@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TBC Tier 6 Loot Priority — Black Temple &amp; Mount Hyjal</title>
+<meta name="description" content="Browsable loot priority guide for TBC Classic Tier 6 (Black Temple, Mount Hyjal). A community mirror of zatar_wow's guide.">
+<link rel="stylesheet" href="style.css">
+<script>const whTooltips = { colorLinks: true, iconizeLinks: true, renameLinks: false };</script>
+<script src="https://wow.zamimg.com/js/tooltips.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <h1>TBC Tier 6 Loot Priority</h1>
+    <p class="tagline">Black Temple &middot; Mount Hyjal &middot; Heart of Darkness craftables —
+      a community mirror of <a href="https://twitch.tv/zatar_wow" rel="noopener">zatar_wow</a>'s guide.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="controls" aria-label="Filters">
+
+    <div class="control-row">
+      <span class="control-label">Zone</span>
+      <div class="chips" id="zone-chips" role="group" aria-label="Zone"></div>
+    </div>
+
+    <div class="control-row">
+      <span class="control-label">Boss</span>
+      <div class="chips" id="boss-chips" role="group" aria-label="Boss"></div>
+    </div>
+
+    <div class="control-row">
+      <span class="control-label">Role</span>
+      <div class="chips" id="role-chips" role="group" aria-label="Role"></div>
+    </div>
+
+    <div class="control-row control-row--inputs">
+      <label class="field">
+        <span class="control-label">Type</span>
+        <select id="type-select"></select>
+      </label>
+      <label class="field">
+        <span class="control-label">Slot</span>
+        <select id="slot-select"></select>
+      </label>
+      <label class="field field--grow">
+        <span class="control-label">Search</span>
+        <input type="search" id="search" placeholder="Item, boss, class, note&hellip;" autocomplete="off">
+      </label>
+      <button type="button" id="reset" class="btn-reset">Reset</button>
+    </div>
+
+    <div class="control-row control-row--meta">
+      <p class="count" id="count" aria-live="polite"></p>
+      <label class="toggle">
+        <input type="checkbox" id="verify-toggle">
+        <span>Flag unverified boss attribution</span>
+      </label>
+    </div>
+
+  </section>
+
+  <div id="results" class="results"></div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <h2>About &amp; credit</h2>
+    <p>
+      All loot priorities and item calls on this page are the work of the original creator,
+      <strong><a href="https://twitch.tv/zatar_wow" rel="noopener">zatar_wow</a></strong>, whose site
+      <em>tbc.classicwowbuilds.com</em> has been offline for several years. This is a
+      <strong>community mirror / preservation</strong> of that guide — not original analysis.
+      The data was reconstructed from their two YouTube videos on Tier 6 loot priority
+      (Mount Hyjal, part 1; Black Temple, part 2).
+    </p>
+    <p>
+      Hunter bow priorities were credited in-video to <strong>Veramos</strong>; arms-warrior input to
+      <strong>Lemonism</strong>. Item IDs, slots and armour types come from the
+      <a href="https://github.com/wowsims/tbc" rel="noopener">wowsims/tbc</a> item database.
+      Tooltips and icons by <a href="https://www.wowhead.com/tbc" rel="noopener">Wowhead</a>.
+    </p>
+    <p class="shorthand">
+      <strong>Shorthand:</strong> R Shaman / R Druid = restoration &middot; H Pal / H Priest = holy &middot;
+      SPriest = shadow priest &middot; Ele = elemental &middot; Boomkin = balance druid &middot;
+      Lock = warlock &middot; Prot = protection &middot; BM = beast mastery.
+    </p>
+    <p class="disclaimer">
+      Not affiliated with Blizzard Entertainment. World of Warcraft is a trademark of Blizzard Entertainment, Inc.
+    </p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
