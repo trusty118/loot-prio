@@ -140,7 +140,7 @@
   "slot": "Shoulder",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Rogue / Enhance",
+  "priority": "Rogue = Enhance",
   "notes": "Near-BiS. Don't confuse with Razorfury Mantle."
  },
  {
@@ -164,7 +164,7 @@
   "slot": "Hands",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Enhance > Hunter / Ret",
+  "priority": "Enhance > Hunter = Ret",
   "notes": "BiS enhance; tied with the leather haste-glove alt."
  },
  {
@@ -248,7 +248,7 @@
   "slot": "Main-Hand",
   "type": "Dagger",
   "role": "Caster",
-  "priority": "Ele > Boomkin > SPriest > Mage/Lock",
+  "priority": "Ele > Boomkin > SPriest > Mage = Lock",
   "notes": "Best non-Zhar'doom caster weapon."
  },
  {
@@ -260,7 +260,7 @@
   "slot": "One-Hand",
   "type": "1H Axe",
   "role": "Physical",
-  "priority": "Orc Fury > Enhance / Fury",
+  "priority": "Orc Fury > Enhance = Fury",
   "notes": "BiS Orc Fury OH."
  },
  {
@@ -464,7 +464,7 @@
   "slot": "Shoulder",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Hunter / Enhance / Ret",
+  "priority": "Hunter = Enhance = Ret",
   "notes": "Mail; temp upgrade. Ret: temp."
  },
  {
@@ -560,7 +560,7 @@
   "slot": "Feet",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Enhance > Hunter > Ret / Warrior",
+  "priority": "Enhance > Hunter > Ret = Warrior",
   "notes": "Underrated; enhance can use the mail option. Hunter: if needs hit."
  },
  {
@@ -656,7 +656,7 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Physical",
-  "priority": "Warrior > Ret / Enhance",
+  "priority": "Warrior > Ret = Enhance",
   "notes": "BiS on most warrior lists."
  },
  {
@@ -776,7 +776,7 @@
   "slot": "Hands",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Enhance > Ret / War / Hunter / Rogue",
+  "priority": "Enhance > Ret = War = Hunter = Rogue",
   "notes": "BiS enhance (mail haste gloves)."
  },
  {
@@ -788,7 +788,7 @@
   "slot": "Feet",
   "type": "Leather",
   "role": "Caster",
-  "priority": "Boomkin / Elemental",
+  "priority": "Boomkin = Elemental",
   "notes": "mp5/sp/crit leather boots."
  },
  {
@@ -836,7 +836,7 @@
   "slot": "Neck",
   "type": "Neck",
   "role": "Caster",
-  "priority": "Lock > Boomkin > SPriest > Mage/Ele",
+  "priority": "Lock > Boomkin > SPriest > Mage = Ele",
   "notes": "Most casters use the Kael'thas neck instead. Boomkin: hit."
  },
  {
@@ -992,7 +992,7 @@
   "slot": "Shoulder",
   "type": "Tier Token (Rogue/Mage/Druid)",
   "role": "Tier",
-  "priority": "Bear/Rogue > Boomkin/Fire Mage > R Druid/Arcane",
+  "priority": "Bear = Rogue > Boomkin = Fire Mage > R Druid = Arcane",
   "notes": "Mother Shahraz."
  },
  {
@@ -1052,7 +1052,7 @@
   "slot": "Head",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Fury / Arms",
+  "priority": "Fury = Arms",
   "notes": "Lots of hit; hold-over while waiting on Cursed Vision / 4pc. Arms: hold-over."
  },
  {
@@ -1064,7 +1064,7 @@
   "slot": "Trinket",
   "type": "Trinket",
   "role": "Physical",
-  "priority": "Fury = Arms > BM = Survival > Enhance > Feral > Rogue/Ret",
+  "priority": "Fury = Arms > BM = Survival > Enhance > Feral > Rogue = Ret",
   "notes": "No internal cooldown = huge uptime."
  },
  {
@@ -1124,7 +1124,7 @@
   "slot": "Head",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "Fire Mage / Lock > Boomkin/Ele",
+  "priority": "Fire Mage = Lock > Boomkin = Ele",
   "notes": "Only ~BiS for fire mage. Warlocks only use this if they don't have Vestments of the Sea-witch from Vashj. Ele: temp."
  },
  {
@@ -1172,7 +1172,7 @@
   "slot": "Trinket",
   "type": "Trinket",
   "role": "Caster",
-  "priority": "Lock > Mage > Boomkin/Ele > SPriest",
+  "priority": "Lock > Mage > Boomkin = Ele > SPriest",
   "notes": "One of the best items in the phase."
  },
  {
@@ -1364,7 +1364,7 @@
   "slot": "Neck",
   "type": "Neck",
   "role": "Physical",
-  "priority": "Warrior / BM Hunter",
+  "priority": "Warrior = BM Hunter",
   "notes": "BiS armor-pen neck; biggest upgrade / whoever has more armor pen."
  },
  {
@@ -1376,7 +1376,7 @@
   "slot": "Neck",
   "type": "Neck",
   "role": "Caster",
-  "priority": "Fire Mage / Fire Lock",
+  "priority": "Fire Mage = Fire Lock",
   "notes": "Great for fire specs only."
  },
  {
@@ -1400,7 +1400,7 @@
   "slot": "Off-Hand",
   "type": "Fist",
   "role": "Physical",
-  "priority": "~Rogue / Hunter",
+  "priority": "~Rogue = Hunter",
   "notes": "Bad. Off-hand claw is 32946. Matches T5 enhance look. Hunter: novelty / stat-stick."
  },
  {
@@ -1460,7 +1460,7 @@
   "slot": "Wrist",
   "type": "Mail",
   "role": "Healer",
-  "priority": "R Shaman / H Pal",
+  "priority": "R Shaman = H Pal",
   "notes": "Not BiS, give to whoever gets the biggest upgrade."
  },
  {
@@ -1520,7 +1520,7 @@
   "slot": "Off-Hand",
   "type": "Off-hand",
   "role": "Caster",
-  "priority": "Lock / Boomkin > Mage",
+  "priority": "Lock = Boomkin > Mage",
   "notes": "BiS Caster OH. Give to whoever isn't getting Zhar'doom."
  },
  {
@@ -1904,7 +1904,7 @@
   "slot": "Chest",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Ret > Hunter / Enhance",
+  "priority": "Ret > Hunter = Enhance",
   "notes": "Better for ret than hunter/enhance. Ret: temp."
  },
  {
@@ -2048,8 +2048,8 @@
   "slot": "Wrist",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "All casters but Mage",
-  "notes": "CRAFTED (BoE). ~belt-of-blasting equivalent; near-BiS caster wrists. Spread across casters; Mage last."
+  "priority": "",
+  "notes": "All casters except Mage."
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -2060,8 +2060,8 @@
   "slot": "Wrist",
   "type": "Cloth",
   "role": "Healer",
-  "priority": "Priest / any healer",
-  "notes": "CRAFTED (BoE). Cloth haste wrists."
+  "priority": "",
+  "notes": "Slightly Priest favoured, but any healer really."
  },
  {
   "zone": "Crafted (Heart of Darkness)",
