@@ -1,0 +1,14 @@
+# Normalise line endings so the repo reads the same on Windows and macOS.
+# Without this, files committed from Windows check out as CRLF there and LF on a
+# Mac, and the first edit on the other machine shows up as a whole-file diff.
+* text=auto eol=lf
+
+# Data files are edited by hand on both machines; keep them byte-identical.
+*.json text eol=lf
+*.csv  text eol=lf
+*.md   text eol=lf
+*.py   text eol=lf
+*.js   text eol=lf
+*.mjs  text eol=lf
+*.css  text eol=lf
+*.html text eol=lf

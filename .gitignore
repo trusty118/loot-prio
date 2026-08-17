@@ -8,3 +8,6 @@ Desktop.ini
 # local tooling
 node_modules/
 *.log
+
+# per-machine Claude Code settings
+.claude/

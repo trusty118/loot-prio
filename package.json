@@ -1,0 +1,14 @@
+{
+  "name": "loot-prio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tests for the TBC Tier 6 loot priority site. The site itself has no build step and no runtime dependencies - jsdom is only here so the tests can render the page headlessly.",
+  "type": "module",
+  "scripts": {
+    "test": "node test/smoke.mjs && node test/bis-fallback.mjs",
+    "serve": "python3 -m http.server 8642 --bind 127.0.0.1"
+  },
+  "devDependencies": {
+    "jsdom": "^24.0.0"
+  }
+}

@@ -1,113 +1,170 @@
-# TBC Loot Priority Site — Handoff
+# TBC Loot Priority Site
 
-A project to turn a WoW TBC Classic (Tier 6) loot-priority guide into a browsable, filterable static website hosted on **GitHub Pages**.
+A browsable, filterable mirror of a WoW TBC Classic (Tier 6) loot-priority guide,
+hosted on GitHub Pages at **https://trusty118.github.io/loot-prio/**.
 
-The data was reconstructed from two YouTube videos by the original creator (see **Attribution**). It is packaged in `loot_data.json`, ready to build a UI on top of.
-
----
-
-## 1. Goal
-
-A single-page static site where a user can:
-
-1. **(Primary) Filter by raid zone → boss.** Pick a zone (Black Temple / Mount Hyjal), then a boss, and see every item that boss drops with its loot priority. This is the main use case — build it first.
-2. **(Secondary) Filter by** role (Physical / Caster / Healer / Tank), item type (Cloth/Leather/Mail/Plate, or weapon class), and slot.
-3. **Search** by item name.
-
-Each item row should show: name (linked to Wowhead), slot, type, role, priority, and notes.
-
-Must be hostable on GitHub Pages (static files only, no server/build step required unless you want one).
+Vanilla `index.html` + `style.css` + `app.js` reading JSON. **No build step** — that is
+deliberate, so Pages can serve the repo root directly. Don't introduce one.
 
 ---
 
-## 2. Data file: `loot_data.json`
+## 1. Getting set up on a new machine
 
-A flat JSON array of item records. Flat is deliberate — easy to filter/group in JS. Example record:
+```bash
+git clone https://github.com/trusty118/loot-prio.git
+cd loot-prio
+npm install          # jsdom, for the tests only - the site itself has no dependencies
+npm test             # 232 checks, should be all green
+python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
+```
+
+Needs `node` and `python3`. `gh` is optional (only used to poll the Pages build).
+
+**Always view over HTTP**, never by opening `index.html` from disk — the page `fetch`es
+its data and will show a load error otherwise.
+
+---
+
+## 2. The data
+
+### `data/loot_data.json` — 182 items, the source of truth
+
+Flat array, grouped in the file by zone then boss in kill order, so a boss's items sit
+together for hand-editing.
+
+| Field | Meaning |
+|---|---|
+| `zone` | `Black Temple`, `Mount Hyjal`, `Crafted (Heart of Darkness)` |
+| `boss` | Boss name, `Trash`, or `—` for crafted (rendered as its zone, not as a boss) |
+| `item` / `id` / `wowhead` | Name, real TBC item ID, Wowhead link |
+| `slot` | `Head` … `Two-Hand`, `Ranged`, `Relic`. Collapsed for display: all weapon slots → `Weapon`, `Ranged`+`Relic` → `Ranged/Relic` |
+| `type` | Armour class or weapon type. Displayed with tidy-ups: `2H Staff` → `Staff`, bare `Mace` → `1H Mace` (hand count derived from slot) |
+| `role` | Physical / Caster / Healer / Tank / Tier. **Currently hidden** — see `SHOW_ROLE` |
+| `priority` | Ordering string, e.g. `SPriest > Warlock = Balance = Elemental > Mage`. `>` ranks, `=` ties |
+| `notes` | Caveats. All conditional wording lives here, never in `priority` |
+
+**`priority` contains no prose and no parentheses** — only recognised shorthand and the
+`>` `=` operators. Conditions were deliberately moved to `notes`. 23 items have an empty
+priority, meaning "whoever needs it"; the reason is in the notes.
+
+### `data/bis.json` — which items are BiS for which spec
 
 ```json
-{
-  "zone": "Black Temple",
-  "boss": "Illidan Stormrage",
-  "item": "Bulwark of Azzinoth",
-  "id": 32375,
-  "wowhead": "https://www.wowhead.com/tbc/item=32375",
-  "slot": "Off-Hand",
-  "type": "Shield",
-  "role": "Tank",
-  "priority": "Prot Warrior > Prot Paladin",
-  "notes": "Warrior never unequips it; pally often swaps shields."
+"Protection Warrior": {
+  "P3": [ { "id": 32375, "item": "Bulwark of Azzinoth", "bis": "expansion" } ]
 }
 ```
 
-### Fields
-| Field | Meaning |
+- Spec keys must match the **canonical labels** in the `SPECS` table in `app.js`
+  (`Restoration Shaman`, not `R Shaman`). Races are not valid keys.
+- `bis` is optional, defaults to `phase`. Values: `phase` | `multiPhase` | `expansion`.
+- Phase keys (`P3`) exist so P4/P5 can be added later without a migration.
+- **Run `python3 verify/check_bis.py` after editing.**
+
+---
+
+## 3. How the priority column renders
+
+This is the least obvious part of the codebase.
+
+`priority` is a **string, scanned with a regex** built from the `SPECS` table
+(`SPEC_RE` in `app.js`). Each recognised shorthand is **replaced by its spec icon**; the
+operators survive as text. So `SPriest > Warlock` renders as two icons with a `>` between.
+
+**This is fragile and we know it.** A word the table doesn't know renders as plain text
+with no icon and no error — adding a priority that says `Balance` when the table only
+knows `Boomkin` fails silently. Adding a spec means adding a row to `SPECS` with a
+verified icon name.
+
+> **Planned:** replace the string with structure —
+> `"priority": [["Shadow Priest"], ["Warlock", "Balance Druid"], ["Mage"]]` — outer array
+> ranks, inner array ties. 156 of 182 records convert mechanically; 23 are empty; 3 need
+> a decision (`>>`, `>=`, `~`). Daniel has approved this direction; it was deferred so it
+> could be done in one sitting on one machine.
+
+### BiS rings
+
+`bis.json` is joined by **canonical spec name + item id** and draws a ring on that spec's
+icon. The colours follow WoW's item-quality ladder, so "rarer" reads as "lasts longer":
+
+| Tier | Colour |
 |---|---|
-| `zone` | `"Black Temple"`, `"Mount Hyjal"`, or `"Crafted (Heart of Darkness)"` (a pseudo-zone for craftable BiS pieces). |
-| `boss` | Boss name, or `"Trash"`, or `"—"` for crafted. Use this for the primary filter. |
-| `item` | Item name (authoritative spelling, cross-referenced to the item DB). |
-| `id` | Real TBC item ID. |
-| `wowhead` | Direct Wowhead TBC link (`/tbc/item={id}`). |
-| `slot` | Equip slot (Head, Shoulder, …, One-Hand, Off-Hand, Ranged, Finger, Trinket, Back, Relic). |
-| `type` | Armor class (Cloth/Leather/Mail/Plate) OR weapon/other category (1H Sword, Dagger, Staff, Shield, Wand, Bow, Cloak, Ring, Neck, Trinket, Idol/Totem/Libram, or `Tier Token (...)`). |
-| `role` | Physical / Caster / Healer / Tank (primary audience). |
-| `priority` | Short arrow notation, e.g. `Ret > Warrior = Rogue`. Class shorthand used in notes: R Shaman/R Druid = resto, H Pal/H Priest = holy, SPriest = shadow priest, Ele = elemental, Boomkin = balance druid, Lock = warlock, Prot = protection, BM = beast mastery. |
-| `notes` | Conditions/caveats behind the priority. |
-| `verifyBoss` | `true` on items whose **boss attribution is a best-effort guess** and should be confirmed (see §4). Absent = confident. |
+| Phase BiS | epic purple `#a335ee` |
+| Multi-phase BiS | legendary orange `#ff8000` |
+| Expansion BiS | artifact gold `#e6cc80` |
 
-**Counts:** 182 records total — Black Temple 109, Mount Hyjal 61, Crafted 12.
+**A ring can only appear on a spec the priority string names.** An item that is BiS for
+Arcane Mage, on a row whose priority says `Mage`, records correctly but shows nothing.
+`check_bis.py` reports these as "not visible" — they are warnings, not errors.
+
+`bis.json` **fails soft**: a 404 or malformed file costs the rings, not the page.
 
 ---
 
-## 3. What's done
+## 4. Conventions that are easy to break
 
-- All items extracted from both videos and matched to **real item IDs** (source: the [wowsims/tbc](https://github.com/wowsims/tbc) item database, `sim/core/items/all_items.go`).
-- Auto-caption garbling fixed (e.g. "leggings of paternity" → **Leggings of Eternity**, "zardoom" → **Zhar'doom**, "veil stock girdle" → **Valestalker Girdle**).
-- `slot` and `type` pulled from the item DB (authoritative armor classes / weapon types).
-- Tier tokens included with verified IDs (item block 31089–31103). *Note: the three BT chest-token IDs (31089/31090/31091) were inferred from the consistent, gapless token block and anchored on a confirmed ID — worth a quick sanity check but very likely correct.*
-- Mount Hyjal boss attribution is **confident** (the creator narrated it boss-by-boss).
-
-The same data also exists as a 2-tab spreadsheet (`Loot_Priority.xlsx`) and two Google Sheets in the user's Drive (`WoW > Loot Prio`), but **`loot_data.json` is the source of truth for the site.**
-
----
-
-## 4. Known gaps / first tasks
-
-1. **Verify boss attribution for the 52 items flagged `verifyBoss: true`** (all in Black Temple, bosses Supremus / Shade of Akama / Teron Gorefiend / Gurtogg Bloodboil / Reliquary of Souls). The creator lumped these mid-instance drops together, so per-boss assignment is a best-effort guess. Confirm against Wowhead: Black Temple = `wowhead.com/tbc/zone=3959`, Hyjal Summit = `wowhead.com/tbc/zone=3606`. (The zone drop tables are JS-rendered, so a plain fetch won't work — use Wowhead's tooltip/data endpoints, an item's "Dropped by" data, or a maintained TBC loot dataset.) BT trash, Naj'entus, Mother Shahraz, Illidari Council, and Illidan are already confident.
-2. **Crafted pseudo-zone**: the 12 Heart-of-Darkness craftables are under `zone: "Crafted (Heart of Darkness)"` with `boss: "—"`. Decide how to surface them (own tab, or a filter chip).
-3. **Not yet included**: gems, and the pure **shadow-resistance** gear for Mother Shahraz (the SR cloak/wrist/boot/belt/leg set). These were intentionally omitted as situational rather than loot-council calls. Add a third data category if you want completeness — the source transcript covers them.
-4. Some low-value items have loose priorities ("biggest upgrade", "whoever", "Skip (bad)") — that's faithful to how the creator called them; render them as-is.
-
----
-
-## 5. Suggested approach
-
-- **Stack:** plain `index.html` + `style.css` + `app.js` (vanilla) that `fetch`es `loot_data.json`. No build step = trivial GitHub Pages hosting. A light framework (Alpine/Svelte/Vite) is fine if preferred, but not needed.
-- **UI shape:** left/top control bar (zone selector → boss selector, plus role/type/slot chips and a search box) driving a filtered list/table. Group results by boss under the chosen zone.
-- **Wowhead tooltips (high value, low effort):** include
-  ```html
-  <script>const whTooltips={colorLinks:true,iconizeLinks:true,renameLinks:true};</script>
-  <script src="https://wow.zamimg.com/js/tooltips.js"></script>
-  ```
-  and point item links at `https://www.wowhead.com/tbc/item={id}` — you get icons + hover tooltips for free.
-- **Color by role** (already a natural grouping): Tank/Physical/Caster/Healer.
-- **Deploy:** repo → Settings → Pages → deploy from `main` / root (or `/docs`). Done.
+- **Never use a bare element selector in `style.css`.** Wowhead's tooltip script injects
+  its own DOM into the page. A bare `table { min-width: 940px }` once matched their
+  tooltip tables and pinned every item tooltip to 940px wide — and `min-width` beats
+  `width` and `max-width`, so no override could fix it. Scope to `.boss-group table`.
+- **Don't hide table cells with `display: none`.** The tables are `table-layout: fixed`;
+  hiding a cell makes the rest shift into the wrong columns. Don't generate the column
+  (see `SHOW_ROLE`).
+- **`title` attributes have a ~1s browser delay** that can't be configured. Icon tooltips
+  use `data-tip` plus a `.tip` element parented to `<body>` (inside the table it would be
+  clipped by the scroll container).
+- **Icon URLs are verified before use.** Everything comes from `wow.zamimg.com`; check a
+  new one returns 200 before wiring it up. Boss portraits are Encounter Journal art
+  (`ui-ej-boss-*.png`) with irregular slugs — `najentus`, `kazrogal`, no leading "the" on
+  the Illidari Council.
+- **`SHOW_ROLE = false`** in `app.js` switches off the Role column and filter. Everything
+  behind it still works — chips, filtering, sort key, search index, token class matching.
 
 ---
 
-## 6. Attribution (required)
+## 5. Tests
 
-The priorities and item choices are the work of the original creator, whose site (`tbc.classicwowbuilds.com`) has been offline for ~4 years. Credit them prominently (e.g. a footer + an "About" note):
+`npm test` runs both:
 
-- Creator's channel / stream: **twitch.tv/zatar_wow** (referenced in both videos as "zatar_wow").
-- Source: two YouTube videos (Tier 6 loot priority — Mount Hyjal part 1, Black Temple part 2).
-- Hunter bow priorities credited in-video to "Veramos"; arms-warrior input to "Lemonism".
+- `test/smoke.mjs` — 232 checks. Renders the page in jsdom and asserts filtering, sorting,
+  grouping, icons, BiS rings, tooltips and the data edits.
+- `test/bis-fallback.mjs` — 7 checks that a missing or malformed `bis.json` degrades
+  gracefully.
 
-State clearly that this is a community mirror/preservation of their guide, not original analysis.
+They can't cover anything needing a real browser: Wowhead's script doesn't complete its
+data fetch under jsdom, so **item icons and item tooltips are untested** — check those by
+eye at `localhost:8642`.
+
+`verify/check_bis.py` validates `bis.json`. `verify/apply.py` is the (finished) boss
+attribution tool, kept as the audit trail.
 
 ---
 
-## 7. Handy reference
+## 6. Known gaps
 
-- Item DB used: `https://raw.githubusercontent.com/wowsims/tbc/master/sim/core/items/all_items.go` (Go source; parse `{Name:..., ID:..., Type:..., ArmorType:..., WeaponType:..., Phase:...}`). Phase 3 = T6 (Hyjal/BT).
-- Wowhead item link pattern: `https://www.wowhead.com/tbc/item={id}`.
-- Tier token block: 31089–31103 (Chest 31089-91, Gloves 31092-94, Helm 31095-97, Legs 31098-100, Shoulders 31101-103); within most blocks order is Conqueror, Vanquisher, Protector — **except Helm**, which is Vanquisher (31095), Protector (31096), Conqueror (31097).
+- **`verify/missing-items.md`** — 2 items confirmed absent from the dataset. An ID-block
+  scan suggests 20-30 more; cross-referencing the
+  [wowsims/tbc](https://github.com/wowsims/tbc) item DB would settle it.
+- **Not included at all:** gems, and Mother Shahraz's shadow-resistance set. Both were
+  intentional omissions by the creator.
+- **Duplicate "Trash" chip** when no zone is selected — boss names aren't unique across
+  zones, so either chip selects both.
+- Planned but not built: a **spec/class filter** reading `bis.json` (`BIS_BY_SPEC` in
+  `app.js` is already shaped for it), and clicking a class icon to show that class's BiS.
+
+---
+
+## 7. Attribution (required, keep it prominent)
+
+The priorities are the work of **[zatar_wow](https://twitch.tv/zatar_wow)**, whose site
+`tbc.classicwowbuilds.com` has been offline for years. This is a community mirror, not
+original analysis. Reconstructed from their two videos:
+[Mount Hyjal](https://www.youtube.com/watch?v=B3zgswtk6T8) and
+[Black Temple](https://www.youtube.com/watch?v=6SWlWDYTkvU). Hunter bow priorities were
+credited in-video to **Veramos**, arms-warrior input to **Lemonism**.
+
+Item IDs and slots came from [wowsims/tbc](https://github.com/wowsims/tbc). Icons and
+tooltips from [Wowhead](https://www.wowhead.com/tbc).
+
+Boss attribution for 52 Black Temple items was verified by hand against Wowhead in
+Aug 2026 — 27 confirmed, 24 corrected. `verify/boss-attribution.csv` is the record.
