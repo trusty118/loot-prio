@@ -80,8 +80,8 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Caster",
-  "priority": "Lock = Boomkin = Ele > SPriest > Mage",
-  "notes": "Most contested caster haste ring; BiS all casters. SPriest: if ->146."
+  "priority": "SPriest > Warlock = Balance = Elemental > Mage",
+  "notes": "BiS for all casters. SPriest should get it first if it takes them over 146 haste, otherwise they are last prio."
  },
  {
   "zone": "Black Temple",

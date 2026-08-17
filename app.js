@@ -249,6 +249,7 @@
     /* --- druid --- */
     ["R Druid", "Restoration Druid", "spell_nature_healingtouch"],
     ["Boomkin", "Balance Druid", "spell_nature_starfall"],
+    ["Balance", "Balance Druid", "spell_nature_starfall"],
     ["Feral Cat", "Feral Druid (cat)", "ability_druid_catform"],
     ["Feral", "Feral Druid", "ability_racial_bearform"],
     ["Bear", "Feral Druid (bear)", "ability_racial_bearform"],
@@ -269,6 +270,12 @@
 
     /* --- warlock --- */
     ["Fire Lock", "Destruction Warlock", "spell_shadow_rainoffire"],
+    ["Destruction", "Destruction Warlock", "spell_shadow_rainoffire"],
+    ["Affliction", "Affliction Warlock", "spell_shadow_deathcoil"],
+    ["Affli", "Affliction Warlock", "spell_shadow_deathcoil"],
+    /* "Warlock" before "Lock": longest match wins, and \b stops "Lock" matching
+       inside "Warlock" anyway, but being explicit here is cheaper than a bug */
+    ["Warlock", "Warlock", "classicon_warlock"],
     ["Lock", "Warlock", "classicon_warlock"],
 
     /* --- rogue --- */
