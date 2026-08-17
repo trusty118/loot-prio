@@ -56,8 +56,8 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Physical",
-  "priority": "Ret > biggest upgrade",
-  "notes": "Least-contested haste ring."
+  "priority": "Ret",
+  "notes": "Least-contested haste ring. Give to biggest upgrade after Ret."
  },
  {
   "zone": "Black Temple",
@@ -128,8 +128,8 @@
   "slot": "Head",
   "type": "Leather",
   "role": "Healer",
-  "priority": "R Shaman > biggest upgrade",
-  "notes": "No spirit; don't default to druid."
+  "priority": "R Shaman",
+  "notes": "Give to biggest upgrade after Shaman."
  },
  {
   "zone": "Black Temple",
@@ -608,8 +608,8 @@
   "slot": "Two-Hand",
   "type": "2H Axe",
   "role": "Physical",
-  "priority": "Undergeared Arms / raid",
-  "notes": "2H axe; weak vs T5."
+  "priority": "Arms",
+  "notes": "Weak item, give to undergeared players."
  },
  {
   "zone": "Black Temple",
@@ -692,8 +692,8 @@
   "slot": "Back",
   "type": "Cloak",
   "role": "Healer",
-  "priority": "Anyone w/o Kael'thas cloak",
-  "notes": "~= KT cloak, a bit more stam. Druid/Priest first."
+  "priority": "Druid = Priest",
+  "notes": "On par with Kael'thas Cloak. Druid/Priest first."
  },
  {
   "zone": "Black Temple",
@@ -704,8 +704,8 @@
   "slot": "Shoulder",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "Biggest upgrade",
-  "notes": "Weak."
+  "priority": "",
+  "notes": "Give to biggest upgrade. Weak item."
  },
  {
   "zone": "Black Temple",
@@ -716,8 +716,8 @@
   "slot": "Chest",
   "type": "Cloth",
   "role": "Healer",
-  "priority": "Biggest upgrade",
-  "notes": "Weak; mp5."
+  "priority": "",
+  "notes": "Give to biggest upgrade. Weak item."
  },
  {
   "zone": "Black Temple",
@@ -728,8 +728,8 @@
   "slot": "Chest",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Anyone",
-  "notes": "Fake agility; hunters gem more from tier. Anyone: bad."
+  "priority": "",
+  "notes": "Weak item. Hunters get more Agi more from Tier with gems."
  },
  {
   "zone": "Black Temple",
@@ -800,8 +800,8 @@
   "slot": "Shoulder",
   "type": "Mail",
   "role": "Healer",
-  "priority": "Whoever",
-  "notes": "Weak healing shoulder."
+  "priority": "",
+  "notes": "Weak item."
  },
  {
   "zone": "Black Temple",
@@ -860,8 +860,8 @@
   "slot": "Off-Hand",
   "type": "Off-hand",
   "role": "Healer",
-  "priority": "Whoever needs an off-hand",
-  "notes": "2nd best healer off-hand."
+  "priority": "",
+  "notes": "2nd best Healer OH."
  },
  {
   "zone": "Black Temple",
@@ -896,8 +896,8 @@
   "slot": "Legs",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "SPriest > any needing hit",
-  "notes": "Near-BiS shadow priest."
+  "priority": "SPriest",
+  "notes": "Near-BiS for Shadow, give to whoever needs +Hit after."
  },
  {
   "zone": "Black Temple",
@@ -1184,8 +1184,8 @@
   "slot": "Trinket",
   "type": "Trinket",
   "role": "Healer",
-  "priority": "The healer who runs out of mana",
-  "notes": "Mediocre vs active trinkets except for the mana."
+  "priority": "",
+  "notes": "Mediocre vs active trinkets except for the mana. Give to the Healer who runs out of mana."
  },
  {
   "zone": "Black Temple",
@@ -1196,8 +1196,8 @@
   "slot": "One-Hand",
   "type": "1H Dagger",
   "role": "Physical",
-  "priority": "~Rogue",
-  "notes": "Little PvE use. Rogue: PvP/novelty."
+  "priority": "",
+  "notes": "Little PvE use. Rogue can use in PvP."
  },
  {
   "zone": "Black Temple",
@@ -1256,8 +1256,8 @@
   "slot": "Main-Hand",
   "type": "Sword",
   "role": "Physical",
-  "priority": "By PLAYER, not class - roll if close",
-  "notes": "Main-hand glaive."
+  "priority": "",
+  "notes": "Give to the PLAYER not the CLASS."
  },
  {
   "zone": "Black Temple",
@@ -1268,8 +1268,8 @@
   "slot": "Off-Hand",
   "type": "Sword",
   "role": "Physical",
-  "priority": "By PLAYER, not class - roll if close",
-  "notes": "Off-hand glaive."
+  "priority": "",
+  "notes": "Give to the PLAYER not the CLASS."
  },
  {
   "zone": "Black Temple",
@@ -1413,7 +1413,7 @@
   "type": "Cloth",
   "role": "Healer",
   "priority": "Priest > R Druid",
-  "notes": "BiS non-haste healer wrists."
+  "notes": "BiS Longetivity Wrists."
  },
  {
   "zone": "Mount Hyjal",
@@ -1425,7 +1425,7 @@
   "type": "Cloth",
   "role": "Caster",
   "priority": "Arcane > Boomkin > Ele > Lock",
-  "notes": "BiS arcane wrists."
+  "notes": "BiS Arcane."
  },
  {
   "zone": "Mount Hyjal",
@@ -1437,7 +1437,7 @@
   "type": "Leather",
   "role": "Physical",
   "priority": "Warrior > Enhance",
-  "notes": "BiS warrior wrists."
+  "notes": "BiS Warrior."
  },
  {
   "zone": "Mount Hyjal",
@@ -1449,7 +1449,7 @@
   "type": "Leather",
   "role": "Healer",
   "priority": "R Druid",
-  "notes": "Leather healing wrists."
+  "notes": ""
  },
  {
   "zone": "Mount Hyjal",
@@ -1461,7 +1461,7 @@
   "type": "Mail",
   "role": "Healer",
   "priority": "R Shaman / H Pal",
-  "notes": "Not BiS; biggest upgrade. H Pal: filler."
+  "notes": "Not BiS, give to whoever gets the biggest upgrade."
  },
  {
   "zone": "Mount Hyjal",
@@ -1473,7 +1473,7 @@
   "type": "Plate",
   "role": "Healer",
   "priority": "H Pal",
-  "notes": "BiS holy-light plate wrists. H Pal: holy-light build."
+  "notes": "BiS for Holy-Light build."
  },
  {
   "zone": "Mount Hyjal",
@@ -1484,8 +1484,8 @@
   "slot": "Feet",
   "type": "Mail",
   "role": "Healer",
-  "priority": "Whoever",
-  "notes": "Weak (worse than the trash boots)."
+  "priority": "",
+  "notes": "Weak item."
  },
  {
   "zone": "Mount Hyjal",
@@ -1497,7 +1497,7 @@
   "type": "Plate",
   "role": "Physical",
   "priority": "Warrior",
-  "notes": "Hit; filler if no Shoulders of the Stranger. Warrior: temp."
+  "notes": "Temp for Warrior if no Shoulderpads of the Stranger from Hydross."
  },
  {
   "zone": "Mount Hyjal",
@@ -1508,8 +1508,8 @@
   "slot": "One-Hand",
   "type": "1H Dagger",
   "role": "Physical",
-  "priority": "Rogue OH",
-  "notes": "Bad. Rogue OH: filler."
+  "priority": "Rogue",
+  "notes": "Temp OH for Rogue. Weak item."
  },
  {
   "zone": "Mount Hyjal",
@@ -1521,7 +1521,7 @@
   "type": "Off-hand",
   "role": "Caster",
   "priority": "Lock / Boomkin > Mage",
-  "notes": "BiS caster off-hand; give to whoever isn't getting the staff. Boomkin: needs hit."
+  "notes": "BiS Caster OH. Give to whoever isn't getting Zhar'doom."
  },
  {
   "zone": "Mount Hyjal",
@@ -1532,8 +1532,8 @@
   "slot": "Shoulder",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "Biggest upgrade",
-  "notes": "Weak; unlucky spell pen."
+  "priority": "",
+  "notes": "Weak item. Niche Spell Pen use."
  },
  {
   "zone": "Mount Hyjal",
@@ -1580,8 +1580,8 @@
   "slot": "Feet",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Skip",
-  "notes": "Skip: worse than Orca Hide."
+  "priority": "",
+  "notes": ""
  },
  {
   "zone": "Mount Hyjal",
@@ -1688,8 +1688,8 @@
   "slot": "Shoulder",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Skip",
-  "notes": "Often worse than T5. Skip: bad."
+  "priority": "",
+  "notes": "Often worse than T5."
  },
  {
   "zone": "Mount Hyjal",
@@ -1772,8 +1772,8 @@
   "slot": "Chest",
   "type": "Leather",
   "role": "Caster",
-  "priority": "Skip",
-  "notes": "Skip: bad."
+  "priority": "",
+  "notes": "Weak item."
  },
  {
   "zone": "Mount Hyjal",
@@ -1916,8 +1916,8 @@
   "slot": "Chest",
   "type": "Plate",
   "role": "Healer",
-  "priority": "Skip",
-  "notes": "Not good. Skip: bad."
+  "priority": "",
+  "notes": "Weak item."
  },
  {
   "zone": "Mount Hyjal",
@@ -2120,8 +2120,8 @@
   "slot": "Wrist",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Skip",
-  "notes": "CRAFTED (BoE). Mail version out-damages these even for war/ret. Skip: bad."
+  "priority": "",
+  "notes": "Mail version out-damages these even for Warr/Ret. Weak item."
  },
  {
   "zone": "Crafted (Heart of Darkness)",
