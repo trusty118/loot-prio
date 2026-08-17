@@ -44,8 +44,8 @@
   "slot": "Waist",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Filler",
-  "notes": "Weak plate DPS haste belt."
+  "priority": "",
+  "notes": "Weak."
  },
  {
   "zone": "Black Temple",
@@ -92,8 +92,8 @@
   "slot": "One-Hand",
   "type": "1H Mace",
   "role": "Physical",
-  "priority": "Human Prot War / Fury OH",
-  "notes": "Hold-over for a human prot warrior waiting on Blade of Savagery. Human Prot War: placeholder."
+  "priority": "Human Prot War = Fury",
+  "notes": "Temp for a human Prot Warr waiting on Blade of Savagery. Temp OH for a Fury Warr, behind PvP Weps & Blade of Infamy."
  },
  {
   "zone": "Black Temple",
@@ -188,8 +188,8 @@
   "slot": "Wrist",
   "type": "Plate",
   "role": "Tank",
-  "priority": "Any tank",
-  "notes": "Full-mitigation sets only. Any tank: mitigation."
+  "priority": "",
+  "notes": "Any Tank for full mitigation sets."
  },
  {
   "zone": "Black Temple",
@@ -224,8 +224,8 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Healer",
-  "priority": "H Pal > R Shaman > undergeared caster",
-  "notes": "64 healing + crit."
+  "priority": "H Pal > R Shaman",
+  "notes": ""
  },
  {
   "zone": "Black Temple",
@@ -260,8 +260,8 @@
   "slot": "One-Hand",
   "type": "1H Axe",
   "role": "Physical",
-  "priority": "Orc Fury > Enhance / non-orc Fury",
-  "notes": "BiS orc fury off-hand (expertise)."
+  "priority": "Orc Fury > Enhance / Fury",
+  "notes": "BiS Orc Fury OH."
  },
  {
   "zone": "Black Temple",
@@ -320,8 +320,8 @@
   "slot": "Shoulder",
   "type": "Plate",
   "role": "Tank",
-  "priority": "Avoid",
-  "notes": "Tier-5 shoulders are better. Avoid: worse than T5."
+  "priority": "",
+  "notes": "Tier 5 Shoulders are better, avoid."
  },
  {
   "zone": "Black Temple",
@@ -333,7 +333,7 @@
   "type": "Neck",
   "role": "Physical",
   "priority": "Enhance > Rogue > Arms",
-  "notes": "BiS enhance & rogue (hit). Arms: if needs hit."
+  "notes": "BiS for Enhance & Rogues that need +Hit. Arms can use if they need +Hit."
  },
  {
   "zone": "Black Temple",
@@ -369,19 +369,7 @@
   "type": "Crossbow",
   "role": "Physical",
   "priority": "Hunter > Prot Warrior",
-  "notes": "Give hunter first."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Shade of Akama",
-  "item": "Praetorian's Legguards",
-  "id": 32263,
-  "wowhead": "https://www.wowhead.com/tbc/item=32263",
-  "slot": "Legs",
-  "type": "Plate",
-  "role": "Tank",
-  "priority": "Prot Warrior",
-  "notes": "No defense; awkward to fit. Prot Warrior: niche."
+  "notes": ""
  },
  {
   "zone": "Black Temple",
@@ -393,7 +381,7 @@
   "type": "1H Mace",
   "role": "Physical",
   "priority": "Enhance > Human Warrior",
-  "notes": "Two are needed - the BiS enhance combo (2.8 speed)."
+  "notes": "BiS for non-Orc Enhance - need 2x"
  },
  {
   "zone": "Black Temple",
@@ -421,39 +409,15 @@
  },
  {
   "zone": "Black Temple",
-  "boss": "Gurtogg Bloodboil",
-  "item": "Leggings of Divine Retribution",
-  "id": 32341,
-  "wowhead": "https://www.wowhead.com/tbc/item=32341",
+  "boss": "Shade of Akama",
+  "item": "Praetorian's Legguards",
+  "id": 32263,
+  "wowhead": "https://www.wowhead.com/tbc/item=32263",
   "slot": "Legs",
   "type": "Plate",
-  "role": "Physical",
-  "priority": "Fury = Arms > Ret",
-  "notes": "Best off-set legs for 4pc-tier warriors."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Gurtogg Bloodboil",
-  "item": "Unstoppable Aggressor's Ring",
-  "id": 32335,
-  "wowhead": "https://www.wowhead.com/tbc/item=32335",
-  "slot": "Finger",
-  "type": "Ring",
-  "role": "Physical",
-  "priority": "Warrior > Ret / Enhance",
-  "notes": "BiS on most warrior lists."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Gurtogg Bloodboil",
-  "item": "Shadowmoon Insignia",
-  "id": 32501,
-  "wowhead": "https://www.wowhead.com/tbc/item=32501",
-  "slot": "Trinket",
-  "type": "Trinket",
   "role": "Tank",
-  "priority": "Feral > Prot Warrior > Prot Paladin",
-  "notes": "Anti-crit for bears."
+  "priority": "Prot Warrior",
+  "notes": "No defense; awkward to fit. Prot Warrior: niche."
  },
  {
   "zone": "Black Temple",
@@ -466,6 +430,102 @@
   "role": "Physical",
   "priority": "Rogue > Feral > Hunter > Enhance > Prot Warrior",
   "notes": "Complex; pairs with the Illidan ring. Rogue: no T5 ring. Feral: hit. Hunter: hit."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Shade of Akama",
+  "item": "Shadow-walker's Cord",
+  "id": 32265,
+  "wowhead": "https://www.wowhead.com/tbc/item=32265",
+  "slot": "Waist",
+  "type": "Leather",
+  "role": "Physical",
+  "priority": "Ret",
+  "notes": "Weak; Vashj belt better. Ret: if no Vashj belt."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Shade of Akama",
+  "item": "Kilt of Immortal Nature",
+  "id": 32271,
+  "wowhead": "https://www.wowhead.com/tbc/item=32271",
+  "slot": "Legs",
+  "type": "Leather",
+  "role": "Healer",
+  "priority": "R Druid",
+  "notes": "2nd BiS; no spirit so good for all healers."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Shade of Akama",
+  "item": "Shoulders of the Hidden Predator",
+  "id": 32264,
+  "wowhead": "https://www.wowhead.com/tbc/item=32264",
+  "slot": "Shoulder",
+  "type": "Mail",
+  "role": "Physical",
+  "priority": "Hunter / Enhance / Ret",
+  "notes": "Mail; temp upgrade. Ret: temp."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Shade of Akama",
+  "item": "Spiritwalker Gauntlets",
+  "id": 32275,
+  "wowhead": "https://www.wowhead.com/tbc/item=32275",
+  "slot": "Hands",
+  "type": "Mail",
+  "role": "Healer",
+  "priority": "R Shaman > H Pal",
+  "notes": "Not BiS but better than tier gloves individually."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Shade of Akama",
+  "item": "Flashfire Girdle",
+  "id": 32276,
+  "wowhead": "https://www.wowhead.com/tbc/item=32276",
+  "slot": "Waist",
+  "type": "Mail",
+  "role": "Caster",
+  "priority": "Elemental",
+  "notes": "BiS ele belt."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Shade of Akama",
+  "item": "The Seeker's Wristguards",
+  "id": 32279,
+  "wowhead": "https://www.wowhead.com/tbc/item=32279",
+  "slot": "Wrist",
+  "type": "Plate",
+  "role": "Tank",
+  "priority": "Prot Paladin",
+  "notes": "Well-itemized prot pally wrists."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Shade of Akama",
+  "item": "Focused Mana Bindings",
+  "id": 32270,
+  "wowhead": "https://www.wowhead.com/tbc/item=32270",
+  "slot": "Wrist",
+  "type": "Cloth",
+  "role": "Caster",
+  "priority": "",
+  "notes": "Any caster needing the +Hit."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Shade of Akama",
+  "item": "Blind-Seers Icon",
+  "id": 32361,
+  "wowhead": "https://www.wowhead.com/tbc/item=32361",
+  "slot": "Off-Hand",
+  "type": "Off-hand",
+  "role": "Caster",
+  "priority": "",
+  "notes": "Any caster needing the +Hit."
  },
  {
   "zone": "Black Temple",
@@ -489,7 +549,7 @@
   "type": "Leather",
   "role": "Healer",
   "priority": "R Druid > R Shaman",
-  "notes": "BiS both; shaman has a mail haste-glove alt."
+  "notes": "BiS for both Druid & Shaman, but Shaman has a Mail alternative in Spiritwalker Gauntlets."
  },
  {
   "zone": "Black Temple",
@@ -577,75 +637,39 @@
  },
  {
   "zone": "Black Temple",
-  "boss": "Shade of Akama",
-  "item": "Shadow-walker's Cord",
-  "id": 32265,
-  "wowhead": "https://www.wowhead.com/tbc/item=32265",
-  "slot": "Waist",
-  "type": "Leather",
-  "role": "Physical",
-  "priority": "Ret",
-  "notes": "Weak; Vashj belt better. Ret: if no Vashj belt."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Shade of Akama",
-  "item": "Kilt of Immortal Nature",
-  "id": 32271,
-  "wowhead": "https://www.wowhead.com/tbc/item=32271",
+  "boss": "Gurtogg Bloodboil",
+  "item": "Leggings of Divine Retribution",
+  "id": 32341,
+  "wowhead": "https://www.wowhead.com/tbc/item=32341",
   "slot": "Legs",
-  "type": "Leather",
-  "role": "Healer",
-  "priority": "R Druid",
-  "notes": "2nd BiS; no spirit so good for all healers."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Shade of Akama",
-  "item": "Shoulders of the Hidden Predator",
-  "id": 32264,
-  "wowhead": "https://www.wowhead.com/tbc/item=32264",
-  "slot": "Shoulder",
-  "type": "Mail",
-  "role": "Physical",
-  "priority": "Hunter / Enhance / Ret",
-  "notes": "Mail; temp upgrade. Ret: temp."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Shade of Akama",
-  "item": "Spiritwalker Gauntlets",
-  "id": 32275,
-  "wowhead": "https://www.wowhead.com/tbc/item=32275",
-  "slot": "Hands",
-  "type": "Mail",
-  "role": "Healer",
-  "priority": "R Shaman > H Pal",
-  "notes": "Not BiS but better than tier gloves individually."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Shade of Akama",
-  "item": "Flashfire Girdle",
-  "id": 32276,
-  "wowhead": "https://www.wowhead.com/tbc/item=32276",
-  "slot": "Waist",
-  "type": "Mail",
-  "role": "Caster",
-  "priority": "Elemental",
-  "notes": "BiS ele belt."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Shade of Akama",
-  "item": "The Seeker's Wristguards",
-  "id": 32279,
-  "wowhead": "https://www.wowhead.com/tbc/item=32279",
-  "slot": "Wrist",
   "type": "Plate",
+  "role": "Physical",
+  "priority": "Fury = Arms > Ret",
+  "notes": "Best off-set legs for 4pc-tier warriors."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Gurtogg Bloodboil",
+  "item": "Unstoppable Aggressor's Ring",
+  "id": 32335,
+  "wowhead": "https://www.wowhead.com/tbc/item=32335",
+  "slot": "Finger",
+  "type": "Ring",
+  "role": "Physical",
+  "priority": "Warrior > Ret / Enhance",
+  "notes": "BiS on most warrior lists."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Gurtogg Bloodboil",
+  "item": "Shadowmoon Insignia",
+  "id": 32501,
+  "wowhead": "https://www.wowhead.com/tbc/item=32501",
+  "slot": "Trinket",
+  "type": "Trinket",
   "role": "Tank",
-  "priority": "Prot Paladin",
-  "notes": "Well-itemized prot pally wrists."
+  "priority": "Feral > Prot Warrior > Prot Paladin",
+  "notes": "Anti-crit for bears."
  },
  {
   "zone": "Black Temple",
@@ -658,18 +682,6 @@
   "role": "Physical",
   "priority": "Fury > Arms",
   "notes": "Not for 4pc; give to non-4set warriors. Fury: off-set."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Shade of Akama",
-  "item": "Focused Mana Bindings",
-  "id": 32270,
-  "wowhead": "https://www.wowhead.com/tbc/item=32270",
-  "slot": "Wrist",
-  "type": "Cloth",
-  "role": "Caster",
-  "priority": "Any caster needing hit",
-  "notes": "Cloth hit wrists."
  },
  {
   "zone": "Black Temple",
@@ -706,18 +718,6 @@
   "role": "Healer",
   "priority": "Biggest upgrade",
   "notes": "Weak; mp5."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Illidari Council",
-  "item": "Belt of Divine Guidance",
-  "id": 32519,
-  "wowhead": "https://www.wowhead.com/tbc/item=32519",
-  "slot": "Waist",
-  "type": "Cloth",
-  "role": "Healer",
-  "priority": "R Druid > Priest",
-  "notes": "Best non-haste belt for druid/priest."
  },
  {
   "zone": "Black Temple",
@@ -889,18 +889,6 @@
  },
  {
   "zone": "Black Temple",
-  "boss": "Shade of Akama",
-  "item": "Blind-Seers Icon",
-  "id": 32361,
-  "wowhead": "https://www.wowhead.com/tbc/item=32361",
-  "slot": "Off-Hand",
-  "type": "Off-hand",
-  "role": "Caster",
-  "priority": "Any caster needing hit",
-  "notes": "Hard to home; only if you need the hit."
- },
- {
-  "zone": "Black Temple",
   "boss": "Mother Shahraz",
   "item": "Leggings of Devastation",
   "id": 32367,
@@ -973,6 +961,54 @@
  },
  {
   "zone": "Black Temple",
+  "boss": "Mother Shahraz",
+  "item": "Pauldrons of the Forgotten Conqueror",
+  "id": 31101,
+  "wowhead": "https://www.wowhead.com/tbc/item=31101",
+  "slot": "Shoulder",
+  "type": "Tier Token (Pal/Priest/Lock)",
+  "role": "Tier",
+  "priority": "Prot Pal > Lock > H Pal > H Priest > SPriest",
+  "notes": "Mother Shahraz."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Mother Shahraz",
+  "item": "Pauldrons of the Forgotten Protector",
+  "id": 31103,
+  "wowhead": "https://www.wowhead.com/tbc/item=31103",
+  "slot": "Shoulder",
+  "type": "Tier Token (War/Hunter/Shaman)",
+  "role": "Tier",
+  "priority": "R Shaman = Ele > Hunter > Fury > Prot Warrior > Enhance",
+  "notes": "Prot Warriors should use the DPS version."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Mother Shahraz",
+  "item": "Pauldrons of the Forgotten Vanquisher",
+  "id": 31102,
+  "wowhead": "https://www.wowhead.com/tbc/item=31102",
+  "slot": "Shoulder",
+  "type": "Tier Token (Rogue/Mage/Druid)",
+  "role": "Tier",
+  "priority": "Bear/Rogue > Boomkin/Fire Mage > R Druid/Arcane",
+  "notes": "Mother Shahraz."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Illidari Council",
+  "item": "Belt of Divine Guidance",
+  "id": 32519,
+  "wowhead": "https://www.wowhead.com/tbc/item=32519",
+  "slot": "Waist",
+  "type": "Cloth",
+  "role": "Healer",
+  "priority": "R Druid > Priest",
+  "notes": "Best non-haste belt for druid/priest."
+ },
+ {
+  "zone": "Black Temple",
   "boss": "Illidari Council",
   "item": "Cloak of the Illidari Council",
   "id": 32331,
@@ -1030,6 +1066,42 @@
   "role": "Physical",
   "priority": "Fury = Arms > BM = Survival > Enhance > Feral > Rogue/Ret",
   "notes": "No internal cooldown = huge uptime."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Illidari Council",
+  "item": "Leggings of the Forgotten Conqueror",
+  "id": 31098,
+  "wowhead": "https://www.wowhead.com/tbc/item=31098",
+  "slot": "Legs",
+  "type": "Tier Token (Pal/Priest/Lock)",
+  "role": "Tier",
+  "priority": "Prot Pal = Lock = H Pal > H Priest = SPriest",
+  "notes": "Illidari Council."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Illidari Council",
+  "item": "Leggings of the Forgotten Protector",
+  "id": 31100,
+  "wowhead": "https://www.wowhead.com/tbc/item=31100",
+  "slot": "Legs",
+  "type": "Tier Token (War/Hunter/Shaman)",
+  "role": "Tier",
+  "priority": "R Shaman > BM Hunter > Prot Warrior > Ele = Enhance = Fury = Arms",
+  "notes": "Illidari Council."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Illidari Council",
+  "item": "Leggings of the Forgotten Vanquisher",
+  "id": 31099,
+  "wowhead": "https://www.wowhead.com/tbc/item=31099",
+  "slot": "Legs",
+  "type": "Tier Token (Rogue/Mage/Druid)",
+  "role": "Tier",
+  "priority": "Feral > Rogue > Mage > Boomkin = R Druid",
+  "notes": "Illidari Council."
  },
  {
   "zone": "Black Temple",
@@ -1201,78 +1273,6 @@
  },
  {
   "zone": "Black Temple",
-  "boss": "Mother Shahraz",
-  "item": "Pauldrons of the Forgotten Conqueror",
-  "id": 31101,
-  "wowhead": "https://www.wowhead.com/tbc/item=31101",
-  "slot": "Shoulder",
-  "type": "Tier Token (Pal/Priest/Lock)",
-  "role": "Tier",
-  "priority": "Prot Pal > Lock > H Pal > H Priest > SPriest",
-  "notes": "Mother Shahraz."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Mother Shahraz",
-  "item": "Pauldrons of the Forgotten Protector",
-  "id": 31103,
-  "wowhead": "https://www.wowhead.com/tbc/item=31103",
-  "slot": "Shoulder",
-  "type": "Tier Token (War/Hunter/Shaman)",
-  "role": "Tier",
-  "priority": "R Shaman = Ele > Hunter > Fury > Prot Warrior > Enhance",
-  "notes": "Prot Warriors should use the DPS version."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Mother Shahraz",
-  "item": "Pauldrons of the Forgotten Vanquisher",
-  "id": 31102,
-  "wowhead": "https://www.wowhead.com/tbc/item=31102",
-  "slot": "Shoulder",
-  "type": "Tier Token (Rogue/Mage/Druid)",
-  "role": "Tier",
-  "priority": "Bear/Rogue > Boomkin/Fire Mage > R Druid/Arcane",
-  "notes": "Mother Shahraz."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Illidari Council",
-  "item": "Leggings of the Forgotten Conqueror",
-  "id": 31098,
-  "wowhead": "https://www.wowhead.com/tbc/item=31098",
-  "slot": "Legs",
-  "type": "Tier Token (Pal/Priest/Lock)",
-  "role": "Tier",
-  "priority": "Prot Pal = Lock = H Pal > H Priest = SPriest",
-  "notes": "Illidari Council."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Illidari Council",
-  "item": "Leggings of the Forgotten Protector",
-  "id": 31100,
-  "wowhead": "https://www.wowhead.com/tbc/item=31100",
-  "slot": "Legs",
-  "type": "Tier Token (War/Hunter/Shaman)",
-  "role": "Tier",
-  "priority": "R Shaman > BM Hunter > Prot Warrior > Ele = Enhance = Fury = Arms",
-  "notes": "Illidari Council."
- },
- {
-  "zone": "Black Temple",
-  "boss": "Illidari Council",
-  "item": "Leggings of the Forgotten Vanquisher",
-  "id": 31099,
-  "wowhead": "https://www.wowhead.com/tbc/item=31099",
-  "slot": "Legs",
-  "type": "Tier Token (Rogue/Mage/Druid)",
-  "role": "Tier",
-  "priority": "Feral > Rogue > Mage > Boomkin = R Druid",
-  "notes": "Illidari Council."
- },
- {
-  "zone": "Black Temple",
   "boss": "Illidan Stormrage",
   "item": "Chestguard of the Forgotten Conqueror",
   "id": 31089,
@@ -1306,150 +1306,6 @@
   "role": "Tier",
   "priority": "Feral > Rogue > Boomkin > R Druid > Arcane",
   "notes": "Illidan."
- },
- {
-  "zone": "Crafted (Heart of Darkness)",
-  "boss": "—",
-  "item": "Bracers of Nimble Thought",
-  "id": 32586,
-  "wowhead": "https://www.wowhead.com/tbc/item=32586",
-  "slot": "Wrist",
-  "type": "Cloth",
-  "role": "Caster",
-  "priority": "All casters but Mage",
-  "notes": "CRAFTED (BoE). ~belt-of-blasting equivalent; near-BiS caster wrists. Spread across casters; Mage last."
- },
- {
-  "zone": "Crafted (Heart of Darkness)",
-  "boss": "—",
-  "item": "Swiftheal Wraps",
-  "id": 32584,
-  "wowhead": "https://www.wowhead.com/tbc/item=32584",
-  "slot": "Wrist",
-  "type": "Cloth",
-  "role": "Healer",
-  "priority": "Priest / any healer",
-  "notes": "CRAFTED (BoE). Cloth haste wrists."
- },
- {
-  "zone": "Crafted (Heart of Darkness)",
-  "boss": "—",
-  "item": "Living Earth Bindings",
-  "id": 32577,
-  "wowhead": "https://www.wowhead.com/tbc/item=32577",
-  "slot": "Wrist",
-  "type": "Mail",
-  "role": "Healer",
-  "priority": "R Shaman",
-  "notes": "CRAFTED (BoE). Mail haste wrists (shaman prefers these)."
- },
- {
-  "zone": "Crafted (Heart of Darkness)",
-  "boss": "—",
-  "item": "Bracers of Renewed Life",
-  "id": 32582,
-  "wowhead": "https://www.wowhead.com/tbc/item=32582",
-  "slot": "Wrist",
-  "type": "Leather",
-  "role": "Healer",
-  "priority": "R Druid",
-  "notes": "CRAFTED (BoE). Leather haste wrists. R Druid: to reach 113 haste."
- },
- {
-  "zone": "Crafted (Heart of Darkness)",
-  "boss": "—",
-  "item": "Bindings of Lightning Reflexes",
-  "id": 32574,
-  "wowhead": "https://www.wowhead.com/tbc/item=32574",
-  "slot": "Wrist",
-  "type": "Mail",
-  "role": "Physical",
-  "priority": "Enhance = Ret",
-  "notes": "CRAFTED (BoE). Mail haste wrists; tied with Swiftstrike Bracers."
- },
- {
-  "zone": "Crafted (Heart of Darkness)",
-  "boss": "—",
-  "item": "Swiftstrike Bracers",
-  "id": 32580,
-  "wowhead": "https://www.wowhead.com/tbc/item=32580",
-  "slot": "Wrist",
-  "type": "Leather",
-  "role": "Physical",
-  "priority": "Enhance",
-  "notes": "CRAFTED (BoE). Tied with Bindings of Lightning Reflexes. Enhance: Rogue backup."
- },
- {
-  "zone": "Crafted (Heart of Darkness)",
-  "boss": "—",
-  "item": "Swiftsteel Bracers",
-  "id": 32568,
-  "wowhead": "https://www.wowhead.com/tbc/item=32568",
-  "slot": "Wrist",
-  "type": "Plate",
-  "role": "Physical",
-  "priority": "Skip",
-  "notes": "CRAFTED (BoE). Mail version out-damages these even for war/ret. Skip: bad."
- },
- {
-  "zone": "Crafted (Heart of Darkness)",
-  "boss": "—",
-  "item": "Swiftstrike Shoulders",
-  "id": 32581,
-  "wowhead": "https://www.wowhead.com/tbc/item=32581",
-  "slot": "Shoulder",
-  "type": "Leather",
-  "role": "Physical",
-  "priority": "Enhance",
-  "notes": "CRAFTED (BoP). Also a leather option; both good for enhance. Enhance: BiS."
- },
- {
-  "zone": "Crafted (Heart of Darkness)",
-  "boss": "—",
-  "item": "Mantle of Nimble Thought",
-  "id": 32587,
-  "wowhead": "https://www.wowhead.com/tbc/item=32587",
-  "slot": "Shoulder",
-  "type": "Cloth",
-  "role": "Caster",
-  "priority": "Shadow Priest",
-  "notes": "CRAFTED (BoP). Not BiS but a big jump for SPriest. Shadow Priest: haste breakpoint."
- },
- {
-  "zone": "Crafted (Heart of Darkness)",
-  "boss": "—",
-  "item": "Swiftheal Mantle",
-  "id": 32585,
-  "wowhead": "https://www.wowhead.com/tbc/item=32585",
-  "slot": "Shoulder",
-  "type": "Cloth",
-  "role": "Healer",
-  "priority": "Priest",
-  "notes": "CRAFTED (BoP). Healer haste shoulders. Priest: early."
- },
- {
-  "zone": "Crafted (Heart of Darkness)",
-  "boss": "—",
-  "item": "Shoulderpads of Renewed Life",
-  "id": 32583,
-  "wowhead": "https://www.wowhead.com/tbc/item=32583",
-  "slot": "Shoulder",
-  "type": "Leather",
-  "role": "Healer",
-  "priority": "R Druid",
-  "notes": "CRAFTED (BoP). Leather haste shoulders. R Druid: to reach 113 haste."
- },
- {
-  "zone": "Crafted (Heart of Darkness)",
-  "boss": "—",
-  "item": "Living Earth Shoulders",
-  "id": 32579,
-  "wowhead": "https://www.wowhead.com/tbc/item=32579",
-  "slot": "Shoulder",
-  "type": "Mail",
-  "role": "Healer",
-  "priority": "R Shaman",
-  "notes": "CRAFTED (BoP). Not BiS; tier preferred. R Shaman: temp."
  },
  {
   "zone": "Mount Hyjal",
@@ -1981,6 +1837,42 @@
  },
  {
   "zone": "Mount Hyjal",
+  "boss": "Azgalor",
+  "item": "Gloves of the Forgotten Conqueror",
+  "id": 31092,
+  "wowhead": "https://www.wowhead.com/tbc/item=31092",
+  "slot": "Hands",
+  "type": "Tier Token (Pal/Priest/Lock)",
+  "role": "Tier",
+  "priority": "Lock > H Priest > SPriest",
+  "notes": "Azgalor. H Pal & Ret don't use tier gloves."
+ },
+ {
+  "zone": "Mount Hyjal",
+  "boss": "Azgalor",
+  "item": "Gloves of the Forgotten Protector",
+  "id": 31094,
+  "wowhead": "https://www.wowhead.com/tbc/item=31094",
+  "slot": "Hands",
+  "type": "Tier Token (War/Hunter/Shaman)",
+  "role": "Tier",
+  "priority": "Hunter > Ele",
+  "notes": "Azgalor. R Shaman 4pc skips gloves; warriors use offset gloves; enhance tier bad."
+ },
+ {
+  "zone": "Mount Hyjal",
+  "boss": "Azgalor",
+  "item": "Gloves of the Forgotten Vanquisher",
+  "id": 31093,
+  "wowhead": "https://www.wowhead.com/tbc/item=31093",
+  "slot": "Hands",
+  "type": "Tier Token (Rogue/Mage/Druid)",
+  "role": "Tier",
+  "priority": "Feral > Rogue > Boomkin > Mage",
+  "notes": "Mage only uses if they need hit. R Druid uses haste gloves instead."
+ },
+ {
+  "zone": "Mount Hyjal",
   "boss": "Archimonde",
   "item": "Midnight Chestguard",
   "id": 30905,
@@ -2113,42 +2005,6 @@
  },
  {
   "zone": "Mount Hyjal",
-  "boss": "Azgalor",
-  "item": "Gloves of the Forgotten Conqueror",
-  "id": 31092,
-  "wowhead": "https://www.wowhead.com/tbc/item=31092",
-  "slot": "Hands",
-  "type": "Tier Token (Pal/Priest/Lock)",
-  "role": "Tier",
-  "priority": "Lock > H Priest > SPriest",
-  "notes": "Azgalor. H Pal & Ret don't use tier gloves."
- },
- {
-  "zone": "Mount Hyjal",
-  "boss": "Azgalor",
-  "item": "Gloves of the Forgotten Protector",
-  "id": 31094,
-  "wowhead": "https://www.wowhead.com/tbc/item=31094",
-  "slot": "Hands",
-  "type": "Tier Token (War/Hunter/Shaman)",
-  "role": "Tier",
-  "priority": "Hunter > Ele",
-  "notes": "Azgalor. R Shaman 4pc skips gloves; warriors use offset gloves; enhance tier bad."
- },
- {
-  "zone": "Mount Hyjal",
-  "boss": "Azgalor",
-  "item": "Gloves of the Forgotten Vanquisher",
-  "id": 31093,
-  "wowhead": "https://www.wowhead.com/tbc/item=31093",
-  "slot": "Hands",
-  "type": "Tier Token (Rogue/Mage/Druid)",
-  "role": "Tier",
-  "priority": "Feral > Rogue > Boomkin > Mage",
-  "notes": "Mage only uses if they need hit. R Druid uses haste gloves instead."
- },
- {
-  "zone": "Mount Hyjal",
   "boss": "Archimonde",
   "item": "Helm of the Forgotten Conqueror",
   "id": 31097,
@@ -2182,5 +2038,149 @@
   "role": "Tier",
   "priority": "Feral > Rogue > Boomkin > R Druid > Mage",
   "notes": "Rogue uses this if not getting Cursed Vision of Sargeras from Illidan."
+ },
+ {
+  "zone": "Crafted (Heart of Darkness)",
+  "boss": "—",
+  "item": "Bracers of Nimble Thought",
+  "id": 32586,
+  "wowhead": "https://www.wowhead.com/tbc/item=32586",
+  "slot": "Wrist",
+  "type": "Cloth",
+  "role": "Caster",
+  "priority": "All casters but Mage",
+  "notes": "CRAFTED (BoE). ~belt-of-blasting equivalent; near-BiS caster wrists. Spread across casters; Mage last."
+ },
+ {
+  "zone": "Crafted (Heart of Darkness)",
+  "boss": "—",
+  "item": "Swiftheal Wraps",
+  "id": 32584,
+  "wowhead": "https://www.wowhead.com/tbc/item=32584",
+  "slot": "Wrist",
+  "type": "Cloth",
+  "role": "Healer",
+  "priority": "Priest / any healer",
+  "notes": "CRAFTED (BoE). Cloth haste wrists."
+ },
+ {
+  "zone": "Crafted (Heart of Darkness)",
+  "boss": "—",
+  "item": "Living Earth Bindings",
+  "id": 32577,
+  "wowhead": "https://www.wowhead.com/tbc/item=32577",
+  "slot": "Wrist",
+  "type": "Mail",
+  "role": "Healer",
+  "priority": "R Shaman",
+  "notes": "CRAFTED (BoE). Mail haste wrists (shaman prefers these)."
+ },
+ {
+  "zone": "Crafted (Heart of Darkness)",
+  "boss": "—",
+  "item": "Bracers of Renewed Life",
+  "id": 32582,
+  "wowhead": "https://www.wowhead.com/tbc/item=32582",
+  "slot": "Wrist",
+  "type": "Leather",
+  "role": "Healer",
+  "priority": "R Druid",
+  "notes": "CRAFTED (BoE). Leather haste wrists. R Druid: to reach 113 haste."
+ },
+ {
+  "zone": "Crafted (Heart of Darkness)",
+  "boss": "—",
+  "item": "Bindings of Lightning Reflexes",
+  "id": 32574,
+  "wowhead": "https://www.wowhead.com/tbc/item=32574",
+  "slot": "Wrist",
+  "type": "Mail",
+  "role": "Physical",
+  "priority": "Enhance = Ret",
+  "notes": "CRAFTED (BoE). Mail haste wrists; tied with Swiftstrike Bracers."
+ },
+ {
+  "zone": "Crafted (Heart of Darkness)",
+  "boss": "—",
+  "item": "Swiftstrike Bracers",
+  "id": 32580,
+  "wowhead": "https://www.wowhead.com/tbc/item=32580",
+  "slot": "Wrist",
+  "type": "Leather",
+  "role": "Physical",
+  "priority": "Enhance",
+  "notes": "CRAFTED (BoE). Tied with Bindings of Lightning Reflexes. Enhance: Rogue backup."
+ },
+ {
+  "zone": "Crafted (Heart of Darkness)",
+  "boss": "—",
+  "item": "Swiftsteel Bracers",
+  "id": 32568,
+  "wowhead": "https://www.wowhead.com/tbc/item=32568",
+  "slot": "Wrist",
+  "type": "Plate",
+  "role": "Physical",
+  "priority": "Skip",
+  "notes": "CRAFTED (BoE). Mail version out-damages these even for war/ret. Skip: bad."
+ },
+ {
+  "zone": "Crafted (Heart of Darkness)",
+  "boss": "—",
+  "item": "Swiftstrike Shoulders",
+  "id": 32581,
+  "wowhead": "https://www.wowhead.com/tbc/item=32581",
+  "slot": "Shoulder",
+  "type": "Leather",
+  "role": "Physical",
+  "priority": "Enhance",
+  "notes": "CRAFTED (BoP). Also a leather option; both good for enhance. Enhance: BiS."
+ },
+ {
+  "zone": "Crafted (Heart of Darkness)",
+  "boss": "—",
+  "item": "Mantle of Nimble Thought",
+  "id": 32587,
+  "wowhead": "https://www.wowhead.com/tbc/item=32587",
+  "slot": "Shoulder",
+  "type": "Cloth",
+  "role": "Caster",
+  "priority": "Shadow Priest",
+  "notes": "CRAFTED (BoP). Not BiS but a big jump for SPriest. Shadow Priest: haste breakpoint."
+ },
+ {
+  "zone": "Crafted (Heart of Darkness)",
+  "boss": "—",
+  "item": "Swiftheal Mantle",
+  "id": 32585,
+  "wowhead": "https://www.wowhead.com/tbc/item=32585",
+  "slot": "Shoulder",
+  "type": "Cloth",
+  "role": "Healer",
+  "priority": "Priest",
+  "notes": "CRAFTED (BoP). Healer haste shoulders. Priest: early."
+ },
+ {
+  "zone": "Crafted (Heart of Darkness)",
+  "boss": "—",
+  "item": "Shoulderpads of Renewed Life",
+  "id": 32583,
+  "wowhead": "https://www.wowhead.com/tbc/item=32583",
+  "slot": "Shoulder",
+  "type": "Leather",
+  "role": "Healer",
+  "priority": "R Druid",
+  "notes": "CRAFTED (BoP). Leather haste shoulders. R Druid: to reach 113 haste."
+ },
+ {
+  "zone": "Crafted (Heart of Darkness)",
+  "boss": "—",
+  "item": "Living Earth Shoulders",
+  "id": 32579,
+  "wowhead": "https://www.wowhead.com/tbc/item=32579",
+  "slot": "Shoulder",
+  "type": "Mail",
+  "role": "Healer",
+  "priority": "R Shaman",
+  "notes": "CRAFTED (BoP). Not BiS; tier preferred. R Shaman: temp."
  }
 ]

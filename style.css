@@ -369,7 +369,11 @@ tbody tr:hover { background: #221c15; }
 
 /* widths live on the <colgroup>; these only carry appearance */
 .col-slot, .col-type { color: var(--text-dim); }
-.col-prio { font-weight: 600; }
+/* sized against the 38px icons it sits between, not the rest of the table */
+.col-prio {
+  font-weight: 600;
+  font-size: 1.08rem;
+}
 .col-notes { color: var(--text-dim); font-size: .85rem; }
 
 /* fixed layout can't grow a column to fit, so long values must wrap */
