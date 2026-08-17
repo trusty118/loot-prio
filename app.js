@@ -33,6 +33,41 @@
   var ZONE_LABEL = { "Crafted (Heart of Darkness)": "Crafted" };
   var ROLE_ORDER = ["Physical", "Caster", "Healer", "Tank", "Tier"];
 
+  /* Encounter Journal boss portraits (128x64 PNG). TBC bosses have no achievement
+     icons - those postdate them - but Legion backfilled the Adventure Guide, so
+     these exist. The slugs are irregular: apostrophes vanish without a hyphen
+     (najentus, kazrogal) and the Illidari Council has no leading "the". Verified
+     forms, do not tidy. */
+  var JOURNAL = "https://wow.zamimg.com/images/wow/journal/ui-ej-boss-";
+  var ICON = "https://wow.zamimg.com/images/wow/icons/large/";
+
+  var BOSS_ICON = {
+    "High Warlord Naj'entus": JOURNAL + "high-warlord-najentus.png",
+    "Supremus": JOURNAL + "supremus.png",
+    "Shade of Akama": JOURNAL + "shade-of-akama.png",
+    "Teron Gorefiend": JOURNAL + "teron-gorefiend.png",
+    "Gurtogg Bloodboil": JOURNAL + "gurtogg-bloodboil.png",
+    "Reliquary of Souls": JOURNAL + "reliquary-of-souls.png",
+    "Mother Shahraz": JOURNAL + "mother-shahraz.png",
+    "Illidari Council": JOURNAL + "illidari-council.png",
+    "Illidan Stormrage": JOURNAL + "illidan-stormrage.png",
+    "Rage Winterchill": JOURNAL + "rage-winterchill.png",
+    "Anetheron": JOURNAL + "anetheron.png",
+    "Kaz'rogal": JOURNAL + "kazrogal.png",
+    "Azgalor": JOURNAL + "azgalor.png",
+    "Archimonde": JOURNAL + "archimonde.png",
+    "Trash": ICON + "inv_misc_bag_08.jpg",
+    "—": ICON + "spell_shadow_demonictactics.jpg"
+  };
+
+  /* Hyjal has no Encounter Journal instance image (only Black Temple does), so
+     both zones borrow their final boss's portrait and stay consistent. */
+  var ZONE_ICON = {
+    "Black Temple": JOURNAL + "illidan-stormrage.png",
+    "Mount Hyjal": JOURNAL + "archimonde.png",
+    "Crafted (Heart of Darkness)": ICON + "spell_shadow_demonictactics.jpg"
+  };
+
   var SLOT_ORDER = [
     "Head", "Neck", "Shoulder", "Back", "Chest", "Wrist", "Hands", "Waist",
     "Legs", "Feet", "Finger", "Trinket", "One-Hand", "Main-Hand", "Off-Hand",
@@ -185,12 +220,17 @@
 
   /* ---------- rendering: controls ---------- */
 
-  function chip(label, active, count, dataset) {
+  function chip(label, active, count, dataset, icon) {
     var b = document.createElement("button");
     b.type = "button";
     b.className = "chip";
     b.setAttribute("aria-pressed", active ? "true" : "false");
-    b.innerHTML = escapeHtml(label) + (count == null ? "" : ' <span class="n">' + count + "</span>");
+    b.innerHTML =
+      /* if the CDN ever stops serving these, fall back to a plain text chip */
+      (icon ? '<img class="chip-icon" src="' + escapeHtml(icon) +
+              '" alt="" onerror="this.style.display=\'none\'">' : "") +
+      escapeHtml(label) +
+      (count == null ? "" : ' <span class="n">' + count + "</span>");
     if (dataset) Object.keys(dataset).forEach(function (k) { b.dataset[k] = dataset[k]; });
     return b;
   }
@@ -205,7 +245,7 @@
     el.zoneChips.appendChild(all);
 
     ZONE_ORDER.forEach(function (z) {
-      var c = chip(zoneLabel(z), state.zone === z, counts[z] || 0);
+      var c = chip(zoneLabel(z), state.zone === z, counts[z] || 0, null, ZONE_ICON[z]);
       c.addEventListener("click", function () {
         state.zone = (state.zone === z) ? "" : z;
         state.boss = "";
@@ -228,7 +268,7 @@
 
     zones.forEach(function (z) {
       orderedBosses(z).forEach(function (b) {
-        var c = chip(bossLabel(b), state.boss === b, counts[b] || 0);
+        var c = chip(bossLabel(b), state.boss === b, counts[b] || 0, null, BOSS_ICON[b]);
         c.addEventListener("click", function () {
           state.boss = (state.boss === b) ? "" : b;
           update();
@@ -354,7 +394,10 @@
 
     var h = document.createElement("h2");
     h.className = "boss-head";
+    var portrait = BOSS_ICON[boss];
     h.innerHTML =
+      (portrait ? '<img class="boss-portrait" src="' + escapeHtml(portrait) +
+                  '" alt="" onerror="this.style.display=\'none\'">' : "") +
       '<span class="zone-tag">' + escapeHtml(zoneLabel(zone)) + "</span> " +
       highlight(bossLabel(boss), state.q) +
       '<span class="n">' + rows.length + (rows.length === 1 ? " item" : " items") + "</span>";
