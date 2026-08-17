@@ -37,11 +37,17 @@ body {
 a { color: var(--gold); }
 a:hover { color: var(--gold-bright); }
 
+/* Wide enough to use a big monitor - the table is the point of the page and
+   percentage columns only wrap because the container caps them. The vw term
+   keeps a margin on ultrawides instead of running edge to edge. */
 .wrap {
-  max-width: 1180px;
+  max-width: min(1760px, 95vw);
   margin: 0 auto;
   padding: 0 20px;
 }
+
+/* Prose is the exception: long measure is hard to read, so it stays narrow. */
+.tagline { max-width: 90ch; }
 
 /* ---------- header ---------- */
 
@@ -260,7 +266,7 @@ select:focus-visible, input:focus-visible, .chip:focus-visible, button:focus-vis
   padding: 10px 14px;
   background: linear-gradient(180deg, #2c241a 0%, #221c15 100%);
   border-bottom: 1px solid var(--line);
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: var(--gold-bright);
 }
 
@@ -275,28 +281,50 @@ select:focus-visible, input:focus-visible, .chip:focus-visible, button:focus-vis
   align-self: center;
 }
 
-.boss-head .zone-tag {
-  font-size: .7rem;
-  text-transform: uppercase;
-  letter-spacing: .09em;
-  color: var(--text-faint);
-  font-weight: 600;
+/* the boss is the heading; the zone is a subordinate tag that follows it */
+.boss-head .boss-name {
+  font-size: 1.22rem;
+  font-weight: 700;
+  color: var(--gold-bright);
+  letter-spacing: .2px;
 }
 
-.boss-head .n {
-  margin-left: auto;
-  font-size: .78rem;
+.boss-head .zone-tag {
+  font-size: .68rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
   color: var(--text-faint);
-  font-weight: 400;
+  font-weight: 600;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 1px 6px;
+  position: relative;
+  top: -1px;
 }
+
 
 .table-scroll { overflow-x: auto; }
 
+/* Fixed layout + declared widths keep every boss table in step. Without it each
+   table sizes to its own contents and the columns stagger between groups.
+   min-width hands narrow screens over to .table-scroll rather than crushing
+   the columns. */
 table {
   width: 100%;
+  min-width: 940px;
   border-collapse: collapse;
+  table-layout: fixed;
   font-size: .89rem;
 }
+
+/* Short columns get fixed widths so they don't inflate on a wide monitor; the
+   three text-heavy columns split whatever is left. */
+.c-item  { width: 25%; }
+.c-slot  { width: 110px; }
+.c-type  { width: 178px; }  /* fits three 38px class icons plus separators */
+.c-role  { width: 104px; }
+.c-prio  { width: 24%; }
+.c-notes { width: auto; }
 
 thead th {
   text-align: left;
@@ -311,6 +339,25 @@ thead th {
   white-space: nowrap;
 }
 
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: color .12s, background .12s;
+}
+
+th.sortable:hover { color: var(--text); background: #2a231b; }
+th.sortable.is-sorted { color: var(--gold); }
+
+.sort-arrow {
+  margin-left: 5px;
+  font-size: .85em;
+  letter-spacing: -.08em;
+  opacity: .35;
+}
+
+th.sortable:hover .sort-arrow { opacity: .7; }
+th.is-sorted .sort-arrow { opacity: 1; letter-spacing: 0; }
+
 tbody td {
   padding: 9px 12px;
   border-bottom: 1px solid var(--line-soft);
@@ -320,10 +367,54 @@ tbody td {
 tbody tr:last-child td { border-bottom: 0; }
 tbody tr:hover { background: #221c15; }
 
-.col-item { min-width: 240px; }
-.col-slot, .col-type { white-space: nowrap; color: var(--text-dim); }
-.col-prio { min-width: 170px; font-weight: 600; }
-.col-notes { color: var(--text-dim); font-size: .85rem; min-width: 210px; }
+/* widths live on the <colgroup>; these only carry appearance */
+.col-slot, .col-type { color: var(--text-dim); }
+.col-prio { font-weight: 600; }
+.col-notes { color: var(--text-dim); font-size: .85rem; }
+
+/* fixed layout can't grow a column to fit, so long values must wrap */
+tbody td { overflow-wrap: break-word; }
+
+/* Tier tokens: "Tier - {class}{class}{class}" instead of the wrapped
+   "Tier Token (War/Hunter/Shaman)". Falls back to the class name as text if an
+   icon fails to load, so the row never loses the information. */
+.col-type .tier-label { font-weight: 600; margin-right: 7px; }
+
+.col-type .tier-sep {
+  color: var(--text-faint);
+  margin: 0 3px;
+}
+
+/* same 38px as the item icons, so every icon on the page reads at one scale */
+.class-icon {
+  width: 38px;
+  height: 38px;
+  vertical-align: middle;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, .5);
+  transition: opacity .12s, filter .12s;
+}
+
+/* dimmed when this class isn't what the current filters asked for */
+.class-icon--muted {
+  opacity: .25;
+  filter: grayscale(1);
+}
+
+tbody tr:hover .class-icon--muted { opacity: .45; }
+
+/* spec icons trailing the shorthand they annotate, in the priority column */
+.spec-icon {
+  width: 38px;
+  height: 38px;
+  margin: 1px 1px;
+  vertical-align: middle;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, .5);
+}
+
+/* icons this size need the line to breathe, or wrapped priorities collide */
+.col-prio { line-height: 1.9; }
 
 .item-link {
   display: inline-flex;
@@ -422,7 +513,7 @@ mark {
 }
 
 .site-footer p { margin: 0 0 10px; max-width: 76ch; }
-.site-footer .shorthand, .site-footer .disclaimer { color: var(--text-faint); font-size: .82rem; }
+.site-footer .disclaimer { color: var(--text-faint); font-size: .82rem; }
 
 /* ---------- responsive ---------- */
 

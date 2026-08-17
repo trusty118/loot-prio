@@ -68,19 +68,114 @@
     "Crafted (Heart of Darkness)": ICON + "spell_shadow_demonictactics.jpg"
   };
 
+  /* Slots as the character sheet presents them: every weapon slot is one "Weapon"
+     entry, and relics share the ranged slot - no class has both, so splitting them
+     only ever produced two half-empty options. */
+  var SLOT_GROUP = {
+    "One-Hand": "Weapon",
+    "Main-Hand": "Weapon",
+    "Off-Hand": "Weapon",
+    "Two-Hand": "Weapon",
+    "Ranged": "Ranged/Relic",
+    "Relic": "Ranged/Relic"
+  };
+
+  function slotGroup(slot) {
+    return SLOT_GROUP[slot] || slot || "";
+  }
+
   var SLOT_ORDER = [
     "Head", "Neck", "Shoulder", "Back", "Chest", "Wrist", "Hands", "Waist",
-    "Legs", "Feet", "Finger", "Trinket", "One-Hand", "Main-Hand", "Off-Hand",
-    "Two-Hand", "Ranged", "Relic"
+    "Legs", "Feet", "Finger", "Trinket", "Weapon", "Ranged/Relic"
   ];
 
   /* The raw `type` field has 30+ values; collapse them into usable buckets. */
   var TYPE_GROUPS = [
     "Cloth", "Leather", "Mail", "Plate",
-    "Weapon", "Shield / Off-hand", "Cloak", "Jewellery", "Relic", "Tier Token"
+    "Weapons - 1H", "Weapons - 2H", "Ranged",
+    "Shield / Off-hand", "Cloak", "Jewellery", "Relic"
   ];
 
-  function typeGroup(type) {
+  /* typeGroup() still returns "Tier Token" - it's a real bucket and an existing
+     ?type= link must keep working - but it's kept out of the dropdown, since the
+     Tier role chip already selects exactly those items. */
+  var HIDDEN_TYPES = { "Tier Token": true };
+
+  /* Display-only tidy-up of the raw type. Staves and polearms are two-handed by
+     definition, so the "2H" prefix is noise. Relabelled at render time rather
+     than in the data, so `type` stays as the item DB records it and typeGroup()
+     can still key off the 2H prefix. */
+  var TYPE_LABEL = {
+    "2H Staff": "Staff",
+    "2H Polearm": "Polearm"
+  };
+
+  /* These arrive with no hand count at all. The Slot column used to supply it,
+     but slots now collapse to a single "Weapon", so the type has to carry it. */
+  var BARE_WEAPON = { "Mace": 1, "Sword": 1, "Dagger": 1, "Axe": 1, "Fist": 1 };
+
+  /* Tier tokens render as "Tier" plus the three class icons - the written-out
+     "Tier Token (Pal/Priest/Lock)" wrapped over three lines in the type column. */
+  var CLASS_ICON = "https://wow.zamimg.com/images/wow/icons/large/classicon_";
+
+  var TIER_CLASSES = {
+    "Tier Token (Pal/Priest/Lock)": ["Paladin", "Priest", "Warlock"],
+    "Tier Token (War/Hunter/Shaman)": ["Warrior", "Hunter", "Shaman"],
+    "Tier Token (Rogue/Mage/Druid)": ["Rogue", "Mage", "Druid"]
+  };
+
+  /* What each class wears and which roles it can fill in T6. Tokens are matched
+     against this per class, so a token surfaces under "Caster + Cloth" only if
+     one and the same class is both - Conqueror has a tank (Paladin) and cloth
+     wearers (Priest/Warlock), but no cloth tank, so it must not match. */
+  var CLASS_INFO = {
+    "Paladin": { armor: "Plate", roles: ["Physical", "Healer", "Tank"] },
+    "Priest": { armor: "Cloth", roles: ["Healer", "Caster"] },
+    "Warlock": { armor: "Cloth", roles: ["Caster"] },
+    "Warrior": { armor: "Plate", roles: ["Physical", "Tank"] },
+    "Hunter": { armor: "Mail", roles: ["Physical"] },
+    "Shaman": { armor: "Mail", roles: ["Caster", "Healer", "Physical"] },
+    "Rogue": { armor: "Leather", roles: ["Physical"] },
+    "Mage": { armor: "Cloth", roles: ["Caster"] },
+    "Druid": { armor: "Leather", roles: ["Physical", "Tank", "Healer", "Caster"] }
+  };
+
+  function tierClasses(rec) {
+    return TIER_CLASSES[rec.type] || null;
+  }
+
+  /* Does this one class satisfy the role and type filters simultaneously? */
+  function classPasses(cls, skip) {
+    var info = CLASS_INFO[cls];
+    if (!info) return false;
+
+    if (skip !== "role" && state.roles.length) {
+      var roleOk = state.roles.indexOf("Tier") !== -1 ||
+        state.roles.some(function (r) { return info.roles.indexOf(r) !== -1; });
+      if (!roleOk) return false;
+    }
+
+    if (skip !== "type" && state.type &&
+        state.type !== "Tier Token" && state.type !== info.armor) {
+      return false;
+    }
+    return true;
+  }
+
+  function typeLabel(rec) {
+    var type = rec.type || "";
+    if (TYPE_LABEL[type]) return TYPE_LABEL[type];
+    if (BARE_WEAPON[type]) return (rec.slot === "Two-Hand" ? "2H " : "1H ") + type;
+    /* keeps sorting and search working on the text the icons stand in for;
+       searching "tier" still hits via the raw type in the haystack */
+    if (TIER_CLASSES[type]) return "Token " + TIER_CLASSES[type].join(" ");
+    return type;
+  }
+
+  /* Takes the whole record, not just `type`: nine weapon types say neither 1H nor
+     2H ("Mace", "Sword", "Fist", ...), so `slot` is what settles the hand count. */
+  function typeGroup(rec) {
+    var type = rec.type || "";
     if (!type) return "Other";
     if (/^Tier Token/i.test(type)) return "Tier Token";
     if (type === "Cloth" || type === "Leather" || type === "Mail" || type === "Plate") return type;
@@ -88,8 +183,106 @@
     if (type === "Shield" || /^Off-hand$/i.test(type)) return "Shield / Off-hand";
     if (type === "Ring" || type === "Neck" || type === "Trinket") return "Jewellery";
     if (type === "Idol" || type === "Totem" || type === "Libram") return "Relic";
-    return "Weapon";
+
+    /* everything left is a weapon */
+    if (rec.slot === "Ranged") return "Ranged";
+    if (/^2H/i.test(type) || rec.slot === "Two-Hand") return "Weapons - 2H";
+    return "Weapons - 1H";
   }
+
+  /* Sort keys for the clickable column headers. Slot and Role sort by their
+     canonical order rather than alphabetically - paper-doll order and
+     Physical/Caster/Healer/Tank/Tier are more useful than Back-before-Chest or
+     Caster-before-Physical. Item and Type sort on the text as displayed. */
+  var SORT_KEYS = {
+    item: function (r) { return r.item.toLowerCase(); },
+    slot: function (r) { return SLOT_ORDER.indexOf(slotGroup(r.slot)); },
+    type: function (r) { return typeLabel(r).toLowerCase(); },
+    role: function (r) { return ROLE_ORDER.indexOf(r.role); }
+  };
+
+  /* Shorthand used in the priority strings -> the spec it names. Longest key wins,
+     so "Prot Pal" is matched before "Prot" and "Fire Mage" before "Mage". Entries
+     with no spec (plain "Lock", "Rogue") get the class icon instead.
+     STEP 1: icons are appended after the existing words so the mapping can be
+     eyeballed before anything is replaced. */
+  var SPEC_ICON = "https://wow.zamimg.com/images/wow/icons/large/";
+
+  var SPECS = [
+    /* --- warrior --- */
+    ["Prot Warrior", "Protection Warrior", "ability_warrior_defensivestance"],
+    ["Prot War", "Protection Warrior", "ability_warrior_defensivestance"],
+    ["Arms", "Arms Warrior", "ability_warrior_savageblow"],
+    ["Fury", "Fury Warrior", "ability_warrior_innerrage"],
+    ["Warrior", "Warrior", "classicon_warrior"],
+    ["War", "Warrior", "classicon_warrior"],
+
+    /* --- paladin --- */
+    ["Prot Paladin", "Protection Paladin", "spell_holy_devotionaura"],
+    ["Prot Pal", "Protection Paladin", "spell_holy_devotionaura"],
+    ["H Pal", "Holy Paladin", "spell_holy_holybolt"],
+    ["Ret", "Retribution Paladin", "spell_holy_auraoflight"],
+    ["Paladin", "Paladin", "classicon_paladin"],
+
+    /* --- priest --- */
+    ["Shadow Priest", "Shadow Priest", "spell_shadow_shadowwordpain"],
+    ["SPriest", "Shadow Priest", "spell_shadow_shadowwordpain"],
+    ["H Priest", "Holy Priest", "spell_holy_guardianspirit"],
+    ["Priest", "Priest", "classicon_priest"],
+
+    /* --- shaman --- */
+    ["R Shaman", "Restoration Shaman", "spell_nature_magicimmunity"],
+    ["Ele Shaman", "Elemental Shaman", "spell_nature_lightning"],
+    ["Elemental", "Elemental Shaman", "spell_nature_lightning"],
+    ["Enhance", "Enhancement Shaman", "spell_nature_lightningshield"],
+    ["Ele", "Elemental Shaman", "spell_nature_lightning"],
+    ["Shaman", "Shaman", "classicon_shaman"],
+
+    /* --- druid --- */
+    ["R Druid", "Restoration Druid", "spell_nature_healingtouch"],
+    ["Boomkin", "Balance Druid", "spell_nature_starfall"],
+    ["Feral Cat", "Feral Druid (cat)", "ability_druid_catform"],
+    ["Feral", "Feral Druid", "ability_racial_bearform"],
+    ["Bear", "Feral Druid (bear)", "ability_racial_bearform"],
+    ["Cat", "Feral Druid (cat)", "ability_druid_catform"],
+    ["Druid", "Druid", "classicon_druid"],
+
+    /* --- hunter --- */
+    ["BM Hunter", "Beast Mastery Hunter", "ability_hunter_beasttaming"],
+    ["Survival Hunter", "Survival Hunter", "ability_hunter_swiftstrike"],
+    ["Survival", "Survival Hunter", "ability_hunter_swiftstrike"],
+    ["BM", "Beast Mastery Hunter", "ability_hunter_beasttaming"],
+    ["Hunter", "Hunter", "classicon_hunter"],
+
+    /* --- mage --- */
+    ["Fire Mage", "Fire Mage", "spell_fire_flamebolt"],
+    ["Arcane", "Arcane Mage", "spell_holy_magicalsentry"],
+    ["Mage", "Mage", "classicon_mage"],
+
+    /* --- warlock --- */
+    ["Fire Lock", "Destruction Warlock", "spell_shadow_rainoffire"],
+    ["Lock", "Warlock", "classicon_warlock"],
+
+    /* --- rogue --- */
+    ["Rogue", "Rogue", "classicon_rogue"],
+
+    /* --- races, where the priority turns on a racial --- */
+    ["Orc", "Orc", "achievement_character_orc_male"],
+    ["Human", "Human", "achievement_character_human_female"]
+  ];
+
+  var SPEC_BY_KEY = {};
+  SPECS.forEach(function (s) { SPEC_BY_KEY[s[0].toLowerCase()] = { name: s[1], icon: s[2] }; });
+
+  /* Longest first so multi-word shorthand wins over its own suffix ("Prot Pal"
+     before "Pal", "Elemental" before "Ele"). The \b guards stop substring hits -
+     without them "Cat" matches inside "Hunter (catch-up)". */
+  var SPEC_RE = new RegExp(
+    "\\b(?:" + SPECS.map(function (s) { return s[0]; })
+      .sort(function (a, b) { return b.length - a.length; })
+      .map(escapeRegExp).join("|") + ")\\b",
+    "gi"
+  );
 
   var state = {
     zone: "",        // "" = all
@@ -97,7 +290,9 @@
     roles: [],       // multi-select; [] = all
     type: "",
     slot: "",
-    q: ""
+    q: "",
+    sort: "",        // "" = leave rows in source order
+    dir: "asc"
   };
 
   var ALL = [];
@@ -165,13 +360,24 @@
   function matches(rec, skip) {
     if (skip !== "zone" && state.zone && rec.zone !== state.zone) return false;
     if (skip !== "boss" && state.boss && rec.boss !== state.boss) return false;
-    if (skip !== "role" && state.roles.length && state.roles.indexOf(rec.role) === -1) return false;
-    if (skip !== "type" && state.type && typeGroup(rec.type) !== state.type) return false;
-    if (skip !== "slot" && state.slot && rec.slot !== state.slot) return false;
+    if (skip !== "slot" && state.slot && slotGroup(rec.slot) !== state.slot) return false;
+
+    /* A token is not cloth or a caster item itself, but it turns into one. Match
+       it on the classes it serves so it appears alongside the gear it competes
+       with; the Role column still just says "Tier". */
+    var classes = tierClasses(rec);
+    if (classes) {
+      if (!classes.some(function (c) { return classPasses(c, skip); })) return false;
+    } else {
+      if (skip !== "role" && state.roles.length && state.roles.indexOf(rec.role) === -1) return false;
+      if (skip !== "type" && state.type && typeGroup(rec) !== state.type) return false;
+    }
 
     if (state.q) {
       var q = state.q.toLowerCase();
-      var hay = [rec.item, rec.boss, rec.zone, rec.priority, rec.notes, rec.slot, rec.type, rec.role]
+      /* search both the raw and displayed forms, so "2H mace" and "mace" both hit */
+      var hay = [rec.item, rec.boss, rec.zone, rec.priority, rec.notes,
+                 rec.slot, slotGroup(rec.slot), rec.type, typeLabel(rec), rec.role]
         .join("   ").toLowerCase();
       if (hay.indexOf(q) === -1) return false;
     }
@@ -180,6 +386,20 @@
 
   function filtered(skip) {
     return ALL.filter(function (r) { return matches(r, skip); });
+  }
+
+  /* Sorts within a boss group - the grouping itself always stays in kill order. */
+  function sortRows(rows) {
+    if (!state.sort || !SORT_KEYS[state.sort]) return rows;
+    var key = SORT_KEYS[state.sort];
+    var dir = state.dir === "desc" ? -1 : 1;
+    return rows.slice().sort(function (a, b) {
+      var x = key(a), y = key(b), c;
+      if (typeof x === "number" && typeof y === "number") c = x - y;
+      else c = String(x).localeCompare(String(y));
+      if (c === 0) c = a.item.localeCompare(b.item);  /* stable, readable tie-break */
+      return c * dir;
+    });
   }
 
   function countBy(skip, keyFn) {
@@ -201,6 +421,7 @@
     if (state.type) p.set("type", state.type);
     if (state.slot) p.set("slot", state.slot);
     if (state.q) p.set("q", state.q);
+    if (state.sort) p.set("sort", state.sort + (state.dir === "desc" ? ":desc" : ""));
     var s = p.toString();
     var url = location.pathname + (s ? "#" + s : "");
     history.replaceState(null, "", url);
@@ -214,6 +435,10 @@
     state.type = p.get("type") || "";
     state.slot = p.get("slot") || "";
     state.q = p.get("q") || "";
+
+    var sort = (p.get("sort") || "").split(":");
+    state.sort = SORT_KEYS[sort[0]] ? sort[0] : "";
+    state.dir = sort[1] === "desc" ? "desc" : "asc";
   }
 
   /* ---------- rendering: controls ---------- */
@@ -314,11 +539,16 @@
   }
 
   function renderSelects() {
-    var typeCounts = countBy("type", function (r) { return typeGroup(r.type); });
-    var slotCounts = countBy("slot", function (r) { return r.slot; });
+    var typeCounts = countBy("type", function (r) { return typeGroup(r); });
+    var slotCounts = countBy("slot", function (r) { return slotGroup(r.slot); });
 
+    /* any bucket not in TYPE_GROUPS still surfaces, so a new type can't go
+       missing - except the ones deliberately hidden */
     var types = TYPE_GROUPS.slice();
-    Object.keys(typeCounts).forEach(function (t) { if (types.indexOf(t) === -1) types.push(t); });
+    Object.keys(typeCounts).forEach(function (t) {
+      if (!HIDDEN_TYPES[t] && types.indexOf(t) === -1) types.push(t);
+    });
+    if (state.type && types.indexOf(state.type) === -1) types.push(state.type);
 
     var slots = SLOT_ORDER.slice();
     Object.keys(slotCounts).forEach(function (s) { if (slots.indexOf(s) === -1) slots.push(s); });
@@ -342,6 +572,62 @@
     return td;
   }
 
+  /* Appends text, wrapping any search hits in <mark>. Built as nodes rather than
+     innerHTML so the spec icons interleaved with this text can't be matched
+     against - a search for "priest" must not hit an icon's title attribute. */
+  function appendText(parent, text, needle) {
+    if (!needle) {
+      parent.appendChild(document.createTextNode(text));
+      return;
+    }
+    var lower = text.toLowerCase();
+    var find = needle.toLowerCase();
+    var at = 0;
+    var hit;
+    while ((hit = lower.indexOf(find, at)) !== -1) {
+      if (hit > at) parent.appendChild(document.createTextNode(text.slice(at, hit)));
+      var mark = document.createElement("mark");
+      mark.textContent = text.slice(hit, hit + find.length);
+      parent.appendChild(mark);
+      at = hit + find.length;
+    }
+    if (at < text.length) parent.appendChild(document.createTextNode(text.slice(at)));
+  }
+
+  function specIcon(spec) {
+    var img = document.createElement("img");
+    img.className = "spec-icon";
+    img.src = SPEC_ICON + spec.icon + ".jpg";
+    img.alt = spec.name;
+    img.title = spec.name;
+    img.setAttribute("onerror", "this.style.display='none'");
+    return img;
+  }
+
+  /* The recognised shorthand is replaced by its icon; everything else (the > = >>
+     operators, and free text like "Anyone" or "biggest upgrade") stays as words.
+     The underlying string is untouched, so search and sort still see the names. */
+  function priorityCell(rec) {
+    var td = document.createElement("td");
+    td.className = "col-prio";
+    var text = rec.priority || "";
+    var at = 0;
+    var m;
+
+    SPEC_RE.lastIndex = 0;
+    while ((m = SPEC_RE.exec(text)) !== null) {
+      var spec = SPEC_BY_KEY[m[0].toLowerCase()];
+      if (!spec) continue;
+      /* "non-orc Fury" and "(non-human)" are exclusions - icon would invert them */
+      if (/non-$/i.test(text.slice(0, m.index))) continue;
+      if (m.index > at) appendText(td, text.slice(at, m.index), state.q);
+      td.appendChild(specIcon(spec));
+      at = m.index + m[0].length;
+    }
+    if (at < text.length) appendText(td, text.slice(at), state.q);
+    return td;
+  }
+
   function renderRow(rec) {
     var tr = document.createElement("tr");
     tr.dataset.role = rec.role;
@@ -350,12 +636,30 @@
 
     var slot = document.createElement("td");
     slot.className = "col-slot";
-    slot.textContent = rec.slot || "";
+    slot.textContent = slotGroup(rec.slot);
     tr.appendChild(slot);
 
     var type = document.createElement("td");
     type.className = "col-type";
-    type.textContent = rec.type || "";
+    var classes = tierClasses(rec);
+    if (classes) {
+      /* Icons only - the Role column already says "Tier", so a word here as well
+         is noise. typeLabel() still returns text for sorting and search.
+         Classes that don't satisfy the active filters are dimmed, so it's clear
+         which of the three put the token in these results. */
+      var filtering = state.roles.length > 0 || state.type !== "";
+      type.innerHTML =
+        classes.map(function (c) {
+          var muted = filtering && !classPasses(c, null);
+          return '<img class="class-icon' + (muted ? " class-icon--muted" : "") + '"' +
+            ' src="' + CLASS_ICON + c.toLowerCase() + '.jpg"' +
+            ' alt="' + escapeHtml(c) + '"' +
+            ' title="' + escapeHtml(c) + (muted ? " (does not match the current filters)" : "") + '"' +
+            ' onerror="this.replaceWith(document.createTextNode(this.alt))">';
+        }).join('<span class="tier-sep">-</span>');
+    } else {
+      type.textContent = typeLabel(rec);
+    }
     tr.appendChild(type);
 
     var role = document.createElement("td");
@@ -365,10 +669,7 @@
     role.appendChild(pill);
     tr.appendChild(role);
 
-    var prio = document.createElement("td");
-    prio.className = "col-prio";
-    prio.innerHTML = highlight(rec.priority, state.q);
-    tr.appendChild(prio);
+    tr.appendChild(priorityCell(rec));
 
     var notes = document.createElement("td");
     notes.className = "col-notes";
@@ -376,6 +677,29 @@
     tr.appendChild(notes);
 
     return tr;
+  }
+
+  /* Sort state is global, so every boss group stays in step - sorting one section
+     and leaving the rest alone would make the columns lie about each other. */
+  function sortableTh(label, key) {
+    var active = state.sort === key;
+    var arrow = active ? (state.dir === "asc" ? "▲" : "▼") : "▴▾";
+    return '<th class="sortable' + (active ? " is-sorted" : "") + '"' +
+      ' data-sort="' + key + '"' +
+      ' aria-sort="' + (active ? (state.dir === "asc" ? "ascending" : "descending") : "none") + '"' +
+      ' tabindex="0" role="button"' +
+      ' title="Sort by ' + escapeHtml(label) + '">' +
+      escapeHtml(label) + '<span class="sort-arrow">' + arrow + "</span></th>";
+  }
+
+  function toggleSort(key) {
+    if (state.sort === key) {
+      state.dir = state.dir === "asc" ? "desc" : "asc";
+    } else {
+      state.sort = key;
+      state.dir = "asc";
+    }
+    update();
   }
 
   function renderGroup(zone, boss, rows) {
@@ -388,20 +712,30 @@
     h.innerHTML =
       (portrait ? '<img class="boss-portrait" src="' + escapeHtml(portrait) +
                   '" alt="" onerror="this.style.display=\'none\'">' : "") +
-      '<span class="zone-tag">' + escapeHtml(zoneLabel(zone)) + "</span> " +
-      highlight(bossLabel(boss), state.q) +
-      '<span class="n">' + rows.length + (rows.length === 1 ? " item" : " items") + "</span>";
+      '<span class="boss-name">' + highlight(bossLabel(boss), state.q) + "</span>" +
+      '<span class="zone-tag">' + escapeHtml(zoneLabel(zone)) + "</span>";
     section.appendChild(h);
 
     var scroll = document.createElement("div");
     scroll.className = "table-scroll";
     var table = document.createElement("table");
+    /* Every boss is its own table, so the column widths have to be declared here -
+       left to themselves, each table would size its columns to its own contents
+       and no two groups would line up. */
     table.innerHTML =
+      "<colgroup>" +
+      '<col class="c-item"><col class="c-slot"><col class="c-type">' +
+      '<col class="c-role"><col class="c-prio"><col class="c-notes">' +
+      "</colgroup>" +
       "<thead><tr>" +
-      "<th>Item</th><th>Slot</th><th>Type</th><th>Role</th><th>Priority</th><th>Notes</th>" +
+      sortableTh("Item", "item") +
+      sortableTh("Slot", "slot") +
+      sortableTh("Type", "type") +
+      sortableTh("Role", "role") +
+      "<th>Priority</th><th>Notes</th>" +
       "</tr></thead>";
     var tbody = document.createElement("tbody");
-    rows.forEach(function (r) { tbody.appendChild(renderRow(r)); });
+    sortRows(rows).forEach(function (r) { tbody.appendChild(renderRow(r)); });
     table.appendChild(tbody);
     scroll.appendChild(table);
     section.appendChild(scroll);
@@ -473,8 +807,21 @@
     el.reset.addEventListener("click", function () {
       state.zone = ""; state.boss = ""; state.roles = [];
       state.type = ""; state.slot = ""; state.q = "";
+      state.sort = ""; state.dir = "asc";
       el.search.value = "";
       update();
+    });
+
+    /* delegated: the headers are rebuilt on every render */
+    el.results.addEventListener("click", function (e) {
+      var th = e.target.closest ? e.target.closest("th[data-sort]") : null;
+      if (th) toggleSort(th.dataset.sort);
+    });
+
+    el.results.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      var th = e.target.closest ? e.target.closest("th[data-sort]") : null;
+      if (th) { e.preventDefault(); toggleSort(th.dataset.sort); }
     });
 
     window.addEventListener("hashchange", function () {

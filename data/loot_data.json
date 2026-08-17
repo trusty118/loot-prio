@@ -20,7 +20,7 @@
   "slot": "Feet",
   "type": "Leather",
   "role": "Tank",
-  "priority": "Feral (Bear)",
+  "priority": "Feral",
   "notes": "BiS bear mitigation. Not for cat."
  },
  {
@@ -68,8 +68,8 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Healer",
-  "priority": "R Druid (if ->113 haste) > Priest > Shaman > R Druid > H Pal",
-  "notes": "Healer haste ring. One haste ring each before doubling up."
+  "priority": "R Druid > Priest > Shaman > R Druid > H Pal",
+  "notes": "Healer haste ring. One haste ring each before doubling up. R Druid: if ->113 haste."
  },
  {
   "zone": "Black Temple",
@@ -80,8 +80,8 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Caster",
-  "priority": "Lock = Boomkin = Ele > SPriest (if ->146) > Mage",
-  "notes": "Most contested caster haste ring; BiS all casters."
+  "priority": "Lock = Boomkin = Ele > SPriest > Mage",
+  "notes": "Most contested caster haste ring; BiS all casters. SPriest: if ->146."
  },
  {
   "zone": "Black Temple",
@@ -92,8 +92,8 @@
   "slot": "One-Hand",
   "type": "1H Mace",
   "role": "Physical",
-  "priority": "Human Prot War (placeholder) / Fury OH",
-  "notes": "Hold-over for a human prot warrior waiting on Blade of Savagery."
+  "priority": "Human Prot War / Fury OH",
+  "notes": "Hold-over for a human prot warrior waiting on Blade of Savagery. Human Prot War: placeholder."
  },
  {
   "zone": "Black Temple",
@@ -188,8 +188,8 @@
   "slot": "Wrist",
   "type": "Plate",
   "role": "Tank",
-  "priority": "Any tank (mitigation)",
-  "notes": "Full-mitigation sets only."
+  "priority": "Any tank",
+  "notes": "Full-mitigation sets only. Any tank: mitigation."
  },
  {
   "zone": "Black Temple",
@@ -236,8 +236,8 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Caster",
-  "priority": "Lock > Boomkin > SPriest > Ele > Mage (never)",
-  "notes": "Great long-term hit ring."
+  "priority": "Lock > Boomkin > SPriest > Ele > Mage",
+  "notes": "Great long-term hit ring. Mage: never."
  },
  {
   "zone": "Black Temple",
@@ -272,8 +272,8 @@
   "slot": "Two-Hand",
   "type": "2H Polearm",
   "role": "Physical",
-  "priority": "Hunter (catch-up)",
-  "notes": "Too much hit; weak."
+  "priority": "Hunter",
+  "notes": "Too much hit; weak. Hunter: catch-up."
  },
  {
   "zone": "Black Temple",
@@ -320,8 +320,8 @@
   "slot": "Shoulder",
   "type": "Plate",
   "role": "Tank",
-  "priority": "Avoid (worse than T5)",
-  "notes": "Tier-5 shoulders are better."
+  "priority": "Avoid",
+  "notes": "Tier-5 shoulders are better. Avoid: worse than T5."
  },
  {
   "zone": "Black Temple",
@@ -332,8 +332,8 @@
   "slot": "Neck",
   "type": "Neck",
   "role": "Physical",
-  "priority": "Enhance > Rogue > Arms (if needs hit)",
-  "notes": "BiS enhance & rogue (hit)."
+  "priority": "Enhance > Rogue > Arms",
+  "notes": "BiS enhance & rogue (hit). Arms: if needs hit."
  },
  {
   "zone": "Black Temple",
@@ -380,8 +380,8 @@
   "slot": "Legs",
   "type": "Plate",
   "role": "Tank",
-  "priority": "Prot Warrior (niche)",
-  "notes": "No defense; awkward to fit."
+  "priority": "Prot Warrior",
+  "notes": "No defense; awkward to fit. Prot Warrior: niche."
  },
  {
   "zone": "Black Temple",
@@ -392,8 +392,8 @@
   "slot": "One-Hand",
   "type": "1H Mace",
   "role": "Physical",
-  "priority": "Enhance (x2) > Human Warrior",
-  "notes": "Two = BiS enhance combo (2.8 speed)."
+  "priority": "Enhance > Human Warrior",
+  "notes": "Two are needed - the BiS enhance combo (2.8 speed)."
  },
  {
   "zone": "Black Temple",
@@ -404,8 +404,8 @@
   "slot": "One-Hand",
   "type": "1H Axe",
   "role": "Tank",
-  "priority": "Prot Warrior (non-human)",
-  "notes": "BiS tank warrior; humans prefer Mother's fast mace."
+  "priority": "Prot Warrior",
+  "notes": "BiS tank warrior; humans prefer Mother's fast mace. Prot Warrior: non-human."
  },
  {
   "zone": "Black Temple",
@@ -428,7 +428,7 @@
   "slot": "Legs",
   "type": "Plate",
   "role": "Physical",
-  "priority": "DPS Warrior (Fury=Arms) > Ret",
+  "priority": "Fury = Arms > Ret",
   "notes": "Best off-set legs for 4pc-tier warriors."
  },
  {
@@ -452,7 +452,7 @@
   "slot": "Trinket",
   "type": "Trinket",
   "role": "Tank",
-  "priority": "Druid > Warrior > Paladin",
+  "priority": "Feral > Prot Warrior > Prot Paladin",
   "notes": "Anti-crit for bears."
  },
  {
@@ -464,8 +464,8 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Physical",
-  "priority": "Rogue (no T5 ring) > Feral (hit) > Hunter (hit) > Enhance > Prot",
-  "notes": "Complex; pairs with the Illidan ring."
+  "priority": "Rogue > Feral > Hunter > Enhance > Prot Warrior",
+  "notes": "Complex; pairs with the Illidan ring. Rogue: no T5 ring. Feral: hit. Hunter: hit."
  },
  {
   "zone": "Black Temple",
@@ -476,8 +476,8 @@
   "slot": "Wrist",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Rogue > Hunter (if needs hit)",
-  "notes": "Huge rogue wrist upgrade."
+  "priority": "Rogue > Hunter",
+  "notes": "Huge rogue wrist upgrade. Hunter: if needs hit."
  },
  {
   "zone": "Black Temple",
@@ -500,8 +500,8 @@
   "slot": "Feet",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Enhance > Hunter (if needs hit) > Ret / Warrior",
-  "notes": "Underrated; enhance can use the mail option."
+  "priority": "Enhance > Hunter > Ret / Warrior",
+  "notes": "Underrated; enhance can use the mail option. Hunter: if needs hit."
  },
  {
   "zone": "Black Temple",
@@ -584,8 +584,8 @@
   "slot": "Waist",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Ret (if no Vashj belt)",
-  "notes": "Weak; Vashj belt better."
+  "priority": "Ret",
+  "notes": "Weak; Vashj belt better. Ret: if no Vashj belt."
  },
  {
   "zone": "Black Temple",
@@ -608,8 +608,8 @@
   "slot": "Shoulder",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Hunter / Enhance / Ret (temp)",
-  "notes": "Mail; temp upgrade."
+  "priority": "Hunter / Enhance / Ret",
+  "notes": "Mail; temp upgrade. Ret: temp."
  },
  {
   "zone": "Black Temple",
@@ -656,8 +656,8 @@
   "slot": "Hands",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Fury (off-set) > Arms",
-  "notes": "Not for 4pc; give to non-4set warriors."
+  "priority": "Fury > Arms",
+  "notes": "Not for 4pc; give to non-4set warriors. Fury: off-set."
  },
  {
   "zone": "Black Temple",
@@ -680,8 +680,8 @@
   "slot": "Back",
   "type": "Cloak",
   "role": "Healer",
-  "priority": "Anyone w/o Kael'thas cloak (Druid/Priest)",
-  "notes": "~= KT cloak, a bit more stam."
+  "priority": "Anyone w/o Kael'thas cloak",
+  "notes": "~= KT cloak, a bit more stam. Druid/Priest first."
  },
  {
   "zone": "Black Temple",
@@ -728,8 +728,8 @@
   "slot": "Chest",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Anyone (bad)",
-  "notes": "Fake agility; hunters gem more from tier."
+  "priority": "Anyone",
+  "notes": "Fake agility; hunters gem more from tier. Anyone: bad."
  },
  {
   "zone": "Black Temple",
@@ -752,8 +752,8 @@
   "slot": "Hands",
   "type": "Cloth",
   "role": "Healer",
-  "priority": "H Pal (regen build) > Priest",
-  "notes": "BiS in the high-mana holy-light pally build."
+  "priority": "H Pal > Priest",
+  "notes": "BiS in the high-mana holy-light pally build. H Pal: regen build."
  },
  {
   "zone": "Black Temple",
@@ -764,8 +764,8 @@
   "slot": "Wrist",
   "type": "Leather",
   "role": "Caster",
-  "priority": "Boomkin (temp)",
-  "notes": "Weak caster wrists."
+  "priority": "Boomkin",
+  "notes": "Weak caster wrists. Boomkin: temp."
  },
  {
   "zone": "Black Temple",
@@ -836,8 +836,8 @@
   "slot": "Neck",
   "type": "Neck",
   "role": "Caster",
-  "priority": "Lock > Boomkin (hit) > SPriest > Mage/Ele",
-  "notes": "Most casters use the Kael'thas neck instead."
+  "priority": "Lock > Boomkin > SPriest > Mage/Ele",
+  "notes": "Most casters use the Kael'thas neck instead. Boomkin: hit."
  },
  {
   "zone": "Black Temple",
@@ -932,8 +932,8 @@
   "slot": "Chest",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Fury (temp)",
-  "notes": "Lots of hit; temp."
+  "priority": "Fury",
+  "notes": "Lots of hit; temp. Fury: temp."
  },
  {
   "zone": "Black Temple",
@@ -944,8 +944,8 @@
   "slot": "Neck",
   "type": "Neck",
   "role": "Healer",
-  "priority": "H Pal (or all healers if no PvP haste neck)",
-  "notes": "Depends whether the PvP haste-healing neck ships."
+  "priority": "H Pal",
+  "notes": "Depends whether the PvP haste-healing neck ships. H Pal: or all healers if no PvP haste neck."
  },
  {
   "zone": "Black Temple",
@@ -1016,8 +1016,8 @@
   "slot": "Head",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Fury / Arms (hold-over)",
-  "notes": "Lots of hit; hold-over while waiting on Cursed Vision / 4pc."
+  "priority": "Fury / Arms",
+  "notes": "Lots of hit; hold-over while waiting on Cursed Vision / 4pc. Arms: hold-over."
  },
  {
   "zone": "Black Temple",
@@ -1040,8 +1040,8 @@
   "slot": "Back",
   "type": "Cloak",
   "role": "Healer",
-  "priority": "R Shaman > Priest > Druid > H Pal (Lock if speed-running)",
-  "notes": "BiS healer cloak all game."
+  "priority": "R Shaman > Priest > Druid > H Pal",
+  "notes": "BiS healer cloak all game. H Pal: Lock if speed-running."
  },
  {
   "zone": "Black Temple",
@@ -1052,8 +1052,8 @@
   "slot": "Head",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "Fire Mage / vestment-less Lock > Boomkin/Ele (temp)",
-  "notes": "Only ~BiS for fire mage."
+  "priority": "Fire Mage / Lock > Boomkin/Ele",
+  "notes": "Only ~BiS for fire mage. Warlocks only use this if they don't have Vestments of the Sea-witch from Vashj. Ele: temp."
  },
  {
   "zone": "Black Temple",
@@ -1088,7 +1088,7 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Physical",
-  "priority": "Rogue > Enhance >> Arms > Fury/Hunter/Feral > Prot > Ret",
+  "priority": "Rogue > Enhance >> Arms > Fury = Hunter = Feral > Prot Warrior > Ret",
   "notes": "BiS all physical DPS but rogue/enhance gain far more."
  },
  {
@@ -1124,8 +1124,8 @@
   "slot": "One-Hand",
   "type": "1H Dagger",
   "role": "Physical",
-  "priority": "~Rogue (PvP/novelty)",
-  "notes": "Little PvE use."
+  "priority": "~Rogue",
+  "notes": "Little PvE use. Rogue: PvP/novelty."
  },
  {
   "zone": "Black Temple",
@@ -1220,8 +1220,8 @@
   "slot": "Shoulder",
   "type": "Tier Token (War/Hunter/Shaman)",
   "role": "Tier",
-  "priority": "R Shaman = Ele > Hunter > Fury > Prot (fury ver) > Enhance",
-  "notes": "Mother Shahraz."
+  "priority": "R Shaman = Ele > Hunter > Fury > Prot Warrior > Enhance",
+  "notes": "Prot Warriors should use the DPS version."
  },
  {
   "zone": "Black Temple",
@@ -1256,7 +1256,7 @@
   "slot": "Legs",
   "type": "Tier Token (War/Hunter/Shaman)",
   "role": "Tier",
-  "priority": "R Shaman > BM Hunter > Prot Warrior > Ele/Enhance/Fury/Arms",
+  "priority": "R Shaman > BM Hunter > Prot Warrior > Ele = Enhance = Fury = Arms",
   "notes": "Illidari Council."
  },
  {
@@ -1280,8 +1280,8 @@
   "slot": "Chest",
   "type": "Tier Token (Pal/Priest/Lock)",
   "role": "Tier",
-  "priority": "Prot Pal > vestment-less Lock > H Pal > SPriest > H Priest > Ret",
-  "notes": "Illidan."
+  "priority": "Prot Pal > Lock > H Pal > SPriest > H Priest > Ret",
+  "notes": "Warlocks only use this if they don't have Vestments of the Sea-witch from Vashj."
  },
  {
   "zone": "Black Temple",
@@ -1292,8 +1292,8 @@
   "slot": "Chest",
   "type": "Tier Token (War/Hunter/Shaman)",
   "role": "Tier",
-  "priority": "R Shaman = Ele > Arms = Fury > Hunter > Prot (fury) > Enhance",
-  "notes": "Illidan."
+  "priority": "R Shaman = Ele > Arms = Fury > Hunter > Prot Warrior > Enhance",
+  "notes": "Prot Warriors should use the DPS version."
  },
  {
   "zone": "Black Temple",
@@ -1316,8 +1316,8 @@
   "slot": "Wrist",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "All casters but Mage (spread out)",
-  "notes": "CRAFTED (BoE). ~belt-of-blasting equivalent; near-BiS caster wrists."
+  "priority": "All casters but Mage",
+  "notes": "CRAFTED (BoE). ~belt-of-blasting equivalent; near-BiS caster wrists. Spread across casters; Mage last."
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -1352,8 +1352,8 @@
   "slot": "Wrist",
   "type": "Leather",
   "role": "Healer",
-  "priority": "R Druid (to reach 113 haste)",
-  "notes": "CRAFTED (BoE). Leather haste wrists."
+  "priority": "R Druid",
+  "notes": "CRAFTED (BoE). Leather haste wrists. R Druid: to reach 113 haste."
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -1376,8 +1376,8 @@
   "slot": "Wrist",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Enhance (Rogue backup)",
-  "notes": "CRAFTED (BoE). Tied with Bindings of Lightning Reflexes."
+  "priority": "Enhance",
+  "notes": "CRAFTED (BoE). Tied with Bindings of Lightning Reflexes. Enhance: Rogue backup."
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -1388,8 +1388,8 @@
   "slot": "Wrist",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Skip (bad)",
-  "notes": "CRAFTED (BoE). Mail version out-damages these even for war/ret."
+  "priority": "Skip",
+  "notes": "CRAFTED (BoE). Mail version out-damages these even for war/ret. Skip: bad."
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -1400,8 +1400,8 @@
   "slot": "Shoulder",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Enhance (BiS)",
-  "notes": "CRAFTED (BoP). Also a leather option; both good for enhance."
+  "priority": "Enhance",
+  "notes": "CRAFTED (BoP). Also a leather option; both good for enhance. Enhance: BiS."
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -1412,8 +1412,8 @@
   "slot": "Shoulder",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "Shadow Priest (haste breakpoint)",
-  "notes": "CRAFTED (BoP). Not BiS but a big jump for SPriest."
+  "priority": "Shadow Priest",
+  "notes": "CRAFTED (BoP). Not BiS but a big jump for SPriest. Shadow Priest: haste breakpoint."
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -1424,8 +1424,8 @@
   "slot": "Shoulder",
   "type": "Cloth",
   "role": "Healer",
-  "priority": "Priest (early)",
-  "notes": "CRAFTED (BoP). Healer haste shoulders."
+  "priority": "Priest",
+  "notes": "CRAFTED (BoP). Healer haste shoulders. Priest: early."
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -1436,8 +1436,8 @@
   "slot": "Shoulder",
   "type": "Leather",
   "role": "Healer",
-  "priority": "R Druid (to reach 113 haste)",
-  "notes": "CRAFTED (BoP). Leather haste shoulders."
+  "priority": "R Druid",
+  "notes": "CRAFTED (BoP). Leather haste shoulders. R Druid: to reach 113 haste."
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -1448,8 +1448,8 @@
   "slot": "Shoulder",
   "type": "Mail",
   "role": "Healer",
-  "priority": "R Shaman (temp)",
-  "notes": "CRAFTED (BoP). Not BiS; tier preferred."
+  "priority": "R Shaman",
+  "notes": "CRAFTED (BoP). Not BiS; tier preferred. R Shaman: temp."
  },
  {
   "zone": "Mount Hyjal",
@@ -1496,8 +1496,8 @@
   "slot": "Chest",
   "type": "Mail",
   "role": "Caster",
-  "priority": "Elemental (if wanted)",
-  "notes": "Weak; whoever."
+  "priority": "Elemental",
+  "notes": "Weak; whoever. Elemental: if wanted."
  },
  {
   "zone": "Mount Hyjal",
@@ -1544,8 +1544,8 @@
   "slot": "Off-Hand",
   "type": "Fist",
   "role": "Physical",
-  "priority": "~Rogue / Hunter (novelty / stat-stick)",
-  "notes": "Bad. Off-hand claw is 32946. Matches T5 enhance look."
+  "priority": "~Rogue / Hunter",
+  "notes": "Bad. Off-hand claw is 32946. Matches T5 enhance look. Hunter: novelty / stat-stick."
  },
  {
   "zone": "Mount Hyjal",
@@ -1604,8 +1604,8 @@
   "slot": "Wrist",
   "type": "Mail",
   "role": "Healer",
-  "priority": "R Shaman / H Pal (filler)",
-  "notes": "Not BiS; biggest upgrade."
+  "priority": "R Shaman / H Pal",
+  "notes": "Not BiS; biggest upgrade. H Pal: filler."
  },
  {
   "zone": "Mount Hyjal",
@@ -1616,8 +1616,8 @@
   "slot": "Wrist",
   "type": "Plate",
   "role": "Healer",
-  "priority": "H Pal (holy-light build)",
-  "notes": "BiS holy-light plate wrists."
+  "priority": "H Pal",
+  "notes": "BiS holy-light plate wrists. H Pal: holy-light build."
  },
  {
   "zone": "Mount Hyjal",
@@ -1640,8 +1640,8 @@
   "slot": "Shoulder",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Warrior (temp)",
-  "notes": "Hit; filler if no Shoulders of the Stranger."
+  "priority": "Warrior",
+  "notes": "Hit; filler if no Shoulders of the Stranger. Warrior: temp."
  },
  {
   "zone": "Mount Hyjal",
@@ -1652,8 +1652,8 @@
   "slot": "One-Hand",
   "type": "1H Dagger",
   "role": "Physical",
-  "priority": "Rogue OH (filler)",
-  "notes": "Bad."
+  "priority": "Rogue OH",
+  "notes": "Bad. Rogue OH: filler."
  },
  {
   "zone": "Mount Hyjal",
@@ -1664,8 +1664,8 @@
   "slot": "Off-Hand",
   "type": "Off-hand",
   "role": "Caster",
-  "priority": "Lock / Boomkin (needs hit) > Mage",
-  "notes": "BiS caster off-hand; give to whoever isn't getting the staff."
+  "priority": "Lock / Boomkin > Mage",
+  "notes": "BiS caster off-hand; give to whoever isn't getting the staff. Boomkin: needs hit."
  },
  {
   "zone": "Mount Hyjal",
@@ -1724,8 +1724,8 @@
   "slot": "Feet",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Skip (worse than Orca Hide)",
-  "notes": ""
+  "priority": "Skip",
+  "notes": "Skip: worse than Orca Hide."
  },
  {
   "zone": "Mount Hyjal",
@@ -1748,8 +1748,8 @@
   "slot": "One-Hand",
   "type": "1H Sword",
   "role": "Tank",
-  "priority": "Prot Warrior (mitigation, niche)",
-  "notes": "Rarely worth it over Mallet / expertise weapon."
+  "priority": "Prot Warrior",
+  "notes": "Rarely worth it over Mallet / expertise weapon. Prot Warrior: mitigation, niche."
  },
  {
   "zone": "Mount Hyjal",
@@ -1760,8 +1760,8 @@
   "slot": "One-Hand",
   "type": "1H Sword",
   "role": "Physical",
-  "priority": "Rogue (if no Talon) > Fury / Survival (x2) / BM",
-  "notes": "Stat stick; survival wants two."
+  "priority": "Rogue > Fury = Survival = BM",
+  "notes": "Rogue only uses if no Talon of Azshara from Tidewalker. Survival wants 2x."
  },
  {
   "zone": "Mount Hyjal",
@@ -1820,8 +1820,8 @@
   "slot": "Feet",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "Prot Pal (threat) / Lock (hit)",
-  "notes": "Niche; rarely truly BiS."
+  "priority": "Prot Pal = Lock",
+  "notes": "Niche item. Prot uses for threat, Lock uses if they need hit."
  },
  {
   "zone": "Mount Hyjal",
@@ -1832,8 +1832,8 @@
   "slot": "Shoulder",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Skip (bad)",
-  "notes": "Often worse than T5."
+  "priority": "Skip",
+  "notes": "Often worse than T5. Skip: bad."
  },
  {
   "zone": "Mount Hyjal",
@@ -1856,8 +1856,8 @@
   "slot": "Waist",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Ret (if no Vashj belt)",
-  "notes": "Haste/agi; not great."
+  "priority": "Ret",
+  "notes": "Not great for Ret - only use if no Belt of One-Hundred Deaths from Vashj."
  },
  {
   "zone": "Mount Hyjal",
@@ -1868,8 +1868,8 @@
   "slot": "Shoulder",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Hunter (temp)",
-  "notes": "Slightly > T5 broken-set; +2% pet crit."
+  "priority": "Hunter",
+  "notes": "Slightly > T5 broken-set; +2% pet crit. Hunter: temp."
  },
  {
   "zone": "Mount Hyjal",
@@ -1916,8 +1916,8 @@
   "slot": "Chest",
   "type": "Leather",
   "role": "Caster",
-  "priority": "Skip (bad)",
-  "notes": ""
+  "priority": "Skip",
+  "notes": "Skip: bad."
  },
  {
   "zone": "Mount Hyjal",
@@ -1928,8 +1928,8 @@
   "slot": "Legs",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Rogue (niche)",
-  "notes": "Weak."
+  "priority": "Rogue",
+  "notes": "Niche - weak item."
  },
  {
   "zone": "Mount Hyjal",
@@ -1952,8 +1952,8 @@
   "slot": "Chest",
   "type": "Plate",
   "role": "Tank",
-  "priority": "Prot Warrior (bad)",
-  "notes": "Worse than T5."
+  "priority": "Prot Warrior",
+  "notes": "Worse than T5. Prot Warrior: bad."
  },
  {
   "zone": "Mount Hyjal",
@@ -1964,7 +1964,7 @@
   "slot": "Waist",
   "type": "Plate",
   "role": "Healer",
-  "priority": "H Pal (holy-light build)",
+  "priority": "H Pal",
   "notes": "BiS holy-light belt."
  },
  {
@@ -1976,8 +1976,8 @@
   "slot": "One-Hand",
   "type": "1H Dagger",
   "role": "Physical",
-  "priority": "BM Hunter > Fury (OH)",
-  "notes": "BiS BM dagger (armor pen)."
+  "priority": "BM Hunter > Fury",
+  "notes": "BiS BM dagger for ArP. Fury can use as OH."
  },
  {
   "zone": "Mount Hyjal",
@@ -2012,8 +2012,8 @@
   "slot": "Chest",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Ret (temp) > Hunter / Enhance",
-  "notes": "Better for ret than hunter/enhance."
+  "priority": "Ret > Hunter / Enhance",
+  "notes": "Better for ret than hunter/enhance. Ret: temp."
  },
  {
   "zone": "Mount Hyjal",
@@ -2024,8 +2024,8 @@
   "slot": "Chest",
   "type": "Plate",
   "role": "Healer",
-  "priority": "Skip (bad)",
-  "notes": "Not good."
+  "priority": "Skip",
+  "notes": "Not good. Skip: bad."
  },
  {
   "zone": "Mount Hyjal",
@@ -2096,8 +2096,8 @@
   "slot": "Off-Hand",
   "type": "Shield",
   "role": "Caster",
-  "priority": "Elemental (Prot Pal threat for speed guilds)",
-  "notes": "BiS ele shield."
+  "priority": "Elemental > Prot Pal",
+  "notes": "BiS ele shield. Prot Paladin really only uses it for threat when speedrunning."
  },
  {
   "zone": "Mount Hyjal",
@@ -2144,8 +2144,8 @@
   "slot": "Hands",
   "type": "Tier Token (Rogue/Mage/Druid)",
   "role": "Tier",
-  "priority": "Feral > Rogue > Boomkin > Mage (if needs hit)",
-  "notes": "Azgalor. R Druid uses haste gloves instead."
+  "priority": "Feral > Rogue > Boomkin > Mage",
+  "notes": "Mage only uses if they need hit. R Druid uses haste gloves instead."
  },
  {
   "zone": "Mount Hyjal",
@@ -2168,8 +2168,8 @@
   "slot": "Head",
   "type": "Tier Token (War/Hunter/Shaman)",
   "role": "Tier",
-  "priority": "Survival Hunter > Ele > Arms/Fury (4pc) > Enhance > Prot",
-  "notes": "Archimonde. Survival uses the tier helm over Cursed Vision."
+  "priority": "Survival Hunter > Ele > Arms = Fury > Enhance > Prot Warrior",
+  "notes": "Survival uses the tier helm over Cursed Vision. Fury only uses if targeting 4pc."
  },
  {
   "zone": "Mount Hyjal",
@@ -2180,7 +2180,7 @@
   "slot": "Head",
   "type": "Tier Token (Rogue/Mage/Druid)",
   "role": "Tier",
-  "priority": "Feral > Rogue (if not getting Cursed Vision) > Boomkin > R Druid > Mage",
-  "notes": "Archimonde."
+  "priority": "Feral > Rogue > Boomkin > R Druid > Mage",
+  "notes": "Rogue uses this if not getting Cursed Vision of Sargeras from Illidan."
  }
 ]
