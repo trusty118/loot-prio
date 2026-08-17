@@ -4,6 +4,7 @@
   "use strict";
 
   var DATA_URL = "data/loot_data.json";
+  var BIS_URL = "data/bis.json";
 
   /* Encounter order per zone (the JSON is not in kill order). */
   var BOSS_ORDER = {
@@ -358,8 +359,13 @@
     return ZONE_LABEL[zone] || zone;
   }
 
+  /* Crafted items have no boss - the em-dash is a placeholder in the data. They are
+     reachable through the Crafted zone, so they get no boss chip and their group is
+     headed by the zone instead. */
+  var NO_BOSS = "—";
+
   function bossLabel(boss) {
-    return boss === "—" ? "Craftable" : boss;
+    return boss;
   }
 
   function orderedBosses(zone) {
@@ -517,6 +523,7 @@
 
     zones.forEach(function (z) {
       orderedBosses(z).forEach(function (b) {
+        if (b === NO_BOSS) return;   /* crafted items are a zone, not a boss */
         var c = chip(bossLabel(b), state.boss === b, counts[b] || 0, null, BOSS_ICON[b]);
         c.addEventListener("click", function () {
           state.boss = (state.boss === b) ? "" : b;
@@ -630,6 +637,38 @@
     3: { cls: "spec-icon--bis3", label: "Expansion BiS" }
   };
 
+  var BIS_TIER_BY_NAME = { "phase": 1, "multiPhase": 2, "expansion": 3 };
+
+  /* Flattened from data/bis.json: "Spec Name|itemId" -> tier number.
+     BIS_BY_SPEC keeps the per-spec shape the file is written in, which is what a
+     spec filter would read from later. */
+  var BIS = {};
+  var BIS_BY_SPEC = {};
+
+  function indexBis(doc) {
+    BIS = {};
+    BIS_BY_SPEC = {};
+    var specs = (doc && doc.specs) || {};
+
+    Object.keys(specs).forEach(function (specName) {
+      var phases = specs[specName] || {};
+      Object.keys(phases).forEach(function (phase) {
+        (phases[phase] || []).forEach(function (entry) {
+          if (!entry || entry.id == null) return;
+          var tier = BIS_TIER_BY_NAME[entry.bis || "phase"] || 1;
+          BIS[specName + "|" + entry.id] = tier;
+          (BIS_BY_SPEC[specName] = BIS_BY_SPEC[specName] || []).push({
+            id: entry.id, item: entry.item, tier: tier, phase: phase
+          });
+        });
+      });
+    });
+  }
+
+  function bisTier(specName, itemId) {
+    return BIS[specName + "|" + itemId] || 0;
+  }
+
   function specIcon(spec, bis) {
     var tier = BIS_TIERS[bis];
     var img = document.createElement("img");
@@ -669,15 +708,15 @@
       if (m.index > at) appendText(td, text.slice(at, m.index), state.q);
       at = m.index + m[0].length;
 
-      /* * = BiS this phase, ** = across phases, *** = all expansion */
+      /* Defensive: asterisks used to mark BiS inline. data/bis.json is the source
+         of truth now, but swallow any leftover so it can't render as text. */
       var stars = /^\*{1,3}/.exec(text.slice(at));
-      var bis = stars ? stars[0].length : 0;
       if (stars) {
         at += stars[0].length;
-        SPEC_RE.lastIndex = at;   /* don't re-scan the markers as text */
+        SPEC_RE.lastIndex = at;
       }
 
-      td.appendChild(specIcon(spec, bis));
+      td.appendChild(specIcon(spec, bisTier(spec.name, rec.id)));
     }
     if (at < text.length) appendText(td, text.slice(at), state.q);
     return td;
@@ -767,11 +806,15 @@
     var h = document.createElement("h2");
     h.className = "boss-head";
     var portrait = BOSS_ICON[boss];
+    /* no boss means crafted: the zone is the heading, and repeating it as a tag
+       alongside itself would just read "Crafted Crafted" */
+    var heading = boss === NO_BOSS ? zoneLabel(zone) : bossLabel(boss);
     h.innerHTML =
       (portrait ? '<img class="boss-portrait" src="' + escapeHtml(portrait) +
                   '" alt="" onerror="this.style.display=\'none\'">' : "") +
-      '<span class="boss-name">' + highlight(bossLabel(boss), state.q) + "</span>" +
-      '<span class="zone-tag">' + escapeHtml(zoneLabel(zone)) + "</span>";
+      '<span class="boss-name">' + highlight(heading, state.q) + "</span>" +
+      (boss === NO_BOSS ? "" :
+        '<span class="zone-tag">' + escapeHtml(zoneLabel(zone)) + "</span>");
     section.appendChild(h);
 
     var scroll = document.createElement("div");
@@ -957,12 +1000,30 @@
 
   el.results.innerHTML = '<p class="loading">Loading loot data&hellip;</p>';
 
-  fetch(DATA_URL)
-    .then(function (res) {
+  /* BiS is decoration on top of the loot table, so it must never take the page
+     down with it: a missing or malformed bis.json costs the rings, nothing else. */
+  function loadBis() {
+    return fetch(BIS_URL)
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(indexBis)
+      .catch(function (err) {
+        if (window.console) console.warn("BiS data unavailable, rings disabled:", err.message);
+        indexBis(null);
+      });
+  }
+
+  Promise.all([
+    fetch(DATA_URL).then(function (res) {
       if (!res.ok) throw new Error("HTTP " + res.status);
       return res.json();
-    })
-    .then(function (data) {
+    }),
+    loadBis()
+  ])
+    .then(function (results) {
+      var data = results[0];
       ALL = data;
       readUrl();
       el.search.value = state.q;

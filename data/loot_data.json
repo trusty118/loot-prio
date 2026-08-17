@@ -1112,7 +1112,7 @@
   "slot": "Back",
   "type": "Cloak",
   "role": "Healer",
-  "priority": "R Shaman** > Priest > Druid > H Pal",
+  "priority": "R Shaman > Priest > Druid > H Pal",
   "notes": "BiS healer cloak all game. H Pal: Lock if speed-running."
  },
  {
@@ -1232,7 +1232,7 @@
   "slot": "Off-Hand",
   "type": "Shield",
   "role": "Tank",
-  "priority": "Prot Warrior*** > Prot Paladin",
+  "priority": "Prot Warrior > Prot Paladin",
   "notes": "Warrior never unequips it."
  },
  {
@@ -1244,7 +1244,7 @@
   "slot": "Ranged",
   "type": "Bow",
   "role": "Physical",
-  "priority": "Survival* > BM",
+  "priority": "Survival > BM",
   "notes": "BiS survival; give BM the other bow."
  },
  {
@@ -1628,7 +1628,7 @@
   "slot": "Two-Hand",
   "type": "2H Staff",
   "role": "Physical",
-  "priority": "Feral*",
+  "priority": "Feral",
   "notes": "BiS feral staff (non-PvP)."
  },
  {

@@ -1,0 +1,25 @@
+{
+ "note": "BiS sets per spec. Spec keys must match the SPECS labels in app.js exactly (e.g. 'Restoration Shaman', not 'R Shaman'). Phase keys are P3/P4/P5; only P3 is filled in for now. Each entry: id + item (both, so a mismatched pair can be caught), and an optional bis of phase | multiPhase | expansion, defaulting to phase. Run verify/check_bis.py after editing.",
+ "specs": {
+  "Restoration Shaman": {
+   "P3": [
+    { "id": 32524, "item": "Shroud of the Highborne", "bis": "multiPhase" }
+   ]
+  },
+  "Protection Warrior": {
+   "P3": [
+    { "id": 32375, "item": "Bulwark of Azzinoth", "bis": "expansion" }
+   ]
+  },
+  "Survival Hunter": {
+   "P3": [
+    { "id": 32336, "item": "Black Bow of the Betrayer" }
+   ]
+  },
+  "Feral Druid": {
+   "P3": [
+    { "id": 30883, "item": "Pillar of Ferocity" }
+   ]
+  }
+ }
+}
