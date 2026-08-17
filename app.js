@@ -29,6 +29,13 @@
     ]
   };
 
+  /* Role column and filter are switched off for now. Everything behind them is
+     intact - role still filters, still feeds the token class matching, and is
+     still in the search index - so flipping this back to true restores it.
+     Hiding the cells with CSS instead does not work: in a table-layout:fixed
+     table the remaining cells shift into the wrong columns. */
+  var SHOW_ROLE = false;
+
   var ZONE_ORDER = ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"];
   var ZONE_LABEL = { "Crafted (Heart of Darkness)": "Crafted" };
   var ROLE_ORDER = ["Physical", "Caster", "Healer", "Tank", "Tier"];
@@ -283,6 +290,25 @@
       .map(escapeRegExp).join("|") + ")\\b",
     "gi"
   );
+
+  /* Role glyphs, drawn rather than fetched: Blizzard's ready-check role icons
+     live in the game's UI atlas and aren't hosted as individual files anywhere.
+     Shapes follow the same language - shield for tank, cross for healer, sword
+     for melee - so the pill reads without relying on colour. */
+  var ROLE_GLYPH = {
+    "Tank": '<path d="M12 2 3 5v7c0 5 4 8.5 9 10 5-1.5 9-5 9-10V5z"/>',
+    "Healer": '<path d="M9.5 2h5v5.5H20v5h-5.5V21h-5v-8.5H4v-5h5.5z"/>',
+    "Physical": '<path d="M20.5 2 22 3.5 12.5 13l-1.5-1.5zM10 12.5 11.5 14l-6 6-3 1 1-3zM3 3l4 1 9 9-2 2-9-9z"/>',
+    "Caster": '<path d="M12 1.5 14 9l7.5 2-7.5 2-2 7.5-2-7.5L2.5 11 10 9z"/>',
+    "Tier": '<path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6zm0 4.5 4 2v4c0 2.6-1.7 4.4-4 5.2-2.3-.8-4-2.6-4-5.2v-4z"/>'
+  };
+
+  function roleGlyph(role) {
+    var d = ROLE_GLYPH[role];
+    if (!d) return "";
+    return '<svg class="role-glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+      d + "</svg>";
+  }
 
   var state = {
     zone: "",        // "" = all
@@ -594,12 +620,32 @@
     if (at < text.length) parent.appendChild(document.createTextNode(text.slice(at)));
   }
 
-  function specIcon(spec) {
+  /* How long an item stays best-in-slot, marked with trailing asterisks in the
+     priority string: * this phase, ** several phases, *** the whole expansion.
+     Colours borrow the item-quality ladder - epic purple, then gold, then
+     legendary orange - so "rarer" reads as "lasts longer". */
+  var BIS_TIERS = {
+    1: { cls: "spec-icon--bis", label: "Phase BiS" },
+    2: { cls: "spec-icon--bis2", label: "Multi-phase BiS" },
+    3: { cls: "spec-icon--bis3", label: "Expansion BiS" }
+  };
+
+  function specIcon(spec, bis) {
+    var tier = BIS_TIERS[bis];
     var img = document.createElement("img");
-    img.className = "spec-icon";
+    img.className = "spec-icon" + (tier ? " " + tier.cls : "");
     img.src = SPEC_ICON + spec.icon + ".jpg";
-    img.alt = spec.name;
-    img.title = spec.name;
+    img.alt = spec.name + (tier ? " (" + tier.label + ")" : "");
+    /* data-tip rather than title: the native tooltip has a ~1s delay the browser
+       won't let us change, and these need to read as fast as the item tooltips.
+       The BiS line is carried separately so the tooltip can colour it to match
+       the ring on the icon. */
+    img.dataset.tip = spec.name;
+    if (tier) {
+      img.dataset.tipBis = tier.label;
+      img.dataset.tipTier = String(bis);
+    }
+    img.setAttribute("aria-label", img.alt);
     img.setAttribute("onerror", "this.style.display='none'");
     return img;
   }
@@ -621,8 +667,17 @@
       /* "non-orc Fury" and "(non-human)" are exclusions - icon would invert them */
       if (/non-$/i.test(text.slice(0, m.index))) continue;
       if (m.index > at) appendText(td, text.slice(at, m.index), state.q);
-      td.appendChild(specIcon(spec));
       at = m.index + m[0].length;
+
+      /* * = BiS this phase, ** = across phases, *** = all expansion */
+      var stars = /^\*{1,3}/.exec(text.slice(at));
+      var bis = stars ? stars[0].length : 0;
+      if (stars) {
+        at += stars[0].length;
+        SPEC_RE.lastIndex = at;   /* don't re-scan the markers as text */
+      }
+
+      td.appendChild(specIcon(spec, bis));
     }
     if (at < text.length) appendText(td, text.slice(at), state.q);
     return td;
@@ -653,8 +708,8 @@
           var muted = filtering && !classPasses(c, null);
           return '<img class="class-icon' + (muted ? " class-icon--muted" : "") + '"' +
             ' src="' + CLASS_ICON + c.toLowerCase() + '.jpg"' +
-            ' alt="' + escapeHtml(c) + '"' +
-            ' title="' + escapeHtml(c) + (muted ? " (does not match the current filters)" : "") + '"' +
+            ' alt="' + escapeHtml(c) + '" aria-label="' + escapeHtml(c) + '"' +
+            ' data-tip="' + escapeHtml(c) + (muted ? " (does not match the current filters)" : "") + '"' +
             ' onerror="this.replaceWith(document.createTextNode(this.alt))">';
         }).join('<span class="tier-sep">-</span>');
     } else {
@@ -662,12 +717,15 @@
     }
     tr.appendChild(type);
 
-    var role = document.createElement("td");
-    var pill = document.createElement("span");
-    pill.className = "role-pill role-" + rec.role;
-    pill.textContent = rec.role;
-    role.appendChild(pill);
-    tr.appendChild(role);
+    if (SHOW_ROLE) {
+      var role = document.createElement("td");
+      role.className = "col-role";
+      var pill = document.createElement("span");
+      pill.className = "role-pill role-" + rec.role;
+      pill.innerHTML = roleGlyph(rec.role) + "<span>" + escapeHtml(rec.role) + "</span>";
+      role.appendChild(pill);
+      tr.appendChild(role);
+    }
 
     tr.appendChild(priorityCell(rec));
 
@@ -725,13 +783,14 @@
     table.innerHTML =
       "<colgroup>" +
       '<col class="c-item"><col class="c-slot"><col class="c-type">' +
-      '<col class="c-role"><col class="c-prio"><col class="c-notes">' +
+      (SHOW_ROLE ? '<col class="c-role">' : "") +
+      '<col class="c-prio"><col class="c-notes">' +
       "</colgroup>" +
       "<thead><tr>" +
       sortableTh("Item", "item") +
       sortableTh("Slot", "slot") +
       sortableTh("Type", "type") +
-      sortableTh("Role", "role") +
+      (SHOW_ROLE ? sortableTh("Role", "role") : "") +
       "<th>Priority</th><th>Notes</th>" +
       "</tr></thead>";
     var tbody = document.createElement("tbody");
@@ -792,6 +851,69 @@
     writeUrl();
   }
 
+  /* ---------- instant tooltips ---------- */
+
+  /* One element reused for every icon, parented to <body> so the table's
+     overflow-x container can't clip it, and positioned on hover with no delay. */
+  var tip = null;
+
+  function showTip(el) {
+    if (!tip) {
+      tip = document.createElement("div");
+      tip.className = "tip";
+      document.body.appendChild(tip);
+    }
+    tip.textContent = el.dataset.tip;
+
+    /* second line, coloured to match the ring drawn on the icon */
+    if (el.dataset.tipBis) {
+      var line = document.createElement("span");
+      line.className = "tip-bis tip-bis--" + (el.dataset.tipTier || "1");
+      line.textContent = el.dataset.tipBis;
+      tip.appendChild(line);
+    }
+
+    tip.style.display = "block";
+
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+
+    /* centred above the icon, flipped below when there's no room up there */
+    var left = r.left + (r.width - t.width) / 2;
+    var top = r.top - t.height - 8;
+    if (top < 4) top = r.bottom + 8;
+
+    var maxLeft = document.documentElement.clientWidth - t.width - 6;
+    if (left < 6) left = 6;
+    if (left > maxLeft) left = maxLeft;
+
+    tip.style.left = Math.round(left) + "px";
+    tip.style.top = Math.round(top) + "px";
+  }
+
+  function hideTip() {
+    if (tip) tip.style.display = "none";
+  }
+
+  function bindTips() {
+    /* delegated, because every render replaces the icons */
+    document.addEventListener("mouseover", function (e) {
+      var el = e.target.closest ? e.target.closest("[data-tip]") : null;
+      if (el) showTip(el);
+    });
+    document.addEventListener("mouseout", function (e) {
+      var el = e.target.closest ? e.target.closest("[data-tip]") : null;
+      if (el) hideTip();
+    });
+    /* keyboard users get it too */
+    document.addEventListener("focusin", function (e) {
+      var el = e.target.closest ? e.target.closest("[data-tip]") : null;
+      if (el) showTip(el);
+    });
+    document.addEventListener("focusout", hideTip);
+    window.addEventListener("scroll", hideTip, true);
+  }
+
   /* ---------- wiring ---------- */
 
   function bind() {
@@ -845,6 +967,7 @@
       readUrl();
       el.search.value = state.q;
       bind();
+      bindTips();
       update();
     })
     .catch(function (err) {

@@ -11,11 +11,22 @@
   --gold: #d9b45a;
   --gold-bright: #f0cf82;
 
-  --role-physical: #e0873c;
-  --role-caster: #a56cd4;
+  /* WoW item-quality colours, reused for the BiS longevity ladder:
+     epic -> legendary -> artifact, matching how long an item stays BiS */
+  --epic: #a335ee;
+  --legendary: #ff8000;
+  --artifact: #e6cc80;
+
+  /* Roles deliberately avoid the item-quality hues below, which carry their own
+     meaning here (item names are coloured by quality, and the BiS rings use the
+     same ladder). Physical was orange = legendary, Caster purple = epic, and
+     Tier gold = artifact, so those three moved to red, teal and stone. Healer
+     green and Tank blue stay: T6 has no uncommon or rare items to clash with. */
+  --role-physical: #e0574c;
+  --role-caster: #3fb3c6;
   --role-healer: #4fbf7a;
   --role-tank: #4a9fe0;
-  --role-tier: #d9b45a;
+  --role-tier: #b0a595;
 
   --radius: 6px;
   --font: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
@@ -309,7 +320,10 @@ select:focus-visible, input:focus-visible, .chip:focus-visible, button:focus-vis
    table sizes to its own contents and the columns stagger between groups.
    min-width hands narrow screens over to .table-scroll rather than crushing
    the columns. */
-table {
+/* Scoped to the results tables on purpose: a bare `table` selector also matches
+   the tables inside Wowhead's injected tooltips, and min-width beats both width
+   and max-width - which pinned every item tooltip to 940px. */
+.boss-group table {
   width: 100%;
   min-width: 940px;
   border-collapse: collapse;
@@ -319,11 +333,14 @@ table {
 
 /* Short columns get fixed widths so they don't inflate on a wide monitor; the
    three text-heavy columns split whatever is left. */
-.c-item  { width: 25%; }
-.c-slot  { width: 110px; }
-.c-type  { width: 178px; }  /* fits three 38px class icons plus separators */
-.c-role  { width: 104px; }
-.c-prio  { width: 24%; }
+.c-item  { width: 20%; }
+.c-slot  { width: 100px; }
+.c-type  { width: 140px; }  /* fits three 25px class icons plus separators */
+.c-role  { width: 100px; }   /* overridden to 0 while the column is hidden */
+/* Eight 38px icons with ring clearance, plus seven operators at 1.08rem, need
+   about 535px - the widest rows in the data are Stormrage Signet Ring and
+   Madness of the Betrayer. 35% clears that with margin at 1600px and up. */
+.c-prio  { width: 35%; }
 .c-notes { width: auto; }
 
 thead th {
@@ -390,9 +407,12 @@ tbody td { overflow-wrap: break-word; }
 }
 
 /* same 38px as the item icons, so every icon on the page reads at one scale */
+/* Two thirds the size of the priority icons: three of these sit side by side in
+   a narrow column, and at 38px they dominated a cell that is only supporting
+   information. The priority icons keep their size. */
 .class-icon {
-  width: 38px;
-  height: 38px;
+  width: 25px;
+  height: 25px;
   vertical-align: middle;
   border-radius: 3px;
   border: 1px solid rgba(0, 0, 0, .5);
@@ -411,10 +431,40 @@ tbody tr:hover .class-icon--muted { opacity: .45; }
 .spec-icon {
   width: 38px;
   height: 38px;
-  margin: 1px 1px;
+  margin: 3px 4px;   /* room for the BiS rings, which draw outside the box */
   vertical-align: middle;
   border-radius: 3px;
   border: 1px solid rgba(0, 0, 0, .5);
+}
+
+/* BiS markers, drawn as rings rather than borders so the icon keeps its size and
+   a double ring can sit outside a single one without shifting the row.
+   The ladder borrows WoW's item-quality colours, so longevity reads at a glance:
+   epic purple for one phase, gold for several, legendary orange for the lot. */
+/* One ring shape for all three; only the colour changes, so the tiers are told
+   apart by hue alone and nothing shifts position between them. */
+.spec-icon--bis,
+.spec-icon--bis2,
+.spec-icon--bis3 {
+  margin: 4px 5px;   /* clearance for the 4px ring */
+}
+
+.spec-icon--bis {
+  box-shadow:
+    0 0 0 4px var(--epic),
+    0 0 8px rgba(163, 53, 238, .6);
+}
+
+.spec-icon--bis2 {
+  box-shadow:
+    0 0 0 4px var(--legendary),
+    0 0 9px rgba(255, 128, 0, .65);
+}
+
+.spec-icon--bis3 {
+  box-shadow:
+    0 0 0 4px var(--artifact),
+    0 0 9px rgba(230, 204, 128, .6);
 }
 
 /* icons this size need the line to breathe, or wrapped priorities collide */
@@ -463,22 +513,82 @@ tbody tr:hover .class-icon--muted { opacity: .45; }
 
 .col-item [class^="icon"] del { display: none; }
 
+/* ---------- role filter: hidden, not removed ----------
+   The column itself is dropped by SHOW_ROLE in app.js - hiding table cells with
+   display:none breaks a fixed-layout table, since the remaining cells shift into
+   the wrong columns. This only hides the filter row; the chips still render and
+   still filter, so a #role= link keeps working. */
+#role-row { display: none; }
+/* ------------------------------------------------------------- */
+
+/* Neutral pill: the glyph identifies the role, so the pill itself no longer
+   tints. Five tinted pills competed with the item-quality colours and the BiS
+   rings, which are the colours that actually carry meaning on this page. */
 .role-pill {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: .7rem;
   font-weight: 700;
   letter-spacing: .04em;
-  padding: 2px 8px;
+  padding: 2px 9px 2px 6px;
   border-radius: 999px;
   white-space: nowrap;
-  border: 1px solid;
+  color: var(--text-dim);
+  border: 1px solid var(--line);
+  background: var(--bg-panel-2);
 }
 
-.role-Physical { color: var(--role-physical); border-color: color-mix(in srgb, var(--role-physical) 45%, transparent); background: color-mix(in srgb, var(--role-physical) 14%, transparent); }
-.role-Caster   { color: var(--role-caster);   border-color: color-mix(in srgb, var(--role-caster) 45%, transparent);   background: color-mix(in srgb, var(--role-caster) 14%, transparent); }
-.role-Healer   { color: var(--role-healer);   border-color: color-mix(in srgb, var(--role-healer) 45%, transparent);   background: color-mix(in srgb, var(--role-healer) 14%, transparent); }
-.role-Tank     { color: var(--role-tank);     border-color: color-mix(in srgb, var(--role-tank) 45%, transparent);     background: color-mix(in srgb, var(--role-tank) 14%, transparent); }
-.role-Tier     { color: var(--role-tier);     border-color: color-mix(in srgb, var(--role-tier) 45%, transparent);     background: color-mix(in srgb, var(--role-tier) 14%, transparent); }
+.role-glyph {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  fill: currentColor;
+  color: var(--role-glyph, var(--text-faint));
+}
+
+/* Only the glyph is coloured, and it follows the ready-check convention:
+   blue shield, green cross, red blade. */
+.role-Tank     { --role-glyph: var(--role-tank); }
+.role-Healer   { --role-glyph: var(--role-healer); }
+.role-Physical { --role-glyph: var(--role-physical); }
+.role-Caster   { --role-glyph: var(--role-caster); }
+.role-Tier     { --role-glyph: var(--role-tier); }
+
+/* Instant tooltip for the class/spec icons. The native title attribute has a
+   browser-imposed delay of about a second that can't be configured, which reads
+   as broken next to Wowhead's instant item tooltips. No transition on purpose. */
+.tip {
+  position: fixed;
+  z-index: 100;
+  display: none;
+  max-width: 280px;
+  padding: 5px 9px;
+  background: #0f0c08;
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: .82rem;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: normal;
+  text-align: center;
+  pointer-events: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .6);
+}
+
+/* Second line of the tooltip, coloured to match the ring on the icon so the
+   colour and the words say the same thing. */
+.tip-bis {
+  display: block;
+  margin-top: 2px;
+  font-size: .78rem;
+  letter-spacing: .02em;
+}
+
+.tip-bis--1 { color: var(--epic); }
+.tip-bis--2 { color: var(--legendary); }
+.tip-bis--3 { color: var(--artifact); }
 
 mark {
   background: rgba(217, 180, 90, .28);
