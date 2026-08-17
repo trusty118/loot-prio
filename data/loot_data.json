@@ -285,8 +285,7 @@
   "type": "Cloth",
   "role": "Caster",
   "priority": "SPriest > Lock > Boomkin > Ele > Mage",
-  "notes": "Near-BiS several; mage first on the crit belt.",
-  "verifyBoss": true
+  "notes": "Near-BiS several; mage first on the crit belt."
  },
  {
   "zone": "Black Temple",
@@ -298,8 +297,7 @@
   "type": "Mail",
   "role": "Caster",
   "priority": "Elemental",
-  "notes": "2nd BiS ele.",
-  "verifyBoss": true
+  "notes": "2nd BiS ele."
  },
  {
   "zone": "Black Temple",
@@ -311,8 +309,7 @@
   "type": "Mail",
   "role": "Healer",
   "priority": "R Shaman > H Pal",
-  "notes": "Mail healing haste belt.",
-  "verifyBoss": true
+  "notes": "Mail healing haste belt."
  },
  {
   "zone": "Black Temple",
@@ -324,8 +321,7 @@
   "type": "Plate",
   "role": "Tank",
   "priority": "Avoid (worse than T5)",
-  "notes": "Tier-5 shoulders are better.",
-  "verifyBoss": true
+  "notes": "Tier-5 shoulders are better."
  },
  {
   "zone": "Black Temple",
@@ -337,8 +333,7 @@
   "type": "Neck",
   "role": "Physical",
   "priority": "Enhance > Rogue > Arms (if needs hit)",
-  "notes": "BiS enhance & rogue (hit).",
-  "verifyBoss": true
+  "notes": "BiS enhance & rogue (hit)."
  },
  {
   "zone": "Black Temple",
@@ -350,8 +345,7 @@
   "type": "Ring",
   "role": "Physical",
   "priority": "Enhance = Rogue",
-  "notes": "Equal priority.",
-  "verifyBoss": true
+  "notes": "Equal priority."
  },
  {
   "zone": "Black Temple",
@@ -363,8 +357,7 @@
   "type": "Shield",
   "role": "Healer",
   "priority": "H Pal > R Shaman",
-  "notes": "Healing crit shield; frees the Archimonde shield for shaman.",
-  "verifyBoss": true
+  "notes": "Healing crit shield; frees the Archimonde shield for shaman."
  },
  {
   "zone": "Black Temple",
@@ -376,12 +369,11 @@
   "type": "Crossbow",
   "role": "Physical",
   "priority": "Hunter > Prot Warrior",
-  "notes": "Give hunter first.",
-  "verifyBoss": true
+  "notes": "Give hunter first."
  },
  {
   "zone": "Black Temple",
-  "boss": "Gurtogg Bloodboil",
+  "boss": "Shade of Akama",
   "item": "Praetorian's Legguards",
   "id": 32263,
   "wowhead": "https://www.wowhead.com/tbc/item=32263",
@@ -389,8 +381,7 @@
   "type": "Plate",
   "role": "Tank",
   "priority": "Prot Warrior (niche)",
-  "notes": "No defense; awkward to fit.",
-  "verifyBoss": true
+  "notes": "No defense; awkward to fit."
  },
  {
   "zone": "Black Temple",
@@ -402,8 +393,7 @@
   "type": "1H Mace",
   "role": "Physical",
   "priority": "Enhance (x2) > Human Warrior",
-  "notes": "Two = BiS enhance combo (2.8 speed).",
-  "verifyBoss": true
+  "notes": "Two = BiS enhance combo (2.8 speed)."
  },
  {
   "zone": "Black Temple",
@@ -415,8 +405,7 @@
   "type": "1H Axe",
   "role": "Tank",
   "priority": "Prot Warrior (non-human)",
-  "notes": "BiS tank warrior; humans prefer Mother's fast mace.",
-  "verifyBoss": true
+  "notes": "BiS tank warrior; humans prefer Mother's fast mace."
  },
  {
   "zone": "Black Temple",
@@ -428,8 +417,7 @@
   "type": "Idol",
   "role": "Physical",
   "priority": "Druid",
-  "notes": "Feral idol; whoever wants it.",
-  "verifyBoss": true
+  "notes": "Feral idol; whoever wants it."
  },
  {
   "zone": "Black Temple",
@@ -441,12 +429,11 @@
   "type": "Plate",
   "role": "Physical",
   "priority": "DPS Warrior (Fury=Arms) > Ret",
-  "notes": "Best off-set legs for 4pc-tier warriors.",
-  "verifyBoss": true
+  "notes": "Best off-set legs for 4pc-tier warriors."
  },
  {
   "zone": "Black Temple",
-  "boss": "Teron Gorefiend",
+  "boss": "Gurtogg Bloodboil",
   "item": "Unstoppable Aggressor's Ring",
   "id": 32335,
   "wowhead": "https://www.wowhead.com/tbc/item=32335",
@@ -454,12 +441,11 @@
   "type": "Ring",
   "role": "Physical",
   "priority": "Warrior > Ret / Enhance",
-  "notes": "BiS on most warrior lists.",
-  "verifyBoss": true
+  "notes": "BiS on most warrior lists."
  },
  {
   "zone": "Black Temple",
-  "boss": "Teron Gorefiend",
+  "boss": "Gurtogg Bloodboil",
   "item": "Shadowmoon Insignia",
   "id": 32501,
   "wowhead": "https://www.wowhead.com/tbc/item=32501",
@@ -467,12 +453,11 @@
   "type": "Trinket",
   "role": "Tank",
   "priority": "Druid > Warrior > Paladin",
-  "notes": "Anti-crit for bears.",
-  "verifyBoss": true
+  "notes": "Anti-crit for bears."
  },
  {
   "zone": "Black Temple",
-  "boss": "Gurtogg Bloodboil",
+  "boss": "Shade of Akama",
   "item": "Ring of Deceitful Intent",
   "id": 32266,
   "wowhead": "https://www.wowhead.com/tbc/item=32266",
@@ -480,12 +465,11 @@
   "type": "Ring",
   "role": "Physical",
   "priority": "Rogue (no T5 ring) > Feral (hit) > Hunter (hit) > Enhance > Prot",
-  "notes": "Complex; pairs with the Illidan ring.",
-  "verifyBoss": true
+  "notes": "Complex; pairs with the Illidan ring."
  },
  {
   "zone": "Black Temple",
-  "boss": "Shade of Akama",
+  "boss": "Teron Gorefiend",
   "item": "Insidious Bands",
   "id": 32324,
   "wowhead": "https://www.wowhead.com/tbc/item=32324",
@@ -493,12 +477,11 @@
   "type": "Leather",
   "role": "Physical",
   "priority": "Rogue > Hunter (if needs hit)",
-  "notes": "Huge rogue wrist upgrade.",
-  "verifyBoss": true
+  "notes": "Huge rogue wrist upgrade."
  },
  {
   "zone": "Black Temple",
-  "boss": "Shade of Akama",
+  "boss": "Teron Gorefiend",
   "item": "Botanist's Gloves of Growth",
   "id": 32328,
   "wowhead": "https://www.wowhead.com/tbc/item=32328",
@@ -506,12 +489,11 @@
   "type": "Leather",
   "role": "Healer",
   "priority": "R Druid > R Shaman",
-  "notes": "BiS both; shaman has a mail haste-glove alt.",
-  "verifyBoss": true
+  "notes": "BiS both; shaman has a mail haste-glove alt."
  },
  {
   "zone": "Black Temple",
-  "boss": "Shade of Akama",
+  "boss": "Teron Gorefiend",
   "item": "Softstep Boots of Tracking",
   "id": 32510,
   "wowhead": "https://www.wowhead.com/tbc/item=32510",
@@ -519,12 +501,11 @@
   "type": "Mail",
   "role": "Physical",
   "priority": "Enhance > Hunter (if needs hit) > Ret / Warrior",
-  "notes": "Underrated; enhance can use the mail option.",
-  "verifyBoss": true
+  "notes": "Underrated; enhance can use the mail option."
  },
  {
   "zone": "Black Temple",
-  "boss": "Shade of Akama",
+  "boss": "Teron Gorefiend",
   "item": "Gauntlets of Enforcement",
   "id": 32280,
   "wowhead": "https://www.wowhead.com/tbc/item=32280",
@@ -532,12 +513,11 @@
   "type": "Plate",
   "role": "Tank",
   "priority": "Prot Warrior",
-  "notes": "Insane prot warrior gloves.",
-  "verifyBoss": true
+  "notes": "Insane prot warrior gloves."
  },
  {
   "zone": "Black Temple",
-  "boss": "Shade of Akama",
+  "boss": "Teron Gorefiend",
   "item": "Girdle of Lordaeron's Fallen",
   "id": 32512,
   "wowhead": "https://www.wowhead.com/tbc/item=32512",
@@ -545,12 +525,11 @@
   "type": "Plate",
   "role": "Healer",
   "priority": "H Pal",
-  "notes": "Plate healing haste belt.",
-  "verifyBoss": true
+  "notes": "Plate healing haste belt."
  },
  {
   "zone": "Black Temple",
-  "boss": "Shade of Akama",
+  "boss": "Teron Gorefiend",
   "item": "Totem of Ancestral Guidance",
   "id": 32330,
   "wowhead": "https://www.wowhead.com/tbc/item=32330",
@@ -558,12 +537,11 @@
   "type": "Totem",
   "role": "Caster",
   "priority": "Elemental",
-  "notes": "BiS ele totem.",
-  "verifyBoss": true
+  "notes": "BiS ele totem."
  },
  {
   "zone": "Black Temple",
-  "boss": "Shade of Akama",
+  "boss": "Teron Gorefiend",
   "item": "Soul Cleaver",
   "id": 32348,
   "wowhead": "https://www.wowhead.com/tbc/item=32348",
@@ -571,12 +549,11 @@
   "type": "2H Axe",
   "role": "Physical",
   "priority": "Undergeared Arms / raid",
-  "notes": "2H axe; weak vs T5.",
-  "verifyBoss": true
+  "notes": "2H axe; weak vs T5."
  },
  {
   "zone": "Black Temple",
-  "boss": "Shade of Akama",
+  "boss": "Teron Gorefiend",
   "item": "Twisted Blades of Zarak",
   "id": 32326,
   "wowhead": "https://www.wowhead.com/tbc/item=32326",
@@ -584,12 +561,11 @@
   "type": "Thrown",
   "role": "Physical",
   "priority": "Warrior > Rogue",
-  "notes": "Warrior rage weapon.",
-  "verifyBoss": true
+  "notes": "Warrior rage weapon."
  },
  {
   "zone": "Black Temple",
-  "boss": "Shade of Akama",
+  "boss": "Teron Gorefiend",
   "item": "Rifle of the Stoic Guardian",
   "id": 32325,
   "wowhead": "https://www.wowhead.com/tbc/item=32325",
@@ -597,12 +573,11 @@
   "type": "Gun",
   "role": "Tank",
   "priority": "Prot Warrior",
-  "notes": "Mitigation gun; good on Mother Shahraz.",
-  "verifyBoss": true
+  "notes": "Mitigation gun; good on Mother Shahraz."
  },
  {
   "zone": "Black Temple",
-  "boss": "Reliquary of Souls",
+  "boss": "Shade of Akama",
   "item": "Shadow-walker's Cord",
   "id": 32265,
   "wowhead": "https://www.wowhead.com/tbc/item=32265",
@@ -610,12 +585,11 @@
   "type": "Leather",
   "role": "Physical",
   "priority": "Ret (if no Vashj belt)",
-  "notes": "Weak; Vashj belt better.",
-  "verifyBoss": true
+  "notes": "Weak; Vashj belt better."
  },
  {
   "zone": "Black Temple",
-  "boss": "Teron Gorefiend",
+  "boss": "Shade of Akama",
   "item": "Kilt of Immortal Nature",
   "id": 32271,
   "wowhead": "https://www.wowhead.com/tbc/item=32271",
@@ -623,12 +597,11 @@
   "type": "Leather",
   "role": "Healer",
   "priority": "R Druid",
-  "notes": "2nd BiS; no spirit so good for all healers.",
-  "verifyBoss": true
+  "notes": "2nd BiS; no spirit so good for all healers."
  },
  {
   "zone": "Black Temple",
-  "boss": "Reliquary of Souls",
+  "boss": "Shade of Akama",
   "item": "Shoulders of the Hidden Predator",
   "id": 32264,
   "wowhead": "https://www.wowhead.com/tbc/item=32264",
@@ -636,12 +609,11 @@
   "type": "Mail",
   "role": "Physical",
   "priority": "Hunter / Enhance / Ret (temp)",
-  "notes": "Mail; temp upgrade.",
-  "verifyBoss": true
+  "notes": "Mail; temp upgrade."
  },
  {
   "zone": "Black Temple",
-  "boss": "Teron Gorefiend",
+  "boss": "Shade of Akama",
   "item": "Spiritwalker Gauntlets",
   "id": 32275,
   "wowhead": "https://www.wowhead.com/tbc/item=32275",
@@ -649,12 +621,11 @@
   "type": "Mail",
   "role": "Healer",
   "priority": "R Shaman > H Pal",
-  "notes": "Not BiS but better than tier gloves individually.",
-  "verifyBoss": true
+  "notes": "Not BiS but better than tier gloves individually."
  },
  {
   "zone": "Black Temple",
-  "boss": "Teron Gorefiend",
+  "boss": "Shade of Akama",
   "item": "Flashfire Girdle",
   "id": 32276,
   "wowhead": "https://www.wowhead.com/tbc/item=32276",
@@ -662,12 +633,11 @@
   "type": "Mail",
   "role": "Caster",
   "priority": "Elemental",
-  "notes": "BiS ele belt.",
-  "verifyBoss": true
+  "notes": "BiS ele belt."
  },
  {
   "zone": "Black Temple",
-  "boss": "Gurtogg Bloodboil",
+  "boss": "Shade of Akama",
   "item": "The Seeker's Wristguards",
   "id": 32279,
   "wowhead": "https://www.wowhead.com/tbc/item=32279",
@@ -675,8 +645,7 @@
   "type": "Plate",
   "role": "Tank",
   "priority": "Prot Paladin",
-  "notes": "Well-itemized prot pally wrists.",
-  "verifyBoss": true
+  "notes": "Well-itemized prot pally wrists."
  },
  {
   "zone": "Black Temple",
@@ -688,12 +657,11 @@
   "type": "Plate",
   "role": "Physical",
   "priority": "Fury (off-set) > Arms",
-  "notes": "Not for 4pc; give to non-4set warriors.",
-  "verifyBoss": true
+  "notes": "Not for 4pc; give to non-4set warriors."
  },
  {
   "zone": "Black Temple",
-  "boss": "Reliquary of Souls",
+  "boss": "Shade of Akama",
   "item": "Focused Mana Bindings",
   "id": 32270,
   "wowhead": "https://www.wowhead.com/tbc/item=32270",
@@ -701,12 +669,11 @@
   "type": "Cloth",
   "role": "Caster",
   "priority": "Any caster needing hit",
-  "notes": "Cloth hit wrists.",
-  "verifyBoss": true
+  "notes": "Cloth hit wrists."
  },
  {
   "zone": "Black Temple",
-  "boss": "Teron Gorefiend",
+  "boss": "Gurtogg Bloodboil",
   "item": "Shroud of Forgiveness",
   "id": 32337,
   "wowhead": "https://www.wowhead.com/tbc/item=32337",
@@ -714,12 +681,11 @@
   "type": "Cloak",
   "role": "Healer",
   "priority": "Anyone w/o Kael'thas cloak (Druid/Priest)",
-  "notes": "~= KT cloak, a bit more stam.",
-  "verifyBoss": true
+  "notes": "~= KT cloak, a bit more stam."
  },
  {
   "zone": "Black Temple",
-  "boss": "Reliquary of Souls",
+  "boss": "Gurtogg Bloodboil",
   "item": "Blood-cursed Shoulderpads",
   "id": 32338,
   "wowhead": "https://www.wowhead.com/tbc/item=32338",
@@ -727,12 +693,11 @@
   "type": "Cloth",
   "role": "Caster",
   "priority": "Biggest upgrade",
-  "notes": "Weak.",
-  "verifyBoss": true
+  "notes": "Weak."
  },
  {
   "zone": "Black Temple",
-  "boss": "Reliquary of Souls",
+  "boss": "Gurtogg Bloodboil",
   "item": "Garments of Temperance",
   "id": 32340,
   "wowhead": "https://www.wowhead.com/tbc/item=32340",
@@ -740,12 +705,11 @@
   "type": "Cloth",
   "role": "Healer",
   "priority": "Biggest upgrade",
-  "notes": "Weak; mp5.",
-  "verifyBoss": true
+  "notes": "Weak; mp5."
  },
  {
   "zone": "Black Temple",
-  "boss": "Reliquary of Souls",
+  "boss": "Illidari Council",
   "item": "Belt of Divine Guidance",
   "id": 32519,
   "wowhead": "https://www.wowhead.com/tbc/item=32519",
@@ -753,8 +717,7 @@
   "type": "Cloth",
   "role": "Healer",
   "priority": "R Druid > Priest",
-  "notes": "Best non-haste belt for druid/priest.",
-  "verifyBoss": true
+  "notes": "Best non-haste belt for druid/priest."
  },
  {
   "zone": "Black Temple",
@@ -766,8 +729,7 @@
   "type": "Mail",
   "role": "Physical",
   "priority": "Anyone (bad)",
-  "notes": "Fake agility; hunters gem more from tier.",
-  "verifyBoss": true
+  "notes": "Fake agility; hunters gem more from tier."
  },
  {
   "zone": "Black Temple",
@@ -779,8 +741,7 @@
   "type": "Plate",
   "role": "Tank",
   "priority": "Prot Warrior > Paladin",
-  "notes": "Good mitigation if no Vashj belt.",
-  "verifyBoss": true
+  "notes": "Good mitigation if no Vashj belt."
  },
  {
   "zone": "Black Temple",
@@ -792,8 +753,7 @@
   "type": "Cloth",
   "role": "Healer",
   "priority": "H Pal (regen build) > Priest",
-  "notes": "BiS in the high-mana holy-light pally build.",
-  "verifyBoss": true
+  "notes": "BiS in the high-mana holy-light pally build."
  },
  {
   "zone": "Black Temple",
@@ -805,8 +765,7 @@
   "type": "Leather",
   "role": "Caster",
   "priority": "Boomkin (temp)",
-  "notes": "Weak caster wrists.",
-  "verifyBoss": true
+  "notes": "Weak caster wrists."
  },
  {
   "zone": "Black Temple",
@@ -818,8 +777,7 @@
   "type": "Leather",
   "role": "Physical",
   "priority": "Enhance > Ret / War / Hunter / Rogue",
-  "notes": "BiS enhance (mail haste gloves).",
-  "verifyBoss": true
+  "notes": "BiS enhance (mail haste gloves)."
  },
  {
   "zone": "Black Temple",
@@ -831,8 +789,7 @@
   "type": "Leather",
   "role": "Caster",
   "priority": "Boomkin / Elemental",
-  "notes": "mp5/sp/crit leather boots.",
-  "verifyBoss": true
+  "notes": "mp5/sp/crit leather boots."
  },
  {
   "zone": "Black Temple",
@@ -844,8 +801,7 @@
   "type": "Mail",
   "role": "Healer",
   "priority": "Whoever",
-  "notes": "Weak healing shoulder.",
-  "verifyBoss": true
+  "notes": "Weak healing shoulder."
  },
  {
   "zone": "Black Temple",
@@ -857,8 +813,7 @@
   "type": "Mail",
   "role": "Physical",
   "priority": "Hunter",
-  "notes": "UNDERRATED - best hunter belt when you need hit. Don't DE / off-spec it.",
-  "verifyBoss": true
+  "notes": "UNDERRATED - best hunter belt when you need hit. Don't DE / off-spec it."
  },
  {
   "zone": "Black Temple",
@@ -870,8 +825,7 @@
   "type": "Plate",
   "role": "Healer",
   "priority": "H Pal",
-  "notes": "~= tier helm; good hold-over.",
-  "verifyBoss": true
+  "notes": "~= tier helm; good hold-over."
  },
  {
   "zone": "Black Temple",
@@ -883,8 +837,7 @@
   "type": "Neck",
   "role": "Caster",
   "priority": "Lock > Boomkin (hit) > SPriest > Mage/Ele",
-  "notes": "Most casters use the Kael'thas neck instead.",
-  "verifyBoss": true
+  "notes": "Most casters use the Kael'thas neck instead."
  },
  {
   "zone": "Black Temple",
@@ -896,8 +849,7 @@
   "type": "Neck",
   "role": "Tank",
   "priority": "Prot Warrior > Feral",
-  "notes": "Prot warriors often use the PvP neck.",
-  "verifyBoss": true
+  "notes": "Prot warriors often use the PvP neck."
  },
  {
   "zone": "Black Temple",
@@ -909,8 +861,7 @@
   "type": "Off-hand",
   "role": "Healer",
   "priority": "Whoever needs an off-hand",
-  "notes": "2nd best healer off-hand.",
-  "verifyBoss": true
+  "notes": "2nd best healer off-hand."
  },
  {
   "zone": "Black Temple",
@@ -922,8 +873,7 @@
   "type": "2H Mace",
   "role": "Physical",
   "priority": "Ret",
-  "notes": "2H mace; better for Ret than the Archimonde sword.",
-  "verifyBoss": true
+  "notes": "2H mace; better for Ret than the Archimonde sword."
  },
  {
   "zone": "Black Temple",
@@ -935,12 +885,11 @@
   "type": "Wand",
   "role": "Healer",
   "priority": "Priest",
-  "notes": "BiS healing wand over the Morgram wand.",
-  "verifyBoss": true
+  "notes": "BiS healing wand over the Morgram wand."
  },
  {
   "zone": "Black Temple",
-  "boss": "Reliquary of Souls",
+  "boss": "Shade of Akama",
   "item": "Blind-Seers Icon",
   "id": 32361,
   "wowhead": "https://www.wowhead.com/tbc/item=32361",
@@ -948,8 +897,7 @@
   "type": "Off-hand",
   "role": "Caster",
   "priority": "Any caster needing hit",
-  "notes": "Hard to home; only if you need the hit.",
-  "verifyBoss": true
+  "notes": "Hard to home; only if you need the hit."
  },
  {
   "zone": "Black Temple",
