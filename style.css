@@ -155,11 +155,33 @@ a:hover { color: var(--gold-bright); }
   font-variant-numeric: tabular-nums;
 }
 
-.chip[data-role="Physical"][aria-pressed="true"] { background: var(--role-physical); border-color: var(--role-physical); color: #1a1409; }
-.chip[data-role="Caster"][aria-pressed="true"]   { background: var(--role-caster);   border-color: var(--role-caster);   color: #14091c; }
-.chip[data-role="Healer"][aria-pressed="true"]   { background: var(--role-healer);   border-color: var(--role-healer);   color: #06180e; }
-.chip[data-role="Tank"][aria-pressed="true"]     { background: var(--role-tank);     border-color: var(--role-tank);     color: #04121c; }
-.chip[data-role="Tier"][aria-pressed="true"]     { background: var(--role-tier);     border-color: var(--role-tier);     color: #1a1409; }
+/* Role chips carry the same colour tone as the .role-pill badges in the table,
+   so the filter and the rows it produces read as the same colour language.
+   Resting = tinted like a pill; pressed = solid fill. */
+.chip[data-role] {
+  color: var(--chip-role);
+  border-color: color-mix(in srgb, var(--chip-role) 45%, transparent);
+  background: color-mix(in srgb, var(--chip-role) 14%, transparent);
+}
+
+.chip[data-role]:hover {
+  color: var(--chip-role);
+  background: color-mix(in srgb, var(--chip-role) 26%, transparent);
+  border-color: color-mix(in srgb, var(--chip-role) 70%, transparent);
+}
+
+.chip[data-role="Physical"] { --chip-role: var(--role-physical); --chip-ink: #1a1409; }
+.chip[data-role="Caster"]   { --chip-role: var(--role-caster);   --chip-ink: #14091c; }
+.chip[data-role="Healer"]   { --chip-role: var(--role-healer);   --chip-ink: #06180e; }
+.chip[data-role="Tank"]     { --chip-role: var(--role-tank);     --chip-ink: #04121c; }
+.chip[data-role="Tier"]     { --chip-role: var(--role-tier);     --chip-ink: #1a1409; }
+
+.chip[data-role][aria-pressed="true"],
+.chip[data-role][aria-pressed="true"]:hover {
+  background: var(--chip-role);
+  border-color: var(--chip-role);
+  color: var(--chip-ink);
+}
 
 .control-row--inputs {
   flex-wrap: wrap;
@@ -218,17 +240,6 @@ select:focus-visible, input:focus-visible, .chip:focus-visible, button:focus-vis
   font-size: .82rem;
   color: var(--text-faint);
 }
-
-.toggle {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: .82rem;
-  color: var(--text-faint);
-  cursor: pointer;
-}
-
-.toggle input { accent-color: var(--gold); }
 
 /* ---------- results ---------- */
 
@@ -309,12 +320,53 @@ tbody td {
 tbody tr:last-child td { border-bottom: 0; }
 tbody tr:hover { background: #221c15; }
 
-.col-item { min-width: 190px; }
+.col-item { min-width: 240px; }
 .col-slot, .col-type { white-space: nowrap; color: var(--text-dim); }
 .col-prio { min-width: 170px; font-weight: 600; }
 .col-notes { color: var(--text-dim); font-size: .85rem; min-width: 210px; }
 
-.item-link { text-decoration: none; font-weight: 600; }
+.item-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Wowhead's script injects <span class="icon{size}"><ins/><del/></span> into each
+   item link. <ins> carries the art; <del> is their decorative item frame, which
+   is a sprite that only lines up with their own stylesheet - we load the script
+   but not the stylesheet, so <del> renders as an offset second border. Hide it
+   and draw the border here instead. whTooltips.iconSize in index.html picks which
+   class appears; all three are handled so changing it can't blank the icons. */
+.col-item .iconsmall,
+.col-item .iconmedium,
+.col-item .iconlarge {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, .6);
+  border-radius: 3px;
+  background-color: #0d0a07;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.col-item .iconsmall  { width: 24px; height: 24px; }
+.col-item .iconmedium { width: 38px; height: 38px; }
+.col-item .iconlarge  { width: 48px; height: 48px; }
+
+.col-item [class^="icon"] ins {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.col-item [class^="icon"] del { display: none; }
 
 .role-pill {
   display: inline-block;
@@ -332,20 +384,6 @@ tbody tr:hover { background: #221c15; }
 .role-Healer   { color: var(--role-healer);   border-color: color-mix(in srgb, var(--role-healer) 45%, transparent);   background: color-mix(in srgb, var(--role-healer) 14%, transparent); }
 .role-Tank     { color: var(--role-tank);     border-color: color-mix(in srgb, var(--role-tank) 45%, transparent);     background: color-mix(in srgb, var(--role-tank) 14%, transparent); }
 .role-Tier     { color: var(--role-tier);     border-color: color-mix(in srgb, var(--role-tier) 45%, transparent);     background: color-mix(in srgb, var(--role-tier) 14%, transparent); }
-
-.verify-flag {
-  display: inline-block;
-  margin-left: 6px;
-  font-size: .68rem;
-  font-weight: 700;
-  color: #e0b93c;
-  border: 1px solid rgba(224, 185, 60, .45);
-  background: rgba(224, 185, 60, .12);
-  border-radius: 3px;
-  padding: 0 4px;
-  cursor: help;
-  vertical-align: 1px;
-}
 
 mark {
   background: rgba(217, 180, 90, .28);

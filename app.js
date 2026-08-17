@@ -97,8 +97,7 @@
     roles: [],       // multi-select; [] = all
     type: "",
     slot: "",
-    q: "",
-    flagVerify: true
+    q: ""
   };
 
   var ALL = [];
@@ -111,7 +110,6 @@
     slot: document.getElementById("slot-select"),
     search: document.getElementById("search"),
     reset: document.getElementById("reset"),
-    verify: document.getElementById("verify-toggle"),
     count: document.getElementById("count"),
     results: document.getElementById("results")
   };
@@ -341,14 +339,6 @@
     a.rel = "noopener";
     a.innerHTML = highlight(rec.item, state.q);
     td.appendChild(a);
-
-    if (rec.verifyBoss && state.flagVerify) {
-      var flag = document.createElement("span");
-      flag.className = "verify-flag";
-      flag.textContent = "?";
-      flag.title = "Boss attribution is a best-effort guess from the source video and is not yet confirmed.";
-      td.appendChild(flag);
-    }
     return td;
   }
 
@@ -478,12 +468,6 @@
     el.search.addEventListener("input", function () {
       clearTimeout(t);
       t = setTimeout(function () { state.q = el.search.value.trim(); update(); }, 120);
-    });
-
-    el.verify.checked = state.flagVerify;
-    el.verify.addEventListener("change", function () {
-      state.flagVerify = el.verify.checked;
-      renderResults();
     });
 
     el.reset.addEventListener("click", function () {
