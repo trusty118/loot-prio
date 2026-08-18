@@ -42,6 +42,7 @@ together for hand-editing.
 | `role` | Physical / Caster / Healer / Tank / Tier. **Currently hidden** — see `SHOW_ROLE` |
 | `priority` | Ordered list of entries, each naming the operator linking it to the previous one — see §3 |
 | `notes` | Caveats. All conditional wording lives here, never in `priority` |
+| `unique` | `true` only on the 19 unique items. **Absent means not unique** — see Repeats in §3 |
 
 **`priority` is structured data, not prose.** 23 items have an empty list, meaning
 "whoever needs it"; the reason is in the notes.
@@ -108,10 +109,23 @@ before the spec's. A `form` (`bear`/`cat` on `FeralDruid`) swaps the icon and na
 and `~>` behave exactly like `>` for ranking — they differ only in what they say, which is
 what `OPERATORS[op].label` is for (it already feeds the operator tooltips).
 
+### Repeats
+
+A spec may appear twice in one priority only when that person could actually equip two:
+the item is in `Finger`, `Trinket`, `One-Hand`, `Main-Hand` or `Off-Hand`, **and** is not
+`unique`. Two-handers, armour and ranged slots cannot, and `check_priority.py` rejects
+those. Blessed Band of Karabor is the live example - a non-unique ring listing Resto Druid
+at two positions.
+
+`unique` comes from Wowhead's tooltip data via `verify/fetch_unique.py`, which also
+cross-checks every id against Wowhead's name. That is how two swapped ids were found: the
+Forgotten Protector and Vanquisher helms were pointing at each other's items.
+
 **This replaced a regex that scanned the string for known shorthand.** That version failed
 silently: a word the table didn't know rendered as plain text with no icon and no error.
-`verify/check_priority.py` now makes that an error. `verify/migrate_priority.py` is the
-one-shot conversion, kept as the audit trail.
+`verify/check_priority.py` now makes that an error - it caught 148 broken references the
+moment the spec identifiers were renamed. `verify/migrate_priority.py` is the one-shot
+conversion, kept as the audit trail.
 
 ### BiS rings
 
@@ -172,8 +186,9 @@ Validators, all exiting non-zero on error:
 - `python3 verify/check_bis.py` — keys and ids resolve, `id`/`item` pairs agree, and it
   warns about entries that can never show a ring.
 
-`verify/migrate_priority.py` and `verify/apply.py` are finished one-shot tools, kept as
-audit trails for how the data was converted.
+Finished one-shot tools, kept as audit trails: `verify/migrate_priority.py` (string ->
+structured priority), `verify/fetch_unique.py` (re-runnable if the item set changes), and
+`verify/apply.py` (boss attribution).
 
 ---
 

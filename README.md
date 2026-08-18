@@ -59,27 +59,41 @@ python -m http.server 8000
   "slot": "Off-Hand",
   "type": "Shield",
   "role": "Tank",
-  "priority": "Prot Warrior > Prot Paladin",
+  "priority": [
+    { "spec": "ProtWarr" },
+    { "spec": "ProtPal", "op": ">" }
+  ],
   "notes": "Warrior never unequips it; pally often swaps shields."
 }
 ```
 
 182 records: Black Temple 109, Mount Hyjal 61, Crafted 12.
 
-Class shorthand used in priorities/notes: R Shaman / R Druid = restoration, H Pal / H Priest = holy,
-SPriest = shadow priest, Ele = elemental, Boomkin = balance druid, Lock = warlock, Prot =
-protection, BM = beast mastery.
+`priority` is an ordered list. Each entry names a `spec` or `class` identifier from
+`data/specs.json`, plus the operator linking it to the entry before it. Operators are
+`>` (better than), `>>` (much better), `~>` (roughly better), `=` (equal) and `~=`
+(roughly equal); the first three advance the position, the last two hold it.
+
+Two more data files:
+
+- **`data/specs.json`** - the registry of 9 classes and all 27 TBC specs, with the
+  identifier, display name and icon for each. Identifiers are what the other files store,
+  so renaming a label never touches data.
+- **`data/bis.json`** - which items are best-in-slot for which spec, keyed by the same
+  identifiers, and marked `phase`, `multiPhase` or `expansion`.
+
+Run `python3 verify/check_priority.py` and `python3 verify/check_bis.py` after editing
+either; both exit non-zero on a bad identifier or operator.
 
 ### Known gaps
 
-- **52 Black Temple items carry `verifyBoss: true`** — the creator lumped several mid-instance
-  bosses together, so those boss attributions are best-effort guesses. The site marks them with a
-  `?` badge (toggleable). Bosses affected: Supremus, Shade of Akama, Teron Gorefiend,
-  Gurtogg Bloodboil, Reliquary of Souls. Mount Hyjal attribution is confident.
+- **Boss attribution was verified by hand** against Wowhead in Aug 2026 - 27 confirmed,
+  24 corrected. `verify/boss-attribution.csv` is the record.
 - **Not included:** gems, and the pure shadow-resistance set for Mother Shahraz. Both were
   intentionally omitted as situational rather than loot-council calls.
-- Some low-value items have loose priorities ("biggest upgrade", "whoever", "Skip (bad)"). That is
-  faithful to how the creator called them and is rendered as-is.
+- **23 items have an empty priority**, meaning "whoever needs it". The creator's wording
+  for those ("biggest upgrade", "whoever", "skip") lives in the notes instead, so the
+  priority column only ever holds specs and operators.
 
 ## Disclaimer
 
