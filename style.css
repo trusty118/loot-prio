@@ -84,31 +84,47 @@ a:hover { color: var(--gold-bright); }
 
 /* ---------- controls ---------- */
 
+/* Three panels, each answering one question in the order they get asked: who am I
+   (class/spec), where am I (zone/boss), and then what of that do I want to see
+   (type/slot/search). Splitting the last one off is what makes it read as acting on
+   the results rather than as another way of choosing them. */
 .controls {
   background: var(--bg-panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 14px 16px 12px;
-  margin: 22px 0 18px;
+  padding: 10px 16px;
+  margin: 0 0 10px;
+}
+
+.controls:first-child { margin-top: 22px; }
+
+/* Only the last panel pins: it is the one adjusted while reading the results, it
+   carries the count, and it sits directly above them. Two sticky panels would fight
+   over the same slot. */
+.controls--refine {
   position: sticky;
   top: 0;
   z-index: 20;
+  margin-bottom: 18px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, .45);
 }
 
+/* `display: flex` on .control-row would otherwise beat the browser's [hidden] rule */
+.control-row[hidden] { display: none; }
+
+/* No dividers between rows: the panels themselves are the separation now, and a
+   line under a two-row panel just boxed in a gap. */
 .control-row {
   display: flex;
   align-items: flex-start;
   gap: 10px;
   padding: 6px 0;
-  border-bottom: 1px solid var(--line-soft);
 }
 
-.control-row:last-child { border-bottom: 0; }
-
+/* Only the Type/Slot/Search fields still carry one. The chip rows dropped theirs:
+   every row opens with its own "All zones" / "All classes" chip, which names it
+   just as well, and the label column was stealing 46px from every row. */
 .control-label {
-  flex: 0 0 46px;
-  padding-top: 5px;
   font-size: .72rem;
   text-transform: uppercase;
   letter-spacing: .09em;
@@ -144,6 +160,14 @@ a:hover { color: var(--gold-bright); }
 /* chips with no icon keep the old symmetric padding */
 .chip:not(:has(.chip-icon)) { padding: 4px 11px; }
 
+/* Every row's "All" chip is the same word with no count on it, so they line up on
+   their own; the min-width just keeps a three-letter pill from reading as cramped
+   next to the chips it sits beside. */
+.chip--all {
+  min-width: 56px;
+  justify-content: center;
+}
+
 /* Encounter Journal portraits are 2:1 (128x64); cover-cropping to a square
    lands on the boss's head, which is centred in these images. */
 .chip-icon {
@@ -158,6 +182,34 @@ a:hover { color: var(--gold-bright); }
 
 .chip:hover { background: #302820; color: var(--text); }
 
+/* Class and spec chips are the icon and nothing else - a name and a count on each
+   of 27 chips buried the icons they were labelling. Both live in the tooltip. */
+.chip--icon {
+  padding: 3px;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.chip--icon .chip-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  transition: filter .12s, opacity .12s;
+  filter: grayscale(.5);
+  opacity: .78;
+}
+
+.chip--icon:hover .chip-icon { filter: none; opacity: 1; }
+
+/* Pressed reads as a lit icon inside a gold frame, rather than the gold fill the
+   text chips use - filling the box behind a 30px icon leaves nothing but a rim. */
+.chip--icon[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--gold) 22%, transparent);
+  border-color: var(--gold-bright);
+}
+
+.chip--icon[aria-pressed="true"] .chip-icon { filter: none; opacity: 1; }
+
 .chip[aria-pressed="true"] {
   background: var(--gold);
   border-color: var(--gold-bright);
@@ -170,6 +222,29 @@ a:hover { color: var(--gold-bright); }
   font-size: .8em;
   margin-left: 5px;
   font-variant-numeric: tabular-nums;
+}
+
+/* The BiS-only toggle sits at the end of the spec row but isn't one of its
+   options, so it takes the epic purple of the BiS rings it filters on rather than
+   the gold every other pressed chip uses. */
+.chip--toggle {
+  margin-left: 8px;
+  color: color-mix(in srgb, var(--epic) 60%, var(--text));
+  border-color: color-mix(in srgb, var(--epic) 50%, transparent);
+  background: color-mix(in srgb, var(--epic) 12%, transparent);
+}
+
+.chip--toggle:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--epic) 24%, transparent);
+  border-color: color-mix(in srgb, var(--epic) 75%, transparent);
+}
+
+.chip--toggle[aria-pressed="true"],
+.chip--toggle[aria-pressed="true"]:hover {
+  background: var(--epic);
+  border-color: var(--epic);
+  color: #f6efff;
 }
 
 /* Role chips carry the same colour tone as the .role-pill badges in the table,
@@ -212,7 +287,6 @@ a:hover { color: var(--gold-bright); }
   gap: 3px;
 }
 
-.field .control-label { flex: none; padding-top: 0; }
 .field--grow { flex: 1 1 220px; min-width: 180px; }
 
 select, input[type="search"] {
@@ -245,11 +319,14 @@ select:focus-visible, input:focus-visible, .chip:focus-visible, button:focus-vis
 
 .btn-reset:hover { color: var(--text); border-color: var(--gold); }
 
+/* The count belongs to the refine panel: it is the running answer to what those
+   three controls just did, so it sits with them rather than over the results. */
 .control-row--meta {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
+  padding-bottom: 0;
 }
 
 .count {
@@ -448,7 +525,19 @@ tbody tr:hover .class-icon--muted { opacity: .45; }
   vertical-align: middle;
   border-radius: 3px;
   border: 1px solid rgba(0, 0, 0, .5);
+  transition: opacity .12s, filter .12s;
 }
+
+/* Everyone who isn't the selected class or spec, dimmed rather than removed: the
+   point of the filter is where you stand in the line, which needs the rest of the
+   line still visible. Lighter-handed than .class-icon--muted, because these carry
+   the BiS rings and a fully greyed ring reads as no ring. */
+.spec-icon--muted {
+  opacity: .35;
+  filter: grayscale(.65);
+}
+
+tbody tr:hover .spec-icon--muted { opacity: .6; }
 
 /* BiS markers, drawn as rings rather than borders so the icon keeps its size and
    a double ring can sit outside a single one without shifting the row.
@@ -645,8 +734,7 @@ mark {
 /* ---------- responsive ---------- */
 
 @media (max-width: 760px) {
-  .controls { position: static; }
+  .controls--refine { position: static; }
   .control-row { flex-direction: column; gap: 6px; }
-  .control-label { padding-top: 0; }
   .col-notes { min-width: 240px; }
 }

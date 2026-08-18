@@ -157,6 +157,52 @@
     return true;
   }
 
+  /* Does one priority entry speak to the selected class/spec? A class entry (Mage)
+     stands for every spec of that class, and a spec entry satisfies a selection of
+     its own class - 104 of the 398 entries are class-level, so both directions have
+     to work. */
+  function entrySpeaksTo(entry, clsId, specId) {
+    if (!entry) return false;
+    if (entry.spec) {
+      if (specId) return entry.spec === specId;
+      var spec = REG.specs[entry.spec];
+      return !!spec && spec["class"] === clsId;
+    }
+    if (entry["class"]) return entry["class"] === clsId;
+    return false;
+  }
+
+  /* An empty priority matches nobody, which is how the 23 "whoever needs it" rows
+     drop out while a class or spec is selected: the filter asks where you stand in
+     a line, and those rows name no line. */
+  function priorityHas(rec, clsId, specId) {
+    return (rec.priority || []).some(function (e) {
+      return entrySpeaksTo(e, clsId, specId);
+    });
+  }
+
+  /* Which specs of one class the user has narrowed to; empty means the whole class.
+     Refining Mage to Fire must not quietly narrow a Warlock picked alongside it, so
+     each class is resolved on its own and the results are unioned. */
+  function pickedSpecs(clsId) {
+    return state.specs.filter(function (id) {
+      var spec = REG.specs[id];
+      return !!spec && spec["class"] === clsId;
+    });
+  }
+
+  function selectionSpeaksTo(entry) {
+    return state.classes.some(function (clsId) {
+      var picked = pickedSpecs(clsId);
+      if (!picked.length) return entrySpeaksTo(entry, clsId, "");
+      return picked.some(function (id) { return entrySpeaksTo(entry, clsId, id); });
+    });
+  }
+
+  function selectionHas(rec) {
+    return (rec.priority || []).some(selectionSpeaksTo);
+  }
+
   function typeLabel(rec) {
     var type = rec.type || "";
     if (TYPE_LABEL[type]) return TYPE_LABEL[type];
@@ -294,6 +340,10 @@
   var state = {
     zone: "",        // "" = all
     boss: "",        // "" = all
+    bossZone: "",    // which zone's boss - only meaningful alongside boss
+    classes: [],     // multi-select class identifiers; [] = all
+    specs: [],       // multi-select spec identifiers, each refining one of the above
+    bisOnly: false,  // narrow to the selected specs' BiS lists
     roles: [],       // multi-select; [] = all
     type: "",
     slot: "",
@@ -307,6 +357,9 @@
   var el = {
     zoneChips: document.getElementById("zone-chips"),
     bossChips: document.getElementById("boss-chips"),
+    classChips: document.getElementById("class-chips"),
+    specChips: document.getElementById("spec-chips"),
+    specRow: document.getElementById("spec-row"),
     roleChips: document.getElementById("role-chips"),
     type: document.getElementById("type-select"),
     slot: document.getElementById("slot-select"),
@@ -359,6 +412,20 @@
     return out;
   }
 
+  /* Boss names are not unique across zones - both raids have a "Trash". A chip is
+     therefore identified by zone + boss, and state.bossZone carries the zone half. */
+  var BOSS_SEP = "␟";
+
+  function bossKey(zone, boss) {
+    return zone + BOSS_SEP + boss;
+  }
+
+  function bossZones(boss) {
+    var seen = {};
+    ALL.forEach(function (r) { if (r.boss === boss) seen[r.zone] = true; });
+    return Object.keys(seen);
+  }
+
   function bossSortKey(rec) {
     var zi = ZONE_ORDER.indexOf(rec.zone);
     var order = orderedBosses(rec.zone);
@@ -371,8 +438,22 @@
   /* `skip` lets us count a facet as if its own filter weren't applied. */
   function matches(rec, skip) {
     if (skip !== "zone" && state.zone && rec.zone !== state.zone) return false;
-    if (skip !== "boss" && state.boss && rec.boss !== state.boss) return false;
+    if (skip !== "boss" && state.boss) {
+      if (rec.boss !== state.boss) return false;
+      /* bossZone is absent on an old bare ?boss=Trash link, which keeps its
+         previous behaviour of selecting both zones' trash */
+      if (state.bossZone && rec.zone !== state.bossZone) return false;
+    }
     if (skip !== "slot" && state.slot && slotGroup(rec.slot) !== state.slot) return false;
+
+    /* class and spec are one facet: "spec" skips both, so the counts on either row
+       are computed as if neither were applied */
+    if (skip !== "spec") {
+      if (state.classes.length && !selectionHas(rec)) return false;
+      /* "bis" skips only the BiS narrowing, so the toggle can count what it would leave */
+      if (skip !== "bis" && state.bisOnly && state.specs.length &&
+          !state.specs.some(function (id) { return bisTier(id, rec.id); })) return false;
+    }
 
     /* A token is not cloth or a caster item itself, but it turns into one. Match
        it on the classes it serves so it appears alongside the gear it competes
@@ -429,6 +510,14 @@
     var p = new URLSearchParams();
     if (state.zone) p.set("zone", state.zone);
     if (state.boss) p.set("boss", state.boss);
+    /* only "Trash" is ambiguous, so only it needs qualifying - the other 14 bosses
+       keep the shorter url they have always had */
+    if (state.boss && state.bossZone && bossZones(state.boss).length > 1) {
+      p.set("bossZone", state.bossZone);
+    }
+    if (state.classes.length) p.set("class", state.classes.join(","));
+    if (state.specs.length) p.set("spec", state.specs.join(","));
+    if (state.bisOnly) p.set("bis", "1");
     if (state.roles.length) p.set("role", state.roles.join(","));
     if (state.type) p.set("type", state.type);
     if (state.slot) p.set("slot", state.slot);
@@ -443,6 +532,28 @@
     var p = new URLSearchParams(location.hash.replace(/^#/, ""));
     state.zone = p.get("zone") || "";
     state.boss = p.get("boss") || "";
+    state.bossZone = p.get("bossZone") || "";
+
+    /* checked against the registry, so a stale or mistyped identifier reads as
+       "no filter" rather than filtering every row away */
+    var list = function (name) {
+      return (p.get(name) || "").split(",").filter(Boolean);
+    };
+    state.specs = list("spec").filter(function (id) { return !!REG.specs[id]; });
+    state.classes = list("class").filter(function (id) { return !!REG.classes[id]; });
+
+    /* a spec implies its class, so a ?spec= link works without one */
+    state.specs.forEach(function (id) {
+      var cls = REG.specs[id]["class"];
+      if (state.classes.indexOf(cls) === -1) state.classes.push(cls);
+    });
+    /* and a spec without its class selected is not a refinement of anything */
+    state.specs = state.specs.filter(function (id) {
+      return state.classes.indexOf(REG.specs[id]["class"]) !== -1;
+    });
+
+    state.bisOnly = state.specs.length ? p.get("bis") === "1" : false;
+
     state.roles = p.get("role") ? p.get("role").split(",").filter(Boolean) : [];
     state.type = p.get("type") || "";
     state.slot = p.get("slot") || "";
@@ -455,28 +566,60 @@
 
   /* ---------- rendering: controls ---------- */
 
-  function chip(label, active, count, dataset, icon) {
+  /* `iconOnly` drops the text and the count off the chip and moves both into its
+     tooltip. 27 spec chips with names and numbers on them read as a wall; the icons
+     are the thing being recognised, and the name is one hover away. The fallback if
+     an icon 404s is the label, so an icon-only chip can never end up blank. */
+  function chip(label, active, count, dataset, icon, iconOnly) {
     var b = document.createElement("button");
     b.type = "button";
     b.className = "chip";
     b.setAttribute("aria-pressed", active ? "true" : "false");
-    b.innerHTML =
-      /* if the CDN ever stops serving these, fall back to a plain text chip */
-      (icon ? '<img class="chip-icon" src="' + escapeHtml(icon) +
-              '" alt="" onerror="this.style.display=\'none\'">' : "") +
-      escapeHtml(label) +
-      (count == null ? "" : ' <span class="n">' + count + "</span>");
+
+    if (iconOnly && icon) {
+      b.classList.add("chip--icon");
+      b.innerHTML = '<img class="chip-icon" src="' + escapeHtml(icon) +
+        '" alt="" onerror="this.replaceWith(document.createTextNode(this.parentNode.dataset.tip))">';
+      b.dataset.tip = label + (count == null ? "" : " — " + count + " items");
+      b.setAttribute("aria-label", b.dataset.tip);
+    } else {
+      b.innerHTML =
+        /* if the CDN ever stops serving these, fall back to a plain text chip */
+        (icon ? '<img class="chip-icon" src="' + escapeHtml(icon) +
+                '" alt="" onerror="this.style.display=\'none\'">' : "") +
+        escapeHtml(label) +
+        (count == null ? "" : ' <span class="n">' + count + "</span>");
+    }
+
     if (dataset) Object.keys(dataset).forEach(function (k) { b.dataset[k] = dataset[k]; });
+    return b;
+  }
+
+  /* Every row leads with a clear-this-row chip. They all read just "All" so the rows
+     line up down the left edge - the full phrase would be the widest chip in each
+     row and each a different width. It survives in the tooltip and the aria-label,
+     which is also where the row labels went when they were dropped.
+
+     No count either: it would be the row's total on every row at once, which the
+     "N of 182 items" line above the results already says, and the numbers that earn
+     their place are the ones on the individual chips. */
+  function allChip(name, active) {
+    var b = chip("All", active, null);
+    b.classList.add("chip--all");
+    b.dataset.tip = "All " + name;
+    b.setAttribute("aria-label", "All " + name);
     return b;
   }
 
   function renderZoneChips() {
     var counts = countBy("zone", function (r) { return r.zone; });
-    var total = filtered("zone").length;
     el.zoneChips.innerHTML = "";
 
-    var all = chip("All zones", !state.zone, total);
-    all.addEventListener("click", function () { state.zone = ""; state.boss = ""; update(); });
+    var all = allChip("zones", !state.zone);
+    all.addEventListener("click", function () {
+      state.zone = ""; state.boss = ""; state.bossZone = "";
+      update();
+    });
     el.zoneChips.appendChild(all);
 
     ZONE_ORDER.forEach(function (z) {
@@ -484,6 +627,7 @@
       c.addEventListener("click", function () {
         state.zone = (state.zone === z) ? "" : z;
         state.boss = "";
+        state.bossZone = "";
         update();
       });
       el.zoneChips.appendChild(c);
@@ -491,22 +635,28 @@
   }
 
   function renderBossChips() {
-    var counts = countBy("boss", function (r) { return r.boss; });
+    /* keyed by zone + boss: counting on the name alone gave both Trash chips the
+       same combined total */
+    var counts = countBy("boss", function (r) { return bossKey(r.zone, r.boss); });
     el.bossChips.innerHTML = "";
 
     var zones = state.zone ? [state.zone] : ZONE_ORDER;
-    var total = filtered("boss").length;
 
-    var all = chip("All bosses", !state.boss, total);
-    all.addEventListener("click", function () { state.boss = ""; update(); });
+    var all = allChip("bosses", !state.boss);
+    all.addEventListener("click", function () {
+      state.boss = ""; state.bossZone = "";
+      update();
+    });
     el.bossChips.appendChild(all);
 
     zones.forEach(function (z) {
       orderedBosses(z).forEach(function (b) {
         if (b === NO_BOSS) return;   /* crafted items are a zone, not a boss */
-        var c = chip(bossLabel(b), state.boss === b, counts[b] || 0, null, BOSS_ICON[b]);
+        var active = state.boss === b && (!state.bossZone || state.bossZone === z);
+        var c = chip(bossLabel(b), active, counts[bossKey(z, b)] || 0, null, BOSS_ICON[b]);
         c.addEventListener("click", function () {
-          state.boss = (state.boss === b) ? "" : b;
+          if (active) { state.boss = ""; state.bossZone = ""; }
+          else { state.boss = b; state.bossZone = z; }
           update();
         });
         el.bossChips.appendChild(c);
@@ -514,11 +664,102 @@
     });
   }
 
+  /* Class and spec answer the other question the table can be asked: not "who gets
+     this item" but "what should I be rolling on". Both are multi-select, because a
+     loot council reads several classes at once. Counts can't come from countBy():
+     one row speaks to several specs at once, so each chip counts the pool itself. */
+  function renderClassChips() {
+    el.classChips.innerHTML = "";
+    var pool = filtered("spec");
+
+    var all = allChip("classes", !state.classes.length);
+    all.addEventListener("click", function () {
+      state.classes = []; state.specs = []; state.bisOnly = false;
+      update();
+    });
+    el.classChips.appendChild(all);
+
+    Object.keys(REG.classes).forEach(function (id) {
+      var info = REG.classes[id];
+      var n = pool.filter(function (r) { return priorityHas(r, id, ""); }).length;
+      var active = state.classes.indexOf(id) !== -1;
+      var c = chip(info.name, active, n, null, ICON_BASE + info.icon + ".jpg", true);
+      c.addEventListener("click", function () {
+        if (active) {
+          state.classes.splice(state.classes.indexOf(id), 1);
+          /* a spec is a refinement of its class - it can't outlive it */
+          state.specs = state.specs.filter(function (s) {
+            return REG.specs[s] && REG.specs[s]["class"] !== id;
+          });
+          if (!state.specs.length) state.bisOnly = false;
+        } else {
+          state.classes.push(id);
+        }
+        update();
+      });
+      el.classChips.appendChild(c);
+    });
+  }
+
+  /* The spec row is hidden until a class is picked: 27 icons with no class chosen
+     is a wall, and the question it asks ("which of your specs?") has no meaning
+     until the first one is answered. */
+  function renderSpecChips() {
+    el.specChips.innerHTML = "";
+    if (el.specRow) el.specRow.hidden = !state.classes.length;
+    if (!state.classes.length) return;
+
+    var pool = filtered("spec");
+
+    var all = allChip("specs", !state.specs.length);
+    all.addEventListener("click", function () {
+      state.specs = []; state.bisOnly = false;
+      update();
+    });
+    el.specChips.appendChild(all);
+
+    /* grouped by the class order of the row above, not by the registry's spec order */
+    state.classes.forEach(function (cls) {
+      Object.keys(REG.specs).forEach(function (id) {
+        var spec = REG.specs[id];
+        if (spec["class"] !== cls) return;
+        var n = pool.filter(function (r) { return priorityHas(r, cls, id); }).length;
+        var active = state.specs.indexOf(id) !== -1;
+        var c = chip(spec.name, active, n, null, ICON_BASE + spec.icon + ".jpg", true);
+        c.addEventListener("click", function () {
+          if (active) {
+            state.specs.splice(state.specs.indexOf(id), 1);
+            if (!state.specs.length) state.bisOnly = false;
+          } else {
+            state.specs.push(id);
+          }
+          update();
+        });
+        el.specChips.appendChild(c);
+      });
+    });
+
+    /* Only offered once a spec is picked: bis.json is keyed by spec, and a
+       class-wide union of nine specs' BiS lists wouldn't mean anything. */
+    if (state.specs.length) {
+      var bisRows = filtered("bis").filter(function (r) {
+        return state.specs.some(function (id) { return bisTier(id, r.id); });
+      });
+      var toggle = chip("BiS only", state.bisOnly, bisRows.length);
+      toggle.classList.add("chip--toggle");
+      toggle.addEventListener("click", function () {
+        state.bisOnly = !state.bisOnly;
+        update();
+      });
+      el.specChips.appendChild(toggle);
+    }
+  }
+
   function renderRoleChips() {
     var counts = countBy("role", function (r) { return r.role; });
     el.roleChips.innerHTML = "";
 
-    var all = chip("All roles", state.roles.length === 0, filtered("role").length);
+    var all = allChip("roles", state.roles.length === 0);
     all.addEventListener("click", function () { state.roles = []; update(); });
     el.roleChips.appendChild(all);
 
@@ -687,6 +928,11 @@
     }
     if (!list || !list.length) return td;
 
+    /* With a class or spec selected, everyone else in the line dims, so where you
+       stand reads at a glance. Same idea as class-icon--muted on tier tokens; the
+       tooltip is untouched, so a dimmed icon still names itself on hover. */
+    var picking = state.classes.length > 0;
+
     list.forEach(function (entry, i) {
       if (i > 0) {
         var op = OPERATORS[entry.op] || OPERATORS[">"];
@@ -706,12 +952,17 @@
         return;
       }
 
+      var muted = picking && !selectionSpeaksTo(entry);
+
       if (resolved.race) {
         var raceIcon = specIcon(resolved.race, 0);
         raceIcon.classList.add("spec-icon--race");   /* sits flush against its spec */
+        if (muted) raceIcon.classList.add("spec-icon--muted");
         td.appendChild(raceIcon);
       }
-      td.appendChild(specIcon(resolved, bisTier(resolved.id, rec.id)));
+      var icon = specIcon(resolved, bisTier(resolved.id, rec.id));
+      if (muted) icon.classList.add("spec-icon--muted");
+      td.appendChild(icon);
     });
 
     return td;
@@ -884,6 +1135,8 @@
   function update() {
     renderZoneChips();
     renderBossChips();
+    renderClassChips();
+    renderSpecChips();
     renderRoleChips();
     renderSelects();
     renderResults();
@@ -966,7 +1219,8 @@
     });
 
     el.reset.addEventListener("click", function () {
-      state.zone = ""; state.boss = ""; state.roles = [];
+      state.zone = ""; state.boss = ""; state.bossZone = ""; state.roles = [];
+      state.classes = []; state.specs = []; state.bisOnly = false;
       state.type = ""; state.slot = ""; state.q = "";
       state.sort = ""; state.dir = "asc";
       el.search.value = "";

@@ -21,23 +21,41 @@
 
 <main class="wrap">
 
-  <section class="controls" aria-label="Filters">
+  <section class="controls controls--who" aria-label="Class and spec">
+
+    <!-- No visible row labels: each row opens with its own "All X" chip, which says
+         the same thing. aria-label on the group keeps it named for screen readers. -->
+    <div class="control-row">
+      <div class="chips" id="class-chips" role="group" aria-label="Class"></div>
+    </div>
+
+    <!-- hidden until a class is picked; app.js toggles the hidden attribute -->
+    <div class="control-row" id="spec-row" hidden>
+      <div class="chips" id="spec-chips" role="group" aria-label="Spec"></div>
+    </div>
+
+  </section>
+
+  <section class="controls controls--where" aria-label="Zone and boss">
 
     <div class="control-row">
-      <span class="control-label">Zone</span>
       <div class="chips" id="zone-chips" role="group" aria-label="Zone"></div>
     </div>
 
     <div class="control-row">
-      <span class="control-label">Boss</span>
       <div class="chips" id="boss-chips" role="group" aria-label="Boss"></div>
     </div>
 
     <!-- hidden by css for now; the chips still render and still filter -->
     <div class="control-row" id="role-row">
-      <span class="control-label">Role</span>
       <div class="chips" id="role-chips" role="group" aria-label="Role"></div>
     </div>
+
+  </section>
+
+  <!-- Narrowing what the panels above selected, so it sits closest to the results
+       and is the one panel that stays pinned while you scroll them. -->
+  <section class="controls controls--refine" aria-label="Refine results">
 
     <div class="control-row control-row--inputs">
       <label class="field">
