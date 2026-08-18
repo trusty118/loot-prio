@@ -384,7 +384,17 @@ ok(!/\.tip\s*\{[^}]*transition/.test(cssText), "tooltip has no transition, so it
 
 // --- priority is structured data, driven by the registry ---
 ok(data.every((r) => Array.isArray(r.priority)), "every priority is a list, not a string");
-ok(Object.keys(specs.specs).length === 27, `registry has all 27 TBC specs (${Object.keys(specs.specs).length})`);
+// 27 playable specs, plus FeralDruid as an umbrella over FeralBear and FeralCat -
+// it stays a valid identifier because the priorities name it, but it is not a spec
+// you can pick and holds no BiS of its own
+const umbrellas = Object.keys(specs.specs).filter((id) => (specs.specs[id].covers || []).length);
+const pickable = Object.keys(specs.specs).filter((id) => !(specs.specs[id].covers || []).length);
+ok(pickable.length === 28, `registry has 28 pickable specs, feral split in two (${pickable.length})`);
+ok(umbrellas.join(",") === "FeralDruid", `FeralDruid is the only umbrella (${umbrellas.join(",")})`);
+ok(specs.specs.FeralDruid.covers.join(",") === "FeralBear,FeralCat", "it covers bear and cat");
+ok(umbrellas.every((id) => !bis.specs[id]), "an umbrella holds no BiS set of its own");
+ok(Object.values(specs.forms.FeralDruid).every((f) => specs.specs[f.spec]),
+   "each form points at the spec it resolves to");
 ok(Object.keys(specs.classes).length === 9, "registry has 9 classes");
 
 // identifiers in the data must exist in the registry - this is what makes a typo an error
@@ -516,31 +526,60 @@ ok(highborne.some((i) => specs.classes[i.dataset.id] && i.className.includes("--
 ok(/BiS/.test(highborne[0].dataset.tipBis) && /phase/i.test(highborne[0].dataset.tipBis),
    `multi-phase icon says so on hover: ${JSON.stringify(highborne[0].dataset.tipBis)}`);
 
-const pillar = iconsOf("Pillar of Ferocity");
-ok(pillar[0].classList.contains("spec-icon--bis"), "* renders the single BiS ring");
-ok(!pillar[0].classList.contains("spec-icon--bis2"), "* is not treated as **");
-ok(pillar[0].dataset.tipBis.endsWith("BiS"), `single BiS icon says so on hover: ${JSON.stringify(pillar[0].dataset.tipBis)}`);
+// the phase example likewise comes from the file rather than being named
+const phaseCase = Object.entries(bis.specs).flatMap(([specId, phases]) =>
+  Object.values(phases).flat()
+    .filter((e) => (e.bis || "phase") === "phase")
+    .map((e) => ({ specId, rec: data.find((r) => r.id === e.id) })))
+  .find(({ specId, rec }) => rec && listsSpec(rec, specId));
+const phaseIcon = iconById(rowFor(phaseCase.rec.item), phaseCase.specId);
+ok(phaseIcon.classList.contains("spec-icon--bis"),
+   `* renders the single BiS ring (${phaseCase.rec.item} / ${phaseCase.specId})`);
+ok(!phaseIcon.classList.contains("spec-icon--bis2"), "* is not treated as **");
+ok(phaseIcon.dataset.tipBis === "Phase BiS",
+   `single BiS icon says so on hover: ${JSON.stringify(phaseIcon.dataset.tipBis)}`);
 
-ok(iconsOf("Bulwark of Azzinoth")[0].classList.contains("spec-icon--bis3"),
-   "*** renders the expansion-BiS ring");
-const bulwarkIcon = iconsOf("Bulwark of Azzinoth")[0];
-ok(bulwarkIcon.dataset.tip === "Protection Warrior" && bulwarkIcon.dataset.tipBis === "Expansion BiS",
-   `name and BiS line carried separately (got ${JSON.stringify(bulwarkIcon.dataset.tip)} / ${JSON.stringify(bulwarkIcon.dataset.tipBis)})`);
-ok(bulwarkIcon.dataset.tipTier === "3", "expansion tier tagged 3 so the tooltip can colour it");
+// Pillar of Ferocity is why feral is split: it is expansion-long for bear and not
+// BiS at all for cat, which one FeralDruid entry could not say
+const pillarRow = rowFor("Pillar of Ferocity");
+const pillarUmbrella = [...pillarRow.children[3].querySelectorAll("img")]
+  .find((i) => i.dataset.id === "FeralDruid" || i.dataset.id === "FeralBear");
+ok(pillarUmbrella && pillarUmbrella.classList.contains("spec-icon--bis3"),
+   "Pillar of Ferocity rings as expansion BiS through the bear it covers");
+ok(/bear/i.test(pillarUmbrella.dataset.tip) && !/cat/i.test(pillarUmbrella.dataset.tip),
+   `and names bear only, not cat (got "${pillarUmbrella.dataset.tip}")`);
+
+// the expansion example is taken from the file rather than named, so re-rating an
+// item's longevity doesn't rewrite the test
+const expansionCase = Object.entries(bis.specs).flatMap(([specId, phases]) =>
+  Object.values(phases).flat()
+    .filter((e) => e.bis === "expansion")
+    .map((e) => ({ specId, rec: data.find((r) => r.id === e.id) })))
+  .find(({ specId, rec }) => rec && listsSpec(rec, specId));
+ok(!!expansionCase, "the file has at least one expansion-BiS entry on a spec the priority names");
+
+const expansionIcon = iconById(rowFor(expansionCase.rec.item), expansionCase.specId);
+ok(expansionIcon.classList.contains("spec-icon--bis3"),
+   `*** renders the expansion-BiS ring (${expansionCase.rec.item} / ${expansionCase.specId})`);
+ok(expansionIcon.dataset.tip === displayName(expansionCase.specId) &&
+   expansionIcon.dataset.tipBis === "Expansion BiS",
+   `name and BiS line carried separately (got ${JSON.stringify(expansionIcon.dataset.tip)} / ${JSON.stringify(expansionIcon.dataset.tipBis)})`);
+ok(expansionIcon.dataset.tipTier === "3", "expansion tier tagged 3 so the tooltip can colour it");
 ok(highborne[0].dataset.tipBis === "Multi-phase BiS" && highborne[0].dataset.tipTier === "2",
    `multi-phase label (got ${JSON.stringify(highborne[0].dataset.tipBis)})`);
-ok(pillar[0].dataset.tipBis === "Phase BiS" && pillar[0].dataset.tipTier === "1",
-   `phase label (got ${JSON.stringify(pillar[0].dataset.tipBis)})`);
+ok(phaseIcon.dataset.tipBis === "Phase BiS" && phaseIcon.dataset.tipTier === "1",
+   `phase label (got ${JSON.stringify(phaseIcon.dataset.tipBis)})`);
 
 // hovering renders the BiS line as its own coloured element
-bulwarkIcon.dispatchEvent(new window.MouseEvent("mouseover", { bubbles: true }));
+expansionIcon.dispatchEvent(new window.MouseEvent("mouseover", { bubbles: true }));
 const liveTip = doc.querySelector("body > .tip");
 const bisLine = liveTip.querySelector(".tip-bis");
 ok(!!bisLine, "the tooltip renders a separate .tip-bis line");
 ok(bisLine.textContent === "Expansion BiS", `BiS line text (got "${bisLine && bisLine.textContent}")`);
 ok(bisLine.classList.contains("tip-bis--3"), "BiS line tagged with its tier for colouring");
-ok(liveTip.textContent.startsWith("Protection Warrior"), "spec name still leads the tooltip");
-bulwarkIcon.dispatchEvent(new window.MouseEvent("mouseout", { bubbles: true }));
+ok(liveTip.textContent.startsWith(displayName(expansionCase.specId)),
+   "spec name still leads the tooltip");
+expansionIcon.dispatchEvent(new window.MouseEvent("mouseout", { bubbles: true }));
 
 // an unmarked icon must not grow a BiS line left over from a previous hover
 const plainIcon = [...doc.querySelectorAll(".col-prio img")].find((i) => !i.dataset.tipBis);
@@ -993,6 +1032,23 @@ ok(chipByTip("#class-chips", "Mage").getAttribute("aria-pressed") === "true" &&
 window.location.hash = "class=Mage,Warlock";
 await new Promise((r) => setTimeout(r, 50));
 ok(rows().length === 27, `two classes restored from the url (got ${rows().length})`);
+
+// --- the feral umbrella in the filter ---
+click(doc.getElementById("reset"));
+click(chipByTip("#class-chips", "Druid"));
+const druidChips = [...doc.querySelectorAll("#spec-chips .chip")].map((c) => c.dataset.tip);
+ok(druidChips.includes("Feral Druid (bear)") && druidChips.includes("Feral Druid (cat)"),
+   `the Druid spec row offers bear and cat (${druidChips.join(", ")})`);
+ok(!druidChips.includes("Feral Druid"), "and not the umbrella they replace");
+
+click(chipByTip("#spec-chips", "Feral Druid (cat)"));
+const catRows = rows().length;
+ok(catRows > 0, `picking cat still matches rows whose priority names FeralDruid (${catRows})`);
+ok(rows().some((tr) => {
+  const rec = data.find((r) => tr.children[0].textContent.includes(r.item));
+  return rec && rec.priority.some((e) => e.spec === "FeralDruid" && !e.form);
+}), "an unqualified FeralDruid entry answers for whichever form is picked");
+click(doc.getElementById("reset"));
 
 // --- a class icon's ring answers for the selected spec, not the whole class ---
 // Ring of Ancient Knowledge names the class Mage in its priority and is BiS for

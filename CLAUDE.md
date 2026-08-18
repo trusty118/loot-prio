@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 317 checks, should be all green
+npm test             # 328 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -54,7 +54,8 @@ together for hand-editing.
                          "icon": "ability_warrior_defensivestance", "roles": ["Tank"] } }
 ```
 
-Five sections: `classes` (9), `specs` (all 27 TBC specs), `forms` (Feral bear/cat),
+Five sections: `classes` (9), `specs` (28 pickable, plus the `FeralDruid` umbrella),
+`forms` (Feral bear/cat, each pointing at the spec it resolves to),
 `races` (Orc/Human), and `aliases` (the old priority shorthand → id).
 
 `aliases` is used by `verify/migrate_priority.py` and by `check_bis.py`'s "did you mean"
@@ -66,6 +67,15 @@ loaded but unread is what made this look done when it wasn't.
 **The key (`ProtWarr`) is the identifier every other data file stores; `name` is display
 only.** Renaming a label never touches a data file. Adding a spec is a data edit, not a
 code edit — check the icon returns 200 first.
+
+**Umbrella specs.** A spec with `covers` stands for the specs it names instead of being one
+itself. `FeralDruid` covers `FeralBear` and `FeralCat`, because the two gear so differently
+that one BiS set can't serve both — Pillar of Ferocity is expansion-long for bear and not
+BiS at all for cat. The priorities go on naming `FeralDruid`, so it stays a valid
+identifier and no priority was rewritten; it just holds no BiS set and is not offered as a
+filter chip. Its icon behaves like a class icon: it rings for whichever covered spec has
+the item, and narrows when you pick one. The `forms` entries carry `spec`, so a priority
+entry of `FeralDruid` + `form: "cat"` resolves straight to `FeralCat`.
 
 ### `data/bis.json` — which items are BiS for which spec
 
@@ -81,7 +91,7 @@ code edit — check the icon returns 200 first.
 - Phase keys (`P3`) exist so P4/P5 can be added later without a migration.
 - **Run `python3 verify/check_bis.py` after editing.**
 
-**329 entries across all 27 specs, and it is generated** — `python3 verify/fetch_bis.py`
+**332 entries across all 28 specs, and it is generated** — `python3 verify/fetch_bis.py`
 builds it from the sources in `verify/bis-sources.json`, which names one Wowhead Phase 3
 guide per spec. Hand edits survive a re-run: an entry already in the file keeps its `bis`
 value, and anything the guides no longer corroborate is kept and reported rather than
@@ -175,7 +185,7 @@ sits on a row that says `Mage`. `bisMark()` resolves this: a spec icon answers f
 and a class icon takes the **highest** tier among its specs. Who the ring is for belongs to
 the icon, not the ring, so it goes on the tooltip's **name line** — `Priest — Discipline,
 Holy` above a plain `Phase BiS` — and the specs drop the class name the icon already shows.
-It matters: of 329 entries, 129 rings land on a spec icon and 120 on a class icon.
+It matters: of 332 entries, most rings land on a spec icon and around 120 on a class icon.
 
 While a filter is on, only the **selected** specs count toward a class icon's ring, so it
 answers "is this BiS for me" rather than "for someone in this class".

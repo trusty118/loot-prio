@@ -90,7 +90,11 @@ def main():
                 # neither is listed, and nothing on the row can hold the mark.
                 listed = {e.get("spec") or e.get("class") for e in rec.get("priority", [])}
                 owner = reg_specs.get(spec_name, {}).get("class")
-                if spec_name not in listed and (owner is None or owner not in listed):
+                # an umbrella spec in the priority (FeralDruid) shows the rings of
+                # the specs it covers, so it counts as this spec being listed
+                umbrellas = {s for s, v in reg_specs.items() if spec_name in (v.get("covers") or [])}
+                if spec_name not in listed and not (umbrellas & listed) \
+                        and (owner is None or owner not in listed):
                     shown = ", ".join(sorted(x for x in listed if x)) or "nobody"
                     who = spec_name if owner is None else f"{spec_name} or {owner}"
                     warnings.append(

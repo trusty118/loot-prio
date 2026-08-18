@@ -1,5 +1,5 @@
 {
- "note": "Canonical classes, specs and races. Identifiers (the keys) are what data files store; name is display only, so a label can be renamed without touching data. aliases maps the old priority shorthand to an id and is used by the migration and by search - never for rendering.",
+ "note": "Canonical classes, specs and races. Identifiers (the keys) are what data files store; name is display only, so a label can be renamed without touching data. A spec with covers is an umbrella over the specs it names - FeralDruid covers FeralBear and FeralCat, which gear very differently. Priorities keep naming FeralDruid, so it stays a valid identifier, but only the covered specs hold BiS sets and only they appear as filter chips. aliases maps the old priority shorthand to an id and is used by the migration - never for rendering.",
  "classes": {
   "Warrior": {
    "name": "Warrior",
@@ -291,6 +291,26 @@
    "roles": [
     "Physical",
     "Tank"
+   ],
+   "covers": [
+    "FeralBear",
+    "FeralCat"
+   ]
+  },
+  "FeralBear": {
+   "class": "Druid",
+   "name": "Feral Druid (bear)",
+   "icon": "ability_racial_bearform",
+   "roles": [
+    "Tank"
+   ]
+  },
+  "FeralCat": {
+   "class": "Druid",
+   "name": "Feral Druid (cat)",
+   "icon": "ability_druid_catform",
+   "roles": [
+    "Physical"
    ]
   },
   "RestoDruid": {
@@ -305,10 +325,12 @@
  "forms": {
   "FeralDruid": {
    "bear": {
+    "spec": "FeralBear",
     "name": "Feral Druid (bear)",
     "icon": "ability_racial_bearform"
    },
    "cat": {
+    "spec": "FeralCat",
     "name": "Feral Druid (cat)",
     "icon": "ability_druid_catform"
    }

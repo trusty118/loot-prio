@@ -164,12 +164,28 @@
   function entrySpeaksTo(entry, clsId, specId) {
     if (!entry) return false;
     if (entry.spec) {
-      if (specId) return entry.spec === specId;
-      var spec = REG.specs[entry.spec];
+      var named = entrySpec(entry);
+      if (specId) return named === specId || covers(named).indexOf(specId) !== -1;
+      var spec = REG.specs[named];
       return !!spec && spec["class"] === clsId;
     }
     if (entry["class"]) return entry["class"] === clsId;
     return false;
+  }
+
+  /* The spec an entry actually names: a form narrows an umbrella to one of the
+     specs it covers, so "FeralDruid + cat" is FeralCat. */
+  function entrySpec(entry) {
+    var form = entry.form && REG.forms[entry.spec] && REG.forms[entry.spec][entry.form];
+    return (form && form.spec && REG.specs[form.spec]) ? form.spec : entry.spec;
+  }
+
+  /* The specs an umbrella stands for. FeralDruid covers bear and cat, which gear
+     so differently that one BiS set can't serve both, but the priorities name the
+     umbrella - so an umbrella answers for whichever of its specs is asked about. */
+  function covers(specId) {
+    var spec = REG.specs[specId];
+    return (spec && spec.covers) || [];
   }
 
   /* An empty priority matches nobody, which is how the 23 "whoever needs it" rows
@@ -263,8 +279,11 @@
       aliases: (doc && doc.aliases) || {}
     };
 
+    /* umbrellas are left out: they hold no BiS of their own and are not offered as
+       filter chips, so a class stands for the specs you can actually pick */
     CLASS_SPECS = {};
     Object.keys(REG.specs).forEach(function (id) {
+      if ((REG.specs[id].covers || []).length) return;
       var cls = REG.specs[id]["class"];
       (CLASS_SPECS[cls] = CLASS_SPECS[cls] || []).push(id);
     });
@@ -282,8 +301,12 @@
       out = { name: spec.name, icon: spec.icon, id: entry.spec };
       var forms = REG.forms[entry.spec];
       if (entry.form && forms && forms[entry.form]) {
-        out.name = forms[entry.form].name;
-        out.icon = forms[entry.form].icon;
+        var form = forms[entry.form];
+        out.name = form.name;
+        out.icon = form.icon;
+        /* a form names one of the covered specs, so "FeralDruid + cat" resolves to
+           FeralCat and its rings come from that spec's own BiS set */
+        if (form.spec && REG.specs[form.spec]) out.id = form.spec;
       }
     } else if (entry["class"]) {
       var cls = REG.classes[entry["class"]];
@@ -735,6 +758,7 @@
       Object.keys(REG.specs).forEach(function (id) {
         var spec = REG.specs[id];
         if (spec["class"] !== cls) return;
+        if (covers(id).length) return;   /* an umbrella is not a spec you can pick */
         var n = pool.filter(function (r) { return priorityHas(r, cls, id); }).length;
         var active = state.specs.indexOf(id) !== -1;
         var c = chip(spec.name, active, n, null, ICON_BASE + spec.icon + ".jpg", true);
@@ -913,12 +937,17 @@
      While a filter is on, only the selected specs count: the ring should answer
      "is this BiS for me", not "for someone in this class". */
   function bisMark(resolved, itemId) {
-    if (REG.specs[resolved.id]) {
+    var stands_for = covers(resolved.id);
+
+    if (REG.specs[resolved.id] && !stands_for.length) {
       return { tier: bisTier(resolved.id, itemId), specs: [] };
     }
 
-    var ids = CLASS_SPECS[resolved.id] || [];
-    var picked = pickedSpecs(resolved.id);
+    /* an umbrella spec aggregates like a class does, over the specs it covers */
+    var ids = stands_for.length ? stands_for : (CLASS_SPECS[resolved.id] || []);
+    var picked = stands_for.length
+      ? stands_for.filter(function (id) { return state.specs.indexOf(id) !== -1; })
+      : pickedSpecs(resolved.id);
     if (picked.length) ids = picked;
 
     var tier = 0, names = [];
@@ -926,21 +955,26 @@
       var t = bisTier(id, itemId);
       if (!t) return;
       if (t > tier) tier = t;
-      names.push(shortSpecName(id));
+      names.push(shortSpecName(id, resolved.name));
     });
     return { tier: tier, specs: names };
   }
 
-  /* "Discipline Priest" -> "Discipline". These names only ever appear on a class
-     icon, listing that class's own specs, so repeating the class after each one
-     says nothing. Falls back to the full name if it doesn't end in its class. */
-  function shortSpecName(id) {
+  /* These names only ever appear on the icon they belong to, listing what it
+     stands for, so repeating that icon's own name after each one says nothing:
+     "Discipline Priest" under Priest is "Discipline", and "Feral Druid (cat)"
+     under Feral Druid is "cat". Falls back to the full name if neither fits. */
+  function shortSpecName(id, parentName) {
     var spec = REG.specs[id];
     if (!spec) return id;
-    var cls = REG.classes[spec["class"]];
-    var suffix = cls ? " " + cls.name : "";
-    if (suffix && spec.name.slice(-suffix.length) === suffix) {
+    if (!parentName) return spec.name;
+
+    var suffix = " " + parentName;
+    if (spec.name.slice(-suffix.length) === suffix) {
       return spec.name.slice(0, -suffix.length);
+    }
+    if (spec.name.indexOf(parentName) === 0) {
+      return spec.name.slice(parentName.length).replace(/^[\s(]+|[\s)]+$/g, "") || spec.name;
     }
     return spec.name;
   }

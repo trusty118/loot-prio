@@ -96,7 +96,8 @@
     },
     {
      "id": 32527,
-     "item": "Ring of Ancient Knowledge"
+     "item": "Ring of Ancient Knowledge",
+     "bis": "multiPhase"
     },
     {
      "id": 32524,
@@ -159,7 +160,8 @@
     },
     {
      "id": 32527,
-     "item": "Ring of Ancient Knowledge"
+     "item": "Ring of Ancient Knowledge",
+     "bis": "multiPhase"
     },
     {
      "id": 32524,
@@ -227,7 +229,8 @@
     },
     {
      "id": 32527,
-     "item": "Ring of Ancient Knowledge"
+     "item": "Ring of Ancient Knowledge",
+     "bis": "multiPhase"
     },
     {
      "id": 32524,
@@ -299,7 +302,8 @@
     },
     {
      "id": 32527,
-     "item": "Ring of Ancient Knowledge"
+     "item": "Ring of Ancient Knowledge",
+     "bis": "expansion"
     },
     {
      "id": 32524,
@@ -322,61 +326,6 @@
     {
      "id": 32374,
      "item": "Zhar'doom, Greatstaff of the Devourer",
-     "bis": "multiPhase"
-    }
-   ]
-  },
-  "FeralDruid": {
-   "P3": [
-    {
-     "id": 32260,
-     "item": "Choker of Endless Nightmares"
-    },
-    {
-     "id": 32591,
-     "item": "Choker of Serrated Blades"
-    },
-    {
-     "id": 32257,
-     "item": "Idol of the White Stag"
-    },
-    {
-     "id": 32324,
-     "item": "Insidious Bands"
-    },
-    {
-     "id": 32505,
-     "item": "Madness of the Betrayer"
-    },
-    {
-     "id": 32362,
-     "item": "Pendant of Titans"
-    },
-    {
-     "id": 30883,
-     "item": "Pillar of Ferocity"
-    },
-    {
-     "id": 32266,
-     "item": "Ring of Deceitful Intent"
-    },
-    {
-     "id": 32366,
-     "item": "Shadowmaster's Boots",
-     "bis": "multiPhase"
-    },
-    {
-     "id": 32501,
-     "item": "Shadowmoon Insignia",
-     "bis": "expansion"
-    },
-    {
-     "id": 32497,
-     "item": "Stormrage Signet Ring"
-    },
-    {
-     "id": 32593,
-     "item": "Treads of the Den Mother",
      "bis": "multiPhase"
     }
    ]
@@ -404,7 +353,8 @@
     },
     {
      "id": 32527,
-     "item": "Ring of Ancient Knowledge"
+     "item": "Ring of Ancient Knowledge",
+     "bis": "expansion"
     },
     {
      "id": 32524,
@@ -440,7 +390,7 @@
     {
      "id": 32375,
      "item": "Bulwark of Azzinoth",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 32232,
@@ -571,7 +521,8 @@
     },
     {
      "id": 32527,
-     "item": "Ring of Ancient Knowledge"
+     "item": "Ring of Ancient Knowledge",
+     "bis": "expansion"
     },
     {
      "id": 32239,
@@ -1534,6 +1485,78 @@
     {
      "id": 32584,
      "item": "Swiftheal Wraps"
+    }
+   ]
+  },
+  "FeralCat": {
+   "P3": [
+    {
+     "id": 32260,
+     "item": "Choker of Endless Nightmares"
+    },
+    {
+     "id": 32591,
+     "item": "Choker of Serrated Blades"
+    },
+    {
+     "id": 32324,
+     "item": "Insidious Bands"
+    },
+    {
+     "id": 32505,
+     "item": "Madness of the Betrayer"
+    },
+    {
+     "id": 32366,
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32497,
+     "item": "Stormrage Signet Ring"
+    }
+   ]
+  },
+  "FeralBear": {
+   "P3": [
+    {
+     "id": 32257,
+     "item": "Idol of the White Stag"
+    },
+    {
+     "id": 32324,
+     "item": "Insidious Bands"
+    },
+    {
+     "id": 32505,
+     "item": "Madness of the Betrayer"
+    },
+    {
+     "id": 32362,
+     "item": "Pendant of Titans"
+    },
+    {
+     "id": 30883,
+     "item": "Pillar of Ferocity",
+     "bis": "expansion"
+    },
+    {
+     "id": 32266,
+     "item": "Ring of Deceitful Intent"
+    },
+    {
+     "id": 32366,
+     "item": "Shadowmaster's Boots"
+    },
+    {
+     "id": 32501,
+     "item": "Shadowmoon Insignia",
+     "bis": "expansion"
+    },
+    {
+     "id": 32593,
+     "item": "Treads of the Den Mother",
+     "bis": "multiPhase"
     }
    ]
   }

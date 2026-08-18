@@ -1,5 +1,5 @@
 {
- "note": "Where each spec's BiS data comes from, and the input to verify/fetch_bis.py. p3 is one or more Wowhead Phase 3 (Black Temple / Mount Hyjal) BiS guides - every url here was checked for a 200 before it went in. wowsims says which wowsims/tbc preset file supplies the longevity check (does a P3 item survive into the P4/P5 preset), with match naming the preset when one file holds several specs; null wowsims means no preset exists for that spec, so its entries stay at the default phase tier. Some guides serve two or three specs at once - Wowhead writes one rogue and one priest-healer guide - so the same url legitimately appears more than once.",
+ "note": "Where each spec's BiS data comes from, and the input to verify/fetch_bis.py. Umbrella specs have no entry here - FeralDruid gears as bear or as cat and never as one set, so FeralBear and FeralCat are sourced separately from Wowhead's tank and dps guides. p3 is one or more Wowhead Phase 3 (Black Temple / Mount Hyjal) BiS guides - every url here was checked for a 200 before it went in. wowsims says which wowsims/tbc preset file supplies the longevity check (does a P3 item survive into the P4/P5 preset), with match naming the preset when one file holds several specs; null wowsims means no preset exists for that spec, so its entries stay at the default phase tier. Some guides serve two or three specs at once - Wowhead writes one rogue and one priest-healer guide - so the same url legitimately appears more than once.",
  "specs": {
   "Arms": {
    "p3": ["https://www.wowhead.com/tbc/guide/arms-warrior-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
@@ -101,12 +101,13 @@
    "p3": ["https://www.wowhead.com/tbc/guide/balance-druid-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
    "wowsims": { "dirs": ["balance_druid"], "match": null }
   },
-  "FeralDruid": {
-   "p3": [
-    "https://www.wowhead.com/tbc/guide/feral-druid-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade",
-    "https://www.wowhead.com/tbc/guide/feral-druid-tank-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
-   ],
-   "wowsims": { "dirs": ["feral_druid", "feral_tank_druid"], "match": null }
+  "FeralCat": {
+   "p3": ["https://www.wowhead.com/tbc/guide/feral-druid-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
+   "wowsims": { "dirs": ["feral_druid"], "match": null }
+  },
+  "FeralBear": {
+   "p3": ["https://www.wowhead.com/tbc/guide/feral-druid-tank-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
+   "wowsims": { "dirs": ["feral_tank_druid"], "match": null }
   },
   "RestoDruid": {
    "p3": ["https://www.wowhead.com/tbc/guide/druid-healer-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
