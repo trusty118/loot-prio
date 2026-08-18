@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 339 checks, should be all green
+npm test             # 346 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -224,6 +224,15 @@ reads several classes at once. The spec row is `hidden` until a class is picked 
 offers exactly the selected classes' specs — grouped in the order the classes were picked,
 not registry order.
 
+**An `unsourced` row is reached through its BiS, not through a priority.** It names nobody, so
+`selectionHas()` can never match it; `unsourcedBis()` lets it through when the item is BiS for
+a spec the selection stands for. Otherwise Band of the Eternal Champion would be BiS for eight
+physical specs and reachable from none of them. The row keeps its empty priority column and
+its tag, so nothing about it reads as one of zatar's calls, and an unsourced item that is BiS
+for nobody (Wraps of Precise Flight) is surfaced by no filter at all. `SELECTED_SPECS` is
+rebuilt once per `update()` rather than per record, since `matches()` runs across every row for
+every chip.
+
 A spec is a **refinement of its class, never a selection in its own right**: deselecting a
 class drops any of its specs, and `pickedSpecs()` resolves each class separately before
 unioning. Picking Mage + Warlock and then narrowing Mage to Fire leaves Warlock whole —
@@ -333,12 +342,8 @@ structured priority), `verify/fetch_unique.py` (re-runnable if the item set chan
   expect tier armour to keep showing as "not in this dataset" on every `fetch_bis.py` run.
 - **Still not included:** gems, and Mother Shahraz's shadow-resistance set — intentional
   omissions by the creator — and tier set pieces, per the above.
-- **The 13 added rows are invisible to the class/spec filter**, because they have no priority
-  and `selectionHas()` matches nobody on an empty one. So Band of the Eternal Champion, which
-  is BiS for 8 physical specs, never appears in a Survival hunter's filtered view. Deliberate
-  for now — the filter answers "where do I stand in zatar's list" — but it means 34 of the
-  366 BiS entries are recorded and unreachable. Letting the filter also match an unsourced row
-  that is BiS for the selected spec would fix it.
+- Planned but not built: alias-aware search, a rank display for the unused `positions()`, and
+  a decision on `SHOW_ROLE`. See §2 and §4.
 - Planned but not built: clicking a spec icon in a priority line to jump straight to that
   spec's filtered view. `BIS_BY_SPEC` in `app.js` is still unread by anything — the filter
   goes through `bisTier()` — and is the natural source for a "show me this spec's whole BiS

@@ -223,6 +223,31 @@
     return (rec.priority || []).some(selectionSpeaksTo);
   }
 
+  /* The specs the current selection actually stands for: a class with none of its
+     specs picked means all of them. Recomputed once per update() rather than per
+     record, since matches() runs it across every row for every chip. */
+  var SELECTED_SPECS = [];
+
+  function indexSelection() {
+    SELECTED_SPECS = [];
+    state.classes.forEach(function (cls) {
+      var picked = pickedSpecs(cls);
+      (picked.length ? picked : (CLASS_SPECS[cls] || [])).forEach(function (id) {
+        if (SELECTED_SPECS.indexOf(id) === -1) SELECTED_SPECS.push(id);
+      });
+    });
+  }
+
+  /* An unsourced row names nobody, so selectionHas() can never match it - but the
+     BiS data can, and these are real T6 items: 11 of the 13 are BiS for at least
+     one spec. Without this, Band of the Eternal Champion is BiS for eight physical
+     specs and reachable from none of them. The row still shows an empty priority
+     column and its "not in the guide" tag, so nothing about it reads as a call. */
+  function unsourcedBis(rec) {
+    if (!rec.unsourced) return false;
+    return SELECTED_SPECS.some(function (id) { return bisTier(id, rec.id); });
+  }
+
   function typeLabel(rec) {
     var type = rec.type || "";
     if (TYPE_LABEL[type]) return TYPE_LABEL[type];
@@ -486,7 +511,7 @@
     /* class and spec are one facet: "spec" skips both, so the counts on either row
        are computed as if neither were applied */
     if (skip !== "spec") {
-      if (state.classes.length && !selectionHas(rec)) return false;
+      if (state.classes.length && !selectionHas(rec) && !unsourcedBis(rec)) return false;
       /* "bis" skips only the BiS narrowing, so the toggle can count what it would leave */
       if (skip !== "bis" && state.bisOnly && state.specs.length &&
           !state.specs.some(function (id) { return bisTier(id, rec.id); })) return false;
@@ -1249,6 +1274,7 @@
   }
 
   function update() {
+    indexSelection();
     renderZoneChips();
     renderBossChips();
     renderClassChips();
