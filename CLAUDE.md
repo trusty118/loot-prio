@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 316 checks, should be all green
+npm test             # 317 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -209,9 +209,10 @@ unioning. Picking Mage + Warlock and then narrowing Mage to Fire leaves Warlock 
 27 rows become 26, not 18. A `?spec=` link with no `class=` adds the implied class on read.
 
 Those chips are **icon-only** (`chip(..., iconOnly)` adds `.chip--icon`): with a name and a
-count on each of 27 chips, the icons being recognised were buried. Both move into the chip's
-`data-tip` — `"Arcane Mage — 18 items"` — which also becomes its `aria-label`, and is what
-tests match on, since these chips have no text content.
+count on each of 27 chips, the icons being recognised were buried. The name moves into the
+chip's `data-tip` and `aria-label`, and is what tests match on since these chips have no
+text content. **No count on them** — you scan this row to find your class, and 27 numbers
+are noise next to the result total already sitting above the table.
 
 A row matches through `selectionHas()` in `app.js`, which asks whether any priority entry
 speaks to the selection (`priorityHas()` is the single-class form underneath it):

@@ -858,7 +858,7 @@ ok(rows().length === 17, `unqualified boss=Trash still selects both zones (got $
 // These chips carry no text: the name and the count live in the tooltip, so they
 // are found by data-tip rather than by textContent.
 const chipByTip = (sel, name) =>
-  [...doc.querySelectorAll(sel + " .chip")].find((c) => (c.dataset.tip || "").startsWith(name + " "));
+  [...doc.querySelectorAll(sel + " .chip")].find((c) => (c.dataset.tip || "") === name);
 
 click(doc.getElementById("reset"));
 ok(doc.getElementById("class-chips") && doc.getElementById("spec-chips"),
@@ -890,10 +890,14 @@ ok([...doc.querySelectorAll("#spec-chips .chip")].length === 0,
    "and renders no spec chips at all");
 ok([...doc.querySelectorAll("#class-chips .chip--icon")].every((c) => !c.textContent.trim()),
    "class chips are icon-only");
-ok(chipByTip("#class-chips", "Mage").dataset.tip === "Mage — 20 items",
-   `the name and count moved into the tooltip: "${chipByTip("#class-chips", "Mage").dataset.tip}"`);
-ok(chipByTip("#class-chips", "Mage").getAttribute("aria-label") === "Mage — 20 items",
+// just the name: these chips are scanned to find your class, and a count on each
+// of 27 of them is noise - the result total is already above the table
+ok(chipByTip("#class-chips", "Mage").dataset.tip === "Mage",
+   `the tooltip is the class name alone: "${chipByTip("#class-chips", "Mage").dataset.tip}"`);
+ok(chipByTip("#class-chips", "Mage").getAttribute("aria-label") === "Mage",
    "an icon-only chip still names itself to a screen reader");
+ok([...doc.querySelectorAll("#class-chips .chip--icon")].every((c) => !/\d/.test(c.dataset.tip)),
+   "no chip tooltip carries a count");
 
 click(chipByTip("#class-chips", "Mage"));
 ok(rows().length === 20, `class=Mage -> 20 rows (got ${rows().length})`);

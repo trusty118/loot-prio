@@ -590,8 +590,10 @@
       b.classList.add("chip--icon");
       b.innerHTML = '<img class="chip-icon" src="' + escapeHtml(icon) +
         '" alt="" onerror="this.replaceWith(document.createTextNode(this.parentNode.dataset.tip))">';
-      b.dataset.tip = label + (count == null ? "" : " — " + count + " items");
-      b.setAttribute("aria-label", b.dataset.tip);
+      /* the name only - a count here is noise on a row you are reading to find
+         your class, and the result count is already above the table */
+      b.dataset.tip = label;
+      b.setAttribute("aria-label", label);
     } else {
       b.innerHTML =
         /* if the CDN ever stops serving these, fall back to a plain text chip */
