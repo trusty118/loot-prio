@@ -967,9 +967,17 @@ ok([...doc.querySelectorAll("#class-chips .chip--icon")].every((c) => !/\d/.test
    "no chip tooltip carries a count");
 
 click(chipByTip("#class-chips", "Mage"));
-ok(rows().length === 20, `class=Mage -> 20 rows (got ${rows().length})`);
-ok(rows().every((tr) => tr.children[3].querySelectorAll("img.spec-icon").length > 0),
-   "no empty-priority rows survive a class filter");
+ok(rows().length === 21, `class=Mage -> 21 rows: 20 named + Band of the Eternal Sage (got ${rows().length})`);
+// An empty priority survives a filter only when the row is unsourced AND the item
+// is BiS for the selection - the creator's own "whoever needs it" rows never do.
+const emptyPrioRows = rows().filter((tr) => tr.children[3].querySelectorAll("img.spec-icon").length === 0);
+ok(emptyPrioRows.every((tr) => tr.querySelector(".item-tag")),
+   "the only priority-less rows shown are the unsourced ones");
+ok(emptyPrioRows.every((tr) => {
+  const rec = data.find((r) => tr.children[0].textContent.includes(r.item));
+  return rec && Object.keys(bis.specs).some((id) => specs.specs[id].class === "Mage" &&
+    Object.values(bis.specs[id]).flat().some((e) => e.id === rec.id));
+}), "and each is there because it is BiS for a spec of the selected class");
 ok(!doc.getElementById("spec-row").hidden, "picking a class reveals the spec row");
 ok([...doc.querySelectorAll("#spec-chips .chip")].length === 4,
    "the spec row holds only that class's three specs, plus All");
@@ -979,7 +987,7 @@ ok(!doc.querySelector("#spec-chips .chip--toggle"), "no BiS toggle until a spec 
 
 // classes are multi-select, and the spec row grows to cover all of them
 click(chipByTip("#class-chips", "Warlock"));
-ok(rows().length === 27, `class=Mage+Warlock -> 27 rows, the union (got ${rows().length})`);
+ok(rows().length === 28, `class=Mage+Warlock -> 28 rows, the union (got ${rows().length})`);
 ok([...doc.querySelectorAll("#spec-chips .chip")].length === 7,
    "the spec row now offers both classes' specs");
 ok(chipByTip("#spec-chips", "Fire Mage") && chipByTip("#spec-chips", "Destruction Warlock"),
@@ -987,20 +995,20 @@ ok(chipByTip("#spec-chips", "Fire Mage") && chipByTip("#spec-chips", "Destructio
 
 // refining one class must not narrow the other
 click(chipByTip("#spec-chips", "Fire Mage"));
-ok(rows().length === 26, `Fire + the whole Warlock class -> 26 rows (got ${rows().length})`);
+ok(rows().length === 27, `Fire + the whole Warlock class -> 27 rows (got ${rows().length})`);
 ok(rows().map((tr) => tr.children[0].textContent.trim()).includes("Cowl of the Illidari High Lord"),
    "a Fire-only row survives the refinement");
 
 // dropping a class drops the specs that were refining it
 click(chipByTip("#class-chips", "Mage"));
-ok(rows().length === 22, `Warlock alone -> 22 rows (got ${rows().length})`);
+ok(rows().length === 23, `Warlock alone -> 23 rows (got ${rows().length})`);
 ok(!window.location.hash.includes("spec="), `the Fire refinement went with it: ${window.location.hash}`);
 
 click(doc.getElementById("reset"));
 click(chipByTip("#class-chips", "Mage"));
 
 click(chipByTip("#spec-chips", "Arcane Mage"));
-ok(rows().length === 18, `spec=Arcane -> 18 rows (got ${rows().length})`);
+ok(rows().length === 19, `spec=Arcane -> 19 rows (got ${rows().length})`);
 const arcaneItems = rows().map((tr) => tr.children[0].textContent.trim());
 ok(arcaneItems.includes("Ring of Ancient Knowledge"),
    "a row that only names the class Mage still matches the spec Arcane");
@@ -1020,7 +1028,7 @@ click(doc.getElementById("reset"));
 click(chipByTip("#class-chips", "Hunter"));
 click(chipByTip("#spec-chips", "Survival Hunter"));
 const survRows = rows().length;
-ok(survRows === 25, `spec=Survival -> 25 rows (got ${survRows})`);
+ok(survRows === 26, `spec=Survival -> 26 rows (got ${survRows})`);
 const toggle = doc.querySelector("#spec-chips .chip--toggle");
 ok(toggle && toggle.textContent.includes("BiS only"), "the BiS toggle appears once a spec is picked");
 
@@ -1059,7 +1067,38 @@ ok(chipByTip("#class-chips", "Mage").getAttribute("aria-pressed") === "true" &&
 // several classes survive a round-trip too
 window.location.hash = "class=Mage,Warlock";
 await new Promise((r) => setTimeout(r, 50));
-ok(rows().length === 27, `two classes restored from the url (got ${rows().length})`);
+ok(rows().length === 28, `two classes restored from the url (got ${rows().length})`);
+
+// --- an unsourced row is reachable through its BiS, not through a priority ---
+// These items name nobody, so the only thing that can connect them to a spec is
+// bis.json. Without that they would be recorded and unreachable.
+click(doc.getElementById("reset"));
+const itemNames = () => rows().map((tr) => tr.children[0].textContent);
+
+click(chipByTip("#class-chips", "Hunter"));
+click(chipByTip("#spec-chips", "Survival Hunter"));
+ok(itemNames().some((n) => n.includes("Band of the Eternal Champion")),
+   "Survival sees the Band it is BiS for, even though no priority names it");
+const bandRow = rowFor("Band of the Eternal Champion");
+ok(bandRow.querySelector(".item-tag"), "and it still carries its 'not in the guide' tag");
+ok(bandRow.children[3].querySelectorAll("img").length === 0,
+   "with an empty priority column, so it never reads as one of the creator's calls");
+
+click(doc.getElementById("reset"));
+click(chipByTip("#class-chips", "Paladin"));
+click(chipByTip("#spec-chips", "Holy Paladin"));
+ok(!itemNames().some((n) => n.includes("Band of the Eternal Champion")),
+   "a spec it is not BiS for does not see it");
+
+// an unsourced item that is BiS for nobody is never pulled in by any filter
+click(doc.getElementById("reset"));
+const orphan = data.find((r) => r.unsourced &&
+  !Object.values(bis.specs).some((p) => Object.values(p).flat().some((e) => e.id === r.id)));
+ok(!!orphan, `an unsourced item exists that is BiS for nobody (${orphan && orphan.item})`);
+click(chipByTip("#class-chips", "Hunter"));
+ok(!itemNames().some((n) => n.includes(orphan.item)),
+   `${orphan.item} is BiS for nobody, so no filter surfaces it`);
+click(doc.getElementById("reset"));
 
 // --- the feral umbrella in the filter ---
 click(doc.getElementById("reset"));
