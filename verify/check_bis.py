@@ -16,46 +16,42 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 LOOT = ROOT / "data" / "loot_data.json"
 BIS = ROOT / "data" / "bis.json"
-APP = ROOT / "app.js"
+SPECS = ROOT / "data" / "specs.json"
 
 VALID_TIERS = {"phase", "multiPhase", "expansion"}
 RACES = {"Orc", "Human"}
 
 
-def spec_table():
-    """The SPECS table in app.js: shorthand -> canonical label."""
-    src = APP.read_text(encoding="utf-8")
-    block = src[src.index("var SPECS = ["):src.index("var SPEC_BY_KEY")]
-    pairs = re.findall(r'\["([^"]+)",\s*"([^"]+)",', block)
-    shorthand_for = {}
-    for short, label in pairs:
-        shorthand_for.setdefault(label, []).append(short)
-    return shorthand_for
+def registry():
+    """Identifiers the BiS file may use: every spec and class in specs.json."""
+    reg = json.loads(SPECS.read_text(encoding="utf-8"))
+    return reg["specs"], reg["classes"], reg["aliases"]
 
 
 def main():
     loot = json.loads(LOOT.read_text(encoding="utf-8"))
     by_id = {r["id"]: r for r in loot}
-    shorthand_for = spec_table()
-    known_specs = set(shorthand_for) - RACES
+    reg_specs, reg_classes, aliases = registry()
+    known_specs = set(reg_specs) | set(reg_classes)
 
     doc = json.loads(BIS.read_text(encoding="utf-8"))
-    specs = doc.get("specs", {})
+    bis_specs = doc.get("specs", {})
 
     errors, warnings = [], []
     entries = 0
 
-    for spec_name, phases in specs.items():
-        if spec_name in RACES:
-            errors.append(f"{spec_name!r} is a race, not a spec")
-            continue
+    for spec_name, phases in bis_specs.items():
         if spec_name not in known_specs:
-            # the likely mistake is using the priority shorthand instead of the label
-            label_for = {s.lower(): label
-                         for label, shorts in shorthand_for.items() for s in shorts}
-            match = label_for.get(spec_name.lower())
-            hint = f" - that is the shorthand; use {match!r}" if match else ""
-            errors.append(f"{spec_name!r} is not in the SPECS table in app.js{hint}")
+            # likely mistakes: the old display label, or the priority shorthand
+            by_name = {v["name"].lower(): k
+                       for k, v in list(reg_specs.items()) + list(reg_classes.items())}
+            alias = {k.lower(): v for k, v in aliases.items()}
+            match = by_name.get(spec_name.lower())
+            if match is None:
+                target = alias.get(spec_name.lower())
+                match = target.get("spec") if isinstance(target, dict) else target
+            hint = f" - use the identifier {match!r}" if match else ""
+            errors.append(f"{spec_name!r} is not in data/specs.json{hint}")
             continue
 
         for phase, items in (phases or {}).items():
@@ -88,16 +84,18 @@ def main():
                 if tier not in VALID_TIERS:
                     errors.append(f"{label}: {rec['item']} has bis={tier!r}, expected one of {sorted(VALID_TIERS)}")
 
-                # will a ring actually be visible? only if the priority names this spec
-                shorthands = shorthand_for.get(spec_name, [])
-                pattern = r"\b(?:" + "|".join(re.escape(s) for s in shorthands) + r")\b"
-                if not re.search(pattern, rec["priority"], re.I):
+                # Will a ring actually be visible? Only if the priority lists this
+                # spec. An exact membership test now that priority is structured -
+                # this used to be a regex over prose.
+                listed = {e.get("spec") or e.get("class") for e in rec.get("priority", [])}
+                if spec_name not in listed:
+                    shown = ", ".join(sorted(x for x in listed if x)) or "nobody"
                     warnings.append(
-                        f"{label}: {rec['item']} - priority {rec['priority']!r} never names "
-                        f"{spec_name} ({'/'.join(shorthands)}), so no ring will show"
+                        f"{label}: {rec['item']} - priority lists {shown}, "
+                        f"not {spec_name}, so no ring will show"
                     )
 
-    print(f"{entries} entries across {len(specs)} specs")
+    print(f"{entries} entries across {len(bis_specs)} specs")
 
     if warnings:
         print(f"\nnot visible ({len(warnings)}):")

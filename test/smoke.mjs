@@ -13,9 +13,12 @@ const { window } = dom;
 
 // stub fetch for the local data files
 const bis = JSON.parse(fs.readFileSync(path.join(root, "data/bis.json"), "utf8"));
-window.fetch = (url) =>
-  Promise.resolve({ ok: true, status: 200,
-    json: () => Promise.resolve(String(url).includes("bis.json") ? bis : data) });
+const specs = JSON.parse(fs.readFileSync(path.join(root, "data/specs.json"), "utf8"));
+window.fetch = (url) => {
+  const u = String(url);
+  const body = u.includes("bis.json") ? bis : u.includes("specs.json") ? specs : data;
+  return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(body) });
+};
 
 window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
 
@@ -364,34 +367,80 @@ probe.dispatchEvent(new window.FocusEvent("focusout", { bubbles: true }));
 // no css transition - a fade would reintroduce the delay we're removing
 ok(!/\.tip\s*\{[^}]*transition/.test(cssText), "tooltip has no transition, so it appears instantly");
 
+// --- priority is structured data, driven by the registry ---
+ok(data.every((r) => Array.isArray(r.priority)), "every priority is a list, not a string");
+ok(Object.keys(specs.specs).length === 27, `registry has all 27 TBC specs (${Object.keys(specs.specs).length})`);
+ok(Object.keys(specs.classes).length === 9, "registry has 9 classes");
+
+// identifiers in the data must exist in the registry - this is what makes a typo an error
+const unknown = [];
+for (const rec of data) {
+  for (const e of rec.priority || []) {
+    const id = e.spec || e.class;
+    if (!(specs.specs[id] || specs.classes[id])) unknown.push(`${rec.item}: ${id}`);
+  }
+}
+ok(unknown.length === 0, `every priority identifier resolves (${unknown.slice(0, 3).join(", ")})`);
+
+// operators render between the icons, and only the five known ones appear
+const ops = [...doc.querySelectorAll(".col-prio .prio-op")].map((o) => o.textContent);
+const KNOWN_OPS = [">", ">>", "~>", "=", "~="];
+ok(ops.length > 0 && ops.every((o) => KNOWN_OPS.includes(o)),
+   `only known operators render (${[...new Set(ops)].sort().join(" ")})`);
+ok(ops.every((o) => o !== ">="), "the old >= is gone");
+
+const opRow = (name) => [...doc.querySelectorAll("tbody tr")]
+  .find((tr) => tr.children[0].textContent.includes(name)).children[3];
+ok([...opRow("Stormrage Signet Ring").querySelectorAll(".prio-op")].map((o) => o.textContent).includes(">>"),
+   "Stormrage Signet Ring keeps its >>");
+ok([...opRow("Zhar'doom").querySelectorAll(".prio-op")].map((o) => o.textContent).includes("~>"),
+   "Zhar'doom uses ~> where it had >=");
+ok([...opRow("Fist of Molten Fury").querySelectorAll(".prio-op")].map((o) => o.textContent).includes("~="),
+   "Fist of Molten Fury uses ~= where it had a bare ~");
+
+// operators carry a tooltip, ready for the operator-tooltip feature
+ok([...doc.querySelectorAll(".prio-op")].every((o) => o.dataset.tip),
+   "every operator has a data-tip explaining it");
+
+// race qualifiers still render their own icon before the spec
+const rising = opRow("Rising Tide");
+ok(rising.querySelectorAll("img")[0].dataset.tip === "Orc",
+   `Rising Tide leads with the Orc icon (got ${rising.querySelectorAll("img")[0].dataset.tip})`);
+
+// forms resolve to their own icon and name
+const vanq = opRow("Pauldrons of the Forgotten Vanquisher");
+ok([...vanq.querySelectorAll("img")].some((i) => i.dataset.tip === "Feral Druid (bear)"),
+   "the bear form renders as its own icon");
+
+// tier tokens still work, which proves CLASS_INFO's replacement reads the registry
+ok(doc.querySelectorAll(".col-type img.class-icon").length === 45,
+   `15 tier tokens x 3 class icons = 45 (${doc.querySelectorAll(".col-type img.class-icon").length})`);
+
 // --- BiS comes from data/bis.json, not from the priority string ---
 ok(!JSON.stringify(data).includes("*"), "no asterisk markers left in loot_data.json");
 ok(bis.specs && Object.keys(bis.specs).length >= 4, "bis.json has spec entries");
 
 // every entry in the file that is visible must have produced a ring
 const tierClass = { phase: "spec-icon--bis", multiPhase: "spec-icon--bis2", expansion: "spec-icon--bis3" };
-// read the real SPECS table so new specs are covered automatically
-const appSrc = fs.readFileSync(path.join(root, "app.js"), "utf8");
-const specBlock = appSrc.slice(appSrc.indexOf("var SPECS = ["), appSrc.indexOf("var SPEC_BY_KEY"));
-const shorthandsFor = {};
-for (const [, short, label] of specBlock.matchAll(/\["([^"]+)",\s*"([^"]+)",/g)) {
-  (shorthandsFor[label] = shorthandsFor[label] || []).push(short);
-}
-const namesSpec = (priority, specName) =>
-  (shorthandsFor[specName] || []).some((sh) => new RegExp("\\b" + sh + "\\b", "i").test(priority));
+// bis.json and priority both use registry identifiers now, so visibility is an
+// exact membership test rather than a regex over prose
+const displayName = (id) => (specs.specs[id] || specs.classes[id] || {}).name;
+const listsSpec = (rec, id) =>
+  (rec.priority || []).some((e) => (e.spec || e.class) === id);
+
 let checked = 0;
-for (const [specName, phases] of Object.entries(bis.specs)) {
+for (const [specId, phases] of Object.entries(bis.specs)) {
   for (const entries of Object.values(phases)) {
     for (const e of entries) {
       const rec = data.find((r) => r.id === e.id);
-      if (!rec || !namesSpec(rec.priority, specName)) continue;   // not visible, fine
+      if (!rec || !listsSpec(rec, specId)) continue;   // recorded but not visible, fine
       const row = [...doc.querySelectorAll("tbody tr")]
         .find((tr) => tr.children[0].textContent.includes(rec.item));
       // an item can be BiS for several specs at once, so check this spec's own icon
       const icon = [...row.children[3].querySelectorAll("img")]
-        .find((i) => i.dataset.tip === specName);
+        .find((i) => i.dataset.tip === displayName(specId));
       ok(icon && icon.classList.contains(tierClass[e.bis || "phase"]),
-         `${rec.item}: ${specName} ringed as ${e.bis || "phase"}`);
+         `${rec.item}: ${specId} ringed as ${e.bis || "phase"}`);
       checked++;
     }
   }

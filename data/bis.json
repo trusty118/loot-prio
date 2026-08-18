@@ -1,57 +1,57 @@
 {
- "note": "BiS sets per spec. Spec keys must match the SPECS labels in app.js exactly (e.g. 'Restoration Shaman', not 'R Shaman'). Phase keys are P3/P4/P5; only P3 is filled in for now. Each entry: id + item (both, so a mismatched pair can be caught), and an optional bis of phase | multiPhase | expansion, defaulting to phase. Run verify/check_bis.py after editing.",
+ "note": "BiS sets per spec, keyed by the identifiers in data/specs.json (e.g. ProtWarr, not 'Protection Warrior'). Phase keys are P3/P4/P5; only P3 is filled in for now. Each entry: id + item, plus an optional bis of phase | multiPhase | expansion, defaulting to phase. Run verify/check_bis.py after editing.",
  "specs": {
-  "Affliction Warlock": {
+  "AffliLock": {
    "P3": [
     { "id": 32527, "item": "Ring of Ancient Knowledge" }
    ]
   },
-  "Arcane Mage": {
+  "Arcane": {
    "P3": [
     { "id": 32527, "item": "Ring of Ancient Knowledge" }
    ]
   },
-  "Balance Druid": {
+  "BalanceDruid": {
    "P3": [
     { "id": 32527, "item": "Ring of Ancient Knowledge" }
    ]
   },
-  "Destruction Warlock": {
+  "DestroLock": {
    "P3": [
     { "id": 32527, "item": "Ring of Ancient Knowledge" }
    ]
   },
-  "Elemental Shaman": {
+  "Ele": {
    "P3": [
     { "id": 32527, "item": "Ring of Ancient Knowledge" }
    ]
   },
-  "Feral Druid": {
+  "FeralDruid": {
    "P3": [
     { "id": 30883, "item": "Pillar of Ferocity" }
    ]
   },
-  "Fire Mage": {
+  "Fire": {
    "P3": [
     { "id": 32527, "item": "Ring of Ancient Knowledge" }
    ]
   },
-  "Protection Warrior": {
+  "ProtWarr": {
    "P3": [
     { "id": 32375, "item": "Bulwark of Azzinoth", "bis": "expansion" }
    ]
   },
-  "Restoration Shaman": {
+  "RestoShaman": {
    "P3": [
     { "id": 32524, "item": "Shroud of the Highborne", "bis": "multiPhase" }
    ]
   },
-  "Shadow Priest": {
+  "Shadow": {
    "P3": [
     { "id": 32527, "item": "Ring of Ancient Knowledge" }
    ]
   },
-  "Survival Hunter": {
+  "Surv": {
    "P3": [
     { "id": 32336, "item": "Black Bow of the Betrayer" }
    ]

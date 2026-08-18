@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const data = JSON.parse(fs.readFileSync(path.join(root, "data/loot_data.json"), "utf8"));
+const specs = JSON.parse(fs.readFileSync(path.join(root, "data/specs.json"), "utf8"));
 const fail = [];
 const ok = (c, m) => { console.log((c ? "PASS  " : "FAIL  ") + m); if (!c) fail.push(m); };
 
@@ -16,7 +17,8 @@ async function boot(bisResponse) {
   window.console = { warn: () => {}, log: () => {} };
   window.fetch = (url) =>
     String(url).includes("bis.json") ? bisResponse() :
-    Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(data) });
+    Promise.resolve({ ok: true, status: 200,
+      json: () => Promise.resolve(String(url).includes("specs.json") ? specs : data) });
   window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
   await new Promise((r) => setTimeout(r, 400));
   return window.document;

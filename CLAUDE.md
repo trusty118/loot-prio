@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 232 checks, should be all green
+npm test             # 252 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -40,23 +40,37 @@ together for hand-editing.
 | `slot` | `Head` … `Two-Hand`, `Ranged`, `Relic`. Collapsed for display: all weapon slots → `Weapon`, `Ranged`+`Relic` → `Ranged/Relic` |
 | `type` | Armour class or weapon type. Displayed with tidy-ups: `2H Staff` → `Staff`, bare `Mace` → `1H Mace` (hand count derived from slot) |
 | `role` | Physical / Caster / Healer / Tank / Tier. **Currently hidden** — see `SHOW_ROLE` |
-| `priority` | Ordering string, e.g. `SPriest > Warlock = Balance = Elemental > Mage`. `>` ranks, `=` ties |
+| `priority` | Ordered list of entries, each naming the operator linking it to the previous one — see §3 |
 | `notes` | Caveats. All conditional wording lives here, never in `priority` |
 
-**`priority` contains no prose and no parentheses** — only recognised shorthand and the
-`>` `=` operators. Conditions were deliberately moved to `notes`. 23 items have an empty
-priority, meaning "whoever needs it"; the reason is in the notes.
+**`priority` is structured data, not prose.** 23 items have an empty list, meaning
+"whoever needs it"; the reason is in the notes.
+
+### `data/specs.json` — the class/spec registry
+
+```json
+"specs": { "ProtWarr": { "class": "Warrior", "name": "Protection Warrior",
+                         "icon": "ability_warrior_defensivestance", "roles": ["Tank"] } }
+```
+
+Four sections: `classes` (9), `specs` (all 27 TBC specs), `forms` (Feral bear/cat),
+`races` (Orc/Human), and `aliases` (the old priority shorthand → id, used by the migration
+and by search only).
+
+**The key (`ProtWarr`) is the identifier every other data file stores; `name` is display
+only.** Renaming a label never touches a data file. Adding a spec is a data edit, not a
+code edit — check the icon returns 200 first.
 
 ### `data/bis.json` — which items are BiS for which spec
 
 ```json
-"Protection Warrior": {
+"ProtWarr": {
   "P3": [ { "id": 32375, "item": "Bulwark of Azzinoth", "bis": "expansion" } ]
 }
 ```
 
-- Spec keys must match the **canonical labels** in the `SPECS` table in `app.js`
-  (`Restoration Shaman`, not `R Shaman`). Races are not valid keys.
+- Keys are the **identifiers** from `data/specs.json` (`ProtWarr`, not
+  `Protection Warrior` and not `Prot Warrior`).
 - `bis` is optional, defaults to `phase`. Values: `phase` | `multiPhase` | `expansion`.
 - Phase keys (`P3`) exist so P4/P5 can be added later without a migration.
 - **Run `python3 verify/check_bis.py` after editing.**
@@ -65,27 +79,45 @@ priority, meaning "whoever needs it"; the reason is in the notes.
 
 ## 3. How the priority column renders
 
-This is the least obvious part of the codebase.
+`priority` is an ordered list. Each entry names a `spec` or a `class` from
+`data/specs.json`, plus the `op` that links it to the entry before it:
 
-`priority` is a **string, scanned with a regex** built from the `SPECS` table
-(`SPEC_RE` in `app.js`). Each recognised shorthand is **replaced by its spec icon**; the
-operators survive as text. So `SPriest > Warlock` renders as two icons with a `>` between.
+```json
+"priority": [
+  { "spec": "Rogue" },
+  { "spec": "EnhShaman", "op": "=" },
+  { "spec": "ArmsWarr",  "op": ">>" },
+  { "spec": "FuryWarr",  "op": ">", "race": "Orc" }
+]
+```
 
-**This is fragile and we know it.** A word the table doesn't know renders as plain text
-with no icon and no error — adding a priority that says `Balance` when the table only
-knows `Boomkin` fails silently. Adding a spec means adding a row to `SPECS` with a
-verified icon name.
+The first entry has no `op`; every later one must have one. A `race` renders its own icon
+before the spec's. A `form` (`bear`/`cat` on `FeralDruid`) swaps the icon and name.
 
-> **Planned:** replace the string with structure —
-> `"priority": [["Shadow Priest"], ["Warlock", "Balance Druid"], ["Mage"]]` — outer array
-> ranks, inner array ties. 156 of 182 records convert mechanically; 23 are empty; 3 need
-> a decision (`>>`, `>=`, `~`). Daniel has approved this direction; it was deferred so it
-> could be done in one sitting on one machine.
+### Operators
+
+| Op | Means | Position |
+|---|---|---|
+| `>` | better than | next |
+| `>>` | much better than | next |
+| `~>` | roughly better than | next |
+| `=` | equal | same |
+| `~=` | roughly equal | same |
+
+`positions()` folds a list into 1-based ranks: `=` and `~=` hold, the rest advance. `>>`
+and `~>` behave exactly like `>` for ranking — they differ only in what they say, which is
+what `OPERATORS[op].label` is for (it already feeds the operator tooltips).
+
+**This replaced a regex that scanned the string for known shorthand.** That version failed
+silently: a word the table didn't know rendered as plain text with no icon and no error.
+`verify/check_priority.py` now makes that an error. `verify/migrate_priority.py` is the
+one-shot conversion, kept as the audit trail.
 
 ### BiS rings
 
-`bis.json` is joined by **canonical spec name + item id** and draws a ring on that spec's
-icon. The colours follow WoW's item-quality ladder, so "rarer" reads as "lasts longer":
+`data/bis.json` is keyed by the same identifiers and joined on identifier + item id, then
+draws a ring on that spec's icon. Colours follow WoW's item-quality ladder, so "rarer"
+reads as "lasts longer":
 
 | Tier | Colour |
 |---|---|
@@ -93,13 +125,12 @@ icon. The colours follow WoW's item-quality ladder, so "rarer" reads as "lasts l
 | Multi-phase BiS | legendary orange `#ff8000` |
 | Expansion BiS | artifact gold `#e6cc80` |
 
-**A ring can only appear on a spec the priority string names.** An item that is BiS for
-Arcane Mage, on a row whose priority says `Mage`, records correctly but shows nothing.
-`check_bis.py` reports these as "not visible" — they are warnings, not errors.
+**A ring can only appear on a spec the priority lists.** An item that is BiS for Arcane
+Mage, on a row whose priority lists `Mage`, records correctly but shows nothing.
+`check_bis.py` reports these as "not visible" — warnings, not errors.
 
-`bis.json` **fails soft**: a 404 or malformed file costs the rings, not the page.
-
----
+`specs.json` and `bis.json` both **fail soft**: a 404 or malformed file costs the icons or
+the rings, not the page.
 
 ## 4. Conventions that are easy to break
 
@@ -126,17 +157,23 @@ Arcane Mage, on a row whose priority says `Mage`, records correctly but shows no
 
 `npm test` runs both:
 
-- `test/smoke.mjs` — 232 checks. Renders the page in jsdom and asserts filtering, sorting,
-  grouping, icons, BiS rings, tooltips and the data edits.
-- `test/bis-fallback.mjs` — 7 checks that a missing or malformed `bis.json` degrades
-  gracefully.
+- `test/smoke.mjs` — renders the page in jsdom and asserts filtering, sorting, grouping,
+  icons, operators, BiS rings, tooltips and the data edits.
+- `test/bis-fallback.mjs` — a missing or malformed `bis.json` degrades gracefully.
 
 They can't cover anything needing a real browser: Wowhead's script doesn't complete its
 data fetch under jsdom, so **item icons and item tooltips are untested** — check those by
 eye at `localhost:8642`.
 
-`verify/check_bis.py` validates `bis.json`. `verify/apply.py` is the (finished) boss
-attribution tool, kept as the audit trail.
+Validators, all exiting non-zero on error:
+
+- `python3 verify/check_priority.py` — every identifier resolves, operators are valid and
+  present except on the first entry, no duplicate spec in a record.
+- `python3 verify/check_bis.py` — keys and ids resolve, `id`/`item` pairs agree, and it
+  warns about entries that can never show a ring.
+
+`verify/migrate_priority.py` and `verify/apply.py` are finished one-shot tools, kept as
+audit trails for how the data was converted.
 
 ---
 
