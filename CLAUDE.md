@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 313 checks, should be all green
+npm test             # 328 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -54,13 +54,28 @@ together for hand-editing.
                          "icon": "ability_warrior_defensivestance", "roles": ["Tank"] } }
 ```
 
-Five sections: `classes` (9), `specs` (all 27 TBC specs), `forms` (Feral bear/cat),
-`races` (Orc/Human), and `aliases` (the old priority shorthand → id, used by the migration
-and by search only).
+Five sections: `classes` (9), `specs` (28 pickable, plus the `FeralDruid` umbrella),
+`forms` (Feral bear/cat, each pointing at the spec it resolves to),
+`races` (Orc/Human), and `aliases` (the old priority shorthand → id).
+
+`aliases` is used by `verify/migrate_priority.py` and by `check_bis.py`'s "did you mean"
+hint. **It is loaded into `app.js` and read by nothing** — search builds its haystack from
+`priorityText()`, which resolves full names, so `Boomkin` and `SPriest` currently match no
+rows. Either wire it into the search haystack or drop it from `indexRegistry()`; leaving it
+loaded but unread is what made this look done when it wasn't.
 
 **The key (`ProtWarr`) is the identifier every other data file stores; `name` is display
 only.** Renaming a label never touches a data file. Adding a spec is a data edit, not a
 code edit — check the icon returns 200 first.
+
+**Umbrella specs.** A spec with `covers` stands for the specs it names instead of being one
+itself. `FeralDruid` covers `FeralBear` and `FeralCat`, because the two gear so differently
+that one BiS set can't serve both — Pillar of Ferocity is expansion-long for bear and not
+BiS at all for cat. The priorities go on naming `FeralDruid`, so it stays a valid
+identifier and no priority was rewritten; it just holds no BiS set and is not offered as a
+filter chip. Its icon behaves like a class icon: it rings for whichever covered spec has
+the item, and narrows when you pick one. The `forms` entries carry `spec`, so a priority
+entry of `FeralDruid` + `form: "cat"` resolves straight to `FeralCat`.
 
 ### `data/bis.json` — which items are BiS for which spec
 
@@ -75,6 +90,31 @@ code edit — check the icon returns 200 first.
 - `bis` is optional, defaults to `phase`. Values: `phase` | `multiPhase` | `expansion`.
 - Phase keys (`P3`) exist so P4/P5 can be added later without a migration.
 - **Run `python3 verify/check_bis.py` after editing.**
+
+**332 entries across all 28 specs, and it is generated** — `python3 verify/fetch_bis.py`
+builds it from the sources in `verify/bis-sources.json`, which names one Wowhead Phase 3
+guide per spec. Hand edits survive a re-run: an entry already in the file keeps its `bis`
+value, and anything the guides no longer corroborate is kept and reported rather than
+dropped. Dry run by default, `--write` to apply, `--only <specs>` and `--verbose` while
+working on one spec.
+
+Two things the tool will not do, by design. It **never writes `data/loot_data.json`** —
+a BiS item this site doesn't list is reported and dropped, never added, because adding
+items is a separate job with its own evidence (see §6). And it never edits a `priority`:
+those are zatar's calls, and BiS is a layer on top of them.
+
+The rank column in those guides has no fixed vocabulary — 140 rows say `BiS`, but tank
+guides rank by purpose (`Best Threat`, `Best Mitigation`) and healers by build
+(`Regen BiS`, `BiS - Haste`). `RANKED_BIS`/`NOT_BIS` in the tool encode the rule: lead with
+"Best" or name "BiS" anywhere, unless qualified into something else (`Option`,
+`Alternative`, `Pre-Raid`, `PvP`, `Best Until Tier 6`). `Near Best` and `Second Best` fail
+the leading-word test deliberately.
+
+The tier is **derived, not guessed**: an item still in that spec's wowsims/tbc P4 preset is
+`multiPhase`, one that survives to P5 is `expansion`. Eight specs have no wowsims preset —
+`HolyPal`, `Marks`, `Disc`, `HolyPriest`, `RestoShaman`, `AffliLock`, `DemoLock`,
+`RestoDruid` — so their entries stay at `phase`, and the tool suppresses tier "conflicts"
+for them, since a default is not a derivation to disagree with.
 
 ---
 
@@ -139,9 +179,24 @@ reads as "lasts longer":
 | Multi-phase BiS | legendary orange `#ff8000` |
 | Expansion BiS | artifact gold `#e6cc80` |
 
-**A ring can only appear on a spec the priority lists.** An item that is BiS for Arcane
-Mage, on a row whose priority lists `Mage`, records correctly but shows nothing.
-`check_bis.py` reports these as "not visible" — warnings, not errors.
+**A class icon carries the rings of the specs behind it.** `bis.json` is keyed by spec, but
+104 of the 398 priority entries name a *class*, so an item that is BiS for Arcane usually
+sits on a row that says `Mage`. `bisMark()` resolves this: a spec icon answers for itself,
+and a class icon takes the **highest** tier among its specs. Who the ring is for belongs to
+the icon, not the ring, so it goes on the tooltip's **name line** — `Priest — Discipline,
+Holy` above a plain `Phase BiS` — and the specs drop the class name the icon already shows.
+It matters: of 332 entries, most rings land on a spec icon and around 120 on a class icon.
+
+While a filter is on, only the **selected** specs count toward a class icon's ring, so it
+answers "is this BiS for me" rather than "for someone in this class".
+
+A ring still can't appear when the priority names neither the spec nor its class;
+`check_bis.py` reports those as "not visible" — warnings, not errors. 80 remain, 33 of them
+on items with an empty priority, where there is no icon to ring at all. The other 47 are
+real disagreements between zatar's calls and Wowhead's, and are left visible on purpose.
+
+Every icon carries `data-id` with its registry identifier, so nothing downstream has to
+recover it from the display name — forms make that lossy (`Feral Druid (cat)`).
 
 `specs.json` and `bis.json` both **fail soft**: a 404 or malformed file costs the icons or
 the rings, not the page.
@@ -164,9 +219,10 @@ unioning. Picking Mage + Warlock and then narrowing Mage to Fire leaves Warlock 
 27 rows become 26, not 18. A `?spec=` link with no `class=` adds the implied class on read.
 
 Those chips are **icon-only** (`chip(..., iconOnly)` adds `.chip--icon`): with a name and a
-count on each of 27 chips, the icons being recognised were buried. Both move into the chip's
-`data-tip` — `"Arcane Mage — 18 items"` — which also becomes its `aria-label`, and is what
-tests match on, since these chips have no text content.
+count on each of 27 chips, the icons being recognised were buried. The name moves into the
+chip's `data-tip` and `aria-label`, and is what tests match on since these chips have no
+text content. **No count on them** — you scan this row to find your class, and 27 numbers
+are noise next to the result total already sitting above the table.
 
 A row matches through `selectionHas()` in `app.js`, which asks whether any priority entry
 speaks to the selection (`priorityHas()` is the single-class form underneath it):
@@ -306,6 +362,14 @@ credited in-video to **Veramos**, arms-warrior input to **Lemonism**.
 
 Item IDs and slots came from [wowsims/tbc](https://github.com/wowsims/tbc). Icons and
 tooltips from [Wowhead](https://www.wowhead.com/tbc).
+
+**The BiS rings are not zatar's** and must never be presented as if they were — the videos
+gave loot-council priorities, not per-spec BiS lists. `data/bis.json` comes from Wowhead's
+per-spec Phase 3 (BT/Hyjal) BiS guides, one per spec, each URL recorded in
+`verify/bis-sources.json`; how long an item stays BiS is derived from
+[wowsims/tbc](https://github.com/wowsims/tbc) P4/P5 gear presets. Where the two sources
+disagree with each other — 47 entries whose spec the priority never names — both are left
+standing rather than reconciled.
 
 Boss attribution for 52 Black Temple items was verified by hand against Wowhead in
 Aug 2026 — 27 confirmed, 24 corrected. `verify/boss-attribution.csv` is the record.

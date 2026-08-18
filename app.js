@@ -164,12 +164,28 @@
   function entrySpeaksTo(entry, clsId, specId) {
     if (!entry) return false;
     if (entry.spec) {
-      if (specId) return entry.spec === specId;
-      var spec = REG.specs[entry.spec];
+      var named = entrySpec(entry);
+      if (specId) return named === specId || covers(named).indexOf(specId) !== -1;
+      var spec = REG.specs[named];
       return !!spec && spec["class"] === clsId;
     }
     if (entry["class"]) return entry["class"] === clsId;
     return false;
+  }
+
+  /* The spec an entry actually names: a form narrows an umbrella to one of the
+     specs it covers, so "FeralDruid + cat" is FeralCat. */
+  function entrySpec(entry) {
+    var form = entry.form && REG.forms[entry.spec] && REG.forms[entry.spec][entry.form];
+    return (form && form.spec && REG.specs[form.spec]) ? form.spec : entry.spec;
+  }
+
+  /* The specs an umbrella stands for. FeralDruid covers bear and cat, which gear
+     so differently that one BiS set can't serve both, but the priorities name the
+     umbrella - so an umbrella answers for whichever of its specs is asked about. */
+  function covers(specId) {
+    var spec = REG.specs[specId];
+    return (spec && spec.covers) || [];
   }
 
   /* An empty priority matches nobody, which is how the 23 "whoever needs it" rows
@@ -250,6 +266,10 @@
      not a code edit. */
   var REG = { classes: {}, specs: {}, forms: {}, races: {}, aliases: {} };
 
+  /* classId -> its spec identifiers, derived rather than stored: it is the same
+     fact as spec.class, and two copies of one fact drift. */
+  var CLASS_SPECS = {};
+
   function indexRegistry(doc) {
     REG = {
       classes: (doc && doc.classes) || {},
@@ -258,6 +278,15 @@
       races: (doc && doc.races) || {},
       aliases: (doc && doc.aliases) || {}
     };
+
+    /* umbrellas are left out: they hold no BiS of their own and are not offered as
+       filter chips, so a class stands for the specs you can actually pick */
+    CLASS_SPECS = {};
+    Object.keys(REG.specs).forEach(function (id) {
+      if ((REG.specs[id].covers || []).length) return;
+      var cls = REG.specs[id]["class"];
+      (CLASS_SPECS[cls] = CLASS_SPECS[cls] || []).push(id);
+    });
   }
 
   /* One priority entry -> what to draw. Returns null if the registry doesn't know
@@ -272,8 +301,12 @@
       out = { name: spec.name, icon: spec.icon, id: entry.spec };
       var forms = REG.forms[entry.spec];
       if (entry.form && forms && forms[entry.form]) {
-        out.name = forms[entry.form].name;
-        out.icon = forms[entry.form].icon;
+        var form = forms[entry.form];
+        out.name = form.name;
+        out.icon = form.icon;
+        /* a form names one of the covered specs, so "FeralDruid + cat" resolves to
+           FeralCat and its rings come from that spec's own BiS set */
+        if (form.spec && REG.specs[form.spec]) out.id = form.spec;
       }
     } else if (entry["class"]) {
       var cls = REG.classes[entry["class"]];
@@ -580,8 +613,10 @@
       b.classList.add("chip--icon");
       b.innerHTML = '<img class="chip-icon" src="' + escapeHtml(icon) +
         '" alt="" onerror="this.replaceWith(document.createTextNode(this.parentNode.dataset.tip))">';
-      b.dataset.tip = label + (count == null ? "" : " — " + count + " items");
-      b.setAttribute("aria-label", b.dataset.tip);
+      /* the name only - a count here is noise on a row you are reading to find
+         your class, and the result count is already above the table */
+      b.dataset.tip = label;
+      b.setAttribute("aria-label", label);
     } else {
       b.innerHTML =
         /* if the CDN ever stops serving these, fall back to a plain text chip */
@@ -723,6 +758,7 @@
       Object.keys(REG.specs).forEach(function (id) {
         var spec = REG.specs[id];
         if (spec["class"] !== cls) return;
+        if (covers(id).length) return;   /* an umbrella is not a spec you can pick */
         var n = pool.filter(function (r) { return priorityHas(r, cls, id); }).length;
         var active = state.specs.indexOf(id) !== -1;
         var c = chip(spec.name, active, n, null, ICON_BASE + spec.icon + ".jpg", true);
@@ -891,17 +927,78 @@
     return BIS[specId + "|" + itemId] || 0;
   }
 
-  function specIcon(spec, bis) {
+  /* What ring an icon should carry, and who it is for. A spec icon answers for
+     itself. A class icon answers for the specs behind it: bis.json is keyed by
+     spec, but 104 of the 398 priority entries name a class, so an item that is
+     BiS for Arcane usually sits on a row that says "Mage" - without this most of
+     the file would never appear. The highest tier among those specs wins, and
+     the names ride along so the tooltip can say who.
+
+     While a filter is on, only the selected specs count: the ring should answer
+     "is this BiS for me", not "for someone in this class". */
+  function bisMark(resolved, itemId) {
+    var stands_for = covers(resolved.id);
+
+    if (REG.specs[resolved.id] && !stands_for.length) {
+      return { tier: bisTier(resolved.id, itemId), specs: [] };
+    }
+
+    /* an umbrella spec aggregates like a class does, over the specs it covers */
+    var ids = stands_for.length ? stands_for : (CLASS_SPECS[resolved.id] || []);
+    var picked = stands_for.length
+      ? stands_for.filter(function (id) { return state.specs.indexOf(id) !== -1; })
+      : pickedSpecs(resolved.id);
+    if (picked.length) ids = picked;
+
+    var tier = 0, names = [];
+    ids.forEach(function (id) {
+      var t = bisTier(id, itemId);
+      if (!t) return;
+      if (t > tier) tier = t;
+      names.push(shortSpecName(id, resolved.name));
+    });
+    return { tier: tier, specs: names };
+  }
+
+  /* These names only ever appear on the icon they belong to, listing what it
+     stands for, so repeating that icon's own name after each one says nothing:
+     "Discipline Priest" under Priest is "Discipline", and "Feral Druid (cat)"
+     under Feral Druid is "cat". Falls back to the full name if neither fits. */
+  function shortSpecName(id, parentName) {
+    var spec = REG.specs[id];
+    if (!spec) return id;
+    if (!parentName) return spec.name;
+
+    var suffix = " " + parentName;
+    if (spec.name.slice(-suffix.length) === suffix) {
+      return spec.name.slice(0, -suffix.length);
+    }
+    if (spec.name.indexOf(parentName) === 0) {
+      return spec.name.slice(parentName.length).replace(/^[\s(]+|[\s)]+$/g, "") || spec.name;
+    }
+    return spec.name;
+  }
+
+  function specIcon(spec, bis, forSpecs) {
     var tier = BIS_TIERS[bis];
     var img = document.createElement("img");
     img.className = "spec-icon" + (tier ? " " + tier.cls : "");
+    /* which registry entry this icon is, so nothing downstream has to work it out
+       from the display name - forms make that lossy ("Feral Druid (cat)") */
+    if (spec.id) img.dataset.id = spec.id;
     img.src = ICON_BASE + spec.icon + ".jpg";
-    img.alt = spec.name + (tier ? " (" + tier.label + ")" : "");
+    /* Who the icon is for goes on the name line - "Priest — Discipline, Holy" -
+       because that is a fact about the icon, not about the ring. A spec icon is
+       already standing there naming itself, so it never carries a list. */
+    var who = spec.name +
+      (forSpecs && forSpecs.length ? " — " + forSpecs.join(", ") : "");
+
+    img.alt = who + (tier ? " (" + tier.label + ")" : "");
     /* data-tip rather than title: the native tooltip has a ~1s delay the browser
        won't let us change, and these need to read as fast as the item tooltips.
        The BiS line is carried separately so the tooltip can colour it to match
        the ring on the icon. */
-    img.dataset.tip = spec.name;
+    img.dataset.tip = who;
     if (tier) {
       img.dataset.tipBis = tier.label;
       img.dataset.tipTier = String(bis);
@@ -960,7 +1057,8 @@
         if (muted) raceIcon.classList.add("spec-icon--muted");
         td.appendChild(raceIcon);
       }
-      var icon = specIcon(resolved, bisTier(resolved.id, rec.id));
+      var mark = bisMark(resolved, rec.id);
+      var icon = specIcon(resolved, mark.tier, mark.specs);
       if (muted) icon.classList.add("spec-icon--muted");
       td.appendChild(icon);
     });
