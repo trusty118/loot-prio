@@ -5,6 +5,7 @@
 
   var DATA_URL = "data/loot_data.json";
   var BIS_URL = "data/bis.json";
+  var SPECS_URL = "data/specs.json";
 
   /* Encounter order per zone (the JSON is not in kill order). */
   var BOSS_ORDER = {
@@ -122,39 +123,25 @@
      but slots now collapse to a single "Weapon", so the type has to carry it. */
   var BARE_WEAPON = { "Mace": 1, "Sword": 1, "Dagger": 1, "Axe": 1, "Fist": 1 };
 
-  /* Tier tokens render as "Tier" plus the three class icons - the written-out
-     "Tier Token (Pal/Priest/Lock)" wrapped over three lines in the type column. */
-  var CLASS_ICON = "https://wow.zamimg.com/images/wow/icons/large/classicon_";
-
+  /* Tier tokens render as the three class icons. Which classes each token serves
+     is fixed by the game, so it stays here; everything about those classes -
+     icon, armour, roles - comes from the registry. */
   var TIER_CLASSES = {
     "Tier Token (Pal/Priest/Lock)": ["Paladin", "Priest", "Warlock"],
     "Tier Token (War/Hunter/Shaman)": ["Warrior", "Hunter", "Shaman"],
     "Tier Token (Rogue/Mage/Druid)": ["Rogue", "Mage", "Druid"]
   };
 
-  /* What each class wears and which roles it can fill in T6. Tokens are matched
-     against this per class, so a token surfaces under "Caster + Cloth" only if
-     one and the same class is both - Conqueror has a tank (Paladin) and cloth
-     wearers (Priest/Warlock), but no cloth tank, so it must not match. */
-  var CLASS_INFO = {
-    "Paladin": { armor: "Plate", roles: ["Physical", "Healer", "Tank"] },
-    "Priest": { armor: "Cloth", roles: ["Healer", "Caster"] },
-    "Warlock": { armor: "Cloth", roles: ["Caster"] },
-    "Warrior": { armor: "Plate", roles: ["Physical", "Tank"] },
-    "Hunter": { armor: "Mail", roles: ["Physical"] },
-    "Shaman": { armor: "Mail", roles: ["Caster", "Healer", "Physical"] },
-    "Rogue": { armor: "Leather", roles: ["Physical"] },
-    "Mage": { armor: "Cloth", roles: ["Caster"] },
-    "Druid": { armor: "Leather", roles: ["Physical", "Tank", "Healer", "Caster"] }
-  };
-
   function tierClasses(rec) {
     return TIER_CLASSES[rec.type] || null;
   }
 
-  /* Does this one class satisfy the role and type filters simultaneously? */
+  /* Does this one class satisfy the role and type filters simultaneously? A token
+     surfaces under "Caster + Cloth" only if one and the same class is both -
+     Conqueror has a tank (Paladin) and cloth wearers (Priest/Warlock), but no
+     cloth tank, so it must not match. */
   function classPasses(cls, skip) {
-    var info = CLASS_INFO[cls];
+    var info = REG.classes[cls];
     if (!info) return false;
 
     if (skip !== "role" && state.roles.length) {
@@ -209,95 +196,81 @@
     role: function (r) { return ROLE_ORDER.indexOf(r.role); }
   };
 
-  /* Shorthand used in the priority strings -> the spec it names. Longest key wins,
-     so "Prot Pal" is matched before "Prot" and "Fire Mage" before "Mage". Entries
-     with no spec (plain "Lock", "Rogue") get the class icon instead.
-     STEP 1: icons are appended after the existing words so the mapping can be
-     eyeballed before anything is replaced. */
-  var SPEC_ICON = "https://wow.zamimg.com/images/wow/icons/large/";
+  var ICON_BASE = "https://wow.zamimg.com/images/wow/icons/large/";
 
-  var SPECS = [
-    /* --- warrior --- */
-    ["Prot Warrior", "Protection Warrior", "ability_warrior_defensivestance"],
-    ["Prot War", "Protection Warrior", "ability_warrior_defensivestance"],
-    ["Arms", "Arms Warrior", "ability_warrior_savageblow"],
-    ["Fury", "Fury Warrior", "ability_warrior_innerrage"],
-    ["Warrior", "Warrior", "classicon_warrior"],
-    ["War", "Warrior", "classicon_warrior"],
+  /* The class/spec/race registry, loaded from data/specs.json. Identifiers are
+     what the data files store; `name` is display only. Replaces the hardcoded
+     SPECS/CLASS_INFO tables that used to live here - a spec is now a data edit,
+     not a code edit. */
+  var REG = { classes: {}, specs: {}, forms: {}, races: {}, aliases: {} };
 
-    /* --- paladin --- */
-    ["Prot Paladin", "Protection Paladin", "spell_holy_devotionaura"],
-    ["Prot Pal", "Protection Paladin", "spell_holy_devotionaura"],
-    ["H Pal", "Holy Paladin", "spell_holy_holybolt"],
-    ["Ret", "Retribution Paladin", "spell_holy_auraoflight"],
-    ["Paladin", "Paladin", "classicon_paladin"],
+  function indexRegistry(doc) {
+    REG = {
+      classes: (doc && doc.classes) || {},
+      specs: (doc && doc.specs) || {},
+      forms: (doc && doc.forms) || {},
+      races: (doc && doc.races) || {},
+      aliases: (doc && doc.aliases) || {}
+    };
+  }
 
-    /* --- priest --- */
-    ["Shadow Priest", "Shadow Priest", "spell_shadow_shadowwordpain"],
-    ["SPriest", "Shadow Priest", "spell_shadow_shadowwordpain"],
-    ["H Priest", "Holy Priest", "spell_holy_guardianspirit"],
-    ["Priest", "Priest", "classicon_priest"],
+  /* One priority entry -> what to draw. Returns null if the registry doesn't know
+     it, so a bad identifier is visibly missing rather than silently mis-drawn. */
+  function resolveEntry(entry) {
+    if (!entry) return null;
+    var out = null;
 
-    /* --- shaman --- */
-    ["R Shaman", "Restoration Shaman", "spell_nature_magicimmunity"],
-    ["Ele Shaman", "Elemental Shaman", "spell_nature_lightning"],
-    ["Elemental", "Elemental Shaman", "spell_nature_lightning"],
-    ["Enhance", "Enhancement Shaman", "spell_nature_lightningshield"],
-    ["Ele", "Elemental Shaman", "spell_nature_lightning"],
-    ["Shaman", "Shaman", "classicon_shaman"],
+    if (entry.spec) {
+      var spec = REG.specs[entry.spec];
+      if (!spec) return null;
+      out = { name: spec.name, icon: spec.icon, id: entry.spec };
+      var forms = REG.forms[entry.spec];
+      if (entry.form && forms && forms[entry.form]) {
+        out.name = forms[entry.form].name;
+        out.icon = forms[entry.form].icon;
+      }
+    } else if (entry["class"]) {
+      var cls = REG.classes[entry["class"]];
+      if (!cls) return null;
+      out = { name: cls.name, icon: cls.icon, id: entry["class"] };
+    } else {
+      return null;
+    }
 
-    /* --- druid --- */
-    ["R Druid", "Restoration Druid", "spell_nature_healingtouch"],
-    ["Boomkin", "Balance Druid", "spell_nature_starfall"],
-    ["Balance", "Balance Druid", "spell_nature_starfall"],
-    ["Feral Cat", "Feral Druid (cat)", "ability_druid_catform"],
-    ["Feral", "Feral Druid", "ability_racial_bearform"],
-    ["Bear", "Feral Druid (bear)", "ability_racial_bearform"],
-    ["Cat", "Feral Druid (cat)", "ability_druid_catform"],
-    ["Druid", "Druid", "classicon_druid"],
+    if (entry.race && REG.races[entry.race]) out.race = REG.races[entry.race];
+    return out;
+  }
 
-    /* --- hunter --- */
-    ["BM Hunter", "Beast Mastery Hunter", "ability_hunter_beasttaming"],
-    ["Survival Hunter", "Survival Hunter", "ability_hunter_swiftstrike"],
-    ["Survival", "Survival Hunter", "ability_hunter_swiftstrike"],
-    ["BM", "Beast Mastery Hunter", "ability_hunter_beasttaming"],
-    ["Hunter", "Hunter", "classicon_hunter"],
+  /* How each operator behaves. `advances` is the only thing ranking cares about:
+     ">>" and "~>" are ">" for logic, and differ only in what they say. The labels
+     are here for the operator tooltips. */
+  var OPERATORS = {
+    ">":  { advances: true,  label: "better than" },
+    ">>": { advances: true,  label: "much better than" },
+    "~>": { advances: true,  label: "roughly better than" },
+    "=":  { advances: false, label: "equal to" },
+    "~=": { advances: false, label: "roughly equal to" }
+  };
 
-    /* --- mage --- */
-    ["Fire Mage", "Fire Mage", "spell_fire_flamebolt"],
-    ["Arcane", "Arcane Mage", "spell_holy_magicalsentry"],
-    ["Mage", "Mage", "classicon_mage"],
+  /* Fold a priority list into 1-based positions: ties share a position. */
+  function positions(list) {
+    var pos = [], n = 0;
+    (list || []).forEach(function (entry, i) {
+      var op = OPERATORS[entry.op];
+      if (i === 0) n = 1;
+      else if (!op || op.advances) n += 1;
+      pos.push(n);
+    });
+    return pos;
+  }
 
-    /* --- warlock --- */
-    ["Fire Lock", "Destruction Warlock", "spell_shadow_rainoffire"],
-    ["Destruction", "Destruction Warlock", "spell_shadow_rainoffire"],
-    ["Affliction", "Affliction Warlock", "spell_shadow_deathcoil"],
-    ["Affli", "Affliction Warlock", "spell_shadow_deathcoil"],
-    /* "Warlock" before "Lock": longest match wins, and \b stops "Lock" matching
-       inside "Warlock" anyway, but being explicit here is cheaper than a bug */
-    ["Warlock", "Warlock", "classicon_warlock"],
-    ["Lock", "Warlock", "classicon_warlock"],
-
-    /* --- rogue --- */
-    ["Rogue", "Rogue", "classicon_rogue"],
-
-    /* --- races, where the priority turns on a racial --- */
-    ["Orc", "Orc", "achievement_character_orc_male"],
-    ["Human", "Human", "achievement_character_human_female"]
-  ];
-
-  var SPEC_BY_KEY = {};
-  SPECS.forEach(function (s) { SPEC_BY_KEY[s[0].toLowerCase()] = { name: s[1], icon: s[2] }; });
-
-  /* Longest first so multi-word shorthand wins over its own suffix ("Prot Pal"
-     before "Pal", "Elemental" before "Ele"). The \b guards stop substring hits -
-     without them "Cat" matches inside "Hunter (catch-up)". */
-  var SPEC_RE = new RegExp(
-    "\\b(?:" + SPECS.map(function (s) { return s[0]; })
-      .sort(function (a, b) { return b.length - a.length; })
-      .map(escapeRegExp).join("|") + ")\\b",
-    "gi"
-  );
+  /* Plain-text form of a priority, for the search index. */
+  function priorityText(list) {
+    return (list || []).map(function (entry) {
+      var r = resolveEntry(entry);
+      return r ? (r.race ? r.race.name + " " : "") + r.name : "";
+    }).join(" ");
+  }
 
   /* Role glyphs, drawn rather than fetched: Blizzard's ready-check role icons
      live in the game's UI atlas and aren't hosted as individual files anywhere.
@@ -415,7 +388,7 @@
     if (state.q) {
       var q = state.q.toLowerCase();
       /* search both the raw and displayed forms, so "2H mace" and "mace" both hit */
-      var hay = [rec.item, rec.boss, rec.zone, rec.priority, rec.notes,
+      var hay = [rec.item, rec.boss, rec.zone, priorityText(rec.priority), rec.notes,
                  rec.slot, slotGroup(rec.slot), rec.type, typeLabel(rec), rec.role]
         .join("   ").toLowerCase();
       if (hay.indexOf(q) === -1) return false;
@@ -672,15 +645,16 @@
     });
   }
 
-  function bisTier(specName, itemId) {
-    return BIS[specName + "|" + itemId] || 0;
+  /* keyed by the registry identifier (ProtWarr), matching data/bis.json */
+  function bisTier(specId, itemId) {
+    return BIS[specId + "|" + itemId] || 0;
   }
 
   function specIcon(spec, bis) {
     var tier = BIS_TIERS[bis];
     var img = document.createElement("img");
     img.className = "spec-icon" + (tier ? " " + tier.cls : "");
-    img.src = SPEC_ICON + spec.icon + ".jpg";
+    img.src = ICON_BASE + spec.icon + ".jpg";
     img.alt = spec.name + (tier ? " (" + tier.label + ")" : "");
     /* data-tip rather than title: the native tooltip has a ~1s delay the browser
        won't let us change, and these need to read as fast as the item tooltips.
@@ -696,36 +670,50 @@
     return img;
   }
 
-  /* The recognised shorthand is replaced by its icon; everything else (the > = >>
-     operators, and free text like "Anyone" or "biggest upgrade") stays as words.
-     The underlying string is untouched, so search and sort still see the names. */
+  /* Priority is an ordered list, each entry naming the operator that links it to
+     the previous one. Icons come from the registry; operators render as text
+     between them. No parsing, so an unknown identifier is a visible gap with a
+     console warning rather than a silent plain-text fallback. */
   function priorityCell(rec) {
     var td = document.createElement("td");
     td.className = "col-prio";
-    var text = rec.priority || "";
-    var at = 0;
-    var m;
+    var list = rec.priority;
 
-    SPEC_RE.lastIndex = 0;
-    while ((m = SPEC_RE.exec(text)) !== null) {
-      var spec = SPEC_BY_KEY[m[0].toLowerCase()];
-      if (!spec) continue;
-      /* "non-orc Fury" and "(non-human)" are exclusions - icon would invert them */
-      if (/non-$/i.test(text.slice(0, m.index))) continue;
-      if (m.index > at) appendText(td, text.slice(at, m.index), state.q);
-      at = m.index + m[0].length;
+    if (typeof list === "string") {
+      /* pre-migration data, or a bad hand-edit: show it rather than blank the cell */
+      if (window.console) console.warn("priority is still a string on " + rec.item);
+      appendText(td, list, state.q);
+      return td;
+    }
+    if (!list || !list.length) return td;
 
-      /* Defensive: asterisks used to mark BiS inline. data/bis.json is the source
-         of truth now, but swallow any leftover so it can't render as text. */
-      var stars = /^\*{1,3}/.exec(text.slice(at));
-      if (stars) {
-        at += stars[0].length;
-        SPEC_RE.lastIndex = at;
+    list.forEach(function (entry, i) {
+      if (i > 0) {
+        var op = OPERATORS[entry.op] || OPERATORS[">"];
+        var sep = document.createElement("span");
+        sep.className = "prio-op";
+        sep.textContent = entry.op || ">";
+        sep.dataset.tip = op.label;
+        td.appendChild(sep);
       }
 
-      td.appendChild(specIcon(spec, bisTier(spec.name, rec.id)));
-    }
-    if (at < text.length) appendText(td, text.slice(at), state.q);
+      var resolved = resolveEntry(entry);
+      if (!resolved) {
+        if (window.console) {
+          console.warn("unknown priority entry on " + rec.item + ":", JSON.stringify(entry));
+        }
+        appendText(td, "?", state.q);
+        return;
+      }
+
+      if (resolved.race) {
+        var raceIcon = specIcon(resolved.race, 0);
+        raceIcon.classList.add("spec-icon--race");   /* sits flush against its spec */
+        td.appendChild(raceIcon);
+      }
+      td.appendChild(specIcon(resolved, bisTier(resolved.id, rec.id)));
+    });
+
     return td;
   }
 
@@ -752,8 +740,9 @@
       type.innerHTML =
         classes.map(function (c) {
           var muted = filtering && !classPasses(c, null);
+          var info = REG.classes[c] || { icon: "inv_misc_questionmark" };
           return '<img class="class-icon' + (muted ? " class-icon--muted" : "") + '"' +
-            ' src="' + CLASS_ICON + c.toLowerCase() + '.jpg"' +
+            ' src="' + ICON_BASE + info.icon + '.jpg"' +
             ' alt="' + escapeHtml(c) + '" aria-label="' + escapeHtml(c) + '"' +
             ' data-tip="' + escapeHtml(c) + (muted ? " (does not match the current filters)" : "") + '"' +
             ' onerror="this.replaceWith(document.createTextNode(this.alt))">';
@@ -1022,11 +1011,28 @@
       });
   }
 
+  /* The registry is not optional the way bis.json is - without it nothing in the
+     priority column can be drawn - but a failure should still leave a readable
+     table rather than a blank page, so it warns and carries on. */
+  function loadRegistry() {
+    return fetch(SPECS_URL)
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(indexRegistry)
+      .catch(function (err) {
+        if (window.console) console.warn("spec registry unavailable:", err.message);
+        indexRegistry(null);
+      });
+  }
+
   Promise.all([
     fetch(DATA_URL).then(function (res) {
       if (!res.ok) throw new Error("HTTP " + res.status);
       return res.json();
     }),
+    loadRegistry(),
     loadBis()
   ])
     .then(function (results) {

@@ -8,7 +8,15 @@
   "slot": "Back",
   "type": "Cloak",
   "role": "Healer",
-  "priority": "H Pal > R Shaman",
+  "priority": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": ">"
+   }
+  ],
   "notes": "Kael'thas cloak is better for Druid/Priest; take this for the mp5."
  },
  {
@@ -20,7 +28,11 @@
   "slot": "Feet",
   "type": "Leather",
   "role": "Tank",
-  "priority": "Feral",
+  "priority": [
+   {
+    "spec": "FeralDruid"
+   }
+  ],
   "notes": "BiS bear mitigation. Not for cat."
  },
  {
@@ -32,7 +44,15 @@
   "slot": "Hands",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Warrior = Ret",
+  "priority": [
+   {
+    "class": "Warrior"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   }
+  ],
   "notes": "Temp upgrade. Give to the warrior NOT getting Grips of Silent Justice."
  },
  {
@@ -44,7 +64,7 @@
   "slot": "Waist",
   "type": "Plate",
   "role": "Physical",
-  "priority": "",
+  "priority": [],
   "notes": "Weak."
  },
  {
@@ -56,7 +76,11 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Physical",
-  "priority": "Ret",
+  "priority": [
+   {
+    "spec": "Ret"
+   }
+  ],
   "notes": "Least-contested haste ring. Give to biggest upgrade after Ret."
  },
  {
@@ -68,7 +92,27 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Healer",
-  "priority": "R Druid > Priest > Shaman > R Druid > H Pal",
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   },
+   {
+    "class": "Priest",
+    "op": ">"
+   },
+   {
+    "class": "Shaman",
+    "op": ">"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   }
+  ],
   "notes": "Healer haste ring. One haste ring each before doubling up. R Druid: if ->113 haste."
  },
  {
@@ -80,7 +124,27 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Caster",
-  "priority": "SPriest > Warlock = Balance = Elemental > Mage",
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   }
+  ],
   "notes": "BiS for all casters. SPriest should get it first if it takes them over 146 haste, otherwise they are last prio."
  },
  {
@@ -92,7 +156,16 @@
   "slot": "One-Hand",
   "type": "1H Mace",
   "role": "Physical",
-  "priority": "Human Prot War = Fury",
+  "priority": [
+   {
+    "race": "Human",
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   }
+  ],
   "notes": "Temp for a human Prot Warr waiting on Blade of Savagery. Temp OH for a Fury Warr, behind PvP Weps & Blade of Infamy."
  },
  {
@@ -104,7 +177,15 @@
   "slot": "Off-Hand",
   "type": "Shield",
   "role": "Tank",
-  "priority": "Prot Pal > Ele Shaman",
+  "priority": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   }
+  ],
   "notes": "Placeholder, not BiS."
  },
  {
@@ -116,7 +197,27 @@
   "slot": "Feet",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "Mage > Lock > Boomkin > Ele > SPriest",
+  "priority": [
+   {
+    "class": "Mage"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   }
+  ],
   "notes": "BiS mage/warlock/boomkin/ele."
  },
  {
@@ -128,7 +229,11 @@
   "slot": "Head",
   "type": "Leather",
   "role": "Healer",
-  "priority": "R Shaman",
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   }
+  ],
   "notes": "Give to biggest upgrade after Shaman."
  },
  {
@@ -140,7 +245,15 @@
   "slot": "Shoulder",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Rogue = Enhance",
+  "priority": [
+   {
+    "class": "Rogue"
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
   "notes": "Near-BiS. Don't confuse with Razorfury Mantle."
  },
  {
@@ -152,7 +265,15 @@
   "slot": "Head",
   "type": "Mail",
   "role": "Healer",
-  "priority": "R Shaman > H Pal",
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   }
+  ],
   "notes": "Near tier-helm value."
  },
  {
@@ -164,7 +285,19 @@
   "slot": "Hands",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Enhance > Hunter = Ret",
+  "priority": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   }
+  ],
   "notes": "BiS enhance; tied with the leather haste-glove alt."
  },
  {
@@ -176,7 +309,11 @@
   "slot": "Feet",
   "type": "Mail",
   "role": "Caster",
-  "priority": "Elemental",
+  "priority": [
+   {
+    "spec": "Ele"
+   }
+  ],
   "notes": "Ele mail caster boots; ~2nd to Slippers of the Seacaller."
  },
  {
@@ -188,7 +325,7 @@
   "slot": "Wrist",
   "type": "Plate",
   "role": "Tank",
-  "priority": "",
+  "priority": [],
   "notes": "Any Tank for full mitigation sets."
  },
  {
@@ -200,7 +337,11 @@
   "slot": "Feet",
   "type": "Plate",
   "role": "Healer",
-  "priority": "H Pal",
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "notes": ""
  },
  {
@@ -212,7 +353,15 @@
   "slot": "Feet",
   "type": "Plate",
   "role": "Tank",
-  "priority": "Prot Pal > Prot Warrior",
+  "priority": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   }
+  ],
   "notes": "Don't disenchant. Good warrior mitigation too."
  },
  {
@@ -224,8 +373,17 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Healer",
-  "priority": "H Pal > R Shaman",
-  "notes": ""
+  "priority": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": ">"
+   }
+  ],
+  "notes": "",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -236,8 +394,29 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Caster",
-  "priority": "Lock > Boomkin > SPriest > Ele > Mage",
-  "notes": "Great long-term hit ring. Mage: never."
+  "priority": [
+   {
+    "class": "Warlock"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   }
+  ],
+  "notes": "Great long-term hit ring. Mage: never.",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -248,7 +427,27 @@
   "slot": "Main-Hand",
   "type": "Dagger",
   "role": "Caster",
-  "priority": "Ele > Boomkin > SPriest > Mage = Lock",
+  "priority": [
+   {
+    "spec": "Ele"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   },
+   {
+    "class": "Warlock",
+    "op": "="
+   }
+  ],
   "notes": "Best non-Zhar'doom caster weapon."
  },
  {
@@ -260,8 +459,22 @@
   "slot": "One-Hand",
   "type": "1H Axe",
   "role": "Physical",
-  "priority": "Orc Fury > Enhance = Fury",
-  "notes": "BiS Orc Fury OH."
+  "priority": [
+   {
+    "race": "Orc",
+    "spec": "Fury"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   }
+  ],
+  "notes": "BiS Orc Fury OH.",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -272,7 +485,11 @@
   "slot": "Two-Hand",
   "type": "2H Polearm",
   "role": "Physical",
-  "priority": "Hunter",
+  "priority": [
+   {
+    "class": "Hunter"
+   }
+  ],
   "notes": "Too much hit; weak. Hunter: catch-up."
  },
  {
@@ -284,7 +501,27 @@
   "slot": "Waist",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "SPriest > Lock > Boomkin > Ele > Mage",
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   }
+  ],
   "notes": "Near-BiS several; mage first on the crit belt."
  },
  {
@@ -296,7 +533,11 @@
   "slot": "Wrist",
   "type": "Mail",
   "role": "Caster",
-  "priority": "Elemental",
+  "priority": [
+   {
+    "spec": "Ele"
+   }
+  ],
   "notes": "2nd BiS ele."
  },
  {
@@ -308,7 +549,15 @@
   "slot": "Waist",
   "type": "Mail",
   "role": "Healer",
-  "priority": "R Shaman > H Pal",
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   }
+  ],
   "notes": "Mail healing haste belt."
  },
  {
@@ -320,7 +569,7 @@
   "slot": "Shoulder",
   "type": "Plate",
   "role": "Tank",
-  "priority": "",
+  "priority": [],
   "notes": "Tier 5 Shoulders are better, avoid."
  },
  {
@@ -332,7 +581,19 @@
   "slot": "Neck",
   "type": "Neck",
   "role": "Physical",
-  "priority": "Enhance > Rogue > Arms",
+  "priority": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   },
+   {
+    "spec": "Arms",
+    "op": ">"
+   }
+  ],
   "notes": "BiS for Enhance & Rogues that need +Hit. Arms can use if they need +Hit."
  },
  {
@@ -344,8 +605,17 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Physical",
-  "priority": "Enhance = Rogue",
-  "notes": "Equal priority."
+  "priority": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "class": "Rogue",
+    "op": "="
+   }
+  ],
+  "notes": "Equal priority.",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -356,7 +626,15 @@
   "slot": "Off-Hand",
   "type": "Shield",
   "role": "Healer",
-  "priority": "H Pal > R Shaman",
+  "priority": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": ">"
+   }
+  ],
   "notes": "Healing crit shield; frees the Archimonde shield for shaman."
  },
  {
@@ -368,7 +646,15 @@
   "slot": "Ranged",
   "type": "Crossbow",
   "role": "Physical",
-  "priority": "Hunter > Prot Warrior",
+  "priority": [
+   {
+    "class": "Hunter"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   }
+  ],
   "notes": ""
  },
  {
@@ -380,7 +666,16 @@
   "slot": "One-Hand",
   "type": "1H Mace",
   "role": "Physical",
-  "priority": "Enhance > Human Warrior",
+  "priority": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "race": "Human",
+    "class": "Warrior",
+    "op": ">"
+   }
+  ],
   "notes": "BiS for non-Orc Enhance - need 2x"
  },
  {
@@ -392,7 +687,11 @@
   "slot": "One-Hand",
   "type": "1H Axe",
   "role": "Tank",
-  "priority": "Prot Warrior",
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
   "notes": "BiS tank warrior; humans prefer Mother's fast mace. Prot Warrior: non-human."
  },
  {
@@ -404,8 +703,13 @@
   "slot": "Relic",
   "type": "Idol",
   "role": "Physical",
-  "priority": "Druid",
-  "notes": "Feral idol; whoever wants it."
+  "priority": [
+   {
+    "class": "Druid"
+   }
+  ],
+  "notes": "Feral idol; whoever wants it.",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -416,7 +720,11 @@
   "slot": "Legs",
   "type": "Plate",
   "role": "Tank",
-  "priority": "Prot Warrior",
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
   "notes": "No defense; awkward to fit. Prot Warrior: niche."
  },
  {
@@ -428,8 +736,29 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Physical",
-  "priority": "Rogue > Feral > Hunter > Enhance > Prot Warrior",
-  "notes": "Complex; pairs with the Illidan ring. Rogue: no T5 ring. Feral: hit. Hunter: hit."
+  "priority": [
+   {
+    "class": "Rogue"
+   },
+   {
+    "spec": "FeralDruid",
+    "op": ">"
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   }
+  ],
+  "notes": "Complex; pairs with the Illidan ring. Rogue: no T5 ring. Feral: hit. Hunter: hit.",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -440,7 +769,11 @@
   "slot": "Waist",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Ret",
+  "priority": [
+   {
+    "spec": "Ret"
+   }
+  ],
   "notes": "Weak; Vashj belt better. Ret: if no Vashj belt."
  },
  {
@@ -452,7 +785,11 @@
   "slot": "Legs",
   "type": "Leather",
   "role": "Healer",
-  "priority": "R Druid",
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
   "notes": "2nd BiS; no spirit so good for all healers."
  },
  {
@@ -464,7 +801,19 @@
   "slot": "Shoulder",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Hunter = Enhance = Ret",
+  "priority": [
+   {
+    "class": "Hunter"
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   }
+  ],
   "notes": "Mail; temp upgrade. Ret: temp."
  },
  {
@@ -476,7 +825,15 @@
   "slot": "Hands",
   "type": "Mail",
   "role": "Healer",
-  "priority": "R Shaman > H Pal",
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   }
+  ],
   "notes": "Not BiS but better than tier gloves individually."
  },
  {
@@ -488,7 +845,11 @@
   "slot": "Waist",
   "type": "Mail",
   "role": "Caster",
-  "priority": "Elemental",
+  "priority": [
+   {
+    "spec": "Ele"
+   }
+  ],
   "notes": "BiS ele belt."
  },
  {
@@ -500,7 +861,11 @@
   "slot": "Wrist",
   "type": "Plate",
   "role": "Tank",
-  "priority": "Prot Paladin",
+  "priority": [
+   {
+    "spec": "ProtPal"
+   }
+  ],
   "notes": "Well-itemized prot pally wrists."
  },
  {
@@ -512,7 +877,7 @@
   "slot": "Wrist",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "",
+  "priority": [],
   "notes": "Any caster needing the +Hit."
  },
  {
@@ -524,7 +889,7 @@
   "slot": "Off-Hand",
   "type": "Off-hand",
   "role": "Caster",
-  "priority": "",
+  "priority": [],
   "notes": "Any caster needing the +Hit."
  },
  {
@@ -536,7 +901,15 @@
   "slot": "Wrist",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Rogue > Hunter",
+  "priority": [
+   {
+    "class": "Rogue"
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   }
+  ],
   "notes": "Huge rogue wrist upgrade. Hunter: if needs hit."
  },
  {
@@ -548,7 +921,15 @@
   "slot": "Hands",
   "type": "Leather",
   "role": "Healer",
-  "priority": "R Druid > R Shaman",
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": ">"
+   }
+  ],
   "notes": "BiS for both Druid & Shaman, but Shaman has a Mail alternative in Spiritwalker Gauntlets."
  },
  {
@@ -560,7 +941,23 @@
   "slot": "Feet",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Enhance > Hunter > Ret = Warrior",
+  "priority": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   },
+   {
+    "class": "Warrior",
+    "op": "="
+   }
+  ],
   "notes": "Underrated; enhance can use the mail option. Hunter: if needs hit."
  },
  {
@@ -572,7 +969,11 @@
   "slot": "Hands",
   "type": "Plate",
   "role": "Tank",
-  "priority": "Prot Warrior",
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
   "notes": "Insane prot warrior gloves."
  },
  {
@@ -584,7 +985,11 @@
   "slot": "Waist",
   "type": "Plate",
   "role": "Healer",
-  "priority": "H Pal",
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "notes": "Plate healing haste belt."
  },
  {
@@ -596,7 +1001,11 @@
   "slot": "Relic",
   "type": "Totem",
   "role": "Caster",
-  "priority": "Elemental",
+  "priority": [
+   {
+    "spec": "Ele"
+   }
+  ],
   "notes": "BiS ele totem."
  },
  {
@@ -608,7 +1017,11 @@
   "slot": "Two-Hand",
   "type": "2H Axe",
   "role": "Physical",
-  "priority": "Arms",
+  "priority": [
+   {
+    "spec": "Arms"
+   }
+  ],
   "notes": "Weak item, give to undergeared players."
  },
  {
@@ -620,7 +1033,15 @@
   "slot": "Ranged",
   "type": "Thrown",
   "role": "Physical",
-  "priority": "Warrior > Rogue",
+  "priority": [
+   {
+    "class": "Warrior"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   }
+  ],
   "notes": "Warrior rage weapon."
  },
  {
@@ -632,7 +1053,11 @@
   "slot": "Ranged",
   "type": "Gun",
   "role": "Tank",
-  "priority": "Prot Warrior",
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
   "notes": "Mitigation gun; good on Mother Shahraz."
  },
  {
@@ -644,7 +1069,19 @@
   "slot": "Legs",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Fury = Arms > Ret",
+  "priority": [
+   {
+    "spec": "Fury"
+   },
+   {
+    "spec": "Arms",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   }
+  ],
   "notes": "Best off-set legs for 4pc-tier warriors."
  },
  {
@@ -656,8 +1093,21 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Physical",
-  "priority": "Warrior > Ret = Enhance",
-  "notes": "BiS on most warrior lists."
+  "priority": [
+   {
+    "class": "Warrior"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
+  "notes": "BiS on most warrior lists.",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -668,8 +1118,21 @@
   "slot": "Trinket",
   "type": "Trinket",
   "role": "Tank",
-  "priority": "Feral > Prot Warrior > Prot Paladin",
-  "notes": "Anti-crit for bears."
+  "priority": [
+   {
+    "spec": "FeralDruid"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   },
+   {
+    "spec": "ProtPal",
+    "op": ">"
+   }
+  ],
+  "notes": "Anti-crit for bears.",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -680,7 +1143,15 @@
   "slot": "Hands",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Fury > Arms",
+  "priority": [
+   {
+    "spec": "Fury"
+   },
+   {
+    "spec": "Arms",
+    "op": ">"
+   }
+  ],
   "notes": "Not for 4pc; give to non-4set warriors. Fury: off-set."
  },
  {
@@ -692,7 +1163,15 @@
   "slot": "Back",
   "type": "Cloak",
   "role": "Healer",
-  "priority": "Druid = Priest",
+  "priority": [
+   {
+    "class": "Druid"
+   },
+   {
+    "class": "Priest",
+    "op": "="
+   }
+  ],
   "notes": "On par with Kael'thas Cloak. Druid/Priest first."
  },
  {
@@ -704,7 +1183,7 @@
   "slot": "Shoulder",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "",
+  "priority": [],
   "notes": "Give to biggest upgrade. Weak item."
  },
  {
@@ -716,7 +1195,7 @@
   "slot": "Chest",
   "type": "Cloth",
   "role": "Healer",
-  "priority": "",
+  "priority": [],
   "notes": "Give to biggest upgrade. Weak item."
  },
  {
@@ -728,7 +1207,7 @@
   "slot": "Chest",
   "type": "Mail",
   "role": "Physical",
-  "priority": "",
+  "priority": [],
   "notes": "Weak item. Hunters get more Agi more from Tier with gems."
  },
  {
@@ -740,7 +1219,15 @@
   "slot": "Waist",
   "type": "Plate",
   "role": "Tank",
-  "priority": "Prot Warrior > Paladin",
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "class": "Paladin",
+    "op": ">"
+   }
+  ],
   "notes": "Good mitigation if no Vashj belt."
  },
  {
@@ -752,7 +1239,15 @@
   "slot": "Hands",
   "type": "Cloth",
   "role": "Healer",
-  "priority": "H Pal > Priest",
+  "priority": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "class": "Priest",
+    "op": ">"
+   }
+  ],
   "notes": "BiS in the high-mana holy-light pally build. H Pal: regen build."
  },
  {
@@ -764,7 +1259,11 @@
   "slot": "Wrist",
   "type": "Leather",
   "role": "Caster",
-  "priority": "Boomkin",
+  "priority": [
+   {
+    "spec": "BalanceDruid"
+   }
+  ],
   "notes": "Weak caster wrists. Boomkin: temp."
  },
  {
@@ -776,7 +1275,27 @@
   "slot": "Hands",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Enhance > Ret = War = Hunter = Rogue",
+  "priority": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   },
+   {
+    "class": "Warrior",
+    "op": "="
+   },
+   {
+    "class": "Hunter",
+    "op": "="
+   },
+   {
+    "class": "Rogue",
+    "op": "="
+   }
+  ],
   "notes": "BiS enhance (mail haste gloves)."
  },
  {
@@ -788,7 +1307,15 @@
   "slot": "Feet",
   "type": "Leather",
   "role": "Caster",
-  "priority": "Boomkin = Elemental",
+  "priority": [
+   {
+    "spec": "BalanceDruid"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   }
+  ],
   "notes": "mp5/sp/crit leather boots."
  },
  {
@@ -800,7 +1327,7 @@
   "slot": "Shoulder",
   "type": "Mail",
   "role": "Healer",
-  "priority": "",
+  "priority": [],
   "notes": "Weak item."
  },
  {
@@ -812,7 +1339,11 @@
   "slot": "Waist",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Hunter",
+  "priority": [
+   {
+    "class": "Hunter"
+   }
+  ],
   "notes": "UNDERRATED - best hunter belt when you need hit. Don't DE / off-spec it."
  },
  {
@@ -824,7 +1355,11 @@
   "slot": "Head",
   "type": "Plate",
   "role": "Healer",
-  "priority": "H Pal",
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "notes": "~= tier helm; good hold-over."
  },
  {
@@ -836,7 +1371,27 @@
   "slot": "Neck",
   "type": "Neck",
   "role": "Caster",
-  "priority": "Lock > Boomkin > SPriest > Mage = Ele",
+  "priority": [
+   {
+    "class": "Warlock"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   }
+  ],
   "notes": "Most casters use the Kael'thas neck instead. Boomkin: hit."
  },
  {
@@ -848,7 +1403,15 @@
   "slot": "Neck",
   "type": "Neck",
   "role": "Tank",
-  "priority": "Prot Warrior > Feral",
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "FeralDruid",
+    "op": ">"
+   }
+  ],
   "notes": "Prot warriors often use the PvP neck."
  },
  {
@@ -860,7 +1423,7 @@
   "slot": "Off-Hand",
   "type": "Off-hand",
   "role": "Healer",
-  "priority": "",
+  "priority": [],
   "notes": "2nd best Healer OH."
  },
  {
@@ -872,7 +1435,11 @@
   "slot": "Two-Hand",
   "type": "2H Mace",
   "role": "Physical",
-  "priority": "Ret",
+  "priority": [
+   {
+    "spec": "Ret"
+   }
+  ],
   "notes": "2H mace; better for Ret than the Archimonde sword."
  },
  {
@@ -884,7 +1451,11 @@
   "slot": "Ranged",
   "type": "Wand",
   "role": "Healer",
-  "priority": "Priest",
+  "priority": [
+   {
+    "class": "Priest"
+   }
+  ],
   "notes": "BiS healing wand over the Morgram wand."
  },
  {
@@ -896,7 +1467,11 @@
   "slot": "Legs",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "SPriest",
+  "priority": [
+   {
+    "spec": "Shadow"
+   }
+  ],
   "notes": "Near-BiS for Shadow, give to whoever needs +Hit after."
  },
  {
@@ -908,7 +1483,32 @@
   "slot": "Feet",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Survival > BM = Ret > Feral Cat > Rogue > Enhance",
+  "priority": [
+   {
+    "spec": "Surv"
+   },
+   {
+    "spec": "BM",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "FeralDruid",
+    "form": "cat",
+    "op": ">"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   }
+  ],
   "notes": "BiS many; give to those who DON'T need hit."
  },
  {
@@ -920,7 +1520,11 @@
   "slot": "Chest",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Fury",
+  "priority": [
+   {
+    "spec": "Fury"
+   }
+  ],
   "notes": "Lots of hit; temp. Fury: temp."
  },
  {
@@ -932,7 +1536,11 @@
   "slot": "Neck",
   "type": "Neck",
   "role": "Healer",
-  "priority": "H Pal",
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "notes": "Depends whether the PvP haste-healing neck ships. H Pal: or all healers if no PvP haste neck."
  },
  {
@@ -944,7 +1552,11 @@
   "slot": "Ranged",
   "type": "Libram",
   "role": "Tank",
-  "priority": "Prot Paladin",
+  "priority": [
+   {
+    "spec": "ProtPal"
+   }
+  ],
   "notes": "Prot pally relic."
  },
  {
@@ -956,7 +1568,16 @@
   "slot": "One-Hand",
   "type": "1H Sword",
   "role": "Physical",
-  "priority": "Rogue > Human Prot Warrior",
+  "priority": [
+   {
+    "class": "Rogue"
+   },
+   {
+    "race": "Human",
+    "spec": "ProtWarr",
+    "op": ">"
+   }
+  ],
   "notes": "Biggest single-item rogue upgrade outside glaives."
  },
  {
@@ -968,7 +1589,27 @@
   "slot": "Shoulder",
   "type": "Tier Token (Pal/Priest/Lock)",
   "role": "Tier",
-  "priority": "Prot Pal > Lock > H Pal > H Priest > SPriest",
+  "priority": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   }
+  ],
   "notes": "Mother Shahraz."
  },
  {
@@ -980,7 +1621,31 @@
   "slot": "Shoulder",
   "type": "Tier Token (War/Hunter/Shaman)",
   "role": "Tier",
-  "priority": "R Shaman = Ele > Hunter > Fury > Prot Warrior > Enhance",
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   },
+   {
+    "spec": "Fury",
+    "op": ">"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   }
+  ],
   "notes": "Prot Warriors should use the DPS version."
  },
  {
@@ -992,7 +1657,32 @@
   "slot": "Shoulder",
   "type": "Tier Token (Rogue/Mage/Druid)",
   "role": "Tier",
-  "priority": "Bear = Rogue > Boomkin = Fire Mage > R Druid = Arcane",
+  "priority": [
+   {
+    "spec": "FeralDruid",
+    "form": "bear"
+   },
+   {
+    "class": "Rogue",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   }
+  ],
   "notes": "Mother Shahraz."
  },
  {
@@ -1004,7 +1694,15 @@
   "slot": "Waist",
   "type": "Cloth",
   "role": "Healer",
-  "priority": "R Druid > Priest",
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   },
+   {
+    "class": "Priest",
+    "op": ">"
+   }
+  ],
   "notes": "Best non-haste belt for druid/priest."
  },
  {
@@ -1016,7 +1714,27 @@
   "slot": "Back",
   "type": "Cloak",
   "role": "Caster",
-  "priority": "Mage > Boomkin = Ele > Lock > SPriest",
+  "priority": [
+   {
+    "class": "Mage"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   }
+  ],
   "notes": "Best caster cloak if you ignore the Illidan healing cloak."
  },
  {
@@ -1028,7 +1746,11 @@
   "slot": "Shoulder",
   "type": "Leather",
   "role": "Healer",
-  "priority": "R Druid",
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
   "notes": "Bad; looks like a helm but is a shoulder."
  },
  {
@@ -1040,7 +1762,23 @@
   "slot": "Head",
   "type": "Mail",
   "role": "Physical",
-  "priority": "BM Hunter = Ret > Survival > Enhance",
+  "priority": [
+   {
+    "spec": "BM"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   }
+  ],
   "notes": "2nd BiS several; enhance last."
  },
  {
@@ -1052,7 +1790,15 @@
   "slot": "Head",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Fury = Arms",
+  "priority": [
+   {
+    "spec": "Fury"
+   },
+   {
+    "spec": "Arms",
+    "op": "="
+   }
+  ],
   "notes": "Lots of hit; hold-over while waiting on Cursed Vision / 4pc. Arms: hold-over."
  },
  {
@@ -1064,8 +1810,41 @@
   "slot": "Trinket",
   "type": "Trinket",
   "role": "Physical",
-  "priority": "Fury = Arms > BM = Survival > Enhance > Feral > Rogue = Ret",
-  "notes": "No internal cooldown = huge uptime."
+  "priority": [
+   {
+    "spec": "Fury"
+   },
+   {
+    "spec": "Arms",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": ">"
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   },
+   {
+    "spec": "FeralDruid",
+    "op": ">"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   }
+  ],
+  "notes": "No internal cooldown = huge uptime.",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -1076,7 +1855,27 @@
   "slot": "Legs",
   "type": "Tier Token (Pal/Priest/Lock)",
   "role": "Tier",
-  "priority": "Prot Pal = Lock = H Pal > H Priest = SPriest",
+  "priority": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "class": "Warlock",
+    "op": "="
+   },
+   {
+    "spec": "HolyPal",
+    "op": "="
+   },
+   {
+    "spec": "HolyPriest",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": "="
+   }
+  ],
   "notes": "Illidari Council."
  },
  {
@@ -1088,7 +1887,35 @@
   "slot": "Legs",
   "type": "Tier Token (War/Hunter/Shaman)",
   "role": "Tier",
-  "priority": "R Shaman > BM Hunter > Prot Warrior > Ele = Enhance = Fury = Arms",
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "BM",
+    "op": ">"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Arms",
+    "op": "="
+   }
+  ],
   "notes": "Illidari Council."
  },
  {
@@ -1100,7 +1927,27 @@
   "slot": "Legs",
   "type": "Tier Token (Rogue/Mage/Druid)",
   "role": "Tier",
-  "priority": "Feral > Rogue > Mage > Boomkin = R Druid",
+  "priority": [
+   {
+    "spec": "FeralDruid"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
   "notes": "Illidari Council."
  },
  {
@@ -1112,7 +1959,23 @@
   "slot": "Back",
   "type": "Cloak",
   "role": "Healer",
-  "priority": "R Shaman > Priest > Druid > H Pal",
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "class": "Priest",
+    "op": ">"
+   },
+   {
+    "class": "Druid",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   }
+  ],
   "notes": "BiS healer cloak all game. H Pal: Lock if speed-running."
  },
  {
@@ -1124,7 +1987,23 @@
   "slot": "Head",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "Fire Mage = Lock > Boomkin = Ele",
+  "priority": [
+   {
+    "spec": "Fire"
+   },
+   {
+    "class": "Warlock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   }
+  ],
   "notes": "Only ~BiS for fire mage. Warlocks only use this if they don't have Vestments of the Sea-witch from Vashj. Ele: temp."
  },
  {
@@ -1136,7 +2015,27 @@
   "slot": "Head",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Enhance > Hunter = Ret > Fury > Rogue",
+  "priority": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "Fury",
+    "op": ">"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   }
+  ],
   "notes": "BiS every physical DPS except feral."
  },
  {
@@ -1148,7 +2047,15 @@
   "slot": "Head",
   "type": "Plate",
   "role": "Tank",
-  "priority": "Prot Warrior > Prot Pal",
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "ProtPal",
+    "op": ">"
+   }
+  ],
   "notes": "Prot pally usually takes the tier helm for threat."
  },
  {
@@ -1160,8 +2067,41 @@
   "slot": "Finger",
   "type": "Ring",
   "role": "Physical",
-  "priority": "Rogue > Enhance >> Arms > Fury = Hunter = Feral > Prot Warrior > Ret",
-  "notes": "BiS all physical DPS but rogue/enhance gain far more."
+  "priority": [
+   {
+    "class": "Rogue"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   },
+   {
+    "spec": "Arms",
+    "op": ">>"
+   },
+   {
+    "spec": "Fury",
+    "op": ">"
+   },
+   {
+    "class": "Hunter",
+    "op": "="
+   },
+   {
+    "spec": "FeralDruid",
+    "op": "="
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   }
+  ],
+  "notes": "BiS all physical DPS but rogue/enhance gain far more. Much better for Rogue and Enhance than the rest.",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -1172,8 +2112,29 @@
   "slot": "Trinket",
   "type": "Trinket",
   "role": "Caster",
-  "priority": "Lock > Mage > Boomkin = Ele > SPriest",
-  "notes": "One of the best items in the phase."
+  "priority": [
+   {
+    "class": "Warlock"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   }
+  ],
+  "notes": "One of the best items in the phase.",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -1184,8 +2145,9 @@
   "slot": "Trinket",
   "type": "Trinket",
   "role": "Healer",
-  "priority": "",
-  "notes": "Mediocre vs active trinkets except for the mana. Give to the Healer who runs out of mana."
+  "priority": [],
+  "notes": "Mediocre vs active trinkets except for the mana. Give to the Healer who runs out of mana.",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -1196,8 +2158,9 @@
   "slot": "One-Hand",
   "type": "1H Dagger",
   "role": "Physical",
-  "priority": "",
-  "notes": "Little PvE use. Rogue can use in PvP."
+  "priority": [],
+  "notes": "Little PvE use. Rogue can use in PvP.",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -1208,7 +2171,15 @@
   "slot": "Main-Hand",
   "type": "Mace",
   "role": "Healer",
-  "priority": "Priest > R Shaman",
+  "priority": [
+   {
+    "class": "Priest"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": ">"
+   }
+  ],
   "notes": "Best heal weapon in game; <50% proc wasted on Druid/H Pal."
  },
  {
@@ -1220,8 +2191,28 @@
   "slot": "Two-Hand",
   "type": "2H Staff",
   "role": "Caster",
-  "priority": "SPriest >= Lock = Mage = Boomkin = Ele",
-  "notes": "Biggest drama item; SPriest has the slight edge."
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "class": "Warlock",
+    "op": "~>"
+   },
+   {
+    "class": "Mage",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   }
+  ],
+  "notes": "Biggest drama item; SPriest has the slight edge. Shadow Priest is only slightly ahead, due to being shafted for most of the expansion on loot, and this will buff your mage/healer group."
  },
  {
   "zone": "Black Temple",
@@ -1232,7 +2223,15 @@
   "slot": "Off-Hand",
   "type": "Shield",
   "role": "Tank",
-  "priority": "Prot Warrior > Prot Paladin",
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "ProtPal",
+    "op": ">"
+   }
+  ],
   "notes": "Warrior never unequips it."
  },
  {
@@ -1244,7 +2243,15 @@
   "slot": "Ranged",
   "type": "Bow",
   "role": "Physical",
-  "priority": "Survival > BM",
+  "priority": [
+   {
+    "spec": "Surv"
+   },
+   {
+    "spec": "BM",
+    "op": ">"
+   }
+  ],
   "notes": "BiS survival; give BM the other bow."
  },
  {
@@ -1256,8 +2263,9 @@
   "slot": "Main-Hand",
   "type": "Sword",
   "role": "Physical",
-  "priority": "",
-  "notes": "Give to the PLAYER not the CLASS."
+  "priority": [],
+  "notes": "Give to the PLAYER not the CLASS.",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -1268,8 +2276,9 @@
   "slot": "Off-Hand",
   "type": "Sword",
   "role": "Physical",
-  "priority": "",
-  "notes": "Give to the PLAYER not the CLASS."
+  "priority": [],
+  "notes": "Give to the PLAYER not the CLASS.",
+  "unique": true
  },
  {
   "zone": "Black Temple",
@@ -1280,7 +2289,31 @@
   "slot": "Chest",
   "type": "Tier Token (Pal/Priest/Lock)",
   "role": "Tier",
-  "priority": "Prot Pal > Lock > H Pal > SPriest > H Priest > Ret",
+  "priority": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   }
+  ],
   "notes": "Warlocks only use this if they don't have Vestments of the Sea-witch from Vashj."
  },
  {
@@ -1292,7 +2325,35 @@
   "slot": "Chest",
   "type": "Tier Token (War/Hunter/Shaman)",
   "role": "Tier",
-  "priority": "R Shaman = Ele > Arms = Fury > Hunter > Prot Warrior > Enhance",
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Arms",
+    "op": ">"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   }
+  ],
   "notes": "Prot Warriors should use the DPS version."
  },
  {
@@ -1304,7 +2365,27 @@
   "slot": "Chest",
   "type": "Tier Token (Rogue/Mage/Druid)",
   "role": "Tier",
-  "priority": "Feral > Rogue > Boomkin > R Druid > Arcane",
+  "priority": [
+   {
+    "spec": "FeralDruid"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Arcane",
+    "op": ">"
+   }
+  ],
   "notes": "Illidan."
  },
  {
@@ -1316,7 +2397,15 @@
   "slot": "Back",
   "type": "Cloak",
   "role": "Caster",
-  "priority": "SPriest > Lock",
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   }
+  ],
   "notes": "Caster hit cloak; BiS warlock single-target if they use the hit."
  },
  {
@@ -1328,7 +2417,15 @@
   "slot": "Back",
   "type": "Cloak",
   "role": "Tank",
-  "priority": "Prot Warrior > Feral",
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "FeralDruid",
+    "op": ">"
+   }
+  ],
   "notes": "Prot-war cloak (no defense; ferals often want an armor cloak)."
  },
  {
@@ -1340,7 +2437,15 @@
   "slot": "Feet",
   "type": "Cloth",
   "role": "Healer",
-  "priority": "Priest > R Druid",
+  "priority": [
+   {
+    "class": "Priest"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   }
+  ],
   "notes": "High healing; stamina makes it best on priest."
  },
  {
@@ -1352,7 +2457,11 @@
   "slot": "Chest",
   "type": "Mail",
   "role": "Caster",
-  "priority": "Elemental",
+  "priority": [
+   {
+    "spec": "Ele"
+   }
+  ],
   "notes": "Weak; whoever. Elemental: if wanted."
  },
  {
@@ -1364,7 +2473,15 @@
   "slot": "Neck",
   "type": "Neck",
   "role": "Physical",
-  "priority": "Warrior = BM Hunter",
+  "priority": [
+   {
+    "class": "Warrior"
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   }
+  ],
   "notes": "BiS armor-pen neck; biggest upgrade / whoever has more armor pen."
  },
  {
@@ -1376,8 +2493,17 @@
   "slot": "Neck",
   "type": "Neck",
   "role": "Caster",
-  "priority": "Fire Mage = Fire Lock",
-  "notes": "Great for fire specs only."
+  "priority": [
+   {
+    "spec": "Fire"
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   }
+  ],
+  "notes": "Great for fire specs only.",
+  "unique": true
  },
  {
   "zone": "Mount Hyjal",
@@ -1388,7 +2514,23 @@
   "slot": "Main-Hand",
   "type": "Mace",
   "role": "Tank",
-  "priority": "Prot Paladin > SPriest > Boomkin > Ele",
+  "priority": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   }
+  ],
   "notes": "Prot pally 1H (hit); a decent, not top-tier, caster mace."
  },
  {
@@ -1400,8 +2542,16 @@
   "slot": "Off-Hand",
   "type": "Fist",
   "role": "Physical",
-  "priority": "~Rogue = Hunter",
-  "notes": "Bad. Off-hand claw is 32946. Matches T5 enhance look. Hunter: novelty / stat-stick."
+  "priority": [
+   {
+    "class": "Rogue"
+   },
+   {
+    "class": "Hunter",
+    "op": "~="
+   }
+  ],
+  "notes": "Bad. Off-hand claw is 32946. Matches T5 enhance look. Hunter: novelty / stat-stick. Roughly equal."
  },
  {
   "zone": "Mount Hyjal",
@@ -1412,7 +2562,15 @@
   "slot": "Wrist",
   "type": "Cloth",
   "role": "Healer",
-  "priority": "Priest > R Druid",
+  "priority": [
+   {
+    "class": "Priest"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   }
+  ],
   "notes": "BiS Longetivity Wrists."
  },
  {
@@ -1424,7 +2582,23 @@
   "slot": "Wrist",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "Arcane > Boomkin > Ele > Lock",
+  "priority": [
+   {
+    "spec": "Arcane"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   }
+  ],
   "notes": "BiS Arcane."
  },
  {
@@ -1436,7 +2610,15 @@
   "slot": "Wrist",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Warrior > Enhance",
+  "priority": [
+   {
+    "class": "Warrior"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   }
+  ],
   "notes": "BiS Warrior."
  },
  {
@@ -1448,7 +2630,11 @@
   "slot": "Wrist",
   "type": "Leather",
   "role": "Healer",
-  "priority": "R Druid",
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
   "notes": ""
  },
  {
@@ -1460,7 +2646,15 @@
   "slot": "Wrist",
   "type": "Mail",
   "role": "Healer",
-  "priority": "R Shaman = H Pal",
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "HolyPal",
+    "op": "="
+   }
+  ],
   "notes": "Not BiS, give to whoever gets the biggest upgrade."
  },
  {
@@ -1472,7 +2666,11 @@
   "slot": "Wrist",
   "type": "Plate",
   "role": "Healer",
-  "priority": "H Pal",
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "notes": "BiS for Holy-Light build."
  },
  {
@@ -1484,7 +2682,7 @@
   "slot": "Feet",
   "type": "Mail",
   "role": "Healer",
-  "priority": "",
+  "priority": [],
   "notes": "Weak item."
  },
  {
@@ -1496,7 +2694,11 @@
   "slot": "Shoulder",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Warrior",
+  "priority": [
+   {
+    "class": "Warrior"
+   }
+  ],
   "notes": "Temp for Warrior if no Shoulderpads of the Stranger from Hydross."
  },
  {
@@ -1508,8 +2710,13 @@
   "slot": "One-Hand",
   "type": "1H Dagger",
   "role": "Physical",
-  "priority": "Rogue",
-  "notes": "Temp OH for Rogue. Weak item."
+  "priority": [
+   {
+    "class": "Rogue"
+   }
+  ],
+  "notes": "Temp OH for Rogue. Weak item.",
+  "unique": true
  },
  {
   "zone": "Mount Hyjal",
@@ -1520,7 +2727,19 @@
   "slot": "Off-Hand",
   "type": "Off-hand",
   "role": "Caster",
-  "priority": "Lock = Boomkin > Mage",
+  "priority": [
+   {
+    "class": "Warlock"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   }
+  ],
   "notes": "BiS Caster OH. Give to whoever isn't getting Zhar'doom."
  },
  {
@@ -1532,7 +2751,7 @@
   "slot": "Shoulder",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "",
+  "priority": [],
   "notes": "Weak item. Niche Spell Pen use."
  },
  {
@@ -1544,7 +2763,19 @@
   "slot": "Waist",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "Mage > Boomkin > Lock",
+  "priority": [
+   {
+    "class": "Mage"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   }
+  ],
   "notes": "BiS mage crit belt."
  },
  {
@@ -1556,7 +2787,15 @@
   "slot": "Feet",
   "type": "Cloth",
   "role": "Healer",
-  "priority": "Priest > R Druid",
+  "priority": [
+   {
+    "class": "Priest"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   }
+  ],
   "notes": "Spirit/int; pedestrian."
  },
  {
@@ -1568,7 +2807,15 @@
   "slot": "Waist",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Survival > BM",
+  "priority": [
+   {
+    "spec": "Surv"
+   },
+   {
+    "spec": "BM",
+    "op": ">"
+   }
+  ],
   "notes": "BiS hunter belt UNLESS they need hit (then use the Reliquary belt / Boneweave)."
  },
  {
@@ -1580,7 +2827,7 @@
   "slot": "Feet",
   "type": "Leather",
   "role": "Physical",
-  "priority": "",
+  "priority": [],
   "notes": ""
  },
  {
@@ -1592,7 +2839,11 @@
   "slot": "Shoulder",
   "type": "Plate",
   "role": "Healer",
-  "priority": "H Pal",
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "notes": "Hold-over shoulders."
  },
  {
@@ -1604,7 +2855,11 @@
   "slot": "One-Hand",
   "type": "1H Sword",
   "role": "Tank",
-  "priority": "Prot Warrior",
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
   "notes": "Rarely worth it over Mallet / expertise weapon. Prot Warrior: mitigation, niche."
  },
  {
@@ -1616,7 +2871,23 @@
   "slot": "One-Hand",
   "type": "1H Sword",
   "role": "Physical",
-  "priority": "Rogue > Fury = Survival = BM",
+  "priority": [
+   {
+    "class": "Rogue"
+   },
+   {
+    "spec": "Fury",
+    "op": ">"
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   }
+  ],
   "notes": "Rogue only uses if no Talon of Azshara from Tidewalker. Survival wants 2x."
  },
  {
@@ -1628,7 +2899,11 @@
   "slot": "Two-Hand",
   "type": "2H Staff",
   "role": "Physical",
-  "priority": "Feral",
+  "priority": [
+   {
+    "spec": "FeralDruid"
+   }
+  ],
   "notes": "BiS feral staff (non-PvP)."
  },
  {
@@ -1640,7 +2915,15 @@
   "slot": "Off-Hand",
   "type": "Shield",
   "role": "Healer",
-  "priority": "R Shaman > H Pal",
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   }
+  ],
   "notes": "BiS rsham shield."
  },
  {
@@ -1652,7 +2935,15 @@
   "slot": "Waist",
   "type": "Cloth",
   "role": "Healer",
-  "priority": "Priest > R Druid",
+  "priority": [
+   {
+    "class": "Priest"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   }
+  ],
   "notes": "Haste belt; druid if it reaches 113 haste."
  },
  {
@@ -1664,7 +2955,19 @@
   "slot": "Legs",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "Boomkin > Ele > SPriest",
+  "priority": [
+   {
+    "spec": "BalanceDruid"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   }
+  ],
   "notes": "Off-set caster legs used with the 4pc tier."
  },
  {
@@ -1676,7 +2979,15 @@
   "slot": "Feet",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "Prot Pal = Lock",
+  "priority": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "class": "Warlock",
+    "op": "="
+   }
+  ],
   "notes": "Niche item. Prot uses for threat, Lock uses if they need hit."
  },
  {
@@ -1688,7 +2999,7 @@
   "slot": "Shoulder",
   "type": "Leather",
   "role": "Physical",
-  "priority": "",
+  "priority": [],
   "notes": "Often worse than T5."
  },
  {
@@ -1700,7 +3011,15 @@
   "slot": "Waist",
   "type": "Leather",
   "role": "Caster",
-  "priority": "Boomkin > Elemental",
+  "priority": [
+   {
+    "spec": "BalanceDruid"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   }
+  ],
   "notes": "Near-BiS boomkin haste belt."
  },
  {
@@ -1712,7 +3031,11 @@
   "slot": "Waist",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Ret",
+  "priority": [
+   {
+    "spec": "Ret"
+   }
+  ],
   "notes": "Not great for Ret - only use if no Belt of One-Hundred Deaths from Vashj."
  },
  {
@@ -1724,7 +3047,11 @@
   "slot": "Shoulder",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Hunter",
+  "priority": [
+   {
+    "class": "Hunter"
+   }
+  ],
   "notes": "Slightly > T5 broken-set; +2% pet crit. Hunter: temp."
  },
  {
@@ -1736,7 +3063,15 @@
   "slot": "Legs",
   "type": "Mail",
   "role": "Healer",
-  "priority": "R Shaman > H Pal",
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   }
+  ],
   "notes": "~Sunhawk; temp."
  },
  {
@@ -1748,7 +3083,23 @@
   "slot": "Main-Hand",
   "type": "Mace",
   "role": "Healer",
-  "priority": "H Pal > R Shaman > H Priest > R Druid",
+  "priority": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": ">"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   }
+  ],
   "notes": "Crit healing mace."
  },
  {
@@ -1760,7 +3111,11 @@
   "slot": "Off-Hand",
   "type": "Shield",
   "role": "Tank",
-  "priority": "Prot Warrior",
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
   "notes": "Near-BiS prot-war shield; if you get this, pass Bulwark along."
  },
  {
@@ -1772,7 +3127,7 @@
   "slot": "Chest",
   "type": "Leather",
   "role": "Caster",
-  "priority": "",
+  "priority": [],
   "notes": "Weak item."
  },
  {
@@ -1784,7 +3139,11 @@
   "slot": "Legs",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Rogue",
+  "priority": [
+   {
+    "class": "Rogue"
+   }
+  ],
   "notes": "Niche - weak item."
  },
  {
@@ -1796,7 +3155,23 @@
   "slot": "Legs",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Survival > Enhance = Ret > BM",
+  "priority": [
+   {
+    "spec": "Surv"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": ">"
+   }
+  ],
   "notes": "BiS several; BM's BiS if they can't get Cursed Vision."
  },
  {
@@ -1808,7 +3183,11 @@
   "slot": "Chest",
   "type": "Plate",
   "role": "Tank",
-  "priority": "Prot Warrior",
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
   "notes": "Worse than T5. Prot Warrior: bad."
  },
  {
@@ -1820,7 +3199,11 @@
   "slot": "Waist",
   "type": "Plate",
   "role": "Healer",
-  "priority": "H Pal",
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "notes": "BiS holy-light belt."
  },
  {
@@ -1832,8 +3215,17 @@
   "slot": "One-Hand",
   "type": "1H Dagger",
   "role": "Physical",
-  "priority": "BM Hunter > Fury",
-  "notes": "BiS BM dagger for ArP. Fury can use as OH."
+  "priority": [
+   {
+    "spec": "BM"
+   },
+   {
+    "spec": "Fury",
+    "op": ">"
+   }
+  ],
+  "notes": "BiS BM dagger for ArP. Fury can use as OH.",
+  "unique": true
  },
  {
   "zone": "Mount Hyjal",
@@ -1844,7 +3236,19 @@
   "slot": "Hands",
   "type": "Tier Token (Pal/Priest/Lock)",
   "role": "Tier",
-  "priority": "Lock > H Priest > SPriest",
+  "priority": [
+   {
+    "class": "Warlock"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   }
+  ],
   "notes": "Azgalor. H Pal & Ret don't use tier gloves."
  },
  {
@@ -1856,7 +3260,15 @@
   "slot": "Hands",
   "type": "Tier Token (War/Hunter/Shaman)",
   "role": "Tier",
-  "priority": "Hunter > Ele",
+  "priority": [
+   {
+    "class": "Hunter"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   }
+  ],
   "notes": "Azgalor. R Shaman 4pc skips gloves; warriors use offset gloves; enhance tier bad."
  },
  {
@@ -1868,7 +3280,23 @@
   "slot": "Hands",
   "type": "Tier Token (Rogue/Mage/Druid)",
   "role": "Tier",
-  "priority": "Feral > Rogue > Boomkin > Mage",
+  "priority": [
+   {
+    "spec": "FeralDruid"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   }
+  ],
   "notes": "Mage only uses if they need hit. R Druid uses haste gloves instead."
  },
  {
@@ -1880,7 +3308,15 @@
   "slot": "Chest",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Enhance > Ret",
+  "priority": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   }
+  ],
   "notes": "BiS enhance/ret chest. (Was mislisted on the BT tab.)"
  },
  {
@@ -1892,7 +3328,15 @@
   "slot": "Legs",
   "type": "Cloth",
   "role": "Healer",
-  "priority": "Priest > R Druid",
+  "priority": [
+   {
+    "class": "Priest"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   }
+  ],
   "notes": "BiS healer legs (druid has a leather alt). Caption said 'Paternity'."
  },
  {
@@ -1904,7 +3348,19 @@
   "slot": "Chest",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Ret > Hunter = Enhance",
+  "priority": [
+   {
+    "spec": "Ret"
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
   "notes": "Better for ret than hunter/enhance. Ret: temp."
  },
  {
@@ -1916,7 +3372,7 @@
   "slot": "Chest",
   "type": "Plate",
   "role": "Healer",
-  "priority": "",
+  "priority": [],
   "notes": "Weak item."
  },
  {
@@ -1928,7 +3384,15 @@
   "slot": "Legs",
   "type": "Plate",
   "role": "Physical",
-  "priority": "Warrior > Ret",
+  "priority": [
+   {
+    "class": "Warrior"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   }
+  ],
   "notes": "Not BiS; biggest upgrade."
  },
  {
@@ -1940,7 +3404,15 @@
   "slot": "Off-Hand",
   "type": "Off-hand",
   "role": "Healer",
-  "priority": "Priest > R Druid",
+  "priority": [
+   {
+    "class": "Priest"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   }
+  ],
   "notes": "BiS healer off-hand (pair with a 1H). Druid uses a staff."
  },
  {
@@ -1952,8 +3424,21 @@
   "slot": "Main-Hand",
   "type": "Sword",
   "role": "Caster",
-  "priority": "Mage = Lock > Prot Pal",
-  "notes": "Contested caster 1H sword; pallies take a backseat."
+  "priority": [
+   {
+    "class": "Mage"
+   },
+   {
+    "class": "Warlock",
+    "op": "="
+   },
+   {
+    "spec": "ProtPal",
+    "op": ">"
+   }
+  ],
+  "notes": "Contested caster 1H sword; pallies take a backseat.",
+  "unique": true
  },
  {
   "zone": "Mount Hyjal",
@@ -1964,7 +3449,11 @@
   "slot": "Two-Hand",
   "type": "2H Sword",
   "role": "Physical",
-  "priority": "Arms",
+  "priority": [
+   {
+    "spec": "Arms"
+   }
+  ],
   "notes": "BiS arms 2H (armor pen); not for Ret."
  },
  {
@@ -1976,7 +3465,15 @@
   "slot": "Two-Hand",
   "type": "2H Staff",
   "role": "Healer",
-  "priority": "R Druid > Priest",
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   },
+   {
+    "class": "Priest",
+    "op": ">"
+   }
+  ],
   "notes": "BiS resto druid staff."
  },
  {
@@ -1988,7 +3485,15 @@
   "slot": "Off-Hand",
   "type": "Shield",
   "role": "Caster",
-  "priority": "Elemental > Prot Pal",
+  "priority": [
+   {
+    "spec": "Ele"
+   },
+   {
+    "spec": "ProtPal",
+    "op": ">"
+   }
+  ],
   "notes": "BiS ele shield. Prot Paladin really only uses it for threat when speedrunning."
  },
  {
@@ -2000,7 +3505,11 @@
   "slot": "Ranged",
   "type": "Bow",
   "role": "Physical",
-  "priority": "BM Hunter",
+  "priority": [
+   {
+    "spec": "BM"
+   }
+  ],
   "notes": "BiS BM bow (Survival takes the Illidan bow)."
  },
  {
@@ -2012,31 +3521,99 @@
   "slot": "Head",
   "type": "Tier Token (Pal/Priest/Lock)",
   "role": "Tier",
-  "priority": "Prot Pal > Lock > H Pal > H Priest > SPriest > Ret",
+  "priority": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   }
+  ],
   "notes": "Archimonde. Warlock helm gives the wings effect."
  },
  {
   "zone": "Mount Hyjal",
   "boss": "Archimonde",
   "item": "Helm of the Forgotten Protector",
-  "id": 31096,
-  "wowhead": "https://www.wowhead.com/tbc/item=31096",
+  "id": 31095,
+  "wowhead": "https://www.wowhead.com/tbc/item=31095",
   "slot": "Head",
   "type": "Tier Token (War/Hunter/Shaman)",
   "role": "Tier",
-  "priority": "Survival Hunter > Ele > Arms = Fury > Enhance > Prot Warrior",
+  "priority": [
+   {
+    "spec": "Surv"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   },
+   {
+    "spec": "Arms",
+    "op": ">"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   }
+  ],
   "notes": "Survival uses the tier helm over Cursed Vision. Fury only uses if targeting 4pc."
  },
  {
   "zone": "Mount Hyjal",
   "boss": "Archimonde",
   "item": "Helm of the Forgotten Vanquisher",
-  "id": 31095,
-  "wowhead": "https://www.wowhead.com/tbc/item=31095",
+  "id": 31096,
+  "wowhead": "https://www.wowhead.com/tbc/item=31096",
   "slot": "Head",
   "type": "Tier Token (Rogue/Mage/Druid)",
   "role": "Tier",
-  "priority": "Feral > Rogue > Boomkin > R Druid > Mage",
+  "priority": [
+   {
+    "spec": "FeralDruid"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   }
+  ],
   "notes": "Rogue uses this if not getting Cursed Vision of Sargeras from Illidan."
  },
  {
@@ -2048,7 +3625,7 @@
   "slot": "Wrist",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "",
+  "priority": [],
   "notes": "All casters except Mage."
  },
  {
@@ -2060,7 +3637,7 @@
   "slot": "Wrist",
   "type": "Cloth",
   "role": "Healer",
-  "priority": "",
+  "priority": [],
   "notes": "Slightly Priest favoured, but any healer really."
  },
  {
@@ -2072,7 +3649,11 @@
   "slot": "Wrist",
   "type": "Mail",
   "role": "Healer",
-  "priority": "R Shaman",
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   }
+  ],
   "notes": "CRAFTED (BoE). Mail haste wrists (shaman prefers these)."
  },
  {
@@ -2084,7 +3665,11 @@
   "slot": "Wrist",
   "type": "Leather",
   "role": "Healer",
-  "priority": "R Druid",
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
   "notes": "CRAFTED (BoE). Leather haste wrists. R Druid: to reach 113 haste."
  },
  {
@@ -2096,7 +3681,15 @@
   "slot": "Wrist",
   "type": "Mail",
   "role": "Physical",
-  "priority": "Enhance = Ret",
+  "priority": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   }
+  ],
   "notes": "CRAFTED (BoE). Mail haste wrists; tied with Swiftstrike Bracers."
  },
  {
@@ -2108,7 +3701,11 @@
   "slot": "Wrist",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Enhance",
+  "priority": [
+   {
+    "spec": "Enh"
+   }
+  ],
   "notes": "CRAFTED (BoE). Tied with Bindings of Lightning Reflexes. Enhance: Rogue backup."
  },
  {
@@ -2120,7 +3717,7 @@
   "slot": "Wrist",
   "type": "Plate",
   "role": "Physical",
-  "priority": "",
+  "priority": [],
   "notes": "Mail version out-damages these even for Warr/Ret. Weak item."
  },
  {
@@ -2132,7 +3729,11 @@
   "slot": "Shoulder",
   "type": "Leather",
   "role": "Physical",
-  "priority": "Enhance",
+  "priority": [
+   {
+    "spec": "Enh"
+   }
+  ],
   "notes": "CRAFTED (BoP). Also a leather option; both good for enhance. Enhance: BiS."
  },
  {
@@ -2144,7 +3745,11 @@
   "slot": "Shoulder",
   "type": "Cloth",
   "role": "Caster",
-  "priority": "Shadow Priest",
+  "priority": [
+   {
+    "spec": "Shadow"
+   }
+  ],
   "notes": "CRAFTED (BoP). Not BiS but a big jump for SPriest. Shadow Priest: haste breakpoint."
  },
  {
@@ -2156,7 +3761,11 @@
   "slot": "Shoulder",
   "type": "Cloth",
   "role": "Healer",
-  "priority": "Priest",
+  "priority": [
+   {
+    "class": "Priest"
+   }
+  ],
   "notes": "CRAFTED (BoP). Healer haste shoulders. Priest: early."
  },
  {
@@ -2168,7 +3777,11 @@
   "slot": "Shoulder",
   "type": "Leather",
   "role": "Healer",
-  "priority": "R Druid",
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
   "notes": "CRAFTED (BoP). Leather haste shoulders. R Druid: to reach 113 haste."
  },
  {
@@ -2180,7 +3793,11 @@
   "slot": "Shoulder",
   "type": "Mail",
   "role": "Healer",
-  "priority": "R Shaman",
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   }
+  ],
   "notes": "CRAFTED (BoP). Not BiS; tier preferred. R Shaman: temp."
  }
 ]

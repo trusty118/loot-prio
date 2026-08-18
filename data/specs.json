@@ -1,0 +1,382 @@
+{
+ "note": "Canonical classes, specs and races. Identifiers (the keys) are what data files store; name is display only, so a label can be renamed without touching data. aliases maps the old priority shorthand to an id and is used by the migration and by search - never for rendering.",
+ "classes": {
+  "Warrior": {
+   "name": "Warrior",
+   "icon": "classicon_warrior",
+   "armor": "Plate",
+   "roles": [
+    "Physical",
+    "Tank"
+   ]
+  },
+  "Paladin": {
+   "name": "Paladin",
+   "icon": "classicon_paladin",
+   "armor": "Plate",
+   "roles": [
+    "Physical",
+    "Healer",
+    "Tank"
+   ]
+  },
+  "Hunter": {
+   "name": "Hunter",
+   "icon": "classicon_hunter",
+   "armor": "Mail",
+   "roles": [
+    "Physical"
+   ]
+  },
+  "Rogue": {
+   "name": "Rogue",
+   "icon": "classicon_rogue",
+   "armor": "Leather",
+   "roles": [
+    "Physical"
+   ]
+  },
+  "Priest": {
+   "name": "Priest",
+   "icon": "classicon_priest",
+   "armor": "Cloth",
+   "roles": [
+    "Healer",
+    "Caster"
+   ]
+  },
+  "Shaman": {
+   "name": "Shaman",
+   "icon": "classicon_shaman",
+   "armor": "Mail",
+   "roles": [
+    "Caster",
+    "Healer",
+    "Physical"
+   ]
+  },
+  "Mage": {
+   "name": "Mage",
+   "icon": "classicon_mage",
+   "armor": "Cloth",
+   "roles": [
+    "Caster"
+   ]
+  },
+  "Warlock": {
+   "name": "Warlock",
+   "icon": "classicon_warlock",
+   "armor": "Cloth",
+   "roles": [
+    "Caster"
+   ]
+  },
+  "Druid": {
+   "name": "Druid",
+   "icon": "classicon_druid",
+   "armor": "Leather",
+   "roles": [
+    "Physical",
+    "Tank",
+    "Healer",
+    "Caster"
+   ]
+  }
+ },
+ "specs": {
+  "Arms": {
+   "class": "Warrior",
+   "name": "Arms Warrior",
+   "icon": "ability_warrior_savageblow",
+   "roles": [
+    "Physical"
+   ]
+  },
+  "Fury": {
+   "class": "Warrior",
+   "name": "Fury Warrior",
+   "icon": "ability_warrior_innerrage",
+   "roles": [
+    "Physical"
+   ]
+  },
+  "ProtWarr": {
+   "class": "Warrior",
+   "name": "Protection Warrior",
+   "icon": "ability_warrior_defensivestance",
+   "roles": [
+    "Tank"
+   ]
+  },
+  "HolyPal": {
+   "class": "Paladin",
+   "name": "Holy Paladin",
+   "icon": "spell_holy_holybolt",
+   "roles": [
+    "Healer"
+   ]
+  },
+  "ProtPal": {
+   "class": "Paladin",
+   "name": "Protection Paladin",
+   "icon": "spell_holy_devotionaura",
+   "roles": [
+    "Tank"
+   ]
+  },
+  "Ret": {
+   "class": "Paladin",
+   "name": "Retribution Paladin",
+   "icon": "spell_holy_auraoflight",
+   "roles": [
+    "Physical"
+   ]
+  },
+  "BM": {
+   "class": "Hunter",
+   "name": "Beast Mastery Hunter",
+   "icon": "ability_hunter_beasttaming",
+   "roles": [
+    "Physical"
+   ]
+  },
+  "Marks": {
+   "class": "Hunter",
+   "name": "Marksmanship Hunter",
+   "icon": "ability_marksmanship",
+   "roles": [
+    "Physical"
+   ]
+  },
+  "Surv": {
+   "class": "Hunter",
+   "name": "Survival Hunter",
+   "icon": "ability_hunter_swiftstrike",
+   "roles": [
+    "Physical"
+   ]
+  },
+  "Assass": {
+   "class": "Rogue",
+   "name": "Assassination Rogue",
+   "icon": "ability_rogue_eviscerate",
+   "roles": [
+    "Physical"
+   ]
+  },
+  "Combat": {
+   "class": "Rogue",
+   "name": "Combat Rogue",
+   "icon": "ability_backstab",
+   "roles": [
+    "Physical"
+   ]
+  },
+  "Sub": {
+   "class": "Rogue",
+   "name": "Subtlety Rogue",
+   "icon": "ability_stealth",
+   "roles": [
+    "Physical"
+   ]
+  },
+  "Disc": {
+   "class": "Priest",
+   "name": "Discipline Priest",
+   "icon": "spell_holy_wordfortitude",
+   "roles": [
+    "Healer"
+   ]
+  },
+  "HolyPriest": {
+   "class": "Priest",
+   "name": "Holy Priest",
+   "icon": "spell_holy_guardianspirit",
+   "roles": [
+    "Healer"
+   ]
+  },
+  "Shadow": {
+   "class": "Priest",
+   "name": "Shadow Priest",
+   "icon": "spell_shadow_shadowwordpain",
+   "roles": [
+    "Caster"
+   ]
+  },
+  "Ele": {
+   "class": "Shaman",
+   "name": "Elemental Shaman",
+   "icon": "spell_nature_lightning",
+   "roles": [
+    "Caster"
+   ]
+  },
+  "Enh": {
+   "class": "Shaman",
+   "name": "Enhancement Shaman",
+   "icon": "spell_nature_lightningshield",
+   "roles": [
+    "Physical"
+   ]
+  },
+  "RestoShaman": {
+   "class": "Shaman",
+   "name": "Restoration Shaman",
+   "icon": "spell_nature_magicimmunity",
+   "roles": [
+    "Healer"
+   ]
+  },
+  "Arcane": {
+   "class": "Mage",
+   "name": "Arcane Mage",
+   "icon": "spell_holy_magicalsentry",
+   "roles": [
+    "Caster"
+   ]
+  },
+  "Fire": {
+   "class": "Mage",
+   "name": "Fire Mage",
+   "icon": "spell_fire_flamebolt",
+   "roles": [
+    "Caster"
+   ]
+  },
+  "Frost": {
+   "class": "Mage",
+   "name": "Frost Mage",
+   "icon": "spell_frost_frostbolt02",
+   "roles": [
+    "Caster"
+   ]
+  },
+  "AffliLock": {
+   "class": "Warlock",
+   "name": "Affliction Warlock",
+   "icon": "spell_shadow_deathcoil",
+   "roles": [
+    "Caster"
+   ]
+  },
+  "DemoLock": {
+   "class": "Warlock",
+   "name": "Demonology Warlock",
+   "icon": "spell_shadow_metamorphosis",
+   "roles": [
+    "Caster"
+   ]
+  },
+  "DestroLock": {
+   "class": "Warlock",
+   "name": "Destruction Warlock",
+   "icon": "spell_shadow_rainoffire",
+   "roles": [
+    "Caster"
+   ]
+  },
+  "BalanceDruid": {
+   "class": "Druid",
+   "name": "Balance Druid",
+   "icon": "spell_nature_starfall",
+   "roles": [
+    "Caster"
+   ]
+  },
+  "FeralDruid": {
+   "class": "Druid",
+   "name": "Feral Druid",
+   "icon": "ability_racial_bearform",
+   "roles": [
+    "Physical",
+    "Tank"
+   ]
+  },
+  "RestoDruid": {
+   "class": "Druid",
+   "name": "Restoration Druid",
+   "icon": "spell_nature_healingtouch",
+   "roles": [
+    "Healer"
+   ]
+  }
+ },
+ "forms": {
+  "FeralDruid": {
+   "bear": {
+    "name": "Feral Druid (bear)",
+    "icon": "ability_racial_bearform"
+   },
+   "cat": {
+    "name": "Feral Druid (cat)",
+    "icon": "ability_druid_catform"
+   }
+  }
+ },
+ "races": {
+  "Orc": {
+   "name": "Orc",
+   "icon": "achievement_character_orc_male"
+  },
+  "Human": {
+   "name": "Human",
+   "icon": "achievement_character_human_female"
+  }
+ },
+ "aliases": {
+  "Survival Hunter": "Surv",
+  "Shadow Priest": "Shadow",
+  "Prot Paladin": "ProtPal",
+  "Prot Warrior": "ProtWarr",
+  "Destruction": "DestroLock",
+  "Affliction": "AffliLock",
+  "Ele Shaman": "Ele",
+  "BM Hunter": "BM",
+  "Elemental": "Ele",
+  "Feral Cat": {
+   "spec": "FeralDruid",
+   "form": "cat"
+  },
+  "Fire Lock": "DestroLock",
+  "Fire Mage": "Fire",
+  "H Priest": "HolyPriest",
+  "Prot Pal": "ProtPal",
+  "Prot War": "ProtWarr",
+  "R Shaman": "RestoShaman",
+  "Survival": "Surv",
+  "Balance": "BalanceDruid",
+  "Boomkin": "BalanceDruid",
+  "Enhance": "Enh",
+  "Paladin": "Paladin",
+  "R Druid": "RestoDruid",
+  "SPriest": "Shadow",
+  "Warlock": "Warlock",
+  "Warrior": "Warrior",
+  "Arcane": "Arcane",
+  "Hunter": "Hunter",
+  "Priest": "Priest",
+  "Shaman": "Shaman",
+  "Affli": "AffliLock",
+  "Druid": "Druid",
+  "Feral": "FeralDruid",
+  "H Pal": "HolyPal",
+  "Rogue": "Rogue",
+  "Arms": "Arms",
+  "Bear": {
+   "spec": "FeralDruid",
+   "form": "bear"
+  },
+  "Fury": "Fury",
+  "Lock": "Warlock",
+  "Mage": "Mage",
+  "Cat": {
+   "spec": "FeralDruid",
+   "form": "cat"
+  },
+  "Ele": "Ele",
+  "Ret": "Ret",
+  "War": "Warrior",
+  "BM": "BM"
+ }
+}
