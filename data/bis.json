@@ -73,6 +73,11 @@
      "bis": "multiPhase"
     },
     {
+     "id": 29305,
+     "item": "Band of the Eternal Sage",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought"
     },
@@ -130,6 +135,10 @@
   },
   "BalanceDruid": {
    "P3": [
+    {
+     "id": 29305,
+     "item": "Band of the Eternal Sage"
+    },
     {
      "id": 30914,
      "item": "Belt of the Crescent Moon",
@@ -268,6 +277,10 @@
      "item": "Antonidas's Aegis of Rapt Concentration"
     },
     {
+     "id": 29305,
+     "item": "Band of the Eternal Sage"
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
      "bis": "multiPhase"
@@ -393,6 +406,10 @@
      "bis": "multiPhase"
     },
     {
+     "id": 32345,
+     "item": "Dreadboots of the Legion"
+    },
+    {
      "id": 32232,
      "item": "Eternium Shell Bracers"
     },
@@ -418,6 +435,11 @@
      "id": 32253,
      "item": "Legionkiller",
      "bis": "expansion"
+    },
+    {
+     "id": 32268,
+     "item": "Myrmidon's Treads",
+     "bis": "multiPhase"
     },
     {
      "id": 32362,
@@ -450,6 +472,10 @@
     {
      "id": 30882,
      "item": "Bastion of Light"
+    },
+    {
+     "id": 32339,
+     "item": "Belt of Primal Majesty"
     },
     {
      "id": 32528,
@@ -553,6 +579,11 @@
   "Surv": {
    "P3": [
     {
+     "id": 29301,
+     "item": "Band of the Eternal Champion",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32336,
      "item": "Black Bow of the Betrayer"
     },
@@ -613,6 +644,15 @@
      "id": 30863,
      "item": "Deadly Cuffs",
      "bis": "multiPhase"
+    },
+    {
+     "id": 32345,
+     "item": "Dreadboots of the Legion",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30861,
+     "item": "Furious Shackles"
     },
     {
      "id": 32341,
@@ -676,6 +716,15 @@
      "bis": "multiPhase"
     },
     {
+     "id": 32345,
+     "item": "Dreadboots of the Legion",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30861,
+     "item": "Furious Shackles"
+    },
+    {
      "id": 32278,
      "item": "Grips of Silent Justice"
     },
@@ -687,6 +736,11 @@
     {
      "id": 32505,
      "item": "Madness of the Betrayer",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32323,
+     "item": "Shadowmoon Destroyer's Drape",
      "bis": "multiPhase"
     },
     {
@@ -714,6 +768,10 @@
   },
   "HolyPal": {
    "P3": [
+    {
+     "id": 29309,
+     "item": "Band of the Eternal Restorer"
+    },
     {
      "id": 30882,
      "item": "Bastion of Light"
@@ -790,6 +848,11 @@
      "bis": "multiPhase"
     },
     {
+     "id": 32342,
+     "item": "Girdle of Mighty Resolve",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32362,
      "item": "Pendant of Titans",
      "bis": "multiPhase"
@@ -853,6 +916,10 @@
      "bis": "multiPhase"
     },
     {
+     "id": 32345,
+     "item": "Dreadboots of the Legion"
+    },
+    {
      "id": 30905,
      "item": "Midnight Chestguard",
      "bis": "multiPhase"
@@ -861,6 +928,10 @@
      "id": 32366,
      "item": "Shadowmaster's Boots",
      "bis": "multiPhase"
+    },
+    {
+     "id": 32323,
+     "item": "Shadowmoon Destroyer's Drape"
     },
     {
      "id": 32497,
@@ -879,6 +950,11 @@
   },
   "BM": {
    "P3": [
+    {
+     "id": 29301,
+     "item": "Band of the Eternal Champion",
+     "bis": "multiPhase"
+    },
     {
      "id": 30881,
      "item": "Blade of Infamy"
@@ -924,6 +1000,11 @@
      "bis": "multiPhase"
     },
     {
+     "id": 32323,
+     "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32497,
      "item": "Stormrage Signet Ring"
     }
@@ -931,6 +1012,10 @@
   },
   "Marks": {
    "P3": [
+    {
+     "id": 29301,
+     "item": "Band of the Eternal Champion"
+    },
     {
      "id": 30881,
      "item": "Blade of Infamy"
@@ -972,6 +1057,10 @@
      "item": "Shadowmaster's Boots"
     },
     {
+     "id": 32323,
+     "item": "Shadowmoon Destroyer's Drape"
+    },
+    {
      "id": 32497,
      "item": "Stormrage Signet Ring"
     }
@@ -979,6 +1068,10 @@
   },
   "Assass": {
    "P3": [
+    {
+     "id": 29301,
+     "item": "Band of the Eternal Champion"
+    },
     {
      "id": 32369,
      "item": "Blade of Savagery",
@@ -1003,6 +1096,10 @@
      "id": 32366,
      "item": "Shadowmaster's Boots",
      "bis": "multiPhase"
+    },
+    {
+     "id": 32323,
+     "item": "Shadowmoon Destroyer's Drape"
     },
     {
      "id": 32471,
@@ -1026,6 +1123,10 @@
   "Combat": {
    "P3": [
     {
+     "id": 29301,
+     "item": "Band of the Eternal Champion"
+    },
+    {
      "id": 32369,
      "item": "Blade of Savagery",
      "bis": "expansion"
@@ -1049,6 +1150,10 @@
      "id": 32366,
      "item": "Shadowmaster's Boots",
      "bis": "multiPhase"
+    },
+    {
+     "id": 32323,
+     "item": "Shadowmoon Destroyer's Drape"
     },
     {
      "id": 32471,
@@ -1072,6 +1177,10 @@
   "Sub": {
    "P3": [
     {
+     "id": 29301,
+     "item": "Band of the Eternal Champion"
+    },
+    {
      "id": 32369,
      "item": "Blade of Savagery",
      "bis": "expansion"
@@ -1095,6 +1204,10 @@
      "id": 32366,
      "item": "Shadowmaster's Boots",
      "bis": "multiPhase"
+    },
+    {
+     "id": 32323,
+     "item": "Shadowmoon Destroyer's Drape"
     },
     {
      "id": 32471,
@@ -1238,6 +1351,10 @@
   "Enh": {
    "P3": [
     {
+     "id": 29301,
+     "item": "Band of the Eternal Champion"
+    },
+    {
      "id": 32574,
      "item": "Bindings of Lightning Reflexes"
     },
@@ -1290,6 +1407,11 @@
     {
      "id": 32366,
      "item": "Shadowmaster's Boots"
+    },
+    {
+     "id": 32323,
+     "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
     },
     {
      "id": 32510,
@@ -1371,6 +1493,10 @@
      "item": "Anetheron's Noose"
     },
     {
+     "id": 29305,
+     "item": "Band of the Eternal Sage"
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought"
     },
@@ -1447,6 +1573,10 @@
      "item": "Apostle of Argus"
     },
     {
+     "id": 32339,
+     "item": "Belt of Primal Majesty"
+    },
+    {
      "id": 32528,
      "item": "Blessed Band of Karabor"
     },
@@ -1461,6 +1591,10 @@
     {
      "id": 32582,
      "item": "Bracers of Renewed Life"
+    },
+    {
+     "id": 32329,
+     "item": "Cowl of Benevolence"
     },
     {
      "id": 32500,
@@ -1491,6 +1625,11 @@
   "FeralCat": {
    "P3": [
     {
+     "id": 29301,
+     "item": "Band of the Eternal Champion",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32260,
      "item": "Choker of Endless Nightmares"
     },
@@ -1507,9 +1646,17 @@
      "item": "Madness of the Betrayer"
     },
     {
+     "id": 32252,
+     "item": "Nether Shadow Tunic"
+    },
+    {
      "id": 32366,
      "item": "Shadowmaster's Boots",
      "bis": "multiPhase"
+    },
+    {
+     "id": 32323,
+     "item": "Shadowmoon Destroyer's Drape"
     },
     {
      "id": 32497,

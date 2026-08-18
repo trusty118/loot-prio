@@ -713,6 +713,32 @@
  },
  {
   "zone": "Black Temple",
+  "boss": "Supremus",
+  "item": "Wraps of Precise Flight",
+  "id": 32251,
+  "wowhead": "https://www.wowhead.com/tbc/item=32251",
+  "slot": "Wrist",
+  "type": "Mail",
+  "role": "Physical",
+  "priority": [],
+  "unsourced": true,
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Supremus",
+  "item": "Nether Shadow Tunic",
+  "id": 32252,
+  "wowhead": "https://www.wowhead.com/tbc/item=32252",
+  "slot": "Chest",
+  "type": "Leather",
+  "role": "Physical",
+  "priority": [],
+  "unsourced": true,
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+ },
+ {
+  "zone": "Black Temple",
   "boss": "Shade of Akama",
   "item": "Praetorian's Legguards",
   "id": 32263,
@@ -894,6 +920,19 @@
  },
  {
   "zone": "Black Temple",
+  "boss": "Shade of Akama",
+  "item": "Myrmidon's Treads",
+  "id": 32268,
+  "wowhead": "https://www.wowhead.com/tbc/item=32268",
+  "slot": "Feet",
+  "type": "Plate",
+  "role": "Tank",
+  "priority": [],
+  "unsourced": true,
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+ },
+ {
+  "zone": "Black Temple",
   "boss": "Teron Gorefiend",
   "item": "Insidious Bands",
   "id": 32324,
@@ -1059,6 +1098,32 @@
    }
   ],
   "notes": "Mitigation gun; good on Mother Shahraz."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Teron Gorefiend",
+  "item": "Shadowmoon Destroyer's Drape",
+  "id": 32323,
+  "wowhead": "https://www.wowhead.com/tbc/item=32323",
+  "slot": "Back",
+  "type": "Cloak",
+  "role": "Physical",
+  "priority": [],
+  "unsourced": true,
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Teron Gorefiend",
+  "item": "Cowl of Benevolence",
+  "id": 32329,
+  "wowhead": "https://www.wowhead.com/tbc/item=32329",
+  "slot": "Head",
+  "type": "Cloth",
+  "role": "Healer",
+  "priority": [],
+  "unsourced": true,
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
  },
  {
   "zone": "Black Temple",
@@ -1229,6 +1294,32 @@
    }
   ],
   "notes": "Good mitigation if no Vashj belt."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Gurtogg Bloodboil",
+  "item": "Belt of Primal Majesty",
+  "id": 32339,
+  "wowhead": "https://www.wowhead.com/tbc/item=32339",
+  "slot": "Waist",
+  "type": "Leather",
+  "role": "Healer",
+  "priority": [],
+  "unsourced": true,
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Gurtogg Bloodboil",
+  "item": "Girdle of Mighty Resolve",
+  "id": 32342,
+  "wowhead": "https://www.wowhead.com/tbc/item=32342",
+  "slot": "Waist",
+  "type": "Plate",
+  "role": "Tank",
+  "priority": [],
+  "unsourced": true,
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
  },
  {
   "zone": "Black Temple",
@@ -1457,6 +1548,19 @@
    }
   ],
   "notes": "BiS healing wand over the Morgram wand."
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Reliquary of Souls",
+  "item": "Dreadboots of the Legion",
+  "id": 32345,
+  "wowhead": "https://www.wowhead.com/tbc/item=32345",
+  "slot": "Feet",
+  "type": "Plate",
+  "role": "Physical",
+  "priority": [],
+  "unsourced": true,
+  "notes": "Drops from Essence of Anger, the third phase of the encounter. Not covered in the source guide; added from the Phase 3 BiS audit."
  },
  {
   "zone": "Black Temple",
@@ -2555,6 +2659,62 @@
  },
  {
   "zone": "Mount Hyjal",
+  "boss": "Trash",
+  "item": "Band of the Eternal Defender",
+  "id": 29297,
+  "wowhead": "https://www.wowhead.com/tbc/item=29297",
+  "slot": "Finger",
+  "type": "Ring",
+  "role": "Tank",
+  "priority": [],
+  "unsourced": true,
+  "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "unique": true
+ },
+ {
+  "zone": "Mount Hyjal",
+  "boss": "Trash",
+  "item": "Band of the Eternal Champion",
+  "id": 29301,
+  "wowhead": "https://www.wowhead.com/tbc/item=29301",
+  "slot": "Finger",
+  "type": "Ring",
+  "role": "Physical",
+  "priority": [],
+  "unsourced": true,
+  "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "unique": true
+ },
+ {
+  "zone": "Mount Hyjal",
+  "boss": "Trash",
+  "item": "Band of the Eternal Sage",
+  "id": 29305,
+  "wowhead": "https://www.wowhead.com/tbc/item=29305",
+  "slot": "Finger",
+  "type": "Ring",
+  "role": "Caster",
+  "priority": [],
+  "unsourced": true,
+  "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "unique": true
+ },
+ {
+  "zone": "Mount Hyjal",
+  "boss": "Trash",
+  "item": "Band of the Eternal Restorer",
+  "id": 29309,
+  "wowhead": "https://www.wowhead.com/tbc/item=29309",
+  "slot": "Finger",
+  "type": "Ring",
+  "role": "Healer",
+  "priority": [],
+  "unsourced": true,
+  "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "unique": true
+ },
+ {
+  "zone": "Mount Hyjal",
   "boss": "Rage Winterchill",
   "item": "Bracers of Martyrdom",
   "id": 30871,
@@ -2741,6 +2901,19 @@
    }
   ],
   "notes": "BiS Caster OH. Give to whoever isn't getting Zhar'doom."
+ },
+ {
+  "zone": "Mount Hyjal",
+  "boss": "Rage Winterchill",
+  "item": "Furious Shackles",
+  "id": 30861,
+  "wowhead": "https://www.wowhead.com/tbc/item=30861",
+  "slot": "Wrist",
+  "type": "Plate",
+  "role": "Physical",
+  "priority": [],
+  "unsourced": true,
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
  },
  {
   "zone": "Mount Hyjal",

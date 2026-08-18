@@ -38,6 +38,10 @@
      table the remaining cells shift into the wrong columns. */
   var SHOW_ROLE = false;
 
+  /* shown on rows the source guide never covered, and in the search haystack so
+     the set is reachable by typing it */
+  var UNSOURCED_TAG = "not in the guide";
+
   var ZONE_ORDER = ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"];
   var ZONE_LABEL = { "Crafted (Heart of Darkness)": "Crafted" };
   var ROLE_ORDER = ["Physical", "Caster", "Healer", "Tank", "Tier"];
@@ -503,7 +507,8 @@
       var q = state.q.toLowerCase();
       /* search both the raw and displayed forms, so "2H mace" and "mace" both hit */
       var hay = [rec.item, rec.boss, rec.zone, priorityText(rec.priority), rec.notes,
-                 rec.slot, slotGroup(rec.slot), rec.type, typeLabel(rec), rec.role]
+                 rec.slot, slotGroup(rec.slot), rec.type, typeLabel(rec), rec.role,
+                 rec.unsourced ? UNSOURCED_TAG : ""]
         .join("   ").toLowerCase();
       if (hay.indexOf(q) === -1) return false;
     }
@@ -859,6 +864,19 @@
     a.rel = "noopener";
     a.innerHTML = highlight(rec.item, state.q);
     td.appendChild(a);
+
+    /* These 13 rows are real T6 loot the source guide never mentions, found by
+       auditing the BiS guides against this dataset. They are worth listing, but
+       the whole point of the site is that the priorities are one person's calls -
+       so a row carrying none of his has to say so rather than read as an item he
+       had no opinion on. */
+    if (rec.unsourced) {
+      var tag = document.createElement("span");
+      tag.className = "item-tag";
+      tag.textContent = UNSOURCED_TAG;
+      tag.dataset.tip = "Not in the source guide - added from the Phase 3 BiS audit";
+      td.appendChild(tag);
+    }
     return td;
   }
 

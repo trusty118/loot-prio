@@ -39,6 +39,21 @@ def main():
         if prio:
             with_priority += 1
 
+        # Two different things look like an empty priority, and must not be confused:
+        # the creator saying "whoever needs it" (his reasoning is in the notes), and
+        # an item he never covered at all (marked unsourced, from the BiS audit).
+        # An empty list with neither says nothing at all - a warning rather than an
+        # error, because the fix is to go back to the source video, and inventing a
+        # note would be worse than leaving the gap visible.
+        if not prio and not rec.get("unsourced") and not rec.get("notes"):
+            warnings.append(
+                f"{where}: empty priority and no notes - the guide's wording for this "
+                f"one was never recorded"
+            )
+        # the marker means "the guide gave no call", so a call contradicts it
+        if rec.get("unsourced") and prio:
+            errors.append(f"{where}: marked unsourced but has a priority - drop the marker")
+
         seen = set()
         for i, e in enumerate(prio):
             entries += 1
