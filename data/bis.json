@@ -3,57 +3,1538 @@
  "specs": {
   "AffliLock": {
    "P3": [
-    { "id": 32527, "item": "Ring of Ancient Knowledge" }
+    {
+     "id": 30888,
+     "item": "Anetheron's Noose"
+    },
+    {
+     "id": 32586,
+     "item": "Bracers of Nimble Thought"
+    },
+    {
+     "id": 30872,
+     "item": "Chronicle of Dark Secrets"
+    },
+    {
+     "id": 32331,
+     "item": "Cloak of the Illidari Council"
+    },
+    {
+     "id": 32525,
+     "item": "Cowl of the Illidari High Lord"
+    },
+    {
+     "id": 30916,
+     "item": "Leggings of Channeled Elements"
+    },
+    {
+     "id": 32367,
+     "item": "Leggings of Devastation"
+    },
+    {
+     "id": 32590,
+     "item": "Nethervoid Cloak"
+    },
+    {
+     "id": 32527,
+     "item": "Ring of Ancient Knowledge"
+    },
+    {
+     "id": 32524,
+     "item": "Shroud of the Highborne"
+    },
+    {
+     "id": 32239,
+     "item": "Slippers of the Seacaller"
+    },
+    {
+     "id": 30910,
+     "item": "Tempest of Chaos"
+    },
+    {
+     "id": 32349,
+     "item": "Translucent Spellthread Necklace"
+    },
+    {
+     "id": 32256,
+     "item": "Waistwrap of Infinity"
+    },
+    {
+     "id": 32374,
+     "item": "Zhar'doom, Greatstaff of the Devourer"
+    }
    ]
   },
   "Arcane": {
    "P3": [
-    { "id": 32527, "item": "Ring of Ancient Knowledge" }
+    {
+     "id": 30888,
+     "item": "Anetheron's Noose",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32586,
+     "item": "Bracers of Nimble Thought"
+    },
+    {
+     "id": 30872,
+     "item": "Chronicle of Dark Secrets"
+    },
+    {
+     "id": 32331,
+     "item": "Cloak of the Illidari Council",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30870,
+     "item": "Cuffs of Devastation",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30916,
+     "item": "Leggings of Channeled Elements"
+    },
+    {
+     "id": 32527,
+     "item": "Ring of Ancient Knowledge"
+    },
+    {
+     "id": 32524,
+     "item": "Shroud of the Highborne"
+    },
+    {
+     "id": 32239,
+     "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30910,
+     "item": "Tempest of Chaos"
+    },
+    {
+     "id": 32483,
+     "item": "The Skull of Gul'dan",
+     "bis": "expansion"
+    },
+    {
+     "id": 32256,
+     "item": "Waistwrap of Infinity"
+    },
+    {
+     "id": 32374,
+     "item": "Zhar'doom, Greatstaff of the Devourer",
+     "bis": "multiPhase"
+    }
    ]
   },
   "BalanceDruid": {
    "P3": [
-    { "id": 32527, "item": "Ring of Ancient Knowledge" }
+    {
+     "id": 30914,
+     "item": "Belt of the Crescent Moon",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32586,
+     "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30872,
+     "item": "Chronicle of Dark Secrets"
+    },
+    {
+     "id": 32331,
+     "item": "Cloak of the Illidari Council",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 34009,
+     "item": "Hammer of Judgement"
+    },
+    {
+     "id": 30916,
+     "item": "Leggings of Channeled Elements",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32527,
+     "item": "Ring of Ancient Knowledge"
+    },
+    {
+     "id": 32524,
+     "item": "Shroud of the Highborne"
+    },
+    {
+     "id": 32239,
+     "item": "Slippers of the Seacaller"
+    },
+    {
+     "id": 32237,
+     "item": "The Maelstrom's Fury"
+    },
+    {
+     "id": 32483,
+     "item": "The Skull of Gul'dan",
+     "bis": "expansion"
+    },
+    {
+     "id": 32374,
+     "item": "Zhar'doom, Greatstaff of the Devourer",
+     "bis": "multiPhase"
+    }
    ]
   },
   "DestroLock": {
    "P3": [
-    { "id": 32527, "item": "Ring of Ancient Knowledge" }
+    {
+     "id": 30888,
+     "item": "Anetheron's Noose",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32586,
+     "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30872,
+     "item": "Chronicle of Dark Secrets"
+    },
+    {
+     "id": 32331,
+     "item": "Cloak of the Illidari Council"
+    },
+    {
+     "id": 32525,
+     "item": "Cowl of the Illidari High Lord"
+    },
+    {
+     "id": 32589,
+     "item": "Hellfire-Encased Pendant"
+    },
+    {
+     "id": 30916,
+     "item": "Leggings of Channeled Elements"
+    },
+    {
+     "id": 32367,
+     "item": "Leggings of Devastation"
+    },
+    {
+     "id": 32590,
+     "item": "Nethervoid Cloak"
+    },
+    {
+     "id": 32527,
+     "item": "Ring of Ancient Knowledge"
+    },
+    {
+     "id": 32524,
+     "item": "Shroud of the Highborne",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32239,
+     "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30910,
+     "item": "Tempest of Chaos"
+    },
+    {
+     "id": 32349,
+     "item": "Translucent Spellthread Necklace"
+    },
+    {
+     "id": 32256,
+     "item": "Waistwrap of Infinity"
+    },
+    {
+     "id": 32374,
+     "item": "Zhar'doom, Greatstaff of the Devourer",
+     "bis": "multiPhase"
+    }
    ]
   },
   "Ele": {
    "P3": [
-    { "id": 32527, "item": "Ring of Ancient Knowledge" }
+    {
+     "id": 30909,
+     "item": "Antonidas's Aegis of Rapt Concentration"
+    },
+    {
+     "id": 32586,
+     "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30872,
+     "item": "Chronicle of Dark Secrets"
+    },
+    {
+     "id": 32331,
+     "item": "Cloak of the Illidari Council",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32276,
+     "item": "Flashfire Girdle",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30916,
+     "item": "Leggings of Channeled Elements",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32587,
+     "item": "Mantle of Nimble Thought"
+    },
+    {
+     "id": 32352,
+     "item": "Naturewarden's Treads",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32527,
+     "item": "Ring of Ancient Knowledge"
+    },
+    {
+     "id": 32524,
+     "item": "Shroud of the Highborne"
+    },
+    {
+     "id": 32239,
+     "item": "Slippers of the Seacaller"
+    },
+    {
+     "id": 32483,
+     "item": "The Skull of Gul'dan",
+     "bis": "expansion"
+    },
+    {
+     "id": 32330,
+     "item": "Totem of Ancestral Guidance",
+     "bis": "expansion"
+    },
+    {
+     "id": 32374,
+     "item": "Zhar'doom, Greatstaff of the Devourer",
+     "bis": "multiPhase"
+    }
    ]
   },
   "FeralDruid": {
    "P3": [
-    { "id": 30883, "item": "Pillar of Ferocity" }
+    {
+     "id": 32260,
+     "item": "Choker of Endless Nightmares"
+    },
+    {
+     "id": 32591,
+     "item": "Choker of Serrated Blades"
+    },
+    {
+     "id": 32257,
+     "item": "Idol of the White Stag"
+    },
+    {
+     "id": 32324,
+     "item": "Insidious Bands"
+    },
+    {
+     "id": 32505,
+     "item": "Madness of the Betrayer"
+    },
+    {
+     "id": 32362,
+     "item": "Pendant of Titans"
+    },
+    {
+     "id": 30883,
+     "item": "Pillar of Ferocity"
+    },
+    {
+     "id": 32266,
+     "item": "Ring of Deceitful Intent"
+    },
+    {
+     "id": 32366,
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32501,
+     "item": "Shadowmoon Insignia",
+     "bis": "expansion"
+    },
+    {
+     "id": 32497,
+     "item": "Stormrage Signet Ring"
+    },
+    {
+     "id": 32593,
+     "item": "Treads of the Den Mother",
+     "bis": "multiPhase"
+    }
    ]
   },
   "Fire": {
    "P3": [
-    { "id": 32527, "item": "Ring of Ancient Knowledge" }
+    {
+     "id": 32586,
+     "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30872,
+     "item": "Chronicle of Dark Secrets",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32525,
+     "item": "Cowl of the Illidari High Lord"
+    },
+    {
+     "id": 32589,
+     "item": "Hellfire-Encased Pendant",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32527,
+     "item": "Ring of Ancient Knowledge"
+    },
+    {
+     "id": 32524,
+     "item": "Shroud of the Highborne"
+    },
+    {
+     "id": 32239,
+     "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30910,
+     "item": "Tempest of Chaos",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32483,
+     "item": "The Skull of Gul'dan",
+     "bis": "expansion"
+    },
+    {
+     "id": 32349,
+     "item": "Translucent Spellthread Necklace"
+    },
+    {
+     "id": 32374,
+     "item": "Zhar'doom, Greatstaff of the Devourer"
+    }
    ]
   },
   "ProtWarr": {
    "P3": [
-    { "id": 32375, "item": "Bulwark of Azzinoth", "bis": "expansion" }
+    {
+     "id": 32375,
+     "item": "Bulwark of Azzinoth",
+     "bis": "expansion"
+    },
+    {
+     "id": 32232,
+     "item": "Eternium Shell Bracers"
+    },
+    {
+     "id": 32521,
+     "item": "Faceplate of the Impenetrable"
+    },
+    {
+     "id": 32280,
+     "item": "Gauntlets of Enforcement",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32333,
+     "item": "Girdle of Stability",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30896,
+     "item": "Glory of the Defender"
+    },
+    {
+     "id": 32253,
+     "item": "Legionkiller",
+     "bis": "expansion"
+    },
+    {
+     "id": 32362,
+     "item": "Pendant of Titans"
+    },
+    {
+     "id": 34010,
+     "item": "Pepe's Shroud of Pacification"
+    },
+    {
+     "id": 32263,
+     "item": "Praetorian's Legguards"
+    },
+    {
+     "id": 32254,
+     "item": "The Brutalizer"
+    },
+    {
+     "id": 30874,
+     "item": "The Unbreakable Will"
+    }
    ]
   },
   "RestoShaman": {
    "P3": [
-    { "id": 32524, "item": "Shroud of the Highborne", "bis": "multiPhase" }
+    {
+     "id": 30895,
+     "item": "Angelista's Sash"
+    },
+    {
+     "id": 30882,
+     "item": "Bastion of Light"
+    },
+    {
+     "id": 32528,
+     "item": "Blessed Band of Karabor"
+    },
+    {
+     "id": 32609,
+     "item": "Boots of the Divine Light"
+    },
+    {
+     "id": 32328,
+     "item": "Botanist's Gloves of Growth"
+    },
+    {
+     "id": 32582,
+     "item": "Bracers of Renewed Life"
+    },
+    {
+     "id": 32500,
+     "item": "Crystal Spire of Karabor"
+    },
+    {
+     "id": 32255,
+     "item": "Felstone Bulwark"
+    },
+    {
+     "id": 32577,
+     "item": "Living Earth Bindings"
+    },
+    {
+     "id": 32496,
+     "item": "Memento of Tyrande"
+    },
+    {
+     "id": 32370,
+     "item": "Nadina's Pendant of Purity"
+    },
+    {
+     "id": 32258,
+     "item": "Naturalist's Preserving Cinch"
+    },
+    {
+     "id": 32524,
+     "item": "Shroud of the Highborne",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32584,
+     "item": "Swiftheal Wraps"
+    }
    ]
   },
   "Shadow": {
    "P3": [
-    { "id": 32527, "item": "Ring of Ancient Knowledge" }
+    {
+     "id": 32586,
+     "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30916,
+     "item": "Leggings of Channeled Elements",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32590,
+     "item": "Nethervoid Cloak",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32527,
+     "item": "Ring of Ancient Knowledge"
+    },
+    {
+     "id": 32239,
+     "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32483,
+     "item": "The Skull of Gul'dan",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32349,
+     "item": "Translucent Spellthread Necklace"
+    },
+    {
+     "id": 32256,
+     "item": "Waistwrap of Infinity",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32374,
+     "item": "Zhar'doom, Greatstaff of the Devourer",
+     "bis": "multiPhase"
+    }
    ]
   },
   "Surv": {
    "P3": [
-    { "id": 32336, "item": "Black Bow of the Betrayer" }
+    {
+     "id": 32336,
+     "item": "Black Bow of the Betrayer"
+    },
+    {
+     "id": 30881,
+     "item": "Blade of Infamy"
+    },
+    {
+     "id": 30900,
+     "item": "Bow-stitched Leggings"
+    },
+    {
+     "id": 30906,
+     "item": "Bristleblitz Striker",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30879,
+     "item": "Don Alejandro's Money Belt",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32248,
+     "item": "Halberd of Desolation"
+    },
+    {
+     "id": 32324,
+     "item": "Insidious Bands",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32505,
+     "item": "Madness of the Betrayer"
+    },
+    {
+     "id": 32366,
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
+    }
+   ]
+  },
+  "Arms": {
+   "P3": [
+    {
+     "id": 32574,
+     "item": "Bindings of Lightning Reflexes"
+    },
+    {
+     "id": 30902,
+     "item": "Cataclysm's Edge",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32591,
+     "item": "Choker of Serrated Blades"
+    },
+    {
+     "id": 30863,
+     "item": "Deadly Cuffs",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32341,
+     "item": "Leggings of Divine Retribution",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32505,
+     "item": "Madness of the Betrayer",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32366,
+     "item": "Shadowmaster's Boots"
+    },
+    {
+     "id": 32497,
+     "item": "Stormrage Signet Ring",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32326,
+     "item": "Twisted Blades of Zarak"
+    },
+    {
+     "id": 32335,
+     "item": "Unstoppable Aggressor's Ring"
+    },
+    {
+     "id": 32837,
+     "item": "Warglaive of Azzinoth"
+    },
+    {
+     "id": 32838,
+     "item": "Warglaive of Azzinoth"
+    }
+   ]
+  },
+  "Fury": {
+   "P3": [
+    {
+     "id": 32574,
+     "item": "Bindings of Lightning Reflexes"
+    },
+    {
+     "id": 32260,
+     "item": "Choker of Endless Nightmares",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32591,
+     "item": "Choker of Serrated Blades"
+    },
+    {
+     "id": 32235,
+     "item": "Cursed Vision of Sargeras"
+    },
+    {
+     "id": 30863,
+     "item": "Deadly Cuffs",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32278,
+     "item": "Grips of Silent Justice"
+    },
+    {
+     "id": 32341,
+     "item": "Leggings of Divine Retribution",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32505,
+     "item": "Madness of the Betrayer",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32497,
+     "item": "Stormrage Signet Ring",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32326,
+     "item": "Twisted Blades of Zarak"
+    },
+    {
+     "id": 32335,
+     "item": "Unstoppable Aggressor's Ring"
+    },
+    {
+     "id": 32837,
+     "item": "Warglaive of Azzinoth"
+    },
+    {
+     "id": 32838,
+     "item": "Warglaive of Azzinoth"
+    }
+   ]
+  },
+  "HolyPal": {
+   "P3": [
+    {
+     "id": 30882,
+     "item": "Bastion of Light"
+    },
+    {
+     "id": 30862,
+     "item": "Blessed Adamantite Bracers"
+    },
+    {
+     "id": 32528,
+     "item": "Blessed Band of Karabor"
+    },
+    {
+     "id": 32500,
+     "item": "Crystal Spire of Karabor"
+    },
+    {
+     "id": 32255,
+     "item": "Felstone Bulwark"
+    },
+    {
+     "id": 30897,
+     "item": "Girdle of Hope"
+    },
+    {
+     "id": 32496,
+     "item": "Memento of Tyrande"
+    },
+    {
+     "id": 32370,
+     "item": "Nadina's Pendant of Purity"
+    },
+    {
+     "id": 32243,
+     "item": "Pearl Inlaid Boots"
+    },
+    {
+     "id": 32238,
+     "item": "Ring of Calming Waves"
+    },
+    {
+     "id": 30911,
+     "item": "Scepter of Purification"
+    },
+    {
+     "id": 34012,
+     "item": "Shroud of the Final Stand"
+    },
+    {
+     "id": 32524,
+     "item": "Shroud of the Highborne"
+    }
+   ]
+  },
+  "ProtPal": {
+   "P3": [
+    {
+     "id": 30909,
+     "item": "Antonidas's Aegis of Rapt Concentration"
+    },
+    {
+     "id": 32375,
+     "item": "Bulwark of Azzinoth",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32232,
+     "item": "Eternium Shell Bracers",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32521,
+     "item": "Faceplate of the Impenetrable",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32362,
+     "item": "Pendant of Titans",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 34010,
+     "item": "Pepe's Shroud of Pacification"
+    },
+    {
+     "id": 32263,
+     "item": "Praetorian's Legguards"
+    },
+    {
+     "id": 32501,
+     "item": "Shadowmoon Insignia"
+    },
+    {
+     "id": 30910,
+     "item": "Tempest of Chaos",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32279,
+     "item": "The Seeker's Wristguards"
+    },
+    {
+     "id": 32245,
+     "item": "Tide-stomper's Greaves",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32368,
+     "item": "Tome of the Lightbringer"
+    }
+   ]
+  },
+  "Ret": {
+   "P3": [
+    {
+     "id": 32526,
+     "item": "Band of Devastation",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32574,
+     "item": "Bindings of Lightning Reflexes",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30900,
+     "item": "Bow-stitched Leggings",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32260,
+     "item": "Choker of Endless Nightmares"
+    },
+    {
+     "id": 32235,
+     "item": "Cursed Vision of Sargeras",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30905,
+     "item": "Midnight Chestguard",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32366,
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32497,
+     "item": "Stormrage Signet Ring"
+    },
+    {
+     "id": 32332,
+     "item": "Torch of the Damned",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32335,
+     "item": "Unstoppable Aggressor's Ring"
+    }
+   ]
+  },
+  "BM": {
+   "P3": [
+    {
+     "id": 30881,
+     "item": "Blade of Infamy"
+    },
+    {
+     "id": 30901,
+     "item": "Boundless Agony"
+    },
+    {
+     "id": 30906,
+     "item": "Bristleblitz Striker",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32591,
+     "item": "Choker of Serrated Blades"
+    },
+    {
+     "id": 32235,
+     "item": "Cursed Vision of Sargeras",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30879,
+     "item": "Don Alejandro's Money Belt"
+    },
+    {
+     "id": 32248,
+     "item": "Halberd of Desolation"
+    },
+    {
+     "id": 32324,
+     "item": "Insidious Bands",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32505,
+     "item": "Madness of the Betrayer"
+    },
+    {
+     "id": 32366,
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32497,
+     "item": "Stormrage Signet Ring"
+    }
+   ]
+  },
+  "Marks": {
+   "P3": [
+    {
+     "id": 30881,
+     "item": "Blade of Infamy"
+    },
+    {
+     "id": 30901,
+     "item": "Boundless Agony"
+    },
+    {
+     "id": 30906,
+     "item": "Bristleblitz Striker"
+    },
+    {
+     "id": 32591,
+     "item": "Choker of Serrated Blades"
+    },
+    {
+     "id": 32235,
+     "item": "Cursed Vision of Sargeras"
+    },
+    {
+     "id": 30879,
+     "item": "Don Alejandro's Money Belt"
+    },
+    {
+     "id": 32248,
+     "item": "Halberd of Desolation"
+    },
+    {
+     "id": 32324,
+     "item": "Insidious Bands"
+    },
+    {
+     "id": 32505,
+     "item": "Madness of the Betrayer"
+    },
+    {
+     "id": 32366,
+     "item": "Shadowmaster's Boots"
+    },
+    {
+     "id": 32497,
+     "item": "Stormrage Signet Ring"
+    }
+   ]
+  },
+  "Assass": {
+   "P3": [
+    {
+     "id": 32369,
+     "item": "Blade of Savagery",
+     "bis": "expansion"
+    },
+    {
+     "id": 32260,
+     "item": "Choker of Endless Nightmares",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32235,
+     "item": "Cursed Vision of Sargeras",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32324,
+     "item": "Insidious Bands",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32366,
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32471,
+     "item": "Shard of Azzinoth"
+    },
+    {
+     "id": 32497,
+     "item": "Stormrage Signet Ring",
+     "bis": "expansion"
+    },
+    {
+     "id": 32837,
+     "item": "Warglaive of Azzinoth"
+    },
+    {
+     "id": 32838,
+     "item": "Warglaive of Azzinoth"
+    }
+   ]
+  },
+  "Combat": {
+   "P3": [
+    {
+     "id": 32369,
+     "item": "Blade of Savagery",
+     "bis": "expansion"
+    },
+    {
+     "id": 32260,
+     "item": "Choker of Endless Nightmares",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32235,
+     "item": "Cursed Vision of Sargeras",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32324,
+     "item": "Insidious Bands",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32366,
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32471,
+     "item": "Shard of Azzinoth"
+    },
+    {
+     "id": 32497,
+     "item": "Stormrage Signet Ring",
+     "bis": "expansion"
+    },
+    {
+     "id": 32837,
+     "item": "Warglaive of Azzinoth"
+    },
+    {
+     "id": 32838,
+     "item": "Warglaive of Azzinoth"
+    }
+   ]
+  },
+  "Sub": {
+   "P3": [
+    {
+     "id": 32369,
+     "item": "Blade of Savagery",
+     "bis": "expansion"
+    },
+    {
+     "id": 32260,
+     "item": "Choker of Endless Nightmares",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32235,
+     "item": "Cursed Vision of Sargeras",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32324,
+     "item": "Insidious Bands",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32366,
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32471,
+     "item": "Shard of Azzinoth"
+    },
+    {
+     "id": 32497,
+     "item": "Stormrage Signet Ring",
+     "bis": "expansion"
+    },
+    {
+     "id": 32837,
+     "item": "Warglaive of Azzinoth"
+    },
+    {
+     "id": 32838,
+     "item": "Warglaive of Azzinoth"
+    }
+   ]
+  },
+  "Disc": {
+   "P3": [
+    {
+     "id": 30895,
+     "item": "Angelista's Sash"
+    },
+    {
+     "id": 32519,
+     "item": "Belt of Divine Guidance"
+    },
+    {
+     "id": 32528,
+     "item": "Blessed Band of Karabor"
+    },
+    {
+     "id": 32609,
+     "item": "Boots of the Divine Light"
+    },
+    {
+     "id": 30871,
+     "item": "Bracers of Martyrdom"
+    },
+    {
+     "id": 32500,
+     "item": "Crystal Spire of Karabor"
+    },
+    {
+     "id": 30912,
+     "item": "Leggings of Eternity"
+    },
+    {
+     "id": 32496,
+     "item": "Memento of Tyrande"
+    },
+    {
+     "id": 32363,
+     "item": "Naaru-Blessed Life Rod"
+    },
+    {
+     "id": 32370,
+     "item": "Nadina's Pendant of Purity"
+    },
+    {
+     "id": 30911,
+     "item": "Scepter of Purification"
+    },
+    {
+     "id": 32524,
+     "item": "Shroud of the Highborne"
+    },
+    {
+     "id": 32585,
+     "item": "Swiftheal Mantle"
+    },
+    {
+     "id": 32584,
+     "item": "Swiftheal Wraps"
+    }
+   ]
+  },
+  "HolyPriest": {
+   "P3": [
+    {
+     "id": 30895,
+     "item": "Angelista's Sash"
+    },
+    {
+     "id": 32519,
+     "item": "Belt of Divine Guidance"
+    },
+    {
+     "id": 32528,
+     "item": "Blessed Band of Karabor"
+    },
+    {
+     "id": 32609,
+     "item": "Boots of the Divine Light"
+    },
+    {
+     "id": 30871,
+     "item": "Bracers of Martyrdom"
+    },
+    {
+     "id": 32500,
+     "item": "Crystal Spire of Karabor"
+    },
+    {
+     "id": 30912,
+     "item": "Leggings of Eternity"
+    },
+    {
+     "id": 32496,
+     "item": "Memento of Tyrande"
+    },
+    {
+     "id": 32363,
+     "item": "Naaru-Blessed Life Rod"
+    },
+    {
+     "id": 32370,
+     "item": "Nadina's Pendant of Purity"
+    },
+    {
+     "id": 30911,
+     "item": "Scepter of Purification"
+    },
+    {
+     "id": 32524,
+     "item": "Shroud of the Highborne"
+    },
+    {
+     "id": 32585,
+     "item": "Swiftheal Mantle"
+    },
+    {
+     "id": 32584,
+     "item": "Swiftheal Wraps"
+    }
+   ]
+  },
+  "Enh": {
+   "P3": [
+    {
+     "id": 32574,
+     "item": "Bindings of Lightning Reflexes"
+    },
+    {
+     "id": 30900,
+     "item": "Bow-stitched Leggings",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32260,
+     "item": "Choker of Endless Nightmares",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32591,
+     "item": "Choker of Serrated Blades"
+    },
+    {
+     "id": 32235,
+     "item": "Cursed Vision of Sargeras",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30863,
+     "item": "Deadly Cuffs",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32234,
+     "item": "Fists of Mukoa",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32347,
+     "item": "Grips of Damnation"
+    },
+    {
+     "id": 32324,
+     "item": "Insidious Bands"
+    },
+    {
+     "id": 32505,
+     "item": "Madness of the Betrayer"
+    },
+    {
+     "id": 30905,
+     "item": "Midnight Chestguard",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32366,
+     "item": "Shadowmaster's Boots"
+    },
+    {
+     "id": 32510,
+     "item": "Softstep Boots of Tracking",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32497,
+     "item": "Stormrage Signet Ring",
+     "bis": "expansion"
+    },
+    {
+     "id": 32581,
+     "item": "Swiftstrike Shoulders",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32262,
+     "item": "Syphon of the Nathrezim",
+     "bis": "multiPhase"
+    }
+   ]
+  },
+  "Frost": {
+   "P3": [
+    {
+     "id": 32586,
+     "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30872,
+     "item": "Chronicle of Dark Secrets",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32331,
+     "item": "Cloak of the Illidari Council"
+    },
+    {
+     "id": 32525,
+     "item": "Cowl of the Illidari High Lord"
+    },
+    {
+     "id": 32527,
+     "item": "Ring of Ancient Knowledge",
+     "bis": "expansion"
+    },
+    {
+     "id": 32524,
+     "item": "Shroud of the Highborne",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32239,
+     "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32483,
+     "item": "The Skull of Gul'dan",
+     "bis": "expansion"
+    },
+    {
+     "id": 32256,
+     "item": "Waistwrap of Infinity",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32374,
+     "item": "Zhar'doom, Greatstaff of the Devourer"
+    }
+   ]
+  },
+  "DemoLock": {
+   "P3": [
+    {
+     "id": 30888,
+     "item": "Anetheron's Noose"
+    },
+    {
+     "id": 32586,
+     "item": "Bracers of Nimble Thought"
+    },
+    {
+     "id": 30872,
+     "item": "Chronicle of Dark Secrets"
+    },
+    {
+     "id": 32331,
+     "item": "Cloak of the Illidari Council"
+    },
+    {
+     "id": 32525,
+     "item": "Cowl of the Illidari High Lord"
+    },
+    {
+     "id": 30916,
+     "item": "Leggings of Channeled Elements"
+    },
+    {
+     "id": 32367,
+     "item": "Leggings of Devastation"
+    },
+    {
+     "id": 32590,
+     "item": "Nethervoid Cloak"
+    },
+    {
+     "id": 32527,
+     "item": "Ring of Ancient Knowledge"
+    },
+    {
+     "id": 32247,
+     "item": "Ring of Captured Storms"
+    },
+    {
+     "id": 32524,
+     "item": "Shroud of the Highborne"
+    },
+    {
+     "id": 32239,
+     "item": "Slippers of the Seacaller"
+    },
+    {
+     "id": 30910,
+     "item": "Tempest of Chaos"
+    },
+    {
+     "id": 32483,
+     "item": "The Skull of Gul'dan"
+    },
+    {
+     "id": 32349,
+     "item": "Translucent Spellthread Necklace"
+    },
+    {
+     "id": 32256,
+     "item": "Waistwrap of Infinity"
+    },
+    {
+     "id": 32374,
+     "item": "Zhar'doom, Greatstaff of the Devourer"
+    }
+   ]
+  },
+  "RestoDruid": {
+   "P3": [
+    {
+     "id": 30895,
+     "item": "Angelista's Sash"
+    },
+    {
+     "id": 30908,
+     "item": "Apostle of Argus"
+    },
+    {
+     "id": 32528,
+     "item": "Blessed Band of Karabor"
+    },
+    {
+     "id": 32609,
+     "item": "Boots of the Divine Light"
+    },
+    {
+     "id": 32328,
+     "item": "Botanist's Gloves of Growth"
+    },
+    {
+     "id": 32582,
+     "item": "Bracers of Renewed Life"
+    },
+    {
+     "id": 32500,
+     "item": "Crystal Spire of Karabor"
+    },
+    {
+     "id": 30912,
+     "item": "Leggings of Eternity"
+    },
+    {
+     "id": 32496,
+     "item": "Memento of Tyrande"
+    },
+    {
+     "id": 30911,
+     "item": "Scepter of Purification"
+    },
+    {
+     "id": 32524,
+     "item": "Shroud of the Highborne"
+    },
+    {
+     "id": 32584,
+     "item": "Swiftheal Wraps"
+    }
    ]
   }
  }

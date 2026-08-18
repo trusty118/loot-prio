@@ -250,6 +250,10 @@
      not a code edit. */
   var REG = { classes: {}, specs: {}, forms: {}, races: {}, aliases: {} };
 
+  /* classId -> its spec identifiers, derived rather than stored: it is the same
+     fact as spec.class, and two copies of one fact drift. */
+  var CLASS_SPECS = {};
+
   function indexRegistry(doc) {
     REG = {
       classes: (doc && doc.classes) || {},
@@ -258,6 +262,12 @@
       races: (doc && doc.races) || {},
       aliases: (doc && doc.aliases) || {}
     };
+
+    CLASS_SPECS = {};
+    Object.keys(REG.specs).forEach(function (id) {
+      var cls = REG.specs[id]["class"];
+      (CLASS_SPECS[cls] = CLASS_SPECS[cls] || []).push(id);
+    });
   }
 
   /* One priority entry -> what to draw. Returns null if the registry doesn't know
@@ -891,17 +901,68 @@
     return BIS[specId + "|" + itemId] || 0;
   }
 
-  function specIcon(spec, bis) {
+  /* What ring an icon should carry, and who it is for. A spec icon answers for
+     itself. A class icon answers for the specs behind it: bis.json is keyed by
+     spec, but 104 of the 398 priority entries name a class, so an item that is
+     BiS for Arcane usually sits on a row that says "Mage" - without this most of
+     the file would never appear. The highest tier among those specs wins, and
+     the names ride along so the tooltip can say who.
+
+     While a filter is on, only the selected specs count: the ring should answer
+     "is this BiS for me", not "for someone in this class". */
+  function bisMark(resolved, itemId) {
+    if (REG.specs[resolved.id]) {
+      return { tier: bisTier(resolved.id, itemId), specs: [] };
+    }
+
+    var ids = CLASS_SPECS[resolved.id] || [];
+    var picked = pickedSpecs(resolved.id);
+    if (picked.length) ids = picked;
+
+    var tier = 0, names = [];
+    ids.forEach(function (id) {
+      var t = bisTier(id, itemId);
+      if (!t) return;
+      if (t > tier) tier = t;
+      names.push(shortSpecName(id));
+    });
+    return { tier: tier, specs: names };
+  }
+
+  /* "Discipline Priest" -> "Discipline". These names only ever appear on a class
+     icon, listing that class's own specs, so repeating the class after each one
+     says nothing. Falls back to the full name if it doesn't end in its class. */
+  function shortSpecName(id) {
+    var spec = REG.specs[id];
+    if (!spec) return id;
+    var cls = REG.classes[spec["class"]];
+    var suffix = cls ? " " + cls.name : "";
+    if (suffix && spec.name.slice(-suffix.length) === suffix) {
+      return spec.name.slice(0, -suffix.length);
+    }
+    return spec.name;
+  }
+
+  function specIcon(spec, bis, forSpecs) {
     var tier = BIS_TIERS[bis];
     var img = document.createElement("img");
     img.className = "spec-icon" + (tier ? " " + tier.cls : "");
+    /* which registry entry this icon is, so nothing downstream has to work it out
+       from the display name - forms make that lossy ("Feral Druid (cat)") */
+    if (spec.id) img.dataset.id = spec.id;
     img.src = ICON_BASE + spec.icon + ".jpg";
-    img.alt = spec.name + (tier ? " (" + tier.label + ")" : "");
+    /* Who the icon is for goes on the name line - "Priest — Discipline, Holy" -
+       because that is a fact about the icon, not about the ring. A spec icon is
+       already standing there naming itself, so it never carries a list. */
+    var who = spec.name +
+      (forSpecs && forSpecs.length ? " — " + forSpecs.join(", ") : "");
+
+    img.alt = who + (tier ? " (" + tier.label + ")" : "");
     /* data-tip rather than title: the native tooltip has a ~1s delay the browser
        won't let us change, and these need to read as fast as the item tooltips.
        The BiS line is carried separately so the tooltip can colour it to match
        the ring on the icon. */
-    img.dataset.tip = spec.name;
+    img.dataset.tip = who;
     if (tier) {
       img.dataset.tipBis = tier.label;
       img.dataset.tipTier = String(bis);
@@ -960,7 +1021,8 @@
         if (muted) raceIcon.classList.add("spec-icon--muted");
         td.appendChild(raceIcon);
       }
-      var icon = specIcon(resolved, bisTier(resolved.id, rec.id));
+      var mark = bisMark(resolved, rec.id);
+      var icon = specIcon(resolved, mark.tier, mark.specs);
       if (muted) icon.classList.add("spec-icon--muted");
       td.appendChild(icon);
     });

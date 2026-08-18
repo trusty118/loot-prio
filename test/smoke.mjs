@@ -343,8 +343,10 @@ ok(!/SPriest|Lock|Boomkin|Mage|Ele/.test(prioText),
 ok(/>=/.test(prioText) && /=/.test(prioText), `operators kept as text: "${prioText.trim()}"`);
 ok(illidanStaff.children[3].querySelectorAll("img.spec-icon").length === 5,
    `Zhar'doom's 5 specs each got an icon (got ${illidanStaff.children[3].querySelectorAll("img.spec-icon").length})`);
-ok([...illidanStaff.children[3].querySelectorAll("img")].map((i) => i.dataset.tip).join(",") ===
-   "Shadow Priest,Warlock,Mage,Balance Druid,Elemental Shaman",
+// by identifier, not display name: a BiS class icon's name line also lists the
+// specs behind its ring ("Mage — Arcane, Fire, Frost")
+ok([...illidanStaff.children[3].querySelectorAll("img")].map((i) => i.dataset.id).join(",") ===
+   "Shadow,Warlock,Mage,BalanceDruid,Ele",
    "Zhar'doom's icons are in priority order");
 
 // free text that isn't a spec must survive
@@ -360,8 +362,9 @@ const probe = doc.querySelector(".col-prio img[data-tip]");
 probe.dispatchEvent(new window.MouseEvent("mouseover", { bubbles: true }));
 const tipEl = doc.querySelector("body > .tip");
 ok(!!tipEl, "hovering an icon creates the tooltip element");
-ok(tipEl.textContent === probe.getAttribute("data-tip"),
-   `tooltip shows the spec name (got "${tipEl.textContent}")`);
+// the name is the tooltip's first line; a BiS icon appends a second one below it
+ok(tipEl.firstChild.textContent === probe.getAttribute("data-tip"),
+   `tooltip leads with the spec name (got "${tipEl.firstChild.textContent}")`);
 ok(tipEl.style.display === "block", "tooltip is visible on hover");
 ok(tipEl.parentElement === doc.body,
    "tooltip is parented to body so the table's overflow container can't clip it");
@@ -440,30 +443,54 @@ const displayName = (id) => (specs.specs[id] || specs.classes[id] || {}).name;
 const listsSpec = (rec, id) =>
   (rec.priority || []).some((e) => (e.spec || e.class) === id);
 
-let checked = 0;
+// Icons carry data-id, so an entry is matched to its icon by identifier rather
+// than by display name - forms ("Feral Druid (cat)") make the name lossy.
+const rowFor = (item) => [...doc.querySelectorAll("tbody tr")]
+  .find((tr) => tr.children[0].textContent.includes(item));
+const iconById = (row, id) =>
+  [...row.children[3].querySelectorAll("img")].find((i) => i.dataset.id === id);
+const tierNum = { phase: 1, multiPhase: 2, expansion: 3 };
+const tierOf = (icon) =>
+  icon.classList.contains("spec-icon--bis3") ? 3
+    : icon.classList.contains("spec-icon--bis2") ? 2
+      : icon.classList.contains("spec-icon--bis") ? 1 : 0;
+
+let onSpec = 0, onClass = 0, missing = [];
 for (const [specId, phases] of Object.entries(bis.specs)) {
+  const owner = (specs.specs[specId] || {}).class;
   for (const entries of Object.values(phases)) {
     for (const e of entries) {
       const rec = data.find((r) => r.id === e.id);
-      if (!rec || !listsSpec(rec, specId)) continue;   // recorded but not visible, fine
-      const row = [...doc.querySelectorAll("tbody tr")]
-        .find((tr) => tr.children[0].textContent.includes(rec.item));
-      // an item can be BiS for several specs at once, so check this spec's own icon
-      const icon = [...row.children[3].querySelectorAll("img")]
-        .find((i) => i.dataset.tip === displayName(specId));
-      ok(icon && icon.classList.contains(tierClass[e.bis || "phase"]),
-         `${rec.item}: ${specId} ringed as ${e.bis || "phase"}`);
-      checked++;
+      if (!rec) continue;
+      const row = rowFor(rec.item);
+      const want = tierNum[e.bis || "phase"];
+
+      if (listsSpec(rec, specId)) {
+        // the priority names the spec: its own icon carries exactly this tier
+        const icon = iconById(row, specId);
+        if (!icon || tierOf(icon) !== want) missing.push(`${rec.item} / ${specId} (spec icon)`);
+        onSpec++;
+      } else if (owner && listsSpec(rec, owner)) {
+        // it names the class: the class icon carries the best tier among its
+        // specs, so this entry's tier is a floor rather than an equality
+        const icon = iconById(row, owner);
+        if (!icon || tierOf(icon) < want) missing.push(`${rec.item} / ${specId} (via ${owner})`);
+        onClass++;
+      }
+      // neither listed: recorded but unshowable, which check_bis.py warns about
     }
   }
 }
-ok(checked === 7, `every visible bis entry produced a ring (checked ${checked})`);
+ok(missing.length === 0, `every showable bis entry produced a ring (missing: ${missing.slice(0, 4).join("; ")})`);
+ok(onSpec > 50 && onClass > 50,
+   `rings land on both spec and class icons (${onSpec} spec, ${onClass} class)`);
 
-// an item with no entry must have no ring
-const unmarked = [...doc.querySelectorAll("tbody tr")]
-  .find((tr) => tr.children[0].textContent.includes("Zhar'doom"));
+// an item with no entry anywhere in bis.json must have no ring
+const bisIds = new Set(Object.values(bis.specs).flatMap((p) => Object.values(p).flat()).map((e) => e.id));
+const cleanRec = data.find((r) => !bisIds.has(r.id) && r.priority.length);
+const unmarked = rowFor(cleanRec.item);
 ok([...unmarked.children[3].querySelectorAll("img")].every((i) => !i.className.includes("--bis")),
-   "an item absent from bis.json has no rings");
+   `an item absent from bis.json has no rings (${cleanRec.item})`);
 
 // --- BiS markers ---
 const iconsOf = (name) => [...[...doc.querySelectorAll("tbody tr")]
@@ -473,8 +500,19 @@ const iconsOf = (name) => [...[...doc.querySelectorAll("tbody tr")]
 const highborne = iconsOf("Shroud of the Highborne");
 ok(highborne[0].classList.contains("spec-icon--bis2"),
    "** renders the multi-phase ring on the marked spec");
-ok(highborne.slice(1).every((i) => !i.className.includes("bis")),
-   "only the marked spec is ringed, not the rest of the priority");
+
+// Whether an icon rings is decided per icon: a spec icon answers for itself, a
+// class icon for any of its specs. Checked here against bis.json on one row that
+// carries both kinds (Resto Shaman, Priest, Druid, Holy Paladin).
+const isBisFor = (id, itemId) =>
+  Object.entries(bis.specs).some(([specId, phases]) =>
+    (specId === id || (specs.specs[specId] || {}).class === id) &&
+    Object.values(phases).flat().some((e) => e.id === itemId));
+const shroudId = data.find((r) => r.item === "Shroud of the Highborne").id;
+ok(highborne.every((i) => i.className.includes("--bis") === isBisFor(i.dataset.id, shroudId)),
+   "each icon rings if and only if the item is BiS for it, class icons included");
+ok(highborne.some((i) => specs.classes[i.dataset.id] && i.className.includes("--bis")),
+   "a class icon can carry a ring for the specs behind it");
 ok(/BiS/.test(highborne[0].dataset.tipBis) && /phase/i.test(highborne[0].dataset.tipBis),
    `multi-phase icon says so on hover: ${JSON.stringify(highborne[0].dataset.tipBis)}`);
 
@@ -518,15 +556,19 @@ for (const [tier, colour] of [["bis", "--epic"], ["bis2", "--legendary"], ["bis3
   ok(new RegExp("\\.spec-icon--" + tier + "\\s*\\{[^}]*var\\(" + colour).test(cssText),
      `${tier} ring uses ${colour}`);
 }
-ok(!iconsOf("Bulwark of Azzinoth")[1].className.includes("bis"),
-   "Bulwark's prot paladin is unmarked");
+// Bulwark is BiS for both tanks it names, and each ring answers for its own spec
+const bulwarkIcons = iconsOf("Bulwark of Azzinoth");
+ok(bulwarkIcons.map((i) => i.dataset.id).join(",") === "ProtWarr,ProtPal",
+   "icons carry their registry identifier");
+ok(bulwarkIcons.every((i) => i.className.includes("--bis")),
+   "both tanks it lists are ringed");
 
 // the markers must never reach the rendered text
 ok(!doc.querySelector("#results").textContent.includes("*"),
    "the * markers are consumed, never displayed");
 
-// an unmarked row is untouched
-ok(iconsOf("Zhar'doom").every((i) => !i.className.includes("bis")),
+// a row nobody has marked is untouched
+ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
    "rows with no markers render no rings");
 
 // the priority column is now icons and operators only - no prose anywhere
@@ -554,15 +596,14 @@ await new Promise((r) => setTimeout(r, 200));
 // longest-match wins: "Prot Pal" must not render as "Prot" + "Pal"
 const bulwark = [...doc.querySelectorAll("tbody tr")]
   .find((tr) => tr.children[0].textContent.includes("Bulwark of Azzinoth"));
-const bulwarkTitles = [...bulwark.children[3].querySelectorAll("img")]
-  .map((i) => i.dataset.tip.split(String.fromCharCode(10))[0]);   // drop any BiS line
-ok(bulwarkTitles.join(",") === "Protection Warrior,Protection Paladin",
+const bulwarkTitles = [...bulwark.children[3].querySelectorAll("img")].map((i) => i.dataset.id);
+ok(bulwarkTitles.join(",") === "ProtWarr,ProtPal",
    `"Prot Warrior > Prot Paladin" maps to both prot specs (got ${bulwarkTitles.join(", ")})`);
 
 // \b guard: "Hunter (catch-up)" must not match "Cat" inside "catch-up"
 const halberd = [...doc.querySelectorAll("tbody tr")]
   .find((tr) => tr.children[0].textContent.includes("Halberd of Desolation"));
-const halberdTitles = [...halberd.children[3].querySelectorAll("img")].map((i) => i.dataset.tip);
+const halberdTitles = [...halberd.children[3].querySelectorAll("img")].map((i) => i.dataset.id);
 ok(halberdTitles.join(",") === "Hunter",
    `"Hunter (catch-up)" yields only Hunter, no stray Cat (got ${halberdTitles.join(", ")})`);
 
@@ -583,21 +624,23 @@ const notesOf = (name) => [...doc.querySelectorAll("tbody tr")]
   .find((tr) => tr.children[0].textContent.includes(name)).children[4].textContent;
 
 // priorities are now icons, so assert on the icon titles rather than the text
+// identifiers rather than display names: a class icon carrying a ring also lists
+// the specs behind it on its name line
 const specsOf = (name) => [...[...doc.querySelectorAll("tbody tr")]
   .find((tr) => tr.children[0].textContent.includes(name))
-  .children[3].querySelectorAll("img")].map((i) => i.dataset.tip.split(String.fromCharCode(10))[0]);
+  .children[3].querySelectorAll("img")].map((i) => i.dataset.id);
 
 ok(!priorityOf("Syphon of the Nathrezim").includes("(x2)"), "Syphon: (x2) removed from priority");
 ok(notesOf("Syphon of the Nathrezim").includes("2x"), "Syphon: notes explain two are needed");
-ok(specsOf("Shadowmoon Insignia").join(",") === "Feral Druid,Protection Warrior,Protection Paladin",
+ok(specsOf("Shadowmoon Insignia").join(",") === "FeralDruid,ProtWarr,ProtPal",
    `Shadowmoon Insignia respecced (got ${specsOf("Shadowmoon Insignia").join(", ")})`);
-ok(specsOf("Leggings of Divine Retribution").join(",") === "Fury Warrior,Arms Warrior,Retribution Paladin",
+ok(specsOf("Leggings of Divine Retribution").join(",") === "Fury,Arms,Ret",
    "Leggings of Divine Retribution respecced");
 
 // bare "Prot" resolved to Protection Warrior everywhere
 for (const item of ["Ring of Deceitful Intent", "Pauldrons of the Forgotten Protector",
                     "Chestguard of the Forgotten Protector", "Helm of the Forgotten Protector"]) {
-  ok(specsOf(item).includes("Protection Warrior"), `${item}: bare Prot is now Protection Warrior`);
+  ok(specsOf(item).includes("ProtWarr"), `${item}: bare Prot is now Protection Warrior`);
 }
 ok(!priorityOf("Pauldrons of the Forgotten Protector").includes("fury ver"), "Pauldrons: (fury ver) gone");
 ok(notesOf("Pauldrons of the Forgotten Protector").includes("DPS version"), "Pauldrons: note added");
@@ -610,7 +653,7 @@ ok(!priorityOf("Cowl of the Illidari High Lord").includes("vestment-less"),
    "Cowl: vestment-less removed from priority");
 ok(notesOf("Cowl of the Illidari High Lord").includes("Sea-witch"), "Cowl: caveat moved to notes");
 ok(specsOf("Stormrage Signet Ring").join(",") ===
-   "Rogue,Enhancement Shaman,Arms Warrior,Fury Warrior,Hunter,Feral Druid,Protection Warrior,Retribution Paladin",
+   "Rogue,Enh,Arms,Fury,Hunter,FeralDruid,ProtWarr,Ret",
    `Stormrage Signet Ring order intact (got ${specsOf("Stormrage Signet Ring").join(", ")})`);
 ok((priorityOf("Stormrage Signet Ring").match(/=/g) || []).length === 2,
    "Stormrage Signet Ring uses = instead of /");
@@ -621,7 +664,7 @@ ok((priorityOf("Leggings of the Forgotten Protector").match(/=/g) || []).length 
 const allPriorities = [...doc.querySelectorAll("tbody tr")].map((tr) => tr.children[3].textContent);
 ok(allPriorities.every((p) => !p.includes("(")),
    `no parentheticals left in any priority (${allPriorities.filter((p) => p.includes("(")).length} found)`);
-ok(specsOf("Antonidas's Aegis").join(",") === "Elemental Shaman,Protection Paladin",
+ok(specsOf("Antonidas's Aegis").join(",") === "Ele,ProtPal",
    `Antonidas keeps its Prot Pal (got ${specsOf("Antonidas's Aegis").join(", ")})`);
 ok(notesOf("Blade of Infamy").includes("Talon of Azshara"), "Blade of Infamy caveat lives in notes");
 
@@ -909,17 +952,34 @@ const survRows = rows().length;
 ok(survRows === 25, `spec=Survival -> 25 rows (got ${survRows})`);
 const toggle = doc.querySelector("#spec-chips .chip--toggle");
 ok(toggle && toggle.textContent.includes("BiS only"), "the BiS toggle appears once a spec is picked");
-ok(toggle.querySelector(".n").textContent === "1", "the toggle counts what it would leave");
+
+// expectations come from bis.json rather than a hardcoded number, so filling the
+// file in doesn't rewrite the test
+const bisIdsFor = (specId) =>
+  new Set(Object.values(bis.specs[specId] || {}).flat().map((e) => e.id));
+const survBis = bisIdsFor("Surv");
+const survVisible = rows().filter((tr) =>
+  [...survBis].some((id) => tr.children[0].textContent.includes(
+    (data.find((r) => r.id === id) || {}).item || " "))).length;
+ok(Number(toggle.querySelector(".n").textContent) === survVisible,
+   `the toggle counts what it would leave (says ${toggle.querySelector(".n").textContent}, ${survVisible} visible)`);
 click(toggle);
-ok(rows().length === 1 && rows()[0].children[0].textContent.includes("Black Bow of the Betrayer"),
-   `BiS only -> just the bow (got ${rows().length} rows)`);
+ok(rows().length === survVisible && rows().length > 0,
+   `BiS only -> ${survVisible} rows (got ${rows().length})`);
+ok(rows().every((tr) => {
+  const rec = data.find((r) => tr.children[0].textContent.includes(r.item));
+  return rec && survBis.has(rec.id);
+}), "every row left is BiS for the selected spec");
 ok(window.location.hash.includes("bis=1"), `BiS only is in the url: ${window.location.hash}`);
 
 // url round-trip
 window.location.hash = "class=Mage&spec=Arcane&bis=1";
 await new Promise((r) => setTimeout(r, 50));
-ok(rows().length === 1 && rows()[0].children[0].textContent.includes("Ring of Ancient Knowledge"),
-   `spec+bis restored from the url (got ${rows().length} rows)`);
+const arcaneBis = bisIdsFor("Arcane");
+ok(rows().length > 0 && rows().every((tr) => {
+  const rec = data.find((r) => tr.children[0].textContent.includes(r.item));
+  return rec && arcaneBis.has(rec.id);
+}), `spec+bis restored from the url (${rows().length} rows, all Arcane BiS)`);
 ok(chipByTip("#class-chips", "Mage").getAttribute("aria-pressed") === "true" &&
    chipByTip("#spec-chips", "Arcane Mage").getAttribute("aria-pressed") === "true" &&
    doc.querySelector("#spec-chips .chip--toggle").getAttribute("aria-pressed") === "true",
@@ -930,7 +990,43 @@ window.location.hash = "class=Mage,Warlock";
 await new Promise((r) => setTimeout(r, 50));
 ok(rows().length === 27, `two classes restored from the url (got ${rows().length})`);
 
+// --- a class icon's ring answers for the selected spec, not the whole class ---
+// Ring of Ancient Knowledge names the class Mage in its priority and is BiS for
+// some Mage specs but not all, so the ring has to follow the selection.
+click(doc.getElementById("reset"));
+const rakId = data.find((r) => r.item === "Ring of Ancient Knowledge").id;
+const mageSpecs = Object.keys(specs.specs).filter((id) => specs.specs[id].class === "Mage");
+const bisMage = mageSpecs.filter((id) => bisIdsFor(id).has(rakId));
+const notBisMage = mageSpecs.filter((id) => !bisIdsFor(id).has(rakId));
+const rakMageIcon = () => iconById(rowFor("Ring of Ancient Knowledge"), "Mage");
+
+ok(bisMage.length > 0, `Ring of Ancient Knowledge is BiS for some Mage specs (${bisMage.join(", ")})`);
+ok(rakMageIcon().className.includes("--bis"),
+   "unfiltered, the Mage icon rings for the specs behind it");
+// who the icon is for goes on the name line; the tier line stays just the tier
+const shortName = (id) => specs.specs[id].name.replace(new RegExp(" " + specs.specs[id].class + "$"), "");
+ok(new RegExp("^Mage — .*\\b" + shortName(bisMage[0]) + "\\b").test(rakMageIcon().dataset.tip),
+   `the name line names the class then its specs (got "${rakMageIcon().dataset.tip}")`);
+ok(!/Mage,|Mage$/.test(rakMageIcon().dataset.tip.split("—")[1] || ""),
+   `no class name repeated after each spec (got "${rakMageIcon().dataset.tip}")`);
+ok(rakMageIcon().dataset.tipBis === "Expansion BiS",
+   `the BiS line is only the tier (got "${rakMageIcon().dataset.tipBis}")`);
+
+click(chipByTip("#class-chips", "Mage"));
+click(chipByTip("#spec-chips", specs.specs[bisMage[0]].name));
+ok(rakMageIcon().className.includes("--bis"),
+   "selecting a spec it is BiS for keeps the ring on the class icon");
+
+if (notBisMage.length) {
+  click(chipByTip("#spec-chips", specs.specs[bisMage[0]].name));   // deselect
+  click(chipByTip("#spec-chips", specs.specs[notBisMage[0]].name));
+  const row = rowFor("Ring of Ancient Knowledge");
+  ok(!row || !iconById(row, "Mage") || !iconById(row, "Mage").className.includes("--bis"),
+     `selecting ${notBisMage[0]}, which it is not BiS for, drops the ring`);
+}
+
 // an unknown identifier reads as no filter rather than filtering everything away
+click(doc.getElementById("reset"));
 window.location.hash = "spec=NotASpec";
 await new Promise((r) => setTimeout(r, 50));
 ok(rows().length === 182, `an unknown spec id is ignored (got ${rows().length})`);
