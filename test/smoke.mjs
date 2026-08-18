@@ -91,11 +91,23 @@ const zoneChips = [...doc.querySelectorAll("#zone-chips .chip")];
 const bossChips = [...doc.querySelectorAll("#boss-chips .chip")];
 const roleChips = [...doc.querySelectorAll("#role-chips .chip")];
 
-// chip 0 in each group is the "All ..." chip and gets no icon
+// chip 0 in each group is the "All" chip and gets no icon
 ok(zoneChips.slice(1).every((c) => c.querySelector("img.chip-icon")), "all 3 zone chips have an icon");
-ok(!zoneChips[0].querySelector("img"), '"All zones" chip has no icon');
+ok(!zoneChips[0].querySelector("img"), '"All" chip has no icon');
 ok(bossChips.slice(1).every((c) => c.querySelector("img.chip-icon")), `all ${bossChips.length - 1} boss chips have an icon`);
-ok(!bossChips[0].querySelector("img"), '"All bosses" chip has no icon');
+ok(!bossChips[0].querySelector("img"), "the boss row's All chip has no icon either");
+
+// every row's clear chip reads just "All", so the rows line up; what it clears is
+// carried by the tooltip and the aria-label instead
+const allChips = ["#zone-chips", "#boss-chips", "#class-chips", "#role-chips"]
+  .map((sel) => doc.querySelector(sel + " .chip"));
+ok(allChips.every((c) => c.classList.contains("chip--all")), "every row leads with an All chip");
+ok(allChips.every((c) => c.textContent.trim() === "All"), "they read just All, with no count");
+ok(allChips.every((c) => !c.querySelector(".n")), "the All chips carry no count element");
+ok(allChips.map((c) => c.dataset.tip).join("|") === "All zones|All bosses|All classes|All roles",
+   `each says what it clears in its tooltip: ${allChips.map((c) => c.dataset.tip).join("|")}`);
+ok(allChips.every((c) => c.getAttribute("aria-label") === c.dataset.tip),
+   "and repeats it as an aria-label");
 ok(roleChips.every((c) => !c.querySelector("img")), "role chips have no icons");
 
 // role chips must carry data-role so the CSS can tint them like the table pills
@@ -764,6 +776,170 @@ ok(rows().length === 182, `all rows still present after sorting (${rows().length
 click(doc.getElementById("reset"));
 ok(!doc.querySelector('th[aria-sort="ascending"]') && !doc.querySelector('th[aria-sort="descending"]'),
    "reset clears the sort");
+
+// --- boss chips are qualified by their zone ---
+// Boss names are not unique across zones: both raids have a "Trash", and either
+// chip used to select both and show the same combined count.
+click(doc.getElementById("reset"));
+const trashChips = () =>
+  [...doc.querySelectorAll("#boss-chips .chip")].filter((c) => c.textContent.trim().startsWith("Trash"));
+
+ok(trashChips().length === 2, `both zones' Trash chips render (got ${trashChips().length})`);
+const trashCounts = trashChips().map((c) => c.querySelector(".n").textContent);
+ok(trashCounts.join("/") === "9/8", `each Trash chip counts only its own zone (got ${trashCounts.join("/")})`);
+
+click(trashChips()[0]);
+ok(rows().length === 9, `Black Temple trash -> 9 rows (got ${rows().length})`);
+ok(groups().length === 1 && /Black Temple/.test(headText()[0]),
+   `only the BT trash group is shown: "${headText()[0]}"`);
+ok(trashChips().map((c) => c.getAttribute("aria-pressed")).join("/") === "true/false",
+   "only the clicked Trash chip reads as pressed");
+ok(window.location.hash.includes("boss=Trash") && window.location.hash.includes("bossZone=Black+Temple"),
+   `ambiguous boss is qualified in the url: ${window.location.hash}`);
+
+click(trashChips()[1]);
+ok(rows().length === 8, `Mount Hyjal trash -> 8 rows (got ${rows().length})`);
+ok(/Mount Hyjal/.test(headText()[0]), `switching zones' trash re-targets the group: "${headText()[0]}"`);
+
+click(doc.getElementById("reset"));
+click(chipByText("#boss-chips", "Archimonde"));
+ok(window.location.hash.includes("boss=Archimonde") && !window.location.hash.includes("bossZone"),
+   `an unambiguous boss keeps its short url: ${window.location.hash}`);
+
+// an old link with a bare ?boss=Trash keeps its previous both-zones behaviour
+window.location.hash = "boss=Trash";
+await new Promise((r) => setTimeout(r, 50));
+ok(rows().length === 17, `unqualified boss=Trash still selects both zones (got ${rows().length})`);
+
+// --- class / spec filter ---
+// These chips carry no text: the name and the count live in the tooltip, so they
+// are found by data-tip rather than by textContent.
+const chipByTip = (sel, name) =>
+  [...doc.querySelectorAll(sel + " .chip")].find((c) => (c.dataset.tip || "").startsWith(name + " "));
+
+click(doc.getElementById("reset"));
+ok(doc.getElementById("class-chips") && doc.getElementById("spec-chips"),
+   "class and spec chip rows exist");
+const whoPanel = doc.querySelector(".controls--who");
+ok(whoPanel && whoPanel.contains(doc.getElementById("class-chips")) &&
+   whoPanel.contains(doc.getElementById("spec-chips")),
+   "class and spec sit in their own panel");
+ok(doc.querySelector("main").firstElementChild === whoPanel, "that panel comes first");
+
+// three panels: who you are, where it drops, then what of that to show
+const panels = [...doc.querySelectorAll("main .controls")];
+ok(panels.length === 3 && panels[0].classList.contains("controls--who") &&
+   panels[1].classList.contains("controls--where") &&
+   panels[2].classList.contains("controls--refine"),
+   `controls split into who / where / refine (got ${panels.length} panels)`);
+const refine = doc.querySelector(".controls--refine");
+ok(["type-select", "slot-select", "search", "reset", "count"]
+   .every((id) => refine.contains(doc.getElementById(id))),
+   "type, slot, search, reset and the count all sit in the refine panel");
+ok(!refine.querySelector(".chips"), "and no chip row is left in it");
+ok(refine.nextElementSibling === doc.getElementById("results"),
+   "the refine panel sits directly above the results it narrows");
+ok(/\.controls--refine\s*\{[^}]*position:\s*sticky/.test(cssText) &&
+   !/\.controls\s*\{[^}]*position:\s*sticky/.test(cssText),
+   "only the refine panel is sticky");
+ok(doc.getElementById("spec-row").hidden, "the spec row is hidden until a class is picked");
+ok([...doc.querySelectorAll("#spec-chips .chip")].length === 0,
+   "and renders no spec chips at all");
+ok([...doc.querySelectorAll("#class-chips .chip--icon")].every((c) => !c.textContent.trim()),
+   "class chips are icon-only");
+ok(chipByTip("#class-chips", "Mage").dataset.tip === "Mage — 20 items",
+   `the name and count moved into the tooltip: "${chipByTip("#class-chips", "Mage").dataset.tip}"`);
+ok(chipByTip("#class-chips", "Mage").getAttribute("aria-label") === "Mage — 20 items",
+   "an icon-only chip still names itself to a screen reader");
+
+click(chipByTip("#class-chips", "Mage"));
+ok(rows().length === 20, `class=Mage -> 20 rows (got ${rows().length})`);
+ok(rows().every((tr) => tr.children[3].querySelectorAll("img.spec-icon").length > 0),
+   "no empty-priority rows survive a class filter");
+ok(!doc.getElementById("spec-row").hidden, "picking a class reveals the spec row");
+ok([...doc.querySelectorAll("#spec-chips .chip")].length === 4,
+   "the spec row holds only that class's three specs, plus All");
+ok(!chipByTip("#spec-chips", "Combat Rogue"), "no other class's specs are offered");
+ok(chipByTip("#spec-chips", "Arcane Mage"), "spec chips are found by their full name");
+ok(!doc.querySelector("#spec-chips .chip--toggle"), "no BiS toggle until a spec is picked");
+
+// classes are multi-select, and the spec row grows to cover all of them
+click(chipByTip("#class-chips", "Warlock"));
+ok(rows().length === 27, `class=Mage+Warlock -> 27 rows, the union (got ${rows().length})`);
+ok([...doc.querySelectorAll("#spec-chips .chip")].length === 7,
+   "the spec row now offers both classes' specs");
+ok(chipByTip("#spec-chips", "Fire Mage") && chipByTip("#spec-chips", "Destruction Warlock"),
+   "specs from each selected class are present");
+
+// refining one class must not narrow the other
+click(chipByTip("#spec-chips", "Fire Mage"));
+ok(rows().length === 26, `Fire + the whole Warlock class -> 26 rows (got ${rows().length})`);
+ok(rows().map((tr) => tr.children[0].textContent.trim()).includes("Cowl of the Illidari High Lord"),
+   "a Fire-only row survives the refinement");
+
+// dropping a class drops the specs that were refining it
+click(chipByTip("#class-chips", "Mage"));
+ok(rows().length === 22, `Warlock alone -> 22 rows (got ${rows().length})`);
+ok(!window.location.hash.includes("spec="), `the Fire refinement went with it: ${window.location.hash}`);
+
+click(doc.getElementById("reset"));
+click(chipByTip("#class-chips", "Mage"));
+
+click(chipByTip("#spec-chips", "Arcane Mage"));
+ok(rows().length === 18, `spec=Arcane -> 18 rows (got ${rows().length})`);
+const arcaneItems = rows().map((tr) => tr.children[0].textContent.trim());
+ok(arcaneItems.includes("Ring of Ancient Knowledge"),
+   "a row that only names the class Mage still matches the spec Arcane");
+ok(!arcaneItems.includes("Cowl of the Illidari High Lord"),
+   "a row that names only Fire does not match Arcane");
+
+const arcaneIcon = doc.querySelector('.col-prio img[data-tip="Arcane Mage"], .col-prio img[data-tip="Mage"]');
+ok(arcaneIcon && !arcaneIcon.classList.contains("spec-icon--muted"),
+   "the selected spec's icon is not dimmed");
+ok(doc.querySelectorAll(".col-prio .spec-icon--muted").length > 0,
+   "the rest of each priority line is dimmed");
+ok(doc.querySelector(".col-prio .spec-icon--muted").dataset.tip,
+   "a dimmed icon keeps its tooltip");
+
+// BiS-only narrows to that spec's bis.json entries
+click(doc.getElementById("reset"));
+click(chipByTip("#class-chips", "Hunter"));
+click(chipByTip("#spec-chips", "Survival Hunter"));
+const survRows = rows().length;
+ok(survRows === 25, `spec=Survival -> 25 rows (got ${survRows})`);
+const toggle = doc.querySelector("#spec-chips .chip--toggle");
+ok(toggle && toggle.textContent.includes("BiS only"), "the BiS toggle appears once a spec is picked");
+ok(toggle.querySelector(".n").textContent === "1", "the toggle counts what it would leave");
+click(toggle);
+ok(rows().length === 1 && rows()[0].children[0].textContent.includes("Black Bow of the Betrayer"),
+   `BiS only -> just the bow (got ${rows().length} rows)`);
+ok(window.location.hash.includes("bis=1"), `BiS only is in the url: ${window.location.hash}`);
+
+// url round-trip
+window.location.hash = "class=Mage&spec=Arcane&bis=1";
+await new Promise((r) => setTimeout(r, 50));
+ok(rows().length === 1 && rows()[0].children[0].textContent.includes("Ring of Ancient Knowledge"),
+   `spec+bis restored from the url (got ${rows().length} rows)`);
+ok(chipByTip("#class-chips", "Mage").getAttribute("aria-pressed") === "true" &&
+   chipByTip("#spec-chips", "Arcane Mage").getAttribute("aria-pressed") === "true" &&
+   doc.querySelector("#spec-chips .chip--toggle").getAttribute("aria-pressed") === "true",
+   "class, spec and BiS chips all come back pressed");
+
+// several classes survive a round-trip too
+window.location.hash = "class=Mage,Warlock";
+await new Promise((r) => setTimeout(r, 50));
+ok(rows().length === 27, `two classes restored from the url (got ${rows().length})`);
+
+// an unknown identifier reads as no filter rather than filtering everything away
+window.location.hash = "spec=NotASpec";
+await new Promise((r) => setTimeout(r, 50));
+ok(rows().length === 182, `an unknown spec id is ignored (got ${rows().length})`);
+
+click(doc.getElementById("reset"));
+ok(rows().length === 182, `reset clears the spec filter (got ${rows().length})`);
+ok(!doc.querySelector("#spec-chips .chip--toggle"), "reset drops the BiS toggle");
+ok(doc.getElementById("spec-row").hidden, "reset hides the spec row again");
+ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priority icons");
 
 console.log(fail.length ? `\n${fail.length} FAILURES` : "\nAll checks passed");
 process.exit(fail.length ? 1 : 0);

@@ -40,6 +40,8 @@ python -m http.server 8000
 ## Features
 
 - **Zone → boss** filtering (the primary use case), results grouped in encounter order
+- **Class → spec** filtering: narrows to the items whose priority names you, dims everyone
+  else in each line, and can narrow again to that spec's best-in-slot items
 - Role filter (Physical / Caster / Healer / Tank / Tier), type and slot filters, free-text search
 - Live counts on every filter chip, reflecting the other active filters
 - Filter state is written to the URL hash, so any view is linkable

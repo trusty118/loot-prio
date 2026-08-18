@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 252 checks, should be all green
+npm test             # 313 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -54,7 +54,7 @@ together for hand-editing.
                          "icon": "ability_warrior_defensivestance", "roles": ["Tank"] } }
 ```
 
-Four sections: `classes` (9), `specs` (all 27 TBC specs), `forms` (Feral bear/cat),
+Five sections: `classes` (9), `specs` (all 27 TBC specs), `forms` (Feral bear/cat),
 `races` (Orc/Human), and `aliases` (the old priority shorthand → id, used by the migration
 and by search only).
 
@@ -85,10 +85,10 @@ code edit — check the icon returns 200 first.
 
 ```json
 "priority": [
-  { "spec": "Rogue" },
-  { "spec": "EnhShaman", "op": "=" },
-  { "spec": "ArmsWarr",  "op": ">>" },
-  { "spec": "FuryWarr",  "op": ">", "race": "Orc" }
+  { "class": "Rogue" },
+  { "spec": "Enh",  "op": "=" },
+  { "spec": "Arms", "op": ">>" },
+  { "spec": "Fury", "op": ">", "race": "Orc" }
 ]
 ```
 
@@ -146,6 +146,58 @@ Mage, on a row whose priority lists `Mage`, records correctly but shows nothing.
 `specs.json` and `bis.json` both **fail soft**: a 404 or malformed file costs the icons or
 the rings, not the page.
 
+### The class/spec filter
+
+Two chip rows, Class then Spec, in the topmost of the three control panels
+(`.controls--who`) — see §4 for why the controls are split three ways. They answer the
+other question the table can be asked: not "who gets this item" but "what should I be
+rolling on".
+
+**Both rows are multi-select** (`state.classes`, `state.specs`), because a loot council
+reads several classes at once. The spec row is `hidden` until a class is picked and then
+offers exactly the selected classes' specs — grouped in the order the classes were picked,
+not registry order.
+
+A spec is a **refinement of its class, never a selection in its own right**: deselecting a
+class drops any of its specs, and `pickedSpecs()` resolves each class separately before
+unioning. Picking Mage + Warlock and then narrowing Mage to Fire leaves Warlock whole —
+27 rows become 26, not 18. A `?spec=` link with no `class=` adds the implied class on read.
+
+Those chips are **icon-only** (`chip(..., iconOnly)` adds `.chip--icon`): with a name and a
+count on each of 27 chips, the icons being recognised were buried. Both move into the chip's
+`data-tip` — `"Arcane Mage — 18 items"` — which also becomes its `aria-label`, and is what
+tests match on, since these chips have no text content.
+
+A row matches through `selectionHas()` in `app.js`, which asks whether any priority entry
+speaks to the selection (`priorityHas()` is the single-class form underneath it):
+
+- a `class` entry (`Mage`) stands for **every** spec of that class, so it matches Arcane;
+- a `spec` entry satisfies a selection of its own **class**, so `Fire` matches Mage.
+
+104 of the 398 entries are class-level, so both directions matter. **An empty priority
+matches nobody**, which is how the 23 "whoever needs it" rows drop out while a filter is
+on: the filter asks where you stand in a line, and those rows name no line.
+
+Everyone else in each line is dimmed (`.spec-icon--muted`) rather than removed — the ranking
+is the point, so the rest of it has to stay readable. Dimmed icons keep their tooltips.
+
+**`BiS only`** is a toggle chip at the end of the spec row, offered only once a spec is
+picked: `bis.json` is keyed by spec, and a class-wide union of nine specs' lists would mean
+nothing. It filters on `bisTier()`, not on the rings, so it still finds items that are BiS
+for a spec the priority never names (the "not visible" case `check_bis.py` warns about).
+With several specs picked it keeps anything BiS for any of them.
+
+### URL state
+
+Filters live in the hash: `zone`, `boss`, `bossZone`, `class`, `spec`, `bis`, `role`,
+`type`, `slot`, `q`, `sort`. `class` and `spec` are comma-joined lists, checked against the
+registry on read, so a stale identifier is dropped rather than filtering every row away.
+
+`bossZone` exists because boss names are **not unique across zones** — both raids have a
+`Trash`. Boss chips are identified by zone + boss, and it is written only when the name is
+ambiguous, so the other 14 bosses keep the short URL they have always had. An old bare
+`boss=Trash` link carries no `bossZone` and keeps its original both-zones behaviour.
+
 ## 4. Conventions that are easy to break
 
 - **Never use a bare element selector in `style.css`.** Wowhead's tooltip script injects
@@ -162,6 +214,18 @@ the rings, not the page.
   new one returns 200 before wiring it up. Boss portraits are Encounter Journal art
   (`ui-ej-boss-*.png`) with irregular slugs — `najentus`, `kazrogal`, no leading "the" on
   the Illidari Council.
+- **The controls are three panels, in the order the questions get asked**:
+  `.controls--who` (class/spec), `.controls--where` (zone/boss, and the hidden role row),
+  and `.controls--refine` (type, slot, search, Reset and the count). The split is what
+  makes the last one read as narrowing the results rather than as another way of choosing
+  them, so keep chip rows out of it. **Only `.controls--refine` is sticky** — it is the one
+  adjusted while reading, it carries the count, and it sits directly above the results;
+  two sticky panels would fight over `top: 0`.
+- **Chip rows have no visible label**, and each leads with a bare `All` chip carrying no
+  count, so the rows line up down one edge. What the row is, and what its All chip clears,
+  live in `aria-label` (on the `role="group"`) and in `data-tip` — `allChip()` sets both,
+  so a new row should go through it rather than calling `chip()` directly. Counts stay on
+  the individual chips; the row total is already the `N of 182 items` line.
 - **`SHOW_ROLE = false`** in `app.js` switches off the Role column and filter. Everything
   behind it still works — chips, filtering, sort key, search index, token class matching.
 
@@ -199,10 +263,35 @@ structured priority), `verify/fetch_unique.py` (re-runnable if the item set chan
   [wowsims/tbc](https://github.com/wowsims/tbc) item DB would settle it.
 - **Not included at all:** gems, and Mother Shahraz's shadow-resistance set. Both were
   intentional omissions by the creator.
-- **Duplicate "Trash" chip** when no zone is selected — boss names aren't unique across
-  zones, so either chip selects both.
-- Planned but not built: a **spec/class filter** reading `bis.json` (`BIS_BY_SPEC` in
-  `app.js` is already shaped for it), and clicking a class icon to show that class's BiS.
+- Planned but not built: clicking a spec icon in a priority line to jump straight to that
+  spec's filtered view. `BIS_BY_SPEC` in `app.js` is still unread by anything — the filter
+  goes through `bisTier()` — and is the natural source for a "show me this spec's whole BiS
+  list" view.
+
+### Pagination — considered and declined, Aug 2026
+
+All 182 items render on one page, in 17 boss groups: 2,397 elements under `#results`
+(910 cells, 464 icons). A full `update()` profiled in jsdom at ~180ms median, of which
+**~82% is DOM construction** and ~0.1ms is the filtering logic. jsdom is roughly an order
+of magnitude slower at DOM work than a browser, so the real cost is well under that.
+
+**Wowhead's reason doesn't transfer.** Their list pages paginate a server-side query over
+hundreds of thousands of items, where a page bounds both the query and the payload. This
+site fetches one 72 KB JSON that is fully in memory before the first row renders, so
+pagination cannot save a byte of network or parse cost — only DOM nodes per render, and
+2,400 elements is not a number browsers struggle with. Against that it would cost
+find-in-page across groups, cut boss groups at page boundaries (kill-order grouping is the
+point of the layout), complicate the linkable-hash property, and break printing.
+
+**If it ever does matter, reach for `content-visibility: auto` plus
+`contain-intrinsic-size` on `.boss-group` first** — off-screen groups skip layout and paint
+while staying in the DOM, searchable and linkable. Most of pagination's rendering benefit,
+none of its behavioural cost.
+
+Two inefficiencies found while profiling, both dwarfed by DOM construction at this size but
+worth naming if the dataset grows several-fold: `bossSortKey()` calls `orderedBosses()` per
+row, rescanning all 182 records while grouping (182²), and each class/spec chip makes its
+own full pass over the filtered pool (~36 passes per render).
 
 ---
 
