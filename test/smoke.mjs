@@ -32,9 +32,9 @@ const groups = () => [...doc.querySelectorAll(".boss-group")];
 const rows = () => [...doc.querySelectorAll("tbody tr")];
 const headText = () => groups().map((g) => g.querySelector(".boss-head").textContent.trim());
 
-ok(rows().length === 182, `renders all 182 rows (got ${rows().length})`);
+ok(rows().length === 195, `renders all 195 rows (got ${rows().length})`);
 ok(groups().length === 17, `renders 17 boss groups (got ${groups().length})`);
-ok(doc.getElementById("count").textContent === "182 of 182 items", `count text: "${doc.getElementById("count").textContent}"`);
+ok(doc.getElementById("count").textContent === "195 of 195 items", `count text: "${doc.getElementById("count").textContent}"`);
 
 const heads = headText();
 ok(/Black Temple/.test(heads[0]) && /Trash/.test(heads[0]), `first group is BT Trash: "${heads[0]}"`);
@@ -61,7 +61,7 @@ ok(headEls.every((h) => {
 }), "boss name precedes the zone tag in every header");
 ok(!headEls.some((h) => /\d+\s+items?/.test(h.textContent)), "per-group item counts removed");
 ok(!doc.querySelector(".boss-head .n"), "no leftover count element in group headers");
-ok(doc.getElementById("count").textContent.includes("of 182"), "the overall count in the toolbar stays");
+ok(doc.getElementById("count").textContent.includes("of 195"), "the overall count in the toolbar stays");
 ok(headEls[0].querySelector(".boss-name").textContent.trim() === "Trash",
    `first header's boss-name is the boss, not the zone (got "${headEls[0].querySelector(".boss-name").textContent.trim()}")`);
 
@@ -83,7 +83,7 @@ ok(!fs.readFileSync(path.join(root, "style.css"), "utf8").includes(".verify-flag
 
 // wowhead links
 const links = [...doc.querySelectorAll("a.item-link")];
-ok(links.length === 182, `182 item links (got ${links.length})`);
+ok(links.length === 195, `195 item links (got ${links.length})`);
 ok(links.every((a) => /wowhead\.com\/tbc\/item=\d+/.test(a.href)), "all item links point at wowhead tbc items");
 
 // --- icons ---
@@ -162,7 +162,7 @@ const chipByText = (sel, text) =>
 const click = (node) => node.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
 
 click(chipByText("#zone-chips", "Mount Hyjal"));
-ok(rows().length === 61, `zone=Mount Hyjal -> 61 rows (got ${rows().length})`);
+ok(rows().length === 66, `zone=Mount Hyjal -> 66 rows (got ${rows().length})`);
 ok(groups().length === 6, `zone=Mount Hyjal -> 6 groups (got ${groups().length})`);
 ok(window.location.hash.includes("zone=Mount+Hyjal"), `url state: ${window.location.hash}`);
 
@@ -179,7 +179,7 @@ ok(rows().some((tr) => tr.dataset.role === "Tier"),
    "Archimonde's healer view now includes its tier token");
 
 click(doc.getElementById("reset"));
-ok(rows().length === 182, `reset -> 182 rows (got ${rows().length})`);
+ok(rows().length === 195, `reset -> 195 rows (got ${rows().length})`);
 
 // type grouping
 const typeSel = doc.getElementById("type-select");
@@ -253,7 +253,7 @@ const bySlot = (v) => { slotSel.value = v; slotSel.dispatchEvent(new window.Even
 // 35 = 31 weapons + shields/off-hand frills, which share the slot but not the type bucket
 ok(bySlot("Weapon") === 35, `slot=Weapon -> 10 One-Hand + 6 Main-Hand + 12 Off-Hand + 7 Two-Hand = 35 (got ${rows().length})`);
 ok(bySlot("Ranged/Relic") === 9, `slot=Ranged/Relic -> 7 ranged + 2 relics = 9 (got ${rows().length})`);
-ok(bySlot("Head") === 11, `unrelated slots unaffected: Head -> 11 (got ${rows().length})`);
+ok(bySlot("Head") === 12, `unrelated slots unaffected: Head -> 12 (got ${rows().length})`);
 slotSel.value = ""; slotSel.dispatchEvent(new window.Event("change"));
 
 // search still finds both the raw and displayed vocabulary
@@ -610,6 +610,31 @@ ok(!doc.querySelector("#results").textContent.includes("*"),
 ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
    "rows with no markers render no rings");
 
+// --- items the source guide never covered ---
+const unsourced = data.filter((r) => r.unsourced);
+ok(unsourced.length === 13, `13 records are marked unsourced (got ${unsourced.length})`);
+ok(unsourced.every((r) => r.priority.length === 0),
+   "an unsourced record never carries a priority - there is no call to record");
+ok(data.filter((r) => !r.unsourced).length === 182,
+   "the creator's original 182 are still exactly that");
+
+const tagged = [...doc.querySelectorAll("tbody tr .item-tag")];
+ok(tagged.length === 13, `each unsourced row is tagged in the table (got ${tagged.length})`);
+ok(tagged.every((t) => t.dataset.tip && /audit/i.test(t.dataset.tip)),
+   "the tag explains itself on hover");
+const taggedRowNames = tagged.map((t) => t.closest("tr").children[0].textContent);
+ok(unsourced.every((r) => taggedRowNames.some((n) => n.includes(r.item))),
+   "every unsourced item is one of the tagged rows");
+
+// the four Bands of the Eternal land in Hyjal trash, and say what they really are
+const bands = data.filter((r) => r.item.startsWith("Band of the Eternal"));
+ok(bands.length === 4, `all four Bands of the Eternal are present (got ${bands.length})`);
+ok(bands.every((r) => r.zone === "Mount Hyjal" && r.boss === "Trash"),
+   "they sit under Mount Hyjal trash");
+ok(bands.every((r) => /Scale of the Sands/.test(r.notes)),
+   "and their notes say they are a reputation reward, not a drop");
+ok(bands.every((r) => r.unique), "each is unique-equipped, so no doubling up");
+
 // the priority column is now icons and operators only - no prose anywhere
 const proseRows = [...doc.querySelectorAll("tbody tr")].filter((tr) =>
   /[a-z]/i.test(tr.children[3].textContent));
@@ -620,7 +645,10 @@ ok(proseRows.length === 0,
 const blank = [...doc.querySelectorAll("tbody tr")]
   .filter((tr) => tr.children[3].textContent.trim() === "" &&
                   tr.children[3].querySelectorAll("img").length === 0);
-ok(blank.length === 23, `23 items have a deliberately blank priority (got ${blank.length})`);
+// 23 the creator left open, plus the 13 he never covered
+ok(blank.length === 36, `36 items render a blank priority cell (got ${blank.length})`);
+ok(data.filter((r) => !r.priority.length && !r.unsourced).length === 23,
+   "23 of them are the creator's own 'whoever needs it' calls");
 ok(!doc.body.textContent.includes("undefined"), "no undefined leaks from the empty strings");
 
 // searching still works even though the words are no longer displayed
@@ -796,7 +824,7 @@ ok(!doc.querySelector(".class-icon--muted"), "no dimming when only the Tier role
 // no filters at all: nothing is dimmed
 click(doc.getElementById("reset"));
 ok(!doc.querySelector(".class-icon--muted"), "no dimming when no filters are active");
-ok(rows().length === 182, "unfiltered view is unchanged at 182 rows");
+ok(rows().length === 195, "unfiltered view is unchanged at 195 rows");
 
 // --- column sorting ---
 click(doc.getElementById("reset"));
@@ -853,7 +881,7 @@ ok([...doc.querySelectorAll(".boss-group")].every((g) => {
 const sortedHeads = [...doc.querySelectorAll(".boss-head .boss-name")].map((h) => h.textContent.trim());
 ok(sortedHeads[0] === "Trash" && sortedHeads[9] === "Illidan Stormrage",
    "boss groups stay in kill order while rows sort inside them");
-ok(rows().length === 182, `all rows still present after sorting (${rows().length})`);
+ok(rows().length === 195, `all rows still present after sorting (${rows().length})`);
 
 click(doc.getElementById("reset"));
 ok(!doc.querySelector('th[aria-sort="ascending"]') && !doc.querySelector('th[aria-sort="descending"]'),
@@ -868,7 +896,7 @@ const trashChips = () =>
 
 ok(trashChips().length === 2, `both zones' Trash chips render (got ${trashChips().length})`);
 const trashCounts = trashChips().map((c) => c.querySelector(".n").textContent);
-ok(trashCounts.join("/") === "9/8", `each Trash chip counts only its own zone (got ${trashCounts.join("/")})`);
+ok(trashCounts.join("/") === "9/12", `each Trash chip counts only its own zone (got ${trashCounts.join("/")})`);
 
 click(trashChips()[0]);
 ok(rows().length === 9, `Black Temple trash -> 9 rows (got ${rows().length})`);
@@ -880,7 +908,7 @@ ok(window.location.hash.includes("boss=Trash") && window.location.hash.includes(
    `ambiguous boss is qualified in the url: ${window.location.hash}`);
 
 click(trashChips()[1]);
-ok(rows().length === 8, `Mount Hyjal trash -> 8 rows (got ${rows().length})`);
+ok(rows().length === 12, `Mount Hyjal trash -> 12 rows (got ${rows().length})`);
 ok(/Mount Hyjal/.test(headText()[0]), `switching zones' trash re-targets the group: "${headText()[0]}"`);
 
 click(doc.getElementById("reset"));
@@ -891,7 +919,7 @@ ok(window.location.hash.includes("boss=Archimonde") && !window.location.hash.inc
 // an old link with a bare ?boss=Trash keeps its previous both-zones behaviour
 window.location.hash = "boss=Trash";
 await new Promise((r) => setTimeout(r, 50));
-ok(rows().length === 17, `unqualified boss=Trash still selects both zones (got ${rows().length})`);
+ok(rows().length === 21, `unqualified boss=Trash still selects both zones (got ${rows().length})`);
 
 // --- class / spec filter ---
 // These chips carry no text: the name and the count live in the tooltip, so they
@@ -1089,10 +1117,10 @@ if (notBisMage.length) {
 click(doc.getElementById("reset"));
 window.location.hash = "spec=NotASpec";
 await new Promise((r) => setTimeout(r, 50));
-ok(rows().length === 182, `an unknown spec id is ignored (got ${rows().length})`);
+ok(rows().length === 195, `an unknown spec id is ignored (got ${rows().length})`);
 
 click(doc.getElementById("reset"));
-ok(rows().length === 182, `reset clears the spec filter (got ${rows().length})`);
+ok(rows().length === 195, `reset clears the spec filter (got ${rows().length})`);
 ok(!doc.querySelector("#spec-chips .chip--toggle"), "reset drops the BiS toggle");
 ok(doc.getElementById("spec-row").hidden, "reset hides the spec row again");
 ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priority icons");

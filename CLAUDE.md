@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 328 checks, should be all green
+npm test             # 339 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -27,7 +27,7 @@ its data and will show a load error otherwise.
 
 ## 2. The data
 
-### `data/loot_data.json` — 182 items, the source of truth
+### `data/loot_data.json` — 195 items, the source of truth
 
 Flat array, grouped in the file by zone then boss in kill order, so a boss's items sit
 together for hand-editing.
@@ -42,10 +42,21 @@ together for hand-editing.
 | `role` | Physical / Caster / Healer / Tank / Tier. **Currently hidden** — see `SHOW_ROLE` |
 | `priority` | Ordered list of entries, each naming the operator linking it to the previous one — see §3 |
 | `notes` | Caveats. All conditional wording lives here, never in `priority` |
-| `unique` | `true` only on the 19 unique items. **Absent means not unique** — see Repeats in §3 |
+| `unique` | `true` only on the 23 unique items. **Absent means not unique** — see Repeats in §3 |
+| `unsourced` | `true` on the 13 items the source guide never covered. **Absent means it is zatar's** |
 
-**`priority` is structured data, not prose.** 23 items have an empty list, meaning
-"whoever needs it"; the reason is in the notes.
+**`priority` is structured data, not prose.**
+
+**An empty `priority` means two different things, and they must not be conflated.** On the
+182 records that came from the videos it means zatar gave a call and the call was "whoever
+needs it" — his wording lives in `notes`, and 23 rows are like this. On the 13 `unsourced`
+records it means he never mentioned the item at all; they were found by auditing Wowhead's
+BiS guides against this dataset (see `verify/missing-items.md`) and they render with a
+**"not in the guide"** tag, because a row carrying none of his calls must not read as one he
+had no opinion on. `check_priority.py` enforces the distinction: an empty priority with
+neither `notes` nor `unsourced` is a warning, and `unsourced` on a record that *has* a
+priority is an error — if someone later records a call for one of these, the marker comes
+off in the same edit.
 
 ### `data/specs.json` — the class/spec registry
 
@@ -91,7 +102,7 @@ entry of `FeralDruid` + `form: "cat"` resolves straight to `FeralCat`.
 - Phase keys (`P3`) exist so P4/P5 can be added later without a migration.
 - **Run `python3 verify/check_bis.py` after editing.**
 
-**332 entries across all 28 specs, and it is generated** — `python3 verify/fetch_bis.py`
+**366 entries across all 28 specs, and it is generated** — `python3 verify/fetch_bis.py`
 builds it from the sources in `verify/bis-sources.json`, which names one Wowhead Phase 3
 guide per spec. Hand edits survive a re-run: an entry already in the file keeps its `bis`
 value, and anything the guides no longer corroborate is kept and reported rather than
@@ -185,7 +196,7 @@ sits on a row that says `Mage`. `bisMark()` resolves this: a spec icon answers f
 and a class icon takes the **highest** tier among its specs. Who the ring is for belongs to
 the icon, not the ring, so it goes on the tooltip's **name line** — `Priest — Discipline,
 Holy` above a plain `Phase BiS` — and the specs drop the class name the icon already shows.
-It matters: of 332 entries, most rings land on a spec icon and around 120 on a class icon.
+It matters: of 366 entries, most rings land on a spec icon and around 120 on a class icon.
 
 While a filter is on, only the **selected** specs count toward a class icon's ring, so it
 answers "is this BiS for me" rather than "for someone in this class".
@@ -281,7 +292,7 @@ ambiguous, so the other 14 bosses keep the short URL they have always had. An ol
   count, so the rows line up down one edge. What the row is, and what its All chip clears,
   live in `aria-label` (on the `role="group"`) and in `data-tip` — `allChip()` sets both,
   so a new row should go through it rather than calling `chip()` directly. Counts stay on
-  the individual chips; the row total is already the `N of 182 items` line.
+  the individual chips; the row total is already the `N of 195 items` line.
 - **`SHOW_ROLE = false`** in `app.js` switches off the Role column and filter. Everything
   behind it still works — chips, filtering, sort key, search index, token class matching.
 
@@ -314,11 +325,20 @@ structured priority), `verify/fetch_unique.py` (re-runnable if the item set chan
 
 ## 6. Known gaps
 
-- **`verify/missing-items.md`** — 2 items confirmed absent from the dataset. An ID-block
-  scan suggests 20-30 more; cross-referencing the
-  [wowsims/tbc](https://github.com/wowsims/tbc) item DB would settle it.
-- **Not included at all:** gems, and Mother Shahraz's shadow-resistance set. Both were
-  intentional omissions by the creator.
+- **Missing items: closed, Aug 2026.** The old "20-30 more" estimate was wrong — it counted
+  tier **set pieces** as missing loot. 71 BiS items were sourced to BT or Hyjal and absent
+  here, but 62 were Thunderheart/Skyshatter/Lightbringer/Onslaught/Slayer's/Absolution/
+  Malefic/Gronnstalker's/Tempest armour, which are what the 15 **tokens** turn into and are
+  correctly not listed. The 8 real ones were added. Full audit in `verify/missing-items.md`;
+  expect tier armour to keep showing as "not in this dataset" on every `fetch_bis.py` run.
+- **Still not included:** gems, and Mother Shahraz's shadow-resistance set — intentional
+  omissions by the creator — and tier set pieces, per the above.
+- **The 13 added rows are invisible to the class/spec filter**, because they have no priority
+  and `selectionHas()` matches nobody on an empty one. So Band of the Eternal Champion, which
+  is BiS for 8 physical specs, never appears in a Survival hunter's filtered view. Deliberate
+  for now — the filter answers "where do I stand in zatar's list" — but it means 34 of the
+  366 BiS entries are recorded and unreachable. Letting the filter also match an unsourced row
+  that is BiS for the selected spec would fix it.
 - Planned but not built: clicking a spec icon in a priority line to jump straight to that
   spec's filtered view. `BIS_BY_SPEC` in `app.js` is still unread by anything — the filter
   goes through `bisTier()` — and is the natural source for a "show me this spec's whole BiS
@@ -326,8 +346,7 @@ structured priority), `verify/fetch_unique.py` (re-runnable if the item set chan
 
 ### Pagination — considered and declined, Aug 2026
 
-All 182 items render on one page, in 17 boss groups: 2,397 elements under `#results`
-(910 cells, 464 icons). A full `update()` profiled in jsdom at ~180ms median, of which
+All 195 items render on one page, in 17 boss groups: ~2,400 elements under `#results`. A full `update()` profiled in jsdom at ~180ms median, of which
 **~82% is DOM construction** and ~0.1ms is the filtering logic. jsdom is roughly an order
 of magnitude slower at DOM work than a browser, so the real cost is well under that.
 
@@ -346,7 +365,7 @@ none of its behavioural cost.
 
 Two inefficiencies found while profiling, both dwarfed by DOM construction at this size but
 worth naming if the dataset grows several-fold: `bossSortKey()` calls `orderedBosses()` per
-row, rescanning all 182 records while grouping (182²), and each class/spec chip makes its
+row, rescanning every record while grouping (n²), and each class/spec chip makes its
 own full pass over the filtered pool (~36 passes per render).
 
 ---
@@ -363,8 +382,13 @@ credited in-video to **Veramos**, arms-warrior input to **Lemonism**.
 Item IDs and slots came from [wowsims/tbc](https://github.com/wowsims/tbc). Icons and
 tooltips from [Wowhead](https://www.wowhead.com/tbc).
 
-**The BiS rings are not zatar's** and must never be presented as if they were — the videos
-gave loot-council priorities, not per-spec BiS lists. `data/bis.json` comes from Wowhead's
+**182 of the 195 rows are zatar's; 13 are not.** Those 13 are T6 items the videos never
+mention, added in Aug 2026 so the loot tables are complete. They carry `unsourced: true`, hold
+no priority, and render with a "not in the guide" tag so no reader mistakes them for his
+calls. `verify/missing-items.md` is the record.
+
+**The BiS rings are not zatar's either** and must never be presented as if they were — the
+videos gave loot-council priorities, not per-spec BiS lists. `data/bis.json` comes from Wowhead's
 per-spec Phase 3 (BT/Hyjal) BiS guides, one per spec, each URL recorded in
 `verify/bis-sources.json`; how long an item stays BiS is derived from
 [wowsims/tbc](https://github.com/wowsims/tbc) P4/P5 gear presets. Where the two sources

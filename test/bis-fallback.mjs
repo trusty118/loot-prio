@@ -26,22 +26,22 @@ async function boot(bisResponse) {
 
 // 404
 let doc = await boot(() => Promise.resolve({ ok: false, status: 404, json: () => Promise.reject(new Error("nope")) }));
-ok(doc.querySelectorAll("tbody tr").length === 182, `bis.json 404 -> table still renders (${doc.querySelectorAll("tbody tr").length} rows)`);
+ok(doc.querySelectorAll("tbody tr").length === 195, `bis.json 404 -> table still renders (${doc.querySelectorAll("tbody tr").length} rows)`);
 ok(doc.querySelectorAll(".spec-icon--bis, .spec-icon--bis2, .spec-icon--bis3").length === 0, "404 -> no rings, no crash");
 ok(doc.querySelectorAll(".col-prio img").length > 300, "404 -> spec icons still render");
 
 // malformed json
 doc = await boot(() => Promise.resolve({ ok: true, status: 200, json: () => Promise.reject(new SyntaxError("bad json")) }));
-ok(doc.querySelectorAll("tbody tr").length === 182, "malformed bis.json -> table still renders");
+ok(doc.querySelectorAll("tbody tr").length === 195, "malformed bis.json -> table still renders");
 
 // valid but empty
 doc = await boot(() => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({ specs: {} }) }));
-ok(doc.querySelectorAll("tbody tr").length === 182, "empty specs -> table still renders");
+ok(doc.querySelectorAll("tbody tr").length === 195, "empty specs -> table still renders");
 ok(doc.querySelectorAll(".spec-icon--bis3").length === 0, "empty specs -> no rings");
 
 // shape without a specs key at all
 doc = await boot(() => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}) }));
-ok(doc.querySelectorAll("tbody tr").length === 182, "missing specs key -> table still renders");
+ok(doc.querySelectorAll("tbody tr").length === 195, "missing specs key -> table still renders");
 
 console.log(fail.length ? `\n${fail.length} FAILURES` : "\nAll checks passed");
 process.exit(fail.length ? 1 : 0);
