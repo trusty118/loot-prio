@@ -68,8 +68,26 @@
       <button type="button" id="reset" class="btn-reset">Reset</button>
     </div>
 
+    <!-- filled from the registry while editing; click an icon to add it to a line.
+         It lives inside the sticky refine panel so it stays on screen while you
+         scroll to the row you are editing. -->
+    <div id="palette" class="palette" hidden aria-label="Specs to add"></div>
+
     <div class="control-row control-row--meta">
       <p class="count" id="count" aria-live="polite"></p>
+
+      <!-- Editing lives with the results rather than with the filters: it acts on the
+           rows you are looking at, not on which rows those are. -->
+      <div class="template-bar">
+        <span class="template-name" id="template-name"></span>
+        <button type="button" id="edit-toggle" class="btn-edit" aria-pressed="false">Edit</button>
+        <span class="template-menu" id="template-menu" hidden>
+          <button type="button" id="tpl-save" class="btn-tpl">Save</button>
+          <button type="button" id="tpl-open" class="btn-tpl">Open</button>
+          <button type="button" id="tpl-share" class="btn-tpl">Copy link</button>
+          <button type="button" id="tpl-discard" class="btn-tpl btn-tpl--warn">Discard</button>
+        </span>
+      </div>
     </div>
 
   </section>

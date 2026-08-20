@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 346 checks, should be all green
+npm test             # 378 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -280,7 +280,86 @@ registry on read, so a stale identifier is dropped rather than filtering every r
 ambiguous, so the other 14 bosses keep the short URL they have always had. An old bare
 `boss=Trash` link carries no `bossZone` and keeps its original both-zones behaviour.
 
-## 4. Conventions that are easy to break
+## 4. Edit mode — your own priority list
+
+The whole data restructure was aimed at this. `priority` became an ordered list of
+`{spec|class, op}` entries so a person could reorder icons and pick operators.
+
+**zatar's data is never mutated.** `ALL` stays exactly as loaded, so "back to his order"
+is always one click away and a template can be diffed against the original. Edits live in
+an overlay:
+
+```js
+function effectivePriority(rec) {                       // the template's, else the guide's
+  return (activeTemplate && activeTemplate.priorities[rec.id]) || rec.priority;
+}
+```
+
+`priorityCell` and `editablePriorityCell` both read that, never `rec.priority` — the one
+exception is the reset button, which reads `rec.priority` precisely because it wants the
+original.
+
+### What a template is
+
+```json
+{ "id": "t_9f3c", "name": "MM hunter list", "created": "2026-08-20",
+  "v": 1, "base": "zatar", "priorities": { "32375": [ { "spec": "ProtWarr" } ] } }
+```
+
+A **full copy** of all 195 priorities, not a diff — 11.6 KB of JSON, **2,263 characters**
+gzipped and base64url'd, which fits a URL comfortably. Two consequences, both handled
+rather than hidden:
+
+- **It is frozen.** Later corrections to `loot_data.json` don't reach a saved template;
+  `base` and the date are stored so the UI can say so.
+- **Items added later aren't in it.** Anything missing renders from `loot_data.json` and is
+  marked as not part of this template, never silently blank (`inTemplate()`).
+
+### Storage
+
+```js
+var store = { list(), load(id), save(t), remove(id) };   // localStorage now, Azure later
+```
+
+**Async from the start** even though localStorage is synchronous, so the Azure Functions +
+Cosmos implementation is a drop-in rather than a refactor of every call site. That is the
+entire reason edit mode was built before login.
+
+### Sharing by link
+
+`encodeTemplate` / `decodeTemplate` gzip via `CompressionStream` and base64url into `#t=`.
+The `z` prefix marks gzip, `r` raw base64 for browsers without it. In the **hash fragment**
+it never reaches a server.
+
+A template from a link is **untrusted input**. `validateTemplate` enforces the same rules as
+`verify/check_priority.py` — identifiers resolve, operators are among the five, the first
+entry has no `op`, no illegal repeats — and refuses with a readable message rather than
+rendering a broken table. `test/templates.mjs` hand-crafts one violation of each.
+
+### The editing gestures
+
+| Action | Pointer | Keyboard |
+|---|---|---|
+| Reorder | drag the icon along the line | ← → |
+| Remove | drag it clear of the row, or the × | Delete |
+| Operator | click the `>` between two icons | Enter |
+| Add | drag from the palette, or + then click | + then click |
+
+Pointer events, **not HTML5 drag-and-drop** — these icons sit in a `table-layout: fixed`
+cell, where HTML5 drop targets are unreliable. A press only becomes a drag past
+`DRAG_SLOP` (4px), so a click still reads as a click; `DRAG_OUT` (14px clear of the row)
+is what makes it a removal.
+
+**Every gesture has a keyboard form**, which is both the accessibility requirement and the
+only reason the editor is testable — jsdom can dispatch a keydown but cannot drag. Dragging
+itself is checked by hand at `localhost:8642`.
+
+**The repeat rule is enforced in the editor, not just the validator.** `allowsRepeat()` is
+the JS port of the rule in `check_priority.py`: a spec may appear twice only when the item
+is a `Finger`, `Trinket`, `One-Hand`, `Main-Hand` or `Off-Hand` and is not `unique`. The
+editor refuses the drop and says why, so it cannot produce data that fails validation later.
+
+## 5. Conventions that are easy to break
 
 - **Never use a bare element selector in `style.css`.** Wowhead's tooltip script injects
   its own DOM into the page. A bare `table { min-width: 940px }` once matched their
@@ -311,13 +390,17 @@ ambiguous, so the other 14 bosses keep the short URL they have always had. An ol
 
 ---
 
-## 5. Tests
+## 6. Tests
 
-`npm test` runs both:
+`npm test` runs four files:
 
 - `test/smoke.mjs` — renders the page in jsdom and asserts filtering, sorting, grouping,
   icons, operators, BiS rings, tooltips and the data edits.
 - `test/bis-fallback.mjs` — a missing or malformed `bis.json` degrades gracefully.
+- `test/edit-mode.mjs` — the editor through its keyboard and click paths: reorder, remove,
+  operator cycling, the palette, the repeat rule, reset, and that `ALL` is never mutated.
+- `test/templates.mjs` — a template is a full copy, storage round-trips, the URL encoding
+  round-trips, and seven kinds of hand-crafted bad template are each refused.
 
 They can't cover anything needing a real browser: Wowhead's script doesn't complete its
 data fetch under jsdom, so **item icons and item tooltips are untested** — check those by
@@ -336,7 +419,7 @@ structured priority), `verify/fetch_unique.py` (re-runnable if the item set chan
 
 ---
 
-## 6. Known gaps
+## 7. Known gaps
 
 - **Missing items: closed, Aug 2026.** The old "20-30 more" estimate was wrong — it counted
   tier **set pieces** as missing loot. 71 BiS items were sourced to BT or Hyjal and absent
@@ -384,7 +467,7 @@ own full pass over the filtered pool (~36 passes per render).
 
 ---
 
-## 7. Attribution (required, keep it prominent)
+## 8. Attribution (required, keep it prominent)
 
 The priorities are the work of **[zatar_wow](https://twitch.tv/zatar_wow)**, whose site
 `tbc.classicwowbuilds.com` has been offline for years. This is a community mirror, not
