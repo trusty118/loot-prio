@@ -31,20 +31,12 @@
     ]
   };
 
-  /* Role column and filter are switched off for now. Everything behind them is
-     intact - role still filters, still feeds the token class matching, and is
-     still in the search index - so flipping this back to true restores it.
-     Hiding the cells with CSS instead does not work: in a table-layout:fixed
-     table the remaining cells shift into the wrong columns. */
-  var SHOW_ROLE = false;
-
   /* shown on rows the source guide never covered, and in the search haystack so
      the set is reachable by typing it */
   var UNSOURCED_TAG = "not in the guide";
 
   var ZONE_ORDER = ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"];
   var ZONE_LABEL = { "Crafted (Heart of Darkness)": "Crafted" };
-  var ROLE_ORDER = ["Physical", "Caster", "Healer", "Tank", "Tier"];
 
   /* Encounter Journal boss portraits (128x64 PNG). TBC bosses have no achievement
      icons - those postdate them - but Legion backfilled the Adventure Guide, so
@@ -109,10 +101,10 @@
     "Shield / Off-hand", "Cloak", "Jewellery", "Relic"
   ];
 
-  /* typeGroup() still returns "Tier Token" - it's a real bucket and an existing
-     ?type= link must keep working - but it's kept out of the dropdown, since the
-     Tier role chip already selects exactly those items. */
-  var HIDDEN_TYPES = { "Tier Token": true };
+  /* Nothing is hidden from the type dropdown any more. "Tier Token" used to be,
+     because the Tier role chip selected exactly those 15 items - with the role
+     filter gone, the dropdown is the only way to reach them. */
+  var HIDDEN_TYPES = {};
 
   /* Display-only tidy-up of the raw type. Staves and polearms are two-handed by
      definition, so the "2H" prefix is noise. Relabelled at render time rather
@@ -147,12 +139,6 @@
   function classPasses(cls, skip) {
     var info = REG.classes[cls];
     if (!info) return false;
-
-    if (skip !== "role" && state.roles.length) {
-      var roleOk = state.roles.indexOf("Tier") !== -1 ||
-        state.roles.some(function (r) { return info.roles.indexOf(r) !== -1; });
-      if (!roleOk) return false;
-    }
 
     if (skip !== "type" && state.type &&
         state.type !== "Tier Token" && state.type !== info.armor) {
@@ -276,15 +262,12 @@
     return "Weapons - 1H";
   }
 
-  /* Sort keys for the clickable column headers. Slot and Role sort by their
-     canonical order rather than alphabetically - paper-doll order and
-     Physical/Caster/Healer/Tank/Tier are more useful than Back-before-Chest or
-     Caster-before-Physical. Item and Type sort on the text as displayed. */
+  /* Sort keys for the clickable column headers. Slot sorts in paper-doll order
+     rather than alphabetically; Item and Type sort on the text as displayed. */
   var SORT_KEYS = {
     item: function (r) { return r.item.toLowerCase(); },
     slot: function (r) { return SLOT_ORDER.indexOf(slotGroup(r.slot)); },
-    type: function (r) { return typeLabel(r).toLowerCase(); },
-    role: function (r) { return ROLE_ORDER.indexOf(r.role); }
+    type: function (r) { return typeLabel(r).toLowerCase(); }
   };
 
   var ICON_BASE = "https://wow.zamimg.com/images/wow/icons/large/";
@@ -380,24 +363,6 @@
     }).join(" ");
   }
 
-  /* Role glyphs, drawn rather than fetched: Blizzard's ready-check role icons
-     live in the game's UI atlas and aren't hosted as individual files anywhere.
-     Shapes follow the same language - shield for tank, cross for healer, sword
-     for melee - so the pill reads without relying on colour. */
-  var ROLE_GLYPH = {
-    "Tank": '<path d="M12 2 3 5v7c0 5 4 8.5 9 10 5-1.5 9-5 9-10V5z"/>',
-    "Healer": '<path d="M9.5 2h5v5.5H20v5h-5.5V21h-5v-8.5H4v-5h5.5z"/>',
-    "Physical": '<path d="M20.5 2 22 3.5 12.5 13l-1.5-1.5zM10 12.5 11.5 14l-6 6-3 1 1-3zM3 3l4 1 9 9-2 2-9-9z"/>',
-    "Caster": '<path d="M12 1.5 14 9l7.5 2-7.5 2-2 7.5-2-7.5L2.5 11 10 9z"/>',
-    "Tier": '<path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6zm0 4.5 4 2v4c0 2.6-1.7 4.4-4 5.2-2.3-.8-4-2.6-4-5.2v-4z"/>'
-  };
-
-  function roleGlyph(role) {
-    var d = ROLE_GLYPH[role];
-    if (!d) return "";
-    return '<svg class="role-glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
-      d + "</svg>";
-  }
 
   var state = {
     zone: "",        // "" = all
@@ -422,7 +387,6 @@
     classChips: document.getElementById("class-chips"),
     specChips: document.getElementById("spec-chips"),
     specRow: document.getElementById("spec-row"),
-    roleChips: document.getElementById("role-chips"),
     type: document.getElementById("type-select"),
     slot: document.getElementById("slot-select"),
     search: document.getElementById("search"),
@@ -524,8 +488,7 @@
     if (classes) {
       if (!classes.some(function (c) { return classPasses(c, skip); })) return false;
     } else {
-      if (skip !== "role" && state.roles.length && state.roles.indexOf(rec.role) === -1) return false;
-      if (skip !== "type" && state.type && typeGroup(rec) !== state.type) return false;
+        if (skip !== "type" && state.type && typeGroup(rec) !== state.type) return false;
     }
 
     if (state.q) {
@@ -581,7 +544,6 @@
     if (state.classes.length) p.set("class", state.classes.join(","));
     if (state.specs.length) p.set("spec", state.specs.join(","));
     if (state.bisOnly) p.set("bis", "1");
-    if (state.roles.length) p.set("role", state.roles.join(","));
     if (state.type) p.set("type", state.type);
     if (state.slot) p.set("slot", state.slot);
     if (state.q) p.set("q", state.q);
@@ -617,7 +579,6 @@
 
     state.bisOnly = state.specs.length ? p.get("bis") === "1" : false;
 
-    state.roles = p.get("role") ? p.get("role").split(",").filter(Boolean) : [];
     state.type = p.get("type") || "";
     state.slot = p.get("slot") || "";
     state.q = p.get("q") || "";
@@ -819,26 +780,6 @@
       });
       el.specChips.appendChild(toggle);
     }
-  }
-
-  function renderRoleChips() {
-    var counts = countBy("role", function (r) { return r.role; });
-    el.roleChips.innerHTML = "";
-
-    var all = allChip("roles", state.roles.length === 0);
-    all.addEventListener("click", function () { state.roles = []; update(); });
-    el.roleChips.appendChild(all);
-
-    ROLE_ORDER.forEach(function (role) {
-      var active = state.roles.indexOf(role) !== -1;
-      var c = chip(role, active, counts[role] || 0, { role: role });
-      c.addEventListener("click", function () {
-        var i = state.roles.indexOf(role);
-        if (i === -1) state.roles.push(role); else state.roles.splice(i, 1);
-        update();
-      });
-      el.roleChips.appendChild(c);
-    });
   }
 
   function fillSelect(sel, values, current, counts, allLabel) {
@@ -1124,11 +1065,10 @@
     type.className = "col-type";
     var classes = tierClasses(rec);
     if (classes) {
-      /* Icons only - the Role column already says "Tier", so a word here as well
-         is noise. typeLabel() still returns text for sorting and search.
-         Classes that don't satisfy the active filters are dimmed, so it's clear
-         which of the three put the token in these results. */
-      var filtering = state.roles.length > 0 || state.type !== "";
+      /* Icons only, no word: typeLabel() still returns text for sorting and
+         search. Classes that don't satisfy the active type filter are dimmed, so
+         it's clear which of the three put the token in these results. */
+      var filtering = state.type !== "";
       type.innerHTML =
         classes.map(function (c) {
           var muted = filtering && !classPasses(c, null);
@@ -1143,16 +1083,6 @@
       type.textContent = typeLabel(rec);
     }
     tr.appendChild(type);
-
-    if (SHOW_ROLE) {
-      var role = document.createElement("td");
-      role.className = "col-role";
-      var pill = document.createElement("span");
-      pill.className = "role-pill role-" + rec.role;
-      pill.innerHTML = roleGlyph(rec.role) + "<span>" + escapeHtml(rec.role) + "</span>";
-      role.appendChild(pill);
-      tr.appendChild(role);
-    }
 
     tr.appendChild(priorityCell(rec));
 
@@ -1214,14 +1144,12 @@
     table.innerHTML =
       "<colgroup>" +
       '<col class="c-item"><col class="c-slot"><col class="c-type">' +
-      (SHOW_ROLE ? '<col class="c-role">' : "") +
       '<col class="c-prio"><col class="c-notes">' +
       "</colgroup>" +
       "<thead><tr>" +
       sortableTh("Item", "item") +
       sortableTh("Slot", "slot") +
       sortableTh("Type", "type") +
-      (SHOW_ROLE ? sortableTh("Role", "role") : "") +
       "<th>Priority</th><th>Notes</th>" +
       "</tr></thead>";
     var tbody = document.createElement("tbody");
@@ -1279,7 +1207,6 @@
     renderBossChips();
     renderClassChips();
     renderSpecChips();
-    renderRoleChips();
     renderSelects();
     renderResults();
     writeUrl();
@@ -1361,7 +1288,7 @@
     });
 
     el.reset.addEventListener("click", function () {
-      state.zone = ""; state.boss = ""; state.bossZone = ""; state.roles = [];
+      state.zone = ""; state.boss = ""; state.bossZone = "";
       state.classes = []; state.specs = []; state.bisOnly = false;
       state.type = ""; state.slot = ""; state.q = "";
       state.sort = ""; state.dir = "asc";

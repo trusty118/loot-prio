@@ -1,11 +1,14 @@
 """Validate data/bis.json against the loot table and the spec table in app.js.
 
 Usage:
-    python verify/check_bis.py
+    python verify/check_bis.py              # errors, plus a one-line summary
+    python verify/check_bis.py --verbose    # and every not-visible entry
 
-Exits non-zero on errors. Orphans are warnings, not errors: an item can legitimately
-be BiS for a spec the priority line never names - it just means no ring is drawn on
-that row, because there is no icon for that spec to ring.
+Exits non-zero on errors. "Not visible" is not an error and not a defect: the guide's
+priority is coarser than per-spec BiS - he never mentions Marksmanship, for instance -
+so an item can be BiS for a spec his line never names, and no icon exists to ring.
+That is expected and must stay that way: the priority is his ordering, destined to be
+a loadable template, and is never augmented from bis.json.
 """
 
 import json
@@ -37,7 +40,7 @@ def main():
     doc = json.loads(BIS.read_text(encoding="utf-8"))
     bis_specs = doc.get("specs", {})
 
-    errors, warnings = [], []
+    errors, warnings, warn_ids = [], [], set()
     entries = 0
 
     for spec_name, phases in bis_specs.items():
@@ -97,6 +100,7 @@ def main():
                         and (owner is None or owner not in listed):
                     shown = ", ".join(sorted(x for x in listed if x)) or "nobody"
                     who = spec_name if owner is None else f"{spec_name} or {owner}"
+                    warn_ids.add(item_id)
                     warnings.append(
                         f"{label}: {rec['item']} - priority lists {shown}, "
                         f"not {who}, so no ring will show"
@@ -105,9 +109,16 @@ def main():
     print(f"{entries} entries across {len(bis_specs)} specs")
 
     if warnings:
-        print(f"\nnot visible ({len(warnings)}):")
-        for w in warnings:
-            print(f"  {w}")
+        verbose = "--verbose" in sys.argv
+        items = len(warn_ids)
+        print()
+        note = "" if verbose else " (--verbose to list them)"
+        print(f"{len(warnings)} entries across {items} items are not visible on the "
+              f"guide's priority - expected, his ordering is coarser than per-spec BiS"
+              + note)
+        if verbose:
+            for w in warnings:
+                print(f"  {w}")
 
     if errors:
         print(f"\nERRORS ({len(errors)}):")
