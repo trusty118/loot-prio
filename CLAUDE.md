@@ -282,6 +282,12 @@ ambiguous, so the other 14 bosses keep the short URL they have always had. An ol
 
 ## 4. Edit mode — your own priority list
 
+> **Being reworked.** The interaction below is agreed to be wrong on four counts — the mental
+> model, adding, operators and dragging. **[docs/edit-mode-plan.md](docs/edit-mode-plan.md) is
+> the agreed replacement; read it before touching any of this.** The model layer it describes
+> (the overlay, the editing rules, templates, storage, sharing) survives unchanged; the palette
+> and the drag-to-delete gesture do not.
+
 The whole data restructure was aimed at this. `priority` became an ordered list of
 `{spec|class, op}` entries so a person could reorder icons and pick operators.
 
