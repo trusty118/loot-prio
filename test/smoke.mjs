@@ -89,7 +89,6 @@ ok(links.every((a) => /wowhead\.com\/tbc\/item=\d+/.test(a.href)), "all item lin
 // --- icons ---
 const zoneChips = [...doc.querySelectorAll("#zone-chips .chip")];
 const bossChips = [...doc.querySelectorAll("#boss-chips .chip")];
-const roleChips = [...doc.querySelectorAll("#role-chips .chip")];
 
 // chip 0 in each group is the "All" chip and gets no icon
 ok(zoneChips.slice(1).every((c) => c.querySelector("img.chip-icon")), "all 3 zone chips have an icon");
@@ -99,26 +98,16 @@ ok(!bossChips[0].querySelector("img"), "the boss row's All chip has no icon eith
 
 // every row's clear chip reads just "All", so the rows line up; what it clears is
 // carried by the tooltip and the aria-label instead
-const allChips = ["#zone-chips", "#boss-chips", "#class-chips", "#role-chips"]
+const allChips = ["#zone-chips", "#boss-chips", "#class-chips"]
   .map((sel) => doc.querySelector(sel + " .chip"));
 ok(allChips.every((c) => c.classList.contains("chip--all")), "every row leads with an All chip");
 ok(allChips.every((c) => c.textContent.trim() === "All"), "they read just All, with no count");
 ok(allChips.every((c) => !c.querySelector(".n")), "the All chips carry no count element");
-ok(allChips.map((c) => c.dataset.tip).join("|") === "All zones|All bosses|All classes|All roles",
+ok(allChips.map((c) => c.dataset.tip).join("|") === "All zones|All bosses|All classes",
    `each says what it clears in its tooltip: ${allChips.map((c) => c.dataset.tip).join("|")}`);
 ok(allChips.every((c) => c.getAttribute("aria-label") === c.dataset.tip),
    "and repeats it as an aria-label");
-ok(roleChips.every((c) => !c.querySelector("img")), "role chips have no icons");
 
-// role chips must carry data-role so the CSS can tint them like the table pills
-const roleAttrs = roleChips.slice(1).map((c) => c.dataset.role);
-ok(roleAttrs.join(",") === "Physical,Caster,Healer,Tank,Tier", `role chips tagged: ${roleAttrs.join(",")}`);
-const css = fs.readFileSync(path.join(root, "style.css"), "utf8");
-ok(/\.chip\[data-role\]\s*\{/.test(css), "role chips have a resting tinted style");
-for (const r of ["Physical", "Caster", "Healer", "Tank", "Tier"]) {
-  ok(new RegExp(`\\.chip\\[data-role="${r}"\\][^{]*\\{[^}]*--chip-role:\\s*var\\(--role-${r.toLowerCase()}\\)`).test(css),
-     `${r} chip bound to --role-${r.toLowerCase()}, the same token as its pill`);
-}
 
 const allImgs = [...doc.querySelectorAll("img")];
 ok(allImgs.length > 0 && allImgs.every((i) => i.getAttribute("src")), "no img has an empty src");
@@ -132,28 +121,18 @@ ok(portraits.size === 16, `16 distinct group portraits, incl. trash/crafted (got
 const ejPortraits = [...portraits].filter((s) => s.includes("ui-ej-boss-"));
 ok(ejPortraits.length === 14, `14 Encounter Journal boss portraits (got ${ejPortraits.length})`);
 
-// the role stripe must be gone
-ok(!fs.readFileSync(path.join(root, "style.css"), "utf8").includes("inset 3px"),
-   "role colour stripe removed from style.css");
-// Role column is switched off via SHOW_ROLE in app.js. Assert it's gone from the
-// table but that everything behind it survives, so turning it back on is safe.
-ok(doc.querySelectorAll(".role-pill").length === 0, "role column not rendered while SHOW_ROLE is false");
+// The Role column and filter are deleted, not hidden. The class/spec filter
+// answers the same question more precisely, so nothing renders a role now.
+const appSrc = fs.readFileSync(path.join(root, "app.js"), "utf8");
+ok(!doc.querySelector(".role-pill"), "no role pills rendered");
 ok(!doc.querySelector('th[data-sort="role"]'), "no Role header");
-ok(fs.readFileSync(path.join(root, "app.js"), "utf8").includes("var SHOW_ROLE"),
-   "the switch is a named flag, not a deletion");
-ok(fs.readFileSync(path.join(root, "app.js"), "utf8").includes("ROLE_GLYPH"),
-   "role glyphs kept for when it comes back");
-ok(doc.querySelectorAll("#role-chips .chip").length === 6, "role chips still built (hidden by css)");
-ok(fs.readFileSync(path.join(root, "style.css"), "utf8").includes("#role-row { display: none; }"),
-   "the filter row is hidden in css, not removed from the markup");
-
-// role pills: neutral background, glyph carries the role
-// role pills are not rendered while the column is off; their styles stay in css
-ok(!/\.role-(Physical|Caster|Healer|Tank|Tier)\s*\{[^}]*background:/.test(cssText),
-   "pills no longer carry a per-role background tint");
-ok(/\.role-glyph[^}]*fill:\s*currentColor/.test(cssText), "glyph inherits its colour from the pill");
-ok(/aria-hidden="true"/.test(fs.readFileSync(path.join(root, "app.js"), "utf8")),
-   "glyphs stay aria-hidden so screen readers read the label, not the shape");
+ok(!doc.querySelector("#role-chips"), "no role chip row in the markup");
+ok(!/SHOW_ROLE|roleGlyph|ROLE_GLYPH|renderRoleChips/.test(appSrc), "no role UI left in app.js");
+ok(!/state\.roles/.test(appSrc), "no role filter state left");
+ok(!/role-pill|role-glyph|--role-/.test(cssText), "no role styles left in style.css");
+// the data survives: role still feeds search and still tags the row
+ok(rows().every((tr) => tr.dataset.role), "every row still carries its role in the dom");
+ok(data.every((r) => r.role), "the role field is untouched in loot_data.json");
 
 // --- filter interactions ---
 const chipByText = (sel, text) =>
@@ -169,14 +148,14 @@ ok(window.location.hash.includes("zone=Mount+Hyjal"), `url state: ${window.locat
 click(chipByText("#boss-chips", "Archimonde"));
 ok(rows().length === 14, `+ boss=Archimonde -> 14 rows (got ${rows().length})`);
 
-click(chipByText("#role-chips", "Healer"));
-const healerRows = rows().length;
-ok(healerRows > 0 && healerRows < 14, `+ role=Healer -> ${healerRows} rows (subset of 14)`);
-// tier tokens legitimately join a role filter - they carry role "Tier" but serve healers
-ok(rows().every((tr) => tr.dataset.role === "Healer" || tr.dataset.role === "Tier"),
-   "visible rows are Healer items or tier tokens");
+// the class filter is what replaced the role filter, so narrow with it instead
+const byTip = (sel, name) =>
+  [...doc.querySelectorAll(sel + " .chip")].find((c) => c.dataset.tip === name);
+click(byTip("#class-chips", "Priest"));
+const priestRows = rows().length;
+ok(priestRows > 0 && priestRows < 14, `+ class=Priest -> ${priestRows} rows (subset of 14)`);
 ok(rows().some((tr) => tr.dataset.role === "Tier"),
-   "Archimonde's healer view now includes its tier token");
+   "Archimonde's priest view still includes its tier token");
 
 click(doc.getElementById("reset"));
 ok(rows().length === 195, `reset -> 195 rows (got ${rows().length})`);
@@ -288,15 +267,17 @@ ok(rows().length > 0, `search "Kael'thas" -> ${rows().length} rows`);
 // --- tier tokens render as class icons only ---
 click(doc.getElementById("reset"));
 
-// the Tier role chip is now the only way in, so the type option must be gone
+// The Tier role chip used to be the way in, so the type option was hidden. With
+// the role filter gone the dropdown is the only route to the tokens.
 const typeOptsAfter = [...typeSel.querySelectorAll("option")].map((o) => o.value);
-ok(!typeOptsAfter.includes("Tier Token"), "Tier Token removed from the type dropdown");
+ok(typeOptsAfter.includes("Tier Token"), "Tier Token is selectable in the type dropdown again");
 ok(typeOptsAfter.includes("Cloth") && typeOptsAfter.includes("Weapons - 1H"),
    "other type options are unaffected");
 
-click(chipByText("#role-chips", "Tier"));
+typeSel.value = "Tier Token";
+typeSel.dispatchEvent(new window.Event("change"));
 const tierRows = rows();
-ok(tierRows.length === 15, `Tier role chip still selects all 15 tokens (got ${tierRows.length})`);
+ok(tierRows.length === 15, `type=Tier Token selects all 15 tokens (got ${tierRows.length})`);
 ok(tierRows.every((tr) => !/[()]/.test(tr.children[2].textContent)),
    "the parenthesised class list is gone");
 ok(tierRows.every((tr) => tr.children[2].textContent.trim().replace(/-/g, "").trim() === ""),
@@ -776,50 +757,40 @@ const litClasses = () => [...doc.querySelectorAll("tbody tr")]
   .filter((i) => !i.classList.contains("class-icon--muted"))
   .map((i) => i.getAttribute("alt"));
 
-// the exact case from the screenshot: caster + cloth + legs
+// cloth + legs. The role half of this test went with the role filter, but the
+// per-class rule still decides which tokens qualify: a token surfaces only if one
+// of its three classes wears the armour asked for.
 click(doc.getElementById("reset"));
-click(chipByText("#role-chips", "Caster"));
 setType("Cloth");
 slotSel.value = "Legs"; slotSel.dispatchEvent(new window.Event("change"));
 
-const legRows = rows().length;
-ok(legRows === 4, `caster+cloth+legs -> 2 items + 2 tokens = 4 (got ${legRows})`);
 const legTokens = tokenNames();
-ok(legTokens.length === 2, `2 leg tokens surfaced (got ${legTokens.length}: ${legTokens.join(", ")})`);
 ok(legTokens.some((n) => n.includes("Conqueror")) && legTokens.some((n) => n.includes("Vanquisher")),
-   "Conqueror (Priest/Warlock) and Vanquisher (Mage) both appear");
+   `Conqueror (Priest/Warlock) and Vanquisher (Mage) both appear (got ${legTokens.join(", ")})`);
 ok(!legTokens.some((n) => n.includes("Protector")),
-   "Protector stays out - its casters are Shaman, who wear mail");
+   "Protector stays out - Warrior is plate, Hunter and Shaman are mail");
 
-// dimming: only the cloth casters stay lit
+// dimming: only the cloth wearers stay lit
 const lit = new Set(litClasses());
 ok(lit.has("Priest") && lit.has("Warlock") && lit.has("Mage"),
-   `cloth casters lit: ${[...lit].join(", ")}`);
+   `cloth classes lit: ${[...lit].join(", ")}`);
 ok(!lit.has("Paladin") && !lit.has("Rogue") && !lit.has("Druid"),
-   "non-matching classes on those tokens are dimmed");
+   "classes on those tokens that don't wear cloth are dimmed");
 
-// the union trap: cloth + tank must match nothing, since no class is both
+// plate reaches Conqueror (Paladin) and Protector (Warrior), not Vanquisher
 click(doc.getElementById("reset"));
-click(chipByText("#role-chips", "Tank"));
-setType("Cloth");
-ok(tokenNames().length === 0,
-   `cloth+tank surfaces no token - Conqueror has a tank and cloth wearers, but no cloth tank (got ${tokenNames().join(", ")})`);
-
-// plate + tank should reach Conqueror (Paladin) and Protector (Warrior), not Vanquisher
-click(doc.getElementById("reset"));
-click(chipByText("#role-chips", "Tank"));
 setType("Plate");
-const plateTanks = tokenNames();
-ok(plateTanks.some((n) => n.includes("Conqueror")) && plateTanks.some((n) => n.includes("Protector")),
-   "plate+tank reaches Conqueror (Paladin) and Protector (Warrior)");
-ok(!plateTanks.some((n) => n.includes("Vanquisher")),
-   "Vanquisher stays out - its tank is a Druid, who wears leather");
+const plate = tokenNames();
+ok(plate.some((n) => n.includes("Conqueror")) && plate.some((n) => n.includes("Protector")),
+   "plate reaches Conqueror (Paladin) and Protector (Warrior)");
+ok(!plate.some((n) => n.includes("Vanquisher")),
+   "Vanquisher stays out - Rogue and Druid are leather, Mage is cloth");
 
-// the Tier role chip still selects every token regardless of armour
+// the type option selects every token regardless of armour, and mutes nothing
 click(doc.getElementById("reset"));
-click(chipByText("#role-chips", "Tier"));
-ok(rows().length === 15, `Tier role chip still selects all 15 tokens (got ${rows().length})`);
-ok(!doc.querySelector(".class-icon--muted"), "no dimming when only the Tier role is selected");
+setType("Tier Token");
+ok(rows().length === 15, `type=Tier Token selects all 15 tokens (got ${rows().length})`);
+ok(!doc.querySelector(".class-icon--muted"), "no dimming when the filter is the tokens themselves");
 
 // no filters at all: nothing is dimmed
 click(doc.getElementById("reset"));
@@ -859,9 +830,9 @@ click(headerFor("type"));
 ok(headerFor("type").getAttribute("aria-sort") === "ascending", "new column starts ascending");
 ok(headerFor("item").getAttribute("aria-sort") === "none", "previous column clears its indicator");
 
-// the role sort key is kept even though the column is hidden, ready for SHOW_ROLE
-ok(fs.readFileSync(path.join(root, "app.js"), "utf8").includes("role: function (r) { return ROLE_ORDER.indexOf(r.role); }"),
-   "role sort key kept in SORT_KEYS for when the column returns");
+// the role sort key went with the column
+ok(!/ROLE_ORDER/.test(fs.readFileSync(path.join(root, "app.js"), "utf8")),
+   "role sort key and ROLE_ORDER removed from app.js");
 
 // slot sorts in paper-doll order: Head before Back before Weapon
 click(headerFor("slot"));
@@ -1039,7 +1010,7 @@ const bisIdsFor = (specId) =>
 const survBis = bisIdsFor("Surv");
 const survVisible = rows().filter((tr) =>
   [...survBis].some((id) => tr.children[0].textContent.includes(
-    (data.find((r) => r.id === id) || {}).item || " "))).length;
+    (data.find((r) => r.id === id) || {}).item || ""))).length;
 ok(Number(toggle.querySelector(".n").textContent) === survVisible,
    `the toggle counts what it would leave (says ${toggle.querySelector(".n").textContent}, ${survVisible} visible)`);
 click(toggle);

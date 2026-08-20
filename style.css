@@ -17,16 +17,6 @@
   --legendary: #ff8000;
   --artifact: #e6cc80;
 
-  /* Roles deliberately avoid the item-quality hues below, which carry their own
-     meaning here (item names are coloured by quality, and the BiS rings use the
-     same ladder). Physical was orange = legendary, Caster purple = epic, and
-     Tier gold = artifact, so those three moved to red, teal and stone. Healer
-     green and Tank blue stay: T6 has no uncommon or rare items to clash with. */
-  --role-physical: #e0574c;
-  --role-caster: #3fb3c6;
-  --role-healer: #4fbf7a;
-  --role-tank: #4a9fe0;
-  --role-tier: #b0a595;
 
   --radius: 6px;
   --font: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
@@ -247,34 +237,6 @@ a:hover { color: var(--gold-bright); }
   color: #f6efff;
 }
 
-/* Role chips carry the same colour tone as the .role-pill badges in the table,
-   so the filter and the rows it produces read as the same colour language.
-   Resting = tinted like a pill; pressed = solid fill. */
-.chip[data-role] {
-  color: var(--chip-role);
-  border-color: color-mix(in srgb, var(--chip-role) 45%, transparent);
-  background: color-mix(in srgb, var(--chip-role) 14%, transparent);
-}
-
-.chip[data-role]:hover {
-  color: var(--chip-role);
-  background: color-mix(in srgb, var(--chip-role) 26%, transparent);
-  border-color: color-mix(in srgb, var(--chip-role) 70%, transparent);
-}
-
-.chip[data-role="Physical"] { --chip-role: var(--role-physical); --chip-ink: #1a1409; }
-.chip[data-role="Caster"]   { --chip-role: var(--role-caster);   --chip-ink: #14091c; }
-.chip[data-role="Healer"]   { --chip-role: var(--role-healer);   --chip-ink: #06180e; }
-.chip[data-role="Tank"]     { --chip-role: var(--role-tank);     --chip-ink: #04121c; }
-.chip[data-role="Tier"]     { --chip-role: var(--role-tier);     --chip-ink: #1a1409; }
-
-.chip[data-role][aria-pressed="true"],
-.chip[data-role][aria-pressed="true"]:hover {
-  background: var(--chip-role);
-  border-color: var(--chip-role);
-  color: var(--chip-ink);
-}
-
 .control-row--inputs {
   flex-wrap: wrap;
   align-items: flex-end;
@@ -413,7 +375,6 @@ select:focus-visible, input:focus-visible, .chip:focus-visible, button:focus-vis
 .c-item  { width: 20%; }
 .c-slot  { width: 100px; }
 .c-type  { width: 140px; }  /* fits three 25px class icons plus separators */
-.c-role  { width: 100px; }   /* overridden to 0 while the column is hidden */
 /* Eight 38px icons with ring clearance, plus seven operators at 1.08rem, need
    about 535px - the widest rows in the data are Stormrage Signet Ring and
    Madness of the Betrayer. 35% clears that with margin at 1600px and up. */
@@ -633,48 +594,6 @@ tbody tr:hover .spec-icon--muted { opacity: .6; }
 }
 
 .col-item [class^="icon"] del { display: none; }
-
-/* ---------- role filter: hidden, not removed ----------
-   The column itself is dropped by SHOW_ROLE in app.js - hiding table cells with
-   display:none breaks a fixed-layout table, since the remaining cells shift into
-   the wrong columns. This only hides the filter row; the chips still render and
-   still filter, so a #role= link keeps working. */
-#role-row { display: none; }
-/* ------------------------------------------------------------- */
-
-/* Neutral pill: the glyph identifies the role, so the pill itself no longer
-   tints. Five tinted pills competed with the item-quality colours and the BiS
-   rings, which are the colours that actually carry meaning on this page. */
-.role-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: .7rem;
-  font-weight: 700;
-  letter-spacing: .04em;
-  padding: 2px 9px 2px 6px;
-  border-radius: 999px;
-  white-space: nowrap;
-  color: var(--text-dim);
-  border: 1px solid var(--line);
-  background: var(--bg-panel-2);
-}
-
-.role-glyph {
-  width: 13px;
-  height: 13px;
-  flex: none;
-  fill: currentColor;
-  color: var(--role-glyph, var(--text-faint));
-}
-
-/* Only the glyph is coloured, and it follows the ready-check convention:
-   blue shield, green cross, red blade. */
-.role-Tank     { --role-glyph: var(--role-tank); }
-.role-Healer   { --role-glyph: var(--role-healer); }
-.role-Physical { --role-glyph: var(--role-physical); }
-.role-Caster   { --role-glyph: var(--role-caster); }
-.role-Tier     { --role-glyph: var(--role-tier); }
 
 /* Instant tooltip for the class/spec icons. The native title attribute has a
    browser-imposed delay of about a second that can't be configured, which reads

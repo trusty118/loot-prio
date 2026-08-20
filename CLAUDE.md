@@ -39,7 +39,7 @@ together for hand-editing.
 | `item` / `id` / `wowhead` | Name, real TBC item ID, Wowhead link |
 | `slot` | `Head` … `Two-Hand`, `Ranged`, `Relic`. Collapsed for display: all weapon slots → `Weapon`, `Ranged`+`Relic` → `Ranged/Relic` |
 | `type` | Armour class or weapon type. Displayed with tidy-ups: `2H Staff` → `Staff`, bare `Mace` → `1H Mace` (hand count derived from slot) |
-| `role` | Physical / Caster / Healer / Tank / Tier. **Currently hidden** — see `SHOW_ROLE` |
+| `role` | Physical / Caster / Healer / Tank / Tier. Feeds search and `data-role`; **no longer rendered** — see §6 |
 | `priority` | Ordered list of entries, each naming the operator linking it to the previous one — see §3 |
 | `notes` | Caveats. All conditional wording lives here, never in `priority` |
 | `unique` | `true` only on the 23 unique items. **Absent means not unique** — see Repeats in §3 |
@@ -201,10 +201,16 @@ It matters: of 366 entries, most rings land on a spec icon and around 120 on a c
 While a filter is on, only the **selected** specs count toward a class icon's ring, so it
 answers "is this BiS for me" rather than "for someone in this class".
 
-A ring still can't appear when the priority names neither the spec nor its class;
-`check_bis.py` reports those as "not visible" — warnings, not errors. 80 remain, 33 of them
-on items with an empty priority, where there is no icon to ring at all. The other 47 are
-real disagreements between zatar's calls and Wowhead's, and are left visible on purpose.
+A ring still can't appear when the priority names neither the spec nor its class.
+`check_bis.py` summarises those as "not visible" — 115 entries across 43 items; pass
+`--verbose` for the list. 18 of the items have an empty priority, where there is no icon
+to ring at all; the other 25 name other specs.
+
+**That gap is deliberate: never close it by adding specs to `priority`.** zatar is coarser
+than per-spec BiS — he never mentions Marksmanship, so items that are MM BiS list only BM
+and Survival. `priority` is *his* ordering and is going to be loadable as a template, so
+appending the missing spec icons would look like a tidy fix while quietly rewriting the
+source guide. Players wanting an MM list will build their own once templates exist.
 
 Every icon carries `data-id` with its registry identifier, so nothing downstream has to
 recover it from the display name — forms make that lossy (`Feral Druid (cat)`).
@@ -281,8 +287,8 @@ ambiguous, so the other 14 bosses keep the short URL they have always had. An ol
   tooltip tables and pinned every item tooltip to 940px wide — and `min-width` beats
   `width` and `max-width`, so no override could fix it. Scope to `.boss-group table`.
 - **Don't hide table cells with `display: none`.** The tables are `table-layout: fixed`;
-  hiding a cell makes the rest shift into the wrong columns. Don't generate the column
-  (see `SHOW_ROLE`).
+  hiding a cell makes the rest shift into the wrong columns. Don't generate the column —
+  that is how the Role column was removed.
 - **`title` attributes have a ~1s browser delay** that can't be configured. Icon tooltips
   use `data-tip` plus a `.tip` element parented to `<body>` (inside the table it would be
   clipped by the scroll container).
@@ -302,8 +308,6 @@ ambiguous, so the other 14 bosses keep the short URL they have always had. An ol
   live in `aria-label` (on the `role="group"`) and in `data-tip` — `allChip()` sets both,
   so a new row should go through it rather than calling `chip()` directly. Counts stay on
   the individual chips; the row total is already the `N of 195 items` line.
-- **`SHOW_ROLE = false`** in `app.js` switches off the Role column and filter. Everything
-  behind it still works — chips, filtering, sort key, search index, token class matching.
 
 ---
 
@@ -342,8 +346,13 @@ structured priority), `verify/fetch_unique.py` (re-runnable if the item set chan
   expect tier armour to keep showing as "not in this dataset" on every `fetch_bis.py` run.
 - **Still not included:** gems, and Mother Shahraz's shadow-resistance set — intentional
   omissions by the creator — and tier set pieces, per the above.
-- Planned but not built: alias-aware search, a rank display for the unused `positions()`, and
-  a decision on `SHOW_ROLE`. See §2 and §4.
+- Planned but not built: alias-aware search, and a rank display for the unused
+  `positions()`. See §2 and §4.
+- **The Role column and filter were deleted, Aug 2026.** The class/spec filter answers the
+  same question more precisely. The `role` field stays in `loot_data.json` and in the
+  search index (typing "healer" still works), and still tags each row via `data-role`, but
+  nothing renders it. "Tier Token" returned to the type dropdown at the same time — the
+  Tier role chip had been the only way to reach those 15 items.
 - Planned but not built: clicking a spec icon in a priority line to jump straight to that
   spec's filtered view. `BIS_BY_SPEC` in `app.js` is still unread by anything — the filter
   goes through `bisTier()` — and is the natural source for a "show me this spec's whole BiS
