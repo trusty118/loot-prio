@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 465 checks, should be all green
+npm test             # 468 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -514,13 +514,13 @@ editor refuses the drop and says why, so it cannot produce data that fails valid
   new one returns 200 before wiring it up. Boss portraits are Encounter Journal art
   (`ui-ej-boss-*.png`) with irregular slugs — `najentus`, `kazrogal`, no leading "the" on
   the Illidari Council.
-- **The controls are three panels, in the order the questions get asked**:
-  `.controls--where` (zone/boss), `.controls--list` (which list you are on, and what you can
-  do to it), and `.controls--refine` — everything that narrows the table, which is type, slot,
-  search **and who you are**. Class and spec used to have a panel of their own at the top;
-  they are filters, so they sit with the filters, to the right of the search box.
-  `.field--grow` caps that box at 300px to make the room: you scan the icons, you only type
-  in the box occasionally. Picking a list is not filtering, which is why it kept its own bar. The split is what
+- **Two control panels**: `.controls--where` (zone/boss) and `.controls--refine` —
+  everything that narrows the table, which is type, slot, search **and who you are**. Class
+  and spec used to have a panel of their own at the top; they are filters, so they sit with
+  the filters, to the right of the search box, and `.field--grow` caps that box at 300px to
+  make the room (you scan the icons, you type in the box occasionally).
+- **Which list you are on lives in the banner**, top right, not in a panel: it is not
+  filtering, and it applies to the whole page rather than to the rows below it. The split is what
   makes the last one read as narrowing the results rather than as another way of choosing
   them, so keep chip rows out of it. **Only `.controls--refine` is sticky** — it is the one
   adjusted while reading, it carries the count, and it sits directly above the results;
@@ -617,6 +617,11 @@ own full pass over the filtered pool (~36 passes per render).
 ---
 
 ## 8. Attribution (required, keep it prominent)
+
+**The banner title is generic — "Classic WoW Loot Prios" — so the credit rides on the
+tagline beside it**, and `test/smoke.mjs` asserts the banner names and links zatar_wow. A
+title that no longer says whose calls these are is exactly how the attribution erodes by
+accident, so if the banner is reworked again, the credit moves with it.
 
 The priorities are the work of **[zatar_wow](https://twitch.tv/zatar_wow)**, whose site
 `tbc.classicwowbuilds.com` has been offline for years. This is a community mirror, not

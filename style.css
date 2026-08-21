@@ -58,6 +58,19 @@ a:hover { color: var(--gold-bright); }
   padding: 26px 0 22px;
 }
 
+/* Title left, list controls right. Wraps to two lines on a narrow window rather
+   than crushing either, and aligns on the bottom edge so the bar sits on the same
+   line as the tagline instead of floating against the whole title block. */
+.site-header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+
+.site-title { min-width: 0; }
+
 .site-header h1 {
   margin: 0;
   font-size: 1.7rem;
@@ -711,12 +724,9 @@ mark {
    one gains a handle and the operators become buttons. Keeping the layout identical
    means switching modes doesn't move anything under the cursor. */
 
-/* Its own bar now, so nothing pushes it right. Aligned on the BOTTOM edge, not the
-   middle: the List control is a label stacked above a select, so it is taller than
-   the buttons beside it, and centring made everything float against that stack. The
-   filter row above solves the same problem the same way. */
-.controls--list .control-row { padding: 2px 0; }
-
+/* In the banner now, top right. Aligned on the BOTTOM edge, not the middle: the List
+   control is a label stacked above a select, so it is taller than the buttons beside
+   it, and centring made everything float against that stack. */
 .template-bar {
   display: flex;
   align-items: flex-end;

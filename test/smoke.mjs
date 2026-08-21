@@ -757,6 +757,14 @@ ok(!footer.includes("Item IDs"), "wowsims/Wowhead attribution paragraph removed"
 ok(!footer.includes("Shorthand"), "shorthand paragraph removed");
 ok(!doc.querySelector(".site-footer .shorthand"), "no leftover shorthand element");
 ok(footer.includes("Not affiliated with Blizzard"), "Blizzard disclaimer kept");
+// The banner title is deliberately generic now ("Classic WoW Loot Prios"), so the
+// credit has to be carried by the tagline beside it. CLAUDE.md section 8 requires
+// attribution to stay prominent, and a title that no longer names him is exactly
+// how that erodes by accident.
+const banner = doc.querySelector(".site-header").textContent;
+ok(/zatar_wow/.test(banner), `the banner still credits the source: "${banner.replace(/\s+/g, " ").trim().slice(0, 90)}"`);
+ok(doc.querySelector(".site-header a[href*='zatar_wow']"), "and links to them from the banner");
+
 ok(footer.includes("zatar_wow") && footer.includes("Veramos") && footer.includes("Lemonism"),
    "creator credits kept");
 
@@ -926,15 +934,16 @@ ok([...inputsRow.children].indexOf(doc.querySelector(".who-inline")) >
 ok(/\.field--grow\s*\{[^}]*flex:\s*0/.test(cssText),
    "the search box no longer takes every spare pixel");
 
-// three panels: where it drops, which list you are on, and then everything that
-// narrows the table - type, slot, search and who you are. Filtering comes last so
-// it sits against the results it narrows.
+// two panels: where it drops, then everything that narrows the table - type, slot,
+// search and who you are. Which list you are on lives in the banner, because it is
+// not filtering and it applies to the whole page.
 const panels = [...doc.querySelectorAll("main .controls")];
 ok(panels.map((p) => p.className.replace("controls ", "")).join(" > ") ===
-   "controls--where > controls--list > controls--refine",
+   "controls--where > controls--refine",
    `panel order: ${panels.map((p) => p.className.replace("controls ", "")).join(" > ")}`);
-ok(doc.querySelector(".controls--list").contains(doc.getElementById("template-bar")),
-   "the list controls are not mixed in with the filters");
+ok(doc.querySelector(".site-header").contains(doc.getElementById("template-bar")),
+   "the list controls sit in the banner");
+ok(!doc.querySelector("main #template-bar"), "and not among the filters");
 ok(doc.querySelector(".controls--refine").nextElementSibling === doc.getElementById("results"),
    "the filters sit directly above the results they narrow");
 
