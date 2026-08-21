@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 468 checks, should be all green
+npm test             # 487 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -235,6 +235,31 @@ recover it from the display name — forms make that lossy (`Feral Druid (cat)`)
 
 `specs.json` and `bis.json` both **fail soft**: a 404 or malformed file costs the icons or
 the rings, not the page.
+
+### Phase, zone, boss
+
+`.controls--where` is a hierarchy, and each row appears only once the row above it is
+answered: phases on load, zones once a phase is picked, bosses once a zone is. Opening on all
+three at once meant 3 zone chips and 17 boss chips before you had said anything.
+
+**Leaving a row unanswered means all of it.** A phase with no zone lists every zone in that
+phase; a zone with no boss lists every boss in it. There is no separate "all" state to
+maintain — `matches()` simply doesn't apply a filter that isn't set — and each row still leads
+with an `All` chip that clears the rows below it.
+
+`PHASES` in `app.js` is the five TBC content phases and the zones each opened, in release
+order. **Only Phase 3 has items**: the other four are pills waiting for data, and their chips
+read `0` rather than being hidden, so the shape of the expansion is visible and a zone has
+somewhere to arrive. `ZONE_ORDER` is derived from it, which keeps `bossSortKey()` working
+without a second list to keep in step.
+
+Picking a different phase clears the zone and boss under it — they belonged to the phase you
+left — and `readUrl()` drops a `zone=` that isn't in the `phase=` it arrives with, so a stale
+link narrows to nothing instead of showing a zone the row can't display.
+
+One consequence for `bossZone`: only one zone's bosses are ever on screen now, so the two
+`Trash` chips can no longer be confused visually. The state still needs to tell them apart —
+a shared `#boss=Trash` link is still ambiguous — so none of that machinery went away.
 
 ### The class/spec filter
 
@@ -514,7 +539,7 @@ editor refuses the drop and says why, so it cannot produce data that fails valid
   new one returns 200 before wiring it up. Boss portraits are Encounter Journal art
   (`ui-ej-boss-*.png`) with irregular slugs — `najentus`, `kazrogal`, no leading "the" on
   the Illidari Council.
-- **Two control panels**: `.controls--where` (zone/boss) and `.controls--refine` —
+- **Two control panels**: `.controls--where` (phase → zone → boss) and `.controls--refine` —
   everything that narrows the table, which is type, slot, search **and who you are**. Class
   and spec used to have a panel of their own at the top; they are filters, so they sit with
   the filters, to the right of the search box, and `.field--grow` caps that box at 300px to

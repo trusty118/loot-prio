@@ -48,13 +48,20 @@
 
 <main class="wrap">
 
-  <section class="controls controls--where" aria-label="Zone and boss">
+  <!-- Phase, then zone, then boss: each row appears only once the one above it has
+       been answered. Opening on all three at once was 20-odd chips of wall. Leaving a
+       row unpicked means all of it - all zones of the phase, all bosses of the zone. -->
+  <section class="controls controls--where" aria-label="Phase, zone and boss">
 
     <div class="control-row">
+      <div class="chips" id="phase-chips" role="group" aria-label="Phase"></div>
+    </div>
+
+    <div class="control-row" id="zone-row" hidden>
       <div class="chips" id="zone-chips" role="group" aria-label="Zone"></div>
     </div>
 
-    <div class="control-row">
+    <div class="control-row" id="boss-row" hidden>
       <div class="chips" id="boss-chips" role="group" aria-label="Boss"></div>
     </div>
 
