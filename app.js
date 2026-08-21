@@ -605,15 +605,25 @@
     return normaliseList(out);
   }
 
-  function cycleOp(list, at) {
+  /* Set the operator linking entry `at` to the one before it. */
+  function setOp(list, at, op) {
     if (at < 1 || at >= list.length) return list;      /* the first entry has no operator */
+    if (OP_LIST.indexOf(op) === -1) return list;
     var out = list.slice();
-    var next = (OP_LIST.indexOf(out[at].op) + 1) % OP_LIST.length;
     var c = {};
     Object.keys(out[at]).forEach(function (k) { c[k] = out[at][k]; });
-    c.op = OP_LIST[next];
+    c.op = op;
     out[at] = c;
     return normaliseList(out);
+  }
+
+  /* Step to the next operator. The pointer picks from a menu instead - four clicks
+     to reach "~=" was one of the complaints - but stepping is the right thing on a
+     keyboard, where there is nothing to aim at. */
+  function cycleOp(list, at) {
+    if (at < 1 || at >= list.length) return list;
+    var next = (OP_LIST.indexOf(list[at].op) + 1) % OP_LIST.length;
+    return setOp(list, at, OP_LIST[next]);
   }
 
   /* Applies an edited list to the active template. There is always one: editable
@@ -1374,9 +1384,9 @@
         btn.textContent = entry.op || ">";
         btn.dataset.tip = op.label + " - click to change";
         btn.setAttribute("aria-label", op.label + ", click to change");
+        btn.setAttribute("aria-haspopup", "true");
         btn.addEventListener("click", function () {
-          applyEdit(rec, cycleOp(list, i));
-          update();
+          openOpMenu(rec, list, i, btn);
         });
         td.appendChild(btn);
       }
@@ -1424,10 +1434,104 @@
   var popFor = null;       /* the record it was opened on */
   var popQuery = "";
 
+  /* Sit an overlay under its anchor, flipping above when there is no room below and
+     clamping to the viewport. Shared by the add popover and the operator menu, which
+     otherwise drift into two subtly different versions of the same arithmetic. */
+  function placeUnder(node, anchor) {
+    var r = anchor.getBoundingClientRect();
+    var n = node.getBoundingClientRect();
+    var left = r.left;
+    var top = r.bottom + 6;
+    if (top + n.height > document.documentElement.clientHeight - 4) {
+      top = Math.max(4, r.top - n.height - 6);
+    }
+    var maxLeft = document.documentElement.clientWidth - n.width - 6;
+    if (left > maxLeft) left = maxLeft;
+    if (left < 6) left = 6;
+    node.style.left = Math.round(left) + "px";
+    node.style.top = Math.round(top) + "px";
+  }
+
   function closePop() {
     popFor = null;
     popQuery = "";
     if (pop) pop.style.display = "none";
+  }
+
+  /* ---------- the operator menu ----------
+     Clicking the operator between two icons used to step to the next one, so the
+     five were a cycle and "~=" was four clicks away. It picks directly now. Same
+     element-per-page, anchor-under, click-outside shape as the add popover. */
+
+  var opMenu = null;
+  var opMenuFor = null;      /* { rec, list, index } while it is open */
+
+  function closeOpMenu() {
+    opMenuFor = null;
+    if (opMenu) opMenu.style.display = "none";
+  }
+
+  function buildOpMenu() {
+    opMenu = document.createElement("div");
+    opMenu.className = "prio-menu";
+    opMenu.setAttribute("role", "menu");
+    opMenu.setAttribute("aria-label", "Choose an operator");
+    opMenu.style.display = "none";
+
+    OP_LIST.forEach(function (op) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "prio-menu-item";
+      b.dataset.op = op;
+      b.setAttribute("role", "menuitemradio");
+
+      var sym = document.createElement("span");
+      sym.className = "prio-menu-op";
+      sym.textContent = op;
+      var label = document.createElement("span");
+      label.className = "prio-menu-label";
+      label.textContent = OPERATORS[op].label;
+      b.appendChild(sym);
+      b.appendChild(label);
+
+      b.addEventListener("click", function () {
+        if (!opMenuFor) return;
+        var at = opMenuFor;
+        applyEdit(at.rec, setOp(at.list, at.index, op));
+        announce(resolveEntry(at.list[at.index]).name + " is now " + OPERATORS[op].label);
+        closeOpMenu();
+        update();
+      });
+
+      opMenu.appendChild(b);
+    });
+
+    opMenu.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { e.preventDefault(); closeOpMenu(); }
+    });
+
+    document.body.appendChild(opMenu);
+  }
+
+  function openOpMenu(rec, list, index, anchor) {
+    if (!canEdit()) return;
+    if (!opMenu) buildOpMenu();
+    closePop();                       /* only one overlay at a time */
+    opMenuFor = { rec: rec, list: list, index: index };
+
+    var current = list[index] && list[index].op;
+    var items = opMenu.querySelectorAll(".prio-menu-item");
+    for (var i = 0; i < items.length; i++) {
+      var on = items[i].dataset.op === current;
+      items[i].setAttribute("aria-checked", on ? "true" : "false");
+      items[i].classList.toggle("is-current", on);
+    }
+
+    opMenu.style.display = "block";
+    placeUnder(opMenu, anchor);
+
+    var pick = opMenu.querySelector(".prio-menu-item.is-current") || items[0];
+    if (pick) pick.focus();
   }
 
   /* Put entry into rec at slot, or refuse and say why. */
@@ -1574,19 +1678,7 @@
     pop.style.display = "block";
     fillPop();
 
-    var r = anchor.getBoundingClientRect();
-    var p = pop.getBoundingClientRect();
-    var left = r.left;
-    var top = r.bottom + 6;
-    if (top + p.height > document.documentElement.clientHeight - 4) {
-      top = Math.max(4, r.top - p.height - 6);
-    }
-    var maxLeft = document.documentElement.clientWidth - p.width - 6;
-    if (left > maxLeft) left = maxLeft;
-    if (left < 6) left = 6;
-    pop.style.left = Math.round(left) + "px";
-    pop.style.top = Math.round(top) + "px";
-
+    placeUnder(pop, anchor);
     pop.querySelector(".prio-pop-find").focus();
   }
 
@@ -2038,6 +2130,7 @@
     unsaved = false;
     state.editing = false;
     closePop();
+    closeOpMenu();
     deleteArmed = false;
     clearTimeout(nameTimer);
     if (el.tplLinkOut) el.tplLinkOut.hidden = true;
@@ -2131,7 +2224,7 @@
 
     el.editToggle.addEventListener("click", function () {
       state.editing = !state.editing;
-      if (!state.editing) closePop();
+      if (!state.editing) { closePop(); closeOpMenu(); }
       announce("");
       update();
     });
@@ -2317,9 +2410,12 @@
     });
 
     document.addEventListener("click", function (e) {
-      if (!pop || pop.style.display === "none") return;
-      if (pop.contains(e.target)) return;
-      closePop();
+      if (pop && pop.style.display !== "none" && !pop.contains(e.target)) closePop();
+      /* the operator button itself opens the menu, so a click on it must not also
+         count as a click away from it */
+      if (opMenu && opMenu.style.display !== "none" &&
+          !opMenu.contains(e.target) &&
+          !(e.target.closest && e.target.closest(".prio-op--editing"))) closeOpMenu();
     });
 
     window.addEventListener("hashchange", function () {

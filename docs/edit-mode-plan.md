@@ -1,15 +1,14 @@
 # Rework edit mode: a list of your own, not a rewrite of his
 
-> **Status:** agreed 21 Aug 2026. **Sections 1, 3 and 4 are built**, and so is section 2's
-> **Add** — the palette bar is gone, replaced by a popover on the row that you can click or drag
-> out of. Drag-clear-of-the-row-to-delete went with it. **What is left of section 2: the
-> `.prio-grip` drag handle, and the five-item operator menu.** Nothing in `data/` is touched by
-> any of this.
+> **Status: done, 21 Aug 2026.** Every section is built and the drag was checked by hand in a
+> real browser — see the Status section at the foot of this file, which is the part worth
+> reading if you are picking this up. Nothing in `data/` was touched by any of it.
 >
-> One thing this plan did not know when it was written: **dragging had never worked at all.**
+> Two things this plan did not know when it was written. **Dragging had never worked at all:**
 > `specIcon()` built a bare `<img>`, which every browser drags natively, cancelling the pointer
-> sequence the editor runs on — and `onDrag` dropped the gesture without a word. That is what
-> "dragging is fiddly" in the Context below actually was.
+> sequence the editor runs on, and `onDrag` dropped the gesture without a word. That is what
+> "dragging is fiddly" in the Context below actually was — and fixing it made **the `.prio-grip`
+> handle unnecessary**, so it was dropped rather than built (section 2).
 
 ## Context
 
@@ -70,24 +69,30 @@ button until a list of yours is open.
 `applyEdit()` loses its `if (!activeTemplate) activeTemplate = newTemplate()` line — a list must
 exist before anything can be edited.
 
-## 2. The editing gestures — Add is built; grip and operator menu are not
+## 2. The editing gestures — built
 
 All inline, in the row, only while one of your lists is open.
 
-- **Reorder — drag from a grip.** Each entry gets a small `.prio-grip` that is the only drag
-  surface; the icon itself is no longer draggable, so a click on an icon can never start a
-  drag. Keep `onDrag()`, `makeGhost()`, `dropSlot()` and `markSlot()` — the snap-slot markers
-  are the good part. Drop outside the line does nothing (returns the entry home) rather than
-  deleting. Arrow-key reordering on the wrapper stays exactly as it is.
+- **Reorder — drag.** ~~Each entry gets a small `.prio-grip` that is the only drag surface.~~
+  **The grip was dropped, and deliberately.** It was prescribed as the fix for "dragging is
+  fiddly", but that complaint turned out to be a bug, not a targeting problem: `specIcon()`
+  built a bare `<img>`, browsers drag images natively, that fired `pointercancel`, and the drop
+  was abandoned silently. With `img.draggable = false` in place the gesture is precise, so a
+  grip would only have added a second thing to aim at in a narrow column. `onDrag()`,
+  `makeGhost()`, `dropSlot()` and `markSlot()` stay; dropping outside the line returns the entry
+  home rather than deleting; arrow keys still reorder.
 - **Remove — the `×` only.** One deliberate control, already there.
 - **Add — from the row.** A `+` at the end of each line opens a small popover anchored to that
   row: a search field and the class/spec icons grouped by class, built from `REG.classes` /
   `CLASS_SPECS` with `resolveEntry()` + `specIcon()`. Enter picks the first match, Escape
   closes. It runs `rejectReason()` before adding and says why when it refuses.
-- **Operator — pick it.** Clicking the operator opens a five-item menu using
-  `OPERATORS[op].label` for the wording (`better than`, `much better than`, …), so any operator
-  is one click. `cycleOp` becomes `setOp`; the keyboard path (Enter on the entry) can keep
-  cycling, since that is the sensible keyboard affordance.
+- **Operator — pick it.** Clicking the operator opens a five-item menu worded with
+  `OPERATORS[op].label`, current one marked, so any operator is one click instead of up to
+  four. `setOp(list, at, op)` sets it and `cycleOp()` now delegates to that; Enter on the entry
+  still steps, because stepping is the right affordance where there is nothing to aim at.
+  The menu reuses the popover's anchoring through `placeUnder()` — extracted so the two
+  overlays cannot drift into two versions of the same arithmetic — and closes on Escape, on a
+  click away, on leaving edit mode and on opening another list.
 
 ## 3. The bar — built
 
@@ -158,46 +163,28 @@ By eye at `http://localhost:8642` (jsdom covers none of the pointer work):
 
 ---
 
-## Picking this up on another machine — read this first
+## Status — finished and verified, 21 Aug 2026
 
-**State at commit `3ec925a` on `edit-mode`:** 429 checks green, `py verify/check_priority.py`
-and `py verify/check_bis.py` clean, `git diff --stat data/` empty. Windows note: `python3` is
-not on PATH here; use `py`.
+Every section above is built. **440 checks green**, both validators clean, and
+`git diff --stat data/` empty — editing has never written the dataset.
 
-### The one thing that is NOT verified
+**The drag gesture was checked by hand in a real browser** on 21 Aug 2026, which was the one
+thing the suite could not answer for itself: jsdom has no `document.elementFromPoint`, so
+`cellUnder()` is unreachable and the tests can only assert that every icon carries
+`draggable="false"`. That assertion is the regression guard for the bug below, not proof the
+gesture works — so if the drag machinery is touched again, it has to be re-checked by hand at
+`http://localhost:8642`: drop into the gap between two icons, onto another row, onto an empty
+priority, and well clear of the row (which must return the entry home, not delete it).
 
-**The drag gesture has never been checked in a real browser.** jsdom cannot drag — it has no
-`document.elementFromPoint`, so `cellUnder()` is unreachable — and the suite only asserts the
-one piece it can see, that every icon carries `draggable="false"`. That assertion is the
-regression guard for the bug, not proof the gesture works.
+### The trap worth remembering
 
-Dragging was broken for the entire life of this feature and nobody noticed, precisely because
-it failed silently. **Do this before building anything else on top of it**, at
-`http://localhost:8642` (`npm run serve`, or `py -m http.server 8642 --bind 127.0.0.1`):
+Dragging was broken for this feature's entire life and nobody noticed, because it failed
+silently. `specIcon()` built a bare `<img>`; every browser drags an `<img>` natively; that
+fires `pointercancel`, which tore down the pointer sequence the editor runs on, and `onDrag`
+abandoned the drop without a word. It read as "nothing happened".
 
-1. `New`, then `Edit`, then `+` on a row — the popover opens under it.
-2. Drag an icon out of the popover into the **gap between two existing icons** on that row.
-   The gap should mark as you move, and the icon should land where the marker was.
-3. Drag one onto a **different row**, and onto an **empty** priority — the empty cell itself
-   should show as the target (it is `.prio-drop-empty`; after `New` every row is this case).
-4. Drag an icon **within** a line to reorder it. Then drag one well clear of the row and let
-   go: it must **return home**, not vanish. Removal is the `×` and the Delete key only.
-5. Type in the popover's field to narrow it, Enter to take the first match, Escape to close.
-6. Watch for **the browser dragging its own ghost image** of the icon at any point. That is
-   the bug's signature, and the drop doing nothing is its symptom. The console will now warn
-   (`drag cancelled by the browser, drop abandoned`) if it happens again.
-
-If any of that misbehaves, the suspects in order: `img.draggable = false` in `specIcon()`,
-`-webkit-user-drag: none` on `.col-prio--editing .prio-edit, .prio-pop-icon` in `style.css`,
-and `onDrag()`'s `pointercancel` branch.
-
-### What is left to build
-
-Section 2 above, minus the Add half that is done:
-
-- **`.prio-grip`** — a small handle that is the *only* drag surface on an entry, so a click on
-  an icon can never start a drag. Today the whole icon is draggable.
-- **The operator menu** — clicking `>` cycles all five, so `~=` takes four clicks.
-  `cycleOp` becomes `setOp(list, at, op)`; the keyboard path can keep cycling.
-
-Both are described in section 2. Nothing else in this document is outstanding.
+Three things keep it fixed, and all three are load-bearing: `img.draggable = false` in
+`specIcon()`, `-webkit-user-drag: none` on `.col-prio--editing .prio-edit, .prio-pop-icon`,
+and `onDrag()`'s `pointercancel` branch, which now warns rather than vanishing. If a drop ever
+does nothing again, check the console for `drag cancelled by the browser, drop abandoned` and
+look at those three in that order.

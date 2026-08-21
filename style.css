@@ -758,6 +758,51 @@ mark {
 
 /* the add popover: every class and spec, opened from the + on a row.
    Parented to <body>, so it is positioned rather than laid out. */
+/* The operator menu. Same fixed-position, shadowed panel as the add popover - they
+   are the same kind of object and should not read as two different mechanisms. */
+.prio-menu {
+  position: fixed;
+  z-index: 40;
+  display: none;
+  min-width: 200px;
+  padding: 4px;
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .55);
+}
+
+.prio-menu-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 9px;
+  font: inherit;
+  font-size: .85rem;
+  text-align: left;
+  color: var(--text-dim);
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.prio-menu-item:hover { background: var(--bg-panel-2); color: var(--text); }
+
+/* the symbol is the thing being chosen, so it leads and is monospaced to stop
+   ">" and ">>" jittering the labels beside them */
+.prio-menu-op {
+  min-width: 2.2em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--gold);
+}
+
+.prio-menu-item.is-current {
+  background: color-mix(in srgb, var(--gold) 16%, transparent);
+  color: var(--text);
+}
+
 .prio-pop {
   position: fixed;
   z-index: 40;

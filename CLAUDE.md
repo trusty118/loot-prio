@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 429 checks, should be all green
+npm test             # 440 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -285,15 +285,11 @@ ambiguous, so the other 14 bosses keep the short URL they have always had. An ol
 
 ## 4. Edit mode — your own priority list
 
-> **Nearly reworked, Aug 2026.** [docs/edit-mode-plan.md](docs/edit-mode-plan.md) is the agreed
-> replacement for an edit mode that read as "curate zatar's 195 rows". **Sections 1, 3 and 4 are
-> built, and so is section 2's Add.** What is left of section 2: the `.prio-grip` drag handle,
-> and the five-item operator menu in place of click-to-cycle.
->
-> **Dragging has not been checked in a real browser yet.** It was silently broken for this
-> feature's whole life (see the gestures section below), and jsdom cannot reach the gesture at
-> all. **Do that check before building on top of it** — the steps are at the end of
-> [docs/edit-mode-plan.md](docs/edit-mode-plan.md), under "Picking this up on another machine".
+> **Reworked and finished, Aug 2026.** [docs/edit-mode-plan.md](docs/edit-mode-plan.md) records
+> what changed and why, including two decisions that are easy to undo by accident: the
+> `.prio-grip` handle was **dropped** once the real drag bug was found, and the drag itself is
+> **only ever verified by hand** — jsdom cannot reach the gesture, so a green suite says nothing
+> about it. Re-check by hand if you touch the drag machinery.
 
 The whole data restructure was aimed at this. `priority` became an ordered list of
 `{spec|class, op}` entries so a person could reorder icons and pick operators.
@@ -413,7 +409,7 @@ is written to your store, and Make a copy is how you keep it.
 |---|---|---|
 | Reorder | drag the icon along its line | ← → |
 | Remove | the × | Delete |
-| Operator | click the `>` between two icons | Enter |
+| Operator | click the `>`, pick from the menu | Enter (steps) |
 | Add | `+`, then click an icon or drag one onto any line | `+`, type, Enter |
 
 Pointer events, **not HTML5 drag-and-drop** — these icons sit in a `table-layout: fixed`
@@ -438,6 +434,13 @@ cell, the table's scroll container would clip it). Clicking an icon adds it to t
 `cellUnder()` resolves what is under the pointer and doesn't care where the drag began.
 `markSlot()` marks the icon a drop would land before — or the cell itself when the line is
 empty, which is every row of a list you have only just started.
+
+**The operator is picked, not cycled.** Clicking it opens `.prio-menu` — the five, worded from
+`OPERATORS[op].label`, with the current one marked — so `~=` is one click rather than four.
+`setOp(list, at, op)` is the primitive and `cycleOp()` delegates to it, because Enter on an
+entry still steps: there is nothing to aim at on a keyboard. The menu and the add popover share
+`placeUnder()` for anchoring, so the two can't drift into two versions of the same arithmetic,
+and both close on Escape, on a click away, on leaving edit mode, and on opening another list.
 
 **Every gesture has a keyboard form**, which is both the accessibility requirement and the
 only reason the editor is testable — jsdom can dispatch a keydown but cannot drag. Dragging

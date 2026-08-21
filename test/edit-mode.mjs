@@ -112,8 +112,39 @@ key(w, iconsIn(d, ITEM)[1], "Enter");
 ok(opsIn(d, ITEM).join("") === ">>", "Enter cycles > to >>");
 key(w, iconsIn(d, ITEM)[1], "Enter");
 ok(opsIn(d, ITEM).join("") === "~>", "and >> to ~>");
+
+// Clicking picks from a menu rather than stepping: reaching "~=" by cycling took
+// four clicks, which was one of the complaints that started this rework.
+ok(!d.querySelector(".prio-menu"), "no operator menu until one is asked for");
 click(w, rowFor(d, ITEM).querySelector(".prio-op"));
-ok(opsIn(d, ITEM).join("") === "=", "clicking the operator cycles it too");
+const menu = d.querySelector(".prio-menu");
+ok(menu && menu.style.display === "block", "clicking the operator opens the menu");
+ok(menu.querySelectorAll(".prio-menu-item").length === 5, "it offers all five operators");
+ok([...menu.querySelectorAll(".prio-menu-item")].map((b) => b.dataset.op).join(",") === ">,>>,~>,=,~=",
+   "in the documented order");
+ok([...menu.querySelectorAll(".prio-menu-label")].map((n) => n.textContent).join("|") ===
+   "better than|much better than|roughly better than|equal to|roughly equal to",
+   "worded, not just symbols");
+ok(menu.querySelector('.prio-menu-item[data-op="~>"]').getAttribute("aria-checked") === "true",
+   "the operator currently in the line is marked");
+
+const pick = (op) => click(w, menu.querySelector('.prio-menu-item[data-op="' + op + '"]'));
+pick("~=");
+ok(opsIn(d, ITEM).join("") === "~=", "one click sets it, no cycling through the others");
+ok(menu.style.display === "none", "and the menu closes behind it");
+ok(JSON.stringify(only(w).priorities[bulwark][1].op) === '"~="', "the choice reached the store");
+
+// Escape leaves the line alone
+click(w, rowFor(d, ITEM).querySelector(".prio-op"));
+key(w, menu, "Escape");
+ok(menu.style.display === "none" && opsIn(d, ITEM).join("") === "~=",
+   "Escape closes it without changing anything");
+
+// the keyboard keeps stepping - there is nothing to aim at on a keyboard
+key(w, iconsIn(d, ITEM)[1], "Enter");
+ok(opsIn(d, ITEM).join("") === ">", "Enter still cycles, wrapping past the end");
+ok(source.includes("function openOpMenu(rec, list, index, anchor) {\n    if (!canEdit()) return;"),
+   "the menu is behind canEdit() like every other editing control");
 
 // --- removing -----------------------------------------------------------------------
 key(w, iconsIn(d, ITEM)[1], "Delete");
