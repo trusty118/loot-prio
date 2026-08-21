@@ -919,6 +919,21 @@ ok(zoneChipNames().join(", ") === "Karazhan, Gruul's Lair, Magtheridon's Lair",
    `phase 1 opens its own zones: ${zoneChipNames().join(", ")}`);
 ok(rows().length === 0, "and nothing is listed under it yet");
 
+// the empty zones have their bosses too, so a phase opens onto something real
+click(chipByText("#zone-chips", "Karazhan"));
+const bossNames = () => [...doc.querySelectorAll("#boss-chips .chip")]
+  .filter((c) => !c.classList.contains("chip--all")).map((c) => c.textContent.replace(/\d+$/, "").trim());
+ok(bossNames().length === 12, `Karazhan lists its 12 encounters (got ${bossNames().length})`);
+ok(bossNames()[0] === "Trash" && bossNames()[11] === "Nightbane",
+   `in kill order: ${bossNames()[0]} ... ${bossNames()[11]}`);
+ok([...doc.querySelectorAll("#boss-chips .chip .n")].every((n) => n.textContent === "0"),
+   "every one reads 0 until items arrive");
+ok([...doc.querySelectorAll("#boss-chips .chip")]
+     .filter((c) => !c.classList.contains("chip--all") && !/Chess/.test(c.textContent))
+     .every((c) => c.querySelector("img.chip-icon")),
+   "and each carries a portrait, bar the Chess Event which has none in the journal");
+ok(rows().length === 0, "with no items listed under any of them yet");
+
 click(phaseChip(2));
 ok(zoneChipNames().join(", ") === "Serpentshrine Cavern, Tempest Keep",
    `phase 2 replaces them: ${zoneChipNames().join(", ")}`);

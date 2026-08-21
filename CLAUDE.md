@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 487 checks, should be all green
+npm test             # 492 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -248,10 +248,20 @@ maintain — `matches()` simply doesn't apply a filter that isn't set — and ea
 with an `All` chip that clears the rows below it.
 
 `PHASES` in `app.js` is the five TBC content phases and the zones each opened, in release
-order. **Only Phase 3 has items**: the other four are pills waiting for data, and their chips
-read `0` rather than being hidden, so the shape of the expansion is visible and a zone has
-somewhere to arrive. `ZONE_ORDER` is derived from it, which keeps `bossSortKey()` working
-without a second list to keep in step.
+order, and `BOSS_ORDER` now carries the kill order for **all nine zones**. **Only Phase 3 has
+items**: everything else is chips reading `0`, so the shape of the expansion is visible and an
+item has a boss to arrive under. `ZONE_ORDER` is derived from `PHASES`, which keeps
+`bossSortKey()` working without a second list to keep in step.
+
+`Trash` is listed only for the raids that actually drop it — Karazhan, Serpentshrine, Tempest
+Keep, Zul'Aman, Sunwell, and the two Phase 3 raids. Gruul's Lair and Magtheridon's Lair have
+none, which is why they have no chip for it.
+
+Every portrait was checked for a 200 before being wired, and the slugs are as irregular as the
+existing ones warn: `alar`, `akilzon`, `janalai` and `kiljaeden` drop their apostrophes,
+`the-curator` and `the-lurker-below` keep their article where `illidari-council` does not, the
+Opera Event is plain `opera`, and Zul'jin is filed under `daakara`. **The Chess Event has no
+portrait in the journal at all** — its chip falls back to text, which `chip()` handles.
 
 Picking a different phase clears the zone and boss under it — they belonged to the phase you
 left — and `readUrl()` drops a `zone=` that isn't in the `phase=` it arrives with, so a stale

@@ -8,7 +8,48 @@
   var SPECS_URL = "data/specs.json";
 
   /* Encounter order per zone (the JSON is not in kill order). */
+  /* Kill order per zone. The seven zones outside Phase 3 have no items yet, so their
+     chips all read 0 - they are here so the phases open onto something real, and so a
+     boss has a name to arrive under. Trash is listed for the raids that actually drop
+     it; Gruul's Lair and Magtheridon's Lair get none, which is why they have none. */
   var BOSS_ORDER = {
+    "Karazhan": [
+      "Trash",
+      "Attumen the Huntsman",
+      "Moroes",
+      "Maiden of Virtue",
+      "Opera Event",
+      "The Curator",
+      "Terestian Illhoof",
+      "Shade of Aran",
+      "Netherspite",
+      "Chess Event",
+      "Prince Malchezaar",
+      "Nightbane"
+    ],
+    "Gruul's Lair": [
+      "High King Maulgar",
+      "Gruul the Dragonkiller"
+    ],
+    "Magtheridon's Lair": [
+      "Magtheridon"
+    ],
+    "Serpentshrine Cavern": [
+      "Trash",
+      "Hydross the Unstable",
+      "The Lurker Below",
+      "Leotheras the Blind",
+      "Fathom-Lord Karathress",
+      "Morogrim Tidewalker",
+      "Lady Vashj"
+    ],
+    "Tempest Keep": [
+      "Trash",
+      "Al'ar",
+      "Void Reaver",
+      "High Astromancer Solarian",
+      "Kael'thas Sunstrider"
+    ],
     "Black Temple": [
       "Trash",
       "High Warlord Naj'entus",
@@ -28,6 +69,24 @@
       "Kaz'rogal",
       "Azgalor",
       "Archimonde"
+    ],
+    "Zul'Aman": [
+      "Trash",
+      "Nalorakk",
+      "Akil'zon",
+      "Jan'alai",
+      "Halazzi",
+      "Hex Lord Malacrass",
+      "Zul'jin"
+    ],
+    "Sunwell Plateau": [
+      "Trash",
+      "Kalecgos",
+      "Brutallus",
+      "Felmyst",
+      "Eredar Twins",
+      "M'uru",
+      "Kil'jaeden"
     ]
   };
 
@@ -72,6 +131,43 @@
   var ICON = "https://wow.zamimg.com/images/wow/icons/large/";
 
   var BOSS_ICON = {
+    "Attumen the Huntsman": JOURNAL + "attumen-the-huntsman.png",
+    "Moroes": JOURNAL + "moroes.png",
+    "Maiden of Virtue": JOURNAL + "maiden-of-virtue.png",
+    "Opera Event": JOURNAL + "opera.png",
+    "The Curator": JOURNAL + "the-curator.png",
+    "Terestian Illhoof": JOURNAL + "terestian-illhoof.png",
+    "Shade of Aran": JOURNAL + "shade-of-aran.png",
+    "Netherspite": JOURNAL + "netherspite.png",
+    /* the Chess Event is the one encounter with no portrait in the journal at all -
+       the chip falls back to text, which chip() handles */
+    "Prince Malchezaar": JOURNAL + "prince-malchezaar.png",
+    "Nightbane": JOURNAL + "nightbane.png",
+    "High King Maulgar": JOURNAL + "high-king-maulgar.png",
+    "Gruul the Dragonkiller": JOURNAL + "gruul-the-dragonkiller.png",
+    "Magtheridon": JOURNAL + "magtheridon.png",
+    "Hydross the Unstable": JOURNAL + "hydross-the-unstable.png",
+    "The Lurker Below": JOURNAL + "the-lurker-below.png",
+    "Leotheras the Blind": JOURNAL + "leotheras-the-blind.png",
+    "Fathom-Lord Karathress": JOURNAL + "fathom-lord-karathress.png",
+    "Morogrim Tidewalker": JOURNAL + "morogrim-tidewalker.png",
+    "Lady Vashj": JOURNAL + "lady-vashj.png",
+    "Al'ar": JOURNAL + "alar.png",
+    "Void Reaver": JOURNAL + "void-reaver.png",
+    "High Astromancer Solarian": JOURNAL + "high-astromancer-solarian.png",
+    "Kael'thas Sunstrider": JOURNAL + "kaelthas-sunstrider.png",
+    "Nalorakk": JOURNAL + "nalorakk.png",
+    "Akil'zon": JOURNAL + "akilzon.png",
+    "Jan'alai": JOURNAL + "janalai.png",
+    "Halazzi": JOURNAL + "halazzi.png",
+    "Hex Lord Malacrass": JOURNAL + "hex-lord-malacrass.png",
+    "Zul'jin": JOURNAL + "daakara.png",
+    "Kalecgos": JOURNAL + "kalecgos.png",
+    "Brutallus": JOURNAL + "brutallus.png",
+    "Felmyst": JOURNAL + "felmyst.png",
+    "Eredar Twins": JOURNAL + "eredar-twins.png",
+    "M'uru": JOURNAL + "muru.png",
+    "Kil'jaeden": JOURNAL + "kiljaeden.png",
     "High Warlord Naj'entus": JOURNAL + "high-warlord-najentus.png",
     "Supremus": JOURNAL + "supremus.png",
     "Shade of Akama": JOURNAL + "shade-of-akama.png",
