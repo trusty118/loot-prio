@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 463 checks, should be all green
+npm test             # 465 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -238,8 +238,8 @@ the rings, not the page.
 
 ### The class/spec filter
 
-Two chip rows, Class then Spec, in the topmost of the three control panels
-(`.controls--who`) — see §4 for why the controls are split three ways. They answer the
+Two chip rows, Class then Spec, sitting in the filter panel to the right of the search box
+(`.who-inline`) — see §4 for how the controls are split. They answer the
 other question the table can be asked: not "who gets this item" but "what should I be
 rolling on".
 
@@ -514,11 +514,13 @@ editor refuses the drop and says why, so it cannot produce data that fails valid
   new one returns 200 before wiring it up. Boss portraits are Encounter Journal art
   (`ui-ej-boss-*.png`) with irregular slugs — `najentus`, `kazrogal`, no leading "the" on
   the Illidari Council.
-- **The controls are four panels, in the order the questions get asked**:
-  `.controls--who` (class/spec), `.controls--where` (zone/boss), `.controls--list` (which
-  list you are on, and what you can do to it), and `.controls--refine` (type, slot, search,
-  Reset and the count). Picking a list is not filtering, and while it sat in the refine
-  panel it read as though it were. The split is what
+- **The controls are three panels, in the order the questions get asked**:
+  `.controls--where` (zone/boss), `.controls--list` (which list you are on, and what you can
+  do to it), and `.controls--refine` — everything that narrows the table, which is type, slot,
+  search **and who you are**. Class and spec used to have a panel of their own at the top;
+  they are filters, so they sit with the filters, to the right of the search box.
+  `.field--grow` caps that box at 300px to make the room: you scan the icons, you only type
+  in the box occasionally. Picking a list is not filtering, which is why it kept its own bar. The split is what
   makes the last one read as narrowing the results rather than as another way of choosing
   them, so keep chip rows out of it. **Only `.controls--refine` is sticky** — it is the one
   adjusted while reading, it carries the count, and it sits directly above the results;

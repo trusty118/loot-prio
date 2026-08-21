@@ -21,21 +21,6 @@
 
 <main class="wrap">
 
-  <section class="controls controls--who" aria-label="Class and spec">
-
-    <!-- No visible row labels: each row opens with its own "All X" chip, which says
-         the same thing. aria-label on the group keeps it named for screen readers. -->
-    <div class="control-row">
-      <div class="chips" id="class-chips" role="group" aria-label="Class"></div>
-    </div>
-
-    <!-- hidden until a class is picked; app.js toggles the hidden attribute -->
-    <div class="control-row" id="spec-row" hidden>
-      <div class="chips" id="spec-chips" role="group" aria-label="Spec"></div>
-    </div>
-
-  </section>
-
   <section class="controls controls--where" aria-label="Zone and boss">
 
     <div class="control-row">
@@ -96,6 +81,18 @@
         <span class="control-label">Search</span>
         <input type="search" id="search" placeholder="Item, boss, class, note&hellip;" autocomplete="off">
       </label>
+
+      <!-- Who you are sits with the other filters now, in the room the search box
+           gave back. No visible labels: each row opens with its own "All" chip, and
+           the group's aria-label names it for a screen reader. -->
+      <div class="who-inline">
+        <div class="chips chips--who" id="class-chips" role="group" aria-label="Class"></div>
+        <!-- hidden until a class is picked; app.js toggles the attribute -->
+        <div class="who-specs" id="spec-row" hidden>
+          <div class="chips chips--who" id="spec-chips" role="group" aria-label="Spec"></div>
+        </div>
+      </div>
+
       <button type="button" id="reset" class="btn-reset">Reset</button>
     </div>
 

@@ -249,7 +249,35 @@ a:hover { color: var(--gold-bright); }
   gap: 3px;
 }
 
-.field--grow { flex: 1 1 220px; min-width: 180px; }
+/* The search box used to take every spare pixel. It is capped now, because the room
+   is better spent on the class and spec icons beside it - you scan those, you type
+   into this one occasionally. */
+.field--grow { flex: 0 1 300px; min-width: 180px; }
+
+/* Who you are, inline with the filters. Wraps to its own line when the row runs out,
+   which is what happens on a narrow window once a class is picked. */
+.who-inline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.who-inline .chips--who { flex: 0 1 auto; }
+
+/* `display` on something the code hides with [hidden] has to be guarded, or the
+   attribute loses - see the note in CLAUDE.md section 4. */
+.who-specs { display: flex; align-items: center; }
+.who-specs[hidden] { display: none; }
+
+/* a hairline between the classes and the specs they narrow to, so the two rows do
+   not read as one undifferentiated wall of icons */
+.who-specs {
+  padding-left: 6px;
+  border-left: 1px solid var(--line);
+}
 
 select, input[type="search"] {
   font: inherit;

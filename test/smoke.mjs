@@ -913,18 +913,25 @@ const chipByTip = (sel, name) =>
 click(doc.getElementById("reset"));
 ok(doc.getElementById("class-chips") && doc.getElementById("spec-chips"),
    "class and spec chip rows exist");
-const whoPanel = doc.querySelector(".controls--who");
-ok(whoPanel && whoPanel.contains(doc.getElementById("class-chips")) &&
-   whoPanel.contains(doc.getElementById("spec-chips")),
-   "class and spec sit in their own panel");
-ok(doc.querySelector("main").firstElementChild === whoPanel, "that panel comes first");
+// Class and spec are filters, so they sit with the filters - to the right of the
+// search box, which was capped to make room for them.
+const inputsRow = doc.querySelector(".control-row--inputs");
+ok(inputsRow.contains(doc.getElementById("class-chips")) &&
+   inputsRow.contains(doc.getElementById("spec-chips")),
+   "class and spec sit in the filter row");
+ok(!doc.querySelector(".controls--who"), "the separate who panel is gone");
+ok([...inputsRow.children].indexOf(doc.querySelector(".who-inline")) >
+   [...inputsRow.children].indexOf(doc.getElementById("search").closest(".field")),
+   "and they come after the search box, not before it");
+ok(/\.field--grow\s*\{[^}]*flex:\s*0/.test(cssText),
+   "the search box no longer takes every spare pixel");
 
-// four panels, in the order the questions get asked: who you are, where it drops,
-// which list you are looking at, and finally what of that to show. Filtering comes
-// last so it sits against the results it narrows.
+// three panels: where it drops, which list you are on, and then everything that
+// narrows the table - type, slot, search and who you are. Filtering comes last so
+// it sits against the results it narrows.
 const panels = [...doc.querySelectorAll("main .controls")];
 ok(panels.map((p) => p.className.replace("controls ", "")).join(" > ") ===
-   "controls--who > controls--where > controls--list > controls--refine",
+   "controls--where > controls--list > controls--refine",
    `panel order: ${panels.map((p) => p.className.replace("controls ", "")).join(" > ")}`);
 ok(doc.querySelector(".controls--list").contains(doc.getElementById("template-bar")),
    "the list controls are not mixed in with the filters");
@@ -957,7 +964,8 @@ const refine = doc.querySelector(".controls--refine");
 ok(["type-select", "slot-select", "search", "reset", "count"]
    .every((id) => refine.contains(doc.getElementById(id))),
    "type, slot, search, reset and the count all sit in the refine panel");
-ok(!refine.querySelector(".chips"), "and no chip row is left in it");
+ok(refine.querySelectorAll(".chips").length === 2,
+   "the only chip rows in it are the class and spec ones");
 ok(refine.nextElementSibling === doc.getElementById("results"),
    "the refine panel sits directly above the results it narrows");
 ok(/\.controls--refine\s*\{[^}]*position:\s*sticky/.test(cssText) &&
