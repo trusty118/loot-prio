@@ -182,7 +182,7 @@
      drop out while a class or spec is selected: the filter asks where you stand in
      a line, and those rows name no line. */
   function priorityHas(rec, clsId, specId) {
-    return (rec.priority || []).some(function (e) {
+    return (effectivePriority(rec) || []).some(function (e) {
       return entrySpeaksTo(e, clsId, specId);
     });
   }
@@ -205,8 +205,11 @@
     });
   }
 
+  /* Both of these ask the list actually on screen, not the guide underneath it: with
+     a template open, reading rec.priority would filter by his ordering while showing
+     yours, and a list you had only just started would go on matching all 195 rows. */
   function selectionHas(rec) {
-    return (rec.priority || []).some(selectionSpeaksTo);
+    return (effectivePriority(rec) || []).some(selectionSpeaksTo);
   }
 
   /* The specs the current selection actually stands for: a class with none of its
@@ -231,6 +234,11 @@
      column and its "not in the guide" tag, so nothing about it reads as a call. */
   function unsourcedBis(rec) {
     if (!rec.unsourced) return false;
+    /* Only while reading the guide. It is a bridge across a gap in HIS data, so with
+       a list of your own open there is no gap to bridge: those rows have a priority
+       column you control like any other, and letting 13 of them through a filter the
+       other 182 fail would make your own list lie about itself. */
+    if (activeTemplate) return false;
     return SELECTED_SPECS.some(function (id) { return bisTier(id, rec.id); });
   }
 
@@ -376,7 +384,6 @@
     slot: "",
     q: "",
     editing: false,  // edit mode: priority cells become editable
-    paletteFor: "",  // which item the palette is currently adding to
     sort: "",        // "" = leave rows in source order
     dir: "asc"
   };
@@ -395,14 +402,18 @@
     reset: document.getElementById("reset"),
     count: document.getElementById("count"),
     results: document.getElementById("results"),
+    templateBar: document.getElementById("template-bar"),
+    tplList: document.getElementById("tpl-list"),
+    tplName: document.getElementById("tpl-name"),
+    tplDirty: document.getElementById("tpl-dirty"),
+    tplNew: document.getElementById("tpl-new"),
+    tplCopy: document.getElementById("tpl-copy"),
     editToggle: document.getElementById("edit-toggle"),
-    templateMenu: document.getElementById("template-menu"),
-    templateName: document.getElementById("template-name"),
-    palette: document.getElementById("palette"),
-    tplSave: document.getElementById("tpl-save"),
-    tplOpen: document.getElementById("tpl-open"),
     tplShare: document.getElementById("tpl-share"),
-    tplDiscard: document.getElementById("tpl-discard")
+    tplDelete: document.getElementById("tpl-delete"),
+    tplLinkOut: document.getElementById("tpl-link-out"),
+    tplLinkField: document.getElementById("tpl-link-field"),
+    editMsg: document.getElementById("edit-msg")
   };
 
   /* ---------- templates ---------- */
@@ -418,7 +429,16 @@
      time rather than hidden: see effectivePriority() and inTemplate(). */
 
   var TEMPLATE_VERSION = 1;
-  var activeTemplate = null;
+
+  /* Three views, one variable and one flag. zatar's list and a list that arrived on
+     a link are reference; only a list in your own store is a workspace. */
+  var activeTemplate = null;   /* the list being VIEWED; null means zatar's */
+  var activeIsMine = false;    /* is it in your store? false for one from a #t= link */
+  var unsaved = false;         /* an edit made but not yet written back */
+
+  function canEdit() {
+    return !!activeTemplate && activeIsMine && state.editing;
+  }
 
   function effectivePriority(rec) {
     if (activeTemplate) {
@@ -434,24 +454,40 @@
     return !activeTemplate || !!activeTemplate.priorities[rec.id];
   }
 
-  function newTemplate(name) {
+  function makeTemplate(name, base, priorities) {
+    return {
+      v: TEMPLATE_VERSION,
+      id: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      name: name,
+      created: new Date().toISOString().slice(0, 10),
+      base: base,
+      priorities: priorities
+    };
+  }
+
+  /* A copy of whatever is on screen. effectivePriority() already answers "what is
+     this row showing", so one function copies the guide's list, one of yours, or one
+     that arrived on a link, without branching on which of the three it is. */
+  function copyOfCurrent(name) {
     var priorities = {};
     ALL.forEach(function (rec) {
       /* deep copy: editing one must never reach into ALL */
-      priorities[rec.id] = (rec.priority || []).map(function (e) {
+      priorities[rec.id] = (effectivePriority(rec) || []).map(function (e) {
         var c = {};
         Object.keys(e).forEach(function (k) { c[k] = e[k]; });
         return c;
       });
     });
-    return {
-      v: TEMPLATE_VERSION,
-      id: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-      name: name || "My priorities",
-      created: new Date().toISOString().slice(0, 10),
-      base: "zatar",
-      priorities: priorities
-    };
+    return makeTemplate(name || "My priorities",
+      activeTemplate ? activeTemplate.id : "zatar", priorities);
+  }
+
+  /* Nobody's list yet: all 195 rows, every priority empty. Still a full copy, so it
+     validates, encodes and shares exactly like any other. */
+  function newBlankTemplate(name) {
+    var priorities = {};
+    ALL.forEach(function (rec) { priorities[rec.id] = []; });
+    return makeTemplate(name || "My list", "blank", priorities);
   }
 
   /* ---------- template storage ----------
@@ -580,16 +616,32 @@
     return normaliseList(out);
   }
 
-  /* Applies an edited list to the active template. Creates one on first edit, so
-     "start editing" and "fork zatar's list" are the same gesture. */
+  /* Applies an edited list to the active template. There is always one: editable
+     cells are only rendered for a list of your own. */
   function applyEdit(rec, list) {
-    if (!activeTemplate) activeTemplate = newTemplate();
+    if (!activeTemplate || !activeIsMine) return;
     activeTemplate.priorities[rec.id] = normaliseList(list);
-    activeTemplate.dirty = true;
+    unsaved = true;
+    saveNow();
+  }
+
+  /* There is no Save button. A list is written when it is made and again on every
+     edit: localStorage is synchronous and a whole template is ~12 KB, which is
+     nothing next to losing an afternoon's list by forgetting to press something.
+     `unsaved` is stored out here rather than on the template so it never travels
+     into the store or into a share link. */
+  function saveNow() {
+    if (!activeTemplate || !activeIsMine) return Promise.resolve();
+    var t = activeTemplate;
+    return store.save(t).then(function () {
+      if (activeTemplate === t) { unsaved = false; renderTemplateBar(); }
+    }, function (err) {
+      announce(err.message);
+    });
   }
 
   function resetItem(rec) {
-    if (!activeTemplate) return;
+    if (!activeTemplate || !activeIsMine) return;
     applyEdit(rec, (rec.priority || []).map(function (e) {
       var c = {}; Object.keys(e).forEach(function (k) { c[k] = e[k]; }); return c;
     }));
@@ -806,7 +858,7 @@
     if (state.q) {
       var q = state.q.toLowerCase();
       /* search both the raw and displayed forms, so "2H mace" and "mace" both hit */
-      var hay = [rec.item, rec.boss, rec.zone, priorityText(rec.priority), rec.notes,
+      var hay = [rec.item, rec.boss, rec.zone, priorityText(effectivePriority(rec)), rec.notes,
                  rec.slot, slotGroup(rec.slot), rec.type, typeLabel(rec), rec.role,
                  rec.unsourced ? UNSOURCED_TAG : ""]
         .join("   ").toLowerCase();
@@ -1139,10 +1191,7 @@
 
   function announce(msg) {
     editMsg = msg || "";
-    if (el.count) {
-      var note = document.getElementById("edit-msg");
-      if (note) note.textContent = editMsg;
-    }
+    if (el.editMsg) el.editMsg.textContent = editMsg;
   }
 
   /* ---------- dragging ----------
@@ -1151,7 +1200,6 @@
      gesture here has the keyboard equivalent above, which is what the tests drive. */
 
   var DRAG_SLOP = 4;      /* px of movement before a press counts as a drag, not a click */
-  var DRAG_OUT = 14;      /* px above or below the line that means "take it out" */
 
   /* Which gap the pointer is in: 0 is before the first icon, n after the last. */
   function dropSlot(td, clientX) {
@@ -1164,25 +1212,23 @@
   }
 
   function clearDrops() {
-    var marked = el.results.querySelectorAll(".prio-drop, .prio-drop-after, .prio-removing");
+    var marked = el.results.querySelectorAll(".prio-drop, .prio-drop-after, .prio-drop-empty");
     [].forEach.call(marked, function (n) {
       n.classList.remove("prio-drop");
       n.classList.remove("prio-drop-after");
-      n.classList.remove("prio-removing");
+      n.classList.remove("prio-drop-empty");
     });
   }
 
-  /* Show the gap the icon would land in by marking the icon that follows it. */
+  /* Show the gap the icon would land in by marking the icon that follows it. A line
+     with no icons has nothing to mark, so the cell itself becomes the target - which
+     is every row of a list you have only just started. */
   function markSlot(td, slot) {
     var icons = td.querySelectorAll(".prio-edit");
+    if (!icons.length) { td.classList.add("prio-drop-empty"); return; }
     var mark = icons[slot];
     if (mark) mark.classList.add("prio-drop");
-    else if (icons.length) icons[icons.length - 1].classList.add("prio-drop-after");
-  }
-
-  function overLine(td, clientY) {
-    var r = td.getBoundingClientRect();
-    return clientY >= r.top - DRAG_OUT && clientY <= r.bottom + DRAG_OUT;
+    else icons[icons.length - 1].classList.add("prio-drop-after");
   }
 
   /* A half-size copy of the icon that follows the pointer. */
@@ -1224,7 +1270,14 @@
         node.classList.remove("prio-dragging");
         clearDrops();
         ev.preventDefault();
-        if (ev.type !== "pointercancel") opts.drop(ev);
+        /* The browser took the gesture off us - a native image drag is how that used
+           to happen, and it swallowed every drop without a word. Abandoning is right;
+           doing it in silence is what hid the bug. */
+        if (ev.type === "pointercancel") {
+          if (window.console) console.warn("drag cancelled by the browser, drop abandoned");
+          return;
+        }
+        opts.drop(ev);
       }
       window.addEventListener("pointermove", move);
       window.addEventListener("pointerup", done);
@@ -1284,23 +1337,20 @@
       if (next) next.focus();
     });
 
-    /* Drag to reorder within the line, or up/down out of it to remove. */
+    /* Drag to reorder. Dropping anywhere but on a line does nothing: taking an icon
+       off is the x and the Delete key, both deliberate. Dragging clear of the row
+       used to remove it, which fired by accident more often than on purpose. */
     onDrag(wrap, {
       over: function (ev) {
         var td = wrap.parentNode;
-        if (overLine(td, ev.clientY)) markSlot(td, dropSlot(td, ev.clientX));
-        else td.classList.add("prio-removing");
+        if (cellUnder(ev) === td) markSlot(td, dropSlot(td, ev.clientX));
       },
       drop: function (ev) {
         var td = wrap.parentNode;
-        if (!overLine(td, ev.clientY)) {
-          applyEdit(rec, removeEntry(list, index));
-          announce(resolved.name + " taken off " + rec.item);
-        } else {
-          var slot = dropSlot(td, ev.clientX);
-          applyEdit(rec, moveEntry(list, index, slot > index ? slot - 1 : slot));
-          announce("");
-        }
+        if (cellUnder(ev) !== td) return;      /* dropped off its line: it goes home */
+        var slot = dropSlot(td, ev.clientX);
+        applyEdit(rec, moveEntry(list, index, slot > index ? slot - 1 : slot));
+        announce("");
         update();
       }
     });
@@ -1339,12 +1389,11 @@
     add.type = "button";
     add.className = "prio-add";
     add.textContent = "+";
-    add.dataset.tip = "Add a spec from the palette";
+    add.dataset.tip = "Add a spec - click one, or drag it onto a line";
     add.setAttribute("aria-label", "Add a spec to " + rec.item);
-    add.addEventListener("click", function () {
-      state.paletteFor = rec.id;
-      renderPalette();
-      announce("Pick a spec to add to " + rec.item);
+    add.addEventListener("click", function (e) {
+      e.stopPropagation();
+      openPop(rec, add);
     });
     td.appendChild(add);
 
@@ -1362,76 +1411,183 @@
     return td;
   }
 
-  /* The palette: every class and spec, click to append to the chosen item. */
-  function renderPalette() {
-    if (!el.palette) return;
-    el.palette.innerHTML = "";
-    el.palette.hidden = !state.editing;
-    if (!state.editing) return;
+  /* ---------- the add popover ----------
+     Every class and spec, opened from the + on a row. One element, created lazily and
+     parented to <body> like the tooltip is: inside a table-layout: fixed cell with a
+     horizontal scroll container it would be clipped.
 
-    /* The chosen row, if one pressed +. Without one the palette still shows, because
-       dragging an icon onto any row works whether or not a row was chosen first. */
-    var target = state.paletteFor
-      ? ALL.filter(function (r) { return String(r.id) === String(state.paletteFor); })[0]
-      : null;
+     Each icon does two things. Clicking adds it to the row the popover was opened on;
+     dragging drops it into a chosen gap on ANY row, because cellUnder() resolves
+     whatever is under the pointer and does not care where the drag began. */
 
-    var head = document.createElement("span");
-    head.className = "palette-head";
-    head.textContent = target
-      ? "Add to " + target.item
-      : "Drag onto a row, or press + on the row first";
-    el.palette.appendChild(head);
+  var pop = null;          /* the element */
+  var popFor = null;       /* the record it was opened on */
+  var popQuery = "";
 
-    /* Put entry into rec's line at slot, or refuse and say why. */
-    function place(rec, entry, resolved, slot) {
-      var list = effectivePriority(rec) || [];
-      var why = rejectReason(rec, list, entry, -1);
-      if (why) { announce(resolved.name + ": " + why); return; }
-      applyEdit(rec, addEntry(list, entry, slot));
-      announce(resolved.name + " added to " + rec.item);
-      update();
-    }
+  function closePop() {
+    popFor = null;
+    popQuery = "";
+    if (pop) pop.style.display = "none";
+  }
 
+  /* Put entry into rec at slot, or refuse and say why. */
+  function place(rec, entry, resolved, slot) {
+    var list = effectivePriority(rec) || [];
+    var why = rejectReason(rec, list, entry, -1);
+    if (why) { announce(resolved.name + ": " + why); return false; }
+    applyEdit(rec, addEntry(list, entry, slot));
+    announce(resolved.name + " added to " + rec.item);
+    update();
+    return true;
+  }
+
+  /* Every pickable entry once: each class, then its specs. */
+  function pickableEntries() {
+    var out = [];
     Object.keys(REG.classes).forEach(function (clsId) {
-      var group = document.createElement("span");
-      group.className = "palette-group";
-
-      [{ "class": clsId }].concat((CLASS_SPECS[clsId] || []).map(function (id) {
-        return { spec: id };
-      })).forEach(function (entry) {
-        var resolved = resolveEntry(entry);
-        if (!resolved) return;
-        var b = document.createElement("button");
-        b.type = "button";
-        b.className = "palette-icon";
-        b.dataset.tip = resolved.name;
-        b.setAttribute("aria-label", "Add " + resolved.name);
-        b.appendChild(specIcon(resolved, 0));
-
-        b.addEventListener("click", function () {
-          if (!target) { announce("Press + on the row you want, or drag this onto it"); return; }
-          place(target, entry, resolved, null);
-        });
-
-        onDrag(b, {
-          over: function (ev) {
-            var td = cellUnder(ev);
-            if (td) markSlot(td, dropSlot(td, ev.clientX));
-          },
-          drop: function (ev) {
-            var td = cellUnder(ev);
-            if (!td) { announce("Drop it on a row's priority to add it"); return; }
-            var id = td.parentNode.dataset.id;
-            var rec = ALL.filter(function (r) { return String(r.id) === String(id); })[0];
-            if (rec) place(rec, entry, resolved, dropSlot(td, ev.clientX));
-          }
-        });
-
-        group.appendChild(b);
+      out.push({ clsId: clsId, entry: { "class": clsId } });
+      (CLASS_SPECS[clsId] || []).forEach(function (id) {
+        out.push({ clsId: clsId, entry: { spec: id } });
       });
-
-      el.palette.appendChild(group);
     });
+    return out.filter(function (e) { return !!resolveEntry(e.entry); });
+  }
+
+  function buildPop() {
+    pop = document.createElement("div");
+    pop.className = "prio-pop";
+    pop.setAttribute("role", "dialog");
+    pop.setAttribute("aria-label", "Add a spec");
+
+    var field = document.createElement("input");
+    field.type = "search";
+    field.className = "prio-pop-find";
+    field.placeholder = "Type to narrow, Enter to take the first";
+    field.setAttribute("aria-label", "Find a class or spec");
+    pop.appendChild(field);
+
+    var head = document.createElement("p");
+    head.className = "prio-pop-head";
+    pop.appendChild(head);
+
+    var body = document.createElement("div");
+    body.className = "prio-pop-body";
+    pop.appendChild(body);
+
+    document.body.appendChild(pop);
+
+    field.addEventListener("input", function () {
+      popQuery = field.value.trim().toLowerCase();
+      fillPop();
+    });
+
+    field.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { e.preventDefault(); closePop(); return; }
+      if (e.key !== "Enter") return;
+      e.preventDefault();
+      var first = pop.querySelector(".prio-pop-icon");
+      if (first) first.click();
+    });
+
+    pop.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { e.preventDefault(); closePop(); }
+    });
+
+    return pop;
+  }
+
+  function fillPop() {
+    var body = pop.querySelector(".prio-pop-body");
+    var head = pop.querySelector(".prio-pop-head");
+    body.innerHTML = "";
+    head.textContent = popFor ? "Add to " + popFor.item : "";
+
+    var groups = {};
+    var order = [];
+    var shown = 0;
+
+    pickableEntries().forEach(function (e) {
+      var resolved = resolveEntry(e.entry);
+      if (popQuery && resolved.name.toLowerCase().indexOf(popQuery) === -1) return;
+      if (!groups[e.clsId]) {
+        groups[e.clsId] = document.createElement("span");
+        groups[e.clsId].className = "prio-pop-group";
+        order.push(e.clsId);
+      }
+      groups[e.clsId].appendChild(popIcon(e.entry, resolved));
+      shown++;
+    });
+
+    order.forEach(function (id) { body.appendChild(groups[id]); });
+    if (!shown) {
+      var none = document.createElement("p");
+      none.className = "prio-pop-none";
+      none.textContent = "Nothing matches that.";
+      body.appendChild(none);
+    }
+  }
+
+  function popIcon(entry, resolved) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "prio-pop-icon";
+    b.dataset.tip = resolved.name;
+    b.setAttribute("aria-label", "Add " + resolved.name);
+    b.appendChild(specIcon(resolved, 0));
+
+    /* click: onto the row this was opened on, at the end of its line */
+    b.addEventListener("click", function () {
+      if (!popFor) return;
+      if (place(popFor, entry, resolved, null)) closePop();
+    });
+
+    /* drag: onto whichever row you drop it on, in the gap you drop it in */
+    onDrag(b, {
+      over: function (ev) {
+        var td = cellUnder(ev);
+        if (td) markSlot(td, dropSlot(td, ev.clientX));
+      },
+      drop: function (ev) {
+        var td = cellUnder(ev);
+        if (!td) { announce("Drop it on a row to add it there"); return; }
+        var rec = recordFor(td.parentNode.dataset.id);
+        if (!rec) return;
+        if (place(rec, entry, resolved, dropSlot(td, ev.clientX))) closePop();
+      }
+    });
+
+    return b;
+  }
+
+  function recordFor(id) {
+    return ALL.filter(function (r) { return String(r.id) === String(id); })[0];
+  }
+
+  /* Anchored under the + that opened it, clamped into the viewport the same way the
+     tooltip is. */
+  function openPop(rec, anchor) {
+    if (!canEdit()) return;
+    if (!pop) buildPop();
+    popFor = rec;
+    popQuery = "";
+    pop.querySelector(".prio-pop-find").value = "";
+    pop.style.display = "block";
+    fillPop();
+
+    var r = anchor.getBoundingClientRect();
+    var p = pop.getBoundingClientRect();
+    var left = r.left;
+    var top = r.bottom + 6;
+    if (top + p.height > document.documentElement.clientHeight - 4) {
+      top = Math.max(4, r.top - p.height - 6);
+    }
+    var maxLeft = document.documentElement.clientWidth - p.width - 6;
+    if (left > maxLeft) left = maxLeft;
+    if (left < 6) left = 6;
+    pop.style.left = Math.round(left) + "px";
+    pop.style.top = Math.round(top) + "px";
+
+    pop.querySelector(".prio-pop-find").focus();
   }
 
   /* ---------- rendering: results ---------- */
@@ -1604,6 +1760,10 @@
       img.dataset.tipTier = String(bis);
     }
     img.setAttribute("aria-label", img.alt);
+    /* An <img> is draggable by default in every browser, and the browser's own image
+       drag cancels the pointer sequence underneath it - which silently killed every
+       drop in the editor. user-select: none does not cover this; only this does. */
+    img.draggable = false;
     img.setAttribute("onerror", "this.style.display='none'");
     return img;
   }
@@ -1701,7 +1861,7 @@
     }
     tr.appendChild(type);
 
-    tr.appendChild(state.editing ? editablePriorityCell(rec) : priorityCell(rec));
+    tr.appendChild(canEdit() ? editablePriorityCell(rec) : priorityCell(rec));
 
     var notes = document.createElement("td");
     notes.className = "col-notes";
@@ -1778,6 +1938,16 @@
     return section;
   }
 
+  /* Asked only on the no-results path, so walking 195 entries costs nothing. Narrowed
+     to a class or spec filter because that is the only one an empty priority defeats:
+     search still reads item names, notes and bosses. */
+  function blankListFiltered() {
+    if (!activeTemplate) return false;
+    if (!state.classes.length && !state.specs.length) return false;
+    var p = activeTemplate.priorities;
+    return Object.keys(p).every(function (k) { return !p[k] || !p[k].length; });
+  }
+
   function renderResults() {
     var rows = filtered();
     el.count.textContent = rows.length + " of " + ALL.length + " items";
@@ -1786,7 +1956,14 @@
     if (!rows.length) {
       var empty = document.createElement("p");
       empty.className = "empty";
-      empty.textContent = "No items match these filters.";
+      /* A list you have only just started names nobody, so the class and spec chips
+         all read zero. That is honest - the filter reflects the list in front of you
+         - but it must say so rather than looking broken. */
+      empty.textContent = blankListFiltered()
+        ? "This list is empty so far, so there is nobody for the class and spec "
+          + "filters to find. Press Edit and add specs to a row, or clear the filters "
+          + "to see every item."
+        : "No items match these filters.";
       el.results.appendChild(empty);
       return;
     }
@@ -1827,122 +2004,218 @@
     renderSpecChips();
     renderSelects();
     renderResults();
-    renderPalette();
     writeUrl();
   }
 
-  /* ---------- template toolbar ---------- */
+  /* ---------- the list bar ----------
+
+     [ List v ] [ name____ ]  New  Make a copy  Edit  Copy link  Delete
+
+     What it offers follows what is on screen. zatar's list, and a list that arrived
+     on a link, are someone else's work: they get New and Make a copy and nothing
+     more. The rest appears once a list of your own is open. No browser dialogs -
+     naming, opening and deleting all happen in the page. */
+
+  var savedLists = [];        /* store.list() is async; this is its cached answer */
+  var deleteArmed = false;    /* Delete asks once, in place, instead of confirm() */
+  var nameTimer = null;
+  var SHARED_VALUE = "__shared__";   /* template ids are t+base36, so no collision */
+
+  /* Refreshes the dropdown's contents. Renders the bar directly and never calls
+     update(), which is what calls renderTemplateBar in the first place. */
+  function refreshLists() {
+    return store.list().then(function (all) {
+      savedLists = all;
+      renderTemplateBar();
+    }, function () { savedLists = []; });
+  }
+
+  /* The one place the view changes. Editing never survives it: a list opens for
+     reading, and you say when you want to change it. */
+  function openTemplate(t, mine) {
+    activeTemplate = t;
+    activeIsMine = !!mine;
+    unsaved = false;
+    state.editing = false;
+    closePop();
+    deleteArmed = false;
+    clearTimeout(nameTimer);
+    if (el.tplLinkOut) el.tplLinkOut.hidden = true;
+  }
+
+  function showZatar() { openTemplate(null, false); }
+
+  function option(value, label) {
+    var o = document.createElement("option");
+    o.value = value;
+    o.textContent = label;
+    return o;
+  }
+
+  function show(node, on) {
+    if (node) node.hidden = !on;
+  }
 
   function renderTemplateBar() {
-    if (!el.editToggle) return;
+    if (!el.tplList) return;
+
+    el.tplList.innerHTML = "";
+    el.tplList.appendChild(option("", "zatar's list"));
+    savedLists.forEach(function (t) { el.tplList.appendChild(option(t.id, t.name)); });
+    /* A shared list is not in the store, so it needs an option of its own to show as
+       selected - otherwise the dropdown would claim zatar's list was on screen. */
+    if (activeTemplate && !activeIsMine) {
+      el.tplList.appendChild(option(SHARED_VALUE, "Shared: " + activeTemplate.name));
+    }
+    el.tplList.value = activeTemplate ? (activeIsMine ? activeTemplate.id : SHARED_VALUE) : "";
+
+    show(el.tplName, activeIsMine);
+    show(el.tplDirty, activeIsMine && unsaved);
+    show(el.editToggle, activeIsMine);
+    show(el.tplShare, activeIsMine);
+    show(el.tplDelete, activeIsMine);
+
+    /* don't fight the caret while the name is being typed */
+    if (activeIsMine && el.tplName && el.tplName !== document.activeElement) {
+      el.tplName.value = activeTemplate.name;
+    }
+
     el.editToggle.setAttribute("aria-pressed", state.editing ? "true" : "false");
     el.editToggle.textContent = state.editing ? "Done" : "Edit";
-    if (el.templateMenu) el.templateMenu.hidden = !state.editing;
+    el.tplDelete.textContent = deleteArmed ? "Sure?" : "Delete";
+    el.tplDelete.className = "btn-tpl btn-tpl--danger" + (deleteArmed ? " btn-tpl--armed" : "");
 
-    if (el.templateName) {
-      el.templateName.textContent = activeTemplate
-        ? activeTemplate.name + (activeTemplate.dirty ? " (unsaved)" : "")
-        : "";
-      el.templateName.className = "template-name" +
-        (activeTemplate && activeTemplate.dirty ? " template-name--dirty" : "");
-    }
+    if (el.editMsg) el.editMsg.textContent = editMsg;
+  }
 
-    var note = document.getElementById("edit-msg");
-    if (!note && el.templateName && el.templateName.parentNode) {
-      note = document.createElement("span");
-      note.id = "edit-msg";
-      note.className = "edit-msg";
-      note.setAttribute("role", "status");
-      el.templateName.parentNode.appendChild(note);
-    }
-    if (note) note.textContent = editMsg;
+  /* New and Make a copy differ only in what they seed. Both write the list at once,
+     so it is in the dropdown from birth and there is nothing to forget to press. */
+  function startList(t, said) {
+    openTemplate(t, true);
+    state.editing = true;      /* you made it in order to change it */
+    announce(said);
+    update();
+    saveNow().then(refreshLists);
   }
 
   function bindTemplateBar() {
-    if (!el.editToggle) return;
+    if (!el.tplList) return;
+
+    /* Delete asks in place, so anything else on the bar takes the question back.
+       Capture, so it runs before the button's own handler. */
+    if (el.templateBar) el.templateBar.addEventListener("click", function (e) {
+      if (deleteArmed && e.target !== el.tplDelete) { deleteArmed = false; renderTemplateBar(); }
+    }, true);
+
+    el.tplList.addEventListener("change", function () {
+      var v = el.tplList.value;
+      if (v === SHARED_VALUE) return;
+      if (v === "") { showZatar(); announce("Showing zatar's list"); update(); return; }
+      store.load(v).then(function (t) {
+        var why = t ? validateTemplate(t) : "it is not there any more";
+        if (why) { announce("That list will not open: " + why); renderTemplateBar(); return; }
+        openTemplate(t, true);
+        announce("Opened " + t.name);
+        update();
+      });
+    });
+
+    el.tplNew.addEventListener("click", function () {
+      startList(newBlankTemplate(), "A blank list - every priority is empty until you fill it in");
+    });
+
+    el.tplCopy.addEventListener("click", function () {
+      var from = activeTemplate ? activeTemplate.name : "zatar's list";
+      startList(copyOfCurrent("Copy of " + from), "Copied " + from);
+    });
 
     el.editToggle.addEventListener("click", function () {
       state.editing = !state.editing;
-      if (!state.editing) state.paletteFor = "";
+      if (!state.editing) closePop();
       announce("");
       update();
     });
 
-    if (el.tplSave) el.tplSave.addEventListener("click", function () {
-      if (!activeTemplate) { announce("Nothing to save yet - change a priority first"); return; }
-      var name = window.prompt("Name this list", activeTemplate.name);
-      if (name === null) return;
-      activeTemplate.name = name || activeTemplate.name;
-      store.save(activeTemplate).then(function () {
-        activeTemplate.dirty = false;
-        announce("Saved");
-        update();
-      }, function (err) { announce(err.message); });
+    /* The name field replaces prompt(). It fires per character, so it is the one
+       thing here that is debounced rather than written straight away. */
+    el.tplName.addEventListener("input", function () {
+      if (!activeIsMine) return;
+      activeTemplate.name = el.tplName.value;
+      unsaved = true;
+      show(el.tplDirty, true);
+      clearTimeout(nameTimer);
+      nameTimer = setTimeout(function () { saveNow().then(refreshLists); }, 400);
     });
 
-    if (el.tplOpen) el.tplOpen.addEventListener("click", function () {
-      store.list().then(function (all) {
-        if (!all.length) { announce("You have no saved lists yet"); return; }
-        var lines = all.map(function (t, i) { return (i + 1) + ". " + t.name; }).join(String.fromCharCode(10));
-        var pick = window.prompt("Open which list?" + String.fromCharCode(10) + lines, "1");
-        var idx = parseInt(pick, 10) - 1;
-        if (isNaN(idx) || !all[idx]) return;
-        store.load(all[idx].id).then(function (t) {
-          var why = validateTemplate(t);
-          if (why) { announce("That list won't load: " + why); return; }
-          activeTemplate = t;
-          activeTemplate.dirty = false;
-          announce("Opened " + t.name);
-          update();
-        });
-      });
+    el.tplName.addEventListener("blur", function () {
+      clearTimeout(nameTimer);
+      if (activeIsMine && unsaved) saveNow().then(refreshLists);
     });
 
-    if (el.tplShare) el.tplShare.addEventListener("click", function () {
-      if (!activeTemplate) { announce("Nothing to share yet"); return; }
+    el.tplShare.addEventListener("click", function () {
+      if (!activeTemplate) return;
       encodeTemplate(activeTemplate).then(function (code) {
         var url = location.origin + location.pathname + "#t=" + code;
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(url).then(
             function () { announce("Link copied (" + url.length + " characters)"); },
-            function () { window.prompt("Copy this link", url); });
+            function () { offerLink(url); });
         } else {
-          window.prompt("Copy this link", url);
+          offerLink(url);
         }
       }, function (err) { announce(err.message); });
     });
 
-    if (el.tplDiscard) el.tplDiscard.addEventListener("click", function () {
-      if (!activeTemplate) return;
-      if (!window.confirm("Discard \"" + activeTemplate.name + "\" and go back to zatar's list?")) return;
-      activeTemplate = null;
-      state.paletteFor = "";
-      announce("Back to the guide's list");
-      update();
+    el.tplDelete.addEventListener("click", function () {
+      if (!activeIsMine) return;
+      if (!deleteArmed) {
+        deleteArmed = true;
+        announce("Press Delete again to remove \"" + activeTemplate.name + "\"");
+        renderTemplateBar();
+        return;
+      }
+      var name = activeTemplate.name;
+      store.remove(activeTemplate.id).then(function () {
+        showZatar();
+        announce("Deleted " + name);
+        update();
+        refreshLists();
+      });
     });
   }
 
+  /* No clipboard API, or it refused: the link goes in a field, selected, to be copied
+     by hand. Anything rather than a grey browser box in the middle of the page. */
+  function offerLink(url) {
+    if (!el.tplLinkField) return;
+    el.tplLinkField.value = url;
+    el.tplLinkOut.hidden = false;
+    el.tplLinkField.focus();
+    el.tplLinkField.select();
+    announce("Copy this link (" + url.length + " characters)");
+  }
+
   /* A #t= link opens someone else's list. It is untrusted input, so it is validated
-     before any of it reaches the table, and refused out loud if it doesn't hold up. */
+     before any of it reaches the table, and refused out loud if it does not hold up.
+     It opens as reference, not as yours: Make a copy is how you keep it. */
   function loadSharedTemplate() {
     var m = /(?:^|&)t=([^&]+)/.exec(location.hash.replace(/^#/, ""));
     if (!m) return;
     decodeTemplate(decodeURIComponent(m[1])).then(function (doc) {
       var why = validateTemplate(doc);
-      if (why) { announce("That shared list won't load: " + why); update(); return; }
-      activeTemplate = {
+      if (why) { announce("That shared list will not load: " + why); update(); return; }
+      openTemplate({
         v: doc.v,
         id: "t" + Date.now().toString(36),
         name: doc.name || "Shared list",
         created: new Date().toISOString().slice(0, 10),
         base: doc.base || "zatar",
-        priorities: doc.priorities,
-        dirty: true              /* it isn't yours until you save it */
-      };
-      announce("Opened shared list: " + activeTemplate.name + " - Save to keep it");
+        priorities: doc.priorities
+      }, false);
+      announce("Opened shared list: " + activeTemplate.name + " - Make a copy to change it");
       update();
     }, function (err) {
-      announce("That shared link didn't work: " + err.message);
+      announce("That shared link did not work: " + err.message);
       update();
     });
   }
@@ -2043,6 +2316,12 @@
       if (th) { e.preventDefault(); toggleSort(th.dataset.sort); }
     });
 
+    document.addEventListener("click", function (e) {
+      if (!pop || pop.style.display === "none") return;
+      if (pop.contains(e.target)) return;
+      closePop();
+    });
+
     window.addEventListener("hashchange", function () {
       readUrl();
       el.search.value = state.q;
@@ -2101,6 +2380,7 @@
       bind();
       bindTips();
       bindTemplateBar();
+      refreshLists();
       loadSharedTemplate();
       update();
     })

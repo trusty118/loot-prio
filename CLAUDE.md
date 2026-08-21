@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 378 checks, should be all green
+npm test             # 429 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -282,11 +282,10 @@ ambiguous, so the other 14 bosses keep the short URL they have always had. An ol
 
 ## 4. Edit mode — your own priority list
 
-> **Being reworked.** The interaction below is agreed to be wrong on four counts — the mental
-> model, adding, operators and dragging. **[docs/edit-mode-plan.md](docs/edit-mode-plan.md) is
-> the agreed replacement; read it before touching any of this.** The model layer it describes
-> (the overlay, the editing rules, templates, storage, sharing) survives unchanged; the palette
-> and the drag-to-delete gesture do not.
+> **Nearly reworked, Aug 2026.** [docs/edit-mode-plan.md](docs/edit-mode-plan.md) is the agreed
+> replacement for an edit mode that read as "curate zatar's 195 rows". **Sections 1, 3 and 4 are
+> built, and so is section 2's Add.** What is left of section 2: the `.prio-grip` drag handle,
+> and the five-item operator menu in place of click-to-cycle.
 
 The whole data restructure was aimed at this. `priority` became an ordered list of
 `{spec|class, op}` entries so a person could reorder icons and pick operators.
@@ -301,9 +300,37 @@ function effectivePriority(rec) {                       // the template's, else 
 }
 ```
 
-`priorityCell` and `editablePriorityCell` both read that, never `rec.priority` — the one
-exception is the reset button, which reads `rec.priority` precisely because it wants the
-original.
+**Everything that asks what a row says goes through that**, never `rec.priority`: both
+priority cells, `selectionHas()`/`priorityHas()` behind the class/spec filter, and the
+search haystack. Two deliberate exceptions read `rec.priority` precisely because they want
+the original — the reset button, and whether to offer one.
+
+### Whose list is on screen
+
+Three views, one variable and one flag:
+
+```js
+var activeTemplate = null;   // the list being VIEWED; null means zatar's
+var activeIsMine = false;    // is it in your store? false for one from a #t= link
+```
+
+**zatar's list is read-only reference, and so is a list that arrived on a link.** Only a
+list in your own store is a workspace — `canEdit()` is `activeTemplate && activeIsMine &&
+state.editing`, and it is what `renderRow` and `renderPalette` gate on. You get one of your
+own two ways, the way Office does it:
+
+- **New** → `newBlankTemplate()`, all 195 rows with every priority empty, `base: "blank"`.
+- **Make a copy** → `copyOfCurrent()`, which deep-copies `effectivePriority(rec)` for every
+  record. That one function copies the guide's list, one of yours, or a shared one, without
+  branching on which — and it is the only way to keep someone else's link.
+
+`state.editing` survives as an **Edit / Done** toggle, but only appears once a list of yours
+is open: a finished list gets read during a raid, and it should not be covered in `×`s. It is
+cleared by every view change (`openTemplate()` is the single place that happens).
+
+**An `unsourced` row is reachable through its BiS only while reading the guide.** That path
+bridges a gap in *his* data; with a list of your own open there is no gap, and letting 13
+rows through a filter the other 182 fail would make your own list lie about itself.
 
 ### What a template is
 
@@ -321,6 +348,11 @@ rather than hidden:
 - **Items added later aren't in it.** Anything missing renders from `loot_data.json` and is
   marked as not part of this template, never silently blank (`inTemplate()`).
 
+A **blank list is a template like any other** — it validates, saves and shares; an empty
+priority is valid data, not a broken one. Its consequence is that it matches no class or spec
+filter, so the chips all read zero. That is honest, and `blankListFiltered()` makes the empty
+results say so rather than look broken. **Don't paper over it by extending `unsourcedBis()`.**
+
 ### Storage
 
 ```js
@@ -330,6 +362,28 @@ var store = { list(), load(id), save(t), remove(id) };   // localStorage now, Az
 **Async from the start** even though localStorage is synchronous, so the Azure Functions +
 Cosmos implementation is a drop-in rather than a refactor of every call site. That is the
 entire reason edit mode was built before login.
+
+**There is no Save button.** A list is written when it is made and again on every edit
+(`saveNow()`), so it is in the dropdown from birth and nothing is lost by forgetting to press
+something. The name field is the one thing debounced, at 400 ms, because it fires per
+character. Whether a write is outstanding lives in a module-level `unsaved`, deliberately
+**not** on the template — so scratch state never travels into the store or into a share link.
+
+### The bar
+
+```
+[ List ▾ ]  [ name______ ]   New   Make a copy   Edit   Copy link   Delete
+```
+
+What it offers follows what is on screen: zatar's list and a shared list get New and Make a
+copy and nothing else; the rest appears once a list of yours is open. `savedLists` caches
+`store.list()`, refreshed by `refreshLists()`, which calls `renderTemplateBar()` **directly
+and never `update()`** — `update()` is what calls `renderTemplateBar` in the first place.
+
+**No browser dialogs anywhere.** Naming is a field, opening is the dropdown, Delete asks in
+place (`Delete` → `Sure?`, taken back by any other bar click), and a missing clipboard API
+reveals the link in a selected field. `test/edit-mode.mjs` asserts against the source that no
+`window.prompt` or `window.confirm` has crept back.
 
 ### Sharing by link
 
@@ -342,19 +396,40 @@ A template from a link is **untrusted input**. `validateTemplate` enforces the s
 entry has no `op`, no illegal repeats — and refuses with a readable message rather than
 rendering a broken table. `test/templates.mjs` hand-crafts one violation of each.
 
+It opens as **reference, not as yours**: the dropdown says `Shared: <name>`, nothing of theirs
+is written to your store, and Make a copy is how you keep it.
+
 ### The editing gestures
 
 | Action | Pointer | Keyboard |
 |---|---|---|
-| Reorder | drag the icon along the line | ← → |
-| Remove | drag it clear of the row, or the × | Delete |
+| Reorder | drag the icon along its line | ← → |
+| Remove | the × | Delete |
 | Operator | click the `>` between two icons | Enter |
-| Add | drag from the palette, or + then click | + then click |
+| Add | `+`, then click an icon or drag one onto any line | `+`, type, Enter |
 
 Pointer events, **not HTML5 drag-and-drop** — these icons sit in a `table-layout: fixed`
 cell, where HTML5 drop targets are unreliable. A press only becomes a drag past
-`DRAG_SLOP` (4px), so a click still reads as a click; `DRAG_OUT` (14px clear of the row)
-is what makes it a removal.
+`DRAG_SLOP` (4px), so a click still reads as a click.
+
+**An `<img>` is natively draggable, and that broke every drop in the editor.** Pressing and
+moving started the browser's own image drag, which fires `pointercancel` and tore down the
+pointer sequence this all runs on — and `onDrag` abandoned the drop in silence, so it looked
+like nothing happened. `specIcon()` sets `img.draggable = false` (with `-webkit-user-drag`
+beside it in the CSS), and a cancelled drag now says so through `console.warn`. **Never render
+a draggable icon without that**, and don't put the silence back.
+
+**Dragging clear of the row no longer removes.** It fired by accident far more than on
+purpose, and it was invisible for as long as dragging itself was broken. A drop anywhere but
+on the icon's own line returns it home; removal is the × and the Delete key, both deliberate.
+
+**Adding is a popover, not a bar.** The `+` on a row opens `.prio-pop` — a search field and
+every class and spec, parented to `<body>` for the same reason the tooltip is (inside the
+cell, the table's scroll container would clip it). Clicking an icon adds it to that row;
+**dragging one lands on whichever row you drop it on**, at the gap you drop it in, because
+`cellUnder()` resolves what is under the pointer and doesn't care where the drag began.
+`markSlot()` marks the icon a drop would land before — or the cell itself when the line is
+empty, which is every row of a list you have only just started.
 
 **Every gesture has a keyboard form**, which is both the accessibility requirement and the
 only reason the editor is testable — jsdom can dispatch a keydown but cannot drag. Dragging
@@ -403,10 +478,16 @@ editor refuses the drop and says why, so it cannot produce data that fails valid
 - `test/smoke.mjs` — renders the page in jsdom and asserts filtering, sorting, grouping,
   icons, operators, BiS rings, tooltips and the data edits.
 - `test/bis-fallback.mjs` — a missing or malformed `bis.json` degrades gracefully.
-- `test/edit-mode.mjs` — the editor through its keyboard and click paths: reorder, remove,
-  operator cycling, the palette, the repeat rule, reset, and that `ALL` is never mutated.
-- `test/templates.mjs` — a template is a full copy, storage round-trips, the URL encoding
-  round-trips, and seven kinds of hand-crafted bad template are each refused.
+- `test/edit-mode.mjs` — that zatar's list is read-only and a list of your own is not; New,
+  Make a copy, the dropdown, the name field, two-step Delete, and that an edit is in the store
+  with nothing pressed to put it there. Then the editor through its keyboard and click paths:
+  reorder, remove, operator cycling, the add popover and its search, the repeat rule, reset,
+  and that `ALL` is never mutated. It also greps its own source — so a `window.prompt` can't
+  creep back — and asserts **every icon carries `draggable="false"`**, which is the only part
+  of the drag gesture jsdom can reach and the exact thing that was broken.
+- `test/templates.mjs` — a template is a full copy, a blank one is valid and shareable,
+  storage round-trips, the URL encoding round-trips, and eight kinds of hand-crafted bad
+  template are each refused.
 
 They can't cover anything needing a real browser: Wowhead's script doesn't complete its
 data fetch under jsdom, so **item icons and item tooltips are untested** — check those by

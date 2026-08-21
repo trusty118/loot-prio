@@ -16,20 +16,14 @@ const fail = [];
 const ok = (c, m) => { console.log((c ? "PASS  " : "FAIL  ") + m); if (!c) fail.push(m); };
 
 /* expose the internals this file is about; the app keeps them private otherwise */
-const EXPOSE = "window.__api = { newTemplate, encodeTemplate, decodeTemplate, validateTemplate," +
-  " store, addEntry, moveEntry, cycleOp, removeEntry, normaliseList }; })();";
+const EXPOSE = "window.__api = { copyOfCurrent, newBlankTemplate, encodeTemplate, decodeTemplate," +
+  " validateTemplate, store, addEntry, moveEntry, cycleOp, removeEntry, normaliseList }; })();";
 
 function boot(hash) {
   const dom = new JSDOM(fs.readFileSync(path.join(root, "index.html"), "utf8"),
     { runScripts: "outside-only", url: "https://x.test/loot-prio/" + (hash || "") });
   const { window } = dom;
   Object.assign(window, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
-  const mem = {};
-  window.localStorage = {
-    getItem: (k) => (k in mem ? mem[k] : null),
-    setItem: (k, v) => { mem[k] = String(v); },
-    removeItem: (k) => { delete mem[k]; }
-  };
   window.fetch = (u) => {
     const s = String(u);
     return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
@@ -45,7 +39,7 @@ await settle();
 const api = w.__api;
 
 // --- what a template is --------------------------------------------------------
-const t = api.newTemplate("Test list");
+const t = api.copyOfCurrent("Test list");
 ok(Object.keys(t.priorities).length === data.length,
    `a template is a full copy: ${Object.keys(t.priorities).length} of ${data.length} items`);
 ok(t.v === 1 && t.base === "zatar", "it records its version and what it forked from");
@@ -53,6 +47,18 @@ ok(t.v === 1 && t.base === "zatar", "it records its version and what it forked f
 t.priorities["32375"] = api.addEntry(t.priorities["32375"], { spec: "Arms" });
 ok(JSON.stringify(data.find((r) => r.id === 32375).priority).indexOf("Arms") === -1,
    "editing the copy does not reach the loaded data");
+
+// --- a blank list is a template like any other ----------------------------------
+const blank = api.newBlankTemplate("Blank list");
+ok(Object.keys(blank.priorities).length === data.length,
+   `New copies all ${data.length} rows, it just leaves them empty`);
+ok(Object.values(blank.priorities).every((p) => Array.isArray(p) && p.length === 0),
+   "with nothing in any of them");
+ok(blank.base === "blank", "and it says it started from nothing rather than from him");
+ok(api.validateTemplate(blank) === null, "an empty priority is valid, not a broken one");
+const blankCode = await api.encodeTemplate(blank);
+ok(api.validateTemplate(await api.decodeTemplate(blankCode)) === null,
+   `and it shares like any other list: ${blankCode.length} characters`);
 
 // --- storage round-trip ---------------------------------------------------------
 await api.store.save(t);
@@ -93,10 +99,13 @@ ok(typeof junk === "string", `a damaged link is refused: ${junk}`);
 // --- loading a shared link -------------------------------------------------------
 const shared = boot("#t=" + code);
 await settle();
-ok(shared.document.getElementById("template-name").textContent.includes("Test list"),
-   "a #t= link opens that list on load");
-ok(shared.document.getElementById("template-name").textContent.includes("unsaved"),
-   "and it is marked unsaved - it isn't yours until you keep it");
+const picker = shared.document.getElementById("tpl-list");
+ok(picker.selectedOptions[0].textContent === "Shared: Test list",
+   `a #t= link opens that list on load: "${picker.selectedOptions[0].textContent}"`);
+ok(shared.document.getElementById("edit-toggle").hidden,
+   "and it opens as reference - someone else's list is not yours to edit in place");
+ok(!shared.document.getElementById("tpl-copy").hidden,
+   "Make a copy is how you keep it");
 
 console.log(fail.length ? `\n${fail.length} FAILURES` : "\nAll checks passed");
 process.exit(fail.length ? 1 : 0);

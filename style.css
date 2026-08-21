@@ -690,8 +690,34 @@ mark {
   margin-left: auto;
 }
 
-.template-name { font-size: .82rem; color: var(--text-dim); }
-.template-name--dirty { color: var(--gold); }
+.template-bar .field--tpl { margin: 0; }
+
+.template-bar select,
+.template-bar .tpl-name,
+.template-bar .tpl-link-field {
+  font: inherit;
+  font-size: .82rem;
+  background: var(--bg-panel-2);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 4px 8px;
+}
+
+.template-bar .tpl-name { width: 14em; }
+.template-bar .tpl-name:focus,
+.template-bar select:focus { outline: 1px solid var(--gold); }
+
+/* Shown only between an edit and the write landing, which is usually too fast to
+   see. It exists so a failed write is not silent. */
+.tpl-dirty {
+  color: var(--gold);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.tpl-link-out { display: inline-flex; }
+.template-bar .tpl-link-field { width: 18em; }
 
 .edit-msg {
   font-size: .82rem;
@@ -719,27 +745,59 @@ mark {
   font-weight: 600;
 }
 
-.btn-tpl--warn:hover { color: #ffb4a8; border-color: #b3564a; }
+.btn-tpl--danger:hover { color: #ffb4a8; border-color: #b3564a; }
 
-.template-menu { display: inline-flex; gap: 6px; }
-
-/* the palette of specs to add, shown only while editing */
-.palette {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 0 4px;
-  border-top: 1px solid var(--line-soft);
+/* Delete asks in place rather than in a browser dialog, so the armed state has to
+   look like the question it is. */
+.btn-tpl--armed {
+  background: #4a1f19;
+  border-color: #b3564a;
+  color: #ffb4a8;
+  font-weight: 600;
 }
 
-.palette-head {
+/* the add popover: every class and spec, opened from the + on a row.
+   Parented to <body>, so it is positioned rather than laid out. */
+.prio-pop {
+  position: fixed;
+  z-index: 40;
+  display: none;
+  max-width: min(560px, 92vw);
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 10px;
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .55);
+}
+
+.prio-pop-find {
+  font: inherit;
+  font-size: .82rem;
+  width: 100%;
+  background: var(--bg-panel-2);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 4px 8px;
+}
+
+.prio-pop-find:focus { outline: 1px solid var(--gold); }
+
+.prio-pop-head {
+  margin: 6px 0 4px;
   font-size: .78rem;
   color: var(--text-faint);
-  width: 100%;
 }
 
-.palette-group {
+.prio-pop-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.prio-pop-group {
   display: inline-flex;
   gap: 2px;
   padding: 2px;
@@ -747,18 +805,25 @@ mark {
   border-radius: var(--radius);
 }
 
-.palette-icon {
+.prio-pop-none {
+  margin: 4px 0 0;
+  font-size: .82rem;
+  color: var(--text-faint);
+}
+
+.prio-pop-icon {
   appearance: none;
   border: 0;
   background: transparent;
   padding: 0;
   line-height: 0;
-  cursor: pointer;
+  cursor: grab;
   border-radius: 3px;
 }
 
-.palette-icon .spec-icon { width: 26px; height: 26px; margin: 0; }
-.palette-icon:hover { outline: 2px solid var(--gold); outline-offset: 1px; }
+.prio-pop-icon .spec-icon { width: 26px; height: 26px; margin: 0; }
+.prio-pop-icon:hover { outline: 2px solid var(--gold); outline-offset: 1px; }
+.prio-pop-icon:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
 
 /* an editable priority cell */
 .col-prio--editing .prio-edit {
@@ -828,10 +893,13 @@ mark {
    the row takes the icon off the line. */
 
 .col-prio--editing .prio-edit,
-.palette-icon {
+.prio-pop-icon {
   touch-action: none;              /* so a touch drag doesn't scroll the page instead */
   user-select: none;
   -webkit-user-select: none;
+  /* the belt to specIcon's braces: an <img> drags natively, and the browser's own
+     image drag cancels the pointer sequence this editor runs on */
+  -webkit-user-drag: none;
 }
 
 .prio-dragging { opacity: .35; cursor: grabbing; }
@@ -854,5 +922,11 @@ mark {
 .prio-drop-after { box-shadow: 3px 0 0 0 var(--gold); }
 
 /* dragged clear of the line: release here and it comes off */
-.prio-removing { outline: 1px dashed #ffb4a8; outline-offset: -1px; }
+/* a line with no icons has nothing to mark, so the cell is the target - which is
+   every row of a list you have only just started */
+.prio-drop-empty {
+  outline: 1px dashed var(--gold);
+  outline-offset: -3px;
+  border-radius: var(--radius);
+}
 

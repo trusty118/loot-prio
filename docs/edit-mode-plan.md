@@ -1,8 +1,15 @@
 # Rework edit mode: a list of your own, not a rewrite of his
 
-> **Status:** agreed 21 Aug 2026, not started. Branch `edit-mode`, on top of commit
-> `97da230`. Pick up at section 1; sections "What stays" and "What goes" are the map of the
-> existing code. Nothing in `data/` is touched by any of this.
+> **Status:** agreed 21 Aug 2026. **Sections 1, 3 and 4 are built**, and so is section 2's
+> **Add** — the palette bar is gone, replaced by a popover on the row that you can click or drag
+> out of. Drag-clear-of-the-row-to-delete went with it. **What is left of section 2: the
+> `.prio-grip` drag handle, and the five-item operator menu.** Nothing in `data/` is touched by
+> any of this.
+>
+> One thing this plan did not know when it was written: **dragging had never worked at all.**
+> `specIcon()` built a bare `<img>`, which every browser drags natively, cancelling the pointer
+> sequence the editor runs on — and `onDrag` dropped the gesture without a word. That is what
+> "dragging is fiddly" in the Context below actually was.
 
 ## Context
 
@@ -48,7 +55,7 @@ changes:
 
 ---
 
-## 1. Starting a list
+## 1. Starting a list — built
 
 Viewing zatar's list is **read-only**. The bar offers `New` and `Make a copy`; there is no Edit
 button until a list of yours is open.
@@ -63,7 +70,7 @@ button until a list of yours is open.
 `applyEdit()` loses its `if (!activeTemplate) activeTemplate = newTemplate()` line — a list must
 exist before anything can be edited.
 
-## 2. The editing gestures
+## 2. The editing gestures — Add is built; grip and operator menu are not
 
 All inline, in the row, only while one of your lists is open.
 
@@ -82,7 +89,7 @@ All inline, in the row, only while one of your lists is open.
   is one click. `cycleOp` becomes `setOp`; the keyboard path (Enter on the entry) can keep
   cycling, since that is the sensible keyboard affordance.
 
-## 3. The bar
+## 3. The bar — built
 
 Replaces `renderTemplateBar()` / `bindTemplateBar()`. Small, in the page's own styling — no
 browser dialogs:
@@ -98,7 +105,7 @@ browser dialogs:
   clipboard API isn't available, rather than a prompt.
 - Keeps the dirty marker and the `role="status"` announcements that are already there.
 
-## 4. Consequences to handle, not hide
+## 4. Consequences to handle, not hide — built
 
 - **A blank list matches no filter.** Every priority is empty, so `selectionHas()` matches
   nobody and the class/spec chips go to zero. That is honest — the filter reflects the list you
@@ -132,7 +139,7 @@ New coverage:
 ## Verification
 
 ```bash
-npm test                          # 378 today; the edit-mode file is rewritten, expect a shift
+npm test                          # 417 after sections 1, 3 and 4
 python3 verify/check_priority.py  # unchanged data
 python3 verify/check_bis.py
 git diff --stat data/             # MUST be empty - editing never writes the dataset
