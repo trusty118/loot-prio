@@ -20,6 +20,9 @@ python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 
 Needs `node` and `python3`. `gh` is optional (only used to poll the Pages build).
 
+**On Windows** `python3` is not on PATH — use `py` for both the server and the validators
+(`py verify/check_priority.py`). `npm run serve` still assumes `python3`.
+
 **Always view over HTTP**, never by opening `index.html` from disk — the page `fetch`es
 its data and will show a load error otherwise.
 
@@ -286,6 +289,11 @@ ambiguous, so the other 14 bosses keep the short URL they have always had. An ol
 > replacement for an edit mode that read as "curate zatar's 195 rows". **Sections 1, 3 and 4 are
 > built, and so is section 2's Add.** What is left of section 2: the `.prio-grip` drag handle,
 > and the five-item operator menu in place of click-to-cycle.
+>
+> **Dragging has not been checked in a real browser yet.** It was silently broken for this
+> feature's whole life (see the gestures section below), and jsdom cannot reach the gesture at
+> all. **Do that check before building on top of it** — the steps are at the end of
+> [docs/edit-mode-plan.md](docs/edit-mode-plan.md), under "Picking this up on another machine".
 
 The whole data restructure was aimed at this. `priority` became an ordered list of
 `{spec|class, op}` entries so a person could reorder icons and pick operators.

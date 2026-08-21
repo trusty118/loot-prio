@@ -155,3 +155,49 @@ By eye at `http://localhost:8642` (jsdom covers none of the pointer work):
 5. Name the list, switch away with the dropdown and back — it persists.
 6. Copy link, open it in a private window: the list arrives, and a corrupted `#t=` is refused
    with a readable message.
+
+---
+
+## Picking this up on another machine — read this first
+
+**State at commit `3ec925a` on `edit-mode`:** 429 checks green, `py verify/check_priority.py`
+and `py verify/check_bis.py` clean, `git diff --stat data/` empty. Windows note: `python3` is
+not on PATH here; use `py`.
+
+### The one thing that is NOT verified
+
+**The drag gesture has never been checked in a real browser.** jsdom cannot drag — it has no
+`document.elementFromPoint`, so `cellUnder()` is unreachable — and the suite only asserts the
+one piece it can see, that every icon carries `draggable="false"`. That assertion is the
+regression guard for the bug, not proof the gesture works.
+
+Dragging was broken for the entire life of this feature and nobody noticed, precisely because
+it failed silently. **Do this before building anything else on top of it**, at
+`http://localhost:8642` (`npm run serve`, or `py -m http.server 8642 --bind 127.0.0.1`):
+
+1. `New`, then `Edit`, then `+` on a row — the popover opens under it.
+2. Drag an icon out of the popover into the **gap between two existing icons** on that row.
+   The gap should mark as you move, and the icon should land where the marker was.
+3. Drag one onto a **different row**, and onto an **empty** priority — the empty cell itself
+   should show as the target (it is `.prio-drop-empty`; after `New` every row is this case).
+4. Drag an icon **within** a line to reorder it. Then drag one well clear of the row and let
+   go: it must **return home**, not vanish. Removal is the `×` and the Delete key only.
+5. Type in the popover's field to narrow it, Enter to take the first match, Escape to close.
+6. Watch for **the browser dragging its own ghost image** of the icon at any point. That is
+   the bug's signature, and the drop doing nothing is its symptom. The console will now warn
+   (`drag cancelled by the browser, drop abandoned`) if it happens again.
+
+If any of that misbehaves, the suspects in order: `img.draggable = false` in `specIcon()`,
+`-webkit-user-drag: none` on `.col-prio--editing .prio-edit, .prio-pop-icon` in `style.css`,
+and `onDrag()`'s `pointercancel` branch.
+
+### What is left to build
+
+Section 2 above, minus the Add half that is done:
+
+- **`.prio-grip`** — a small handle that is the *only* drag surface on an entry, so a click on
+  an icon can never start a drag. Today the whole icon is draggable.
+- **The operator menu** — clicking `>` cycles all five, so `~=` takes four clicks.
+  `cycleOp` becomes `setOp(list, at, op)`; the keyboard path can keep cycling.
+
+Both are described in section 2. Nothing else in this document is outstanding.
