@@ -919,12 +919,40 @@ ok(whoPanel && whoPanel.contains(doc.getElementById("class-chips")) &&
    "class and spec sit in their own panel");
 ok(doc.querySelector("main").firstElementChild === whoPanel, "that panel comes first");
 
-// three panels: who you are, where it drops, then what of that to show
+// four panels, in the order the questions get asked: who you are, where it drops,
+// which list you are looking at, and finally what of that to show. Filtering comes
+// last so it sits against the results it narrows.
 const panels = [...doc.querySelectorAll("main .controls")];
-ok(panels.length === 3 && panels[0].classList.contains("controls--who") &&
-   panels[1].classList.contains("controls--where") &&
-   panels[2].classList.contains("controls--refine"),
-   `controls split into who / where / refine (got ${panels.length} panels)`);
+ok(panels.map((p) => p.className.replace("controls ", "")).join(" > ") ===
+   "controls--who > controls--where > controls--list > controls--refine",
+   `panel order: ${panels.map((p) => p.className.replace("controls ", "")).join(" > ")}`);
+ok(doc.querySelector(".controls--list").contains(doc.getElementById("template-bar")),
+   "the list controls are not mixed in with the filters");
+ok(doc.querySelector(".controls--refine").nextElementSibling === doc.getElementById("results"),
+   "the filters sit directly above the results they narrow");
+
+// An author `display` rule beats the browser's [hidden], which is how the share-link
+// field ended up permanently on the bar as an empty box. Any rule that sets display
+// on something the code hides must be guarded.
+// Checked against the stylesheet source, not getComputedStyle: jsdom never loads the
+// external CSS, so a computed-style check here would pass whatever the rule says.
+// A class is safe if it never sets display, or if some rule pairs it with [hidden] -
+// either `.x[hidden] { display: none }` or `.x:not([hidden]) { display: flex }`.
+const bareCss = cssText.replace(/\/\*[\s\S]*?\*\//g, "");
+const hiddenEls = [...doc.querySelectorAll("main [hidden]")];
+ok(hiddenEls.length > 0, `markup hides some controls up front (${hiddenEls.length})`);
+
+const unguarded = [];
+for (const el of hiddenEls) {
+  for (const cls of el.classList) {
+    const setsDisplay = (bareCss.match(new RegExp("[^{}]*\\." + cls + "\\b[^{}]*\\{[^}]*\\}", "g")) || [])
+      .some((rule) => /display\s*:/.test(rule.slice(rule.indexOf("{"))));
+    const guarded = new RegExp("\\." + cls + "\\b[^{}]*\\[hidden\\]").test(bareCss);
+    if (setsDisplay && !guarded) unguarded.push(`.${cls} (on #${el.id})`);
+  }
+}
+ok(unguarded.length === 0,
+   `every hidden control's display rule is guarded${unguarded.length ? ", these are not: " + unguarded.join(", ") : ""}`);
 const refine = doc.querySelector(".controls--refine");
 ok(["type-select", "slot-select", "search", "reset", "count"]
    .every((id) => refine.contains(doc.getElementById(id))),

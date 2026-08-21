@@ -48,6 +48,37 @@
 
   </section>
 
+  <!-- Which list you are looking at, and what you can do to it. Its own bar, because
+       none of it is filtering - sitting in the filter panel made it read as though
+       picking a list were another way of narrowing the table. -->
+  <section class="controls controls--list" aria-label="Your lists">
+    <div class="control-row">
+      <!-- zatar's list is reference, so until a list of your own is open this offers
+           only the two ways to start one. -->
+      <div class="template-bar" id="template-bar">
+        <label class="field field--tpl">
+          <span class="control-label">List</span>
+          <select id="tpl-list"></select>
+        </label>
+        <input type="text" id="tpl-name" class="tpl-name" aria-label="Name this list"
+               placeholder="Name this list" autocomplete="off" hidden>
+        <span class="tpl-dirty" id="tpl-dirty" data-tip="Not written yet" hidden>&bull;</span>
+        <button type="button" id="tpl-new" class="btn-tpl">New</button>
+        <button type="button" id="tpl-copy" class="btn-tpl">Make a copy</button>
+        <button type="button" id="edit-toggle" class="btn-edit" aria-pressed="false" hidden>Edit</button>
+        <button type="button" id="tpl-share" class="btn-tpl" hidden>Copy link</button>
+        <button type="button" id="tpl-delete" class="btn-tpl btn-tpl--danger" hidden>Delete</button>
+        <span class="edit-msg" id="edit-msg" role="status"></span>
+        <!-- shown only when the clipboard API is missing or refuses: the link to copy
+             by hand, rather than a browser dialog -->
+        <span class="tpl-link-out" id="tpl-link-out" hidden>
+          <input type="text" id="tpl-link-field" class="tpl-link-field" readonly aria-label="Share link">
+        </span>
+      </div>
+    </div>
+    </div>
+  </section>
+
   <!-- Narrowing what the panels above selected, so it sits closest to the results
        and is the one panel that stays pinned while you scroll them. -->
   <section class="controls controls--refine" aria-label="Refine results">
@@ -70,31 +101,6 @@
 
     <div class="control-row control-row--meta">
       <p class="count" id="count" aria-live="polite"></p>
-
-      <!-- Editing lives with the results rather than with the filters: it acts on the
-           rows you are looking at, not on which rows those are. zatar's list is
-           reference, so until a list of your own is open the bar offers only the two
-           ways to start one. -->
-      <div class="template-bar" id="template-bar">
-        <label class="field field--tpl">
-          <span class="control-label">List</span>
-          <select id="tpl-list"></select>
-        </label>
-        <input type="text" id="tpl-name" class="tpl-name" aria-label="Name this list"
-               placeholder="Name this list" autocomplete="off" hidden>
-        <span class="tpl-dirty" id="tpl-dirty" data-tip="Not written yet" hidden>&bull;</span>
-        <button type="button" id="tpl-new" class="btn-tpl">New</button>
-        <button type="button" id="tpl-copy" class="btn-tpl">Make a copy</button>
-        <button type="button" id="edit-toggle" class="btn-edit" aria-pressed="false" hidden>Edit</button>
-        <button type="button" id="tpl-share" class="btn-tpl" hidden>Copy link</button>
-        <button type="button" id="tpl-delete" class="btn-tpl btn-tpl--danger" hidden>Delete</button>
-        <span class="edit-msg" id="edit-msg" role="status"></span>
-        <!-- shown only when the clipboard API is missing or refuses: the link to copy
-             by hand, rather than a browser dialog -->
-        <span class="tpl-link-out" id="tpl-link-out" hidden>
-          <input type="text" id="tpl-link-field" class="tpl-link-field" readonly aria-label="Share link">
-        </span>
-      </div>
     </div>
 
   </section>

@@ -683,12 +683,21 @@ mark {
    one gains a handle and the operators become buttons. Keeping the layout identical
    means switching modes doesn't move anything under the cursor. */
 
+/* Its own bar now, so nothing pushes it right. Aligned on the BOTTOM edge, not the
+   middle: the List control is a label stacked above a select, so it is taller than
+   the buttons beside it, and centring made everything float against that stack. The
+   filter row above solves the same problem the same way. */
+.controls--list .control-row { padding: 2px 0; }
+
 .template-bar {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-left: auto;
 }
+
+/* the label sits directly on the select, matching the Type/Slot/Search fields */
+.template-bar .field--tpl { gap: 3px; }
 
 .template-bar .field--tpl { margin: 0; }
 
@@ -716,7 +725,10 @@ mark {
   line-height: 1;
 }
 
-.tpl-link-out { display: inline-flex; }
+/* `display` here would beat the browser's [hidden] rule and leave an empty box on
+   the bar for good - the same trap as .control-row[hidden]. Only style it when it is
+   actually shown. */
+.tpl-link-out:not([hidden]) { display: inline-flex; }
 .template-bar .tpl-link-field { width: 18em; }
 
 .edit-msg {

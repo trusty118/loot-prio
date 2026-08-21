@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 459 checks, should be all green
+npm test             # 463 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -498,6 +498,12 @@ editor refuses the drop and says why, so it cannot produce data that fails valid
   its own DOM into the page. A bare `table { min-width: 940px }` once matched their
   tooltip tables and pinned every item tooltip to 940px wide — and `min-width` beats
   `width` and `max-width`, so no override could fix it. Scope to `.boss-group table`.
+- **A `display` rule beats the browser's `[hidden]`.** It has bitten twice: once on
+  `.control-row`, once on `.tpl-link-out`, where it left the share-link box permanently on
+  the bar. Anything the code hides with `hidden` must either never set `display`, or pair it
+  with the attribute — `.x[hidden] { display: none }` or `.x:not([hidden]) { display: flex }`.
+  `test/smoke.mjs` checks this against the stylesheet **source**: jsdom does not load external
+  CSS, so a `getComputedStyle` check would pass no matter what the rule said.
 - **Don't hide table cells with `display: none`.** The tables are `table-layout: fixed`;
   hiding a cell makes the rest shift into the wrong columns. Don't generate the column —
   that is how the Role column was removed.
@@ -508,9 +514,11 @@ editor refuses the drop and says why, so it cannot produce data that fails valid
   new one returns 200 before wiring it up. Boss portraits are Encounter Journal art
   (`ui-ej-boss-*.png`) with irregular slugs — `najentus`, `kazrogal`, no leading "the" on
   the Illidari Council.
-- **The controls are three panels, in the order the questions get asked**:
-  `.controls--who` (class/spec), `.controls--where` (zone/boss, and the hidden role row),
-  and `.controls--refine` (type, slot, search, Reset and the count). The split is what
+- **The controls are four panels, in the order the questions get asked**:
+  `.controls--who` (class/spec), `.controls--where` (zone/boss), `.controls--list` (which
+  list you are on, and what you can do to it), and `.controls--refine` (type, slot, search,
+  Reset and the count). Picking a list is not filtering, and while it sat in the refine
+  panel it read as though it were. The split is what
   makes the last one read as narrowing the results rather than as another way of choosing
   them, so keep chip rows out of it. **Only `.controls--refine` is sticky** — it is the one
   adjusted while reading, it carries the count, and it sits directly above the results;
