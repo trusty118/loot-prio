@@ -182,7 +182,7 @@
      drop out while a class or spec is selected: the filter asks where you stand in
      a line, and those rows name no line. */
   function priorityHas(rec, clsId, specId) {
-    return (rec.priority || []).some(function (e) {
+    return (effectivePriority(rec) || []).some(function (e) {
       return entrySpeaksTo(e, clsId, specId);
     });
   }
@@ -205,8 +205,11 @@
     });
   }
 
+  /* Both of these ask the list actually on screen, not the guide underneath it: with
+     a template open, reading rec.priority would filter by his ordering while showing
+     yours, and a list you had only just started would go on matching all 195 rows. */
   function selectionHas(rec) {
-    return (rec.priority || []).some(selectionSpeaksTo);
+    return (effectivePriority(rec) || []).some(selectionSpeaksTo);
   }
 
   /* The specs the current selection actually stands for: a class with none of its
@@ -231,6 +234,11 @@
      column and its "not in the guide" tag, so nothing about it reads as a call. */
   function unsourcedBis(rec) {
     if (!rec.unsourced) return false;
+    /* Only while reading the guide. It is a bridge across a gap in HIS data, so with
+       a list of your own open there is no gap to bridge: those rows have a priority
+       column you control like any other, and letting 13 of them through a filter the
+       other 182 fail would make your own list lie about itself. */
+    if (activeTemplate) return false;
     return SELECTED_SPECS.some(function (id) { return bisTier(id, rec.id); });
   }
 
@@ -375,6 +383,7 @@
     type: "",
     slot: "",
     q: "",
+    editing: false,  // edit mode: priority cells become editable
     sort: "",        // "" = leave rows in source order
     dir: "asc"
   };
@@ -392,8 +401,373 @@
     search: document.getElementById("search"),
     reset: document.getElementById("reset"),
     count: document.getElementById("count"),
-    results: document.getElementById("results")
+    results: document.getElementById("results"),
+    templateBar: document.getElementById("template-bar"),
+    tplList: document.getElementById("tpl-list"),
+    tplName: document.getElementById("tpl-name"),
+    tplDirty: document.getElementById("tpl-dirty"),
+    tplNew: document.getElementById("tpl-new"),
+    tplCopy: document.getElementById("tpl-copy"),
+    editToggle: document.getElementById("edit-toggle"),
+    tplShare: document.getElementById("tpl-share"),
+    tplDelete: document.getElementById("tpl-delete"),
+    tplLinkOut: document.getElementById("tpl-link-out"),
+    tplLinkField: document.getElementById("tpl-link-field"),
+    editMsg: document.getElementById("edit-msg")
   };
+
+  /* ---------- templates ---------- */
+
+  /* A template is a person's own version of the priorities: a full copy, keyed by
+     item id. zatar's data in ALL is never touched, so "reset to his" is always one
+     step away and a template can be diffed against what it forked from.
+
+     Full copy rather than a sparse overlay was a deliberate call: 11.6 KB of JSON,
+     2.1 KB once gzipped and base64'd, which fits in a URL fragment. The cost is that
+     a saved template is frozen - later fixes to loot_data.json don't reach it - and
+     items added after it was saved simply aren't in it. Both are handled at read
+     time rather than hidden: see effectivePriority() and inTemplate(). */
+
+  var TEMPLATE_VERSION = 1;
+
+  /* Three views, one variable and one flag. zatar's list and a list that arrived on
+     a link are reference; only a list in your own store is a workspace. */
+  var activeTemplate = null;   /* the list being VIEWED; null means zatar's */
+  var activeIsMine = false;    /* is it in your store? false for one from a #t= link */
+  var unsaved = false;         /* an edit made but not yet written back */
+
+  function canEdit() {
+    return !!activeTemplate && activeIsMine && state.editing;
+  }
+
+  function effectivePriority(rec) {
+    if (activeTemplate) {
+      var own = activeTemplate.priorities[rec.id];
+      if (own) return own;
+    }
+    return rec.priority;
+  }
+
+  /* False for an item the active template has never heard of - added to the dataset
+     after it was saved. The row still renders, from the guide's data, and says so. */
+  function inTemplate(rec) {
+    return !activeTemplate || !!activeTemplate.priorities[rec.id];
+  }
+
+  function makeTemplate(name, base, priorities) {
+    return {
+      v: TEMPLATE_VERSION,
+      id: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      name: name,
+      created: new Date().toISOString().slice(0, 10),
+      base: base,
+      priorities: priorities
+    };
+  }
+
+  /* A copy of whatever is on screen. effectivePriority() already answers "what is
+     this row showing", so one function copies the guide's list, one of yours, or one
+     that arrived on a link, without branching on which of the three it is. */
+  function copyOfCurrent(name) {
+    var priorities = {};
+    ALL.forEach(function (rec) {
+      /* deep copy: editing one must never reach into ALL */
+      priorities[rec.id] = (effectivePriority(rec) || []).map(function (e) {
+        var c = {};
+        Object.keys(e).forEach(function (k) { c[k] = e[k]; });
+        return c;
+      });
+    });
+    return makeTemplate(name || "My priorities",
+      activeTemplate ? activeTemplate.id : "zatar", priorities);
+  }
+
+  /* Nobody's list yet: all 195 rows, every priority empty. Still a full copy, so it
+     validates, encodes and shares exactly like any other. */
+  function newBlankTemplate(name) {
+    var priorities = {};
+    ALL.forEach(function (rec) { priorities[rec.id] = []; });
+    return makeTemplate(name || "My list", "blank", priorities);
+  }
+
+  /* ---------- template storage ----------
+     Async on purpose even though localStorage is synchronous: the Azure
+     implementation that arrives with login is then a drop-in, not a refactor of
+     every call site. */
+
+  var STORE_KEY = "lootprio.templates";
+
+  var localStore = {
+    read: function () {
+      try {
+        return JSON.parse(window.localStorage.getItem(STORE_KEY) || "{}");
+      } catch (e) {
+        if (window.console) console.warn("saved templates unreadable:", e.message);
+        return {};
+      }
+    },
+    write: function (all) {
+      window.localStorage.setItem(STORE_KEY, JSON.stringify(all));
+    },
+    list: function () {
+      var all = this.read();
+      return Promise.resolve(Object.keys(all).map(function (id) {
+        return { id: id, name: all[id].name, created: all[id].created };
+      }));
+    },
+    load: function (id) {
+      return Promise.resolve(this.read()[id] || null);
+    },
+    save: function (t) {
+      var all = this.read();
+      all[t.id] = t;
+      try {
+        this.write(all);
+      } catch (e) {
+        /* quota is the realistic failure: ~400 templates fit, but say so plainly */
+        return Promise.reject(new Error("Could not save: " + e.message));
+      }
+      return Promise.resolve(t);
+    },
+    remove: function (id) {
+      var all = this.read();
+      delete all[id];
+      this.write(all);
+      return Promise.resolve();
+    }
+  };
+
+  var store = localStore;
+
+  /* ---------- editing rules ----------
+     The same rules verify/check_priority.py enforces, applied while editing so the
+     editor cannot produce data the validator would reject. */
+
+  var OP_LIST = [">", ">>", "~>", "=", "~="];
+  var DOUBLE_SLOTS = { "Finger": 1, "Trinket": 1, "One-Hand": 1, "Main-Hand": 1, "Off-Hand": 1 };
+
+  /* You can only be told to take two of something you could equip twice. */
+  function allowsRepeat(rec) {
+    return !rec.unique && !!DOUBLE_SLOTS[rec.slot];
+  }
+
+  function entryKey(entry) {
+    return [entry.spec || entry["class"] || "", entry.form || "", entry.race || ""].join("|");
+  }
+
+  /* Why a change is refused, or null if it is fine. Returned as a message because
+     the editor says it out loud rather than silently ignoring the drop. */
+  function rejectReason(rec, list, entry, replacingIndex) {
+    if (!resolveEntry(entry)) return "that isn't a spec or class I know";
+    var key = entryKey(entry);
+    var clash = list.some(function (e, i) {
+      return i !== replacingIndex && entryKey(e) === key;
+    });
+    if (clash && !allowsRepeat(rec)) {
+      return rec.unique
+        ? rec.item + " is unique - only one can be equipped"
+        : "a " + rec.slot + " item can only be equipped once";
+    }
+    return null;
+  }
+
+  /* Every edit goes through here: it keeps the operator invariant (first entry has
+     none, everything after has one) so no caller has to remember it. */
+  function normaliseList(list) {
+    return list.map(function (e, i) {
+      var c = {};
+      Object.keys(e).forEach(function (k) { if (k !== "op") c[k] = e[k]; });
+      if (i > 0) c.op = OP_LIST.indexOf(e.op) === -1 ? ">" : e.op;
+      return c;
+    });
+  }
+
+  /* ---------- editing actions ----------
+     Each returns a new list rather than mutating, so undo is a matter of keeping the
+     previous one, and so nothing can half-apply. */
+
+  function moveEntry(list, from, to) {
+    if (to < 0 || to >= list.length || from === to) return list;
+    var out = list.slice();
+    out.splice(to, 0, out.splice(from, 1)[0]);
+    return normaliseList(out);
+  }
+
+  function removeEntry(list, at) {
+    var out = list.slice();
+    out.splice(at, 1);
+    return normaliseList(out);
+  }
+
+  function addEntry(list, entry, at) {
+    var out = list.slice();
+    out.splice(at == null ? out.length : at, 0, entry);
+    return normaliseList(out);
+  }
+
+  /* Set the operator linking entry `at` to the one before it. */
+  function setOp(list, at, op) {
+    if (at < 1 || at >= list.length) return list;      /* the first entry has no operator */
+    if (OP_LIST.indexOf(op) === -1) return list;
+    var out = list.slice();
+    var c = {};
+    Object.keys(out[at]).forEach(function (k) { c[k] = out[at][k]; });
+    c.op = op;
+    out[at] = c;
+    return normaliseList(out);
+  }
+
+  /* Step to the next operator. The pointer picks from a menu instead - four clicks
+     to reach "~=" was one of the complaints - but stepping is the right thing on a
+     keyboard, where there is nothing to aim at. */
+  function cycleOp(list, at) {
+    if (at < 1 || at >= list.length) return list;
+    var next = (OP_LIST.indexOf(list[at].op) + 1) % OP_LIST.length;
+    return setOp(list, at, OP_LIST[next]);
+  }
+
+  /* Applies an edited list to the active template. There is always one: editable
+     cells are only rendered for a list of your own. */
+  function applyEdit(rec, list) {
+    if (!activeTemplate || !activeIsMine) return;
+    activeTemplate.priorities[rec.id] = normaliseList(list);
+    unsaved = true;
+    saveNow();
+  }
+
+  /* There is no Save button. A list is written when it is made and again on every
+     edit: localStorage is synchronous and a whole template is ~12 KB, which is
+     nothing next to losing an afternoon's list by forgetting to press something.
+     `unsaved` is stored out here rather than on the template so it never travels
+     into the store or into a share link. */
+  function saveNow() {
+    if (!activeTemplate || !activeIsMine) return Promise.resolve();
+    var t = activeTemplate;
+    return store.save(t).then(function () {
+      if (activeTemplate === t) { unsaved = false; renderTemplateBar(); }
+    }, function (err) {
+      announce(err.message);
+    });
+  }
+
+  function resetItem(rec) {
+    if (!activeTemplate || !activeIsMine) return;
+    applyEdit(rec, (rec.priority || []).map(function (e) {
+      var c = {}; Object.keys(e).forEach(function (k) { c[k] = e[k]; }); return c;
+    }));
+  }
+
+  /* ---------- sharing ----------
+     gzip via CompressionStream where the browser has it (11.6 KB -> ~2.1 KB), plain
+     base64 where it doesn't. The marker byte says which, so a link made in one
+     browser opens in another. It all lives in the hash, which never leaves the
+     browser, so only browser URL limits apply. */
+
+  function bytesToB64(bytes) {
+    var bin = "";
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+
+  function b64ToBytes(b64) {
+    var bin = atob(b64.replace(/-/g, "+").replace(/_/g, "/"));
+    var out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+
+  /* btoa only speaks latin-1, so text has to become bytes first. TextEncoder is the
+     obvious way and is present in every browser; the fallback keeps this working
+     under jsdom, where it isn't. */
+  function utf8ToBytes(str) {
+    if (typeof TextEncoder === "function") return new TextEncoder().encode(str);
+    var bin = unescape(encodeURIComponent(str));
+    var out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+
+  function bytesToUtf8(bytes) {
+    if (typeof TextDecoder === "function") return new TextDecoder().decode(bytes);
+    var bin = "";
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return decodeURIComponent(escape(bin));
+  }
+
+  function encodeTemplate(t) {
+    var json = JSON.stringify({ v: t.v, name: t.name, base: t.base, priorities: t.priorities });
+    var bytes = utf8ToBytes(json);
+    if (typeof CompressionStream !== "function" || typeof Response !== "function") {
+      return Promise.resolve("r" + bytesToB64(bytes));
+    }
+    var cs = new CompressionStream("gzip");
+    var writer = cs.writable.getWriter();
+    writer.write(bytes);
+    writer.close();
+    return new Response(cs.readable).arrayBuffer().then(function (buf) {
+      return "z" + bytesToB64(new Uint8Array(buf));
+    });
+  }
+
+  function decodeTemplate(text) {
+    var kind = text.charAt(0);
+    var bytes;
+    try {
+      bytes = b64ToBytes(text.slice(1));
+    } catch (e) {
+      return Promise.reject(new Error("that link is damaged"));
+    }
+    if (kind === "r") {
+      return Promise.resolve(JSON.parse(bytesToUtf8(bytes)));
+    }
+    if (kind !== "z") return Promise.reject(new Error("that link is not a template"));
+    if (typeof DecompressionStream !== "function" || typeof Response !== "function") {
+      return Promise.reject(new Error("this browser can't read compressed links"));
+    }
+    var ds = new DecompressionStream("gzip");
+    var writer = ds.writable.getWriter();
+    writer.write(bytes);
+    writer.close();
+    return new Response(ds.readable).arrayBuffer().then(function (buf) {
+      return JSON.parse(bytesToUtf8(new Uint8Array(buf)));
+    });
+  }
+
+  /* A shared template is untrusted input. Check it against the registry and the
+     editing rules before any of it reaches the table, and say what is wrong rather
+     than rendering something broken. */
+  function validateTemplate(doc) {
+    if (!doc || typeof doc !== "object") return "not a template";
+    if (doc.v !== TEMPLATE_VERSION) return "made by a different version of this site";
+    if (!doc.priorities || typeof doc.priorities !== "object") return "no priorities in it";
+
+    var byId = {};
+    ALL.forEach(function (r) { byId[r.id] = r; });
+
+    var ids = Object.keys(doc.priorities);
+    if (!ids.length) return "it has no items";
+
+    for (var i = 0; i < ids.length; i++) {
+      var rec = byId[ids[i]];
+      if (!rec) continue;              /* an item we no longer carry: ignored, not fatal */
+      var list = doc.priorities[ids[i]];
+      if (!Array.isArray(list)) return "item " + ids[i] + " has a broken priority";
+
+      var seen = {};
+      for (var j = 0; j < list.length; j++) {
+        var e = list[j];
+        if (!e || typeof e !== "object") return rec.item + ": entry " + j + " is not an entry";
+        if (e.spec && e["class"]) return rec.item + ": entry names both a spec and a class";
+        if (!resolveEntry(e)) return rec.item + ": unknown spec or class";
+        if (j === 0 && e.op) return rec.item + ": the first entry can't have an operator";
+        if (j > 0 && OP_LIST.indexOf(e.op) === -1) return rec.item + ": unknown operator";
+        var key = entryKey(e);
+        if (seen[key] && !allowsRepeat(rec)) return rec.item + ": lists the same spec twice";
+        seen[key] = true;
+      }
+    }
+    return null;
+  }
 
   /* ---------- helpers ---------- */
 
@@ -494,7 +868,7 @@
     if (state.q) {
       var q = state.q.toLowerCase();
       /* search both the raw and displayed forms, so "2H mace" and "mace" both hit */
-      var hay = [rec.item, rec.boss, rec.zone, priorityText(rec.priority), rec.notes,
+      var hay = [rec.item, rec.boss, rec.zone, priorityText(effectivePriority(rec)), rec.notes,
                  rec.slot, slotGroup(rec.slot), rec.type, typeLabel(rec), rec.role,
                  rec.unsourced ? UNSOURCED_TAG : ""]
         .join("   ").toLowerCase();
@@ -818,6 +1192,496 @@
     fillSelect(el.slot, slots, state.slot, slotCounts, "All slots");
   }
 
+  /* ---------- the editor ----------
+     Every action has a keyboard form as well as a pointer one. That is partly
+     accessibility and partly how the editor is testable at all: jsdom can dispatch a
+     keydown but cannot drag. */
+
+  var editMsg = "";        /* why the last edit was refused, shown under the toolbar */
+
+  function announce(msg) {
+    editMsg = msg || "";
+    if (el.editMsg) el.editMsg.textContent = editMsg;
+  }
+
+  /* ---------- dragging ----------
+     Pointer events rather than HTML5 drag-and-drop: these icons live in a
+     table-layout: fixed cell, where HTML5 DnD drop targets are unreliable. Every
+     gesture here has the keyboard equivalent above, which is what the tests drive. */
+
+  var DRAG_SLOP = 4;      /* px of movement before a press counts as a drag, not a click */
+
+  /* Which gap the pointer is in: 0 is before the first icon, n after the last. */
+  function dropSlot(td, clientX) {
+    var icons = td.querySelectorAll(".prio-edit");
+    for (var i = 0; i < icons.length; i++) {
+      var r = icons[i].getBoundingClientRect();
+      if (clientX < r.left + r.width / 2) return i;
+    }
+    return icons.length;
+  }
+
+  function clearDrops() {
+    var marked = el.results.querySelectorAll(".prio-drop, .prio-drop-after, .prio-drop-empty");
+    [].forEach.call(marked, function (n) {
+      n.classList.remove("prio-drop");
+      n.classList.remove("prio-drop-after");
+      n.classList.remove("prio-drop-empty");
+    });
+  }
+
+  /* Show the gap the icon would land in by marking the icon that follows it. A line
+     with no icons has nothing to mark, so the cell itself becomes the target - which
+     is every row of a list you have only just started. */
+  function markSlot(td, slot) {
+    var icons = td.querySelectorAll(".prio-edit");
+    if (!icons.length) { td.classList.add("prio-drop-empty"); return; }
+    var mark = icons[slot];
+    if (mark) mark.classList.add("prio-drop");
+    else icons[icons.length - 1].classList.add("prio-drop-after");
+  }
+
+  /* A half-size copy of the icon that follows the pointer. */
+  function makeGhost(node, e) {
+    var g = node.cloneNode(true);
+    g.className = "drag-ghost";
+    document.body.appendChild(g);
+    moveGhost(g, e);
+    return g;
+  }
+  function moveGhost(g, e) {
+    g.style.left = e.clientX + "px";
+    g.style.top = e.clientY + "px";
+  }
+
+  /* Shared press-drag-release plumbing. onDrop gets the pointer event. */
+  function onDrag(node, opts) {
+    node.addEventListener("pointerdown", function (e) {
+      if (e.button !== 0) return;
+      var startX = e.clientX, startY = e.clientY, ghost = null;
+
+      function move(ev) {
+        if (!ghost) {
+          if (Math.abs(ev.clientX - startX) + Math.abs(ev.clientY - startY) < DRAG_SLOP) return;
+          ghost = makeGhost(node, ev);
+          node.classList.add("prio-dragging");
+          if (node.setPointerCapture) node.setPointerCapture(ev.pointerId);
+        }
+        moveGhost(ghost, ev);
+        clearDrops();
+        opts.over(ev);
+      }
+      function done(ev) {
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", done);
+        window.removeEventListener("pointercancel", done);
+        if (!ghost) return;                      /* it was a click; leave that to click */
+        ghost.parentNode.removeChild(ghost);
+        node.classList.remove("prio-dragging");
+        clearDrops();
+        ev.preventDefault();
+        /* The browser took the gesture off us - a native image drag is how that used
+           to happen, and it swallowed every drop without a word. Abandoning is right;
+           doing it in silence is what hid the bug. */
+        if (ev.type === "pointercancel") {
+          if (window.console) console.warn("drag cancelled by the browser, drop abandoned");
+          return;
+        }
+        opts.drop(ev);
+      }
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", done);
+      window.addEventListener("pointercancel", done);
+    });
+  }
+
+  /* The editable cell under the pointer, if any. */
+  function cellUnder(e) {
+    var n = document.elementFromPoint(e.clientX, e.clientY);
+    return n && n.closest ? n.closest(".col-prio--editing") : null;
+  }
+
+  /* One icon inside an editable line. */
+  function editableIcon(rec, list, index, resolved, entry) {
+    var wrap = document.createElement("span");
+    wrap.className = "prio-edit";
+    wrap.tabIndex = 0;
+    wrap.dataset.index = String(index);
+    wrap.setAttribute("role", "listitem");
+    wrap.setAttribute("aria-label",
+      resolved.name + ", position " + (index + 1) + " of " + list.length +
+      ". Left and right arrows move, Delete removes, Enter changes the operator.");
+
+    var mark = bisMark(resolved, rec.id);
+    wrap.appendChild(specIcon(resolved, mark.tier, mark.specs));
+
+    var x = document.createElement("button");
+    x.type = "button";
+    x.className = "prio-x";
+    x.textContent = "×";
+    x.tabIndex = -1;                    /* the wrapper is the tab stop, Delete removes */
+    x.setAttribute("aria-hidden", "true");
+    x.addEventListener("click", function (e) {
+      e.stopPropagation();
+      applyEdit(rec, removeEntry(list, index));
+      update();
+    });
+    wrap.appendChild(x);
+
+    wrap.addEventListener("keydown", function (e) {
+      var handled = true;
+      if (e.key === "ArrowLeft") applyEdit(rec, moveEntry(list, index, index - 1));
+      else if (e.key === "ArrowRight") applyEdit(rec, moveEntry(list, index, index + 1));
+      else if (e.key === "Delete" || e.key === "Backspace") applyEdit(rec, removeEntry(list, index));
+      else if (e.key === "Enter" || e.key === " ") applyEdit(rec, cycleOp(list, index));
+      else handled = false;
+      if (!handled) return;
+      e.preventDefault();
+      announce("");
+      update();
+      /* keep the moved icon focused so arrows can be held down */
+      var sel = "tr[data-id='" + rec.id + "'] .prio-edit";
+      var all = el.results.querySelectorAll(sel);
+      var want = e.key === "ArrowLeft" ? index - 1 : e.key === "ArrowRight" ? index + 1 : index;
+      var next = all[Math.max(0, Math.min(all.length - 1, want))];
+      if (next) next.focus();
+    });
+
+    /* Drag to reorder. Dropping anywhere but on a line does nothing: taking an icon
+       off is the x and the Delete key, both deliberate. Dragging clear of the row
+       used to remove it, which fired by accident more often than on purpose. */
+    onDrag(wrap, {
+      over: function (ev) {
+        var td = wrap.parentNode;
+        if (cellUnder(ev) === td) markSlot(td, dropSlot(td, ev.clientX));
+      },
+      drop: function (ev) {
+        var td = wrap.parentNode;
+        if (cellUnder(ev) !== td) return;      /* dropped off its line: it goes home */
+        var slot = dropSlot(td, ev.clientX);
+        applyEdit(rec, moveEntry(list, index, slot > index ? slot - 1 : slot));
+        announce("");
+        update();
+      }
+    });
+
+    return wrap;
+  }
+
+  /* The editable form of a priority cell: same icons, plus handles. */
+  function editablePriorityCell(rec) {
+    var td = document.createElement("td");
+    td.className = "col-prio col-prio--editing";
+    td.setAttribute("role", "list");
+    var list = effectivePriority(rec) || [];
+
+    list.forEach(function (entry, i) {
+      if (i > 0) {
+        var op = OPERATORS[entry.op] || OPERATORS[">"];
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "prio-op prio-op--editing";
+        btn.textContent = entry.op || ">";
+        btn.dataset.tip = op.label + " - click to change";
+        btn.setAttribute("aria-label", op.label + ", click to change");
+        btn.setAttribute("aria-haspopup", "true");
+        btn.addEventListener("click", function () {
+          openOpMenu(rec, list, i, btn);
+        });
+        td.appendChild(btn);
+      }
+      var resolved = resolveEntry(entry);
+      if (!resolved) return;
+      td.appendChild(editableIcon(rec, list, i, resolved, entry));
+    });
+
+    var add = document.createElement("button");
+    add.type = "button";
+    add.className = "prio-add";
+    add.textContent = "+";
+    add.dataset.tip = "Add a spec - click one, or drag it onto a line";
+    add.setAttribute("aria-label", "Add a spec to " + rec.item);
+    add.addEventListener("click", function (e) {
+      e.stopPropagation();
+      openPop(rec, add);
+    });
+    td.appendChild(add);
+
+    if (activeTemplate && rec.priority && rec.priority.length) {
+      var reset = document.createElement("button");
+      reset.type = "button";
+      reset.className = "prio-reset";
+      reset.textContent = "↺";
+      reset.dataset.tip = "Back to zatar's order";
+      reset.setAttribute("aria-label", "Reset " + rec.item + " to the guide's order");
+      reset.addEventListener("click", function () { resetItem(rec); update(); });
+      td.appendChild(reset);
+    }
+
+    return td;
+  }
+
+  /* ---------- the add popover ----------
+     Every class and spec, opened from the + on a row. One element, created lazily and
+     parented to <body> like the tooltip is: inside a table-layout: fixed cell with a
+     horizontal scroll container it would be clipped.
+
+     Each icon does two things. Clicking adds it to the row the popover was opened on;
+     dragging drops it into a chosen gap on ANY row, because cellUnder() resolves
+     whatever is under the pointer and does not care where the drag began. */
+
+  var pop = null;          /* the element */
+  var popFor = null;       /* the record it was opened on */
+  var popQuery = "";
+
+  /* Sit an overlay under its anchor, flipping above when there is no room below and
+     clamping to the viewport. Shared by the add popover and the operator menu, which
+     otherwise drift into two subtly different versions of the same arithmetic. */
+  function placeUnder(node, anchor) {
+    var r = anchor.getBoundingClientRect();
+    var n = node.getBoundingClientRect();
+    var left = r.left;
+    var top = r.bottom + 6;
+    if (top + n.height > document.documentElement.clientHeight - 4) {
+      top = Math.max(4, r.top - n.height - 6);
+    }
+    var maxLeft = document.documentElement.clientWidth - n.width - 6;
+    if (left > maxLeft) left = maxLeft;
+    if (left < 6) left = 6;
+    node.style.left = Math.round(left) + "px";
+    node.style.top = Math.round(top) + "px";
+  }
+
+  function closePop() {
+    popFor = null;
+    popQuery = "";
+    if (pop) pop.style.display = "none";
+  }
+
+  /* ---------- the operator menu ----------
+     Clicking the operator between two icons used to step to the next one, so the
+     five were a cycle and "~=" was four clicks away. It picks directly now. Same
+     element-per-page, anchor-under, click-outside shape as the add popover. */
+
+  var opMenu = null;
+  var opMenuFor = null;      /* { rec, list, index } while it is open */
+
+  function closeOpMenu() {
+    opMenuFor = null;
+    if (opMenu) opMenu.style.display = "none";
+  }
+
+  function buildOpMenu() {
+    opMenu = document.createElement("div");
+    opMenu.className = "prio-menu";
+    opMenu.setAttribute("role", "menu");
+    opMenu.setAttribute("aria-label", "Choose an operator");
+    opMenu.style.display = "none";
+
+    OP_LIST.forEach(function (op) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "prio-menu-item";
+      b.dataset.op = op;
+      b.setAttribute("role", "menuitemradio");
+
+      var sym = document.createElement("span");
+      sym.className = "prio-menu-op";
+      sym.textContent = op;
+      var label = document.createElement("span");
+      label.className = "prio-menu-label";
+      label.textContent = OPERATORS[op].label;
+      b.appendChild(sym);
+      b.appendChild(label);
+
+      b.addEventListener("click", function () {
+        if (!opMenuFor) return;
+        var at = opMenuFor;
+        applyEdit(at.rec, setOp(at.list, at.index, op));
+        announce(resolveEntry(at.list[at.index]).name + " is now " + OPERATORS[op].label);
+        closeOpMenu();
+        update();
+      });
+
+      opMenu.appendChild(b);
+    });
+
+    opMenu.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { e.preventDefault(); closeOpMenu(); }
+    });
+
+    document.body.appendChild(opMenu);
+  }
+
+  function openOpMenu(rec, list, index, anchor) {
+    if (!canEdit()) return;
+    if (!opMenu) buildOpMenu();
+    closePop();                       /* only one overlay at a time */
+    opMenuFor = { rec: rec, list: list, index: index };
+
+    var current = list[index] && list[index].op;
+    var items = opMenu.querySelectorAll(".prio-menu-item");
+    for (var i = 0; i < items.length; i++) {
+      var on = items[i].dataset.op === current;
+      items[i].setAttribute("aria-checked", on ? "true" : "false");
+      items[i].classList.toggle("is-current", on);
+    }
+
+    opMenu.style.display = "block";
+    placeUnder(opMenu, anchor);
+
+    var pick = opMenu.querySelector(".prio-menu-item.is-current") || items[0];
+    if (pick) pick.focus();
+  }
+
+  /* Put entry into rec at slot, or refuse and say why. */
+  function place(rec, entry, resolved, slot) {
+    var list = effectivePriority(rec) || [];
+    var why = rejectReason(rec, list, entry, -1);
+    if (why) { announce(resolved.name + ": " + why); return false; }
+    applyEdit(rec, addEntry(list, entry, slot));
+    announce(resolved.name + " added to " + rec.item);
+    update();
+    return true;
+  }
+
+  /* Every pickable entry once: each class, then its specs. */
+  function pickableEntries() {
+    var out = [];
+    Object.keys(REG.classes).forEach(function (clsId) {
+      out.push({ clsId: clsId, entry: { "class": clsId } });
+      (CLASS_SPECS[clsId] || []).forEach(function (id) {
+        out.push({ clsId: clsId, entry: { spec: id } });
+      });
+    });
+    return out.filter(function (e) { return !!resolveEntry(e.entry); });
+  }
+
+  function buildPop() {
+    pop = document.createElement("div");
+    pop.className = "prio-pop";
+    pop.setAttribute("role", "dialog");
+    pop.setAttribute("aria-label", "Add a spec");
+
+    var field = document.createElement("input");
+    field.type = "search";
+    field.className = "prio-pop-find";
+    field.placeholder = "Type to narrow, Enter to take the first";
+    field.setAttribute("aria-label", "Find a class or spec");
+    pop.appendChild(field);
+
+    var head = document.createElement("p");
+    head.className = "prio-pop-head";
+    pop.appendChild(head);
+
+    var body = document.createElement("div");
+    body.className = "prio-pop-body";
+    pop.appendChild(body);
+
+    document.body.appendChild(pop);
+
+    field.addEventListener("input", function () {
+      popQuery = field.value.trim().toLowerCase();
+      fillPop();
+    });
+
+    field.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { e.preventDefault(); closePop(); return; }
+      if (e.key !== "Enter") return;
+      e.preventDefault();
+      var first = pop.querySelector(".prio-pop-icon");
+      if (first) first.click();
+    });
+
+    pop.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { e.preventDefault(); closePop(); }
+    });
+
+    return pop;
+  }
+
+  function fillPop() {
+    var body = pop.querySelector(".prio-pop-body");
+    var head = pop.querySelector(".prio-pop-head");
+    body.innerHTML = "";
+    head.textContent = popFor ? "Add to " + popFor.item : "";
+
+    var groups = {};
+    var order = [];
+    var shown = 0;
+
+    pickableEntries().forEach(function (e) {
+      var resolved = resolveEntry(e.entry);
+      if (popQuery && resolved.name.toLowerCase().indexOf(popQuery) === -1) return;
+      if (!groups[e.clsId]) {
+        groups[e.clsId] = document.createElement("span");
+        groups[e.clsId].className = "prio-pop-group";
+        order.push(e.clsId);
+      }
+      groups[e.clsId].appendChild(popIcon(e.entry, resolved));
+      shown++;
+    });
+
+    order.forEach(function (id) { body.appendChild(groups[id]); });
+    if (!shown) {
+      var none = document.createElement("p");
+      none.className = "prio-pop-none";
+      none.textContent = "Nothing matches that.";
+      body.appendChild(none);
+    }
+  }
+
+  function popIcon(entry, resolved) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "prio-pop-icon";
+    b.dataset.tip = resolved.name;
+    b.setAttribute("aria-label", "Add " + resolved.name);
+    b.appendChild(specIcon(resolved, 0));
+
+    /* click: onto the row this was opened on, at the end of its line */
+    b.addEventListener("click", function () {
+      if (!popFor) return;
+      if (place(popFor, entry, resolved, null)) closePop();
+    });
+
+    /* drag: onto whichever row you drop it on, in the gap you drop it in */
+    onDrag(b, {
+      over: function (ev) {
+        var td = cellUnder(ev);
+        if (td) markSlot(td, dropSlot(td, ev.clientX));
+      },
+      drop: function (ev) {
+        var td = cellUnder(ev);
+        if (!td) { announce("Drop it on a row to add it there"); return; }
+        var rec = recordFor(td.parentNode.dataset.id);
+        if (!rec) return;
+        if (place(rec, entry, resolved, dropSlot(td, ev.clientX))) closePop();
+      }
+    });
+
+    return b;
+  }
+
+  function recordFor(id) {
+    return ALL.filter(function (r) { return String(r.id) === String(id); })[0];
+  }
+
+  /* Anchored under the + that opened it, clamped into the viewport the same way the
+     tooltip is. */
+  function openPop(rec, anchor) {
+    if (!canEdit()) return;
+    if (!pop) buildPop();
+    popFor = rec;
+    popQuery = "";
+    pop.querySelector(".prio-pop-find").value = "";
+    pop.style.display = "block";
+    fillPop();
+
+    placeUnder(pop, anchor);
+    pop.querySelector(".prio-pop-find").focus();
+  }
+
   /* ---------- rendering: results ---------- */
 
   function itemCell(rec) {
@@ -988,6 +1852,10 @@
       img.dataset.tipTier = String(bis);
     }
     img.setAttribute("aria-label", img.alt);
+    /* An <img> is draggable by default in every browser, and the browser's own image
+       drag cancels the pointer sequence underneath it - which silently killed every
+       drop in the editor. user-select: none does not cover this; only this does. */
+    img.draggable = false;
     img.setAttribute("onerror", "this.style.display='none'");
     return img;
   }
@@ -999,7 +1867,7 @@
   function priorityCell(rec) {
     var td = document.createElement("td");
     td.className = "col-prio";
-    var list = rec.priority;
+    var list = effectivePriority(rec);
 
     if (typeof list === "string") {
       /* pre-migration data, or a bad hand-edit: show it rather than blank the cell */
@@ -1053,6 +1921,7 @@
   function renderRow(rec) {
     var tr = document.createElement("tr");
     tr.dataset.role = rec.role;
+    tr.dataset.id = String(rec.id);
 
     tr.appendChild(itemCell(rec));
 
@@ -1084,7 +1953,7 @@
     }
     tr.appendChild(type);
 
-    tr.appendChild(priorityCell(rec));
+    tr.appendChild(canEdit() ? editablePriorityCell(rec) : priorityCell(rec));
 
     var notes = document.createElement("td");
     notes.className = "col-notes";
@@ -1161,6 +2030,16 @@
     return section;
   }
 
+  /* Asked only on the no-results path, so walking 195 entries costs nothing. Narrowed
+     to a class or spec filter because that is the only one an empty priority defeats:
+     search still reads item names, notes and bosses. */
+  function blankListFiltered() {
+    if (!activeTemplate) return false;
+    if (!state.classes.length && !state.specs.length) return false;
+    var p = activeTemplate.priorities;
+    return Object.keys(p).every(function (k) { return !p[k] || !p[k].length; });
+  }
+
   function renderResults() {
     var rows = filtered();
     el.count.textContent = rows.length + " of " + ALL.length + " items";
@@ -1169,7 +2048,14 @@
     if (!rows.length) {
       var empty = document.createElement("p");
       empty.className = "empty";
-      empty.textContent = "No items match these filters.";
+      /* A list you have only just started names nobody, so the class and spec chips
+         all read zero. That is honest - the filter reflects the list in front of you
+         - but it must say so rather than looking broken. */
+      empty.textContent = blankListFiltered()
+        ? "This list is empty so far, so there is nobody for the class and spec "
+          + "filters to find. Press Edit and add specs to a row, or clear the filters "
+          + "to see every item."
+        : "No items match these filters.";
       el.results.appendChild(empty);
       return;
     }
@@ -1203,6 +2089,7 @@
 
   function update() {
     indexSelection();
+    renderTemplateBar();
     renderZoneChips();
     renderBossChips();
     renderClassChips();
@@ -1210,6 +2097,220 @@
     renderSelects();
     renderResults();
     writeUrl();
+  }
+
+  /* ---------- the list bar ----------
+
+     [ List v ] [ name____ ]  New  Make a copy  Edit  Copy link  Delete
+
+     What it offers follows what is on screen. zatar's list, and a list that arrived
+     on a link, are someone else's work: they get New and Make a copy and nothing
+     more. The rest appears once a list of your own is open. No browser dialogs -
+     naming, opening and deleting all happen in the page. */
+
+  var savedLists = [];        /* store.list() is async; this is its cached answer */
+  var deleteArmed = false;    /* Delete asks once, in place, instead of confirm() */
+  var nameTimer = null;
+  var SHARED_VALUE = "__shared__";   /* template ids are t+base36, so no collision */
+
+  /* Refreshes the dropdown's contents. Renders the bar directly and never calls
+     update(), which is what calls renderTemplateBar in the first place. */
+  function refreshLists() {
+    return store.list().then(function (all) {
+      savedLists = all;
+      renderTemplateBar();
+    }, function () { savedLists = []; });
+  }
+
+  /* The one place the view changes. Editing never survives it: a list opens for
+     reading, and you say when you want to change it. */
+  function openTemplate(t, mine) {
+    activeTemplate = t;
+    activeIsMine = !!mine;
+    unsaved = false;
+    state.editing = false;
+    closePop();
+    closeOpMenu();
+    deleteArmed = false;
+    clearTimeout(nameTimer);
+    if (el.tplLinkOut) el.tplLinkOut.hidden = true;
+  }
+
+  function showZatar() { openTemplate(null, false); }
+
+  function option(value, label) {
+    var o = document.createElement("option");
+    o.value = value;
+    o.textContent = label;
+    return o;
+  }
+
+  function show(node, on) {
+    if (node) node.hidden = !on;
+  }
+
+  function renderTemplateBar() {
+    if (!el.tplList) return;
+
+    el.tplList.innerHTML = "";
+    el.tplList.appendChild(option("", "zatar's list"));
+    savedLists.forEach(function (t) { el.tplList.appendChild(option(t.id, t.name)); });
+    /* A shared list is not in the store, so it needs an option of its own to show as
+       selected - otherwise the dropdown would claim zatar's list was on screen. */
+    if (activeTemplate && !activeIsMine) {
+      el.tplList.appendChild(option(SHARED_VALUE, "Shared: " + activeTemplate.name));
+    }
+    el.tplList.value = activeTemplate ? (activeIsMine ? activeTemplate.id : SHARED_VALUE) : "";
+
+    show(el.tplName, activeIsMine);
+    show(el.tplDirty, activeIsMine && unsaved);
+    show(el.editToggle, activeIsMine);
+    show(el.tplShare, activeIsMine);
+    show(el.tplDelete, activeIsMine);
+
+    /* don't fight the caret while the name is being typed */
+    if (activeIsMine && el.tplName && el.tplName !== document.activeElement) {
+      el.tplName.value = activeTemplate.name;
+    }
+
+    el.editToggle.setAttribute("aria-pressed", state.editing ? "true" : "false");
+    el.editToggle.textContent = state.editing ? "Done" : "Edit";
+    el.tplDelete.textContent = deleteArmed ? "Sure?" : "Delete";
+    el.tplDelete.className = "btn-tpl btn-tpl--danger" + (deleteArmed ? " btn-tpl--armed" : "");
+
+    if (el.editMsg) el.editMsg.textContent = editMsg;
+  }
+
+  /* New and Make a copy differ only in what they seed. Both write the list at once,
+     so it is in the dropdown from birth and there is nothing to forget to press. */
+  function startList(t, said) {
+    openTemplate(t, true);
+    state.editing = true;      /* you made it in order to change it */
+    announce(said);
+    update();
+    saveNow().then(refreshLists);
+  }
+
+  function bindTemplateBar() {
+    if (!el.tplList) return;
+
+    /* Delete asks in place, so anything else on the bar takes the question back.
+       Capture, so it runs before the button's own handler. */
+    if (el.templateBar) el.templateBar.addEventListener("click", function (e) {
+      if (deleteArmed && e.target !== el.tplDelete) { deleteArmed = false; renderTemplateBar(); }
+    }, true);
+
+    el.tplList.addEventListener("change", function () {
+      var v = el.tplList.value;
+      if (v === SHARED_VALUE) return;
+      if (v === "") { showZatar(); announce("Showing zatar's list"); update(); return; }
+      store.load(v).then(function (t) {
+        var why = t ? validateTemplate(t) : "it is not there any more";
+        if (why) { announce("That list will not open: " + why); renderTemplateBar(); return; }
+        openTemplate(t, true);
+        announce("Opened " + t.name);
+        update();
+      });
+    });
+
+    el.tplNew.addEventListener("click", function () {
+      startList(newBlankTemplate(), "A blank list - every priority is empty until you fill it in");
+    });
+
+    el.tplCopy.addEventListener("click", function () {
+      var from = activeTemplate ? activeTemplate.name : "zatar's list";
+      startList(copyOfCurrent("Copy of " + from), "Copied " + from);
+    });
+
+    el.editToggle.addEventListener("click", function () {
+      state.editing = !state.editing;
+      if (!state.editing) { closePop(); closeOpMenu(); }
+      announce("");
+      update();
+    });
+
+    /* The name field replaces prompt(). It fires per character, so it is the one
+       thing here that is debounced rather than written straight away. */
+    el.tplName.addEventListener("input", function () {
+      if (!activeIsMine) return;
+      activeTemplate.name = el.tplName.value;
+      unsaved = true;
+      show(el.tplDirty, true);
+      clearTimeout(nameTimer);
+      nameTimer = setTimeout(function () { saveNow().then(refreshLists); }, 400);
+    });
+
+    el.tplName.addEventListener("blur", function () {
+      clearTimeout(nameTimer);
+      if (activeIsMine && unsaved) saveNow().then(refreshLists);
+    });
+
+    el.tplShare.addEventListener("click", function () {
+      if (!activeTemplate) return;
+      encodeTemplate(activeTemplate).then(function (code) {
+        var url = location.origin + location.pathname + "#t=" + code;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(
+            function () { announce("Link copied (" + url.length + " characters)"); },
+            function () { offerLink(url); });
+        } else {
+          offerLink(url);
+        }
+      }, function (err) { announce(err.message); });
+    });
+
+    el.tplDelete.addEventListener("click", function () {
+      if (!activeIsMine) return;
+      if (!deleteArmed) {
+        deleteArmed = true;
+        announce("Press Delete again to remove \"" + activeTemplate.name + "\"");
+        renderTemplateBar();
+        return;
+      }
+      var name = activeTemplate.name;
+      store.remove(activeTemplate.id).then(function () {
+        showZatar();
+        announce("Deleted " + name);
+        update();
+        refreshLists();
+      });
+    });
+  }
+
+  /* No clipboard API, or it refused: the link goes in a field, selected, to be copied
+     by hand. Anything rather than a grey browser box in the middle of the page. */
+  function offerLink(url) {
+    if (!el.tplLinkField) return;
+    el.tplLinkField.value = url;
+    el.tplLinkOut.hidden = false;
+    el.tplLinkField.focus();
+    el.tplLinkField.select();
+    announce("Copy this link (" + url.length + " characters)");
+  }
+
+  /* A #t= link opens someone else's list. It is untrusted input, so it is validated
+     before any of it reaches the table, and refused out loud if it does not hold up.
+     It opens as reference, not as yours: Make a copy is how you keep it. */
+  function loadSharedTemplate() {
+    var m = /(?:^|&)t=([^&]+)/.exec(location.hash.replace(/^#/, ""));
+    if (!m) return;
+    decodeTemplate(decodeURIComponent(m[1])).then(function (doc) {
+      var why = validateTemplate(doc);
+      if (why) { announce("That shared list will not load: " + why); update(); return; }
+      openTemplate({
+        v: doc.v,
+        id: "t" + Date.now().toString(36),
+        name: doc.name || "Shared list",
+        created: new Date().toISOString().slice(0, 10),
+        base: doc.base || "zatar",
+        priorities: doc.priorities
+      }, false);
+      announce("Opened shared list: " + activeTemplate.name + " - Make a copy to change it");
+      update();
+    }, function (err) {
+      announce("That shared link did not work: " + err.message);
+      update();
+    });
   }
 
   /* ---------- instant tooltips ---------- */
@@ -1308,6 +2409,15 @@
       if (th) { e.preventDefault(); toggleSort(th.dataset.sort); }
     });
 
+    document.addEventListener("click", function (e) {
+      if (pop && pop.style.display !== "none" && !pop.contains(e.target)) closePop();
+      /* the operator button itself opens the menu, so a click on it must not also
+         count as a click away from it */
+      if (opMenu && opMenu.style.display !== "none" &&
+          !opMenu.contains(e.target) &&
+          !(e.target.closest && e.target.closest(".prio-op--editing"))) closeOpMenu();
+    });
+
     window.addEventListener("hashchange", function () {
       readUrl();
       el.search.value = state.q;
@@ -1365,6 +2475,9 @@
       el.search.value = state.q;
       bind();
       bindTips();
+      bindTemplateBar();
+      refreshLists();
+      loadSharedTemplate();
       update();
     })
     .catch(function (err) {

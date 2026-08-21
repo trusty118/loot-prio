@@ -676,3 +676,302 @@ mark {
   .control-row { flex-direction: column; gap: 6px; }
   .col-notes { min-width: 240px; }
 }
+
+
+/* ---------- edit mode ----------
+   The editable line is the same icons in the same order; what changes is that each
+   one gains a handle and the operators become buttons. Keeping the layout identical
+   means switching modes doesn't move anything under the cursor. */
+
+.template-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.template-bar .field--tpl { margin: 0; }
+
+.template-bar select,
+.template-bar .tpl-name,
+.template-bar .tpl-link-field {
+  font: inherit;
+  font-size: .82rem;
+  background: var(--bg-panel-2);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 4px 8px;
+}
+
+.template-bar .tpl-name { width: 14em; }
+.template-bar .tpl-name:focus,
+.template-bar select:focus { outline: 1px solid var(--gold); }
+
+/* Shown only between an edit and the write landing, which is usually too fast to
+   see. It exists so a failed write is not silent. */
+.tpl-dirty {
+  color: var(--gold);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.tpl-link-out { display: inline-flex; }
+.template-bar .tpl-link-field { width: 18em; }
+
+.edit-msg {
+  font-size: .82rem;
+  color: var(--gold-bright);
+  margin-left: 8px;
+}
+
+.btn-edit, .btn-tpl {
+  font: inherit;
+  font-size: .82rem;
+  background: var(--bg-panel-2);
+  color: var(--text-dim);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.btn-edit:hover, .btn-tpl:hover { color: var(--text); border-color: var(--gold); }
+
+.btn-edit[aria-pressed="true"] {
+  background: var(--gold);
+  border-color: var(--gold-bright);
+  color: #1a1409;
+  font-weight: 600;
+}
+
+.btn-tpl--danger:hover { color: #ffb4a8; border-color: #b3564a; }
+
+/* Delete asks in place rather than in a browser dialog, so the armed state has to
+   look like the question it is. */
+.btn-tpl--armed {
+  background: #4a1f19;
+  border-color: #b3564a;
+  color: #ffb4a8;
+  font-weight: 600;
+}
+
+/* the add popover: every class and spec, opened from the + on a row.
+   Parented to <body>, so it is positioned rather than laid out. */
+/* The operator menu. Same fixed-position, shadowed panel as the add popover - they
+   are the same kind of object and should not read as two different mechanisms. */
+.prio-menu {
+  position: fixed;
+  z-index: 40;
+  display: none;
+  min-width: 200px;
+  padding: 4px;
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .55);
+}
+
+.prio-menu-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 9px;
+  font: inherit;
+  font-size: .85rem;
+  text-align: left;
+  color: var(--text-dim);
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.prio-menu-item:hover { background: var(--bg-panel-2); color: var(--text); }
+
+/* the symbol is the thing being chosen, so it leads and is monospaced to stop
+   ">" and ">>" jittering the labels beside them */
+.prio-menu-op {
+  min-width: 2.2em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--gold);
+}
+
+.prio-menu-item.is-current {
+  background: color-mix(in srgb, var(--gold) 16%, transparent);
+  color: var(--text);
+}
+
+.prio-pop {
+  position: fixed;
+  z-index: 40;
+  display: none;
+  max-width: min(560px, 92vw);
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 10px;
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .55);
+}
+
+.prio-pop-find {
+  font: inherit;
+  font-size: .82rem;
+  width: 100%;
+  background: var(--bg-panel-2);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 4px 8px;
+}
+
+.prio-pop-find:focus { outline: 1px solid var(--gold); }
+
+.prio-pop-head {
+  margin: 6px 0 4px;
+  font-size: .78rem;
+  color: var(--text-faint);
+}
+
+.prio-pop-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.prio-pop-group {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+}
+
+.prio-pop-none {
+  margin: 4px 0 0;
+  font-size: .82rem;
+  color: var(--text-faint);
+}
+
+.prio-pop-icon {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  line-height: 0;
+  cursor: grab;
+  border-radius: 3px;
+}
+
+.prio-pop-icon .spec-icon { width: 26px; height: 26px; margin: 0; }
+.prio-pop-icon:hover { outline: 2px solid var(--gold); outline-offset: 1px; }
+.prio-pop-icon:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+
+/* an editable priority cell */
+.col-prio--editing .prio-edit {
+  position: relative;
+  display: inline-block;
+  cursor: grab;
+  border-radius: 4px;
+}
+
+.col-prio--editing .prio-edit:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* the remove handle only appears on the icon you are pointing at, so a line of eight
+   isn't a wall of crosses */
+.prio-x {
+  position: absolute;
+  top: -6px;
+  right: -2px;
+  display: none;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  line-height: 14px;
+  text-align: center;
+  font-size: 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #2a1c1a;
+  color: #ffb4a8;
+  cursor: pointer;
+}
+
+.prio-edit:hover .prio-x,
+.prio-edit:focus-within .prio-x { display: block; }
+
+.prio-op--editing {
+  appearance: none;
+  font: inherit;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px dashed var(--line);
+  border-radius: 3px;
+  padding: 0 3px;
+  cursor: pointer;
+}
+
+.prio-op--editing:hover { color: var(--gold); border-color: var(--gold); }
+
+.prio-add, .prio-reset {
+  font: inherit;
+  font-size: .9rem;
+  margin-left: 6px;
+  padding: 1px 7px;
+  color: var(--text-faint);
+  background: transparent;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.prio-add:hover, .prio-reset:hover { color: var(--gold); border-color: var(--gold); }
+/* ---------- dragging ----------
+   A press that moves becomes a drag: the icon dims in place, a half-size ghost
+   follows the pointer, and the gap it would land in is marked. Dragging clear of
+   the row takes the icon off the line. */
+
+.col-prio--editing .prio-edit,
+.prio-pop-icon {
+  touch-action: none;              /* so a touch drag doesn't scroll the page instead */
+  user-select: none;
+  -webkit-user-select: none;
+  /* the belt to specIcon's braces: an <img> drags natively, and the browser's own
+     image drag cancels the pointer sequence this editor runs on */
+  -webkit-user-drag: none;
+}
+
+.prio-dragging { opacity: .35; cursor: grabbing; }
+
+.drag-ghost {
+  position: fixed;
+  z-index: 60;
+  margin: 0;
+  padding: 0;
+  opacity: .9;
+  pointer-events: none;            /* elementFromPoint must see what's underneath */
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .6));
+}
+
+.drag-ghost .prio-x { display: none; }
+
+/* the gap the icon lands in */
+.prio-drop { box-shadow: -3px 0 0 0 var(--gold); }
+.prio-drop-after { box-shadow: 3px 0 0 0 var(--gold); }
+
+/* dragged clear of the line: release here and it comes off */
+/* a line with no icons has nothing to mark, so the cell is the target - which is
+   every row of a list you have only just started */
+.prio-drop-empty {
+  outline: 1px dashed var(--gold);
+  outline-offset: -3px;
+  border-radius: var(--radius);
+}
+
