@@ -44,14 +44,23 @@ const groups = () => [...doc.querySelectorAll(".boss-group")];
 const rows = () => [...doc.querySelectorAll("tbody tr")];
 const headText = () => groups().map((g) => g.querySelector(".boss-head").textContent.trim());
 
-// the where-panel opens closed: phases only, nothing below them
-ok(doc.querySelectorAll("#phase-chips .chip").length === 6,
-   "five phases plus an All chip, and nothing else, on load");
-ok(doc.querySelectorAll("#zone-chips .chip").length === 0, "no zone chips until a phase is picked");
-ok(doc.getElementById("zone-row").hidden && doc.getElementById("boss-row").hidden,
-   "and both rows below are hidden");
-ok(rows().length === 195, "with no phase picked nothing is filtered out");
-openP3();
+// A phase is a mode, not a filter: one is always picked, so the page opens with the
+// zone row already open and something in the table.
+const phaseChips = () => [...doc.querySelectorAll("#phase-chips .chip")];
+ok(phaseChips().length === 5, `five phases and no All chip (got ${phaseChips().length})`);
+ok(!phaseChips().some((c) => c.classList.contains("chip--all")),
+   "there is no every-phase state to return to");
+const picked = () => phaseChips().find((c) => c.getAttribute("aria-pressed") === "true");
+ok(!!picked(), "one of them is picked on load");
+ok(picked().textContent.trim().startsWith("Phase 3"),
+   `and it is the phase that has data (got "${picked().textContent.trim()}")`);
+ok(!doc.getElementById("boss-row").hidden === false, "the boss row still waits for a zone");
+ok(doc.querySelectorAll("#zone-chips .chip").length > 0, "but the zone row is already open");
+ok(rows().length === 195, "and the phase with the data shows all of it");
+
+// clicking the phase you are already on must not leave the page with no phase at all
+click(picked());
+ok(!!picked() && rows().length === 195, "clicking the current phase is a no-op");
 
 ok(rows().length === 195, `renders all 195 rows (got ${rows().length})`);
 ok(groups().length === 17, `renders 17 boss groups (got ${groups().length})`);
@@ -962,7 +971,44 @@ await new Promise((r) => setTimeout(r, 50));
 ok(!window.location.hash.includes("zone="), "a zone outside the chosen phase is dropped on read");
 
 click(doc.getElementById("reset"));
-ok(doc.getElementById("zone-row").hidden, "reset closes the hierarchy again");
+ok(chipByText("#phase-chips", "Phase 3").getAttribute("aria-pressed") === "true",
+   "reset returns to the phase with the data, not to an empty page");
+ok(doc.getElementById("boss-row").hidden && rows().length === 195,
+   "with the zone and boss below it cleared");
+
+// --- the phase is always set ---
+click(doc.getElementById("reset"));
+
+// the landing phase is derived from the data, not hardcoded: the LAST phase that has
+// items, so it follows the content when a new tier is filled in
+const phasesWithItems = ["P1", "P2", "P3", "P4", "P5"].filter((id) => {
+  const zones = { P1: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair"],
+                  P2: ["Serpentshrine Cavern", "Tempest Keep"],
+                  P3: ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"],
+                  P4: ["Zul'Aman"], P5: ["Sunwell Plateau"] }[id];
+  return data.some((r) => zones.includes(r.zone));
+});
+ok(window.location.hash.includes("phase=" + phasesWithItems[phasesWithItems.length - 1]),
+   `the landing phase is the last one with items (${phasesWithItems.join(", ")})`);
+ok(/phase=P\d/.test(window.location.hash), `the phase is always in the url: ${window.location.hash}`);
+
+// an unknown phase in a link falls back rather than emptying the table
+window.location.hash = "phase=P9";
+await new Promise((r) => setTimeout(r, 50));
+ok(rows().length === 195 && window.location.hash.includes("phase=P3"),
+   `an unknown phase falls back to the default (${window.location.hash})`);
+
+// a phase with no items says so in its own words - there is no "all phases" to escape
+// to now, so an empty phase is the whole page
+click(doc.getElementById("reset"));
+click(chipByText("#phase-chips", "Phase 4"));
+ok(rows().length === 0, "phase 4 has nothing in it yet");
+const emptyMsg = doc.querySelector(".empty").textContent;
+ok(/Phase 4/.test(emptyMsg) && /dataset/.test(emptyMsg),
+   `and says that, rather than blaming the filters: "${emptyMsg}"`);
+ok(doc.querySelectorAll("#zone-chips .chip").length > 0,
+   "its zones are still listed, so the phase is visibly a place with nothing in it");
+click(doc.getElementById("reset"));
 
 // --- boss chips are qualified by their zone ---
 // Boss names are not unique across zones: both raids have a "Trash". The hierarchy

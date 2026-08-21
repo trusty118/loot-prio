@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 492 checks, should be all green
+npm test             # 503 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -238,14 +238,31 @@ the rings, not the page.
 
 ### Phase, zone, boss
 
-`.controls--where` is a hierarchy, and each row appears only once the row above it is
-answered: phases on load, zones once a phase is picked, bosses once a zone is. Opening on all
-three at once meant 3 zone chips and 17 boss chips before you had said anything.
+**The phase is a mode, not a filter.** One is always selected and there is no `All` on that
+row: which tier you are gearing for is true for a whole raid tier, where everything else on
+the panel is answered per lookup. Clicking the phase you are already on is a no-op, since
+deselecting it would leave the page with no phase at all.
 
-**Leaving a row unanswered means all of it.** A phase with no zone lists every zone in that
-phase; a zone with no boss lists every boss in it. There is no separate "all" state to
-maintain — `matches()` simply doesn't apply a filter that isn't set — and each row still leads
-with an `All` chip that clears the rows below it.
+`defaultPhase()` is the **last phase that has items**, derived from `ALL` rather than
+hardcoded — when Zul'Aman items arrive, Phase 4 becomes the landing phase on its own.
+`readUrl()` falls back to it for a missing or unknown `phase=`, and Reset returns to it.
+
+Below that it is still a hierarchy: the zone row is always open (a phase is always set), and
+the **boss row waits for a zone**, because every boss of a phase at once is the wall this
+exists to avoid. **Leaving a row unanswered means all of it** — a phase with no zone lists
+every zone in it, a zone with no boss every boss in it. That needs no "all" state, because
+`matches()` simply doesn't apply a filter that isn't set.
+
+**A trade that was chosen, not overlooked:** with the phase locked, a search for an item that
+lives in another phase returns nothing and does not say why. Searching across phases, and
+marking the empty phases as unavailable, were both offered and declined in favour of the
+simpler behaviour. Don't "fix" it without asking. What it *does* say is when a phase is empty
+outright — `phaseIsEmpty()` names the phase rather than blaming the filters, which matters
+because without an `All` to fall back to an empty phase is the whole page.
+
+Measured while deciding this, for anyone tempted to reach for the phase row to reduce clutter:
+at peak there are ~40 controls on screen, and the phase row is 6 of them. The weight is the
+boss row (up to 13) and the class row (10).
 
 `PHASES` in `app.js` is the five TBC content phases and the zones each opened, in release
 order, and `BOSS_ORDER` now carries the kill order for **all nine zones**. **Only Phase 3 has

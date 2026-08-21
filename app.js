@@ -110,6 +110,20 @@
     { id: "P5", label: "Phase 5", zones: ["Sunwell Plateau"] }
   ];
 
+  /* The phase to land on: the last one that actually has items. Derived rather than
+     hardcoded, so it follows the content - when Zul'Aman items arrive, Phase 4 becomes
+     the landing phase without anyone editing this. Needs ALL, so it cannot be a static
+     initialiser; state.phase is set from it once the data is in. */
+  function defaultPhase() {
+    for (var i = PHASES.length - 1; i >= 0; i--) {
+      var zones = PHASES[i].zones;
+      for (var j = 0; j < ALL.length; j++) {
+        if (zones.indexOf(ALL[j].zone) !== -1) return PHASES[i].id;
+      }
+    }
+    return PHASES[0].id;
+  }
+
   function phaseZones(id) {
     for (var i = 0; i < PHASES.length; i++) {
       if (PHASES[i].id === id) return PHASES[i].zones;
@@ -579,7 +593,6 @@
   var el = {
     phaseChips: document.getElementById("phase-chips"),
     zoneChips: document.getElementById("zone-chips"),
-    zoneRow: document.getElementById("zone-row"),
     bossRow: document.getElementById("boss-row"),
     bossChips: document.getElementById("boss-chips"),
     classChips: document.getElementById("class-chips"),
@@ -1136,7 +1149,7 @@
   function readUrl() {
     var p = new URLSearchParams(location.hash.replace(/^#/, ""));
     var phase = p.get("phase") || "";
-    state.phase = phaseZones(phase).length ? phase : "";
+    state.phase = phaseZones(phase).length ? phase : defaultPhase();
     state.zone = p.get("zone") || "";
     /* a zone outside the chosen phase would leave the row showing nothing selected */
     if (state.phase && state.zone && phaseZones(state.phase).indexOf(state.zone) === -1) {
@@ -1235,17 +1248,15 @@
     });
     el.phaseChips.innerHTML = "";
 
-    var all = allChip("phases", !state.phase);
-    all.addEventListener("click", function () {
-      state.phase = ""; state.zone = ""; state.boss = ""; state.bossZone = "";
-      update();
-    });
-    el.phaseChips.appendChild(all);
-
+    /* No All chip: a phase is a mode, not a filter. Which tier you are gearing for is
+       true for the whole tier, where everything else on this panel is answered per
+       lookup - so it is set once and always set, and there is no "every phase" to
+       return to. */
     PHASES.forEach(function (ph) {
       var c = chip(ph.label, state.phase === ph.id, counts[ph.id] || 0);
       c.addEventListener("click", function () {
-        state.phase = (state.phase === ph.id) ? "" : ph.id;
+        if (state.phase === ph.id) return;      /* clicking the current one is a no-op */
+        state.phase = ph.id;
         /* the zone and boss below it belonged to the phase you just left */
         state.zone = ""; state.boss = ""; state.bossZone = "";
         update();
@@ -1257,8 +1268,6 @@
   function renderZoneChips() {
     var counts = countBy("zone", function (r) { return r.zone; });
     el.zoneChips.innerHTML = "";
-    if (el.zoneRow) el.zoneRow.hidden = !state.phase;
-    if (!state.phase) return;
 
     var all = allChip("zones", !state.zone);
     all.addEventListener("click", function () {
@@ -2308,6 +2317,22 @@
   /* Asked only on the no-results path, so walking 195 entries costs nothing. Narrowed
      to a class or spec filter because that is the only one an empty priority defeats:
      search still reads item names, notes and bosses. */
+  /* True when the chosen phase has nothing in the dataset at all. Worth saying in its
+     own words: with the phase locked there is no "all phases" to fall back to, so an
+     empty phase is the whole page, and "no items match these filters" would send you
+     hunting for a filter to clear that does not exist. */
+  function phaseIsEmpty() {
+    var zones = phaseZones(state.phase);
+    return !ALL.some(function (r) { return zones.indexOf(r.zone) !== -1; });
+  }
+
+  function phaseLabel(id) {
+    for (var i = 0; i < PHASES.length; i++) {
+      if (PHASES[i].id === id) return PHASES[i].label;
+    }
+    return id;
+  }
+
   function blankListFiltered() {
     if (!activeTemplate) return false;
     if (!state.classes.length && !state.specs.length) return false;
@@ -2326,11 +2351,14 @@
       /* A list you have only just started names nobody, so the class and spec chips
          all read zero. That is honest - the filter reflects the list in front of you
          - but it must say so rather than looking broken. */
-      empty.textContent = blankListFiltered()
-        ? "This list is empty so far, so there is nobody for the class and spec "
-          + "filters to find. Press Edit and add specs to a row, or clear the filters "
-          + "to see every item."
-        : "No items match these filters.";
+      empty.textContent = phaseIsEmpty()
+        ? phaseLabel(state.phase) + " isn't in the dataset yet - its bosses are listed, "
+          + "but no loot has been added to them."
+        : blankListFiltered()
+          ? "This list is empty so far, so there is nobody for the class and spec "
+            + "filters to find. Press Edit and add specs to a row, or clear the filters "
+            + "to see every item."
+          : "No items match these filters.";
       el.results.appendChild(empty);
       return;
     }
@@ -2665,7 +2693,7 @@
     });
 
     el.reset.addEventListener("click", function () {
-      state.phase = ""; state.zone = ""; state.boss = ""; state.bossZone = "";
+      state.phase = defaultPhase(); state.zone = ""; state.boss = ""; state.bossZone = "";
       state.classes = []; state.specs = []; state.bisOnly = false;
       state.type = ""; state.slot = ""; state.q = "";
       state.sort = ""; state.dir = "asc";

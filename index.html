@@ -48,16 +48,16 @@
 
 <main class="wrap">
 
-  <!-- Phase, then zone, then boss: each row appears only once the one above it has
-       been answered. Opening on all three at once was 20-odd chips of wall. Leaving a
-       row unpicked means all of it - all zones of the phase, all bosses of the zone. -->
+  <!-- A phase is always picked, so its zones are always listed; the boss row waits for
+       a zone, because every boss of the phase at once is the wall this avoids. Leaving
+       the zone unpicked means all of them, and the boss unpicked means all of those. -->
   <section class="controls controls--where" aria-label="Phase, zone and boss">
 
     <div class="control-row">
       <div class="chips" id="phase-chips" role="group" aria-label="Phase"></div>
     </div>
 
-    <div class="control-row" id="zone-row" hidden>
+    <div class="control-row" id="zone-row">
       <div class="chips" id="zone-chips" role="group" aria-label="Zone"></div>
     </div>
 
