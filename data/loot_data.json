@@ -7,7 +7,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=34012",
   "slot": "Back",
   "type": "Cloak",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "HolyPal"
@@ -27,7 +29,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32593",
   "slot": "Feet",
   "type": "Leather",
-  "role": "Tank",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "FeralDruid"
@@ -43,7 +48,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32608",
   "slot": "Hands",
   "type": "Plate",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Warrior"
@@ -63,7 +70,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32606",
   "slot": "Waist",
   "type": "Plate",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [],
   "notes": "Weak."
  },
@@ -75,7 +84,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32526",
   "slot": "Finger",
   "type": "Ring",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Ret"
@@ -91,7 +102,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32528",
   "slot": "Finger",
   "type": "Ring",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoDruid"
@@ -123,7 +136,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32527",
   "slot": "Finger",
   "type": "Ring",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Shadow"
@@ -155,7 +170,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32943",
   "slot": "One-Hand",
   "type": "1H Mace",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "race": "Human",
@@ -176,7 +193,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=34011",
   "slot": "Off-Hand",
   "type": "Shield",
-  "role": "Tank",
+  "roles": [
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtPal"
@@ -196,7 +215,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32239",
   "slot": "Feet",
   "type": "Cloth",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "class": "Mage"
@@ -228,7 +249,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32240",
   "slot": "Head",
   "type": "Leather",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoShaman"
@@ -244,7 +267,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32377",
   "slot": "Shoulder",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Rogue"
@@ -264,7 +289,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32241",
   "slot": "Head",
   "type": "Mail",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoShaman"
@@ -284,7 +311,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32234",
   "slot": "Hands",
   "type": "Mail",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Enh"
@@ -308,7 +337,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32242",
   "slot": "Feet",
   "type": "Mail",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Ele"
@@ -324,7 +355,11 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32232",
   "slot": "Wrist",
   "type": "Plate",
-  "role": "Tank",
+  "roles": [
+   "Physical",
+   "Caster",
+   "Tank"
+  ],
   "priority": [],
   "notes": "Any Tank for full mitigation sets."
  },
@@ -336,7 +371,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32243",
   "slot": "Feet",
   "type": "Plate",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "HolyPal"
@@ -352,7 +389,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32245",
   "slot": "Feet",
   "type": "Plate",
-  "role": "Tank",
+  "roles": [
+   "Caster",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtPal"
@@ -372,7 +412,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32238",
   "slot": "Finger",
   "type": "Ring",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "HolyPal"
@@ -393,7 +435,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32247",
   "slot": "Finger",
   "type": "Ring",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "class": "Warlock"
@@ -426,7 +470,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32237",
   "slot": "Main-Hand",
   "type": "Dagger",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Ele"
@@ -458,7 +504,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32236",
   "slot": "One-Hand",
   "type": "1H Axe",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "race": "Orc",
@@ -484,7 +532,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32248",
   "slot": "Two-Hand",
   "type": "2H Polearm",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Hunter"
@@ -500,7 +550,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32256",
   "slot": "Waist",
   "type": "Cloth",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Shadow"
@@ -532,7 +584,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32259",
   "slot": "Wrist",
   "type": "Mail",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Ele"
@@ -548,7 +602,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32258",
   "slot": "Waist",
   "type": "Mail",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoShaman"
@@ -568,7 +624,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32250",
   "slot": "Shoulder",
   "type": "Plate",
-  "role": "Tank",
+  "roles": [
+   "Tank"
+  ],
   "priority": [],
   "notes": "Tier 5 Shoulders are better, avoid."
  },
@@ -580,7 +638,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32260",
   "slot": "Neck",
   "type": "Neck",
-  "role": "Physical",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "Enh"
@@ -604,7 +665,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32261",
   "slot": "Finger",
   "type": "Ring",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Enh"
@@ -625,7 +688,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32255",
   "slot": "Off-Hand",
   "type": "Shield",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "HolyPal"
@@ -645,7 +710,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32253",
   "slot": "Ranged",
   "type": "Crossbow",
-  "role": "Physical",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "class": "Hunter"
@@ -665,7 +733,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32262",
   "slot": "One-Hand",
   "type": "1H Mace",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Enh"
@@ -686,7 +756,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32254",
   "slot": "One-Hand",
   "type": "1H Axe",
-  "role": "Tank",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtWarr"
@@ -702,7 +775,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32257",
   "slot": "Relic",
   "type": "Idol",
-  "role": "Physical",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "class": "Druid"
@@ -719,7 +795,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32251",
   "slot": "Wrist",
   "type": "Mail",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [],
   "unsourced": true,
   "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
@@ -732,7 +810,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32252",
   "slot": "Chest",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [],
   "unsourced": true,
   "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
@@ -745,7 +826,11 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32263",
   "slot": "Legs",
   "type": "Plate",
-  "role": "Tank",
+  "roles": [
+   "Physical",
+   "Caster",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtWarr"
@@ -761,7 +846,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32266",
   "slot": "Finger",
   "type": "Ring",
-  "role": "Physical",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "class": "Rogue"
@@ -794,7 +882,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32265",
   "slot": "Waist",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Ret"
@@ -810,7 +900,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32271",
   "slot": "Legs",
   "type": "Leather",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoDruid"
@@ -826,7 +918,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32264",
   "slot": "Shoulder",
   "type": "Mail",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Hunter"
@@ -850,7 +944,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32275",
   "slot": "Hands",
   "type": "Mail",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoShaman"
@@ -870,7 +966,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32276",
   "slot": "Waist",
   "type": "Mail",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Ele"
@@ -886,7 +984,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32279",
   "slot": "Wrist",
   "type": "Plate",
-  "role": "Tank",
+  "roles": [
+   "Caster",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtPal"
@@ -902,7 +1003,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32270",
   "slot": "Wrist",
   "type": "Cloth",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [],
   "notes": "Any caster needing the +Hit."
  },
@@ -914,7 +1017,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32361",
   "slot": "Off-Hand",
   "type": "Off-hand",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [],
   "notes": "Any caster needing the +Hit."
  },
@@ -926,7 +1031,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32268",
   "slot": "Feet",
   "type": "Plate",
-  "role": "Tank",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [],
   "unsourced": true,
   "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
@@ -939,7 +1047,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32324",
   "slot": "Wrist",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "class": "Rogue"
@@ -959,7 +1070,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32328",
   "slot": "Hands",
   "type": "Leather",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoDruid"
@@ -979,7 +1092,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32510",
   "slot": "Feet",
   "type": "Mail",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Enh"
@@ -1007,7 +1122,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32280",
   "slot": "Hands",
   "type": "Plate",
-  "role": "Tank",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtWarr"
@@ -1023,7 +1141,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32512",
   "slot": "Waist",
   "type": "Plate",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "HolyPal"
@@ -1039,7 +1159,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32330",
   "slot": "Relic",
   "type": "Totem",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Ele"
@@ -1055,7 +1177,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32348",
   "slot": "Two-Hand",
   "type": "2H Axe",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Arms"
@@ -1071,7 +1195,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32326",
   "slot": "Ranged",
   "type": "Thrown",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Warrior"
@@ -1091,7 +1217,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32325",
   "slot": "Ranged",
   "type": "Gun",
-  "role": "Tank",
+  "roles": [
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtWarr"
@@ -1107,7 +1235,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32323",
   "slot": "Back",
   "type": "Cloak",
-  "role": "Physical",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [],
   "unsourced": true,
   "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
@@ -1120,7 +1251,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32329",
   "slot": "Head",
   "type": "Cloth",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [],
   "unsourced": true,
   "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
@@ -1133,7 +1266,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32341",
   "slot": "Legs",
   "type": "Plate",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Fury"
@@ -1157,7 +1292,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32335",
   "slot": "Finger",
   "type": "Ring",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Warrior"
@@ -1182,7 +1319,11 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32501",
   "slot": "Trinket",
   "type": "Trinket",
-  "role": "Tank",
+  "roles": [
+   "Physical",
+   "Caster",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "FeralDruid"
@@ -1207,7 +1348,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32278",
   "slot": "Hands",
   "type": "Plate",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Fury"
@@ -1227,7 +1370,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32337",
   "slot": "Back",
   "type": "Cloak",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "class": "Druid"
@@ -1247,7 +1392,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32338",
   "slot": "Shoulder",
   "type": "Cloth",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [],
   "notes": "Give to biggest upgrade. Weak item."
  },
@@ -1259,7 +1406,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32340",
   "slot": "Chest",
   "type": "Cloth",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [],
   "notes": "Give to biggest upgrade. Weak item."
  },
@@ -1271,7 +1420,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32334",
   "slot": "Chest",
   "type": "Mail",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [],
   "notes": "Weak item. Hunters get more Agi more from Tier with gems."
  },
@@ -1283,7 +1434,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32333",
   "slot": "Waist",
   "type": "Plate",
-  "role": "Tank",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtWarr"
@@ -1303,7 +1457,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32339",
   "slot": "Waist",
   "type": "Leather",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [],
   "unsourced": true,
   "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
@@ -1316,7 +1472,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32342",
   "slot": "Waist",
   "type": "Plate",
-  "role": "Tank",
+  "roles": [
+   "Caster",
+   "Tank"
+  ],
   "priority": [],
   "unsourced": true,
   "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
@@ -1329,7 +1488,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32353",
   "slot": "Hands",
   "type": "Cloth",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "HolyPal"
@@ -1349,7 +1510,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32351",
   "slot": "Wrist",
   "type": "Leather",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "BalanceDruid"
@@ -1365,7 +1528,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32347",
   "slot": "Hands",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Enh"
@@ -1397,7 +1562,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32352",
   "slot": "Feet",
   "type": "Leather",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "BalanceDruid"
@@ -1417,7 +1584,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32517",
   "slot": "Shoulder",
   "type": "Mail",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [],
   "notes": "Weak item."
  },
@@ -1429,7 +1598,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32346",
   "slot": "Waist",
   "type": "Mail",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Hunter"
@@ -1445,7 +1616,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32354",
   "slot": "Head",
   "type": "Plate",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "HolyPal"
@@ -1461,7 +1634,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32349",
   "slot": "Neck",
   "type": "Neck",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "class": "Warlock"
@@ -1493,7 +1668,11 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32362",
   "slot": "Neck",
   "type": "Neck",
-  "role": "Tank",
+  "roles": [
+   "Physical",
+   "Caster",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtWarr"
@@ -1513,7 +1692,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32350",
   "slot": "Off-Hand",
   "type": "Off-hand",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [],
   "notes": "2nd best Healer OH."
  },
@@ -1525,7 +1706,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32332",
   "slot": "Two-Hand",
   "type": "2H Mace",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Ret"
@@ -1541,7 +1724,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32363",
   "slot": "Ranged",
   "type": "Wand",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "class": "Priest"
@@ -1557,7 +1742,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32345",
   "slot": "Feet",
   "type": "Plate",
-  "role": "Physical",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [],
   "unsourced": true,
   "notes": "Drops from Essence of Anger, the third phase of the encounter. Not covered in the source guide; added from the Phase 3 BiS audit."
@@ -1570,7 +1758,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32367",
   "slot": "Legs",
   "type": "Cloth",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Shadow"
@@ -1586,7 +1776,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32366",
   "slot": "Feet",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "Surv"
@@ -1623,7 +1816,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32365",
   "slot": "Chest",
   "type": "Plate",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Fury"
@@ -1639,7 +1834,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32370",
   "slot": "Neck",
   "type": "Neck",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "HolyPal"
@@ -1655,7 +1852,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32368",
   "slot": "Ranged",
   "type": "Libram",
-  "role": "Tank",
+  "roles": [
+   "Caster",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtPal"
@@ -1671,7 +1871,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32369",
   "slot": "One-Hand",
   "type": "1H Sword",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Rogue"
@@ -1692,7 +1894,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31101",
   "slot": "Shoulder",
   "type": "Tier Token (Pal/Priest/Lock)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "spec": "ProtPal"
@@ -1724,7 +1928,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31103",
   "slot": "Shoulder",
   "type": "Tier Token (War/Hunter/Shaman)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "spec": "RestoShaman"
@@ -1760,7 +1966,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31102",
   "slot": "Shoulder",
   "type": "Tier Token (Rogue/Mage/Druid)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "spec": "FeralDruid",
@@ -1797,7 +2005,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32519",
   "slot": "Waist",
   "type": "Cloth",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoDruid"
@@ -1817,7 +2027,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32331",
   "slot": "Back",
   "type": "Cloak",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "class": "Mage"
@@ -1849,7 +2061,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32518",
   "slot": "Shoulder",
   "type": "Leather",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoDruid"
@@ -1865,7 +2079,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32376",
   "slot": "Head",
   "type": "Mail",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "BM"
@@ -1893,7 +2109,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32373",
   "slot": "Head",
   "type": "Plate",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Fury"
@@ -1913,7 +2131,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32505",
   "slot": "Trinket",
   "type": "Trinket",
-  "role": "Physical",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "Fury"
@@ -1958,7 +2179,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31098",
   "slot": "Legs",
   "type": "Tier Token (Pal/Priest/Lock)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "spec": "ProtPal"
@@ -1990,7 +2213,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31100",
   "slot": "Legs",
   "type": "Tier Token (War/Hunter/Shaman)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "spec": "RestoShaman"
@@ -2030,7 +2255,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31099",
   "slot": "Legs",
   "type": "Tier Token (Rogue/Mage/Druid)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "spec": "FeralDruid"
@@ -2062,7 +2289,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32524",
   "slot": "Back",
   "type": "Cloak",
-  "role": "Healer",
+  "roles": [
+   "Caster",
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoShaman"
@@ -2090,7 +2320,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32525",
   "slot": "Head",
   "type": "Cloth",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Fire"
@@ -2118,7 +2350,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32235",
   "slot": "Head",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Enh"
@@ -2150,7 +2384,11 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32521",
   "slot": "Head",
   "type": "Plate",
-  "role": "Tank",
+  "roles": [
+   "Physical",
+   "Caster",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtWarr"
@@ -2170,7 +2408,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32497",
   "slot": "Finger",
   "type": "Ring",
-  "role": "Physical",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "class": "Rogue"
@@ -2215,7 +2456,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32483",
   "slot": "Trinket",
   "type": "Trinket",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "class": "Warlock"
@@ -2248,7 +2491,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32496",
   "slot": "Trinket",
   "type": "Trinket",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [],
   "notes": "Mediocre vs active trinkets except for the mana. Give to the Healer who runs out of mana.",
   "unique": true
@@ -2261,7 +2506,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32471",
   "slot": "One-Hand",
   "type": "1H Dagger",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [],
   "notes": "Little PvE use. Rogue can use in PvP.",
   "unique": true
@@ -2274,7 +2521,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32500",
   "slot": "Main-Hand",
   "type": "Mace",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "class": "Priest"
@@ -2294,7 +2543,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32374",
   "slot": "Two-Hand",
   "type": "2H Staff",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Shadow"
@@ -2326,7 +2577,11 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32375",
   "slot": "Off-Hand",
   "type": "Shield",
-  "role": "Tank",
+  "roles": [
+   "Physical",
+   "Caster",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtWarr"
@@ -2346,7 +2601,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32336",
   "slot": "Ranged",
   "type": "Bow",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Surv"
@@ -2366,7 +2623,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32837",
   "slot": "Main-Hand",
   "type": "Sword",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [],
   "notes": "Give to the PLAYER not the CLASS.",
   "unique": true
@@ -2379,7 +2638,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32838",
   "slot": "Off-Hand",
   "type": "Sword",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [],
   "notes": "Give to the PLAYER not the CLASS.",
   "unique": true
@@ -2392,7 +2653,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31089",
   "slot": "Chest",
   "type": "Tier Token (Pal/Priest/Lock)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "spec": "ProtPal"
@@ -2428,7 +2691,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31091",
   "slot": "Chest",
   "type": "Tier Token (War/Hunter/Shaman)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "spec": "RestoShaman"
@@ -2468,7 +2733,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31090",
   "slot": "Chest",
   "type": "Tier Token (Rogue/Mage/Druid)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "spec": "FeralDruid"
@@ -2500,7 +2767,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32590",
   "slot": "Back",
   "type": "Cloak",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Shadow"
@@ -2520,7 +2789,11 @@
   "wowhead": "https://www.wowhead.com/tbc/item=34010",
   "slot": "Back",
   "type": "Cloak",
-  "role": "Tank",
+  "roles": [
+   "Physical",
+   "Caster",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtWarr"
@@ -2540,7 +2813,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32609",
   "slot": "Feet",
   "type": "Cloth",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "class": "Priest"
@@ -2560,7 +2835,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32592",
   "slot": "Chest",
   "type": "Mail",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Ele"
@@ -2576,7 +2853,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32591",
   "slot": "Neck",
   "type": "Neck",
-  "role": "Physical",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "class": "Warrior"
@@ -2596,7 +2876,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32589",
   "slot": "Neck",
   "type": "Neck",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Fire"
@@ -2617,7 +2899,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=34009",
   "slot": "Main-Hand",
   "type": "Mace",
-  "role": "Tank",
+  "roles": [
+   "Caster",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtPal"
@@ -2645,7 +2930,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32945",
   "slot": "Off-Hand",
   "type": "Fist",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Rogue"
@@ -2665,7 +2952,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=29297",
   "slot": "Finger",
   "type": "Ring",
-  "role": "Tank",
+  "roles": [
+   "Tank"
+  ],
   "priority": [],
   "unsourced": true,
   "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
@@ -2679,7 +2968,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=29301",
   "slot": "Finger",
   "type": "Ring",
-  "role": "Physical",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [],
   "unsourced": true,
   "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
@@ -2693,7 +2985,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=29305",
   "slot": "Finger",
   "type": "Ring",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [],
   "unsourced": true,
   "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
@@ -2707,7 +3001,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=29309",
   "slot": "Finger",
   "type": "Ring",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [],
   "unsourced": true,
   "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
@@ -2721,7 +3017,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30871",
   "slot": "Wrist",
   "type": "Cloth",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "class": "Priest"
@@ -2741,7 +3039,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30870",
   "slot": "Wrist",
   "type": "Cloth",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Arcane"
@@ -2769,7 +3069,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30863",
   "slot": "Wrist",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Warrior"
@@ -2789,7 +3091,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30868",
   "slot": "Wrist",
   "type": "Leather",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoDruid"
@@ -2805,7 +3109,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30864",
   "slot": "Wrist",
   "type": "Mail",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoShaman"
@@ -2825,7 +3131,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30862",
   "slot": "Wrist",
   "type": "Plate",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "HolyPal"
@@ -2841,7 +3149,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30873",
   "slot": "Feet",
   "type": "Mail",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [],
   "notes": "Weak item."
  },
@@ -2853,7 +3163,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30866",
   "slot": "Shoulder",
   "type": "Plate",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Warrior"
@@ -2869,7 +3181,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30865",
   "slot": "One-Hand",
   "type": "1H Dagger",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Rogue"
@@ -2886,7 +3200,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30872",
   "slot": "Off-Hand",
   "type": "Off-hand",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "class": "Warlock"
@@ -2910,7 +3226,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30861",
   "slot": "Wrist",
   "type": "Plate",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [],
   "unsourced": true,
   "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
@@ -2923,7 +3241,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30884",
   "slot": "Shoulder",
   "type": "Cloth",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [],
   "notes": "Weak item. Niche Spell Pen use."
  },
@@ -2935,7 +3255,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30888",
   "slot": "Waist",
   "type": "Cloth",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "class": "Mage"
@@ -2959,7 +3281,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30885",
   "slot": "Feet",
   "type": "Cloth",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "class": "Priest"
@@ -2979,7 +3303,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30879",
   "slot": "Waist",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Surv"
@@ -2999,7 +3325,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30886",
   "slot": "Feet",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [],
   "notes": ""
  },
@@ -3011,7 +3339,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30878",
   "slot": "Shoulder",
   "type": "Plate",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "HolyPal"
@@ -3027,7 +3357,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30874",
   "slot": "One-Hand",
   "type": "1H Sword",
-  "role": "Tank",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtWarr"
@@ -3043,7 +3376,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30881",
   "slot": "One-Hand",
   "type": "1H Sword",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Rogue"
@@ -3071,7 +3406,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30883",
   "slot": "Two-Hand",
   "type": "2H Staff",
-  "role": "Physical",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "FeralDruid"
@@ -3087,7 +3425,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30882",
   "slot": "Off-Hand",
   "type": "Shield",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoShaman"
@@ -3107,7 +3447,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30895",
   "slot": "Waist",
   "type": "Cloth",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "class": "Priest"
@@ -3127,7 +3469,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30916",
   "slot": "Legs",
   "type": "Cloth",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "BalanceDruid"
@@ -3151,7 +3495,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30894",
   "slot": "Feet",
   "type": "Cloth",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "ProtPal"
@@ -3171,7 +3517,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30917",
   "slot": "Shoulder",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [],
   "notes": "Often worse than T5."
  },
@@ -3183,7 +3531,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30914",
   "slot": "Waist",
   "type": "Leather",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "BalanceDruid"
@@ -3203,7 +3553,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30919",
   "slot": "Waist",
   "type": "Mail",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Ret"
@@ -3219,7 +3571,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30892",
   "slot": "Shoulder",
   "type": "Mail",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Hunter"
@@ -3235,7 +3589,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30893",
   "slot": "Legs",
   "type": "Mail",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoShaman"
@@ -3255,7 +3611,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30918",
   "slot": "Main-Hand",
   "type": "Mace",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "HolyPal"
@@ -3283,7 +3641,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30889",
   "slot": "Off-Hand",
   "type": "Shield",
-  "role": "Tank",
+  "roles": [
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtWarr"
@@ -3299,7 +3659,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30899",
   "slot": "Chest",
   "type": "Leather",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [],
   "notes": "Weak item."
  },
@@ -3311,7 +3673,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30898",
   "slot": "Legs",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Rogue"
@@ -3327,7 +3691,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30900",
   "slot": "Legs",
   "type": "Mail",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Surv"
@@ -3355,7 +3721,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30896",
   "slot": "Chest",
   "type": "Plate",
-  "role": "Tank",
+  "roles": [
+   "Physical",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "ProtWarr"
@@ -3371,7 +3740,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30897",
   "slot": "Waist",
   "type": "Plate",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "HolyPal"
@@ -3387,7 +3758,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30901",
   "slot": "One-Hand",
   "type": "1H Dagger",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "BM"
@@ -3408,7 +3781,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31092",
   "slot": "Hands",
   "type": "Tier Token (Pal/Priest/Lock)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "class": "Warlock"
@@ -3432,7 +3807,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31094",
   "slot": "Hands",
   "type": "Tier Token (War/Hunter/Shaman)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "class": "Hunter"
@@ -3452,7 +3829,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31093",
   "slot": "Hands",
   "type": "Tier Token (Rogue/Mage/Druid)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "spec": "FeralDruid"
@@ -3480,7 +3859,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30905",
   "slot": "Chest",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Enh"
@@ -3500,7 +3881,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30912",
   "slot": "Legs",
   "type": "Cloth",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "class": "Priest"
@@ -3520,7 +3903,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30907",
   "slot": "Chest",
   "type": "Mail",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Ret"
@@ -3544,7 +3929,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30904",
   "slot": "Chest",
   "type": "Plate",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [],
   "notes": "Weak item."
  },
@@ -3556,7 +3943,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30903",
   "slot": "Legs",
   "type": "Plate",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "class": "Warrior"
@@ -3576,7 +3965,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30911",
   "slot": "Off-Hand",
   "type": "Off-hand",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "class": "Priest"
@@ -3596,7 +3987,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30910",
   "slot": "Main-Hand",
   "type": "Sword",
-  "role": "Caster",
+  "roles": [
+   "Caster",
+   "Tank"
+  ],
   "priority": [
    {
     "class": "Mage"
@@ -3621,7 +4015,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30902",
   "slot": "Two-Hand",
   "type": "2H Sword",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Arms"
@@ -3637,7 +4033,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30908",
   "slot": "Two-Hand",
   "type": "2H Staff",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoDruid"
@@ -3657,7 +4055,10 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30909",
   "slot": "Off-Hand",
   "type": "Shield",
-  "role": "Caster",
+  "roles": [
+   "Caster",
+   "Tank"
+  ],
   "priority": [
    {
     "spec": "Ele"
@@ -3677,7 +4078,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=30906",
   "slot": "Ranged",
   "type": "Bow",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "BM"
@@ -3693,7 +4096,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31097",
   "slot": "Head",
   "type": "Tier Token (Pal/Priest/Lock)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "spec": "ProtPal"
@@ -3729,7 +4134,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31095",
   "slot": "Head",
   "type": "Tier Token (War/Hunter/Shaman)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "spec": "Surv"
@@ -3765,7 +4172,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=31096",
   "slot": "Head",
   "type": "Tier Token (Rogue/Mage/Druid)",
-  "role": "Tier",
+  "roles": [
+   "Tier"
+  ],
   "priority": [
    {
     "spec": "FeralDruid"
@@ -3797,7 +4206,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32586",
   "slot": "Wrist",
   "type": "Cloth",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [],
   "notes": "All casters except Mage."
  },
@@ -3809,7 +4220,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32584",
   "slot": "Wrist",
   "type": "Cloth",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [],
   "notes": "Slightly Priest favoured, but any healer really."
  },
@@ -3821,7 +4234,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32577",
   "slot": "Wrist",
   "type": "Mail",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoShaman"
@@ -3837,7 +4252,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32582",
   "slot": "Wrist",
   "type": "Leather",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoDruid"
@@ -3853,7 +4270,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32574",
   "slot": "Wrist",
   "type": "Mail",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Enh"
@@ -3873,7 +4292,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32580",
   "slot": "Wrist",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Enh"
@@ -3889,7 +4310,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32568",
   "slot": "Wrist",
   "type": "Plate",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [],
   "notes": "Mail version out-damages these even for Warr/Ret. Weak item."
  },
@@ -3901,7 +4324,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32581",
   "slot": "Shoulder",
   "type": "Leather",
-  "role": "Physical",
+  "roles": [
+   "Physical"
+  ],
   "priority": [
    {
     "spec": "Enh"
@@ -3917,7 +4342,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32587",
   "slot": "Shoulder",
   "type": "Cloth",
-  "role": "Caster",
+  "roles": [
+   "Caster"
+  ],
   "priority": [
    {
     "spec": "Shadow"
@@ -3933,7 +4360,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32585",
   "slot": "Shoulder",
   "type": "Cloth",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "class": "Priest"
@@ -3949,7 +4378,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32583",
   "slot": "Shoulder",
   "type": "Leather",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoDruid"
@@ -3965,7 +4396,9 @@
   "wowhead": "https://www.wowhead.com/tbc/item=32579",
   "slot": "Shoulder",
   "type": "Mail",
-  "role": "Healer",
+  "roles": [
+   "Healer"
+  ],
   "priority": [
    {
     "spec": "RestoShaman"

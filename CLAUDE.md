@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 440 checks, should be all green
+npm test             # 459 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -42,7 +42,7 @@ together for hand-editing.
 | `item` / `id` / `wowhead` | Name, real TBC item ID, Wowhead link |
 | `slot` | `Head` … `Two-Hand`, `Ranged`, `Relic`. Collapsed for display: all weapon slots → `Weapon`, `Ranged`+`Relic` → `Ranged/Relic` |
 | `type` | Armour class or weapon type. Displayed with tidy-ups: `2H Staff` → `Staff`, bare `Mace` → `1H Mace` (hand count derived from slot) |
-| `role` | Physical / Caster / Healer / Tank / Tier. Feeds search and `data-role`; **no longer rendered** — see §6 |
+| `roles` | What the item is *for*: any of Physical / Caster / Healer / Tank / Tier, **as a list**. Drives the editor's smart filtering, feeds search, and its first value tags the row as `data-role`. Not rendered — see §6 |
 | `priority` | Ordered list of entries, each naming the operator linking it to the previous one — see §3 |
 | `notes` | Caveats. All conditional wording lives here, never in `priority` |
 | `unique` | `true` only on the 23 unique items. **Absent means not unique** — see Repeats in §3 |
@@ -60,6 +60,13 @@ had no opinion on. `check_priority.py` enforces the distinction: an empty priori
 neither `notes` nor `unsourced` is a warning, and `unsourced` on a record that *has* a
 priority is an error — if someone later records a call for one of these, the marker comes
 off in the same edit.
+
+**`roles` replaced the single-valued `role`, Aug 2026.** One word could not say that a plate
+piece is wanted by both a Retribution and a Protection Paladin. It was seeded by
+`verify/seed_roles.py` from two sources — the specs that call an item BiS in `bis.json` (116
+items), and the old `role` for the 79 nothing ranks — then reviewed by hand. `check_priority.py`
+enforces that every record carries a non-empty list drawn from the five, and that **no cloth item
+is ever tagged `Physical`**, which is what keeps rogues and hunters off robes in the editor.
 
 ### `data/specs.json` — the class/spec registry
 
@@ -81,6 +88,14 @@ loaded but unread is what made this look done when it wasn't.
 **The key (`ProtWarr`) is the identifier every other data file stores; `name` is display
 only.** Renaming a label never touches a data file. Adding a spec is a data edit, not a
 code edit — check the icon returns 200 first.
+
+**A spec's `roles` are the kinds of loot it gears for, not what it does in a raid.** That
+distinction is load-bearing for smart filtering: `ProtPal` carries `Caster` because spellpower
+was its threat stat, `ProtWarr` carries `Physical` for threat weapons, `FeralBear` carries
+`Physical` because bears gear from agility leather, and `FeralCat` carries `Tank` because cat and
+bear share the same pieces. Fixing these on the **spec** is why almost no item needs a
+hand-written exception — the alternative was tagging every caster item `Tank` so a Prot Paladin
+could see it.
 
 **Umbrella specs.** A spec with `covers` stands for the specs it names instead of being one
 itself. `FeralDruid` covers `FeralBear` and `FeralCat`, because the two gear so differently
@@ -441,6 +456,32 @@ empty, which is every row of a list you have only just started.
 entry still steps: there is nothing to aim at on a keyboard. The menu and the add popover share
 `placeUnder()` for anchoring, so the two can't drift into two versions of the same arithmetic,
 and both close on Escape, on a click away, on leaving edit mode, and on opening another list.
+
+**Smart filtering: two layers, and they are not the same kind of rule.** `suitsItem()` decides
+what the `+` popover offers.
+
+1. **Proficiency is hard.** A class wears its own armour type and everything below it —
+   Cloth < Leather < Mail < Plate — so a Mage is never offered leather and a Hunter never plate;
+   `Idol`/`Totem`/`Libram` belong to Druid/Shaman/Paladin alone. Measured against zatar's 398
+   entries this excludes **none** of them, and `check_priority.py` now fails if the data ever
+   contradicts it. **A naive equality rule would have flagged 72** — he routinely puts Boomkin
+   and Ele on cloth and Holy Paladins on mail, which is normal TBC gearing, so never write
+   `item.type === class.armor`.
+2. **Role tags are advisory**, and run on whoever survived layer 1: the item's `roles` must meet
+   the spec's. The same crossing contradicts **59** of his own calls — a Prot Warrior on a
+   physical weapon, an Enhancement Shaman on a healer ring — which is exactly why the popover
+   **hides** rather than refuses, and why `rejectReason()` is untouched by any of this. Dragging
+   is not restricted at all.
+
+Cloth is layer 2's work, not layer 1's: anyone can physically wear cloth, and rogues stay off
+robes only because all 24 cloth items are tagged Caster/Healer.
+
+**`Show all specs` is in the popover**, not on the bar — it is a decision about the pick you are
+making. It disappears when the item suits everyone, since there would be nothing to reveal, and
+the choice persists in `lootprio.smartFilter`. The popover carries no line naming the item: it
+opens anchored under that row's `+`, so saying so again was repeating what you can see. The name
+is on the dialog's `aria-label`, for the reader that cannot see where it opened. Weapon proficiency (no Priest with a polearm) is the obvious next
+layer of the same kind and is not built.
 
 **Every gesture has a keyboard form**, which is both the accessibility requirement and the
 only reason the editor is testable — jsdom can dispatch a keydown but cannot drag. Dragging

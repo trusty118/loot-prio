@@ -20,6 +20,13 @@ OPERATORS = {">", ">>", "~>", "=", "~="}
 # weapon, not two. Ranged and Relic are single slots, and armour is one each.
 DOUBLE_SLOTS = {"Finger", "Trinket", "One-Hand", "Main-Hand", "Off-Hand"}
 
+ROLE_TAGS = {"Physical", "Caster", "Healer", "Tank", "Tier"}
+
+# Armour proficiency: a class wears its own type and everything below it. This is a
+# hard rule the editor enforces, so the data must never contradict it.
+ARMOUR_RANK = {"Cloth": 1, "Leather": 2, "Mail": 3, "Plate": 4}
+RELIC_CLASS = {"Idol": "Druid", "Totem": "Shaman", "Libram": "Paladin"}
+
 
 def main():
     reg = json.loads(SPECS.read_text(encoding="utf-8"))
@@ -38,6 +45,23 @@ def main():
             continue
         if prio:
             with_priority += 1
+
+        # `roles` says what kinds of player an item is for, and drives the editor's
+        # smart filtering. A tag is a judgement, so the only thing checkable is that
+        # it is present, non-empty, and drawn from the five.
+        tags = rec.get("roles")
+        if not isinstance(tags, list) or not tags:
+            errors.append(f"{where}: roles is {tags!r}, expected a non-empty list")
+        else:
+            bad = [t for t in tags if t not in ROLE_TAGS]
+            if bad:
+                errors.append(f"{where}: unknown role tag(s) {bad}, expected from {sorted(ROLE_TAGS)}")
+            if len(set(tags)) != len(tags):
+                errors.append(f"{where}: roles lists the same tag twice ({tags})")
+            # cloth is caster/healer gear; a Physical tag here would put rogues and
+            # hunters back on robes in the editor
+            if rec.get("type") == "Cloth" and "Physical" in tags:
+                errors.append(f"{where}: cloth tagged Physical - no cloth item in this set is")
 
         # Two different things look like an empty priority, and must not be confused:
         # the creator saying "whoever needs it" (his reasoning is in the notes), and
@@ -91,6 +115,30 @@ def main():
                     errors.append(f"{where}[{i}]: missing op")
                 elif e["op"] not in OPERATORS:
                     errors.append(f"{where}[{i}]: unknown op {e['op']!r}, expected one of {sorted(OPERATORS)}")
+
+            # Proficiency is a hard rule the editor applies, so the data must never
+            # contradict it: a class wears its own armour type and everything below,
+            # and a relic belongs to exactly one class. Tested when this was written,
+            # zatar's 398 entries break it zero times.
+            named = []
+            if has_spec and e["spec"] in specs:
+                cov = specs[e["spec"]].get("covers")
+                named = cov if cov else [e["spec"]]
+            elif has_class and e["class"] in classes:
+                named = [k for k, v in specs.items()
+                         if v["class"] == e["class"] and not v.get("covers")]
+            for s_id in named:
+                cls = specs[s_id]["class"]
+                cap = ARMOUR_RANK.get(classes[cls]["armor"], 9)
+                need = ARMOUR_RANK.get(rec.get("type"))
+                if need and need > cap:
+                    errors.append(
+                        f"{where}: {s_id} cannot wear {rec['type']} "
+                        f"({cls} wears {classes[cls]['armor']} and below)"
+                    )
+                owner = RELIC_CLASS.get(rec.get("type"))
+                if owner and cls != owner:
+                    errors.append(f"{where}: {s_id} cannot use a {rec['type']} (that is {owner} only)")
 
             # A spec may only be listed twice if that person could equip two of the
             # item: a ring, a trinket, or a one-handed weapon, and only when the

@@ -830,12 +830,6 @@ mark {
 
 .prio-pop-find:focus { outline: 1px solid var(--gold); }
 
-.prio-pop-head {
-  margin: 6px 0 4px;
-  font-size: .78rem;
-  color: var(--text-faint);
-}
-
 .prio-pop-body {
   display: flex;
   flex-wrap: wrap;
@@ -849,6 +843,27 @@ mark {
   border: 1px solid var(--line-soft);
   border-radius: var(--radius);
 }
+
+/* The escape hatch from smart filtering. Reads as a quiet aside rather than a
+   button, because it is the exception - most of the time the narrowed list is the
+   right one and this only needs to be findable. */
+.prio-pop-foot {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 6px 4px 2px;
+  font: inherit;
+  font-size: .76rem;
+  text-align: left;
+  color: var(--text-faint);
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--line-soft);
+  cursor: pointer;
+}
+
+.prio-pop-foot:hover:not(:disabled) { color: var(--gold); }
+.prio-pop-foot:disabled { cursor: default; }
 
 .prio-pop-none {
   margin: 4px 0 0;
