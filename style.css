@@ -201,19 +201,30 @@ a:hover { color: var(--gold-bright); }
   background: var(--bg-panel-2);
 }
 
-.phase-art {
+/* One strip per raid, so a phase covering three raids shows three. Each strip takes an
+   equal share and crops to fill, which is what lets a 128x64 portrait sit in a tall
+   narrow box without distorting. */
+.phase-split {
   position: absolute;
   inset: 0;
-  width: 100%;
+  display: flex;
+}
+
+.phase-split img {
+  flex: 1 1 0;
+  min-width: 0;
   height: 100%;
   object-fit: cover;
-  transition: filter .15s, opacity .15s, transform .15s;
+  transition: filter .15s, transform .15s;
   filter: grayscale(.65) brightness(.55);
 }
 
-.chip--phase:hover .phase-art { filter: grayscale(.2) brightness(.8); }
+/* a hairline seam, so two portraits do not blend into one confusing image */
+.phase-split img + img { border-left: 1px solid rgba(0, 0, 0, .55); }
 
-.chip--phase[aria-pressed="true"] .phase-art {
+.chip--phase:hover .phase-split img { filter: grayscale(.2) brightness(.8); }
+
+.chip--phase[aria-pressed="true"] .phase-split img {
   filter: none;
   transform: scale(1.03);   /* a touch of life on the one you are in */
 }

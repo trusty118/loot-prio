@@ -102,25 +102,21 @@
      This is also what makes the where-panel readable: 17 boss chips and 3 zone
      chips at once was a wall, so nothing below a phase is shown until one is
      picked, and nothing below a zone until a zone is. */
-  /* Each phase shows the Encounter Journal's tile for its signature raid - the same
-     source as every other icon here, at 256x128 rather than the 128x64 the boss
-     portraits come in, which is what makes a tile this size hold up. Serpentshrine and
-     Hyjal have no tile of their own on the CDN, so Phase 2 flies Tempest Keep and
-     Phase 3 Black Temple. All five checked for 200. */
-  var INSTANCE = "https://wow.zamimg.com/images/wow/journal/ui-ej-dungeonbutton-";
-
   var PHASES = [
-    { id: "P1", label: "Phase 1", art: INSTANCE + "karazhan.png",
-      zones: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair"] },
-    { id: "P2", label: "Phase 2", art: INSTANCE + "tempestkeep.png",
-      zones: ["Serpentshrine Cavern", "Tempest Keep"] },
-    { id: "P3", label: "Phase 3", art: INSTANCE + "blacktemple.png",
-      zones: ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"] },
-    { id: "P4", label: "Phase 4", art: INSTANCE + "zulaman.png",
-      zones: ["Zul'Aman"] },
-    { id: "P5", label: "Phase 5", art: INSTANCE + "sunwellplateau.png",
-      zones: ["Sunwell Plateau"] }
+    { id: "P1", label: "Phase 1", zones: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair"] },
+    { id: "P2", label: "Phase 2", zones: ["Serpentshrine Cavern", "Tempest Keep"] },
+    { id: "P3", label: "Phase 3", zones: ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"] },
+    { id: "P4", label: "Phase 4", zones: ["Zul'Aman"] },
+    { id: "P5", label: "Phase 5", zones: ["Sunwell Plateau"] }
   ];
+
+  /* The raids of a phase, which is not quite its zones: the crafted pseudo-zone has no
+     bosses and no art, so it has no strip on the tile. Having a boss list is the test,
+     rather than naming it, so a future crafted-style zone behaves the same. Its name is
+     still on the tooltip - the phase does cover it, it just cannot be pictured. */
+  function phaseRaids(id) {
+    return phaseZones(id).filter(function (z) { return !!BOSS_ORDER[z]; });
+  }
 
   /* The phase to land on: the last one that actually has items. Derived rather than
      hardcoded, so it follows the content - when Zul'Aman items arrive, Phase 4 becomes
@@ -1253,19 +1249,28 @@
   /* A phase is a tile rather than a pill: it is the one thing on the page you set and
      leave, so it earns the room, and the raid art says which tier you are in faster
      than the words do. Its own builder rather than another flag on chip() - the label
-     sits over the art and the count in the corner, which is not a chip layout. */
+     sits over the art and the count in the corner, which is not a chip layout.
+
+     The art is one strip per raid, side by side, so a phase covering three raids shows
+     three. That is why it uses the boss portraits every other chip uses rather than the
+     sharper 256x128 instance tiles: there is no instance tile for Serpentshrine or
+     Hyjal, so those phases could only ever have shown one of their raids. */
   function phaseChip(ph, active, count) {
     var b = document.createElement("button");
     b.type = "button";
     b.className = "chip chip--phase";
     b.setAttribute("aria-pressed", active ? "true" : "false");
 
-    var art = document.createElement("img");
-    art.className = "phase-art";
-    art.src = ph.art;
-    art.alt = "";
-    /* the tile still reads as itself if the CDN ever stops serving these */
-    art.setAttribute("onerror", "this.style.display='none'");
+    var art = document.createElement("div");
+    art.className = "phase-split";
+    phaseRaids(ph.id).forEach(function (z) {
+      var img = document.createElement("img");
+      img.src = ZONE_ICON[z];
+      img.alt = "";
+      /* the tile still reads as itself if the CDN ever stops serving these */
+      img.setAttribute("onerror", "this.style.display='none'");
+      art.appendChild(img);
+    });
     b.appendChild(art);
 
     var label = document.createElement("span");

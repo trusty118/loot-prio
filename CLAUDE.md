@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 510 checks, should be all green
+npm test             # 514 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -238,14 +238,23 @@ the rings, not the page.
 
 ### Phase, zone, boss
 
-**Phases are tiles, not pills.** Each carries its signature raid's Encounter Journal
-*instance* art — `ui-ej-dungeonbutton-<instance>.png`, which is **256x128**, four times the
-pixels of the `ui-ej-boss-*` portraits every other chip uses, and what makes a tile this size
-hold up. Serpentshrine and Mount Hyjal have no instance tile on the CDN, so Phase 2 flies
-Tempest Keep and Phase 3 Black Temple. Unpicked tiles are desaturated and dimmed; the picked
-one is full colour with a gold label, so which tier you are in reads without being read.
-`phaseChip()` builds them rather than `chip()` — a label over art with a count in the corner
-is not a chip layout, and `chip()` already carries three flags.
+**Phases are tiles, not pills**, 168x84, carrying **one strip of art per raid** — Phase 1
+shows three, Phase 3 two. Unpicked tiles are desaturated and dimmed; the picked one is full
+colour with a gold label, so which tier you are in reads without being read. `phaseChip()`
+builds them rather than `chip()`: a label over art with a count in the corner is not a chip
+layout, and `chip()` already carries three flags.
+
+`phaseRaids()` is **not** `phaseZones()`. The crafted pseudo-zone has no bosses and no art, so
+it gets no strip — having a `BOSS_ORDER` entry is the test, rather than naming it, so a future
+crafted-style zone behaves the same way. Its name stays on the tooltip: the phase does cover
+it, it just cannot be pictured.
+
+The strips use the same `ui-ej-boss-*` portraits as every other chip, at 128x64. There **is**
+sharper art on the CDN — `ui-ej-dungeonbutton-<instance>.png` at 256x128 — and the tiles used
+it at first, but there is no instance tile for Serpentshrine or Mount Hyjal, so those phases
+could only ever show one of their raids. Representing every raid beat the extra resolution.
+(`ui-ej-background-*` and `ui-ej-lorebg-*` are 512x512 and tempting from the filename; they are
+parchment textures, not art.)
 
 **The phase is a mode, not a filter.** One is always selected and there is no `All` on that
 row: which tier you are gearing for is true for a whole raid tier, where everything else on

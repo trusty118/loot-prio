@@ -54,9 +54,18 @@ ok(!phaseChips().some((c) => c.classList.contains("chip--all")),
 // A phase is a tile, not a pill: it is the one control you set and leave, so it
 // carries its raid's art at a size you can read across the room.
 ok(phaseChips().every((c) => c.classList.contains("chip--phase")), "each phase is a tile");
-ok(phaseChips().every((c) => c.querySelector("img.phase-art")), "each carries its raid art");
-ok(phaseChips().every((c) => /ui-ej-dungeonbutton-/.test(c.querySelector("img.phase-art").src)),
-   "from the Encounter Journal's instance tiles, which are 256x128 rather than 128x64");
+ok(phaseChips().every((c) => c.querySelector(".phase-split img")), "each carries raid art");
+
+// one strip per RAID, which is not the same as per zone: the crafted pseudo-zone has
+// no bosses and no art, so phase 3 shows two strips for three zones
+const strips = (n) => chipByText("#phase-chips", "Phase " + n).querySelectorAll(".phase-split img");
+ok(strips(1).length === 3, `phase 1 shows its three raids (got ${strips(1).length})`);
+ok(strips(3).length === 2, `phase 3 shows two - crafted has no art to show (got ${strips(3).length})`);
+ok(strips(4).length === 1, `phase 4 shows its one (got ${strips(4).length})`);
+ok(/illidan/.test(strips(3)[0].src) && /archimonde/.test(strips(3)[1].src),
+   "in zone order, each raid flying its final boss");
+ok(/Crafted/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),
+   "and the tooltip still names the zone that cannot be pictured");
 ok(phaseChips().every((c) => c.querySelector(".phase-label") && c.querySelector(".phase-count")),
    "with the label over the art and the count in the corner");
 ok(/Black Temple/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),
