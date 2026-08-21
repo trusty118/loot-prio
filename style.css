@@ -830,12 +830,6 @@ mark {
 
 .prio-pop-find:focus { outline: 1px solid var(--gold); }
 
-.prio-pop-head {
-  margin: 6px 0 4px;
-  font-size: .78rem;
-  color: var(--text-faint);
-}
-
 .prio-pop-body {
   display: flex;
   flex-wrap: wrap;

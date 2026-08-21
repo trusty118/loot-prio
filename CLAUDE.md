@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 457 checks, should be all green
+npm test             # 459 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -476,9 +476,11 @@ what the `+` popover offers.
 Cloth is layer 2's work, not layer 1's: anyone can physically wear cloth, and rogues stay off
 robes only because all 24 cloth items are tagged Caster/Healer.
 
-**`Show everything` is in the popover**, not on the bar — it is a decision about the pick you are
-making. It says how many are hidden, so nothing is ever silently absent, and the choice persists
-in `lootprio.smartFilter`. Weapon proficiency (no Priest with a polearm) is the obvious next
+**`Show all specs` is in the popover**, not on the bar — it is a decision about the pick you are
+making. It disappears when the item suits everyone, since there would be nothing to reveal, and
+the choice persists in `lootprio.smartFilter`. The popover carries no line naming the item: it
+opens anchored under that row's `+`, so saying so again was repeating what you can see. The name
+is on the dialog's `aria-label`, for the reader that cannot see where it opened. Weapon proficiency (no Priest with a polearm) is the obvious next
 layer of the same kind and is not built.
 
 **Every gesture has a keyboard form**, which is both the accessibility requirement and the

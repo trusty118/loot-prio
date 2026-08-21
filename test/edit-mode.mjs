@@ -171,8 +171,11 @@ const popOpen = () => d.querySelector(".prio-pop") &&
 ok(!d.querySelector(".prio-pop"), "no popover exists until a + is pressed");
 click(w, rowFor(d, UNIQUE).querySelector(".prio-add"));
 ok(popOpen(), "the + opens it");
-ok(d.querySelector(".prio-pop-head").textContent.includes(UNIQUE),
-   "and it says which row it is adding to");
+// The popover is anchored under the row's +, so a line naming the item was just
+// repeating what you can see. It survives for screen readers, which cannot.
+ok(!d.querySelector(".prio-pop-head"), "no line repeating which item you clicked");
+ok(d.querySelector(".prio-pop").getAttribute("aria-label").includes(UNIQUE),
+   "the item is named to a screen reader instead");
 // Smart filtering is on by default, so the popover offers what the item suits
 // rather than all 37. UNIQUE is a plate item, so no cloth or leather wearer.
 const offered = () => [...d.querySelectorAll(".prio-pop-icon")].map((b) => b.dataset.tip);
@@ -210,7 +213,7 @@ ok(onCloth.includes("Protection Paladin"),
 
 // --- the escape hatch --------------------------------------------------------------
 const foot = () => d.querySelector(".prio-pop-foot");
-ok(/hidden/.test(foot().textContent), `the popover says what it is hiding: "${foot().textContent}"`);
+ok(foot().textContent === "Show all specs", `the control says what it does: "${foot().textContent}"`);
 click(w, foot());
 ok(offered().length > 30, `show everything brings all of them back: ${offered().length}`);
 ok(offered().includes("Rogue"), "including the ones the item does not suit");
@@ -218,6 +221,14 @@ ok(w.localStorage.getItem("lootprio.smartFilter") === "off", "and the choice is 
 click(w, foot());
 ok(offered().length < 30 && w.localStorage.getItem("lootprio.smartFilter") === "on",
    "clicking again goes back to filtering");
+
+// an item that suits everyone has nothing to reveal, so the control is not there
+const OPEN = data.find((r) => r.roles.length >= 3 && !["Cloth","Leather","Mail","Plate"].includes(r.type));
+if (OPEN) {
+  click(w, rowFor(d, OPEN.item).querySelector(".prio-add"));
+  ok(foot().hidden === (offered().length === 37),
+     `nothing hidden on ${OPEN.item} means no control (offers ${offered().length})`);
+}
 
 // hand the popover back where the next block expects it
 click(w, rowFor(d, UNIQUE).querySelector(".prio-add"));

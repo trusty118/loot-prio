@@ -1645,10 +1645,6 @@
     field.setAttribute("aria-label", "Find a class or spec");
     pop.appendChild(field);
 
-    var head = document.createElement("p");
-    head.className = "prio-pop-head";
-    pop.appendChild(head);
-
     var body = document.createElement("div");
     body.className = "prio-pop-body";
     pop.appendChild(body);
@@ -1689,9 +1685,7 @@
 
   function fillPop() {
     var body = pop.querySelector(".prio-pop-body");
-    var head = pop.querySelector(".prio-pop-head");
     body.innerHTML = "";
-    head.textContent = popFor ? "Add to " + popFor.item : "";
 
     var groups = {};
     var order = [];
@@ -1721,16 +1715,10 @@
        off is how you build something the rules do not expect - a healing warrior. */
     var foot = pop.querySelector(".prio-pop-foot");
     var hidden = popFor ? pickableEntries(null).length - pickableEntries(popFor).length : 0;
-    foot.hidden = false;
-    if (smartFilter()) {
-      foot.textContent = hidden
-        ? hidden + " hidden that this item does not suit - show everything"
-        : "showing everything this item suits";
-      foot.disabled = !hidden;
-    } else {
-      foot.textContent = "showing every spec - go back to what this item suits";
-      foot.disabled = false;
-    }
+    foot.textContent = smartFilter() ? "Show all specs" : "Show only what suits";
+    /* nothing to reveal on an item that suits everyone, so the control goes away
+       rather than sitting there doing nothing */
+    foot.hidden = smartFilter() && !hidden;
   }
 
   function popIcon(entry, resolved) {
@@ -1776,6 +1764,7 @@
     if (!pop) buildPop();
     popFor = rec;
     popQuery = "";
+    pop.setAttribute("aria-label", "Add a spec to " + rec.item);
     pop.querySelector(".prio-pop-find").value = "";
     pop.style.display = "block";
     fillPop();
