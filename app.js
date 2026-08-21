@@ -132,6 +132,60 @@
     return TIER_CLASSES[rec.type] || null;
   }
 
+  /* ---------- what an item suits ----------
+     Two layers, in order, and they are deliberately not the same kind of rule.
+
+     1. Proficiency is HARD. A class wears its own armour type and everything below
+        it - Cloth < Leather < Mail < Plate - so a Mage is never offered leather and
+        a Hunter never plate; a relic belongs to exactly one class. Checked against
+        zatar's 398 entries, this breaks none of them, and check_priority.py keeps
+        it that way.
+
+     2. Role tags are ADVISORY, and run on whoever survived the first layer. They
+        cross the item's `roles` with the spec's, which is why ProtPal carries
+        Caster (spellpower was its threat stat) rather than every caster item
+        needing a Tank tag. Advisory because the same crossing contradicts 59 of
+        zatar's own calls - a Prot Warrior on a physical weapon, an Enhancement
+        Shaman on a healer ring - so the editor hides these, never refuses them. */
+
+  var ARMOUR_RANK = { "Cloth": 1, "Leather": 2, "Mail": 3, "Plate": 4 };
+  var RELIC_CLASS = { "Idol": "Druid", "Totem": "Shaman", "Libram": "Paladin" };
+
+  /* Layer 1 on its own: can this class physically use the item at all? */
+  function canUse(clsId, rec) {
+    var info = REG.classes[clsId];
+    if (!info) return false;
+
+    var need = ARMOUR_RANK[rec.type];
+    if (need && need > (ARMOUR_RANK[info.armor] || 9)) return false;
+
+    var owner = RELIC_CLASS[rec.type];
+    if (owner && clsId !== owner) return false;
+
+    return true;
+  }
+
+  /* Both layers, for one spec. Tier tokens answer through the three classes they
+     serve, which TIER_CLASSES already knows. */
+  function suitsItem(rec, specId) {
+    var spec = REG.specs[specId];
+    if (!spec) return false;
+
+    var tokenClasses = tierClasses(rec);
+    if (tokenClasses) return tokenClasses.indexOf(spec["class"]) !== -1;
+
+    if (!canUse(spec["class"], rec)) return false;
+
+    var tags = rec.roles || [];
+    if (!tags.length) return true;              /* nothing said, so nothing excluded */
+    return (spec.roles || []).some(function (r) { return tags.indexOf(r) !== -1; });
+  }
+
+  /* A class is offered when any of its specs is. */
+  function classSuitsItem(rec, clsId) {
+    return (CLASS_SPECS[clsId] || []).some(function (id) { return suitsItem(rec, id); });
+  }
+
   /* Does this one class satisfy the role and type filters simultaneously? A token
      surfaces under "Caster + Cloth" only if one and the same class is both -
      Conqueror has a tank (Paladin) and cloth wearers (Priest/Warlock), but no
@@ -496,6 +550,20 @@
      every call site. */
 
   var STORE_KEY = "lootprio.templates";
+  var SMART_KEY = "lootprio.smartFilter";
+
+  /* Smart filtering narrows the add popover to specs the item suits. On by default:
+     most of the time the full 37 is noise, and the few real exceptions are reached
+     by turning it off rather than by never filtering. */
+  function smartFilter() {
+    try { return window.localStorage.getItem(SMART_KEY) !== "off"; }
+    catch (e) { return true; }
+  }
+
+  function setSmartFilter(on) {
+    try { window.localStorage.setItem(SMART_KEY, on ? "on" : "off"); }
+    catch (e) { /* private browsing: the session still works, it just won't persist */ }
+  }
 
   var localStore = {
     read: function () {
@@ -869,7 +937,7 @@
       var q = state.q.toLowerCase();
       /* search both the raw and displayed forms, so "2H mace" and "mace" both hit */
       var hay = [rec.item, rec.boss, rec.zone, priorityText(effectivePriority(rec)), rec.notes,
-                 rec.slot, slotGroup(rec.slot), rec.type, typeLabel(rec), rec.role,
+                 rec.slot, slotGroup(rec.slot), rec.type, typeLabel(rec), (rec.roles || []).join(" "),
                  rec.unsourced ? UNSOURCED_TAG : ""]
         .join("   ").toLowerCase();
       if (hay.indexOf(q) === -1) return false;
@@ -1546,11 +1614,18 @@
   }
 
   /* Every pickable entry once: each class, then its specs. */
-  function pickableEntries() {
+  /* Everything pickable, narrowed to what the item suits unless smart filtering is
+     off. A class is offered when any of its specs is, matching how a class icon
+     already answers for the specs behind it. */
+  function pickableEntries(rec) {
     var out = [];
+    var smart = rec && smartFilter();
+
     Object.keys(REG.classes).forEach(function (clsId) {
+      if (smart && !classSuitsItem(rec, clsId)) return;
       out.push({ clsId: clsId, entry: { "class": clsId } });
       (CLASS_SPECS[clsId] || []).forEach(function (id) {
+        if (smart && !suitsItem(rec, id)) return;
         out.push({ clsId: clsId, entry: { spec: id } });
       });
     });
@@ -1577,6 +1652,18 @@
     var body = document.createElement("div");
     body.className = "prio-pop-body";
     pop.appendChild(body);
+
+    /* the escape hatch from smart filtering, in the popover rather than on the bar:
+       it is a decision about this pick, made where the picking happens */
+    var foot = document.createElement("button");
+    foot.type = "button";
+    foot.className = "prio-pop-foot";
+    foot.addEventListener("click", function () {
+      setSmartFilter(!smartFilter());
+      fillPop();
+      pop.querySelector(".prio-pop-find").focus();
+    });
+    pop.appendChild(foot);
 
     document.body.appendChild(pop);
 
@@ -1610,7 +1697,7 @@
     var order = [];
     var shown = 0;
 
-    pickableEntries().forEach(function (e) {
+    pickableEntries(popFor).forEach(function (e) {
       var resolved = resolveEntry(e.entry);
       if (popQuery && resolved.name.toLowerCase().indexOf(popQuery) === -1) return;
       if (!groups[e.clsId]) {
@@ -1628,6 +1715,21 @@
       none.className = "prio-pop-none";
       none.textContent = "Nothing matches that.";
       body.appendChild(none);
+    }
+
+    /* Never hide silently: say how many are missing and offer them back. Turning it
+       off is how you build something the rules do not expect - a healing warrior. */
+    var foot = pop.querySelector(".prio-pop-foot");
+    var hidden = popFor ? pickableEntries(null).length - pickableEntries(popFor).length : 0;
+    foot.hidden = false;
+    if (smartFilter()) {
+      foot.textContent = hidden
+        ? hidden + " hidden that this item does not suit - show everything"
+        : "showing everything this item suits";
+      foot.disabled = !hidden;
+    } else {
+      foot.textContent = "showing every spec - go back to what this item suits";
+      foot.disabled = false;
     }
   }
 
@@ -1920,7 +2022,9 @@
 
   function renderRow(rec) {
     var tr = document.createElement("tr");
-    tr.dataset.role = rec.role;
+    /* one value, as it always was - the CSS hooks and the token matching expect a
+       single word. The rest of the tags reach search through the haystack. */
+    tr.dataset.role = (rec.roles || [])[0] || "";
     tr.dataset.id = String(rec.id);
 
     tr.appendChild(itemCell(rec));

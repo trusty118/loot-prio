@@ -130,9 +130,21 @@ ok(!doc.querySelector("#role-chips"), "no role chip row in the markup");
 ok(!/SHOW_ROLE|roleGlyph|ROLE_GLYPH|renderRoleChips/.test(appSrc), "no role UI left in app.js");
 ok(!/state\.roles/.test(appSrc), "no role filter state left");
 ok(!/role-pill|role-glyph|--role-/.test(cssText), "no role styles left in style.css");
-// the data survives: role still feeds search and still tags the row
-ok(rows().every((tr) => tr.dataset.role), "every row still carries its role in the dom");
-ok(data.every((r) => r.role), "the role field is untouched in loot_data.json");
+// the data survives, now multi-valued: `roles` feeds search and still tags the row
+const ROLE_TAGS = ["Physical", "Caster", "Healer", "Tank", "Tier"];
+ok(rows().every((tr) => tr.dataset.role), "every row still carries a role in the dom");
+ok(data.every((r) => Array.isArray(r.roles) && r.roles.length),
+   "every record carries a non-empty roles array");
+ok(data.every((r) => r.roles.every((x) => ROLE_TAGS.includes(x))),
+   "and every tag is one of the five");
+ok(!data.some((r) => "role" in r), "the old single-valued role field is gone");
+ok(data.some((r) => r.roles.length > 1), "some items are tagged for more than one kind of player");
+
+// cloth is caster/healer gear: no cloth item may be tagged Physical, or the editor
+// would start offering rogues and hunters a robe
+const clothPhysical = data.filter((r) => r.type === "Cloth" && r.roles.includes("Physical"));
+ok(clothPhysical.length === 0,
+   `no cloth item is tagged Physical (${clothPhysical.map((r) => r.item).join(", ") || "none"})`);
 
 // --- filter interactions ---
 const chipByText = (sel, text) =>

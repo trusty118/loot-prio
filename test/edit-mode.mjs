@@ -173,8 +173,54 @@ click(w, rowFor(d, UNIQUE).querySelector(".prio-add"));
 ok(popOpen(), "the + opens it");
 ok(d.querySelector(".prio-pop-head").textContent.includes(UNIQUE),
    "and it says which row it is adding to");
-ok(d.querySelectorAll(".prio-pop-icon").length > 30,
-   `it offers every class and spec: ${d.querySelectorAll(".prio-pop-icon").length} icons`);
+// Smart filtering is on by default, so the popover offers what the item suits
+// rather than all 37. UNIQUE is a plate item, so no cloth or leather wearer.
+const offered = () => [...d.querySelectorAll(".prio-pop-icon")].map((b) => b.dataset.tip);
+const rec = (name) => data.find((r) => r.item.includes(name));
+ok(offered().length < 30 && offered().length > 0,
+   `it offers what the item suits, not everything: ${offered().length} icons`);
+// Ring of Deceitful Intent is a Ring, so nothing is excluded by armour - a mage can
+// physically wear any ring. It is the TAG layer that keeps casters off it.
+ok(rec(UNIQUE).roles.join() === "Physical,Tank", "the fixture is tagged Physical, Tank");
+ok(!offered().includes("Mage") && !offered().includes("Arcane Mage"),
+   "the tag layer keeps a Mage off a physical/tank ring");
+ok(offered().includes("Warrior"), "but a Warrior, who wants exactly that, is offered");
+
+// --- layer 1: proficiency, on items where armour actually decides ------------------
+const PLATE = data.find((r) => r.type === "Plate").item;
+const CLOTH = data.find((r) => r.type === "Cloth").item;
+
+click(w, rowFor(d, PLATE).querySelector(".prio-add"));
+const onPlate = offered();
+ok(!["Mage", "Priest", "Warlock", "Rogue", "Hunter", "Druid", "Shaman"]
+     .some((c) => onPlate.includes(c)),
+   `plate offers no class that cannot wear it (${onPlate.filter((n) => !n.includes(" ")).join(", ")})`);
+ok(onPlate.includes("Warrior") || onPlate.includes("Paladin"), "plate offers the plate wearers");
+
+click(w, rowFor(d, CLOTH).querySelector(".prio-add"));
+const onCloth = offered();
+ok(!["Rogue", "Hunter", "Warrior"].some((c) => onCloth.includes(c)),
+   "cloth offers no physical class - the tags do that, since anyone can wear cloth");
+ok(onCloth.includes("Mage") && onCloth.includes("Priest"), "cloth offers casters and healers");
+
+// Prot Paladin is the reason spec roles are wider than raid roles: spellpower was
+// its threat stat, so caster gear must reach it.
+ok(onCloth.includes("Protection Paladin"),
+   "a caster cloth item still offers a Prot Paladin");
+
+// --- the escape hatch --------------------------------------------------------------
+const foot = () => d.querySelector(".prio-pop-foot");
+ok(/hidden/.test(foot().textContent), `the popover says what it is hiding: "${foot().textContent}"`);
+click(w, foot());
+ok(offered().length > 30, `show everything brings all of them back: ${offered().length}`);
+ok(offered().includes("Rogue"), "including the ones the item does not suit");
+ok(w.localStorage.getItem("lootprio.smartFilter") === "off", "and the choice is remembered");
+click(w, foot());
+ok(offered().length < 30 && w.localStorage.getItem("lootprio.smartFilter") === "on",
+   "clicking again goes back to filtering");
+
+// hand the popover back where the next block expects it
+click(w, rowFor(d, UNIQUE).querySelector(".prio-add"));
 
 const before = namesIn(d, UNIQUE).length;
 click(w, popIcon("Arms Warrior"));
@@ -206,12 +252,15 @@ ok(d.querySelector(".prio-pop-none"), "and it says so when nothing matches");
 key(w, d.querySelector(".prio-pop-find"), "Escape");
 ok(!popOpen(), "Escape closes it");
 
-const DOUBLE = "Blessed Band of Karabor";         // not unique, Finger
+const DOUBLE = "Blessed Band of Karabor";         // not unique, Finger, healer ring
+// a healer spec, because smart filtering will not offer an Arms Warrior a healer ring -
+// and Resto Druid is the spec zatar himself lists on it twice
+const TWICE = "Restoration Druid";
 click(w, rowFor(d, DOUBLE).querySelector(".prio-add"));
 const dbefore = namesIn(d, DOUBLE).length;
-click(w, popIcon("Arms Warrior"));
+click(w, popIcon(TWICE));
 click(w, rowFor(d, DOUBLE).querySelector(".prio-add"));
-click(w, popIcon("Arms Warrior"));
+click(w, popIcon(TWICE));
 ok(namesIn(d, DOUBLE).length === dbefore + 2,
    "a non-unique ring accepts the same spec twice - you can wear two");
 
