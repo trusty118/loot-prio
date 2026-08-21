@@ -50,6 +50,19 @@ const phaseChips = () => [...doc.querySelectorAll("#phase-chips .chip")];
 ok(phaseChips().length === 5, `five phases and no All chip (got ${phaseChips().length})`);
 ok(!phaseChips().some((c) => c.classList.contains("chip--all")),
    "there is no every-phase state to return to");
+
+// A phase is a tile, not a pill: it is the one control you set and leave, so it
+// carries its raid's art at a size you can read across the room.
+ok(phaseChips().every((c) => c.classList.contains("chip--phase")), "each phase is a tile");
+ok(phaseChips().every((c) => c.querySelector("img.phase-art")), "each carries its raid art");
+ok(phaseChips().every((c) => /ui-ej-dungeonbutton-/.test(c.querySelector("img.phase-art").src)),
+   "from the Encounter Journal's instance tiles, which are 256x128 rather than 128x64");
+ok(phaseChips().every((c) => c.querySelector(".phase-label") && c.querySelector(".phase-count")),
+   "with the label over the art and the count in the corner");
+ok(/Black Temple/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),
+   `and the raids it covers on hover: "${chipByText("#phase-chips", "Phase 3").dataset.tip}"`);
+ok(phaseChips().every((c) => c.querySelector("img").getAttribute("onerror")),
+   "the art falls back rather than leaving a broken tile");
 const picked = () => phaseChips().find((c) => c.getAttribute("aria-pressed") === "true");
 ok(!!picked(), "one of them is picked on load");
 ok(picked().textContent.trim().startsWith("Phase 3"),
@@ -105,6 +118,8 @@ const colClasses = tables.map((t) => [...t.querySelectorAll("colgroup col")].map
 ok(new Set(colClasses).size === 1, `all ${tables.length} tables use identical column classes`);
 const cssText = fs.readFileSync(path.join(root, "style.css"), "utf8");
 ok(/table-layout:\s*fixed/.test(cssText), "tables use fixed layout so widths are honoured");
+ok(/\.chip--phase\s*\{[^}]*height/.test(cssText),
+   "the phase tile has a size of its own rather than inheriting a pill's");
 ok(/\.c-item\s*\{[^}]*width/.test(cssText), "column widths are declared in css");
 
 // verify flags

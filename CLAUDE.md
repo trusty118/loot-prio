@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 503 checks, should be all green
+npm test             # 510 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -237,6 +237,15 @@ recover it from the display name — forms make that lossy (`Feral Druid (cat)`)
 the rings, not the page.
 
 ### Phase, zone, boss
+
+**Phases are tiles, not pills.** Each carries its signature raid's Encounter Journal
+*instance* art — `ui-ej-dungeonbutton-<instance>.png`, which is **256x128**, four times the
+pixels of the `ui-ej-boss-*` portraits every other chip uses, and what makes a tile this size
+hold up. Serpentshrine and Mount Hyjal have no instance tile on the CDN, so Phase 2 flies
+Tempest Keep and Phase 3 Black Temple. Unpicked tiles are desaturated and dimmed; the picked
+one is full colour with a gold label, so which tier you are in reads without being read.
+`phaseChip()` builds them rather than `chip()` — a label over art with a count in the corner
+is not a chip layout, and `chip()` already carries three flags.
 
 **The phase is a mode, not a filter.** One is always selected and there is no `All` on that
 row: which tier you are gearing for is true for a whole raid tier, where everything else on

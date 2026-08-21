@@ -185,6 +185,70 @@ a:hover { color: var(--gold-bright); }
 
 .chip:hover { background: #302820; color: var(--text); }
 
+/* ---------- phase tiles ----------
+   The phase is the one control you set and leave, so it gets room the others do not:
+   a 2:1 tile carrying its raid's Encounter Journal art, at the 256x128 those come in.
+   Unpicked tiles are dimmed and desaturated so the current phase reads at a glance
+   from across the room, which is the whole point of using art here. */
+.chip--phase {
+  position: relative;
+  width: 168px;
+  height: 84px;
+  padding: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  align-items: flex-end;
+  background: var(--bg-panel-2);
+}
+
+.phase-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter .15s, opacity .15s, transform .15s;
+  filter: grayscale(.65) brightness(.55);
+}
+
+.chip--phase:hover .phase-art { filter: grayscale(.2) brightness(.8); }
+
+.chip--phase[aria-pressed="true"] .phase-art {
+  filter: none;
+  transform: scale(1.03);   /* a touch of life on the one you are in */
+}
+
+/* the label sits on the art, so it carries its own contrast rather than relying on
+   whatever happens to be behind it */
+.phase-label {
+  position: relative;
+  z-index: 1;
+  padding: 6px 9px;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--text);
+  text-shadow: 0 1px 3px #000, 0 0 10px #000;
+}
+
+.chip--phase[aria-pressed="true"] .phase-label { color: var(--gold-bright); }
+
+.phase-count {
+  position: absolute;
+  z-index: 1;
+  top: 5px;
+  right: 7px;
+  margin: 0;
+  opacity: 1;
+  color: var(--text-dim);
+  text-shadow: 0 1px 3px #000, 0 0 8px #000;
+}
+
+.chip--phase[aria-pressed="true"] { border-color: var(--gold-bright); }
+.chip--phase[aria-pressed="true"] .phase-count { color: var(--gold); }
+
+/* a phase with nothing in it yet says so by being flat, not by being hidden */
+.chip--phase:not([aria-pressed="true"]) .phase-count { opacity: .8; }
+
 /* Class and spec chips are the icon and nothing else - a name and a count on each
    of 27 chips buried the icons they were labelling. Both live in the tooltip. */
 .chip--icon {
