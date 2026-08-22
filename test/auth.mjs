@@ -59,6 +59,15 @@ function fakeSupabase() {
   return {
     _rows: rows,
     from,
+    /* The real one is a security-definer function: the lists table stays unreadable to
+       an anonymous caller, and this can only ever return a row that is both flagged
+       shared and matched by an exact token. The fake enforces the same two conditions,
+       because a fake that is laxer than the thing it stands for tests nothing. */
+    rpc: (name, args) => {
+      if (name !== "get_shared_list") return Promise.resolve({ data: null, error: { message: "no such function" } });
+      const hit = [...rows.values()].find((r) => r.shared === true && r.share_token === args.token);
+      return Promise.resolve({ data: hit ? [hit] : [], error: null });
+    },
     auth: {
       getSession: () => Promise.resolve({ data: { session }, error: null }),
       onAuthStateChange: (cb) => { listeners.push(cb); return { data: { subscription: {} } }; },
@@ -268,6 +277,76 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   ok(shown(w, "sign-in") && !shown(w, "account"), "signing out returns the sign-in button");
   ok(sdk._rows.size === 1, "the account keeps its lists");
   ok(w.localStorage.getItem("lootprio.templates") === localBefore, "and this browser keeps its own");
+}
+
+// ---------------------------------------------------------------------------------
+// Live shared links. The whole template used to travel in the URL, which capped what a
+// list could hold; this carries a token instead, so length stops being a question.
+// ---------------------------------------------------------------------------------
+{
+  const sdk = fakeSupabase();
+  const w = boot({ configured: true, sdk });
+  await settle();
+  sdk.auth._signIn("Trusty");
+  await settle();
+  newList(w);
+  await settle();
+
+  let copied = "";
+  w.navigator.clipboard = { writeText: (t) => { copied = t; return Promise.resolve(); } };
+
+  // Copy link, from the list menu
+  $(w, "list-trigger").click();
+  const menu = w.document.querySelector(".list-menu");
+  [...menu.querySelectorAll(".lm-item")].find((b) => b.textContent.trim() === "Copy link").click();
+  await settle();
+
+  ok(/[?&]s=/.test(copied), `signed in, the link carries a token rather than the list (${copied.slice(0, 60)}\u2026)`);
+  ok(copied.length < 200, `and it is short whatever the list holds (${copied.length} chars)`);
+  ok(!/#t=/.test(copied), "so nothing of the list itself is in the url");
+
+  const row = [...sdk._rows.values()][0];
+  ok(row.shared === true, "sharing flags the row, so the read function will return it");
+  ok(row.share_token && row.share_token.length >= 20,
+     `and mints a long random token (${row.share_token && row.share_token.length} chars)`);
+  ok(row.share_token !== row.id,
+     "never the list id, which is four hex characters and could simply be guessed");
+
+  // the token resolves for someone else, and only while it is shared
+  const token = row.share_token;
+  const seen = await sdk.rpc("get_shared_list", { token });
+  ok(seen.data.length === 1, "the token opens the list for someone who has the link");
+  const wrong = await sdk.rpc("get_shared_list", { token: "not-the-token" });
+  ok(wrong.data.length === 0, "and a token that is not it opens nothing");
+
+  // Stop sharing
+  $(w, "list-trigger").click();
+  const m2 = w.document.querySelector(".list-menu");
+  const stop = [...m2.querySelectorAll(".lm-item")].find((b) => b.textContent.trim() === "Stop sharing");
+  ok(stop, "a live link needs a way to stop being one, so the menu offers it");
+  stop.click();
+  await settle();
+  ok([...sdk._rows.values()][0].shared === false, "which clears the flag");
+  const after = await sdk.rpc("get_shared_list", { token });
+  ok(after.data.length === 0, "and the link stops opening it, token or not");
+}
+
+// ---------------------------------------------------------------------------------
+// Signed out there is nothing to point at, so the whole list still travels in the url.
+// ---------------------------------------------------------------------------------
+{
+  const w = boot();
+  await settle();
+  newList(w);
+  await settle();
+  let copied = "";
+  w.navigator.clipboard = { writeText: (t) => { copied = t; return Promise.resolve(); } };
+  $(w, "list-trigger").click();
+  const menu = w.document.querySelector(".list-menu");
+  [...menu.querySelectorAll(".lm-item")].find((b) => b.textContent.trim() === "Copy link").click();
+  await settle();
+  ok(/#t=/.test(copied), "signed out, Copy link still puts the whole list in the url");
+  ok(!/[?&]s=/.test(copied), "because there is nothing in a database to point at");
 }
 
 console.log(fail.length ? `\n${fail.length} FAILURES` : "\nAll checks passed");

@@ -642,6 +642,35 @@ zatar's** — jsdom cannot measure layout, but it can assert the mechanism.
 
 ### Sharing by link
 
+**Two paths, chosen by whether you are signed in, and they mean different things.**
+
+**Signed in → `?s=<token>`, and the link is live.** It carries a token, not the list, so it
+is ~30 characters however much the list holds — which is what makes unbounded notes possible
+at all. The recipient reads the row, so a call you fix reaches everyone holding the link.
+`Stop sharing` clears the flag and the link stops resolving; so does deleting the list. That
+is the honest consequence of live rather than a defect.
+
+**The token is never the list id.** Ids are `t_9f3c` — four hex characters — so a link built
+from one could be guessed by trying ids until something came back. `makeShareToken()` is 128
+bits from `crypto.getRandomValues`.
+
+**Anonymous reads go through a `security definer` function, not a relaxed policy.** The
+obvious `using (shared = true)` would let anyone select **every shared list on the site** in
+one query; shared lists should be readable by people who have the link, not enumerable by
+people who do not. `get_shared_list(token)` can only return a row that is both flagged
+`shared` and matched by an exact token, and the `lists` table itself stays unreadable to
+anonymous callers. `docs/sharing-setup.md` has the SQL and the two curl checks that prove it.
+
+**Signed out → `#t=`, exactly as before.** There is nothing in a database to point at, and
+the site has to keep working without one. That link is frozen and size-capped, which is the
+honest trade.
+
+**A `?s=` link cannot be read at boot** — the SDK is still arriving. `loadSharedTemplate()`
+reports it as handled and `initAuth()`'s `getSession()` is where it actually resolves. Same
+shape as the sign-in race, for the same reason.
+
+### The `#t=` encoding
+
 `encodeTemplate` / `decodeTemplate` gzip via `CompressionStream` and base64url into `#t=`.
 The `z` prefix marks gzip, `r` raw base64 for browsers without it. In the **hash fragment**
 it never reaches a server.

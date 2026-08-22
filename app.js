@@ -906,7 +906,11 @@
       created: row.created,
       v: row.v,
       base: row.base,
-      priorities: row.priorities
+      priorities: row.priorities,
+      /* carried so the menu knows whether to offer Stop sharing, and so a second
+         Copy link reuses the token the first one minted rather than orphaning it */
+      share_token: row.share_token || null,
+      shared: !!row.shared
     };
   }
 
@@ -922,12 +926,13 @@
        priorities either way, and the database can compute it once per write instead of
        the client computing it once per read. */
     list: function () {
-      return sb.from("lists").select("id,name,created,priorities")
+      return sb.from("lists").select("id,name,created,priorities,shared")
         .order("updated_at", { ascending: false })
         .then(function (res) {
           if (res.error) throw new Error(res.error.message);
           return (res.data || []).map(function (r) {
-            return { id: r.id, name: r.name, created: r.created, filled: filledCount(r.priorities) };
+            return { id: r.id, name: r.name, created: r.created,
+                     filled: filledCount(r.priorities), shared: !!r.shared };
           });
         });
     },
@@ -950,6 +955,8 @@
         v: t.v,
         base: t.base,
         priorities: t.priorities,
+        share_token: t.share_token || null,
+        shared: !!t.shared,
         updated_at: new Date().toISOString()
       }).then(function (res) {
         if (res.error) throw new Error("Could not save: " + res.error.message);
@@ -2950,6 +2957,10 @@
       syncStore();
       refreshLists();
       renderTemplateBar();
+      /* A ?s= link is resolved against Supabase, so it cannot be read at boot - the SDK
+         is still arriving then. loadSharedTemplate() reports it as handled and this is
+         where it actually happens. */
+      if (!activeTemplate) loadSharedByToken();
     });
   }
   var nameTimer = null;
@@ -3316,6 +3327,12 @@
       closeListMenu(); copyShareLink();
     }));
 
+    if (activeIsMine && activeTemplate.shared) {
+      listMenu.appendChild(menuItem("Stop sharing", "", function () {
+        closeListMenu(); stopSharing();
+      }));
+    }
+
     if (activeIsMine) {
       listMenu.appendChild(document.createElement("hr"));
       listMenu.appendChild(menuItem("Delete list\u2026", "lm-item--danger", function () {
@@ -3436,16 +3453,30 @@
 
   function copyShareLink() {
     if (!activeTemplate) return;
+    var server = shareServerSide();
+    if (server) {
+      server.then(function (url) {
+        deliverLink(url, "Link copied - anyone with it sees your edits as you make them");
+        refreshLists();
+      }, function (err) { announce("Could not share: " + err.message); });
+      return;
+    }
+    /* Signed out there is nothing in the database to point at, so the whole list travels
+       in the link exactly as it always has. It is capped and frozen, and that is the
+       honest trade for a site that has to work without a backend. */
     encodeTemplate(activeTemplate).then(function (code) {
       var url = location.origin + location.pathname + "#t=" + code;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(
-          function () { announce("Link copied (" + url.length + " characters)"); },
-          function () { offerLink(url); });
-      } else {
-        offerLink(url);
-      }
+      deliverLink(url, "Link copied (" + url.length + " characters)");
     }, function (err) { announce(err.message); });
+  }
+
+  function deliverLink(url, said) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function () { announce(said); },
+                                              function () { offerLink(url); });
+    } else {
+      offerLink(url);
+    }
   }
 
   /* New and Make a copy differ only in what they seed. Both write the list at once,
@@ -3499,7 +3530,72 @@
   /* A #t= link opens someone else's list. It is untrusted input, so it is validated
      before any of it reaches the table, and refused out loud if it does not hold up.
      It opens as reference, not as yours: Make a copy is how you keep it. */
+  /* 128 bits from the platform's CSPRNG, base64url'd. Never the list id: ids are
+     `t_9f3c`, four hex characters, so a link built from one could be guessed by trying
+     ids until something came back. */
+  function makeShareToken() {
+    var b = new Uint8Array(16);
+    (window.crypto || window.msCrypto).getRandomValues(b);
+    var s = "";
+    for (var i = 0; i < b.length; i++) s += String.fromCharCode(b[i]);
+    return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+
+  /* A link that carries a token instead of the list. The whole template used to travel
+     in the URL, which capped what a list could hold - the notes are what would have
+     broken it. This carries about thirty characters no matter how much the list says.
+
+     It is also live: the recipient reads the row, so a call you fix reaches everyone
+     holding the link. That is a real change from the frozen copy `#t=` gives, and it is
+     why Stop sharing exists - a live link needs a way to stop being one. */
+  function shareServerSide() {
+    if (!activeTemplate) return null;
+    if (!(signedIn() && supabaseReady() && activeIsMine)) return null;
+    if (!activeTemplate.share_token) activeTemplate.share_token = makeShareToken();
+    activeTemplate.shared = true;
+    unsaved = true;
+    return saveNow().then(function () {
+      return location.origin + location.pathname + "?s=" +
+        encodeURIComponent(activeTemplate.share_token) + location.hash;
+    });
+  }
+
+  function stopSharing() {
+    if (!activeTemplate || !activeIsMine) return;
+    activeTemplate.shared = false;
+    unsaved = true;
+    saveNow().then(function () {
+      announce("Stopped sharing \u201c" + activeTemplate.name + "\u201d - the link no longer opens it");
+      renderTemplateBar();
+    });
+  }
+
+  /* Someone else's list, fetched by token. The table itself stays unreadable to an
+     anonymous caller - this goes through a security-definer function that can only
+     return a row that is both flagged shared and matched by an exact token. */
+  function loadSharedByToken() {
+    var m = /[?&]s=([^&]+)/.exec(location.search);
+    if (!m) return false;
+    if (!supabaseReady()) return true;    /* handled, just not yet - see initAuth */
+    sb.rpc("get_shared_list", { token: decodeURIComponent(m[1]) }).then(function (res) {
+      var row = res.data && res.data.length ? res.data[0] : null;
+      if (res.error || !row) {
+        announce(res.error ? "That shared link did not work: " + res.error.message
+                           : "That link does not open a list any more");
+        update();
+        return;
+      }
+      var why = validateTemplate(row);
+      if (why) { announce("That shared list will not load: " + why); update(); return; }
+      openTemplate(row, false);
+      announce("Opened shared list: " + row.name + " - Make a copy to change it");
+      update();
+    });
+    return true;
+  }
+
   function loadSharedTemplate() {
+    if (loadSharedByToken()) return;
     var m = /(?:^|&)t=([^&]+)/.exec(location.hash.replace(/^#/, ""));
     if (!m) return;
     decodeTemplate(decodeURIComponent(m[1])).then(function (doc) {
