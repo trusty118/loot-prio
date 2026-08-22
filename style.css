@@ -1112,6 +1112,29 @@ mark {
   font-weight: 600;
 }
 
+/* Who you are signed in as. Deliberately quiet - it is a status, not a control, and
+   the bar beside it is all controls. */
+.account {
+  font-size: .82rem;
+  color: var(--text-dim);
+  max-width: 18ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Offered once, at the only moment it means anything: just after signing in, when
+   this device has lists and the account does not. Gold because it is the one thing on
+   the bar worth doing right then - everything else can wait. */
+.btn-tpl--merge {
+  background: var(--gold);
+  border-color: var(--gold-bright);
+  color: #14181f;
+  font-weight: 600;
+}
+
+.btn-tpl--merge:hover { color: #14181f; background: var(--gold-bright); }
+
 /* the add popover: every class and spec, opened from the + on a row.
    Parented to <body>, so it is positioned rather than laid out. */
 /* The operator menu. Same fixed-position, shadowed panel as the add popover - they

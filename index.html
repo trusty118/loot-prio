@@ -8,6 +8,9 @@
 <link rel="stylesheet" href="style.css">
 <script>const whTooltips = { colorLinks: true, iconizeLinks: true, renameLinks: false, iconSize: "medium" };</script>
 <script src="https://wow.zamimg.com/js/tooltips.js"></script>
+<!-- Sign-in. Absent, blocked or offline, the page still works exactly as it always
+     has - it just keeps your lists in this browser instead of in an account. -->
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -33,6 +36,14 @@
       <button type="button" id="edit-toggle" class="btn-edit" aria-pressed="false" hidden>Edit</button>
       <button type="button" id="tpl-share" class="btn-tpl" hidden>Copy link</button>
       <button type="button" id="tpl-delete" class="btn-tpl btn-tpl--danger" hidden>Delete</button>
+      <!-- Signing in is an upgrade, never a gate: signed out, everything below still
+           works and saves to this browser. -->
+      <button type="button" id="sign-in" class="btn-tpl" hidden>Sign in with Discord</button>
+      <span class="account" id="account" hidden></span>
+      <button type="button" id="sign-out" class="btn-tpl" hidden>Sign out</button>
+      <!-- Offered once, when signing in would otherwise make this device's lists look
+           like they had vanished. -->
+      <button type="button" id="tpl-merge" class="btn-tpl btn-tpl--merge" hidden>Copy my lists here</button>
       <span class="edit-msg" id="edit-msg" role="status"></span>
       <!-- shown only when the clipboard API is missing or refuses: the link to copy
            by hand, rather than a browser dialog -->

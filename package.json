@@ -5,7 +5,7 @@
   "description": "Tests for the TBC Tier 6 loot priority site. The site itself has no build step and no runtime dependencies - jsdom is only here so the tests can render the page headlessly.",
   "type": "module",
   "scripts": {
-    "test": "node test/smoke.mjs && node test/bis-fallback.mjs && node test/edit-mode.mjs && node test/templates.mjs",
+    "test": "node test/smoke.mjs && node test/bis-fallback.mjs && node test/edit-mode.mjs && node test/templates.mjs && node test/auth.mjs",
     "serve": "python3 -m http.server 8642 --bind 127.0.0.1"
   },
   "devDependencies": {

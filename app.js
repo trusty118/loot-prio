@@ -3,6 +3,21 @@
 (function () {
   "use strict";
 
+  /* Revalidate rather than trust the cache. GitHub Pages serves these with
+     max-age=600, so without this a corrected role or a fixed boss attribution can read
+     stale for ten minutes after a deploy - the classic "tell everyone to hard-refresh"
+     problem, and nobody should ever be asked to do that.
+
+     `no-cache` does not mean "don't cache": it means "always ask the server if this is
+     still current". The browser sends a conditional request and gets back a ~200 byte
+     304 when nothing has changed, or the new file when it has. One tiny round trip per
+     load buys data that is never stale.
+
+     This is also why item data stays in these files rather than moving to a database:
+     the code and the data ship in one commit and deploy together, so a cached app.js
+     can never disagree with the data it is reading. */
+  var FRESH = { cache: "no-cache" };
+
   var DATA_URL = "data/loot_data.json";
   var BIS_URL = "data/bis.json";
   var SPECS_URL = "data/specs.json";
@@ -636,6 +651,10 @@
     tplCopy: document.getElementById("tpl-copy"),
     editToggle: document.getElementById("edit-toggle"),
     tplShare: document.getElementById("tpl-share"),
+    signIn: document.getElementById("sign-in"),
+    signOut: document.getElementById("sign-out"),
+    account: document.getElementById("account"),
+    tplMerge: document.getElementById("tpl-merge"),
     tplDelete: document.getElementById("tpl-delete"),
     tplLinkOut: document.getElementById("tpl-link-out"),
     tplLinkField: document.getElementById("tpl-link-field"),
@@ -777,7 +796,129 @@
     }
   };
 
+  /* ---------- the account, and the store behind it ----------
+
+     Signed out is the full product: make lists, edit them, share them by link, all of
+     it kept in localStorage. Signing in is an upgrade - your lists follow you between
+     machines instead of being trapped in one browser - and never a gate. Friends
+     arriving to try the editor should never meet a login wall first.
+
+     Everything here fails soft, the same way specs.json and bis.json do. No config, a
+     blocked CDN, a paused project: you lose sign-in, not the page. That is why
+     supabaseReady() is checked at every entry point rather than assumed once. */
+
+  /* Filled in once the Supabase project exists. The anon key is *designed* to be
+     public and belongs in this file: it identifies the project, it does not authorise
+     anything. Row-level security is what actually protects a list - a policy of
+     `auth.uid() = user_id` means the database itself refuses to hand your rows to
+     anyone else, no matter what the client asks for.
+
+     The service-role key is the one that bypasses those policies. It must never appear
+     in this repo, in this file, or in any client. */
+  /* Empty until the Supabase project exists - see docs/login-setup.md. Empty is a
+     supported state, not a broken one: no config means no sign-in button and the site
+     behaves exactly as it did before login was built. */
+  var SUPABASE_URL = "";
+  var SUPABASE_ANON_KEY = "";
+
+  var sb = null;            /* the Supabase client, once it exists */
+  var session = null;       /* the signed-in session, or null */
+
+  function supabaseConfigured() {
+    return !!(SUPABASE_URL && SUPABASE_ANON_KEY);
+  }
+
+  /* The SDK is a hotlinked CDN script, like Wowhead's tooltips.js, so it can simply be
+     absent - offline, blocked, or in jsdom, which is how the tests run. */
+  function supabaseReady() {
+    return !!(sb && supabaseConfigured());
+  }
+
+  function signedIn() {
+    return !!(session && session.user);
+  }
+
+  /* The Discord display name, for the bar. Falls back through what Discord actually
+     sends before giving up on a label rather than rendering "undefined". */
+  function accountName() {
+    if (!signedIn()) return "";
+    var m = session.user.user_metadata || {};
+    return m.full_name || m.name || m.user_name || m.preferred_username ||
+           session.user.email || "Signed in";
+  }
+
+  /* One row of the `lists` table is one template. The column names match the template
+     shape validateTemplate() already enforces, so nothing about the format changes and
+     a list is byte-identical whether it came from here or from localStorage. */
+  function rowToTemplate(row) {
+    return {
+      id: row.id,
+      name: row.name,
+      created: row.created,
+      v: row.v,
+      base: row.base,
+      priorities: row.priorities
+    };
+  }
+
+  /* The same four methods as localStore, same promises, same meanings - which is the
+     whole reason edit mode was built against an async store before login existed.
+     Nothing that calls these learns which one it is talking to. */
+  var remoteStore = {
+    list: function () {
+      return sb.from("lists").select("id,name,created").order("updated_at", { ascending: false })
+        .then(function (res) {
+          if (res.error) throw new Error(res.error.message);
+          return (res.data || []).map(function (r) {
+            return { id: r.id, name: r.name, created: r.created };
+          });
+        });
+    },
+    load: function (id) {
+      return sb.from("lists").select("*").eq("id", id).maybeSingle()
+        .then(function (res) {
+          if (res.error) throw new Error(res.error.message);
+          /* a missing id is null, not an error - same as localStore */
+          return res.data ? rowToTemplate(res.data) : null;
+        });
+    },
+    save: function (t) {
+      /* user_id is left to the column default (auth.uid()); sending it from the client
+         would be a claim the database has to check anyway, and the RLS policy is the
+         thing that decides. */
+      return sb.from("lists").upsert({
+        id: t.id,
+        name: t.name,
+        created: t.created,
+        v: t.v,
+        base: t.base,
+        priorities: t.priorities,
+        updated_at: new Date().toISOString()
+      }).then(function (res) {
+        if (res.error) throw new Error("Could not save: " + res.error.message);
+        return t;
+      });
+    },
+    remove: function (id) {
+      return sb.from("lists").delete().eq("id", id).then(function (res) {
+        if (res.error) throw new Error(res.error.message);
+      });
+    }
+  };
+
+  /* The single swap point the whole design turned on. Signed in reads and writes the
+     account; signed out reads and writes this browser. */
+  function activeStore() {
+    return signedIn() && supabaseReady() ? remoteStore : localStore;
+  }
+
   var store = localStore;
+
+  /* Kept in step with the session rather than resolved at each call site, so `store`
+     stays the plain object every existing caller already holds. */
+  function syncStore() {
+    store = activeStore();
+  }
 
   /* ---------- editing rules ----------
      The same rules verify/check_priority.py enforces, applied while editing so the
@@ -2528,6 +2669,106 @@
 
   var savedLists = [];        /* store.list() is async; this is its cached answer */
   var deleteArmed = false;    /* Delete asks once, in place, instead of confirm() */
+  var mergeOffer = false;     /* local lists found on first sign-in - offer to keep them */
+
+  /* ---------- signing in ----------
+     Discord only. Every raider has one, it is the easiest of the three OAuth flows,
+     and Supabase implements the token exchange - so the two places a project this size
+     usually grows a security hole (the exchange, and "can this user read this row")
+     are both somebody else's tested code rather than ours. */
+
+  function signIn() {
+    if (!supabaseReady()) { announce("Sign-in is unavailable right now."); return; }
+    /* Come back to the page you left, not to the site root - the phase, zone and
+       filters all live in the hash, and losing them across a login is a small betrayal
+       that is entirely avoidable. */
+    sb.auth.signInWithOAuth({
+      provider: "discord",
+      options: { redirectTo: location.href }
+    }).then(function (res) {
+      if (res && res.error) announce("Could not sign in: " + res.error.message);
+    });
+  }
+
+  function signOut() {
+    if (!supabaseReady()) return;
+    sb.auth.signOut().then(function () {
+      /* Back to this browser's own lists. Nothing of theirs is deleted either side of
+         the line: the account keeps its rows, localStorage keeps its own. */
+      openTemplate(null, false);
+      refreshLists();
+    });
+  }
+
+  /* Local lists do not follow you into the account by themselves, and the store swaps
+     the moment you sign in - so without this, someone's first act of signing in makes
+     their work appear to vanish. It has not: it is still in localStorage, just no
+     longer what the dropdown is reading.
+
+     So offer to copy it up, in place in the bar, the same two-step shape Delete uses.
+     The local copies are left exactly where they are, never moved or deleted, so
+     answering wrong costs nothing. */
+  function offerMerge() {
+    localStore.list().then(function (local) {
+      if (!local.length) return;
+      return remoteStore.list().then(function (remote) {
+        /* only worth asking when the account is empty - once there are lists up there,
+           silently duplicating everything on every sign-in would be its own bug */
+        mergeOffer = !remote.length;
+        renderTemplateBar();
+      });
+    }).catch(function () { /* offline or paused: not worth a message of its own */ });
+  }
+
+  function doMerge() {
+    mergeOffer = false;
+    announce("Copying your lists\u2026");
+    localStore.list().then(function (local) {
+      return Promise.all(local.map(function (row) {
+        return localStore.load(row.id).then(function (t) {
+          return t ? remoteStore.save(t) : null;
+        });
+      }));
+    }).then(function (done) {
+      announce(done.length + (done.length === 1 ? " list" : " lists") +
+                 " copied to your account. The copies on this device are untouched.");
+      refreshLists();
+    }).catch(function (err) {
+      announce("Could not copy your lists: " + err.message);
+      renderTemplateBar();
+    });
+  }
+
+  /* Wiring the session to the store. Runs on load and on every auth change, which is
+     also how a redirect back from Discord is picked up - the SDK parses the URL,
+     restores the session, and fires this. */
+  function initAuth() {
+    if (!supabaseConfigured() || !window.supabase) return;
+    try {
+      sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch (err) {
+      if (window.console) console.warn("sign-in unavailable:", err.message);
+      return;
+    }
+
+    sb.auth.onAuthStateChange(function (event, next) {
+      var was = signedIn();
+      session = next;
+      syncStore();
+      /* the lists on screen belonged to whoever was signed in a moment ago */
+      if (was !== signedIn()) openTemplate(null, false);
+      refreshLists();
+      if (!was && signedIn()) offerMerge();
+      renderTemplateBar();
+    });
+
+    sb.auth.getSession().then(function (res) {
+      session = (res && res.data && res.data.session) || null;
+      syncStore();
+      refreshLists();
+      renderTemplateBar();
+    });
+  }
   var nameTimer = null;
   var SHARED_VALUE = "__shared__";   /* template ids are t+base36, so no collision */
 
@@ -2579,6 +2820,14 @@
       el.tplList.appendChild(option(SHARED_VALUE, "Shared: " + activeTemplate.name));
     }
     el.tplList.value = activeTemplate ? (activeIsMine ? activeTemplate.id : SHARED_VALUE) : "";
+
+    /* No sign-in button at all when it could not work - an unconfigured project or a
+       blocked CDN should read as "this site has no accounts", not as a broken button. */
+    show(el.signIn, supabaseReady() && !signedIn());
+    show(el.signOut, supabaseReady() && signedIn());
+    show(el.account, supabaseReady() && signedIn());
+    show(el.tplMerge, mergeOffer);
+    if (signedIn() && el.account) el.account.textContent = accountName();
 
     show(el.tplName, activeIsMine);
     show(el.tplDirty, activeIsMine && unsaved);
@@ -2634,6 +2883,10 @@
     el.tplNew.addEventListener("click", function () {
       startList(newBlankTemplate(), "A blank list - every priority is empty until you fill it in");
     });
+
+    if (el.signIn) el.signIn.addEventListener("click", signIn);
+    if (el.signOut) el.signOut.addEventListener("click", signOut);
+    if (el.tplMerge) el.tplMerge.addEventListener("click", doMerge);
 
     el.tplCopy.addEventListener("click", function () {
       var from = activeTemplate ? activeTemplate.name : "zatar's list";
@@ -2850,7 +3103,7 @@
   /* BiS is decoration on top of the loot table, so it must never take the page
      down with it: a missing or malformed bis.json costs the rings, nothing else. */
   function loadBis() {
-    return fetch(BIS_URL)
+    return fetch(BIS_URL, FRESH)
       .then(function (res) {
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();
@@ -2866,7 +3119,7 @@
      priority column can be drawn - but a failure should still leave a readable
      table rather than a blank page, so it warns and carries on. */
   function loadRegistry() {
-    return fetch(SPECS_URL)
+    return fetch(SPECS_URL, FRESH)
       .then(function (res) {
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();
@@ -2879,7 +3132,7 @@
   }
 
   Promise.all([
-    fetch(DATA_URL).then(function (res) {
+    fetch(DATA_URL, FRESH).then(function (res) {
       if (!res.ok) throw new Error("HTTP " + res.status);
       return res.json();
     }),
@@ -2894,6 +3147,9 @@
       bind();
       bindTips();
       bindTemplateBar();
+      /* After bind, so the bar's controls exist before a session can render into them;
+         before refreshLists, so a restored session picks the right store first. */
+      initAuth();
       refreshLists();
       loadSharedTemplate();
       update();

@@ -480,12 +480,39 @@ results say so rather than look broken. **Don't paper over it by extending `unso
 ### Storage
 
 ```js
-var store = { list(), load(id), save(t), remove(id) };   // localStorage now, Azure later
+var store = { list(), load(id), save(t), remove(id) };   // localStore or remoteStore
 ```
 
-**Async from the start** even though localStorage is synchronous, so the Azure Functions +
-Cosmos implementation is a drop-in rather than a refactor of every call site. That is the
-entire reason edit mode was built before login.
+**Async from the start** even though localStorage is synchronous, so the remote
+implementation would be a drop-in rather than a refactor of every call site. That is the
+entire reason edit mode was built before login — **and it paid off exactly as intended**:
+adding Supabase changed `activeStore()` and nothing else. No call site moved.
+
+**Signed out is the whole product.** Make lists, edit them, share them by link, all kept in
+`localStorage`. Signing in is an *upgrade* — your lists follow you between machines instead
+of being trapped in one browser — and never a gate. Friends arriving to try the editor must
+never meet a login wall, which is why `activeStore()` falls back rather than refusing.
+
+**Everything about sign-in fails soft**, the same way `specs.json` and `bis.json` do: no
+config, a blocked CDN, a paused project, or jsdom — you lose sign-in, not the page. That is
+why `supabaseReady()` is re-checked at each entry point instead of being resolved once, and
+why the sign-in button is *absent* rather than disabled when it could not work. A disabled
+button says "this is broken"; no button says "this site has no accounts", which is the
+truth in that state.
+
+**The anon key belongs in `app.js` and is not a secret.** It identifies the project; it
+authorises nothing. What actually protects a list is the row-level-security policy
+(`auth.uid() = user_id`) — the database itself refuses to hand over someone else's rows no
+matter what the client asks for. **The service-role key bypasses those policies and must
+never appear in this repo**; `test/auth.mjs` greps for it, and for any pasted JWT literal,
+with comments stripped first so the file can still explain the rule without failing on it.
+
+**Local lists do not follow you into an account by themselves.** The store swaps the moment
+you sign in, so without help someone's first sign-in makes their work appear to vanish — it
+hasn't, it is still in `localStorage`, just no longer what the dropdown reads. `offerMerge()`
+offers to copy it up, in place in the bar, and **only when the account is empty**: offering
+it every time would silently duplicate everything on every sign-in. The local copies are
+never moved or deleted, so answering wrong costs nothing.
 
 **There is no Save button.** A list is written when it is made and again on every edit
 (`saveNow()`), so it is in the dropdown from birth and nothing is lost by forgetting to press
@@ -496,7 +523,7 @@ character. Whether a write is outstanding lives in a module-level `unsaved`, del
 ### The bar
 
 ```
-[ List ▾ ]  [ name______ ]   New   Make a copy   Edit   Copy link   Delete
+[ List ▾ ]  [ name______ ]   New   Make a copy   Edit   Copy link   Delete   <name>  Sign out
 ```
 
 What it offers follows what is on screen: zatar's list and a shared list get New and Make a
@@ -637,6 +664,14 @@ current if any of those change.
 - **`title` attributes have a ~1s browser delay** that can't be configured. Icon tooltips
   use `data-tip` plus a `.tip` element parented to `<body>` (inside the table it would be
   clipped by the scroll container).
+- **The three data fetches revalidate (`FRESH = { cache: "no-cache" }`).** Pages serves
+  these with `max-age=600`, so without it a corrected role or boss attribution reads stale
+  for ten minutes after a deploy — the "everyone hard-refresh" problem, which nobody should
+  ever be asked to do. `no-cache` does not disable caching; it forces a conditional request,
+  which costs a ~200-byte `304` when nothing changed. This is also **why item data stays in
+  files rather than moving to a database**: code and data ship in one commit and deploy
+  together, so a cached `app.js` can never disagree with the data it is reading. A database
+  reintroduces exactly that skew.
 - **Icon URLs are verified before use.** Everything comes from `wow.zamimg.com`; check a
   new one returns 200 before wiring it up. Boss portraits are Encounter Journal art
   (`ui-ej-boss-*.png`) with irregular slugs — `najentus`, `kazrogal`, no leading "the" on
@@ -678,6 +713,14 @@ current if any of those change.
 - `test/templates.mjs` — a template is a full copy, a blank one is valid and shareable,
   storage round-trips, the URL encoding round-trips, and eight kinds of hand-crafted bad
   template are each refused.
+- `test/auth.mjs` — signing in, against a **fake Supabase that is a working in-memory
+  table** rather than a call recorder, so the assertions are about behaviour that
+  round-trips. It pins the fail-soft states (unconfigured, and configured-but-CDN-blocked,
+  which is the realistic outage), that the store genuinely swaps with the session, that the
+  merge offer appears only when the account is empty, and that merging never deletes the
+  local copy. The keys are consts inside the IIFE — the right place for them — so the test
+  rewrites the source string rather than `app.js` growing a hook that exists only for tests.
+  **The OAuth redirect itself cannot happen in jsdom** and is checked by hand, like the drag.
 
 They can't cover anything needing a real browser: Wowhead's script doesn't complete its
 data fetch under jsdom, so **item icons and item tooltips are untested** — check those by
