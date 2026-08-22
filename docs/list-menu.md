@@ -35,6 +35,10 @@ same button was the wrong replacement. It also never says what you lose.
 
 The bar becomes **exactly two controls plus the account zone, in every state**:
 
+> If you also ship `edit-mode-placement.md`, `Edit` leaves this bar for the refine bar and what
+> remains is the trigger plus the account zone. Fixed-width either way — the two changes are
+> independent and neither depends on the other landing first.
+
 ```
 TBC Loot Prio Lists                    LIST [ My list        ▾ ]  [ Edit ]   [ @macka118 ▾ ]
 ```

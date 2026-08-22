@@ -575,6 +575,18 @@ where a varying number of items costs nothing.
 
 Three consequences worth keeping:
 
+- **`Edit` is not in the banner at all.** It lives in `.controls--refine`, the sticky panel,
+  because it acts on the rows below it — the banner answers *which list am I on*, this answers
+  *change these calls*. On a 195-row page the banner scrolls away immediately, taking the
+  control that changes what you are looking at with it. Armed, it gives **three signals**: the
+  button fills, the bar tints (`.controls--refine.is-editing`), and a fixed-text hint says so.
+  A `min-width: 118px` keeps `Edit priorities` and `Done editing` the same width, because this
+  bar sits directly above the rows and must not reflow when the mode flips.
+- **The hint is fixed text and `#edit-msg` stayed a toast.** The spec asked for `#edit-msg`
+  itself to become that status line; it can't, because it carries the delete **Undo** and its
+  text varies in length — and variable-length text in this bar is the reflow defect the whole
+  redesign has been removing. Two elements, two jobs: constant mode indicator in the bar,
+  transient announcements in the toast.
 - **`Edit` is `disabled`, never `hidden`**, with `title="Make a copy to edit"`. A control
   that vanishes teaches nothing; a disabled one with a reason teaches the copy path at the
   moment someone went looking for it. Its **font-weight is constant across both states** and
