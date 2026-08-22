@@ -54,20 +54,42 @@ ok(!phaseChips().some((c) => c.classList.contains("chip--all")),
 // A phase is a tile, not a pill: it is the one control you set and leave, so it
 // carries its raid's art at a size you can read across the room.
 ok(phaseChips().every((c) => c.classList.contains("chip--phase")), "each phase is a tile");
-ok(phaseChips().every((c) => c.querySelector(".phase-split img")), "each carries raid art");
+ok(phaseChips().every((c) => c.querySelector(".art-split img")), "each carries raid art");
 
 // one strip per RAID, which is not the same as per zone: the crafted pseudo-zone has
 // no bosses and no art, so phase 3 shows two strips for three zones
-const strips = (n) => chipByText("#phase-chips", "Phase " + n).querySelectorAll(".phase-split img");
+const strips = (n) => chipByText("#phase-chips", "Phase " + n).querySelectorAll(".art-split img");
 ok(strips(1).length === 3, `phase 1 shows its three raids (got ${strips(1).length})`);
 ok(strips(3).length === 2, `phase 3 shows two - crafted has no art to show (got ${strips(3).length})`);
 ok(strips(4).length === 1, `phase 4 shows its one (got ${strips(4).length})`);
-ok(/illidan/.test(strips(3)[0].src) && /archimonde/.test(strips(3)[1].src),
-   "in zone order, each raid flying its final boss");
+ok(strips(5).length === 1, `phase 5 shows Sunwell only, not its crafted tier (got ${strips(5).length})`);
+ok(strips(2).length === 2, `phase 2 likewise shows two raids (got ${strips(2).length})`);
+
+// Three phases have a crafted tier, each named for the material it is gated on. They
+// behave identically because nothing special-cases them: no bosses means no art strip
+// and an empty boss row, and the display label is the same for all three.
+const appSource = fs.readFileSync(path.join(root, "app.js"), "utf8");
+const crafted = [...appSource.matchAll(/"(Crafted \([^"]+\))"/g)].map((m) => m[1]);
+ok([...new Set(crafted)].length === 3,
+   `three crafted zones, one per tier that has craftables: ${[...new Set(crafted)].join(", ")}`);
+ok([...new Set(crafted)].every((z) => new RegExp('"' + z.replace(/[()]/g, "\\$&") + '": "Crafted"').test(appSource)),
+   "each renders as plain Crafted, since two are never on screen together");
+// One order, followed everywhere: the tile strips, the zone row and the table's boss
+// groups all read Hyjal first because the phase lists its zones that way.
+ok(/archimonde/.test(strips(3)[0].src) && /illidan/.test(strips(3)[1].src),
+   "each raid flies its final boss, Hyjal first");
+ok([...doc.querySelectorAll("#zone-chips .chip")]
+     .filter((c) => !c.classList.contains("chip--all"))[0].textContent.includes("Mount Hyjal"),
+   "and the zone row leads with it too");
 ok(/Crafted/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),
    "and the tooltip still names the zone that cannot be pictured");
-ok(phaseChips().every((c) => c.querySelector(".phase-label") && c.querySelector(".phase-count")),
-   "with the label over the art and the count in the corner");
+ok(phaseChips().every((c) => c.querySelector(".art-label")), "with the label over the art");
+
+// No count on the face of a tile - the art is doing the work, and "N of 195 items"
+// above the table already answers it. It survives where it costs nothing.
+ok(phaseChips().every((c) => !c.querySelector(".art-count")), "and no item count on it");
+ok(/195/.test(chipByText("#phase-chips", "Phase 3").getAttribute("aria-label")),
+   "though a screen reader is still told how many, since it cannot see the table either");
 ok(/Black Temple/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),
    `and the raids it covers on hover: "${chipByText("#phase-chips", "Phase 3").dataset.tip}"`);
 ok(phaseChips().every((c) => c.querySelector("img").getAttribute("onerror")),
@@ -89,9 +111,9 @@ ok(groups().length === 17, `renders 17 boss groups (got ${groups().length})`);
 ok(doc.getElementById("count").textContent === "195 of 195 items", `count text: "${doc.getElementById("count").textContent}"`);
 
 const heads = headText();
-ok(/Black Temple/.test(heads[0]) && /Trash/.test(heads[0]), `first group is BT Trash: "${heads[0]}"`);
-ok(/Illidan Stormrage/.test(heads[9]), `BT ends on Illidan: "${heads[9]}"`);
-ok(/Archimonde/.test(heads[15]), `Hyjal ends on Archimonde: "${heads[15]}"`);
+ok(/Mount Hyjal/.test(heads[0]) && /Trash/.test(heads[0]), `first group is Hyjal trash: "${heads[0]}"`);
+ok(/Archimonde/.test(heads[5]), `Hyjal ends on Archimonde: "${heads[5]}"`);
+ok(/Illidan Stormrage/.test(heads[15]), `Black Temple ends on Illidan: "${heads[15]}"`);
 ok(/^Crafted$/.test(heads[16]), `crafted group is headed by its zone, with no boss: "${heads[16]}"`);
 ok(!/Craftable/.test(doc.body.textContent), "the Craftable pseudo-boss label is gone");
 click(chipByText("#zone-chips", "Crafted"));
@@ -149,9 +171,18 @@ click(chipByText("#zone-chips", "Black Temple"));
 const zoneChips = [...doc.querySelectorAll("#zone-chips .chip")];
 const bossChips = [...doc.querySelectorAll("#boss-chips .chip")];
 
-// chip 0 in each group is the "All" chip and gets no icon
-ok(zoneChips.slice(1).every((c) => c.querySelector("img.chip-icon")), "all 3 zone chips have an icon");
-ok(!zoneChips[0].querySelector("img"), '"All" chip has no icon');
+// Zones are art tiles too - the same language as the phases one level down, so the
+// two read as parent and child rather than as two unrelated rows.
+ok(zoneChips.slice(1).every((c) => c.classList.contains("chip--art")),
+   "zone chips share the tile treatment with the phases");
+ok(zoneChips.slice(1).every((c) => c.classList.contains("chip--zone")),
+   "under their own class, so they can be sized differently");
+ok(zoneChips.slice(1).every((c) => c.querySelectorAll(".art-split img").length === 1),
+   "each showing its one zone's art");
+ok(!zoneChips[0].querySelector("img"), '"All" chip has no art');
+ok(/\.chip--phase\s*\{[^}]*height:\s*84px/.test(cssText) &&
+   /\.chip--zone\s*\{[^}]*height:\s*46px/.test(cssText),
+   "and a zone tile is visibly smaller than a phase tile, which is what ranks them");
 ok(bossChips.slice(1).every((c) => c.querySelector("img.chip-icon")), `all ${bossChips.length - 1} boss chips have an icon`);
 ok(!bossChips[0].querySelector("img"), "the boss row's All chip has no icon either");
 
@@ -929,7 +960,8 @@ ok([...doc.querySelectorAll(".boss-group")].every((g) => {
 
 // grouping order must survive sorting
 const sortedHeads = [...doc.querySelectorAll(".boss-head .boss-name")].map((h) => h.textContent.trim());
-ok(sortedHeads[0] === "Trash" && sortedHeads[9] === "Illidan Stormrage",
+ok(sortedHeads[0] === "Trash" && sortedHeads[5] === "Archimonde" &&
+   sortedHeads[15] === "Illidan Stormrage",
    "boss groups stay in kill order while rows sort inside them");
 ok(rows().length === 195, `all rows still present after sorting (${rows().length})`);
 
@@ -944,8 +976,8 @@ const zoneChipNames = () => [...doc.querySelectorAll("#zone-chips .chip")]
   .filter((c) => !c.classList.contains("chip--all")).map((c) => c.textContent.replace(/\d+$/, "").trim());
 
 ok([1, 2, 3, 4, 5].every((n) => phaseChip(n)), "all five phases have a chip");
-ok(phaseChip(1).querySelector(".n").textContent === "0",
-   "a phase with no items yet reads 0 rather than being hidden");
+ok(/, 0 items/.test(phaseChip(1).getAttribute("aria-label")),
+   "a phase with no items is still offered, and says so where it does not clutter");
 
 click(phaseChip(1));
 ok(zoneChipNames().join(", ") === "Karazhan, Gruul's Lair, Magtheridon's Lair",
@@ -968,11 +1000,11 @@ ok([...doc.querySelectorAll("#boss-chips .chip")]
 ok(rows().length === 0, "with no items listed under any of them yet");
 
 click(phaseChip(2));
-ok(zoneChipNames().join(", ") === "Serpentshrine Cavern, Tempest Keep",
-   `phase 2 replaces them: ${zoneChipNames().join(", ")}`);
+ok(zoneChipNames().join(", ") === "Serpentshrine Cavern, Tempest Keep, Crafted",
+   `phase 2 replaces them, and has a crafted tier of its own: ${zoneChipNames().join(", ")}`);
 
 click(phaseChip(3));
-ok(zoneChipNames().join(", ") === "Black Temple, Mount Hyjal, Crafted",
+ok(zoneChipNames().join(", ") === "Mount Hyjal, Black Temple, Crafted",
    `phase 3 is the one with data: ${zoneChipNames().join(", ")}`);
 ok(rows().length === 195, "picking a phase with no zone means every zone in it");
 ok(doc.getElementById("boss-row").hidden, "the boss row waits for a zone");

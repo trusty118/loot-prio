@@ -104,11 +104,18 @@
      picked, and nothing below a zone until a zone is. */
   var PHASES = [
     { id: "P1", label: "Phase 1", zones: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair"] },
-    { id: "P2", label: "Phase 2", zones: ["Serpentshrine Cavern", "Tempest Keep"] },
-    { id: "P3", label: "Phase 3", zones: ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"] },
+    { id: "P2", label: "Phase 2",
+      zones: ["Serpentshrine Cavern", "Tempest Keep", "Crafted (Nether Vortex)"] },
+    { id: "P3", label: "Phase 3",
+      zones: ["Mount Hyjal", "Black Temple", "Crafted (Heart of Darkness)"] },
     { id: "P4", label: "Phase 4", zones: ["Zul'Aman"] },
-    { id: "P5", label: "Phase 5", zones: ["Sunwell Plateau"] }
+    { id: "P5", label: "Phase 5", zones: ["Sunwell Plateau", "Crafted (Sunmote)"] }
   ];
+
+  /* The order zones are listed in is load-bearing, not cosmetic: ZONE_ORDER derives from
+     it, and ZONE_ORDER decides the zone chip row, the order of the art strips on a phase
+     tile, and - through bossSortKey() - the order boss groups appear in the table. Change
+     it and all three move together, which is the point. */
 
   /* The raids of a phase, which is not quite its zones: the crafted pseudo-zone has no
      bosses and no art, so it has no strip on the tile. Having a boss list is the test,
@@ -142,7 +149,14 @@
   /* Every zone, in phase order - which is also kill order across the expansion, so
      bossSortKey() can go on using the index of this list. */
   var ZONE_ORDER = PHASES.reduce(function (all, p) { return all.concat(p.zones); }, []);
-  var ZONE_LABEL = { "Crafted (Heart of Darkness)": "Crafted" };
+  /* Each phase has its own crafting tier, named for the material it is gated on, and
+     both render as plain "Crafted" - they are never on screen together, because the
+     phase above them decides which one is. */
+  var ZONE_LABEL = {
+    "Crafted (Nether Vortex)": "Crafted",
+    "Crafted (Heart of Darkness)": "Crafted",
+    "Crafted (Sunmote)": "Crafted"
+  };
 
   /* Encounter Journal boss portraits (128x64 PNG). TBC bosses have no achievement
      icons - those postdate them - but Legion backfilled the Adventure Guide, so
@@ -221,7 +235,9 @@
     "Tempest Keep": JOURNAL + "kaelthas-sunstrider.png",
     "Black Temple": JOURNAL + "illidan-stormrage.png",
     "Mount Hyjal": JOURNAL + "archimonde.png",
+    "Crafted (Nether Vortex)": ICON + "inv_elemental_mote_nether.jpg",
     "Crafted (Heart of Darkness)": ICON + "spell_shadow_demonictactics.jpg",
+    "Crafted (Sunmote)": ICON + "spell_nature_elementalshields.jpg",
     "Zul'Aman": JOURNAL + "daakara.png",
     "Sunwell Plateau": JOURNAL + "kiljaeden.png"
   };
@@ -1246,26 +1262,24 @@
 
   /* The top of the where-hierarchy. Nothing below it renders until one is picked,
      which is what stops the panel opening as 3 zone chips and 17 boss chips. */
-  /* A phase is a tile rather than a pill: it is the one thing on the page you set and
-     leave, so it earns the room, and the raid art says which tier you are in faster
-     than the words do. Its own builder rather than another flag on chip() - the label
-     sits over the art and the count in the corner, which is not a chip layout.
-
-     The art is one strip per raid, side by side, so a phase covering three raids shows
-     three. That is why it uses the boss portraits every other chip uses rather than the
-     sharper 256x128 instance tiles: there is no instance tile for Serpentshrine or
-     Hyjal, so those phases could only ever have shown one of their raids. */
-  function phaseChip(ph, active, count) {
+  /* ---------- art tiles ----------
+     Phase and zone are both "where am I", so they share a language: art behind, label
+     over it, count in the corner, dim until picked. They are deliberately not the same
+     size - a phase tile is twice a zone tile - because that difference is what says
+     which one is above the other. One builder, two skins. */
+  function artChip(opts) {
     var b = document.createElement("button");
     b.type = "button";
-    b.className = "chip chip--phase";
-    b.setAttribute("aria-pressed", active ? "true" : "false");
+    b.className = "chip chip--art " + opts.cls;
+    b.setAttribute("aria-pressed", opts.active ? "true" : "false");
 
+    /* one strip per image, so a phase covering three raids shows three. A zone passes
+       one and gets the same treatment for free. */
     var art = document.createElement("div");
-    art.className = "phase-split";
-    phaseRaids(ph.id).forEach(function (z) {
+    art.className = "art-split";
+    (opts.images || []).forEach(function (src) {
       var img = document.createElement("img");
-      img.src = ZONE_ICON[z];
+      img.src = src;
       img.alt = "";
       /* the tile still reads as itself if the CDN ever stops serving these */
       img.setAttribute("onerror", "this.style.display='none'");
@@ -1274,20 +1288,48 @@
     b.appendChild(art);
 
     var label = document.createElement("span");
-    label.className = "phase-label";
-    label.textContent = ph.label;
+    label.className = "art-label";
+    label.textContent = opts.label;
     b.appendChild(label);
 
-    var n = document.createElement("span");
-    n.className = "n phase-count";
-    n.textContent = count;
-    b.appendChild(n);
-
-    /* which raids are in it, for the reader who does not know the phases by number */
-    var zones = ph.zones.map(function (z) { return zoneLabel(z); }).join(", ");
-    b.dataset.tip = ph.label + " — " + zones;
-    b.setAttribute("aria-label", ph.label + ", " + count + " items: " + zones);
+    /* No count on the face of a tile. The number is noise where the art is doing the
+       work, and "N of 195 items" above the table already answers it. It stays in the
+       aria-label, where it costs nothing and is the only way a screen reader gets it. */
+    b.dataset.tip = opts.tip;
+    b.setAttribute("aria-label", opts.ariaLabel || opts.tip);
     return b;
+  }
+
+  /* A phase is the one control you set and leave, so it earns the most room, and the
+     raid art says which tier you are in faster than the words do.
+
+     The strips use the same ui-ej-boss-* portraits as every other chip rather than the
+     sharper 256x128 instance tiles: there is no instance tile for Serpentshrine or
+     Hyjal, so those phases could only ever have shown one of their raids. */
+  function phaseChip(ph, active, count) {
+    var zones = ph.zones.map(function (z) { return zoneLabel(z); }).join(", ");
+    return artChip({
+      cls: "chip--phase",
+      active: active,
+      label: ph.label,
+      count: count,
+      images: phaseRaids(ph.id).map(function (z) { return ZONE_ICON[z]; }),
+      tip: ph.label + " — " + zones,
+      ariaLabel: ph.label + ", " + count + " items: " + zones
+    });
+  }
+
+  /* A zone is the same idea one level down, at half the size. */
+  function zoneChip(z, active, count) {
+    return artChip({
+      cls: "chip--zone",
+      active: active,
+      label: zoneLabel(z),
+      count: count,
+      images: [ZONE_ICON[z]],
+      tip: zoneLabel(z),
+      ariaLabel: zoneLabel(z) + ", " + count + " items"
+    });
   }
 
   function renderPhaseChips() {
@@ -1330,7 +1372,7 @@
     el.zoneChips.appendChild(all);
 
     phaseZones(state.phase).forEach(function (z) {
-      var c = chip(zoneLabel(z), state.zone === z, counts[z] || 0, null, ZONE_ICON[z]);
+      var c = zoneChip(z, state.zone === z, counts[z] || 0);
       c.addEventListener("click", function () {
         state.zone = (state.zone === z) ? "" : z;
         state.boss = "";
