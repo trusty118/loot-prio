@@ -667,7 +667,12 @@ current if any of those change.
   the bar. Anything the code hides with `hidden` must either never set `display`, or pair it
   with the attribute — `.x[hidden] { display: none }` or `.x:not([hidden]) { display: flex }`.
   `test/smoke.mjs` checks this against the stylesheet **source**: jsdom does not load external
-  CSS, so a `getComputedStyle` check would pass no matter what the rule said.
+  CSS, so a `getComputedStyle` check would pass no matter what the rule said. **It has now
+  bitten three times** — `.control-row`, `.tpl-link-out`, and `.btn-discord`, which would
+  have pinned the sign-in button to the bar whether or not you were signed in. The third one
+  also exposed that the guard was scoped to `main [hidden]`, so it never covered the template
+  bar — which is in `<header>`, and is where all three actually happened. It is document-wide
+  now. A guard that does not cover the scene of the crime is not a guard.
 - **Don't hide table cells with `display: none`.** The tables are `table-layout: fixed`;
   hiding a cell makes the rest shift into the wrong columns. Don't generate the column —
   that is how the Role column was removed.

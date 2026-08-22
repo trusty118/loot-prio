@@ -1207,7 +1207,11 @@ for (const cls of [...cssText.matchAll(/\.(field--[a-z]+)\s*\{[^}]*display:\s*no
 }
 
 const bareCss = cssText.replace(/\/\*[\s\S]*?\*\//g, "");
-const hiddenEls = [...doc.querySelectorAll("main [hidden]")];
+// Document-wide, not `main [hidden]`. The scope used to be main, which quietly meant
+// the template bar was never checked - and the bar lives in <header>, which is where
+// BOTH of the occurrences this test exists to catch actually happened (.control-row
+// and .tpl-link-out). A guard that does not cover the scene of the crime is not a guard.
+const hiddenEls = [...doc.querySelectorAll("[hidden]")];
 ok(hiddenEls.length > 0, `markup hides some controls up front (${hiddenEls.length})`);
 
 const unguarded = [];

@@ -1112,6 +1112,51 @@ mark {
   font-weight: 600;
 }
 
+/* ---------- sign in ----------
+   Discord's own colours, deliberately, and the one place on this page that breaks the
+   "gold and the item-quality colours are the only saturated things" rule.
+
+   That rule is about colours *this site* uses to mean something about your data. A
+   third-party brand mark is a different category: it is not us claiming meaning, it is
+   Discord identifying itself, and the recognition is the entire point - people know at
+   a glance that this is a redirect and a consent screen rather than a new password to
+   invent. Hesitating at a sign-in prompt is a worse outcome than a button that does not
+   match the furniture.
+
+   Blurple is cool, so it never competes with gold. It is close in hue to --epic, but
+   the two are never in eyeshot: rings live in the table, this lives in the banner. And
+   it is gone the moment you sign in. */
+/* `display` here would otherwise beat the browser's [hidden] and pin the button to the
+   bar for good - signed in or not. Third time this trap has been sprung in this repo;
+   see CLAUDE.md section 5. */
+.btn-discord[hidden] { display: none; }
+
+.btn-discord {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border: 1px solid #5865f2;
+  border-radius: var(--radius);
+  background: #5865f2;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-discord:hover { background: #4752c4; border-color: #4752c4; }
+
+/* The mark is never recoloured or distorted, per Discord's brand guidance - it takes
+   the button's own text colour and keeps its aspect ratio. */
+.discord-mark {
+  width: 18px;
+  height: 14px;
+  flex: none;
+}
+
 /* Who you are signed in as. Deliberately quiet - it is a status, not a control, and
    the bar beside it is all controls. */
 .account {
