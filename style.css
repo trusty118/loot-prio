@@ -50,9 +50,6 @@ a:hover { color: var(--gold-bright); }
   padding: 0 20px;
 }
 
-/* Prose is the exception: long measure is hard to read, so it stays narrow. */
-.tagline { max-width: 90ch; }
-
 /* ---------- header ---------- */
 
 .site-header {
@@ -61,9 +58,9 @@ a:hover { color: var(--gold-bright); }
   padding: 26px 0 22px;
 }
 
-/* Title left, list controls right. Wraps to two lines on a narrow window rather
-   than crushing either, and aligns on the bottom edge so the bar sits on the same
-   line as the tagline instead of floating against the whole title block. */
+/* Title left, list controls right, wrapping to two lines on a narrow window rather
+   than crushing either. Aligned on the bottom edge so the bar sits on the title's
+   baseline. */
 .site-header-row {
   display: flex;
   align-items: flex-end;
@@ -80,12 +77,6 @@ a:hover { color: var(--gold-bright); }
   letter-spacing: .4px;
   color: var(--gold-bright);
   text-shadow: 0 1px 0 #000;
-}
-
-.tagline {
-  margin: 6px 0 0;
-  color: var(--text-dim);
-  font-size: .92rem;
 }
 
 /* ---------- controls ---------- */
