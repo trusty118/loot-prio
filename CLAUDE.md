@@ -493,6 +493,22 @@ adding Supabase changed `activeStore()` and nothing else. No call site moved.
 of being trapped in one browser — and never a gate. Friends arriving to try the editor must
 never meet a login wall, which is why `activeStore()` falls back rather than refusing.
 
+**Sign-in uses the PKCE flow, and that is not a detail.** The implicit flow returns the
+session in the **hash fragment**, which is where this entire site keeps its state — the two
+would be writing to the same place on the same page load. PKCE returns `?code=` in the query
+instead. Different storage, no collision.
+
+**`writeUrl()` must preserve `location.search`.** It used to rebuild from `location.pathname`
+alone, silently dropping any query string. Nothing here uses the query string, so it went
+unnoticed for the life of the project — until an OAuth redirect came back as `?code=` and
+`update()` deleted Discord's answer at boot, *before the SDK had finished loading*. Sign-in
+then did nothing at all, with no error anywhere.
+
+**The hash cannot ride along in `redirectTo`.** Supabase appends `?code=` to that URL, and a
+query has to sit before a fragment, so a `redirectTo` ending in one composes into nonsense.
+`stashReturn()` parks the hash in `sessionStorage` and `restoreReturn()` puts it back once the
+session lands — which is why signing in returns you to the phase and filters you left.
+
 **The SDK is very often not loaded when `initAuth()` first runs**, and it looks like it
 should be. `app.js` is a classic script at the end of `<body>` so it executes *during*
 parsing; the deferred SDK executes *after*. `app.js` is therefore always first, and

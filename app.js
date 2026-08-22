@@ -1311,7 +1311,13 @@
     if (state.q) p.set("q", state.q);
     if (state.sort) p.set("sort", state.sort + (state.dir === "desc" ? ":desc" : ""));
     var s = p.toString();
-    var url = location.pathname + (s ? "#" + s : "");
+    /* Keep location.search. This used to rebuild from pathname alone, which silently
+       dropped any query string - and the one that matters is `?code=` coming back from
+       an OAuth redirect. update() runs at boot before the SDK has finished loading, so
+       dropping it here deleted Discord's answer before anything could read it, and
+       sign-in appeared to do nothing at all. Nothing else on this site uses the query
+       string, which is exactly why it went unnoticed. */
+    var url = location.pathname + location.search + (s ? "#" + s : "");
     history.replaceState(null, "", url);
   }
 
@@ -2681,14 +2687,38 @@
      usually grows a security hole (the exchange, and "can this user read this row")
      are both somebody else's tested code rather than ours. */
 
+  var RETURN_KEY = "lootprio.returnTo";
+
+  /* Come back to the page you left, not to the site root - the phase, zone and filters
+     all live in the hash, and losing them across a login is a small betrayal that is
+     entirely avoidable.
+
+     The hash cannot simply ride along in redirectTo: Supabase appends `?code=` to that
+     URL, and a query has to sit before a fragment, so a redirectTo that already ends in
+     one composes into nonsense. Park it instead, and put it back on the way in. */
+  function stashReturn() {
+    try { window.sessionStorage.setItem(RETURN_KEY, location.hash); }
+    catch (e) { /* private browsing: you lose your filters, not your sign-in */ }
+  }
+
+  function restoreReturn() {
+    var h = "";
+    try {
+      h = window.sessionStorage.getItem(RETURN_KEY) || "";
+      window.sessionStorage.removeItem(RETURN_KEY);
+    } catch (e) { return false; }
+    if (!h || h === location.hash) return false;
+    history.replaceState(null, "", location.pathname + location.search + h);
+    readUrl();
+    return true;
+  }
+
   function signIn() {
     if (!supabaseReady()) { announce("Sign-in is unavailable right now."); return; }
-    /* Come back to the page you left, not to the site root - the phase, zone and
-       filters all live in the hash, and losing them across a login is a small betrayal
-       that is entirely avoidable. */
+    stashReturn();
     sb.auth.signInWithOAuth({
       provider: "discord",
-      options: { redirectTo: location.href }
+      options: { redirectTo: location.origin + location.pathname }
     }).then(function (res) {
       if (res && res.error) announce("Could not sign in: " + res.error.message);
     });
@@ -2776,7 +2806,14 @@
 
   function startAuth() {
     try {
-      sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      /* PKCE puts the answer in `?code=`, where the implicit flow puts it in the hash
+         fragment. This whole site drives its state from the hash, so the implicit flow
+         would have us and Supabase writing to the same place on the same page load.
+         Different storage, no collision, and a code in a query survives a redirect
+         chain that a fragment does not. */
+      sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { flowType: "pkce", detectSessionInUrl: true, persistSession: true }
+      });
     } catch (err) {
       if (window.console) console.warn("sign-in unavailable:", err.message);
       return;
@@ -2789,7 +2826,11 @@
       /* the lists on screen belonged to whoever was signed in a moment ago */
       if (was !== signedIn()) openTemplate(null, false);
       refreshLists();
-      if (!was && signedIn()) offerMerge();
+      if (!was && signedIn()) {
+        offerMerge();
+        /* the filters you left behind, now that the round trip is over */
+        if (restoreReturn()) update();
+      }
       renderTemplateBar();
     });
 

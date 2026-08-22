@@ -173,6 +173,34 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
 }
 
 // ---------------------------------------------------------------------------------
+// 3c. writeUrl() must not eat the query string.
+//
+//     It used to rebuild the URL from location.pathname alone, dropping location.search
+//     entirely. Nothing on this site uses the query string, so it went unnoticed for
+//     the life of the project - right up until an OAuth redirect came back as `?code=`
+//     and update() deleted Discord's answer at boot, before the SDK had even loaded.
+//     Sign-in then did nothing, silently, with no error anywhere.
+// ---------------------------------------------------------------------------------
+{
+  const dom = new JSDOM(fs.readFileSync(path.join(root, "index.html"), "utf8"),
+    { runScripts: "outside-only", url: "https://x.test/loot-prio/?code=abc123#phase=P3" });
+  const { window: w } = dom;
+  Object.assign(w, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
+  w.fetch = (u) => {
+    const s = String(u);
+    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
+      s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
+  };
+  w.eval(source);
+  await settle();
+
+  ok(w.location.search === "?code=abc123",
+     `an OAuth code survives boot, when update() rewrites the url (got "${w.location.search}")`);
+  ok(w.location.hash.includes("phase=P3"),
+     `and the page's own hash state is still written (got "${w.location.hash}")`);
+}
+
+// ---------------------------------------------------------------------------------
 // 4. Configured and present: sign in, and the store follows the session.
 // ---------------------------------------------------------------------------------
 {
