@@ -238,24 +238,42 @@ the rings, not the page.
 
 ### Phase, zone, boss
 
-**Phase and zone are art tiles, not pills.** Both answer "where am I", so they share one
-language — art behind, label over it, count in the corner, dim until picked — and `artChip()`
-builds both. What separates them is size: a **phase is 168x84** and carries **one strip per
-raid** (Phase 1 shows three, Phase 3 two); a **zone is 124x46** and carries its one. That
-difference is what says which sits above the other, so keep them apart if either is restyled.
+**All three levels are art now, not pills.** Phase, zone and boss all answer "where am I", so
+they share one language — art behind, dim until picked — and what separates them is **size**:
+a **phase is 148x72** and carries **one strip per raid** (Phase 1 shows three, Phase 3 two); a
+**zone is 112x48** and carries its one; a **boss is a 76x44 portrait** in the rail. That ladder
+is what says which sits above the other, so keep them ranked if any of them is restyled.
+`test/smoke.mjs` asserts the **ordering** rather than the three numbers — the sizes have moved
+once already and the ranking is the part that must not.
 
-The zone tile adds a bottom scrim (`.chip--zone::after`) that the phase tile does not need: at
-46px the art is busy exactly where the label lands, and a text-shadow alone stops carrying it.
+Those are the **full-width** sizes. Under 1000px the whole ladder steps down (phase and zone go
+fluid, the rail portrait returns to 56x34), because the compact set exists to clear a 900px
+half-screen window — this page lives beside the game, not alone.
 
-**No item count on the face of a tile.** The number is noise where the art is doing the work,
-and the `N of 195 items` line above the table already answers it. It stays in the `aria-label`,
-which is the only way a screen reader gets it and costs nothing on screen. Boss chips keep
-their counts — they are pills with no art competing, and the count is what tells you which boss
-is worth opening.
+Both tiles carry a scrim (`.chip--phase::after`, `.chip--zone::after`). The phase tile did not
+need one at 168x84 and does at 72px: the art is busy exactly where the label lands, and a
+text-shadow alone stops carrying it.
 
-Bosses stay pills — third level, smallest, and a row of up to 13 of them has no room to be
-anything else. `chip()` still builds those; `artChip()` exists because a label over art with a
-count in a corner is not a chip layout, and `chip()` already carries three flags.
+**No item count, and no name, on the face of anything carrying art.** The number is noise where
+the art is doing the work, and the `N of 195 items` line above the table already answers it.
+Both stay in the `aria-label` — the only way a screen reader gets them — and the boss name is
+additionally on `data-tip`, since the rail is the one level whose label is hidden rather than
+absent. **This overturns the old rule that boss chips keep their counts**, which was correct
+while they were pills with no art competing; once the portrait arrived the number was sitting
+on top of the thing it was competing with.
+
+**Bosses were pills until Aug 2026, and the reasoning that changed is worth keeping.** The
+argument for pills was that a row of up to 13 has no room to be anything else. That was right
+about the row and wrong about the shape: as pills, 13 bosses are 13 borders, 13 gaps and two
+wrapped lines; as one bordered rail of portraits with no gaps they are ~786px and fit a 900px
+window. `chip()` still builds them — the rail is CSS on `#boss-chips` plus the `.chip-label`
+span, not a third builder.
+
+**`chip()` wraps its label in `<span class="chip-label">` so the rail can hide the name.** A
+bare text node cannot be hidden, which is the only reason that span exists. The hide is scoped
+`:not(.chip--all)`: the leading All cell is a word and nothing else, and hiding its label would
+leave an empty clickable box. A test pins that exemption, because it is invisible until someone
+looks for the cell that vanished.
 
 `phaseRaids()` is **not** `phaseZones()`. The crafted pseudo-zone has no bosses and no art, so
 it gets no strip — having a `BOSS_ORDER` entry is the test, rather than naming it, so a future
@@ -579,6 +597,22 @@ the JS port of the rule in `check_priority.py`: a spec may appear twice only whe
 is a `Finger`, `Trinket`, `One-Hand`, `Main-Hand` or `Off-Hand` and is not `unique`. The
 editor refuses the drop and says why, so it cannot produce data that fails validation later.
 
+**The palette was restyled to "cold slate", Aug 2026**, from a direction Claude Design
+returned against [docs/design-brief.md](docs/design-brief.md). Every neutral cooled to slate so
+that **gold and the three item-quality colours are the only warm things on screen** — those are
+the colours that carry meaning, and on the old warm browns they were competing with the
+furniture. Nothing marked fixed in the brief moved: `--gold`, `--gold-bright`, `--epic`,
+`--legendary` and `--artifact` are byte-identical, and the BiS rings were not touched at all.
+The two mute treatments were pushed *harder* (`.35 → .26`, `.25 → .2`) precisely to keep the
+brief's promise — slate raises the floor, so the old values had stopped reading as dimmed.
+
+Five things in that package did not survive contact with this repo, and the reasons are all
+still live: `.prio-drop-empty` is a transient class on a `<td>` and must never take `display`
+(see §5); a rule hiding `.chip-label` had to exempt `.chip--all`; a `.prio-pop-arrow` was
+dropped as dead CSS because nothing creates the element; `.field--type` had to be added to the
+markup before a rule could hide it; and boss chips needed a `data-tip` they never had, because
+the rail hides the name that used to be their label.
+
 A visual-direction brief for handing the look to a designer lives in
 [docs/design-brief.md](docs/design-brief.md). It states which colours carry meaning and cannot
 move — the epic/legendary/artifact BiS ladder, gold as "selected", dim as "not you", and the
@@ -615,7 +649,8 @@ current if any of those change.
 - **Which list you are on lives in the banner**, top right, not in a panel: it is not
   filtering, and it applies to the whole page rather than to the rows below it. The split is what
   makes the last one read as narrowing the results rather than as another way of choosing
-  them, so keep chip rows out of it. **Only `.controls--refine` is sticky** — it is the one
+  them. The class and spec strips are the exception and belong there: they are filters, and
+  they sit at the right-hand end of that bar. **Only `.controls--refine` is sticky** — it is the one
   adjusted while reading, it carries the count, and it sits directly above the results;
   two sticky panels would fight over `top: 0`.
 - **Chip rows have no visible label**, and each leads with a bare `All` chip carrying no

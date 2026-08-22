@@ -180,9 +180,48 @@ ok(zoneChips.slice(1).every((c) => c.classList.contains("chip--zone")),
 ok(zoneChips.slice(1).every((c) => c.querySelectorAll(".art-split img").length === 1),
    "each showing its one zone's art");
 ok(!zoneChips[0].querySelector("img"), '"All" chip has no art');
-ok(/\.chip--phase\s*\{[^}]*height:\s*84px/.test(cssText) &&
-   /\.chip--zone\s*\{[^}]*height:\s*46px/.test(cssText),
-   "and a zone tile is visibly smaller than a phase tile, which is what ranks them");
+// Size is what says which control sits above which: phase tile, then zone tile, then
+// boss portrait. Assert the ladder rather than three literal pixel values - the
+// numbers are a styling decision and have already moved once, the ranking is not.
+const heightOf = (sel) => {
+  const m = new RegExp(sel.replace(/[.\-]/g, "\\$&") + "\\s*\\{[^}]*height:\\s*(\\d+)px").exec(cssText);
+  return m ? Number(m[1]) : null;
+};
+const ladder = [".chip--phase", ".chip--zone", "#boss-chips .chip .chip-icon"].map(heightOf);
+ok(ladder.every((h) => h !== null), `every rung of the size ladder has a height (${ladder})`);
+ok(ladder[0] > ladder[1] && ladder[1] > ladder[2],
+   `phase > zone > boss portrait, which is what ranks them (${ladder.join(" > ")})`);
+
+// ---- the boss rail ----
+// It is portraits, not pills: the name is hidden and reached by hovering. Three
+// things have to hold for that to be a rail rather than a row of anonymous squares.
+
+// 1. The label is a span, not a bare text node - a text node cannot be hidden, which
+//    is the whole reason chip() wraps it.
+ok(bossChips.slice(1).every((c) => c.querySelector(".chip-label")),
+   "every boss chip wraps its name in .chip-label so the rail can hide it");
+
+// 2. The name still exists somewhere reachable. Hiding the label takes it out of the
+//    accessible name too, so both the tooltip and the aria-label have to carry it.
+ok(bossChips.slice(1).every((c) => c.dataset.tip && c.dataset.tip.trim()),
+   "and carries the name in data-tip, since the face no longer shows it");
+ok(bossChips.slice(1).every((c) => (c.getAttribute("aria-label") || "").includes(c.dataset.tip)),
+   "and in its aria-label, which display:none would otherwise have emptied");
+
+// 3. The rule that hides the name must not also blank the leading All chip - it is a
+//    word and nothing else, so hiding its label leaves an empty clickable box.
+ok(/#boss-chips[^{]*:not\(\.chip--all\)[^{]*\.chip-label\s*\{[^}]*display:\s*none/.test(cssText),
+   "the rail hides boss names but exempts the All cell, which is only a word");
+ok(bossChips[0].classList.contains("chip--all") && bossChips[0].textContent.trim(),
+   "so the All cell still has text to show");
+
+// No count on the face of a rail portrait either - same rule as the phase and zone
+// tiles, which is what makes the three read as one language. It has to survive in the
+// aria-label, though: that is the only way a screen reader gets it.
+ok(bossChips.slice(1).every((c) => !c.querySelector(".n")),
+   "no count on the face of a rail portrait - the art is doing the work");
+ok(bossChips.slice(1).every((c) => /,\s*\d+ items$/.test(c.getAttribute("aria-label") || "")),
+   "but the count survives in the aria-label, exactly as it does on the tiles");
 ok(bossChips.slice(1).every((c) => c.querySelector("img.chip-icon")), `all ${bossChips.length - 1} boss chips have an icon`);
 ok(!bossChips[0].querySelector("img"), "the boss row's All chip has no icon either");
 
@@ -991,10 +1030,13 @@ ok(rows().length === 0, "and nothing is listed under it yet");
 click(chipByText("#zone-chips", "Karazhan"));
 const bossNames = () => [...doc.querySelectorAll("#boss-chips .chip")]
   .filter((c) => !c.classList.contains("chip--all")).map((c) => c.textContent.replace(/\d+$/, "").trim());
+// The rail shows art alone, so the count lives in the aria-label ("Moroes, 6 items").
+const bossCount = (c) => (/,\s*(\d+) items$/.exec(c.getAttribute("aria-label") || "") || [])[1];
 ok(bossNames().length === 12, `Karazhan lists its 12 encounters (got ${bossNames().length})`);
 ok(bossNames()[0] === "Trash" && bossNames()[11] === "Nightbane",
    `in kill order: ${bossNames()[0]} ... ${bossNames()[11]}`);
-ok([...doc.querySelectorAll("#boss-chips .chip .n")].every((n) => n.textContent === "0"),
+ok([...doc.querySelectorAll("#boss-chips .chip")]
+     .filter((c) => !c.classList.contains("chip--all")).every((c) => bossCount(c) === "0"),
    "every one reads 0 until items arrive");
 ok([...doc.querySelectorAll("#boss-chips .chip")]
      .filter((c) => !c.classList.contains("chip--all") && !/Chess/.test(c.textContent))
@@ -1080,7 +1122,7 @@ const trashChip = () => [...doc.querySelectorAll("#boss-chips .chip")]
   .find((c) => c.textContent.trim().startsWith("Trash"));
 
 click(chipByText("#zone-chips", "Black Temple"));
-ok(trashChip().querySelector(".n").textContent === "9", "BT's Trash counts only BT trash");
+ok(bossCount(trashChip()) === "9", "BT's Trash counts only BT trash");
 click(trashChip());
 ok(rows().length === 9, `Black Temple trash -> 9 rows (got ${rows().length})`);
 ok(groups().length === 1 && /Black Temple/.test(headText()[0]),
@@ -1089,7 +1131,7 @@ ok(window.location.hash.includes("boss=Trash") && window.location.hash.includes(
    `an ambiguous boss is still qualified in the url: ${window.location.hash}`);
 
 click(chipByText("#zone-chips", "Mount Hyjal"));
-ok(trashChip().querySelector(".n").textContent === "12", "and Hyjal's counts only Hyjal trash");
+ok(bossCount(trashChip()) === "12", "and Hyjal's counts only Hyjal trash");
 click(trashChip());
 ok(rows().length === 12, `Mount Hyjal trash -> 12 rows (got ${rows().length})`);
 ok(/Mount Hyjal/.test(headText()[0]), `switching zone re-targets the trash: "${headText()[0]}"`);
@@ -1148,6 +1190,22 @@ ok(doc.querySelector(".controls--refine").nextElementSibling === doc.getElementB
 // external CSS, so a computed-style check here would pass whatever the rule says.
 // A class is safe if it never sets display, or if some rule pairs it with [hidden] -
 // either `.x[hidden] { display: none }` or `.x:not([hidden]) { display: flex }`.
+// `.prio-drop-empty` lands on a <td> during a drag. The tables are table-layout:
+// fixed, so anything that changes that cell's box - display, width, padding - shifts
+// every other column in the row while you drag over it. An outline costs no layout,
+// which is why it is one. Parse the source: jsdom never loads external CSS, so
+// getComputedStyle would pass here no matter what the rule said.
+const dropEmptyRules = cssText.match(/\.prio-drop-empty[^{]*\{[^}]*\}/g) || [];
+ok(dropEmptyRules.length > 0, "the empty-cell drop target has a rule");
+ok(!dropEmptyRules.some((r) => /(^|[;{\s])(display|width|padding)\s*:/.test(r)),
+   "and none of it changes the cell's box, which would shift the fixed columns");
+
+// A media query that hides a class nothing carries is a rule that silently does
+// nothing - which is how the half-screen layout would have kept showing Type.
+for (const cls of [...cssText.matchAll(/\.(field--[a-z]+)\s*\{[^}]*display:\s*none/g)].map((m) => m[1])) {
+  ok(doc.querySelector("." + cls), `.${cls} is hidden by a rule, so something must carry it`);
+}
+
 const bareCss = cssText.replace(/\/\*[\s\S]*?\*\//g, "");
 const hiddenEls = [...doc.querySelectorAll("main [hidden]")];
 ok(hiddenEls.length > 0, `markup hides some controls up front (${hiddenEls.length})`);

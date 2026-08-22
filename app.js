@@ -1232,11 +1232,18 @@
       b.dataset.tip = label;
       b.setAttribute("aria-label", label);
     } else {
+      /* The label is wrapped rather than left as a bare text node because the boss
+         rail hides the name and keeps the count, and a text node cannot be hidden.
+         textContent is unchanged either way.
+
+         The fallback if the CDN stops serving a portrait is the same one the
+         icon-only branch uses: replace the img with the name, rather than just
+         hiding it. In the rail the name is hidden, so hiding the image too would
+         leave an empty cell you could still click. */
       b.innerHTML =
-        /* if the CDN ever stops serving these, fall back to a plain text chip */
         (icon ? '<img class="chip-icon" src="' + escapeHtml(icon) +
-                '" alt="" onerror="this.style.display=\'none\'">' : "") +
-        escapeHtml(label) +
+                '" alt="" onerror="this.replaceWith(document.createTextNode(this.parentNode.dataset.tip || \'\'))">' : "") +
+        '<span class="chip-label">' + escapeHtml(label) + "</span>" +
         (count == null ? "" : ' <span class="n">' + count + "</span>");
     }
 
@@ -1406,7 +1413,20 @@
       orderedBosses(z).forEach(function (b) {
         if (b === NO_BOSS) return;   /* crafted items are a zone, not a boss */
         var active = state.boss === b && (!state.bossZone || state.bossZone === z);
-        var c = chip(bossLabel(b), active, counts[bossKey(z, b)] || 0, null, BOSS_ICON[b]);
+        var n = counts[bossKey(z, b)] || 0;
+        /* No count on the face of a rail portrait, for the same reason the phase and
+           zone tiles don't carry one: the number is clutter where the art is doing
+           the work, and the "N of 195 items" line above the table already answers it.
+           It survives in the aria-label, exactly as it does on the tiles - which is
+           the only way a screen reader gets it, and costs nothing on screen.
+
+           The name has to be carried somewhere too, now that the face shows neither.
+           data-tip is the instant tooltip (a title attribute has a browser delay that
+           can't be turned off); the aria-label is what a screen reader gets, since a
+           display:none label is out of the accessible name. */
+        var c = chip(bossLabel(b), active, null, null, BOSS_ICON[b]);
+        c.dataset.tip = bossLabel(b);
+        c.setAttribute("aria-label", bossLabel(b) + ", " + n + " items");
         c.addEventListener("click", function () {
           if (active) { state.boss = ""; state.bossZone = ""; }
           else { state.boss = b; state.bossZone = z; }
