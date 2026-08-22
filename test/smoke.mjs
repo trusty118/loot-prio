@@ -251,7 +251,13 @@ ok(allChips.every((c) => c.getAttribute("aria-label") === c.dataset.tip),
    "and repeats it as an aria-label");
 
 
-const allImgs = [...doc.querySelectorAll("img")];
+// Every image on this page is hotlinked from wow.zamimg.com at a size that was checked
+// for a 200 before it was wired up, and carries a fallback for the day one stops being
+// served. The account avatar is the single exception and is excluded deliberately: its
+// URL comes from Discord, for a person, and is not ours to verify - so it is built in
+// app.js rather than sitting in the markup, and its onerror removes it entirely, which
+// leaves the name that was always the part carrying the meaning.
+const allImgs = [...doc.querySelectorAll("img:not(.account-avatar)")];
 ok(allImgs.length > 0 && allImgs.every((i) => i.getAttribute("src")), "no img has an empty src");
 ok(allImgs.every((i) => /^https:\/\/wow\.zamimg\.com\//.test(i.getAttribute("src"))), "every img src is on zamimg");
 ok(allImgs.every((i) => i.getAttribute("onerror")), "every img has an onerror fallback");

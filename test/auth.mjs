@@ -100,6 +100,10 @@ function boot({ configured = false, sdk = null } = {}) {
 
 const $ = (w, id) => w.document.getElementById(id);
 const shown = (w, id) => { const n = $(w, id); return !!n && !n.hidden; };
+const acctName = (w) => ($(w, "account-name") || {}).textContent || "";
+/* Sign out lives in the account menu now, so reaching it means opening that first -
+   which is itself the thing worth asserting. */
+const openAcct = (w) => { $(w, "account").click(); return w.document.querySelector(".acct-menu"); };
 
 // ---------------------------------------------------------------------------------
 // 1. The anon key is publishable; the service key never is.
@@ -168,7 +172,7 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
 
   sdk.auth._signIn("Late");
   await settle();
-  ok(shown(w, "account") && $(w, "account").textContent === "Late",
+  ok(shown(w, "account") && acctName(w) === "Late",
      "and signing in works normally afterwards");
 }
 
@@ -219,9 +223,22 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
 
   sdk.auth._signIn("Trusty");
   await settle();
-  ok(shown(w, "account") && $(w, "account").textContent === "Trusty",
-     `signed in, the bar shows who you are (got "${$(w, "account").textContent}")`);
-  ok(shown(w, "sign-out") && !shown(w, "sign-in"), "and offers sign-out instead of sign-in");
+  ok(shown(w, "account") && acctName(w) === "Trusty",
+     `signed in, the bar shows who you are (got "${acctName(w)}")`);
+  ok(!shown(w, "sign-in"), "and stops offering to sign in");
+
+  // The account control is a menu, not two more buttons on an already busy bar.
+  const menu = openAcct(w);
+  ok(menu && menu.style.display === "block", "clicking the account opens a menu");
+  ok($(w, "account").getAttribute("aria-expanded") === "true", "and says so on aria-expanded");
+  ok(/Signed in as/.test(menu.textContent) && /Trusty/.test(menu.textContent),
+     "which states who you are rather than offering your own name as a button");
+  ok([...menu.querySelectorAll(".acct-item")].some((b) => b.textContent === "Sign out"),
+     "and carries Sign out");
+
+  // Escape closes it, like the other two overlays
+  menu.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  ok(menu.style.display === "none", "Escape closes it, as it does the other two overlays");
 
   // 5. the merge offer: local lists exist, the account is empty
   ok(shown(w, "tpl-merge"),
@@ -242,7 +259,8 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
      "and localStorage is not touched - the store really did swap");
 
   // 7. signing out returns you to this browser's lists, losing nothing either side
-  $(w, "sign-out").click();
+  const m2 = openAcct(w);
+  [...m2.querySelectorAll(".acct-item")].find((b) => b.textContent === "Sign out").click();
   await settle();
   ok(shown(w, "sign-in") && !shown(w, "account"), "signing out returns the sign-in button");
   ok(sdk._rows.size === 2, "the account keeps its lists");

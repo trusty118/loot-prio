@@ -325,13 +325,19 @@ a:hover { color: var(--gold-bright); }
 .chip--phase .art-label { padding: 5px 8px; font-size: 13px; }
 
 /* At 84px the phase art was quiet where the label landed and a text-shadow carried
-   it. At 62px it isn't, so the phase tile now takes the scrim the zone always had. */
+   it. At 62px it isn't, so the phase tile takes the scrim the zone always had.
+
+   Tight and steep, not broad and soft. A gradient over the bottom 70% fading gently to
+   transparent puts a dark wash across most of the tile, which is what was actually
+   burying the art once the dim filter had been lifted - the filter had stopped being
+   the limiter and this had become it. Darker where the text is, gone by halfway. */
 .chip--phase::after {
   content: "";
   position: absolute;
   inset: auto 0 0 0;
-  height: 70%;
-  background: linear-gradient(to top, rgba(4, 6, 9, .92), transparent);
+  height: 52%;
+  background: linear-gradient(to top,
+    rgba(4, 6, 9, .95) 0%, rgba(4, 6, 9, .72) 45%, transparent 100%);
   pointer-events: none;
 }
 
@@ -341,14 +347,15 @@ a:hover { color: var(--gold-bright); }
 .chip--zone { width: 112px; height: 48px; }
 .chip--zone .art-label { padding: 3px 7px; font-size: 11px; color: var(--text); }
 
-/* Full height, not the bottom 60%: at 38px there is no part of the tile the text
-   isn't sitting on. */
+/* Same shape as the phase scrim, proportionally taller: the zone tile is shorter, so
+   its label takes a bigger share of it. Still clears the top third for art. */
 .chip--zone::after {
   content: "";
   position: absolute;
   inset: auto 0 0 0;
-  height: 78%;
-  background: linear-gradient(to top, rgba(4, 6, 9, .92), transparent);
+  height: 62%;
+  background: linear-gradient(to top,
+    rgba(4, 6, 9, .95) 0%, rgba(4, 6, 9, .7) 50%, transparent 100%);
   pointer-events: none;
 }
 
@@ -1198,16 +1205,107 @@ mark {
   flex: none;
 }
 
-/* Who you are signed in as. Deliberately quiet - it is a status, not a control, and
-   the bar beside it is all controls. */
+/* Who you are, and the things you can do about that, in one control - which is what
+   every site does with an account, and it keeps two more buttons off a bar that already
+   carries List, New and Make a copy.
+
+   `display` here would beat the browser's [hidden] and pin it to the bar while signed
+   out - see CLAUDE.md section 5, which this has now caught four times. */
+.account[hidden] { display: none; }
+
 .account {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: inherit;
   font-size: .82rem;
   color: var(--text-dim);
-  max-width: 18ch;
+  background: var(--bg-panel-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 3px 8px 3px 4px;
+  cursor: pointer;
+  max-width: 22ch;
+}
+
+.account:hover { color: var(--text); border-color: var(--gold); }
+.account[aria-expanded="true"] { color: var(--text); border-color: var(--gold); }
+
+.account-avatar {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: 999px;
+  object-fit: cover;
+  background: #000;
+}
+
+.account-name {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.account-caret { font-size: .7em; opacity: .7; flex: none; }
+
+/* The third overlay on the page, and it takes the same shell as the other two so they
+   cannot drift into three different-looking menus. */
+.acct-menu {
+  position: fixed;
+  z-index: 40;
+  display: none;
+  min-width: 180px;
+  padding: 4px;
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, .7);
+  color: var(--text);
+}
+
+/* A statement, not an option: it sits above the items and is not clickable, so the
+   menu never looks like it is offering you your own name to press. */
+.acct-who {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 6px 9px 8px;
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: 4px;
+}
+
+.acct-who-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.acct-who-name {
+  font-size: .86rem;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.acct-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  font-size: .86rem;
+  padding: 6px 9px;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.acct-item:hover, .acct-item:focus-visible { background: var(--bg-panel-2); color: var(--text); }
 
 /* Offered once, at the only moment it means anything: just after signing in, when
    this device has lists and the account does not. Gold because it is the one thing on

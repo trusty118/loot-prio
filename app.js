@@ -652,8 +652,8 @@
     editToggle: document.getElementById("edit-toggle"),
     tplShare: document.getElementById("tpl-share"),
     signIn: document.getElementById("sign-in"),
-    signOut: document.getElementById("sign-out"),
     account: document.getElementById("account"),
+    accountName: document.getElementById("account-name"),
     tplMerge: document.getElementById("tpl-merge"),
     tplDelete: document.getElementById("tpl-delete"),
     tplLinkOut: document.getElementById("tpl-link-out"),
@@ -844,6 +844,31 @@
 
   /* The Discord display name, for the bar. Falls back through what Discord actually
      sends before giving up on a label rather than rendering "undefined". */
+  /* The one image on this page that does not come from wow.zamimg.com, and the only
+     one whose URL is chosen by someone else. Built here rather than sitting empty in
+     the markup - an <img> with no src is a request for the page itself in some
+     browsers - and it removes itself if Discord's CDN will not serve it, leaving the
+     name, which was always the part that mattered. */
+  function renderAvatar() {
+    var have = el.account && el.account.querySelector(".account-avatar");
+    var url = accountAvatar();
+    if (!url) { if (have) have.remove(); return; }
+    if (have && have.getAttribute("src") === url) return;
+    if (have) have.remove();
+    var img = document.createElement("img");
+    img.className = "account-avatar";
+    img.alt = "";
+    img.setAttribute("onerror", "this.remove()");
+    img.src = url;
+    el.account.insertBefore(img, el.account.firstChild);
+  }
+
+  function accountAvatar() {
+    if (!signedIn()) return "";
+    var m = session.user.user_metadata || {};
+    return m.avatar_url || m.picture || "";
+  }
+
   function accountName() {
     if (!signedIn()) return "";
     var m = session.user.user_metadata || {};
@@ -2724,8 +2749,70 @@
     });
   }
 
+  /* ---------- the account menu ----------
+     The third overlay on this page, and built like the other two: created once,
+     parented to <body> so no scroll container can clip it, positioned by placeUnder()
+     rather than by arithmetic of its own, and closed by Escape or a click away. */
+
+  var acctMenu = null;
+
+  function closeAcctMenu() {
+    if (acctMenu) acctMenu.style.display = "none";
+    if (el.account) el.account.setAttribute("aria-expanded", "false");
+  }
+
+  function buildAcctMenu() {
+    acctMenu = document.createElement("div");
+    acctMenu.className = "acct-menu";
+    acctMenu.setAttribute("role", "menu");
+    acctMenu.setAttribute("aria-label", "Account");
+    acctMenu.style.display = "none";
+
+    /* Who you are, stated rather than actionable - the button that opened this shows a
+       name, and a menu whose first line repeats it without saying what it is reads as a
+       thing you should click. */
+    var who = document.createElement("div");
+    who.className = "acct-who";
+    var w1 = document.createElement("span");
+    w1.className = "acct-who-label";
+    w1.textContent = "Signed in as";
+    var w2 = document.createElement("span");
+    w2.className = "acct-who-name";
+    who.appendChild(w1);
+    who.appendChild(w2);
+    acctMenu.appendChild(who);
+
+    var out = document.createElement("button");
+    out.type = "button";
+    out.className = "acct-item";
+    out.setAttribute("role", "menuitem");
+    out.textContent = "Sign out";
+    out.addEventListener("click", function () { closeAcctMenu(); signOut(); });
+    acctMenu.appendChild(out);
+
+    acctMenu.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { e.preventDefault(); closeAcctMenu(); el.account.focus(); }
+    });
+
+    document.body.appendChild(acctMenu);
+  }
+
+  function toggleAcctMenu() {
+    if (!acctMenu) buildAcctMenu();
+    if (acctMenu.style.display === "block") { closeAcctMenu(); return; }
+    closePop();                       /* only one overlay at a time */
+    closeOpMenu();
+    acctMenu.querySelector(".acct-who-name").textContent = accountName();
+    acctMenu.style.display = "block";
+    el.account.setAttribute("aria-expanded", "true");
+    placeUnder(acctMenu, el.account);
+    var first = acctMenu.querySelector(".acct-item");
+    if (first) first.focus();
+  }
+
   function signOut() {
     if (!supabaseReady()) return;
+    closeAcctMenu();
     sb.auth.signOut().then(function () {
       /* Back to this browser's own lists. Nothing of theirs is deleted either side of
          the line: the account keeps its rows, localStorage keeps its own. */
@@ -2896,10 +2983,14 @@
     /* No sign-in button at all when it could not work - an unconfigured project or a
        blocked CDN should read as "this site has no accounts", not as a broken button. */
     show(el.signIn, supabaseReady() && !signedIn());
-    show(el.signOut, supabaseReady() && signedIn());
     show(el.account, supabaseReady() && signedIn());
     show(el.tplMerge, mergeOffer);
-    if (signedIn() && el.account) el.account.textContent = accountName();
+    if (signedIn()) {
+      if (el.accountName) el.accountName.textContent = accountName();
+      renderAvatar();
+    } else {
+      closeAcctMenu();
+    }
 
     show(el.tplName, activeIsMine);
     show(el.tplDirty, activeIsMine && unsaved);
@@ -2957,7 +3048,10 @@
     });
 
     if (el.signIn) el.signIn.addEventListener("click", signIn);
-    if (el.signOut) el.signOut.addEventListener("click", signOut);
+    if (el.account) el.account.addEventListener("click", function (ev) {
+      ev.stopPropagation();           /* opening it must not count as a click away */
+      toggleAcctMenu();
+    });
     if (el.tplMerge) el.tplMerge.addEventListener("click", doMerge);
 
     el.tplCopy.addEventListener("click", function () {
@@ -3159,6 +3253,9 @@
       if (opMenu && opMenu.style.display !== "none" &&
           !opMenu.contains(e.target) &&
           !(e.target.closest && e.target.closest(".prio-op--editing"))) closeOpMenu();
+      if (acctMenu && acctMenu.style.display !== "none" && !acctMenu.contains(e.target)) {
+        closeAcctMenu();
+      }
     });
 
     window.addEventListener("hashchange", function () {
