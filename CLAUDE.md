@@ -590,6 +590,15 @@ Three consequences worth keeping:
 `renderTemplateBar()` **directly and never `update()`** — `update()` is what calls
 `renderTemplateBar` in the first place.
 
+**Rows count what is *ranked*, not what is held.** Every list is a full copy of all 195
+records, so an item count is the same number on every row and says nothing — `159 ranked`
+for zatar's, `0 ranked` for a list you have just started, is the number that separates
+them. `store.list()` returns it as `filled`; `localStore` gets it free from the blob it
+already reads, and `remoteStore` pulls `priorities` to count client-side. **If someone
+ever has dozens of lists, the fix is a generated column in Postgres, not a lighter
+select** — the number has to come from the priorities either way, and the database can
+compute it once per write instead of the client computing it once per read.
+
 **The menu is the fourth overlay and shares the other three's machinery**: built once,
 parented to `<body>`, positioned by `placeUnder()`, closed by Escape. It has three faces —
 the list, the rename field, the delete confirm — swapped in place so there is one anchor and

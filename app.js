@@ -751,6 +751,26 @@
     catch (e) { /* private browsing: the session still works, it just won't persist */ }
   }
 
+  /* How much of a list actually says something. Every list holds all 195 records - a
+     template is a full copy, not a diff - so "195 items" was true of every one of them
+     and told you nothing. What separates them is how many carry a priority. */
+  function filledCount(priorities) {
+    if (!priorities) return 0;
+    var n = 0;
+    Object.keys(priorities).forEach(function (id) {
+      if ((priorities[id] || []).length) n++;
+    });
+    return n;
+  }
+
+  /* zatar's own, which is not in any store: 159 of the 195. The other 36 are the rows
+     where his call was "whoever needs it" and the 13 the videos never covered. */
+  function zatarFilled() {
+    var n = 0;
+    ALL.forEach(function (rec) { if ((rec.priority || []).length) n++; });
+    return n;
+  }
+
   var localStore = {
     read: function () {
       try {
@@ -766,7 +786,10 @@
     list: function () {
       var all = this.read();
       return Promise.resolve(Object.keys(all).map(function (id) {
-        return { id: id, name: all[id].name, created: all[id].created };
+        return {
+          id: id, name: all[id].name, created: all[id].created,
+          filled: filledCount(all[id].priorities)
+        };
       }));
     },
     load: function (id) {
@@ -889,12 +912,20 @@
      whole reason edit mode was built against an async store before login existed.
      Nothing that calls these learns which one it is talking to. */
   var remoteStore = {
+    /* `priorities` is the heavy column and this pulls it for every list, only to count
+       the non-empty entries. It is fine at the scale this runs at - a person has a
+       handful of lists, each ~12KB - and it keeps the count honest without a schema
+       change. If someone ever has dozens, the fix is a generated column in Postgres
+       holding the count, not a lighter select here: the number has to come from the
+       priorities either way, and the database can compute it once per write instead of
+       the client computing it once per read. */
     list: function () {
-      return sb.from("lists").select("id,name,created").order("updated_at", { ascending: false })
+      return sb.from("lists").select("id,name,created,priorities")
+        .order("updated_at", { ascending: false })
         .then(function (res) {
           if (res.error) throw new Error(res.error.message);
           return (res.data || []).map(function (r) {
-            return { id: r.id, name: r.name, created: r.created };
+            return { id: r.id, name: r.name, created: r.created, filled: filledCount(r.priorities) };
           });
         });
     },
@@ -3078,7 +3109,9 @@
 
     var c = document.createElement("span");
     c.className = "lm-row-count";
-    c.textContent = count == null ? "" : count + " items";
+    /* "ranked", not "items": every list holds all 195 records, so an item count is the
+       same number on every row. This is the one that differs. */
+    c.textContent = count == null ? "" : count + " ranked";
 
     b.appendChild(tick);
     b.appendChild(main);
@@ -3096,20 +3129,25 @@
     if (savedLists.length) {
       listMenu.appendChild(menuSection("Your lists"));
       savedLists.forEach(function (t) {
+        /* the open list is the one being edited, so take its count live rather than
+           from the cache, which is only as fresh as the last write */
+        var n = (activeIsMine && activeTemplate && activeTemplate.id === t.id)
+          ? filledCount(activeTemplate.priorities) : t.filled;
         listMenu.appendChild(listRow(
-          t.name, ALL.length,
+          t.name, n,
           activeIsMine && activeTemplate && activeTemplate.id === t.id, "",
           function () { closeListMenu(); openById(t.id); }));
       });
     }
 
     listMenu.appendChild(menuSection("Following"));
-    listMenu.appendChild(listRow("zatar's list", ALL.length, !activeTemplate, "by zatar",
+    listMenu.appendChild(listRow("zatar's list", zatarFilled(), !activeTemplate, "by zatar",
       function () { closeListMenu(); showZatar(); announce("Showing zatar's list"); update(); }));
     /* a list that arrived on a link is not in the store, so it needs a row of its own or
        the menu would claim zatar's list was the one on screen */
     if (activeTemplate && !activeIsMine) {
-      listMenu.appendChild(listRow(activeTemplate.name, ALL.length, true, "shared with you",
+      listMenu.appendChild(listRow(activeTemplate.name, filledCount(activeTemplate.priorities),
+        true, "shared with you",
         function () { closeListMenu(); }));
     }
 
@@ -3203,8 +3241,9 @@
 
     var p = document.createElement("p");
     p.className = "lm-note";
-    p.textContent = "Delete \u201c" + activeTemplate.name + "\u201d and its " + ALL.length +
-      " items? Anyone you sent the link to will lose it.";
+    var n = filledCount(activeTemplate.priorities);
+    p.textContent = "Delete \u201c" + activeTemplate.name + "\u201d and the " + n +
+      (n === 1 ? " item" : " items") + " you have ranked? Anyone you sent the link to will lose it.";
     listMenu.appendChild(p);
 
     var row = document.createElement("div");
