@@ -489,12 +489,65 @@ results say so rather than look broken. **Don't paper over it by extending `unso
 ### Storage
 
 ```js
-var store = { list(), load(id), save(t), remove(id) };   // localStorage now, Azure later
+var store = { list(), load(id), save(t), remove(id) };   // localStore or remoteStore
 ```
 
-**Async from the start** even though localStorage is synchronous, so the Azure Functions +
-Cosmos implementation is a drop-in rather than a refactor of every call site. That is the
-entire reason edit mode was built before login.
+**Async from the start** even though localStorage is synchronous, so the remote
+implementation would be a drop-in rather than a refactor of every call site. That is the
+entire reason edit mode was built before login — **and it paid off exactly as intended**:
+adding Supabase changed `activeStore()` and nothing else. No call site moved.
+
+**Signed out is the whole product.** Make lists, edit them, share them by link, all kept in
+`localStorage`. Signing in is an *upgrade* — your lists follow you between machines instead
+of being trapped in one browser — and never a gate. Friends arriving to try the editor must
+never meet a login wall, which is why `activeStore()` falls back rather than refusing.
+
+**Sign-in uses the PKCE flow, and that is not a detail.** The implicit flow returns the
+session in the **hash fragment**, which is where this entire site keeps its state — the two
+would be writing to the same place on the same page load. PKCE returns `?code=` in the query
+instead. Different storage, no collision.
+
+**`writeUrl()` must preserve `location.search`.** It used to rebuild from `location.pathname`
+alone, silently dropping any query string. Nothing here uses the query string, so it went
+unnoticed for the life of the project — until an OAuth redirect came back as `?code=` and
+`update()` deleted Discord's answer at boot, *before the SDK had finished loading*. Sign-in
+then did nothing at all, with no error anywhere.
+
+**The hash cannot ride along in `redirectTo`.** Supabase appends `?code=` to that URL, and a
+query has to sit before a fragment, so a `redirectTo` ending in one composes into nonsense.
+`stashReturn()` parks the hash in `sessionStorage` and `restoreReturn()` puts it back once the
+session lands — which is why signing in returns you to the phase and filters you left.
+
+**The SDK is very often not loaded when `initAuth()` first runs**, and it looks like it
+should be. `app.js` is a classic script at the end of `<body>` so it executes *during*
+parsing; the deferred SDK executes *after*. `app.js` is therefore always first, and
+`initAuth()` is called from the data-fetch `.then()`, which over localhost resolves in a
+couple of milliseconds — long before 212KB arrives from a CDN. Checking `window.supabase`
+once and giving up meant **the button never appeared at all, on exactly the machine you
+would be testing on**. `whenSupabaseReady()` waits on the `<script id="supabase-sdk">`
+tag's `load` event instead, and checks the global *first* — if the script has already run,
+its `load` has already fired and will never fire again.
+
+**Everything about sign-in fails soft**, the same way `specs.json` and `bis.json` do: no
+config, a blocked CDN, a paused project, or jsdom — you lose sign-in, not the page. That is
+why `supabaseReady()` is re-checked at each entry point instead of being resolved once, and
+why the sign-in button is *absent* rather than disabled when it could not work. A disabled
+button says "this is broken"; no button says "this site has no accounts", which is the
+truth in that state.
+
+**The anon key belongs in `app.js` and is not a secret.** It identifies the project; it
+authorises nothing. What actually protects a list is the row-level-security policy
+(`auth.uid() = user_id`) — the database itself refuses to hand over someone else's rows no
+matter what the client asks for. **The service-role key bypasses those policies and must
+never appear in this repo**; `test/auth.mjs` greps for it, and for any pasted JWT literal,
+with comments stripped first so the file can still explain the rule without failing on it.
+
+**Local lists do not follow you into an account by themselves.** The store swaps the moment
+you sign in, so without help someone's first sign-in makes their work appear to vanish — it
+hasn't, it is still in `localStorage`, just no longer what the dropdown reads. `offerMerge()`
+offers to copy it up, in place in the bar, and **only when the account is empty**: offering
+it every time would silently duplicate everything on every sign-in. The local copies are
+never moved or deleted, so answering wrong costs nothing.
 
 **There is no Save button.** A list is written when it is made and again on every edit
 (`saveNow()`), so it is in the dropdown from birth and nothing is lost by forgetting to press
@@ -505,7 +558,7 @@ character. Whether a write is outstanding lives in a module-level `unsaved`, del
 ### The bar
 
 ```
-[ List ▾ ]  [ name______ ]   New   Make a copy   Edit   Copy link   Delete
+[ List ▾ ]  [ name______ ]   New   Make a copy   Edit   Copy link   Delete   <name>  Sign out
 ```
 
 What it offers follows what is on screen: zatar's list and a shared list get New and Make a
@@ -610,8 +663,25 @@ editor refuses the drop and says why, so it cannot produce data that fails valid
 returned against [docs/design-brief.md](docs/design-brief.md). Every neutral cooled to slate so
 that **gold and the three item-quality colours are the only warm things on screen** — those are
 the colours that carry meaning, and on the old warm browns they were competing with the
-furniture. Nothing marked fixed in the brief moved: `--gold`, `--gold-bright`, `--epic`,
+furniture. Nothing marked fixed in the brief moved at the time: `--gold`, `--gold-bright`, `--epic`,
 `--legendary` and `--artifact` are byte-identical, and the BiS rings were not touched at all.
+
+**The accent has since moved to `#86cf3e`** (bright `#a8e05c`), Aug 2026 — a tempered fel
+green, for TBC, and worth recording how it was reached because both ends were wrong. Outland's
+own `#8fce00` was the literal answer and read as **acid**: a bright yellow-green is the one hot
+thing on a page deliberately cooled to slate, and it appears on every `All` chip at once. Jade
+`#2fbf71` corrected the heat and **overshot** — cool and dark enough to look washed out, and no
+longer recognisably TBC. `#86cf3e` keeps fel's yellow-green hue, which is the part that reads
+as Outland, and takes the brightness out. The tokens keep their `--gold` names on purpose:
+renaming 58 usages
+buys nothing when a later expansion just changes the two values again. Green is normally wrong
+for a WoW page, since `#1eff00` is uncommon quality; it is safe here only because every item in
+this dataset is epic or legendary, so **no green item name ever renders**. It also fixed a real
+ambiguity — the old `#d9b45a` sat a few degrees from `--artifact #e6cc80`, so "selected" and
+"expansion BiS" looked alike despite meaning nothing like each other. **The BiS ladder itself
+is still untouched.** Two `rgba()` literals of the old gold (`#spec-chips`, `mark`) were never
+tethered to the token and would have stayed gold on a green page; both `color-mix` off
+`--gold` now, so they cannot drift again.
 The two mute treatments were pushed *harder* (`.35 → .26`, `.25 → .2`) precisely to keep the
 brief's promise — slate raises the floor, so the old values had stopped reading as dimmed.
 
@@ -624,7 +694,7 @@ the rail hides the name that used to be their label.
 
 A visual-direction brief for handing the look to a designer lives in
 [docs/design-brief.md](docs/design-brief.md). It states which colours carry meaning and cannot
-move — the epic/legendary/artifact BiS ladder, gold as "selected", dim as "not you", and the
+move — the epic/legendary/artifact BiS ladder, the accent as "selected", dim as "not you", and the
 phase/zone/boss size ranking — so a restyle does not quietly break the semantics. Keep it
 current if any of those change.
 
@@ -639,13 +709,26 @@ current if any of those change.
   the bar. Anything the code hides with `hidden` must either never set `display`, or pair it
   with the attribute — `.x[hidden] { display: none }` or `.x:not([hidden]) { display: flex }`.
   `test/smoke.mjs` checks this against the stylesheet **source**: jsdom does not load external
-  CSS, so a `getComputedStyle` check would pass no matter what the rule said.
+  CSS, so a `getComputedStyle` check would pass no matter what the rule said. **It has now
+  bitten three times** — `.control-row`, `.tpl-link-out`, and `.btn-discord`, which would
+  have pinned the sign-in button to the bar whether or not you were signed in. The third one
+  also exposed that the guard was scoped to `main [hidden]`, so it never covered the template
+  bar — which is in `<header>`, and is where all three actually happened. It is document-wide
+  now. A guard that does not cover the scene of the crime is not a guard.
 - **Don't hide table cells with `display: none`.** The tables are `table-layout: fixed`;
   hiding a cell makes the rest shift into the wrong columns. Don't generate the column —
   that is how the Role column was removed.
 - **`title` attributes have a ~1s browser delay** that can't be configured. Icon tooltips
   use `data-tip` plus a `.tip` element parented to `<body>` (inside the table it would be
   clipped by the scroll container).
+- **The three data fetches revalidate (`FRESH = { cache: "no-cache" }`).** Pages serves
+  these with `max-age=600`, so without it a corrected role or boss attribution reads stale
+  for ten minutes after a deploy — the "everyone hard-refresh" problem, which nobody should
+  ever be asked to do. `no-cache` does not disable caching; it forces a conditional request,
+  which costs a ~200-byte `304` when nothing changed. This is also **why item data stays in
+  files rather than moving to a database**: code and data ship in one commit and deploy
+  together, so a cached `app.js` can never disagree with the data it is reading. A database
+  reintroduces exactly that skew.
 - **Icon URLs are verified before use.** Everything comes from `wow.zamimg.com`; check a
   new one returns 200 before wiring it up. Boss portraits are Encounter Journal art
   (`ui-ej-boss-*.png`) with irregular slugs — `najentus`, `kazrogal`, no leading "the" on
@@ -687,6 +770,14 @@ current if any of those change.
 - `test/templates.mjs` — a template is a full copy, a blank one is valid and shareable,
   storage round-trips, the URL encoding round-trips, and eight kinds of hand-crafted bad
   template are each refused.
+- `test/auth.mjs` — signing in, against a **fake Supabase that is a working in-memory
+  table** rather than a call recorder, so the assertions are about behaviour that
+  round-trips. It pins the fail-soft states (unconfigured, and configured-but-CDN-blocked,
+  which is the realistic outage), that the store genuinely swaps with the session, that the
+  merge offer appears only when the account is empty, and that merging never deletes the
+  local copy. The keys are consts inside the IIFE — the right place for them — so the test
+  rewrites the source string rather than `app.js` growing a hook that exists only for tests.
+  **The OAuth redirect itself cannot happen in jsdom** and is checked by hand, like the drag.
 
 They can't cover anything needing a real browser: Wowhead's script doesn't complete its
 data fetch under jsdom, so **item icons and item tooltips are untested** — check those by

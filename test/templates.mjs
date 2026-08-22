@@ -34,6 +34,25 @@ function boot(hash) {
 }
 const settle = () => new Promise((r) => setTimeout(r, 400));
 
+/* A fixed sleep is a race, and this one lost about 40% of the time on a loaded
+   machine: booting a shared list means fetches, promises and a gzip round trip through
+   DecompressionStream, and 400ms is not a guarantee of anything. Worse, it fails as an
+   unrelated assertion, so the natural reading is "the change I just made broke sharing"
+   rather than "the test did not wait long enough".
+
+   Wait for the condition instead. Same speed when things are quick, and it only spends
+   the time when it has to. */
+async function waitFor(cond, what, ms = 5000) {
+  const until = Date.now() + ms;
+  while (Date.now() < until) {
+    if (cond()) return true;
+    await new Promise((r) => setTimeout(r, 20));
+  }
+  console.log(`FAIL  timed out after ${ms}ms waiting for ${what}`);
+  fail.push(`timed out waiting for ${what}`);
+  return false;
+}
+
 const w = boot();
 await settle();
 const api = w.__api;
@@ -98,8 +117,9 @@ ok(typeof junk === "string", `a damaged link is refused: ${junk}`);
 
 // --- loading a shared link -------------------------------------------------------
 const shared = boot("#t=" + code);
-await settle();
 const picker = shared.document.getElementById("tpl-list");
+await waitFor(() => picker.selectedOptions.length && /^Shared:/.test(picker.selectedOptions[0].textContent),
+              "the shared list to open");
 ok(picker.selectedOptions[0].textContent === "Shared: Test list",
    `a #t= link opens that list on load: "${picker.selectedOptions[0].textContent}"`);
 ok(shared.document.getElementById("edit-toggle").hidden,

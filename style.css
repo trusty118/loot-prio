@@ -14,9 +14,28 @@
   --text-dim: #98a2b3;
   --text-faint: #6b7482;
 
-  /* FIXED - gold means selected, everywhere, one meaning. */
-  --gold: #d9b45a;
-  --gold-bright: #f0cf82;
+  /* One accent, one meaning: selected. The token names are historical - this is green
+     now, for TBC, and a later expansion just changes these two values again.
+
+     A tempered fel green, arrived at from both ends. Outland's own #8fce00 was tried
+     first and read as acid against a palette deliberately cooled to slate - the one hot
+     thing on a cold page, shouting from every All chip. Jade #2fbf71 fixed that and
+     overshot: cool and dark enough to look washed out, and no longer obviously TBC.
+
+     This keeps fel's yellow-green hue, which is the part that says Outland, and takes
+     the brightness out of it. Still clear of --artifact gold below, and still nothing
+     like #1eff00 uncommon green.
+
+     Green is normally a bad accent for a WoW page, because #1eff00 is uncommon quality.
+     It is safe here for a reason specific to this dataset: every item on this site is
+     epic or legendary, so no green item name ever renders and there is nothing for it
+     to be confused with.
+
+     It also fixes something that was quietly wrong. The old #d9b45a sat a few degrees
+     from --artifact #e6cc80, so "selected" and "expansion BiS" - two things with no
+     relationship at all - looked like the same colour. They no longer do. */
+  --gold: #86cf3e;
+  --gold-bright: #a8e05c;
 
   /* WoW item-quality colours, reused for the BiS longevity ladder:
      epic -> legendary -> artifact, matching how long an item stays BiS */
@@ -573,7 +592,9 @@ a:hover { color: var(--gold-bright); }
 
 #spec-chips {
   border-color: var(--gold);
-  background: rgba(217, 180, 90, .10);
+  /* colour-mixed off the token rather than a hard-coded rgba: the literal here was the
+     old gold, and it would have stayed gold while everything around it went green */
+  background: color-mix(in srgb, var(--gold) 10%, transparent);
 }
 
 select, input[type="search"] {
@@ -963,7 +984,7 @@ tbody tr:hover .spec-icon--muted { opacity: .5; }
 .tip-bis--3 { color: var(--artifact); }
 
 mark {
-  background: rgba(217, 180, 90, .28);
+  background: color-mix(in srgb, var(--gold) 28%, transparent);
   color: inherit;
   border-radius: 2px;
   padding: 0 1px;
@@ -1121,6 +1142,74 @@ mark {
   color: #ffb4a8;
   font-weight: 600;
 }
+
+/* ---------- sign in ----------
+   Discord's own colours, deliberately, and the one place on this page that breaks the
+   "gold and the item-quality colours are the only saturated things" rule.
+
+   That rule is about colours *this site* uses to mean something about your data. A
+   third-party brand mark is a different category: it is not us claiming meaning, it is
+   Discord identifying itself, and the recognition is the entire point - people know at
+   a glance that this is a redirect and a consent screen rather than a new password to
+   invent. Hesitating at a sign-in prompt is a worse outcome than a button that does not
+   match the furniture.
+
+   Blurple is cool, so it never competes with gold. It is close in hue to --epic, but
+   the two are never in eyeshot: rings live in the table, this lives in the banner. And
+   it is gone the moment you sign in. */
+/* `display` here would otherwise beat the browser's [hidden] and pin the button to the
+   bar for good - signed in or not. Third time this trap has been sprung in this repo;
+   see CLAUDE.md section 5. */
+.btn-discord[hidden] { display: none; }
+
+.btn-discord {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border: 1px solid #5865f2;
+  border-radius: var(--radius);
+  background: #5865f2;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-discord:hover { background: #4752c4; border-color: #4752c4; }
+
+/* The mark is never recoloured or distorted, per Discord's brand guidance - it takes
+   the button's own text colour and keeps its aspect ratio. */
+.discord-mark {
+  width: 18px;
+  height: 14px;
+  flex: none;
+}
+
+/* Who you are signed in as. Deliberately quiet - it is a status, not a control, and
+   the bar beside it is all controls. */
+.account {
+  font-size: .82rem;
+  color: var(--text-dim);
+  max-width: 18ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Offered once, at the only moment it means anything: just after signing in, when
+   this device has lists and the account does not. Gold because it is the one thing on
+   the bar worth doing right then - everything else can wait. */
+.btn-tpl--merge {
+  background: var(--gold);
+  border-color: var(--gold-bright);
+  color: #14181f;
+  font-weight: 600;
+}
+
+.btn-tpl--merge:hover { color: #14181f; background: var(--gold-bright); }
 
 /* the add popover: every class and spec, opened from the + on a row.
    Parented to <body>, so it is positioned rather than laid out. */
