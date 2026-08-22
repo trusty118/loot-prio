@@ -52,9 +52,19 @@
      without a token here they drift: the rail was lightened on its own once and the
      tiles were left behind, which is exactly how a shared treatment stops being one.
      Dark enough to read as "not picked", light enough to still recognise the art -
-     which matters most on the rail, where the name is only a hover away. */
-  --art-dim: grayscale(.55) brightness(.62);
-  --art-dim-hover: grayscale(.25) brightness(.85);
+     which matters most on the rail, where the name is only a hover away.
+
+     Lifted twice now, and the second time for a reason worth keeping. These are dark
+     portraits on a black tile, so a filter that looks reasonable as a number lands as
+     mud: brightness(.62) on Phase 1's already-black art left nothing to recognise.
+
+     Rest is now most of the way to hover, but not all of it. Making rest identical to
+     hover was the obvious fix and costs more than it looks: hovering would stop giving
+     any feedback at all, and "dim until picked" is the language all three levels of the
+     hierarchy share. Three steps instead of two - rest, hover, picked - with the accent
+     border and label doing the rest of the work on the picked one. */
+  --art-dim: grayscale(.3) brightness(.85);
+  --art-dim-hover: grayscale(0) brightness(1);
 
   --radius: 4px;           /* was 6px - colder reads as tighter */
   --radius-sm: 3px;        /* icons and tags, where 4px looks like a mistake */
