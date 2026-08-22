@@ -144,6 +144,35 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
 }
 
 // ---------------------------------------------------------------------------------
+// 3b. The SDK arrives LATE, which is the normal case rather than the edge case.
+//
+//     app.js is a classic script at the end of <body> and runs during parsing; the SDK
+//     is deferred and runs after. app.js is therefore always first, and over localhost
+//     the data fetches resolve before 212KB has come back from a CDN. Checking
+//     window.supabase once and giving up meant the button never appeared at all - on
+//     exactly the machine you would be testing on. This is that bug, pinned.
+// ---------------------------------------------------------------------------------
+{
+  const sdk = fakeSupabase();
+  const w = boot({ configured: true });          // no window.supabase at boot
+  await settle();
+  ok(!shown(w, "sign-in"), "SDK not loaded yet -> no sign-in button (correct so far)");
+
+  // the deferred <script> finishes: it sets the global, then fires load
+  w.supabase = { createClient: () => sdk };
+  w.document.getElementById("supabase-sdk").dispatchEvent(new w.Event("load"));
+  await settle();
+
+  ok(shown(w, "sign-in"),
+     "the SDK arriving late still turns sign-in on - app.js waits for the tag");
+
+  sdk.auth._signIn("Late");
+  await settle();
+  ok(shown(w, "account") && $(w, "account").textContent === "Late",
+     "and signing in works normally afterwards");
+}
+
+// ---------------------------------------------------------------------------------
 // 4. Configured and present: sign in, and the store follows the session.
 // ---------------------------------------------------------------------------------
 {

@@ -493,6 +493,16 @@ adding Supabase changed `activeStore()` and nothing else. No call site moved.
 of being trapped in one browser — and never a gate. Friends arriving to try the editor must
 never meet a login wall, which is why `activeStore()` falls back rather than refusing.
 
+**The SDK is very often not loaded when `initAuth()` first runs**, and it looks like it
+should be. `app.js` is a classic script at the end of `<body>` so it executes *during*
+parsing; the deferred SDK executes *after*. `app.js` is therefore always first, and
+`initAuth()` is called from the data-fetch `.then()`, which over localhost resolves in a
+couple of milliseconds — long before 212KB arrives from a CDN. Checking `window.supabase`
+once and giving up meant **the button never appeared at all, on exactly the machine you
+would be testing on**. `whenSupabaseReady()` waits on the `<script id="supabase-sdk">`
+tag's `load` event instead, and checks the global *first* — if the script has already run,
+its `load` has already fired and will never fire again.
+
 **Everything about sign-in fails soft**, the same way `specs.json` and `bis.json` do: no
 config, a blocked CDN, a paused project, or jsdom — you lose sign-in, not the page. That is
 why `supabaseReady()` is re-checked at each entry point instead of being resolved once, and

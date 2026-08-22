@@ -2746,8 +2746,35 @@
   /* Wiring the session to the store. Runs on load and on every auth change, which is
      also how a redirect back from Discord is picked up - the SDK parses the URL,
      restores the session, and fires this. */
+  /* The SDK is very often not there yet when this first runs, and the reason is worth
+     writing down because it looks like it should be fine.
+
+     app.js is a classic script at the end of <body>, so it executes *during* parsing.
+     The SDK is deferred, so it executes *after* parsing. app.js therefore always runs
+     first, and initAuth() is called from the data-fetch .then() - which over localhost
+     resolves in a couple of milliseconds, long before 212KB has arrived from a CDN.
+
+     So checking window.supabase once and giving up means the sign-in button never
+     appears at all, on exactly the machine where you would be testing it. Wait for the
+     tag instead. Checking the global first matters: if the script has already run, its
+     load event has already fired and will never fire again. */
+  function whenSupabaseReady(cb) {
+    if (window.supabase) { cb(); return; }
+    var tag = document.getElementById("supabase-sdk");
+    /* absent by design - jsdom, or someone stripped the tag. Not an error. */
+    if (!tag) return;
+    tag.addEventListener("load", function () { if (window.supabase) cb(); });
+    tag.addEventListener("error", function () {
+      if (window.console) console.warn("sign-in unavailable: the Supabase SDK did not load");
+    });
+  }
+
   function initAuth() {
-    if (!supabaseConfigured() || !window.supabase) return;
+    if (!supabaseConfigured()) return;
+    whenSupabaseReady(startAuth);
+  }
+
+  function startAuth() {
     try {
       sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     } catch (err) {
