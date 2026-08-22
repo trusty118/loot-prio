@@ -58,6 +58,19 @@ a:hover { color: var(--gold-bright); }
   padding: 26px 0 22px;
 }
 
+/* Title left, list controls right. Wraps to two lines on a narrow window rather
+   than crushing either, and aligns on the bottom edge so the bar sits on the same
+   line as the tagline instead of floating against the whole title block. */
+.site-header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+
+.site-title { min-width: 0; }
+
 .site-header h1 {
   margin: 0;
   font-size: 1.7rem;
@@ -172,6 +185,81 @@ a:hover { color: var(--gold-bright); }
 
 .chip:hover { background: #302820; color: var(--text); }
 
+/* ---------- phase tiles ----------
+   The phase is the one control you set and leave, so it gets room the others do not:
+   a 2:1 tile carrying its raid's Encounter Journal art, at the 256x128 those come in.
+   Unpicked tiles are dimmed and desaturated so the current phase reads at a glance
+   from across the room, which is the whole point of using art here. */
+.chip--phase {
+  position: relative;
+  width: 168px;
+  height: 84px;
+  padding: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  align-items: flex-end;
+  background: var(--bg-panel-2);
+}
+
+/* One strip per raid, so a phase covering three raids shows three. Each strip takes an
+   equal share and crops to fill, which is what lets a 128x64 portrait sit in a tall
+   narrow box without distorting. */
+.phase-split {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+
+.phase-split img {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  object-fit: cover;
+  transition: filter .15s, transform .15s;
+  filter: grayscale(.65) brightness(.55);
+}
+
+/* a hairline seam, so two portraits do not blend into one confusing image */
+.phase-split img + img { border-left: 1px solid rgba(0, 0, 0, .55); }
+
+.chip--phase:hover .phase-split img { filter: grayscale(.2) brightness(.8); }
+
+.chip--phase[aria-pressed="true"] .phase-split img {
+  filter: none;
+  transform: scale(1.03);   /* a touch of life on the one you are in */
+}
+
+/* the label sits on the art, so it carries its own contrast rather than relying on
+   whatever happens to be behind it */
+.phase-label {
+  position: relative;
+  z-index: 1;
+  padding: 6px 9px;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--text);
+  text-shadow: 0 1px 3px #000, 0 0 10px #000;
+}
+
+.chip--phase[aria-pressed="true"] .phase-label { color: var(--gold-bright); }
+
+.phase-count {
+  position: absolute;
+  z-index: 1;
+  top: 5px;
+  right: 7px;
+  margin: 0;
+  opacity: 1;
+  color: var(--text-dim);
+  text-shadow: 0 1px 3px #000, 0 0 8px #000;
+}
+
+.chip--phase[aria-pressed="true"] { border-color: var(--gold-bright); }
+.chip--phase[aria-pressed="true"] .phase-count { color: var(--gold); }
+
+/* a phase with nothing in it yet says so by being flat, not by being hidden */
+.chip--phase:not([aria-pressed="true"]) .phase-count { opacity: .8; }
+
 /* Class and spec chips are the icon and nothing else - a name and a count on each
    of 27 chips buried the icons they were labelling. Both live in the tooltip. */
 .chip--icon {
@@ -249,7 +337,35 @@ a:hover { color: var(--gold-bright); }
   gap: 3px;
 }
 
-.field--grow { flex: 1 1 220px; min-width: 180px; }
+/* The search box used to take every spare pixel. It is capped now, because the room
+   is better spent on the class and spec icons beside it - you scan those, you type
+   into this one occasionally. */
+.field--grow { flex: 0 1 300px; min-width: 180px; }
+
+/* Who you are, inline with the filters. Wraps to its own line when the row runs out,
+   which is what happens on a narrow window once a class is picked. */
+.who-inline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.who-inline .chips--who { flex: 0 1 auto; }
+
+/* `display` on something the code hides with [hidden] has to be guarded, or the
+   attribute loses - see the note in CLAUDE.md section 4. */
+.who-specs { display: flex; align-items: center; }
+.who-specs[hidden] { display: none; }
+
+/* a hairline between the classes and the specs they narrow to, so the two rows do
+   not read as one undifferentiated wall of icons */
+.who-specs {
+  padding-left: 6px;
+  border-left: 1px solid var(--line);
+}
 
 select, input[type="search"] {
   font: inherit;
@@ -683,12 +799,9 @@ mark {
    one gains a handle and the operators become buttons. Keeping the layout identical
    means switching modes doesn't move anything under the cursor. */
 
-/* Its own bar now, so nothing pushes it right. Aligned on the BOTTOM edge, not the
-   middle: the List control is a label stacked above a select, so it is taller than
-   the buttons beside it, and centring made everything float against that stack. The
-   filter row above solves the same problem the same way. */
-.controls--list .control-row { padding: 2px 0; }
-
+/* In the banner now, top right. Aligned on the BOTTOM edge, not the middle: the List
+   control is a label stacked above a select, so it is taller than the buttons beside
+   it, and centring made everything float against that stack. */
 .template-bar {
   display: flex;
   align-items: flex-end;

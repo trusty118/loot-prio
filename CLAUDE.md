@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 463 checks, should be all green
+npm test             # 514 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -236,10 +236,80 @@ recover it from the display name — forms make that lossy (`Feral Druid (cat)`)
 `specs.json` and `bis.json` both **fail soft**: a 404 or malformed file costs the icons or
 the rings, not the page.
 
+### Phase, zone, boss
+
+**Phases are tiles, not pills**, 168x84, carrying **one strip of art per raid** — Phase 1
+shows three, Phase 3 two. Unpicked tiles are desaturated and dimmed; the picked one is full
+colour with a gold label, so which tier you are in reads without being read. `phaseChip()`
+builds them rather than `chip()`: a label over art with a count in the corner is not a chip
+layout, and `chip()` already carries three flags.
+
+`phaseRaids()` is **not** `phaseZones()`. The crafted pseudo-zone has no bosses and no art, so
+it gets no strip — having a `BOSS_ORDER` entry is the test, rather than naming it, so a future
+crafted-style zone behaves the same way. Its name stays on the tooltip: the phase does cover
+it, it just cannot be pictured.
+
+The strips use the same `ui-ej-boss-*` portraits as every other chip, at 128x64. There **is**
+sharper art on the CDN — `ui-ej-dungeonbutton-<instance>.png` at 256x128 — and the tiles used
+it at first, but there is no instance tile for Serpentshrine or Mount Hyjal, so those phases
+could only ever show one of their raids. Representing every raid beat the extra resolution.
+(`ui-ej-background-*` and `ui-ej-lorebg-*` are 512x512 and tempting from the filename; they are
+parchment textures, not art.)
+
+**The phase is a mode, not a filter.** One is always selected and there is no `All` on that
+row: which tier you are gearing for is true for a whole raid tier, where everything else on
+the panel is answered per lookup. Clicking the phase you are already on is a no-op, since
+deselecting it would leave the page with no phase at all.
+
+`defaultPhase()` is the **last phase that has items**, derived from `ALL` rather than
+hardcoded — when Zul'Aman items arrive, Phase 4 becomes the landing phase on its own.
+`readUrl()` falls back to it for a missing or unknown `phase=`, and Reset returns to it.
+
+Below that it is still a hierarchy: the zone row is always open (a phase is always set), and
+the **boss row waits for a zone**, because every boss of a phase at once is the wall this
+exists to avoid. **Leaving a row unanswered means all of it** — a phase with no zone lists
+every zone in it, a zone with no boss every boss in it. That needs no "all" state, because
+`matches()` simply doesn't apply a filter that isn't set.
+
+**A trade that was chosen, not overlooked:** with the phase locked, a search for an item that
+lives in another phase returns nothing and does not say why. Searching across phases, and
+marking the empty phases as unavailable, were both offered and declined in favour of the
+simpler behaviour. Don't "fix" it without asking. What it *does* say is when a phase is empty
+outright — `phaseIsEmpty()` names the phase rather than blaming the filters, which matters
+because without an `All` to fall back to an empty phase is the whole page.
+
+Measured while deciding this, for anyone tempted to reach for the phase row to reduce clutter:
+at peak there are ~40 controls on screen, and the phase row is 6 of them. The weight is the
+boss row (up to 13) and the class row (10).
+
+`PHASES` in `app.js` is the five TBC content phases and the zones each opened, in release
+order, and `BOSS_ORDER` now carries the kill order for **all nine zones**. **Only Phase 3 has
+items**: everything else is chips reading `0`, so the shape of the expansion is visible and an
+item has a boss to arrive under. `ZONE_ORDER` is derived from `PHASES`, which keeps
+`bossSortKey()` working without a second list to keep in step.
+
+`Trash` is listed only for the raids that actually drop it — Karazhan, Serpentshrine, Tempest
+Keep, Zul'Aman, Sunwell, and the two Phase 3 raids. Gruul's Lair and Magtheridon's Lair have
+none, which is why they have no chip for it.
+
+Every portrait was checked for a 200 before being wired, and the slugs are as irregular as the
+existing ones warn: `alar`, `akilzon`, `janalai` and `kiljaeden` drop their apostrophes,
+`the-curator` and `the-lurker-below` keep their article where `illidari-council` does not, the
+Opera Event is plain `opera`, and Zul'jin is filed under `daakara`. **The Chess Event has no
+portrait in the journal at all** — its chip falls back to text, which `chip()` handles.
+
+Picking a different phase clears the zone and boss under it — they belonged to the phase you
+left — and `readUrl()` drops a `zone=` that isn't in the `phase=` it arrives with, so a stale
+link narrows to nothing instead of showing a zone the row can't display.
+
+One consequence for `bossZone`: only one zone's bosses are ever on screen now, so the two
+`Trash` chips can no longer be confused visually. The state still needs to tell them apart —
+a shared `#boss=Trash` link is still ambiguous — so none of that machinery went away.
+
 ### The class/spec filter
 
-Two chip rows, Class then Spec, in the topmost of the three control panels
-(`.controls--who`) — see §4 for why the controls are split three ways. They answer the
+Two chip rows, Class then Spec, sitting in the filter panel to the right of the search box
+(`.who-inline`) — see §4 for how the controls are split. They answer the
 other question the table can be asked: not "who gets this item" but "what should I be
 rolling on".
 
@@ -514,11 +584,13 @@ editor refuses the drop and says why, so it cannot produce data that fails valid
   new one returns 200 before wiring it up. Boss portraits are Encounter Journal art
   (`ui-ej-boss-*.png`) with irregular slugs — `najentus`, `kazrogal`, no leading "the" on
   the Illidari Council.
-- **The controls are four panels, in the order the questions get asked**:
-  `.controls--who` (class/spec), `.controls--where` (zone/boss), `.controls--list` (which
-  list you are on, and what you can do to it), and `.controls--refine` (type, slot, search,
-  Reset and the count). Picking a list is not filtering, and while it sat in the refine
-  panel it read as though it were. The split is what
+- **Two control panels**: `.controls--where` (phase → zone → boss) and `.controls--refine` —
+  everything that narrows the table, which is type, slot, search **and who you are**. Class
+  and spec used to have a panel of their own at the top; they are filters, so they sit with
+  the filters, to the right of the search box, and `.field--grow` caps that box at 300px to
+  make the room (you scan the icons, you type in the box occasionally).
+- **Which list you are on lives in the banner**, top right, not in a panel: it is not
+  filtering, and it applies to the whole page rather than to the rows below it. The split is what
   makes the last one read as narrowing the results rather than as another way of choosing
   them, so keep chip rows out of it. **Only `.controls--refine` is sticky** — it is the one
   adjusted while reading, it carries the count, and it sits directly above the results;
@@ -615,6 +687,11 @@ own full pass over the filtered pool (~36 passes per render).
 ---
 
 ## 8. Attribution (required, keep it prominent)
+
+**The banner title is generic — "Classic WoW Loot Prios" — so the credit rides on the
+tagline beside it**, and `test/smoke.mjs` asserts the banner names and links zatar_wow. A
+title that no longer says whose calls these are is exactly how the attribution erodes by
+accident, so if the banner is reworked again, the credit moves with it.
 
 The priorities are the work of **[zatar_wow](https://twitch.tv/zatar_wow)**, whose site
 `tbc.classicwowbuilds.com` has been offline for years. This is a community mirror, not

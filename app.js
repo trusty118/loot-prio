@@ -8,7 +8,48 @@
   var SPECS_URL = "data/specs.json";
 
   /* Encounter order per zone (the JSON is not in kill order). */
+  /* Kill order per zone. The seven zones outside Phase 3 have no items yet, so their
+     chips all read 0 - they are here so the phases open onto something real, and so a
+     boss has a name to arrive under. Trash is listed for the raids that actually drop
+     it; Gruul's Lair and Magtheridon's Lair get none, which is why they have none. */
   var BOSS_ORDER = {
+    "Karazhan": [
+      "Trash",
+      "Attumen the Huntsman",
+      "Moroes",
+      "Maiden of Virtue",
+      "Opera Event",
+      "The Curator",
+      "Terestian Illhoof",
+      "Shade of Aran",
+      "Netherspite",
+      "Chess Event",
+      "Prince Malchezaar",
+      "Nightbane"
+    ],
+    "Gruul's Lair": [
+      "High King Maulgar",
+      "Gruul the Dragonkiller"
+    ],
+    "Magtheridon's Lair": [
+      "Magtheridon"
+    ],
+    "Serpentshrine Cavern": [
+      "Trash",
+      "Hydross the Unstable",
+      "The Lurker Below",
+      "Leotheras the Blind",
+      "Fathom-Lord Karathress",
+      "Morogrim Tidewalker",
+      "Lady Vashj"
+    ],
+    "Tempest Keep": [
+      "Trash",
+      "Al'ar",
+      "Void Reaver",
+      "High Astromancer Solarian",
+      "Kael'thas Sunstrider"
+    ],
     "Black Temple": [
       "Trash",
       "High Warlord Naj'entus",
@@ -28,6 +69,24 @@
       "Kaz'rogal",
       "Azgalor",
       "Archimonde"
+    ],
+    "Zul'Aman": [
+      "Trash",
+      "Nalorakk",
+      "Akil'zon",
+      "Jan'alai",
+      "Halazzi",
+      "Hex Lord Malacrass",
+      "Zul'jin"
+    ],
+    "Sunwell Plateau": [
+      "Trash",
+      "Kalecgos",
+      "Brutallus",
+      "Felmyst",
+      "Eredar Twins",
+      "M'uru",
+      "Kil'jaeden"
     ]
   };
 
@@ -35,7 +94,54 @@
      the set is reachable by typing it */
   var UNSOURCED_TAG = "not in the guide";
 
-  var ZONE_ORDER = ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"];
+  /* The five content phases of TBC, and the zones each one opened. Only Phase 3 has
+     items in the dataset so far; the rest are here so the shape of the whole
+     expansion is visible and a zone has somewhere to arrive. A phase with nothing
+     in it still says what belongs there, and its chip reads 0.
+
+     This is also what makes the where-panel readable: 17 boss chips and 3 zone
+     chips at once was a wall, so nothing below a phase is shown until one is
+     picked, and nothing below a zone until a zone is. */
+  var PHASES = [
+    { id: "P1", label: "Phase 1", zones: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair"] },
+    { id: "P2", label: "Phase 2", zones: ["Serpentshrine Cavern", "Tempest Keep"] },
+    { id: "P3", label: "Phase 3", zones: ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"] },
+    { id: "P4", label: "Phase 4", zones: ["Zul'Aman"] },
+    { id: "P5", label: "Phase 5", zones: ["Sunwell Plateau"] }
+  ];
+
+  /* The raids of a phase, which is not quite its zones: the crafted pseudo-zone has no
+     bosses and no art, so it has no strip on the tile. Having a boss list is the test,
+     rather than naming it, so a future crafted-style zone behaves the same. Its name is
+     still on the tooltip - the phase does cover it, it just cannot be pictured. */
+  function phaseRaids(id) {
+    return phaseZones(id).filter(function (z) { return !!BOSS_ORDER[z]; });
+  }
+
+  /* The phase to land on: the last one that actually has items. Derived rather than
+     hardcoded, so it follows the content - when Zul'Aman items arrive, Phase 4 becomes
+     the landing phase without anyone editing this. Needs ALL, so it cannot be a static
+     initialiser; state.phase is set from it once the data is in. */
+  function defaultPhase() {
+    for (var i = PHASES.length - 1; i >= 0; i--) {
+      var zones = PHASES[i].zones;
+      for (var j = 0; j < ALL.length; j++) {
+        if (zones.indexOf(ALL[j].zone) !== -1) return PHASES[i].id;
+      }
+    }
+    return PHASES[0].id;
+  }
+
+  function phaseZones(id) {
+    for (var i = 0; i < PHASES.length; i++) {
+      if (PHASES[i].id === id) return PHASES[i].zones;
+    }
+    return [];
+  }
+
+  /* Every zone, in phase order - which is also kill order across the expansion, so
+     bossSortKey() can go on using the index of this list. */
+  var ZONE_ORDER = PHASES.reduce(function (all, p) { return all.concat(p.zones); }, []);
   var ZONE_LABEL = { "Crafted (Heart of Darkness)": "Crafted" };
 
   /* Encounter Journal boss portraits (128x64 PNG). TBC bosses have no achievement
@@ -47,6 +153,43 @@
   var ICON = "https://wow.zamimg.com/images/wow/icons/large/";
 
   var BOSS_ICON = {
+    "Attumen the Huntsman": JOURNAL + "attumen-the-huntsman.png",
+    "Moroes": JOURNAL + "moroes.png",
+    "Maiden of Virtue": JOURNAL + "maiden-of-virtue.png",
+    "Opera Event": JOURNAL + "opera.png",
+    "The Curator": JOURNAL + "the-curator.png",
+    "Terestian Illhoof": JOURNAL + "terestian-illhoof.png",
+    "Shade of Aran": JOURNAL + "shade-of-aran.png",
+    "Netherspite": JOURNAL + "netherspite.png",
+    /* the Chess Event is the one encounter with no portrait in the journal at all -
+       the chip falls back to text, which chip() handles */
+    "Prince Malchezaar": JOURNAL + "prince-malchezaar.png",
+    "Nightbane": JOURNAL + "nightbane.png",
+    "High King Maulgar": JOURNAL + "high-king-maulgar.png",
+    "Gruul the Dragonkiller": JOURNAL + "gruul-the-dragonkiller.png",
+    "Magtheridon": JOURNAL + "magtheridon.png",
+    "Hydross the Unstable": JOURNAL + "hydross-the-unstable.png",
+    "The Lurker Below": JOURNAL + "the-lurker-below.png",
+    "Leotheras the Blind": JOURNAL + "leotheras-the-blind.png",
+    "Fathom-Lord Karathress": JOURNAL + "fathom-lord-karathress.png",
+    "Morogrim Tidewalker": JOURNAL + "morogrim-tidewalker.png",
+    "Lady Vashj": JOURNAL + "lady-vashj.png",
+    "Al'ar": JOURNAL + "alar.png",
+    "Void Reaver": JOURNAL + "void-reaver.png",
+    "High Astromancer Solarian": JOURNAL + "high-astromancer-solarian.png",
+    "Kael'thas Sunstrider": JOURNAL + "kaelthas-sunstrider.png",
+    "Nalorakk": JOURNAL + "nalorakk.png",
+    "Akil'zon": JOURNAL + "akilzon.png",
+    "Jan'alai": JOURNAL + "janalai.png",
+    "Halazzi": JOURNAL + "halazzi.png",
+    "Hex Lord Malacrass": JOURNAL + "hex-lord-malacrass.png",
+    "Zul'jin": JOURNAL + "daakara.png",
+    "Kalecgos": JOURNAL + "kalecgos.png",
+    "Brutallus": JOURNAL + "brutallus.png",
+    "Felmyst": JOURNAL + "felmyst.png",
+    "Eredar Twins": JOURNAL + "eredar-twins.png",
+    "M'uru": JOURNAL + "muru.png",
+    "Kil'jaeden": JOURNAL + "kiljaeden.png",
     "High Warlord Naj'entus": JOURNAL + "high-warlord-najentus.png",
     "Supremus": JOURNAL + "supremus.png",
     "Shade of Akama": JOURNAL + "shade-of-akama.png",
@@ -67,10 +210,20 @@
 
   /* Hyjal has no Encounter Journal instance image (only Black Temple does), so
      both zones borrow their final boss's portrait and stay consistent. */
+  /* Each zone borrows its final boss's portrait, since only Black Temple has an
+     instance image of its own. Zul'Aman is the odd one: Zul'jin has no slug, and the
+     Encounter Journal files that raid's last boss as "daakara". All checked for 200. */
   var ZONE_ICON = {
+    "Karazhan": JOURNAL + "prince-malchezaar.png",
+    "Gruul's Lair": JOURNAL + "gruul-the-dragonkiller.png",
+    "Magtheridon's Lair": JOURNAL + "magtheridon.png",
+    "Serpentshrine Cavern": JOURNAL + "lady-vashj.png",
+    "Tempest Keep": JOURNAL + "kaelthas-sunstrider.png",
     "Black Temple": JOURNAL + "illidan-stormrage.png",
     "Mount Hyjal": JOURNAL + "archimonde.png",
-    "Crafted (Heart of Darkness)": ICON + "spell_shadow_demonictactics.jpg"
+    "Crafted (Heart of Darkness)": ICON + "spell_shadow_demonictactics.jpg",
+    "Zul'Aman": JOURNAL + "daakara.png",
+    "Sunwell Plateau": JOURNAL + "kiljaeden.png"
   };
 
   /* Slots as the character sheet presents them: every weapon slot is one "Weapon"
@@ -427,6 +580,7 @@
 
 
   var state = {
+    phase: "",       // "" = none picked, so only the phase pills show
     zone: "",        // "" = all
     boss: "",        // "" = all
     bossZone: "",    // which zone's boss - only meaningful alongside boss
@@ -445,7 +599,9 @@
   var ALL = [];
 
   var el = {
+    phaseChips: document.getElementById("phase-chips"),
     zoneChips: document.getElementById("zone-chips"),
+    bossRow: document.getElementById("boss-row"),
     bossChips: document.getElementById("boss-chips"),
     classChips: document.getElementById("class-chips"),
     specChips: document.getElementById("spec-chips"),
@@ -905,6 +1061,8 @@
 
   /* `skip` lets us count a facet as if its own filter weren't applied. */
   function matches(rec, skip) {
+    if (skip !== "phase" && state.phase &&
+        phaseZones(state.phase).indexOf(rec.zone) === -1) return false;
     if (skip !== "zone" && state.zone && rec.zone !== state.zone) return false;
     if (skip !== "boss" && state.boss) {
       if (rec.boss !== state.boss) return false;
@@ -976,6 +1134,7 @@
 
   function writeUrl() {
     var p = new URLSearchParams();
+    if (state.phase) p.set("phase", state.phase);
     if (state.zone) p.set("zone", state.zone);
     if (state.boss) p.set("boss", state.boss);
     /* only "Trash" is ambiguous, so only it needs qualifying - the other 14 bosses
@@ -997,7 +1156,13 @@
 
   function readUrl() {
     var p = new URLSearchParams(location.hash.replace(/^#/, ""));
+    var phase = p.get("phase") || "";
+    state.phase = phaseZones(phase).length ? phase : defaultPhase();
     state.zone = p.get("zone") || "";
+    /* a zone outside the chosen phase would leave the row showing nothing selected */
+    if (state.phase && state.zone && phaseZones(state.phase).indexOf(state.zone) === -1) {
+      state.zone = "";
+    }
     state.boss = p.get("boss") || "";
     state.bossZone = p.get("bossZone") || "";
 
@@ -1079,18 +1244,92 @@
     return b;
   }
 
+  /* The top of the where-hierarchy. Nothing below it renders until one is picked,
+     which is what stops the panel opening as 3 zone chips and 17 boss chips. */
+  /* A phase is a tile rather than a pill: it is the one thing on the page you set and
+     leave, so it earns the room, and the raid art says which tier you are in faster
+     than the words do. Its own builder rather than another flag on chip() - the label
+     sits over the art and the count in the corner, which is not a chip layout.
+
+     The art is one strip per raid, side by side, so a phase covering three raids shows
+     three. That is why it uses the boss portraits every other chip uses rather than the
+     sharper 256x128 instance tiles: there is no instance tile for Serpentshrine or
+     Hyjal, so those phases could only ever have shown one of their raids. */
+  function phaseChip(ph, active, count) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip chip--phase";
+    b.setAttribute("aria-pressed", active ? "true" : "false");
+
+    var art = document.createElement("div");
+    art.className = "phase-split";
+    phaseRaids(ph.id).forEach(function (z) {
+      var img = document.createElement("img");
+      img.src = ZONE_ICON[z];
+      img.alt = "";
+      /* the tile still reads as itself if the CDN ever stops serving these */
+      img.setAttribute("onerror", "this.style.display='none'");
+      art.appendChild(img);
+    });
+    b.appendChild(art);
+
+    var label = document.createElement("span");
+    label.className = "phase-label";
+    label.textContent = ph.label;
+    b.appendChild(label);
+
+    var n = document.createElement("span");
+    n.className = "n phase-count";
+    n.textContent = count;
+    b.appendChild(n);
+
+    /* which raids are in it, for the reader who does not know the phases by number */
+    var zones = ph.zones.map(function (z) { return zoneLabel(z); }).join(", ");
+    b.dataset.tip = ph.label + " — " + zones;
+    b.setAttribute("aria-label", ph.label + ", " + count + " items: " + zones);
+    return b;
+  }
+
+  function renderPhaseChips() {
+    if (!el.phaseChips) return;
+    var counts = countBy("phase", function (r) {
+      for (var i = 0; i < PHASES.length; i++) {
+        if (PHASES[i].zones.indexOf(r.zone) !== -1) return PHASES[i].id;
+      }
+      return "";
+    });
+    el.phaseChips.innerHTML = "";
+
+    /* No All chip: a phase is a mode, not a filter. Which tier you are gearing for is
+       true for the whole tier, where everything else on this panel is answered per
+       lookup - so it is set once and always set, and there is no "every phase" to
+       return to. */
+    PHASES.forEach(function (ph) {
+      var c = phaseChip(ph, state.phase === ph.id, counts[ph.id] || 0);
+      c.addEventListener("click", function () {
+        if (state.phase === ph.id) return;      /* clicking the current one is a no-op */
+        state.phase = ph.id;
+        /* the zone and boss below it belonged to the phase you just left */
+        state.zone = ""; state.boss = ""; state.bossZone = "";
+        update();
+      });
+      el.phaseChips.appendChild(c);
+    });
+  }
+
   function renderZoneChips() {
     var counts = countBy("zone", function (r) { return r.zone; });
     el.zoneChips.innerHTML = "";
 
     var all = allChip("zones", !state.zone);
     all.addEventListener("click", function () {
+      /* every zone in this phase - the phase itself stays picked */
       state.zone = ""; state.boss = ""; state.bossZone = "";
       update();
     });
     el.zoneChips.appendChild(all);
 
-    ZONE_ORDER.forEach(function (z) {
+    phaseZones(state.phase).forEach(function (z) {
       var c = chip(zoneLabel(z), state.zone === z, counts[z] || 0, null, ZONE_ICON[z]);
       c.addEventListener("click", function () {
         state.zone = (state.zone === z) ? "" : z;
@@ -1107,8 +1346,12 @@
        same combined total */
     var counts = countBy("boss", function (r) { return bossKey(r.zone, r.boss); });
     el.bossChips.innerHTML = "";
+    /* no zone, no boss list: without one this is every boss of the phase at once,
+       which is the wall the hierarchy exists to avoid */
+    if (el.bossRow) el.bossRow.hidden = !state.zone;
+    if (!state.zone) return;
 
-    var zones = state.zone ? [state.zone] : ZONE_ORDER;
+    var zones = state.zone ? [state.zone] : phaseZones(state.phase);
 
     var all = allChip("bosses", !state.boss);
     all.addEventListener("click", function () {
@@ -2126,6 +2369,22 @@
   /* Asked only on the no-results path, so walking 195 entries costs nothing. Narrowed
      to a class or spec filter because that is the only one an empty priority defeats:
      search still reads item names, notes and bosses. */
+  /* True when the chosen phase has nothing in the dataset at all. Worth saying in its
+     own words: with the phase locked there is no "all phases" to fall back to, so an
+     empty phase is the whole page, and "no items match these filters" would send you
+     hunting for a filter to clear that does not exist. */
+  function phaseIsEmpty() {
+    var zones = phaseZones(state.phase);
+    return !ALL.some(function (r) { return zones.indexOf(r.zone) !== -1; });
+  }
+
+  function phaseLabel(id) {
+    for (var i = 0; i < PHASES.length; i++) {
+      if (PHASES[i].id === id) return PHASES[i].label;
+    }
+    return id;
+  }
+
   function blankListFiltered() {
     if (!activeTemplate) return false;
     if (!state.classes.length && !state.specs.length) return false;
@@ -2144,11 +2403,14 @@
       /* A list you have only just started names nobody, so the class and spec chips
          all read zero. That is honest - the filter reflects the list in front of you
          - but it must say so rather than looking broken. */
-      empty.textContent = blankListFiltered()
-        ? "This list is empty so far, so there is nobody for the class and spec "
-          + "filters to find. Press Edit and add specs to a row, or clear the filters "
-          + "to see every item."
-        : "No items match these filters.";
+      empty.textContent = phaseIsEmpty()
+        ? phaseLabel(state.phase) + " isn't in the dataset yet - its bosses are listed, "
+          + "but no loot has been added to them."
+        : blankListFiltered()
+          ? "This list is empty so far, so there is nobody for the class and spec "
+            + "filters to find. Press Edit and add specs to a row, or clear the filters "
+            + "to see every item."
+          : "No items match these filters.";
       el.results.appendChild(empty);
       return;
     }
@@ -2183,6 +2445,7 @@
   function update() {
     indexSelection();
     renderTemplateBar();
+    renderPhaseChips();
     renderZoneChips();
     renderBossChips();
     renderClassChips();
@@ -2482,7 +2745,7 @@
     });
 
     el.reset.addEventListener("click", function () {
-      state.zone = ""; state.boss = ""; state.bossZone = "";
+      state.phase = defaultPhase(); state.zone = ""; state.boss = ""; state.bossZone = "";
       state.classes = []; state.specs = []; state.bisOnly = false;
       state.type = ""; state.slot = ""; state.q = "";
       state.sort = ""; state.dir = "asc";

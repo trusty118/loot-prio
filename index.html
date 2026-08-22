@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TBC Tier 6 Loot Priority — Black Temple &amp; Mount Hyjal</title>
-<meta name="description" content="Browsable loot priority guide for TBC Classic Tier 6 (Black Temple, Mount Hyjal). A community mirror of zatar_wow's guide.">
+<title>Classic WoW Loot Prios — TBC Tier 6</title>
+<meta name="description" content="Browsable loot priority lists for Classic WoW. Currently TBC Tier 6 (Black Temple, Mount Hyjal), mirroring zatar_wow's guide, with your own lists on top.">
 <link rel="stylesheet" href="style.css">
 <script>const whTooltips = { colorLinks: true, iconizeLinks: true, renameLinks: false, iconSize: "medium" };</script>
 <script src="https://wow.zamimg.com/js/tooltips.js"></script>
@@ -12,71 +12,59 @@
 <body>
 
 <header class="site-header">
-  <div class="wrap">
-    <h1>TBC Tier 6 Loot Priority</h1>
-    <p class="tagline">Black Temple &middot; Mount Hyjal &middot; Heart of Darkness craftables —
-      a community mirror of <a href="https://twitch.tv/zatar_wow" rel="noopener">zatar_wow</a>'s guide.</p>
+  <div class="wrap site-header-row">
+    <div class="site-title">
+      <h1>Classic WoW Loot Prios</h1>
+      <!-- The credit stays in the banner even though the title has generalised: it is
+           the first thing a visitor reads, and these are one person's calls. See
+           CLAUDE.md section 8 - attribution is required and stays prominent. -->
+      <p class="tagline">Currently TBC Tier 6 — Black Temple &middot; Mount Hyjal &middot;
+        Heart of Darkness craftables. Priorities by
+        <a href="https://twitch.tv/zatar_wow" rel="noopener">zatar_wow</a>.</p>
+    </div>
+
+    <div class="template-bar" id="template-bar">
+      <label class="field field--tpl">
+        <span class="control-label">List</span>
+        <select id="tpl-list"></select>
+      </label>
+      <input type="text" id="tpl-name" class="tpl-name" aria-label="Name this list"
+             placeholder="Name this list" autocomplete="off" hidden>
+      <span class="tpl-dirty" id="tpl-dirty" data-tip="Not written yet" hidden>&bull;</span>
+      <button type="button" id="tpl-new" class="btn-tpl">New</button>
+      <button type="button" id="tpl-copy" class="btn-tpl">Make a copy</button>
+      <button type="button" id="edit-toggle" class="btn-edit" aria-pressed="false" hidden>Edit</button>
+      <button type="button" id="tpl-share" class="btn-tpl" hidden>Copy link</button>
+      <button type="button" id="tpl-delete" class="btn-tpl btn-tpl--danger" hidden>Delete</button>
+      <span class="edit-msg" id="edit-msg" role="status"></span>
+      <!-- shown only when the clipboard API is missing or refuses: the link to copy
+           by hand, rather than a browser dialog -->
+      <span class="tpl-link-out" id="tpl-link-out" hidden>
+        <input type="text" id="tpl-link-field" class="tpl-link-field" readonly aria-label="Share link">
+      </span>
+    </div>
   </div>
 </header>
 
 <main class="wrap">
 
-  <section class="controls controls--who" aria-label="Class and spec">
-
-    <!-- No visible row labels: each row opens with its own "All X" chip, which says
-         the same thing. aria-label on the group keeps it named for screen readers. -->
-    <div class="control-row">
-      <div class="chips" id="class-chips" role="group" aria-label="Class"></div>
-    </div>
-
-    <!-- hidden until a class is picked; app.js toggles the hidden attribute -->
-    <div class="control-row" id="spec-row" hidden>
-      <div class="chips" id="spec-chips" role="group" aria-label="Spec"></div>
-    </div>
-
-  </section>
-
-  <section class="controls controls--where" aria-label="Zone and boss">
+  <!-- A phase is always picked, so its zones are always listed; the boss row waits for
+       a zone, because every boss of the phase at once is the wall this avoids. Leaving
+       the zone unpicked means all of them, and the boss unpicked means all of those. -->
+  <section class="controls controls--where" aria-label="Phase, zone and boss">
 
     <div class="control-row">
+      <div class="chips" id="phase-chips" role="group" aria-label="Phase"></div>
+    </div>
+
+    <div class="control-row" id="zone-row">
       <div class="chips" id="zone-chips" role="group" aria-label="Zone"></div>
     </div>
 
-    <div class="control-row">
+    <div class="control-row" id="boss-row" hidden>
       <div class="chips" id="boss-chips" role="group" aria-label="Boss"></div>
     </div>
 
-  </section>
-
-  <!-- Which list you are looking at, and what you can do to it. Its own bar, because
-       none of it is filtering - sitting in the filter panel made it read as though
-       picking a list were another way of narrowing the table. -->
-  <section class="controls controls--list" aria-label="Your lists">
-    <div class="control-row">
-      <!-- zatar's list is reference, so until a list of your own is open this offers
-           only the two ways to start one. -->
-      <div class="template-bar" id="template-bar">
-        <label class="field field--tpl">
-          <span class="control-label">List</span>
-          <select id="tpl-list"></select>
-        </label>
-        <input type="text" id="tpl-name" class="tpl-name" aria-label="Name this list"
-               placeholder="Name this list" autocomplete="off" hidden>
-        <span class="tpl-dirty" id="tpl-dirty" data-tip="Not written yet" hidden>&bull;</span>
-        <button type="button" id="tpl-new" class="btn-tpl">New</button>
-        <button type="button" id="tpl-copy" class="btn-tpl">Make a copy</button>
-        <button type="button" id="edit-toggle" class="btn-edit" aria-pressed="false" hidden>Edit</button>
-        <button type="button" id="tpl-share" class="btn-tpl" hidden>Copy link</button>
-        <button type="button" id="tpl-delete" class="btn-tpl btn-tpl--danger" hidden>Delete</button>
-        <span class="edit-msg" id="edit-msg" role="status"></span>
-        <!-- shown only when the clipboard API is missing or refuses: the link to copy
-             by hand, rather than a browser dialog -->
-        <span class="tpl-link-out" id="tpl-link-out" hidden>
-          <input type="text" id="tpl-link-field" class="tpl-link-field" readonly aria-label="Share link">
-        </span>
-      </div>
-    </div>
-    </div>
   </section>
 
   <!-- Narrowing what the panels above selected, so it sits closest to the results
@@ -96,6 +84,18 @@
         <span class="control-label">Search</span>
         <input type="search" id="search" placeholder="Item, boss, class, note&hellip;" autocomplete="off">
       </label>
+
+      <!-- Who you are sits with the other filters now, in the room the search box
+           gave back. No visible labels: each row opens with its own "All" chip, and
+           the group's aria-label names it for a screen reader. -->
+      <div class="who-inline">
+        <div class="chips chips--who" id="class-chips" role="group" aria-label="Class"></div>
+        <!-- hidden until a class is picked; app.js toggles the attribute -->
+        <div class="who-specs" id="spec-row" hidden>
+          <div class="chips chips--who" id="spec-chips" role="group" aria-label="Spec"></div>
+        </div>
+      </div>
+
       <button type="button" id="reset" class="btn-reset">Reset</button>
     </div>
 

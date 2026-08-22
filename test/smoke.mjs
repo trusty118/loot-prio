@@ -28,9 +28,61 @@ const doc = window.document;
 const fail = [];
 const ok = (cond, msg) => { console.log((cond ? "PASS  " : "FAIL  ") + msg); if (!cond) fail.push(msg); };
 
+const chipByText = (sel, text) =>
+  [...doc.querySelectorAll(sel + " .chip")].find((c) => c.textContent.trim().startsWith(text));
+const click = (node) => node.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+
+// Where you are is a hierarchy now - phase, then zone, then boss - and nothing below
+// a row renders until that row is answered. Everything that drives zone or boss chips
+// has to open Phase 3 first, which is the phase this dataset covers.
+const openP3 = () => {
+  const c = chipByText("#phase-chips", "Phase 3");
+  if (c.getAttribute("aria-pressed") !== "true") click(c);
+};
+
 const groups = () => [...doc.querySelectorAll(".boss-group")];
 const rows = () => [...doc.querySelectorAll("tbody tr")];
 const headText = () => groups().map((g) => g.querySelector(".boss-head").textContent.trim());
+
+// A phase is a mode, not a filter: one is always picked, so the page opens with the
+// zone row already open and something in the table.
+const phaseChips = () => [...doc.querySelectorAll("#phase-chips .chip")];
+ok(phaseChips().length === 5, `five phases and no All chip (got ${phaseChips().length})`);
+ok(!phaseChips().some((c) => c.classList.contains("chip--all")),
+   "there is no every-phase state to return to");
+
+// A phase is a tile, not a pill: it is the one control you set and leave, so it
+// carries its raid's art at a size you can read across the room.
+ok(phaseChips().every((c) => c.classList.contains("chip--phase")), "each phase is a tile");
+ok(phaseChips().every((c) => c.querySelector(".phase-split img")), "each carries raid art");
+
+// one strip per RAID, which is not the same as per zone: the crafted pseudo-zone has
+// no bosses and no art, so phase 3 shows two strips for three zones
+const strips = (n) => chipByText("#phase-chips", "Phase " + n).querySelectorAll(".phase-split img");
+ok(strips(1).length === 3, `phase 1 shows its three raids (got ${strips(1).length})`);
+ok(strips(3).length === 2, `phase 3 shows two - crafted has no art to show (got ${strips(3).length})`);
+ok(strips(4).length === 1, `phase 4 shows its one (got ${strips(4).length})`);
+ok(/illidan/.test(strips(3)[0].src) && /archimonde/.test(strips(3)[1].src),
+   "in zone order, each raid flying its final boss");
+ok(/Crafted/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),
+   "and the tooltip still names the zone that cannot be pictured");
+ok(phaseChips().every((c) => c.querySelector(".phase-label") && c.querySelector(".phase-count")),
+   "with the label over the art and the count in the corner");
+ok(/Black Temple/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),
+   `and the raids it covers on hover: "${chipByText("#phase-chips", "Phase 3").dataset.tip}"`);
+ok(phaseChips().every((c) => c.querySelector("img").getAttribute("onerror")),
+   "the art falls back rather than leaving a broken tile");
+const picked = () => phaseChips().find((c) => c.getAttribute("aria-pressed") === "true");
+ok(!!picked(), "one of them is picked on load");
+ok(picked().textContent.trim().startsWith("Phase 3"),
+   `and it is the phase that has data (got "${picked().textContent.trim()}")`);
+ok(!doc.getElementById("boss-row").hidden === false, "the boss row still waits for a zone");
+ok(doc.querySelectorAll("#zone-chips .chip").length > 0, "but the zone row is already open");
+ok(rows().length === 195, "and the phase with the data shows all of it");
+
+// clicking the phase you are already on must not leave the page with no phase at all
+click(picked());
+ok(!!picked() && rows().length === 195, "clicking the current phase is a no-op");
 
 ok(rows().length === 195, `renders all 195 rows (got ${rows().length})`);
 ok(groups().length === 17, `renders 17 boss groups (got ${groups().length})`);
@@ -42,8 +94,10 @@ ok(/Illidan Stormrage/.test(heads[9]), `BT ends on Illidan: "${heads[9]}"`);
 ok(/Archimonde/.test(heads[15]), `Hyjal ends on Archimonde: "${heads[15]}"`);
 ok(/^Crafted$/.test(heads[16]), `crafted group is headed by its zone, with no boss: "${heads[16]}"`);
 ok(!/Craftable/.test(doc.body.textContent), "the Craftable pseudo-boss label is gone");
-ok([...doc.querySelectorAll("#boss-chips .chip")].every((c) => !/Craft/.test(c.textContent)),
-   "no crafted chip in the boss row");
+click(chipByText("#zone-chips", "Crafted"));
+ok([...doc.querySelectorAll("#boss-chips .chip")].filter((c) => !c.classList.contains("chip--all")).length === 0,
+   "crafted is a zone with no bosses, so its boss row holds only the All chip");
+click(doc.querySelector("#zone-chips .chip--all"));
 ok([...doc.querySelectorAll("#zone-chips .chip")].some((c) => /Crafted/.test(c.textContent)),
    "Crafted is still a zone chip");
 
@@ -73,6 +127,8 @@ const colClasses = tables.map((t) => [...t.querySelectorAll("colgroup col")].map
 ok(new Set(colClasses).size === 1, `all ${tables.length} tables use identical column classes`);
 const cssText = fs.readFileSync(path.join(root, "style.css"), "utf8");
 ok(/table-layout:\s*fixed/.test(cssText), "tables use fixed layout so widths are honoured");
+ok(/\.chip--phase\s*\{[^}]*height/.test(cssText),
+   "the phase tile has a size of its own rather than inheriting a pill's");
 ok(/\.c-item\s*\{[^}]*width/.test(cssText), "column widths are declared in css");
 
 // verify flags
@@ -87,6 +143,9 @@ ok(links.length === 195, `195 item links (got ${links.length})`);
 ok(links.every((a) => /wowhead\.com\/tbc\/item=\d+/.test(a.href)), "all item links point at wowhead tbc items");
 
 // --- icons ---
+ok(doc.getElementById("boss-row").hidden, "no boss row until a zone is picked");
+click(chipByText("#zone-chips", "Black Temple"));
+
 const zoneChips = [...doc.querySelectorAll("#zone-chips .chip")];
 const bossChips = [...doc.querySelectorAll("#boss-chips .chip")];
 
@@ -114,6 +173,9 @@ ok(allImgs.length > 0 && allImgs.every((i) => i.getAttribute("src")), "no img ha
 ok(allImgs.every((i) => /^https:\/\/wow\.zamimg\.com\//.test(i.getAttribute("src"))), "every img src is on zamimg");
 ok(allImgs.every((i) => i.getAttribute("onerror")), "every img has an onerror fallback");
 
+// every group has to be on screen to count the portraits, and the icons block above
+// left a zone picked - "All" on the zone row means every zone of the phase
+click(doc.querySelector("#zone-chips .chip--all"));
 const portraits = new Set(
   [...doc.querySelectorAll(".boss-portrait")].map((i) => i.getAttribute("src"))
 );
@@ -147,11 +209,7 @@ ok(clothPhysical.length === 0,
    `no cloth item is tagged Physical (${clothPhysical.map((r) => r.item).join(", ") || "none"})`);
 
 // --- filter interactions ---
-const chipByText = (sel, text) =>
-  [...doc.querySelectorAll(sel + " .chip")].find((c) => c.textContent.trim().startsWith(text));
-
-const click = (node) => node.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
-
+openP3();
 click(chipByText("#zone-chips", "Mount Hyjal"));
 ok(rows().length === 66, `zone=Mount Hyjal -> 66 rows (got ${rows().length})`);
 ok(groups().length === 6, `zone=Mount Hyjal -> 6 groups (got ${groups().length})`);
@@ -757,6 +815,14 @@ ok(!footer.includes("Item IDs"), "wowsims/Wowhead attribution paragraph removed"
 ok(!footer.includes("Shorthand"), "shorthand paragraph removed");
 ok(!doc.querySelector(".site-footer .shorthand"), "no leftover shorthand element");
 ok(footer.includes("Not affiliated with Blizzard"), "Blizzard disclaimer kept");
+// The banner title is deliberately generic now ("Classic WoW Loot Prios"), so the
+// credit has to be carried by the tagline beside it. CLAUDE.md section 8 requires
+// attribution to stay prominent, and a title that no longer names him is exactly
+// how that erodes by accident.
+const banner = doc.querySelector(".site-header").textContent;
+ok(/zatar_wow/.test(banner), `the banner still credits the source: "${banner.replace(/\s+/g, " ").trim().slice(0, 90)}"`);
+ok(doc.querySelector(".site-header a[href*='zatar_wow']"), "and links to them from the banner");
+
 ok(footer.includes("zatar_wow") && footer.includes("Veramos") && footer.includes("Lemonism"),
    "creator credits kept");
 
@@ -811,6 +877,7 @@ ok(rows().length === 195, "unfiltered view is unchanged at 195 rows");
 
 // --- column sorting ---
 click(doc.getElementById("reset"));
+openP3();
 const bossChip = (t) => chipByText("#boss-chips", t);
 click(chipByText("#zone-chips", "Black Temple"));
 click(bossChip("Illidan Stormrage"));
@@ -870,31 +937,131 @@ click(doc.getElementById("reset"));
 ok(!doc.querySelector('th[aria-sort="ascending"]') && !doc.querySelector('th[aria-sort="descending"]'),
    "reset clears the sort");
 
-// --- boss chips are qualified by their zone ---
-// Boss names are not unique across zones: both raids have a "Trash", and either
-// chip used to select both and show the same combined count.
+// --- phase, zone, boss: each row waits for the one above ---
 click(doc.getElementById("reset"));
-const trashChips = () =>
-  [...doc.querySelectorAll("#boss-chips .chip")].filter((c) => c.textContent.trim().startsWith("Trash"));
+const phaseChip = (n) => chipByText("#phase-chips", "Phase " + n);
+const zoneChipNames = () => [...doc.querySelectorAll("#zone-chips .chip")]
+  .filter((c) => !c.classList.contains("chip--all")).map((c) => c.textContent.replace(/\d+$/, "").trim());
 
-ok(trashChips().length === 2, `both zones' Trash chips render (got ${trashChips().length})`);
-const trashCounts = trashChips().map((c) => c.querySelector(".n").textContent);
-ok(trashCounts.join("/") === "9/12", `each Trash chip counts only its own zone (got ${trashCounts.join("/")})`);
+ok([1, 2, 3, 4, 5].every((n) => phaseChip(n)), "all five phases have a chip");
+ok(phaseChip(1).querySelector(".n").textContent === "0",
+   "a phase with no items yet reads 0 rather than being hidden");
 
-click(trashChips()[0]);
+click(phaseChip(1));
+ok(zoneChipNames().join(", ") === "Karazhan, Gruul's Lair, Magtheridon's Lair",
+   `phase 1 opens its own zones: ${zoneChipNames().join(", ")}`);
+ok(rows().length === 0, "and nothing is listed under it yet");
+
+// the empty zones have their bosses too, so a phase opens onto something real
+click(chipByText("#zone-chips", "Karazhan"));
+const bossNames = () => [...doc.querySelectorAll("#boss-chips .chip")]
+  .filter((c) => !c.classList.contains("chip--all")).map((c) => c.textContent.replace(/\d+$/, "").trim());
+ok(bossNames().length === 12, `Karazhan lists its 12 encounters (got ${bossNames().length})`);
+ok(bossNames()[0] === "Trash" && bossNames()[11] === "Nightbane",
+   `in kill order: ${bossNames()[0]} ... ${bossNames()[11]}`);
+ok([...doc.querySelectorAll("#boss-chips .chip .n")].every((n) => n.textContent === "0"),
+   "every one reads 0 until items arrive");
+ok([...doc.querySelectorAll("#boss-chips .chip")]
+     .filter((c) => !c.classList.contains("chip--all") && !/Chess/.test(c.textContent))
+     .every((c) => c.querySelector("img.chip-icon")),
+   "and each carries a portrait, bar the Chess Event which has none in the journal");
+ok(rows().length === 0, "with no items listed under any of them yet");
+
+click(phaseChip(2));
+ok(zoneChipNames().join(", ") === "Serpentshrine Cavern, Tempest Keep",
+   `phase 2 replaces them: ${zoneChipNames().join(", ")}`);
+
+click(phaseChip(3));
+ok(zoneChipNames().join(", ") === "Black Temple, Mount Hyjal, Crafted",
+   `phase 3 is the one with data: ${zoneChipNames().join(", ")}`);
+ok(rows().length === 195, "picking a phase with no zone means every zone in it");
+ok(doc.getElementById("boss-row").hidden, "the boss row waits for a zone");
+
+click(chipByText("#zone-chips", "Black Temple"));
+ok(!doc.getElementById("boss-row").hidden, "which a zone reveals");
+ok(rows().length === 117, `a zone with no boss means every boss in it (got ${rows().length})`);
+ok(window.location.hash.includes("phase=P3"), `the phase is in the url: ${window.location.hash}`);
+
+// leaving a phase takes its zone and boss with it - they belonged to that phase
+click(chipByText("#boss-chips", "Illidan Stormrage"));
+click(phaseChip(4));
+ok(zoneChipNames().join(", ") === "Zul'Aman", "phase 4 shows Zul'Aman");
+ok(doc.getElementById("boss-row").hidden && !window.location.hash.includes("boss="),
+   "and the boss you had picked in phase 3 is gone");
+
+// a zone from another phase in the url is dropped rather than filtering to nothing
+window.location.hash = "phase=P4&zone=Black+Temple";
+await new Promise((r) => setTimeout(r, 50));
+ok(!window.location.hash.includes("zone="), "a zone outside the chosen phase is dropped on read");
+
+click(doc.getElementById("reset"));
+ok(chipByText("#phase-chips", "Phase 3").getAttribute("aria-pressed") === "true",
+   "reset returns to the phase with the data, not to an empty page");
+ok(doc.getElementById("boss-row").hidden && rows().length === 195,
+   "with the zone and boss below it cleared");
+
+// --- the phase is always set ---
+click(doc.getElementById("reset"));
+
+// the landing phase is derived from the data, not hardcoded: the LAST phase that has
+// items, so it follows the content when a new tier is filled in
+const phasesWithItems = ["P1", "P2", "P3", "P4", "P5"].filter((id) => {
+  const zones = { P1: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair"],
+                  P2: ["Serpentshrine Cavern", "Tempest Keep"],
+                  P3: ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"],
+                  P4: ["Zul'Aman"], P5: ["Sunwell Plateau"] }[id];
+  return data.some((r) => zones.includes(r.zone));
+});
+ok(window.location.hash.includes("phase=" + phasesWithItems[phasesWithItems.length - 1]),
+   `the landing phase is the last one with items (${phasesWithItems.join(", ")})`);
+ok(/phase=P\d/.test(window.location.hash), `the phase is always in the url: ${window.location.hash}`);
+
+// an unknown phase in a link falls back rather than emptying the table
+window.location.hash = "phase=P9";
+await new Promise((r) => setTimeout(r, 50));
+ok(rows().length === 195 && window.location.hash.includes("phase=P3"),
+   `an unknown phase falls back to the default (${window.location.hash})`);
+
+// a phase with no items says so in its own words - there is no "all phases" to escape
+// to now, so an empty phase is the whole page
+click(doc.getElementById("reset"));
+click(chipByText("#phase-chips", "Phase 4"));
+ok(rows().length === 0, "phase 4 has nothing in it yet");
+const emptyMsg = doc.querySelector(".empty").textContent;
+ok(/Phase 4/.test(emptyMsg) && /dataset/.test(emptyMsg),
+   `and says that, rather than blaming the filters: "${emptyMsg}"`);
+ok(doc.querySelectorAll("#zone-chips .chip").length > 0,
+   "its zones are still listed, so the phase is visibly a place with nothing in it");
+click(doc.getElementById("reset"));
+
+// --- boss chips are qualified by their zone ---
+// Boss names are not unique across zones: both raids have a "Trash". The hierarchy
+// means only one zone's bosses are ever on screen, so the two chips can no longer be
+// confused visually - but the state behind them still has to know which is which,
+// and a shared link still has to say.
+click(doc.getElementById("reset"));
+openP3();
+const trashChip = () => [...doc.querySelectorAll("#boss-chips .chip")]
+  .find((c) => c.textContent.trim().startsWith("Trash"));
+
+click(chipByText("#zone-chips", "Black Temple"));
+ok(trashChip().querySelector(".n").textContent === "9", "BT's Trash counts only BT trash");
+click(trashChip());
 ok(rows().length === 9, `Black Temple trash -> 9 rows (got ${rows().length})`);
 ok(groups().length === 1 && /Black Temple/.test(headText()[0]),
    `only the BT trash group is shown: "${headText()[0]}"`);
-ok(trashChips().map((c) => c.getAttribute("aria-pressed")).join("/") === "true/false",
-   "only the clicked Trash chip reads as pressed");
 ok(window.location.hash.includes("boss=Trash") && window.location.hash.includes("bossZone=Black+Temple"),
-   `ambiguous boss is qualified in the url: ${window.location.hash}`);
+   `an ambiguous boss is still qualified in the url: ${window.location.hash}`);
 
-click(trashChips()[1]);
+click(chipByText("#zone-chips", "Mount Hyjal"));
+ok(trashChip().querySelector(".n").textContent === "12", "and Hyjal's counts only Hyjal trash");
+click(trashChip());
 ok(rows().length === 12, `Mount Hyjal trash -> 12 rows (got ${rows().length})`);
-ok(/Mount Hyjal/.test(headText()[0]), `switching zones' trash re-targets the group: "${headText()[0]}"`);
+ok(/Mount Hyjal/.test(headText()[0]), `switching zone re-targets the trash: "${headText()[0]}"`);
 
 click(doc.getElementById("reset"));
+openP3();
+click(chipByText("#zone-chips", "Mount Hyjal"));
 click(chipByText("#boss-chips", "Archimonde"));
 ok(window.location.hash.includes("boss=Archimonde") && !window.location.hash.includes("bossZone"),
    `an unambiguous boss keeps its short url: ${window.location.hash}`);
@@ -913,21 +1080,29 @@ const chipByTip = (sel, name) =>
 click(doc.getElementById("reset"));
 ok(doc.getElementById("class-chips") && doc.getElementById("spec-chips"),
    "class and spec chip rows exist");
-const whoPanel = doc.querySelector(".controls--who");
-ok(whoPanel && whoPanel.contains(doc.getElementById("class-chips")) &&
-   whoPanel.contains(doc.getElementById("spec-chips")),
-   "class and spec sit in their own panel");
-ok(doc.querySelector("main").firstElementChild === whoPanel, "that panel comes first");
+// Class and spec are filters, so they sit with the filters - to the right of the
+// search box, which was capped to make room for them.
+const inputsRow = doc.querySelector(".control-row--inputs");
+ok(inputsRow.contains(doc.getElementById("class-chips")) &&
+   inputsRow.contains(doc.getElementById("spec-chips")),
+   "class and spec sit in the filter row");
+ok(!doc.querySelector(".controls--who"), "the separate who panel is gone");
+ok([...inputsRow.children].indexOf(doc.querySelector(".who-inline")) >
+   [...inputsRow.children].indexOf(doc.getElementById("search").closest(".field")),
+   "and they come after the search box, not before it");
+ok(/\.field--grow\s*\{[^}]*flex:\s*0/.test(cssText),
+   "the search box no longer takes every spare pixel");
 
-// four panels, in the order the questions get asked: who you are, where it drops,
-// which list you are looking at, and finally what of that to show. Filtering comes
-// last so it sits against the results it narrows.
+// two panels: where it drops, then everything that narrows the table - type, slot,
+// search and who you are. Which list you are on lives in the banner, because it is
+// not filtering and it applies to the whole page.
 const panels = [...doc.querySelectorAll("main .controls")];
 ok(panels.map((p) => p.className.replace("controls ", "")).join(" > ") ===
-   "controls--who > controls--where > controls--list > controls--refine",
+   "controls--where > controls--refine",
    `panel order: ${panels.map((p) => p.className.replace("controls ", "")).join(" > ")}`);
-ok(doc.querySelector(".controls--list").contains(doc.getElementById("template-bar")),
-   "the list controls are not mixed in with the filters");
+ok(doc.querySelector(".site-header").contains(doc.getElementById("template-bar")),
+   "the list controls sit in the banner");
+ok(!doc.querySelector("main #template-bar"), "and not among the filters");
 ok(doc.querySelector(".controls--refine").nextElementSibling === doc.getElementById("results"),
    "the filters sit directly above the results they narrow");
 
@@ -957,7 +1132,8 @@ const refine = doc.querySelector(".controls--refine");
 ok(["type-select", "slot-select", "search", "reset", "count"]
    .every((id) => refine.contains(doc.getElementById(id))),
    "type, slot, search, reset and the count all sit in the refine panel");
-ok(!refine.querySelector(".chips"), "and no chip row is left in it");
+ok(refine.querySelectorAll(".chips").length === 2,
+   "the only chip rows in it are the class and spec ones");
 ok(refine.nextElementSibling === doc.getElementById("results"),
    "the refine panel sits directly above the results it narrows");
 ok(/\.controls--refine\s*\{[^}]*position:\s*sticky/.test(cssText) &&
