@@ -59,7 +59,13 @@ changes:
 Viewing zatar's list is **read-only**. The bar offers `New` and `Make a copy`; there is no Edit
 button until a list of yours is open.
 
-> **Superseded, Aug 2026 — see [list-menu.md](list-menu.md).** `Edit` is now always present and
+> **Superseded twice, Aug 2026.** `Edit` has also **left the banner entirely** — see
+> [edit-mode-placement.md](edit-mode-placement.md). It lives in `.controls--refine` now, which
+> is the sticky panel, so on a 195-row page it is never more than a glance from the cell it
+> affects. It was ~400px and a whole page-section away, among controls that answer "which list
+> am I on" rather than "change these calls".
+>
+> **See [list-menu.md](list-menu.md) for the rest.** `Edit` is now always present and
 > `disabled` when the open list isn't yours, with `title="Make a copy to edit"`. A control that
 > vanishes teaches nothing, and its appearing was itself part of the reflow this replaced.
 > `New` and `Make a copy` moved into the list menu. Everything else in this section still holds.

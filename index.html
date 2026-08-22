@@ -35,10 +35,6 @@
         <span class="list-trigger-caret" aria-hidden="true">&#9662;</span>
       </button>
       <span class="tpl-dirty" id="tpl-dirty" data-tip="Not written yet" hidden>&bull;</span>
-      <!-- Disabled rather than hidden when the open list isn't yours. A control that
-           vanishes teaches nothing; a disabled one with a reason teaches the copy path
-           at the moment someone went looking for it. -->
-      <button type="button" id="edit-toggle" class="btn-edit" aria-pressed="false">Edit</button>
       <!-- shown only when the clipboard API is missing or refuses: the link to copy
            by hand, rather than a browser dialog -->
       <span class="tpl-link-out" id="tpl-link-out" hidden>
@@ -125,6 +121,20 @@
       </div>
 
       <button type="button" id="reset" class="btn-reset">Reset</button>
+
+      <!-- Edit lives here, not in the banner. It answers "change these calls", which is
+           an action on the rows below; the banner answers "which list am I on". And this
+           panel is the sticky one, so on a 195-row page the control is never more than a
+           glance away from the cell it affects.
+
+           The hint is fixed text, deliberately. Variable-length status belongs in the
+           toast - text that changes length in a bar sitting directly above the rows is
+           the reflow defect this whole redesign has been removing. -->
+      <span class="edit-hint" id="edit-hint" hidden>Editing &mdash; changes save as you make them</span>
+      <!-- Disabled rather than hidden when the open list isn't yours. A control that
+           vanishes teaches nothing; a disabled one with a reason teaches the copy path
+           at the moment someone went looking for it. -->
+      <button type="button" id="edit-toggle" class="btn-edit" aria-pressed="false">Edit priorities</button>
     </div>
 
     <div class="control-row control-row--meta">

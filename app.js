@@ -653,7 +653,9 @@
     accountName: document.getElementById("account-name"),
     tplLinkOut: document.getElementById("tpl-link-out"),
     tplLinkField: document.getElementById("tpl-link-field"),
-    editMsg: document.getElementById("edit-msg")
+    editMsg: document.getElementById("edit-msg"),
+    editHint: document.getElementById("edit-hint"),
+    refine: document.querySelector(".controls--refine")
   };
 
   /* ---------- templates ---------- */
@@ -3002,7 +3004,14 @@
     el.editToggle.disabled = !activeIsMine;
     el.editToggle.title = activeIsMine ? "" : "Make a copy to edit";
     el.editToggle.setAttribute("aria-pressed", state.editing ? "true" : "false");
-    el.editToggle.textContent = state.editing ? "Done" : "Edit";
+    el.editToggle.textContent = state.editing ? "Done editing" : "Edit priorities";
+
+    /* Three signals for the armed state, because a mode that changes what a click does
+       should be impossible to be in without noticing: the button fills, the bar it sits
+       in tints, and a line of fixed text says so. The class is what carries the second
+       and, through it, the wash on the editable rows. */
+    if (el.refine) el.refine.classList.toggle("is-editing", !!state.editing);
+    show(el.editHint, !!state.editing);
 
     show(el.tplDirty, activeIsMine && unsaved);
 

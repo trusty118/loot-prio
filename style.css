@@ -34,8 +34,13 @@
      It also fixes something that was quietly wrong. The old #d9b45a sat a few degrees
      from --artifact #e6cc80, so "selected" and "expansion BiS" - two things with no
      relationship at all - looked like the same colour. They no longer do. */
-  --gold: #86cf3e;
-  --gold-bright: #a8e05c;
+  --fel: #86cf3e;
+  --fel-bright: #a8e05c;
+  /* The names --gold/--gold-bright are historical and stay, so every existing
+     var(--gold) keeps working and nothing has to be renamed across 58 usages. Anything
+     new should say --fel, which is what the colour actually is. */
+  --gold: var(--fel);
+  --gold-bright: var(--fel-bright);
 
   /* WoW item-quality colours, reused for the BiS longevity ladder:
      epic -> legendary -> artifact, matching how long an item stays BiS */
@@ -1376,6 +1381,57 @@ mark {
 }
 
 .btn-tpl--danger:hover { color: #ffb4a8; border-color: #b3564a; }
+
+/* ---------- edit mode, armed ----------
+   Edit lives in the refine bar, not the banner: it acts on the rows below it, and this
+   is the panel that stays on screen while you scroll them. Three signals, because a
+   mode that changes what a click does should be impossible to be in unnoticed. */
+
+/* 1. the button fills - the one place a fill is right, because this is a mode rather
+      than a selection */
+#edit-toggle {
+  margin-left: auto;
+  min-width: 118px;
+}
+
+/* Both labels have to produce the same box, or flipping the mode reflows a bar that
+   sits directly above the rows - the same defect the list menu removed upstream, and
+   worse here. */
+#edit-toggle[aria-pressed="true"] {
+  background: var(--fel);
+  border-color: var(--fel-bright);
+  color: #0b0d11;
+  font-weight: 600;
+}
+
+/* 2. the bar tints, peripherally and for as long as the mode lasts */
+.controls--refine.is-editing {
+  background: #171d16;
+  border-bottom-color: var(--fel);
+}
+
+/* 3. and it says so in words. Fixed text: variable-length status lives in the toast,
+      because text that changes length here would move the button beside it. */
+.edit-hint[hidden] { display: none; }
+
+.edit-hint {
+  display: inline-block;
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--fel-bright);
+  white-space: nowrap;
+}
+
+/* the hint already claimed the auto margin, so the button follows it rather than
+   pushing away from it */
+.controls--refine.is-editing #edit-toggle { margin-left: 10px; }
+
+/* The cells the mode acts on, so the link between the bar and the editable column is
+   visible without looking for it. #results is a sibling of the bar inside <main>, which
+   is what makes the ~ combinator reach it. */
+.controls--refine.is-editing ~ #results .col-prio--editing {
+  background: color-mix(in srgb, var(--fel) 10%, transparent);
+}
 
 /* Disabled rather than hidden when the list is not yours. The weight and the box stay
    exactly as they are in the enabled state - only colour changes - because a

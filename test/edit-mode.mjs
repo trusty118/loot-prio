@@ -16,6 +16,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
 const data = rd("loot_data.json"), bis = rd("bis.json"), specs = rd("specs.json");
 const source = fs.readFileSync(path.join(root, "app.js"), "utf8");
+const cssText = fs.readFileSync(path.join(root, "style.css"), "utf8");
+const htmlText = fs.readFileSync(path.join(root, "index.html"), "utf8");
 
 const fail = [];
 const ok = (c, m) => { console.log((c ? "PASS  " : "FAIL  ") + m); if (!c) fail.push(m); };
@@ -517,6 +519,43 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
      `the bar holds the same controls either way, so nothing moves\n        ${onZatar}`);
   ok(!/:hidden/.test(onZatar.replace(/tpl-dirty:hidden|tpl-link-out:hidden/g, "")),
      "and nothing in it is hidden except the two transient markers");
+}
+
+// --- Edit lives with the rows it changes, not with the list controls ---------------------------
+{
+  const w6 = boot();
+  await settle();
+  const d6 = w6.document;
+  const bar = d6.querySelector(".controls--refine");
+  const tog = el(d6, "edit-toggle");
+
+  ok(bar.contains(tog), "Edit sits in the sticky refine bar, above the rows it acts on");
+  ok(!d6.querySelector(".template-bar").contains(tog),
+     "and not in the banner, which answers which list rather than change these calls");
+
+  doMenu(w6, "+  New list");
+  await settle();
+
+  // Three signals, because a mode that changes what a click does should be hard to be
+  // in without noticing.
+  ok(tog.getAttribute("aria-pressed") === "true", "armed: the button says so");
+  ok(bar.classList.contains("is-editing"), "armed: the bar it sits in tints");
+  ok(!el(d6, "edit-hint").hidden, "armed: and a line of text says what mode you are in");
+
+  // Both labels must produce the same box, or flipping the mode reflows a bar sitting
+  // directly above the rows.
+  const armed = tog.textContent;
+  click(w6, tog);
+  ok(!bar.classList.contains("is-editing") && el(d6, "edit-hint").hidden,
+     "and all three come off together");
+  ok(/min-width:\s*118px/.test(cssText.match(/#edit-toggle\s*\{[^}]*\}/)[0]),
+     "the button has a min-width, so the two labels cannot change the bar's width");
+  ok(armed !== tog.textContent, `the label changes with the mode ("${tog.textContent}" / "${armed}")`);
+
+  // The hint is fixed text on purpose: variable-length status lives in the toast,
+  // because text that changes length here would move the button beside it.
+  ok(/id="edit-hint"[^>]*>Editing/.test(htmlText.replace(/\n\s*/g, " ")),
+     "and the hint's text is in the markup, not built from a message");
 }
 
 // --- no browser dialogs anywhere ------------------------------------------------------------
