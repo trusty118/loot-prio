@@ -579,6 +579,12 @@ the JS port of the rule in `check_priority.py`: a spec may appear twice only whe
 is a `Finger`, `Trinket`, `One-Hand`, `Main-Hand` or `Off-Hand` and is not `unique`. The
 editor refuses the drop and says why, so it cannot produce data that fails validation later.
 
+A visual-direction brief for handing the look to a designer lives in
+[docs/design-brief.md](docs/design-brief.md). It states which colours carry meaning and cannot
+move — the epic/legendary/artifact BiS ladder, gold as "selected", dim as "not you", and the
+phase/zone/boss size ranking — so a restyle does not quietly break the semantics. Keep it
+current if any of those change.
+
 ## 5. Conventions that are easy to break
 
 - **Never use a bare element selector in `style.css`.** Wowhead's tooltip script injects
