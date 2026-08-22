@@ -68,6 +68,11 @@ const row = (w, name) => {
   const m = w.document.querySelector(".list-menu");
   return [...m.querySelectorAll(".lm-row")].find((b) => b.querySelector(".lm-row-name").textContent === name);
 };
+/* Read the count element, not the row's text. The byline runs straight into the count
+   in textContent ("...by zatar159 ranked"), so a \b-anchored match against the whole
+   row silently never fires - which is how the first version of this test passed
+   nothing and looked like a code bug. */
+const rowCount = (w, name) => row(w, name).querySelector(".lm-row-count").textContent;
 const doMenu = (w, label) => { openMenu(w); click(w, act(w, label)); };
 const triggerName = (d) => el(d, "list-trigger-name").textContent;
 
@@ -428,6 +433,38 @@ await settle();
 ok(only(w3) && JSON.stringify(only(w3).priorities[bulwark]) === JSON.stringify([{ spec: "Fury" }]),
    "Make a copy is how you keep it, and it copies what was on screen");
 ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
+
+// --- the rows count what actually differs between lists ---------------------------------------
+// Every list is a full copy of all 195 records, so an item count is the same number on
+// every row and says nothing. What separates them is how many carry a priority.
+{
+  const w5 = boot();
+  await settle();
+  const d5 = w5.document;
+  const zatarRanked = data.filter((r) => (r.priority || []).length).length;
+
+  openMenu(w5);
+  ok(rowCount(w5, "zatar's list") === zatarRanked + " ranked",
+     `zatar's row counts the ${zatarRanked} he actually ranked, not all ${data.length} (got "${rowCount(w5, "zatar's list")}")`);
+  ok(zatarRanked < data.length,
+     `and that is a different number from the dataset size, which is the whole point (${zatarRanked} < ${data.length})`);
+  closeMenu(w5);
+
+  doMenu(w5, "+  New list");
+  await settle();
+  openMenu(w5);
+  ok(rowCount(w5, "My list") === "0 ranked",
+     `a blank list reads 0, which is the honest answer and the useful one (got "${rowCount(w5, "My list")}")`);
+  closeMenu(w5);
+
+  // a copy carries what it copied, not the dataset size
+  doMenu(w5, "Make a copy");
+  await settle();
+  openMenu(w5);
+  ok(rowCount(w5, "Copy of My list") === "0 ranked",
+     `copying a blank list copies its emptiness (got "${rowCount(w5, "Copy of My list")}")`);
+  closeMenu(w5);
+}
 
 // --- the menu closes the way the other overlays do -------------------------------------------
 {
