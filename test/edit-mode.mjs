@@ -54,22 +54,49 @@ const saved = (w) => JSON.parse(w.localStorage.getItem("lootprio.templates") || 
 const only = (w) => Object.values(saved(w))[0];
 const el = (d, id) => d.getElementById(id);
 
+/* The bar is two controls now; everything else lives in the list menu. These reach
+   into it the way a person does - open it, then find the row or action by its label. */
+const openMenu = (w) => { click(w, el(w.document, "list-trigger")); return w.document.querySelector(".list-menu"); };
+const menuText = (w) => { const m = openMenu(w); const t = m.textContent; closeMenu(w); return t; };
+const closeMenu = (w) => w.document.querySelector(".list-menu").dispatchEvent(
+  new w.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+const act = (w, label) => {
+  const m = w.document.querySelector(".list-menu");
+  return [...m.querySelectorAll(".lm-item")].find((b) => b.textContent.trim() === label);
+};
+const row = (w, name) => {
+  const m = w.document.querySelector(".list-menu");
+  return [...m.querySelectorAll(".lm-row")].find((b) => b.querySelector(".lm-row-name").textContent === name);
+};
+const doMenu = (w, label) => { openMenu(w); click(w, act(w, label)); };
+const triggerName = (d) => el(d, "list-trigger-name").textContent;
+
 const w = boot();
 await settle();
 const d = w.document;
 
 // --- zatar's list is reference, not a workspace ---------------------------------
 ok(!d.querySelector(".prio-edit"), "the guide's rows are not editable");
-ok(el(d, "edit-toggle").hidden, "no Edit button until a list of your own is open");
-ok(el(d, "tpl-name").hidden && el(d, "tpl-delete").hidden && el(d, "tpl-share").hidden,
-   "and no name field, Delete or Copy link either");
-ok(!el(d, "tpl-new").hidden && !el(d, "tpl-copy").hidden,
-   "only the two ways to start a list of your own are offered");
-ok(el(d, "tpl-list").value === "" && el(d, "tpl-list").options[0].textContent.includes("zatar"),
-   "the dropdown says whose list is on screen");
+// Disabled rather than hidden: a control that vanishes teaches nothing, and the title
+// names the way out at the moment you went looking for it.
+ok(el(d, "edit-toggle").disabled, "Edit is disabled, not hidden, on a list that is not yours");
+ok(!el(d, "edit-toggle").hidden, "and it stays in the bar, so nothing reflows when it becomes usable");
+ok(/copy/i.test(el(d, "edit-toggle").title), `and says what to do about it: "${el(d, "edit-toggle").title}"`);
+ok(triggerName(d) === "zatar's list", `the trigger says whose list is on screen: "${triggerName(d)}"`);
+
+{
+  const m = openMenu(w);
+  ok(!act(w, "Rename\u2026"), "no Rename on a list that is not yours");
+  ok(!act(w, "Delete list\u2026"), "and no Delete either");
+  ok(act(w, "Make a copy") && act(w, "Copy link") && act(w, "+  New list"),
+     "but New, Make a copy and Copy link are all offered");
+  ok(/Make a copy to build your own/.test(m.textContent),
+     "and it says in words why the other two are absent, rather than just omitting them");
+  closeMenu(w);
+}
 
 // --- Make a copy -----------------------------------------------------------------
-click(w, el(d, "tpl-copy"));
+doMenu(w, "Make a copy");
 await settle();
 const copy = only(w);
 ok(Object.keys(copy.priorities).length === data.length,
@@ -79,9 +106,8 @@ ok(JSON.stringify(copy.priorities[data[0].id]) === JSON.stringify(data[0].priori
 ok(copy.base === "zatar", `it records what it was copied from (base: ${copy.base})`);
 ok(copy.name === "Copy of zatar's list", `and names itself after it: "${copy.name}"`);
 ok(!("dirty" in copy), "no scratch state is written into the store");
-ok(!el(d, "edit-toggle").hidden && !el(d, "tpl-name").hidden,
-   "a list of your own brings out Edit, the name field and the rest");
-ok(el(d, "tpl-list").value === copy.id, "and the dropdown selects it");
+ok(!el(d, "edit-toggle").disabled, "a list of your own makes Edit usable");
+ok(triggerName(d) === copy.name, `and the trigger names it: "${triggerName(d)}"`);
 ok(d.querySelectorAll(".prio-edit").length > 0,
    "it opens ready to edit - you pressed Make a copy in order to change it");
 
@@ -293,56 +319,78 @@ ok(!/function overLine|DRAG_OUT/.test(source),
 click(w, el(d, "edit-toggle"));
 ok(!d.querySelector(".prio-edit") && !d.querySelector(".prio-add"),
    "Done puts the edit chrome away without closing the list");
-ok(!el(d, "tpl-name").hidden, "the list is still open - it is yours to read as well as write");
+ok(!el(d, "edit-toggle").disabled, "the list is still open - it is yours to read as well as write");
 click(w, el(d, "edit-toggle"));
 
-// --- the name field replaces prompt() ---------------------------------------------------
-el(d, "tpl-name").value = "MM hunter list";
-el(d, "tpl-name").dispatchEvent(new w.Event("input", { bubbles: true }));
+// --- Rename is a panel in the menu, not a field parked on the bar -----------------------
+openMenu(w);
+click(w, act(w, "Rename\u2026"));
+const field = d.querySelector(".lm-field");
+ok(field && field.value === "Copy of zatar's list",
+   `Rename opens a field holding the current name: "${field && field.value}"`);
+field.value = "MM hunter list";
+key(w, field, "Enter");
 await settle();
-ok(only(w).name === "MM hunter list", `renaming in the field writes through: "${only(w).name}"`);
-ok([...el(d, "tpl-list").options].some((o) => o.textContent === "MM hunter list"),
-   "and the dropdown follows");
+ok(only(w).name === "MM hunter list", `Enter saves it: "${only(w).name}"`);
+ok(triggerName(d) === "MM hunter list", "and the trigger follows");
+ok(!d.querySelector(".list-menu[style*='block']"), "and the menu closes behind it");
 
 // --- switching away and back ------------------------------------------------------------
 const mine = only(w).id;
-const sel = el(d, "tpl-list");
-sel.value = "";
-sel.dispatchEvent(new w.Event("change", { bubbles: true }));
+openMenu(w);
+click(w, row(w, "zatar's list"));
 await settle();
-ok(!d.querySelector(".prio-edit") && el(d, "edit-toggle").hidden,
+ok(!d.querySelector(".prio-edit") && el(d, "edit-toggle").disabled,
    "back on the guide's list, nothing is editable again");
 ok(namesIn(d, ITEM).join(",") === "Protection Warrior,Protection Paladin",
    "and the guide's own order is what shows");
 
-sel.value = mine;
-sel.dispatchEvent(new w.Event("change", { bubbles: true }));
+openMenu(w);
+click(w, row(w, "MM hunter list"));
 await settle();
-ok(el(d, "tpl-name").value === "MM hunter list", "reopening it brings the name back");
+ok(triggerName(d) === "MM hunter list", "reopening it brings the name back");
 ok(namesIn(d, DOUBLE).length === dbefore + 2, "and the edits are all there");
 ok(!d.querySelector(".prio-edit"), "it opens for reading - Edit is how you change it");
 
-// --- Delete asks first ------------------------------------------------------------------
-click(w, el(d, "tpl-delete"));
-ok(el(d, "tpl-delete").textContent === "Sure?", "Delete asks in place rather than in a dialog");
+// --- Delete asks in a panel, not by arming the button you just pressed -------------------
+// The old bar turned Delete into "Sure?" in place, so the confirm landed under the cursor
+// that had just clicked it and a double-click destroyed a list.
+const doomed = only(w).id;
+openMenu(w);
+click(w, act(w, "Delete list\u2026"));
+const panel = d.querySelector(".list-menu");
+ok(/MM hunter list/.test(panel.textContent) && /link/.test(panel.textContent),
+   "Delete names the list and what else is lost, rather than just asking");
 ok(Object.keys(saved(w)).length === 1, "and has deleted nothing yet");
-click(w, el(d, "tpl-copy"));          // anything else on the bar takes the question back
-await settle();
-ok(el(d, "tpl-delete").textContent === "Delete", "another button takes the question back");
 
-const doomed = only(w) && el(d, "tpl-list").value;
-click(w, el(d, "tpl-delete"));
-click(w, el(d, "tpl-delete"));
+// the safe one is where the cursor already is, and carries the weight
+const keep = act(w, "Keep it");
+ok(keep && keep.classList.contains("lm-item--primary"),
+   "the safe choice is the solid button, so the destructive one has to be aimed at");
+click(w, keep);
+ok(Object.keys(saved(w)).length === 1, "Keep it leaves the list alone");
+
+openMenu(w);
+click(w, act(w, "Delete list\u2026"));
+click(w, act(w, "Delete"));
 await settle();
-ok(!saved(w)[doomed], "asked twice, it deletes");
-ok(el(d, "tpl-list").value === "" && el(d, "edit-toggle").hidden,
+ok(!saved(w)[doomed], "Delete removes it");
+ok(triggerName(d) === "zatar's list" && el(d, "edit-toggle").disabled,
    "and drops back to the guide's list");
+
+// an undo is worth more than any confirm, which is why the confirm can stay light
+const undo = el(d, "edit-msg").querySelector(".toast-undo");
+ok(undo, "and the toast offers Undo");
+click(w, undo);
+await settle();
+ok(saved(w)[doomed], "which puts the list back");
+ok(triggerName(d) === "MM hunter list", "and reopens it");
 
 // --- New: a list of nobody's ---------------------------------------------------------------
 const w2 = boot();
 await settle();
 const d2 = w2.document;
-click(w2, el(d2, "tpl-new"));
+doMenu(w2, "+  New list");
 await settle();
 const blank = only(w2);
 ok(Object.keys(blank.priorities).length === data.length,
@@ -369,17 +417,70 @@ const w3 = boot("#t=" + code);
 await settle();
 const d3 = w3.document;
 ok(namesIn(d3, ITEM).join(",") === "Fury Warrior", "a #t= link opens the list it carries");
-ok(!d3.querySelector(".prio-edit") && el(d3, "edit-toggle").hidden,
+ok(!d3.querySelector(".prio-edit") && el(d3, "edit-toggle").disabled,
    "read-only on arrival - someone else's list is reference too");
-ok(el(d3, "tpl-list").selectedOptions[0].textContent.startsWith("Shared:"),
+ok(triggerName(d3) === "Someone's list",
    "the dropdown says so rather than claiming the guide's list is on screen");
 ok(Object.keys(saved(w3)).length === 0, "and nothing of theirs is written into your store");
 
-click(w3, el(d3, "tpl-copy"));
+doMenu(w3, "Make a copy");
 await settle();
 ok(only(w3) && JSON.stringify(only(w3).priorities[bulwark]) === JSON.stringify([{ spec: "Fury" }]),
    "Make a copy is how you keep it, and it copies what was on screen");
-ok(!el(d3, "edit-toggle").hidden, "now it is yours and editable");
+ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
+
+// --- the menu closes the way the other overlays do -------------------------------------------
+{
+  const m = openMenu(w3);
+  ok(m.style.display === "block", "the trigger opens the menu");
+  m.dispatchEvent(new w3.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  ok(m.style.display === "none", "Escape closes it");
+
+  openMenu(w3);
+  d3.dispatchEvent(new w3.MouseEvent("mousedown", { bubbles: true }));
+  ok(m.style.display === "none", "and so does a mousedown outside it");
+
+  // The trigger's own toggle and the document's outside-close both fire on the same
+  // click; without excluding the trigger the menu shuts and reopens instantly.
+  openMenu(w3);
+  ok(m.style.display === "block", "clicking the trigger does not immediately close it again");
+  closeMenu(w3);
+}
+
+// --- Escape backs out one level at a time ------------------------------------------------------
+{
+  doMenu(w3, "Make a copy");
+  await settle();
+  const m = openMenu(w3);
+  click(w3, act(w3, "Rename\u2026"));
+  ok(m.querySelector(".lm-field"), "Rename swaps the panel in place");
+  m.dispatchEvent(new w3.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  ok(m.style.display === "block" && !m.querySelector(".lm-field"),
+     "Escape returns to the menu rather than closing it - a mistyped rename should not cost the menu");
+  m.dispatchEvent(new w3.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  ok(m.style.display === "none", "and Escape again closes it");
+}
+
+// --- the bar does not reflow, which is the whole point ------------------------------------------
+// The old bar went from three controls to seven the moment you opened a list of your
+// own, and everything jumped sideways. jsdom cannot measure layout, but it can assert
+// the mechanism: the same controls are present and visible in both states.
+{
+  const barKids = (dd) => [...dd.querySelectorAll(".template-bar > *")]
+    .map((n) => (n.id || n.className) + (n.hidden ? ":hidden" : ""))
+    .join(",");
+
+  const w4 = boot();
+  await settle();
+  const onZatar = barKids(w4.document);
+  doMenu(w4, "Make a copy");
+  await settle();
+  const onMine = barKids(w4.document);
+  ok(onZatar === onMine,
+     `the bar holds the same controls either way, so nothing moves\n        ${onZatar}`);
+  ok(!/:hidden/.test(onZatar.replace(/tpl-dirty:hidden|tpl-link-out:hidden/g, "")),
+     "and nothing in it is hidden except the two transient markers");
+}
 
 // --- no browser dialogs anywhere ------------------------------------------------------------
 ok(!/window\.(prompt|confirm)\s*\(/.test(source),

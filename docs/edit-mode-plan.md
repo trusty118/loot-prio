@@ -59,6 +59,11 @@ changes:
 Viewing zatar's list is **read-only**. The bar offers `New` and `Make a copy`; there is no Edit
 button until a list of yours is open.
 
+> **Superseded, Aug 2026 — see [list-menu.md](list-menu.md).** `Edit` is now always present and
+> `disabled` when the open list isn't yours, with `title="Make a copy to edit"`. A control that
+> vanishes teaches nothing, and its appearing was itself part of the reflow this replaced.
+> `New` and `Make a copy` moved into the list menu. Everything else in this section still holds.
+
 - **New** → `newBlankTemplate()`, a sibling of `newTemplate()` that seeds `priorities[id] = []`
   for every record. All 195 rows still render — same zones, bosses, slots, BiS rings — with an
   empty Priority column and a `+` on each line.
@@ -94,7 +99,21 @@ All inline, in the row, only while one of your lists is open.
   overlays cannot drift into two versions of the same arithmetic — and closes on Escape, on a
   click away, on leaving edit mode and on opening another list.
 
-## 3. The bar — built
+## 3. The bar — built, then replaced
+
+> **Superseded in full, Aug 2026 — see [list-menu.md](list-menu.md)**, the design Claude Design
+> returned against `docs/design-brief.md`. The bar described below had three defects, all of
+> them visible: it **reflowed** (three controls became seven when you opened a list of your
+> own, and everything jumped sideways); the **name existed twice**, in the select and in the
+> field beside it, with nothing saying which was authoritative; and **`Delete` → `Sure?`
+> mutated in place**, putting the confirm under the cursor that had just clicked it, so a
+> double-click destroyed a list and the question named nothing you were losing.
+>
+> Avoiding `confirm()` was right; arming the same button was the wrong replacement. It is now a
+> confirm panel in the menu that names what is lost, with the safe choice under the cursor and
+> an **Undo** in the toast.
+>
+> Kept below as the record of what was built and why it changed.
 
 Replaces `renderTemplateBar()` / `bindTemplateBar()`. Small, in the page's own styling — no
 browser dialogs:

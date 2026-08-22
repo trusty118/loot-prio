@@ -644,17 +644,13 @@
     count: document.getElementById("count"),
     results: document.getElementById("results"),
     templateBar: document.getElementById("template-bar"),
-    tplList: document.getElementById("tpl-list"),
-    tplName: document.getElementById("tpl-name"),
+    listTrigger: document.getElementById("list-trigger"),
+    listTriggerName: document.getElementById("list-trigger-name"),
     tplDirty: document.getElementById("tpl-dirty"),
-    tplNew: document.getElementById("tpl-new"),
-    tplCopy: document.getElementById("tpl-copy"),
     editToggle: document.getElementById("edit-toggle"),
-    tplShare: document.getElementById("tpl-share"),
     signIn: document.getElementById("sign-in"),
     account: document.getElementById("account"),
     accountName: document.getElementById("account-name"),
-    tplDelete: document.getElementById("tpl-delete"),
     tplLinkOut: document.getElementById("tpl-link-out"),
     tplLinkField: document.getElementById("tpl-link-field"),
     editMsg: document.getElementById("edit-msg")
@@ -1753,9 +1749,39 @@
 
   var editMsg = "";        /* why the last edit was refused, shown under the toolbar */
 
-  function announce(msg) {
+  var toastTimer = null;
+
+  /* Same role="status" element and the same call sites it always had - only where it
+     sits has changed. It used to live inside the template bar, so every message pushed
+     the buttons along as it appeared and changed length; now it is a toast that affects
+     no layout at all.
+
+     `undo` is optional and is what lets the delete confirm stay light: an undo is worth
+     more than any confirm, and the deleted record is held in the closure until the
+     toast clears. */
+  function announce(msg, undo) {
     editMsg = msg || "";
-    if (el.editMsg) el.editMsg.textContent = editMsg;
+    if (!el.editMsg) return;
+    clearTimeout(toastTimer);
+    el.editMsg.innerHTML = "";
+    if (!editMsg) { el.editMsg.hidden = true; return; }
+
+    var text = document.createElement("span");
+    text.textContent = editMsg;
+    el.editMsg.appendChild(text);
+
+    if (undo) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "toast-undo";
+      b.textContent = "Undo";
+      b.addEventListener("click", function () { announce(""); undo(); });
+      el.editMsg.appendChild(b);
+    }
+
+    el.editMsg.hidden = false;
+    /* An undo needs longer than a status line, and neither should stay forever. */
+    toastTimer = setTimeout(function () { announce(""); }, undo ? 12000 : 6000);
   }
 
   /* ---------- dragging ----------
@@ -2708,7 +2734,6 @@
      naming, opening and deleting all happen in the page. */
 
   var savedLists = [];        /* store.list() is async; this is its cached answer */
-  var deleteArmed = false;    /* Delete asks once, in place, instead of confirm() */
 
   /* ---------- signing in ----------
      Discord only. Every raider has one, it is the easiest of the three OAuth flows,
@@ -2913,7 +2938,6 @@
     state.editing = false;
     closePop();
     closeOpMenu();
-    deleteArmed = false;
     clearTimeout(nameTimer);
     if (el.tplLinkOut) el.tplLinkOut.hidden = true;
   }
@@ -2931,18 +2955,25 @@
     if (node) node.hidden = !on;
   }
 
+  /* Two controls, in every state. The bar's old defect was that it reflowed: opening a
+     list of your own unhid four more buttons at once and everything jumped sideways.
+     Nothing here hides, so nothing moves. */
   function renderTemplateBar() {
-    if (!el.tplList) return;
+    if (!el.listTrigger) return;
 
-    el.tplList.innerHTML = "";
-    el.tplList.appendChild(option("", "zatar's list"));
-    savedLists.forEach(function (t) { el.tplList.appendChild(option(t.id, t.name)); });
-    /* A shared list is not in the store, so it needs an option of its own to show as
-       selected - otherwise the dropdown would claim zatar's list was on screen. */
-    if (activeTemplate && !activeIsMine) {
-      el.tplList.appendChild(option(SHARED_VALUE, "Shared: " + activeTemplate.name));
-    }
-    el.tplList.value = activeTemplate ? (activeIsMine ? activeTemplate.id : SHARED_VALUE) : "";
+    el.listTriggerName.textContent =
+      activeTemplate ? activeTemplate.name : "zatar's list";
+
+    /* Disabled, never hidden, and the title says what to do about it - a control that
+       vanishes teaches nothing. Weight stays constant across both states and the button
+       has a min-width, because a weight flip alone moves the row about a pixel, which
+       is the same defect this whole rewrite exists to remove. */
+    el.editToggle.disabled = !activeIsMine;
+    el.editToggle.title = activeIsMine ? "" : "Make a copy to edit";
+    el.editToggle.setAttribute("aria-pressed", state.editing ? "true" : "false");
+    el.editToggle.textContent = state.editing ? "Done" : "Edit";
+
+    show(el.tplDirty, activeIsMine && unsaved);
 
     /* No sign-in button at all when it could not work - an unconfigured project or a
        blocked CDN should read as "this site has no accounts", not as a broken button. */
@@ -2956,23 +2987,296 @@
       closeAcctMenu();
     }
 
-    show(el.tplName, activeIsMine);
-    show(el.tplDirty, activeIsMine && unsaved);
-    show(el.editToggle, activeIsMine);
-    show(el.tplShare, activeIsMine);
-    show(el.tplDelete, activeIsMine);
+    if (listMenu && listMenu.style.display === "block") renderListMenu();
+  }
 
-    /* don't fight the caret while the name is being typed */
-    if (activeIsMine && el.tplName && el.tplName !== document.activeElement) {
-      el.tplName.value = activeTemplate.name;
+
+  /* ---------- the list menu ----------
+     The third overlay built on the same machinery as .prio-pop and .prio-menu: created
+     once, parented to <body> so no scroll container can clip it, positioned by
+     placeUnder() rather than by arithmetic of its own, closed by Escape or a click
+     away. docs/edit-mode-plan.md extracted placeUnder() precisely so overlays could not
+     drift into two versions of the same sum; this must not become the version that does.
+
+     It has three faces - the list, the rename field, the delete confirm - because a
+     panel that swaps in place keeps one Escape target and one anchor. */
+
+  var listMenu = null;
+  var menuFace = "list";      /* "list" | "rename" | "delete" */
+
+  function closeListMenu() {
+    if (listMenu) listMenu.style.display = "none";
+    menuFace = "list";
+    if (el.listTrigger) el.listTrigger.setAttribute("aria-expanded", "false");
+  }
+
+  function buildListMenu() {
+    listMenu = document.createElement("div");
+    listMenu.className = "list-menu";
+    listMenu.setAttribute("role", "menu");
+    listMenu.setAttribute("aria-label", "Lists");
+    listMenu.style.display = "none";
+
+    /* One level at a time: Escape out of rename or delete returns to the list, and only
+       Escape from the list closes the menu. A mistyped rename should not cost you the
+       menu as well. */
+    listMenu.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") return;
+      e.preventDefault();
+      if (menuFace !== "list") { menuFace = "list"; renderListMenu(); return; }
+      closeListMenu();
+      el.listTrigger.focus();
+    });
+
+    document.body.appendChild(listMenu);
+  }
+
+  function menuSection(title) {
+    var h = document.createElement("div");
+    h.className = "lm-section";
+    h.textContent = title;
+    return h;
+  }
+
+  function menuItem(label, cls, onClick) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "lm-item" + (cls ? " " + cls : "");
+    b.setAttribute("role", "menuitem");
+    b.textContent = label;
+    b.addEventListener("click", onClick);
+    return b;
+  }
+
+  /* A list row: the name, what it holds, and a tick on the one you are reading. The
+     count is what confirms you picked the right list - the same argument that keeps
+     counts on the boss chips. */
+  function listRow(name, count, current, byline, onClick) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "lm-row" + (current ? " lm-row--current" : "");
+    b.setAttribute("role", "menuitemradio");
+    b.setAttribute("aria-checked", current ? "true" : "false");
+
+    var tick = document.createElement("span");
+    tick.className = "lm-tick";
+    tick.textContent = current ? "\u2713" : "";
+    tick.setAttribute("aria-hidden", "true");
+
+    var main = document.createElement("span");
+    main.className = "lm-row-main";
+    var n = document.createElement("span");
+    n.className = "lm-row-name";
+    n.textContent = name;
+    main.appendChild(n);
+    if (byline) {
+      var by = document.createElement("span");
+      by.className = "lm-row-by";
+      by.textContent = byline;
+      main.appendChild(by);
     }
 
-    el.editToggle.setAttribute("aria-pressed", state.editing ? "true" : "false");
-    el.editToggle.textContent = state.editing ? "Done" : "Edit";
-    el.tplDelete.textContent = deleteArmed ? "Sure?" : "Delete";
-    el.tplDelete.className = "btn-tpl btn-tpl--danger" + (deleteArmed ? " btn-tpl--armed" : "");
+    var c = document.createElement("span");
+    c.className = "lm-row-count";
+    c.textContent = count == null ? "" : count + " items";
 
-    if (el.editMsg) el.editMsg.textContent = editMsg;
+    b.appendChild(tick);
+    b.appendChild(main);
+    b.appendChild(c);
+    b.addEventListener("click", onClick);
+    return b;
+  }
+
+  function renderListMenu() {
+    if (menuFace === "rename") return renderRenamePanel();
+    if (menuFace === "delete") return renderDeletePanel();
+
+    listMenu.innerHTML = "";
+
+    if (savedLists.length) {
+      listMenu.appendChild(menuSection("Your lists"));
+      savedLists.forEach(function (t) {
+        listMenu.appendChild(listRow(
+          t.name, ALL.length,
+          activeIsMine && activeTemplate && activeTemplate.id === t.id, "",
+          function () { closeListMenu(); openById(t.id); }));
+      });
+    }
+
+    listMenu.appendChild(menuSection("Following"));
+    listMenu.appendChild(listRow("zatar's list", ALL.length, !activeTemplate, "by zatar",
+      function () { closeListMenu(); showZatar(); announce("Showing zatar's list"); update(); }));
+    /* a list that arrived on a link is not in the store, so it needs a row of its own or
+       the menu would claim zatar's list was the one on screen */
+    if (activeTemplate && !activeIsMine) {
+      listMenu.appendChild(listRow(activeTemplate.name, ALL.length, true, "shared with you",
+        function () { closeListMenu(); }));
+    }
+
+    listMenu.appendChild(document.createElement("hr"));
+    listMenu.appendChild(menuItem("+  New list", "lm-item--new", function () {
+      closeListMenu();
+      startList(newBlankTemplate(), "A blank list - every priority is empty until you fill it in");
+    }));
+
+    listMenu.appendChild(document.createElement("hr"));
+    listMenu.appendChild(menuSection(activeIsMine ? "This list" :
+      activeTemplate ? "Following " + activeTemplate.name : "zatar's list"));
+
+    /* Said once, plainly, instead of silently offering fewer buttons and leaving the
+       reader to notice what is missing. */
+    if (!activeIsMine) {
+      var note = document.createElement("p");
+      note.className = "lm-note";
+      note.textContent = activeTemplate
+        ? "You're following this list. Make a copy to change anything."
+        : "zatar's calls, as published. Make a copy to build your own.";
+      listMenu.appendChild(note);
+    }
+
+    if (activeIsMine) {
+      listMenu.appendChild(menuItem("Rename\u2026", "", function () {
+        menuFace = "rename"; renderListMenu();
+      }));
+    }
+    listMenu.appendChild(menuItem("Make a copy", "", function () {
+      closeListMenu();
+      var from = activeTemplate ? activeTemplate.name : "zatar's list";
+      startList(copyOfCurrent("Copy of " + from), "Copied " + from);
+    }));
+    listMenu.appendChild(menuItem("Copy link", "", function () {
+      closeListMenu(); copyShareLink();
+    }));
+
+    if (activeIsMine) {
+      listMenu.appendChild(document.createElement("hr"));
+      listMenu.appendChild(menuItem("Delete list\u2026", "lm-item--danger", function () {
+        menuFace = "delete"; renderListMenu();
+      }));
+    }
+  }
+
+  function renderRenamePanel() {
+    listMenu.innerHTML = "";
+    listMenu.appendChild(menuSection("Rename list"));
+
+    var field = document.createElement("input");
+    field.type = "text";
+    field.className = "lm-field";
+    field.value = activeTemplate ? activeTemplate.name : "";
+    field.setAttribute("aria-label", "List name");
+    listMenu.appendChild(field);
+
+    var row = document.createElement("div");
+    row.className = "lm-actions";
+    row.appendChild(menuItem("Cancel", "", function () { menuFace = "list"; renderListMenu(); }));
+
+    var save = menuItem("Save", "lm-item--primary", function () { commitRename(field.value); });
+    row.appendChild(save);
+    listMenu.appendChild(row);
+
+    field.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); commitRename(field.value); }
+    });
+    field.focus();
+    field.select();
+    placeUnder(listMenu, el.listTrigger);
+  }
+
+  /* The same path the old name field's blur used, so the dirty marker and the store
+     write are unchanged - this is a bar rewrite, not a model change. */
+  function commitRename(name) {
+    if (!activeIsMine) return;
+    var next = (name || "").trim();
+    if (!next) { announce("A list needs a name"); return; }
+    activeTemplate.name = next;
+    unsaved = true;
+    closeListMenu();
+    announce("Renamed to " + next);
+    update();
+    saveNow().then(refreshLists);
+  }
+
+  function renderDeletePanel() {
+    listMenu.innerHTML = "";
+    listMenu.appendChild(menuSection("Delete list"));
+
+    var p = document.createElement("p");
+    p.className = "lm-note";
+    p.textContent = "Delete \u201c" + activeTemplate.name + "\u201d and its " + ALL.length +
+      " items? Anyone you sent the link to will lose it.";
+    listMenu.appendChild(p);
+
+    var row = document.createElement("div");
+    row.className = "lm-actions";
+    /* The safe one sits where the cursor already is - under the row that was just
+       clicked - and carries the weight; the destructive one is quiet and off to the
+       right, so it has to be aimed at. The old bar armed the same button in place,
+       which meant a double-click destroyed a list. */
+    row.appendChild(menuItem("Keep it", "lm-item--primary", function () {
+      menuFace = "list"; renderListMenu();
+    }));
+    row.appendChild(menuItem("Delete", "lm-item--danger", doDelete));
+    listMenu.appendChild(row);
+    placeUnder(listMenu, el.listTrigger);
+  }
+
+  function doDelete() {
+    if (!activeIsMine) return;
+    var doomed = activeTemplate;
+    closeListMenu();
+    store.remove(doomed.id).then(function () {
+      showZatar();
+      update();
+      refreshLists();
+      /* An undo is worth more than any confirm, which is why the confirm above can stay
+         light. The record is held in memory until the toast clears. */
+      announce("Deleted " + doomed.name, function () {
+        store.save(doomed).then(function () {
+          openTemplate(doomed, true);
+          announce("Restored " + doomed.name);
+          update();
+          refreshLists();
+        });
+      });
+    });
+  }
+
+  function toggleListMenu() {
+    if (!listMenu) buildListMenu();
+    if (listMenu.style.display === "block") { closeListMenu(); return; }
+    closePop();
+    closeOpMenu();
+    closeAcctMenu();
+    menuFace = "list";
+    listMenu.style.display = "block";
+    el.listTrigger.setAttribute("aria-expanded", "true");
+    renderListMenu();
+    placeUnder(listMenu, el.listTrigger);
+  }
+
+  function openById(id) {
+    store.load(id).then(function (t) {
+      var why = t ? validateTemplate(t) : "it is not there any more";
+      if (why) { announce("That list will not open: " + why); renderTemplateBar(); return; }
+      openTemplate(t, true);
+      announce("Opened " + t.name);
+      update();
+    });
+  }
+
+  function copyShareLink() {
+    if (!activeTemplate) return;
+    encodeTemplate(activeTemplate).then(function (code) {
+      var url = location.origin + location.pathname + "#t=" + code;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(
+          function () { announce("Link copied (" + url.length + " characters)"); },
+          function () { offerLink(url); });
+      } else {
+        offerLink(url);
+      }
+    }, function (err) { announce(err.message); });
   }
 
   /* New and Make a copy differ only in what they seed. Both write the list at once,
@@ -2986,94 +3290,29 @@
   }
 
   function bindTemplateBar() {
-    if (!el.tplList) return;
+    if (!el.listTrigger) return;
 
-    /* Delete asks in place, so anything else on the bar takes the question back.
-       Capture, so it runs before the button's own handler. */
-    if (el.templateBar) el.templateBar.addEventListener("click", function (e) {
-      if (deleteArmed && e.target !== el.tplDelete) { deleteArmed = false; renderTemplateBar(); }
-    }, true);
-
-    el.tplList.addEventListener("change", function () {
-      var v = el.tplList.value;
-      if (v === SHARED_VALUE) return;
-      if (v === "") { showZatar(); announce("Showing zatar's list"); update(); return; }
-      store.load(v).then(function (t) {
-        var why = t ? validateTemplate(t) : "it is not there any more";
-        if (why) { announce("That list will not open: " + why); renderTemplateBar(); return; }
-        openTemplate(t, true);
-        announce("Opened " + t.name);
-        update();
-      });
-    });
-
-    el.tplNew.addEventListener("click", function () {
-      startList(newBlankTemplate(), "A blank list - every priority is empty until you fill it in");
+    /* Both halves of the gesture have to be kept off the document handler, or the
+       trigger's own mousedown closes the menu and its click reopens it - which looks
+       like the menu ignoring every second press. */
+    el.listTrigger.addEventListener("mousedown", function (ev) { ev.stopPropagation(); });
+    el.listTrigger.addEventListener("click", function (ev) {
+      ev.stopPropagation();
+      toggleListMenu();
     });
 
     if (el.signIn) el.signIn.addEventListener("click", signIn);
     if (el.account) el.account.addEventListener("click", function (ev) {
-      ev.stopPropagation();           /* opening it must not count as a click away */
+      ev.stopPropagation();
       toggleAcctMenu();
     });
 
-    el.tplCopy.addEventListener("click", function () {
-      var from = activeTemplate ? activeTemplate.name : "zatar's list";
-      startList(copyOfCurrent("Copy of " + from), "Copied " + from);
-    });
-
     el.editToggle.addEventListener("click", function () {
+      if (!activeIsMine) return;
       state.editing = !state.editing;
       if (!state.editing) { closePop(); closeOpMenu(); }
       announce("");
       update();
-    });
-
-    /* The name field replaces prompt(). It fires per character, so it is the one
-       thing here that is debounced rather than written straight away. */
-    el.tplName.addEventListener("input", function () {
-      if (!activeIsMine) return;
-      activeTemplate.name = el.tplName.value;
-      unsaved = true;
-      show(el.tplDirty, true);
-      clearTimeout(nameTimer);
-      nameTimer = setTimeout(function () { saveNow().then(refreshLists); }, 400);
-    });
-
-    el.tplName.addEventListener("blur", function () {
-      clearTimeout(nameTimer);
-      if (activeIsMine && unsaved) saveNow().then(refreshLists);
-    });
-
-    el.tplShare.addEventListener("click", function () {
-      if (!activeTemplate) return;
-      encodeTemplate(activeTemplate).then(function (code) {
-        var url = location.origin + location.pathname + "#t=" + code;
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(url).then(
-            function () { announce("Link copied (" + url.length + " characters)"); },
-            function () { offerLink(url); });
-        } else {
-          offerLink(url);
-        }
-      }, function (err) { announce(err.message); });
-    });
-
-    el.tplDelete.addEventListener("click", function () {
-      if (!activeIsMine) return;
-      if (!deleteArmed) {
-        deleteArmed = true;
-        announce("Press Delete again to remove \"" + activeTemplate.name + "\"");
-        renderTemplateBar();
-        return;
-      }
-      var name = activeTemplate.name;
-      store.remove(activeTemplate.id).then(function () {
-        showZatar();
-        announce("Deleted " + name);
-        update();
-        refreshLists();
-      });
     });
   }
 
@@ -3218,6 +3457,19 @@
           !(e.target.closest && e.target.closest(".prio-op--editing"))) closeOpMenu();
       if (acctMenu && acctMenu.style.display !== "none" && !acctMenu.contains(e.target)) {
         closeAcctMenu();
+      }
+
+    });
+
+    /* mousedown, not click, and the difference is load-bearing. A menu item that swaps
+       the panel - Rename, Delete - has already replaced the menu's contents by the time
+       the click event reaches the document, so the node that was clicked is no longer a
+       child of the menu and contains() says false. The menu would close itself every
+       time you opened one of its own panels. mousedown fires while the node is still
+       attached. */
+    document.addEventListener("mousedown", function (e) {
+      if (listMenu && listMenu.style.display !== "none" && !listMenu.contains(e.target)) {
+        closeListMenu();
       }
     });
 

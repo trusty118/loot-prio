@@ -24,19 +24,21 @@
     </div>
 
     <div class="template-bar" id="template-bar">
-      <label class="field field--tpl field--joined">
+      <!-- Two controls, in every state. Nothing here hides or unhides: the bar used to
+           go from three controls to seven the moment you opened a list of your own, and
+           every button jumped sideways. New, Make a copy, Copy link, Rename and Delete
+           all live in the menu now, where a varying number of items costs nothing. -->
+      <button type="button" id="list-trigger" class="field field--joined field--tpl list-trigger"
+              aria-haspopup="menu" aria-expanded="false">
         <span class="control-label">List</span>
-        <select id="tpl-list"></select>
-      </label>
-      <input type="text" id="tpl-name" class="tpl-name" aria-label="Name this list"
-             placeholder="Name this list" autocomplete="off" hidden>
+        <span class="list-trigger-name" id="list-trigger-name"></span>
+        <span class="list-trigger-caret" aria-hidden="true">&#9662;</span>
+      </button>
       <span class="tpl-dirty" id="tpl-dirty" data-tip="Not written yet" hidden>&bull;</span>
-      <button type="button" id="tpl-new" class="btn-tpl">New</button>
-      <button type="button" id="tpl-copy" class="btn-tpl">Make a copy</button>
-      <button type="button" id="edit-toggle" class="btn-edit" aria-pressed="false" hidden>Edit</button>
-      <button type="button" id="tpl-share" class="btn-tpl" hidden>Copy link</button>
-      <button type="button" id="tpl-delete" class="btn-tpl btn-tpl--danger" hidden>Delete</button>
-      <span class="edit-msg" id="edit-msg" role="status"></span>
+      <!-- Disabled rather than hidden when the open list isn't yours. A control that
+           vanishes teaches nothing; a disabled one with a reason teaches the copy path
+           at the moment someone went looking for it. -->
+      <button type="button" id="edit-toggle" class="btn-edit" aria-pressed="false">Edit</button>
       <!-- shown only when the clipboard API is missing or refuses: the link to copy
            by hand, rather than a browser dialog -->
       <span class="tpl-link-out" id="tpl-link-out" hidden>
@@ -132,6 +134,11 @@
   </section>
 
   <div id="results" class="results"></div>
+
+<!-- Out of the bar. In it, "Opened My list" and the delete prompt pushed the buttons
+     along as they appeared and changed length. Same role="status" element and the same
+     announce() calls - only where it sits has changed, so screen readers are unaffected. -->
+<div class="toast" id="edit-msg" role="status" hidden></div>
 
 </main>
 

@@ -117,15 +117,19 @@ ok(typeof junk === "string", `a damaged link is refused: ${junk}`);
 
 // --- loading a shared link -------------------------------------------------------
 const shared = boot("#t=" + code);
-const picker = shared.document.getElementById("tpl-list");
-await waitFor(() => picker.selectedOptions.length && /^Shared:/.test(picker.selectedOptions[0].textContent),
-              "the shared list to open");
-ok(picker.selectedOptions[0].textContent === "Shared: Test list",
-   `a #t= link opens that list on load: "${picker.selectedOptions[0].textContent}"`);
-ok(shared.document.getElementById("edit-toggle").hidden,
+const name = () => shared.document.getElementById("list-trigger-name").textContent;
+await waitFor(() => name() === "Test list", "the shared list to open");
+ok(name() === "Test list", `a #t= link opens that list on load: "${name()}"`);
+ok(shared.document.getElementById("edit-toggle").disabled,
    "and it opens as reference - someone else's list is not yours to edit in place");
-ok(!shared.document.getElementById("tpl-copy").hidden,
+
+/* Make a copy is how you keep it, and it lives in the list menu now. */
+shared.document.getElementById("list-trigger").click();
+const menu = shared.document.querySelector(".list-menu");
+ok([...menu.querySelectorAll(".lm-item")].some((b) => b.textContent.trim() === "Make a copy"),
    "Make a copy is how you keep it");
+ok(/following this list/i.test(menu.textContent),
+   "and the menu says so plainly rather than silently offering fewer actions");
 
 console.log(fail.length ? `\n${fail.length} FAILURES` : "\nAll checks passed");
 process.exit(fail.length ? 1 : 0);
