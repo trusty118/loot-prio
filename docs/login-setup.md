@@ -74,18 +74,33 @@ the client cannot ask its way around it.
 
 ## 6. Hand over two values
 
-Supabase → **Project Settings → API**:
+Supabase → **Project Settings → API Keys**:
 
 - **Project URL** — `https://<project>.supabase.co`
-- **anon / public key** — the long `eyJ...` string labelled **anon**
+- the browser-safe key
 
-Both go into `app.js` as `SUPABASE_URL` and `SUPABASE_ANON_KEY`. **Both are safe in a
-public repo.** The anon key identifies the project and authorises nothing; the RLS policy
-in step 5 is what protects the data.
+**Supabase has two key schemes in the wild**, and which one you see depends on when the
+project was made. They mean the same things under different names:
 
-**The `service_role` key on that same page is the dangerous one.** It bypasses every
-policy. It must never go in this repo, this site, or any browser. `test/auth.mjs` fails the
-build if it or any pasted JWT appears in `app.js`.
+| Role | Current scheme | Legacy scheme |
+|---|---|---|
+| Safe in a browser, **use this** | **Publishable key** — `sb_publishable_…` | **anon** — `eyJ…` |
+| Privileged, **never leaves a server** | **Secret key** — `sb_secret_…` | **service_role** — `eyJ…` |
+
+A new project shows the current scheme, with the old one behind a **Legacy anon,
+service_role API keys** tab. Either works — this site is built against `supabase-js@2`,
+which accepts both. Prefer the publishable key; fall back to the legacy anon key only if
+sign-in reports an invalid key.
+
+Both the Project URL and the browser-safe key go into `app.js` as `SUPABASE_URL` and
+`SUPABASE_ANON_KEY`, and **both are safe in a public repo**. Supabase says the condition
+out loud on that page: the publishable key is safe in a browser *if RLS is enabled and
+policies are configured*. Step 5 is what earns that.
+
+**The privileged key — `sb_secret_…` or `service_role` — bypasses every policy.** It must
+never go in this repo, this site, or any browser. The two rows sit next to each other in
+the dashboard and look alike, which is exactly how the wrong one gets copied, so
+`test/auth.mjs` fails the build if either format appears in `app.js`.
 
 ---
 

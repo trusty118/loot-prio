@@ -112,8 +112,13 @@ ok(/SUPABASE_ANON_KEY/.test(source), "the anon key is a named constant, not scat
 const code = source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
 ok(!/service[_-]?role/i.test(code),
    "no service-role key in app.js code - that one bypasses row-level security");
-ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code),
-   "and no JWT literal pasted in by hand");
+
+// Supabase has two key formats in the wild and the privileged key looks different in
+// each: a service_role JWT (eyJ...) in the legacy scheme, sb_secret_... in the current
+// one. Both are rejected, because the day this matters is the day someone copies the
+// wrong row out of a dashboard that shows them side by side.
+ok(!/sb_secret_/.test(code), "no sb_secret_ key - the current format of the same danger");
+ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted in by hand");
 
 // ---------------------------------------------------------------------------------
 // 2. Unconfigured: no accounts exist as far as the page is concerned.
