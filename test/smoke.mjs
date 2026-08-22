@@ -192,6 +192,19 @@ ok(ladder.every((h) => h !== null), `every rung of the size ladder has a height 
 ok(ladder[0] > ladder[1] && ladder[1] > ladder[2],
    `phase > zone > boss portrait, which is what ranks them (${ladder.join(" > ")})`);
 
+// "Dim until picked" is the other half of that shared language, and it lives in three
+// separate selectors. They drifted apart once - the rail was lightened and the tiles
+// were left behind - so the values are tokens now and every level has to use them.
+// A hard-coded grayscale()/brightness() on an art surface is the regression.
+const artFilters = (cssText.match(/(?:\.art-split img|#boss-chips[^{]*\.chip-icon)[^{]*\{[^}]*\}/g) || [])
+  .concat(cssText.match(/\.chip--art:hover[^{]*\{[^}]*\}/g) || [])
+  // `filter: none` is the *picked* state and is meant to be literal - it is the
+  // absence of the treatment, not a variant of it. Only dimming is tokenised.
+  .filter((r) => /filter:/.test(r) && !/filter:\s*none/.test(r));
+ok(artFilters.length >= 3, `every art surface has a dim rule (${artFilters.length})`);
+ok(artFilters.every((r) => /filter:\s*var\(--art-dim/.test(r)),
+   "and all of them go through the shared token, so the three levels cannot drift");
+
 // ---- the boss rail ----
 // It is portraits, not pills: the name is hidden and reached by hovering. Three
 // things have to hold for that to be a rail rather than a row of anonymous squares.
