@@ -237,22 +237,11 @@ a:hover { color: var(--gold-bright); }
 
 .chip--art[aria-pressed="true"] .art-label { color: var(--gold-bright); }
 
-.art-count {
-  position: absolute;
-  z-index: 1;
-  margin: 0;
-  opacity: 1;
-  color: var(--text-dim);
-  text-shadow: 0 1px 3px #000, 0 0 8px #000;
-}
-
 .chip--art[aria-pressed="true"] { border-color: var(--gold-bright); }
-.chip--art[aria-pressed="true"] .art-count { color: var(--gold); }
 
 /* --- the phase, at full size --- */
 .chip--phase { width: 168px; height: 84px; }
 .chip--phase .art-label { padding: 6px 9px; font-size: .82rem; }
-.chip--phase .art-count { top: 5px; right: 7px; }
 
 /* --- the zone, the same idea one level down ---
    Half the height, and the label sits on a scrim rather than floating on the art: at
@@ -260,7 +249,6 @@ a:hover { color: var(--gold-bright); }
    carrying it. */
 .chip--zone { width: 124px; height: 46px; }
 .chip--zone .art-label { padding: 3px 7px; font-size: .74rem; }
-.chip--zone .art-count { top: 3px; right: 6px; font-size: .68rem; }
 
 .chip--zone::after {
   content: "";

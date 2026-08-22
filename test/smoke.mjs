@@ -66,8 +66,13 @@ ok(/illidan/.test(strips(3)[0].src) && /archimonde/.test(strips(3)[1].src),
    "in zone order, each raid flying its final boss");
 ok(/Crafted/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),
    "and the tooltip still names the zone that cannot be pictured");
-ok(phaseChips().every((c) => c.querySelector(".art-label") && c.querySelector(".art-count")),
-   "with the label over the art and the count in the corner");
+ok(phaseChips().every((c) => c.querySelector(".art-label")), "with the label over the art");
+
+// No count on the face of a tile - the art is doing the work, and "N of 195 items"
+// above the table already answers it. It survives where it costs nothing.
+ok(phaseChips().every((c) => !c.querySelector(".art-count")), "and no item count on it");
+ok(/195/.test(chipByText("#phase-chips", "Phase 3").getAttribute("aria-label")),
+   "though a screen reader is still told how many, since it cannot see the table either");
 ok(/Black Temple/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),
    `and the raids it covers on hover: "${chipByText("#phase-chips", "Phase 3").dataset.tip}"`);
 ok(phaseChips().every((c) => c.querySelector("img").getAttribute("onerror")),
@@ -953,8 +958,8 @@ const zoneChipNames = () => [...doc.querySelectorAll("#zone-chips .chip")]
   .filter((c) => !c.classList.contains("chip--all")).map((c) => c.textContent.replace(/\d+$/, "").trim());
 
 ok([1, 2, 3, 4, 5].every((n) => phaseChip(n)), "all five phases have a chip");
-ok(phaseChip(1).querySelector(".n").textContent === "0",
-   "a phase with no items yet reads 0 rather than being hidden");
+ok(/, 0 items/.test(phaseChip(1).getAttribute("aria-label")),
+   "a phase with no items is still offered, and says so where it does not clutter");
 
 click(phaseChip(1));
 ok(zoneChipNames().join(", ") === "Karazhan, Gruul's Lair, Magtheridon's Lair",
@@ -977,8 +982,8 @@ ok([...doc.querySelectorAll("#boss-chips .chip")]
 ok(rows().length === 0, "with no items listed under any of them yet");
 
 click(phaseChip(2));
-ok(zoneChipNames().join(", ") === "Serpentshrine Cavern, Tempest Keep",
-   `phase 2 replaces them: ${zoneChipNames().join(", ")}`);
+ok(zoneChipNames().join(", ") === "Serpentshrine Cavern, Tempest Keep, Crafted",
+   `phase 2 replaces them, and has a crafted tier of its own: ${zoneChipNames().join(", ")}`);
 
 click(phaseChip(3));
 ok(zoneChipNames().join(", ") === "Black Temple, Mount Hyjal, Crafted",

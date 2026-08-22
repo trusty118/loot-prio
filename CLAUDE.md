@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 517 checks, should be all green
+npm test             # 519 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -247,6 +247,12 @@ difference is what says which sits above the other, so keep them apart if either
 The zone tile adds a bottom scrim (`.chip--zone::after`) that the phase tile does not need: at
 46px the art is busy exactly where the label lands, and a text-shadow alone stops carrying it.
 
+**No item count on the face of a tile.** The number is noise where the art is doing the work,
+and the `N of 195 items` line above the table already answers it. It stays in the `aria-label`,
+which is the only way a screen reader gets it and costs nothing on screen. Boss chips keep
+their counts — they are pills with no art competing, and the count is what tells you which boss
+is worth opening.
+
 Bosses stay pills — third level, smallest, and a row of up to 13 of them has no room to be
 anything else. `chip()` still builds those; `artChip()` exists because a label over art with a
 count in a corner is not a chip layout, and `chip()` already carries three flags.
@@ -290,7 +296,11 @@ at peak there are ~40 controls on screen, and the phase row is 6 of them. The we
 boss row (up to 13) and the class row (10).
 
 `PHASES` in `app.js` is the five TBC content phases and the zones each opened, in release
-order, and `BOSS_ORDER` now carries the kill order for **all nine zones**. **Only Phase 3 has
+order, and `BOSS_ORDER` now carries the kill order for **all nine raid zones**. Phases 2 and 3
+each also carry a **crafted zone**, named for the material it is gated on — `Crafted (Nether
+Vortex)` and `Crafted (Heart of Darkness)` — both of which render as plain `Crafted`, since
+they are never on screen together. They have no bosses and no `BOSS_ORDER` entry, which is
+exactly what keeps them off the phase tile's art strips. **Only Phase 3 has
 items**: everything else is chips reading `0`, so the shape of the expansion is visible and an
 item has a boss to arrive under. `ZONE_ORDER` is derived from `PHASES`, which keeps
 `bossSortKey()` working without a second list to keep in step.

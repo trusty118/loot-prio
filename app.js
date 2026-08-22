@@ -104,7 +104,8 @@
      picked, and nothing below a zone until a zone is. */
   var PHASES = [
     { id: "P1", label: "Phase 1", zones: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair"] },
-    { id: "P2", label: "Phase 2", zones: ["Serpentshrine Cavern", "Tempest Keep"] },
+    { id: "P2", label: "Phase 2",
+      zones: ["Serpentshrine Cavern", "Tempest Keep", "Crafted (Nether Vortex)"] },
     { id: "P3", label: "Phase 3", zones: ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"] },
     { id: "P4", label: "Phase 4", zones: ["Zul'Aman"] },
     { id: "P5", label: "Phase 5", zones: ["Sunwell Plateau"] }
@@ -142,7 +143,13 @@
   /* Every zone, in phase order - which is also kill order across the expansion, so
      bossSortKey() can go on using the index of this list. */
   var ZONE_ORDER = PHASES.reduce(function (all, p) { return all.concat(p.zones); }, []);
-  var ZONE_LABEL = { "Crafted (Heart of Darkness)": "Crafted" };
+  /* Each phase has its own crafting tier, named for the material it is gated on, and
+     both render as plain "Crafted" - they are never on screen together, because the
+     phase above them decides which one is. */
+  var ZONE_LABEL = {
+    "Crafted (Nether Vortex)": "Crafted",
+    "Crafted (Heart of Darkness)": "Crafted"
+  };
 
   /* Encounter Journal boss portraits (128x64 PNG). TBC bosses have no achievement
      icons - those postdate them - but Legion backfilled the Adventure Guide, so
@@ -221,6 +228,7 @@
     "Tempest Keep": JOURNAL + "kaelthas-sunstrider.png",
     "Black Temple": JOURNAL + "illidan-stormrage.png",
     "Mount Hyjal": JOURNAL + "archimonde.png",
+    "Crafted (Nether Vortex)": ICON + "inv_elemental_mote_nether.jpg",
     "Crafted (Heart of Darkness)": ICON + "spell_shadow_demonictactics.jpg",
     "Zul'Aman": JOURNAL + "daakara.png",
     "Sunwell Plateau": JOURNAL + "kiljaeden.png"
@@ -1276,11 +1284,9 @@
     label.textContent = opts.label;
     b.appendChild(label);
 
-    var n = document.createElement("span");
-    n.className = "n art-count";
-    n.textContent = opts.count;
-    b.appendChild(n);
-
+    /* No count on the face of a tile. The number is noise where the art is doing the
+       work, and "N of 195 items" above the table already answers it. It stays in the
+       aria-label, where it costs nothing and is the only way a screen reader gets it. */
     b.dataset.tip = opts.tip;
     b.setAttribute("aria-label", opts.ariaLabel || opts.tip);
     return b;
