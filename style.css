@@ -17,12 +17,14 @@
   /* One accent, one meaning: selected. The token names are historical - this is green
      now, for TBC, and a later expansion just changes these two values again.
 
-     Jade, not Outland's fel green. Fel is the more literal answer and was tried first:
-     at #8fce00 it is a bright yellow-green, and against a palette deliberately cooled
-     to slate it read as acid - the one hot thing on a cold page, shouting from every
-     All chip. Jade keeps the green while sitting down into the palette rather than
-     fighting it, and being cooler it leaves more room between the accent and the warm
-     --artifact gold below.
+     A tempered fel green, arrived at from both ends. Outland's own #8fce00 was tried
+     first and read as acid against a palette deliberately cooled to slate - the one hot
+     thing on a cold page, shouting from every All chip. Jade #2fbf71 fixed that and
+     overshot: cool and dark enough to look washed out, and no longer obviously TBC.
+
+     This keeps fel's yellow-green hue, which is the part that says Outland, and takes
+     the brightness out of it. Still clear of --artifact gold below, and still nothing
+     like #1eff00 uncommon green.
 
      Green is normally a bad accent for a WoW page, because #1eff00 is uncommon quality.
      It is safe here for a reason specific to this dataset: every item on this site is
@@ -32,8 +34,8 @@
      It also fixes something that was quietly wrong. The old #d9b45a sat a few degrees
      from --artifact #e6cc80, so "selected" and "expansion BiS" - two things with no
      relationship at all - looked like the same colour. They no longer do. */
-  --gold: #2fbf71;
-  --gold-bright: #58dc93;
+  --gold: #86cf3e;
+  --gold-bright: #a8e05c;
 
   /* WoW item-quality colours, reused for the BiS longevity ladder:
      epic -> legendary -> artifact, matching how long an item stays BiS */
