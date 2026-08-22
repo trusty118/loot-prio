@@ -1205,6 +1205,18 @@ mark {
   flex: none;
 }
 
+/* Pinned to the right-hand end of the bar, away from the list controls, because being
+   signed in is not one of them. One box with margin-left:auto rather than auto on each
+   button: flex shares free space between every auto margin, so three of them would
+   spread apart instead of grouping, and the account would drift left and right as the
+   status message beside it changed length. */
+.account-zone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
 /* Who you are, and the things you can do about that, in one control - which is what
    every site does with an account, and it keeps two more buttons off a bar that already
    carries List, New and Make a copy.
