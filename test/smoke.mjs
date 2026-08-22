@@ -74,13 +74,13 @@ ok([...new Set(crafted)].length === 3,
    `three crafted zones, one per tier that has craftables: ${[...new Set(crafted)].join(", ")}`);
 ok([...new Set(crafted)].every((z) => new RegExp('"' + z.replace(/[()]/g, "\\$&") + '": "Crafted"').test(appSource)),
    "each renders as plain Crafted, since two are never on screen together");
-// Phase 3 carries an artOrder, which is display only - Archimonde leads on the tile
-// while Black Temple still leads everywhere the zone order matters.
+// One order, followed everywhere: the tile strips, the zone row and the table's boss
+// groups all read Hyjal first because the phase lists its zones that way.
 ok(/archimonde/.test(strips(3)[0].src) && /illidan/.test(strips(3)[1].src),
-   "each raid flies its final boss, in the tile's own order");
+   "each raid flies its final boss, Hyjal first");
 ok([...doc.querySelectorAll("#zone-chips .chip")]
-     .filter((c) => !c.classList.contains("chip--all"))[0].textContent.includes("Black Temple"),
-   "the zone row is unmoved by it");
+     .filter((c) => !c.classList.contains("chip--all"))[0].textContent.includes("Mount Hyjal"),
+   "and the zone row leads with it too");
 ok(/Crafted/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),
    "and the tooltip still names the zone that cannot be pictured");
 ok(phaseChips().every((c) => c.querySelector(".art-label")), "with the label over the art");
@@ -111,9 +111,9 @@ ok(groups().length === 17, `renders 17 boss groups (got ${groups().length})`);
 ok(doc.getElementById("count").textContent === "195 of 195 items", `count text: "${doc.getElementById("count").textContent}"`);
 
 const heads = headText();
-ok(/Black Temple/.test(heads[0]) && /Trash/.test(heads[0]), `first group is BT Trash: "${heads[0]}"`);
-ok(/Illidan Stormrage/.test(heads[9]), `BT ends on Illidan: "${heads[9]}"`);
-ok(/Archimonde/.test(heads[15]), `Hyjal ends on Archimonde: "${heads[15]}"`);
+ok(/Mount Hyjal/.test(heads[0]) && /Trash/.test(heads[0]), `first group is Hyjal trash: "${heads[0]}"`);
+ok(/Archimonde/.test(heads[5]), `Hyjal ends on Archimonde: "${heads[5]}"`);
+ok(/Illidan Stormrage/.test(heads[15]), `Black Temple ends on Illidan: "${heads[15]}"`);
 ok(/^Crafted$/.test(heads[16]), `crafted group is headed by its zone, with no boss: "${heads[16]}"`);
 ok(!/Craftable/.test(doc.body.textContent), "the Craftable pseudo-boss label is gone");
 click(chipByText("#zone-chips", "Crafted"));
@@ -960,7 +960,8 @@ ok([...doc.querySelectorAll(".boss-group")].every((g) => {
 
 // grouping order must survive sorting
 const sortedHeads = [...doc.querySelectorAll(".boss-head .boss-name")].map((h) => h.textContent.trim());
-ok(sortedHeads[0] === "Trash" && sortedHeads[9] === "Illidan Stormrage",
+ok(sortedHeads[0] === "Trash" && sortedHeads[5] === "Archimonde" &&
+   sortedHeads[15] === "Illidan Stormrage",
    "boss groups stay in kill order while rows sort inside them");
 ok(rows().length === 195, `all rows still present after sorting (${rows().length})`);
 
@@ -1003,7 +1004,7 @@ ok(zoneChipNames().join(", ") === "Serpentshrine Cavern, Tempest Keep, Crafted",
    `phase 2 replaces them, and has a crafted tier of its own: ${zoneChipNames().join(", ")}`);
 
 click(phaseChip(3));
-ok(zoneChipNames().join(", ") === "Black Temple, Mount Hyjal, Crafted",
+ok(zoneChipNames().join(", ") === "Mount Hyjal, Black Temple, Crafted",
    `phase 3 is the one with data: ${zoneChipNames().join(", ")}`);
 ok(rows().length === 195, "picking a phase with no zone means every zone in it");
 ok(doc.getElementById("boss-row").hidden, "the boss row waits for a zone");

@@ -106,15 +106,16 @@
     { id: "P1", label: "Phase 1", zones: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair"] },
     { id: "P2", label: "Phase 2",
       zones: ["Serpentshrine Cavern", "Tempest Keep", "Crafted (Nether Vortex)"] },
-    /* artOrder is display only: the zone order below drives ZONE_ORDER, which the zone
-       chips and the table's grouping both follow, so it cannot be shuffled just to
-       rearrange a tile. Archimonde leads here because his portrait faces into the tile
-       and Illidan's faces out of it. */
-    { id: "P3", label: "Phase 3", zones: ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"],
-      artOrder: ["Mount Hyjal", "Black Temple"] },
+    { id: "P3", label: "Phase 3",
+      zones: ["Mount Hyjal", "Black Temple", "Crafted (Heart of Darkness)"] },
     { id: "P4", label: "Phase 4", zones: ["Zul'Aman"] },
     { id: "P5", label: "Phase 5", zones: ["Sunwell Plateau", "Crafted (Sunmote)"] }
   ];
+
+  /* The order zones are listed in is load-bearing, not cosmetic: ZONE_ORDER derives from
+     it, and ZONE_ORDER decides the zone chip row, the order of the art strips on a phase
+     tile, and - through bossSortKey() - the order boss groups appear in the table. Change
+     it and all three move together, which is the point. */
 
   /* The raids of a phase, which is not quite its zones: the crafted pseudo-zone has no
      bosses and no art, so it has no strip on the tile. Having a boss list is the test,
@@ -1312,7 +1313,7 @@
       active: active,
       label: ph.label,
       count: count,
-      images: (ph.artOrder || phaseRaids(ph.id)).map(function (z) { return ZONE_ICON[z]; }),
+      images: phaseRaids(ph.id).map(function (z) { return ZONE_ICON[z]; }),
       tip: ph.label + " — " + zones,
       ariaLabel: ph.label + ", " + count + " items: " + zones
     });

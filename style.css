@@ -1,5 +1,8 @@
 :root {
-  --bg: #14100c;
+  /* Black behind and between the panels. The panels stay warm, so the separation now
+     comes from the panel being lighter than the page rather than from its border - and
+     the item-quality colours in the table sit on black the way they do in the game. */
+  --bg: #000;
   --bg-panel: #1e1913;
   --bg-panel-2: #262019;
   --bg-row: #1a1510;
@@ -180,7 +183,7 @@ a:hover { color: var(--gold-bright); }
   object-fit: cover;
   border-radius: 999px;
   border: 1px solid rgba(0, 0, 0, .45);
-  background: #0d0a07;
+  background: #000;   /* same reason as the tiles: alpha edges want black behind */
 }
 
 .chip:hover { background: #302820; color: var(--text); }
@@ -195,7 +198,10 @@ a:hover { color: var(--gold-bright); }
   border-radius: var(--radius);
   overflow: hidden;
   align-items: flex-end;
-  background: var(--bg-panel-2);
+  /* Black, not the panel colour. These portraits are PNGs with soft alpha edges, so
+     whatever sits behind them bleeds around every silhouette - against the warm panel
+     brown that haze was washing the outlines out. */
+  background: #000;
 }
 
 /* one strip per image, each taking an equal share and cropping to fill - which is what
