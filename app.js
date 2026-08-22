@@ -654,7 +654,6 @@
     signIn: document.getElementById("sign-in"),
     account: document.getElementById("account"),
     accountName: document.getElementById("account-name"),
-    tplMerge: document.getElementById("tpl-merge"),
     tplDelete: document.getElementById("tpl-delete"),
     tplLinkOut: document.getElementById("tpl-link-out"),
     tplLinkField: document.getElementById("tpl-link-field"),
@@ -1504,8 +1503,14 @@
 
   /* A zone is the same idea one level down, at half the size. */
   function zoneChip(z, active, count) {
+    /* A crafted zone is pictured by a square item icon rather than a 2:1 Encounter
+       Journal portrait, so cover-cropping it into a wide tile throws most of it away.
+       Having no BOSS_ORDER entry is the test, not the name - the same rule the phase
+       tiles use to decide which zones get an art strip - so a future crafted-style
+       zone gets this for free. */
+    var cls = "chip--zone" + (BOSS_ORDER[z] ? "" : " chip--emblem");
     return artChip({
-      cls: "chip--zone",
+      cls: cls,
       active: active,
       label: zoneLabel(z),
       count: count,
@@ -2704,7 +2709,6 @@
 
   var savedLists = [];        /* store.list() is async; this is its cached answer */
   var deleteArmed = false;    /* Delete asks once, in place, instead of confirm() */
-  var mergeOffer = false;     /* local lists found on first sign-in - offer to keep them */
 
   /* ---------- signing in ----------
      Discord only. Every raider has one, it is the easiest of the three OAuth flows,
@@ -2821,44 +2825,7 @@
     });
   }
 
-  /* Local lists do not follow you into the account by themselves, and the store swaps
-     the moment you sign in - so without this, someone's first act of signing in makes
-     their work appear to vanish. It has not: it is still in localStorage, just no
-     longer what the dropdown is reading.
 
-     So offer to copy it up, in place in the bar, the same two-step shape Delete uses.
-     The local copies are left exactly where they are, never moved or deleted, so
-     answering wrong costs nothing. */
-  function offerMerge() {
-    localStore.list().then(function (local) {
-      if (!local.length) return;
-      return remoteStore.list().then(function (remote) {
-        /* only worth asking when the account is empty - once there are lists up there,
-           silently duplicating everything on every sign-in would be its own bug */
-        mergeOffer = !remote.length;
-        renderTemplateBar();
-      });
-    }).catch(function () { /* offline or paused: not worth a message of its own */ });
-  }
-
-  function doMerge() {
-    mergeOffer = false;
-    announce("Copying your lists\u2026");
-    localStore.list().then(function (local) {
-      return Promise.all(local.map(function (row) {
-        return localStore.load(row.id).then(function (t) {
-          return t ? remoteStore.save(t) : null;
-        });
-      }));
-    }).then(function (done) {
-      announce(done.length + (done.length === 1 ? " list" : " lists") +
-                 " copied to your account. The copies on this device are untouched.");
-      refreshLists();
-    }).catch(function (err) {
-      announce("Could not copy your lists: " + err.message);
-      renderTemplateBar();
-    });
-  }
 
   /* Wiring the session to the store. Runs on load and on every auth change, which is
      also how a redirect back from Discord is picked up - the SDK parses the URL,
@@ -2913,11 +2880,8 @@
       /* the lists on screen belonged to whoever was signed in a moment ago */
       if (was !== signedIn()) openTemplate(null, false);
       refreshLists();
-      if (!was && signedIn()) {
-        offerMerge();
-        /* the filters you left behind, now that the round trip is over */
-        if (restoreReturn()) update();
-      }
+      /* the filters you left behind, now that the round trip is over */
+      if (!was && signedIn() && restoreReturn()) update();
       renderTemplateBar();
     });
 
@@ -2984,7 +2948,7 @@
        blocked CDN should read as "this site has no accounts", not as a broken button. */
     show(el.signIn, supabaseReady() && !signedIn());
     show(el.account, supabaseReady() && signedIn());
-    show(el.tplMerge, mergeOffer);
+
     if (signedIn()) {
       if (el.accountName) el.accountName.textContent = accountName();
       renderAvatar();
@@ -3052,7 +3016,6 @@
       ev.stopPropagation();           /* opening it must not count as a click away */
       toggleAcctMenu();
     });
-    if (el.tplMerge) el.tplMerge.addEventListener("click", doMerge);
 
     el.tplCopy.addEventListener("click", function () {
       var from = activeTemplate ? activeTemplate.name : "zatar's list";

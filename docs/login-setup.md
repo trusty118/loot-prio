@@ -108,8 +108,8 @@ the dashboard and look alike, which is exactly how the wrong one gets copied, so
 
 - Sign in on one machine, make a list, sign in on another, and confirm it is there. That is
   the whole feature.
-- The first sign-in on a browser that already has local lists offers **Copy my lists here**.
-  It copies rather than moves — the local ones stay where they are.
+- Lists made **before** signing in stay in that browser and are not copied into the account.
+  They are not lost: signing out shows them again. The two stores are separate on purpose.
 - **Free projects pause after about a week with no requests** and need a manual restore
   from the dashboard. If that starts biting, a weekly GitHub Action making one trivial
   query keeps it awake, or the Pro plan removes it.

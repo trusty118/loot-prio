@@ -347,6 +347,17 @@ a:hover { color: var(--gold-bright); }
 .chip--zone { width: 112px; height: 48px; }
 .chip--zone .art-label { padding: 3px 7px; font-size: 11px; color: var(--text); }
 
+/* A square item icon in a 112x48 tile. object-fit: cover scales it until the tile is
+   full, which for a square in a wide box means cropping away everything but the middle
+   band - and cover is already the smallest scale that fills, so there is no way to show
+   more of it while still filling. Contain instead: the whole icon, centred, on the
+   black the tile already uses behind soft-alpha art. */
+.chip--emblem .art-split img { object-fit: contain; }
+
+/* Nothing under it worth protecting, and the label needs the contrast more than the
+   emblem needs the room. */
+.chip--emblem::after { height: 70%; }
+
 /* Same shape as the phase scrim, proportionally taller: the zone tile is shorter, so
    its label takes a bigger share of it. Still clears the top third for art. */
 .chip--zone::after {
@@ -1318,18 +1329,6 @@ mark {
 }
 
 .acct-item:hover, .acct-item:focus-visible { background: var(--bg-panel-2); color: var(--text); }
-
-/* Offered once, at the only moment it means anything: just after signing in, when
-   this device has lists and the account does not. Gold because it is the one thing on
-   the bar worth doing right then - everything else can wait. */
-.btn-tpl--merge {
-  background: var(--gold);
-  border-color: var(--gold-bright);
-  color: #14181f;
-  font-weight: 600;
-}
-
-.btn-tpl--merge:hover { color: #14181f; background: var(--gold-bright); }
 
 /* the add popover: every class and spec, opened from the + on a row.
    Parented to <body>, so it is positioned rather than laid out. */
