@@ -239,7 +239,16 @@ the rings, not the page.
 ### Phase, zone, boss
 
 **All three levels are art now, not pills.** Phase, zone and boss all answer "where am I", so
-they share one language — art behind, dim until picked — and what separates them is **size**:
+they share one language — art behind, dim until picked — and what separates them is **size**.
+
+**"Dim until picked" is `--art-dim` / `--art-dim-hover`, and every art surface must use them.**
+Three separate selectors carry that treatment, and they drifted the first time one was touched:
+the rail was lightened for legibility and the two tiles were left behind at `brightness(.45)`,
+which is how a shared language quietly becomes two. A test fails on any hard-coded
+`grayscale()`/`brightness()` on an art surface. `filter: none` — the *picked* state — stays
+literal, because that is the absence of the treatment rather than a variant of it.
+
+The sizes:
 a **phase is 148x72** and carries **one strip per raid** (Phase 1 shows three, Phase 3 two); a
 **zone is 112x48** and carries its one; a **boss is a 76x44 portrait** in the rail. That ladder
 is what says which sits above the other, so keep them ranked if any of them is restyled.
