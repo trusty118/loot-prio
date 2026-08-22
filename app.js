@@ -1246,26 +1246,24 @@
 
   /* The top of the where-hierarchy. Nothing below it renders until one is picked,
      which is what stops the panel opening as 3 zone chips and 17 boss chips. */
-  /* A phase is a tile rather than a pill: it is the one thing on the page you set and
-     leave, so it earns the room, and the raid art says which tier you are in faster
-     than the words do. Its own builder rather than another flag on chip() - the label
-     sits over the art and the count in the corner, which is not a chip layout.
-
-     The art is one strip per raid, side by side, so a phase covering three raids shows
-     three. That is why it uses the boss portraits every other chip uses rather than the
-     sharper 256x128 instance tiles: there is no instance tile for Serpentshrine or
-     Hyjal, so those phases could only ever have shown one of their raids. */
-  function phaseChip(ph, active, count) {
+  /* ---------- art tiles ----------
+     Phase and zone are both "where am I", so they share a language: art behind, label
+     over it, count in the corner, dim until picked. They are deliberately not the same
+     size - a phase tile is twice a zone tile - because that difference is what says
+     which one is above the other. One builder, two skins. */
+  function artChip(opts) {
     var b = document.createElement("button");
     b.type = "button";
-    b.className = "chip chip--phase";
-    b.setAttribute("aria-pressed", active ? "true" : "false");
+    b.className = "chip chip--art " + opts.cls;
+    b.setAttribute("aria-pressed", opts.active ? "true" : "false");
 
+    /* one strip per image, so a phase covering three raids shows three. A zone passes
+       one and gets the same treatment for free. */
     var art = document.createElement("div");
-    art.className = "phase-split";
-    phaseRaids(ph.id).forEach(function (z) {
+    art.className = "art-split";
+    (opts.images || []).forEach(function (src) {
       var img = document.createElement("img");
-      img.src = ZONE_ICON[z];
+      img.src = src;
       img.alt = "";
       /* the tile still reads as itself if the CDN ever stops serving these */
       img.setAttribute("onerror", "this.style.display='none'");
@@ -1274,20 +1272,50 @@
     b.appendChild(art);
 
     var label = document.createElement("span");
-    label.className = "phase-label";
-    label.textContent = ph.label;
+    label.className = "art-label";
+    label.textContent = opts.label;
     b.appendChild(label);
 
     var n = document.createElement("span");
-    n.className = "n phase-count";
-    n.textContent = count;
+    n.className = "n art-count";
+    n.textContent = opts.count;
     b.appendChild(n);
 
-    /* which raids are in it, for the reader who does not know the phases by number */
-    var zones = ph.zones.map(function (z) { return zoneLabel(z); }).join(", ");
-    b.dataset.tip = ph.label + " — " + zones;
-    b.setAttribute("aria-label", ph.label + ", " + count + " items: " + zones);
+    b.dataset.tip = opts.tip;
+    b.setAttribute("aria-label", opts.ariaLabel || opts.tip);
     return b;
+  }
+
+  /* A phase is the one control you set and leave, so it earns the most room, and the
+     raid art says which tier you are in faster than the words do.
+
+     The strips use the same ui-ej-boss-* portraits as every other chip rather than the
+     sharper 256x128 instance tiles: there is no instance tile for Serpentshrine or
+     Hyjal, so those phases could only ever have shown one of their raids. */
+  function phaseChip(ph, active, count) {
+    var zones = ph.zones.map(function (z) { return zoneLabel(z); }).join(", ");
+    return artChip({
+      cls: "chip--phase",
+      active: active,
+      label: ph.label,
+      count: count,
+      images: phaseRaids(ph.id).map(function (z) { return ZONE_ICON[z]; }),
+      tip: ph.label + " — " + zones,
+      ariaLabel: ph.label + ", " + count + " items: " + zones
+    });
+  }
+
+  /* A zone is the same idea one level down, at half the size. */
+  function zoneChip(z, active, count) {
+    return artChip({
+      cls: "chip--zone",
+      active: active,
+      label: zoneLabel(z),
+      count: count,
+      images: [ZONE_ICON[z]],
+      tip: zoneLabel(z),
+      ariaLabel: zoneLabel(z) + ", " + count + " items"
+    });
   }
 
   function renderPhaseChips() {
@@ -1330,7 +1358,7 @@
     el.zoneChips.appendChild(all);
 
     phaseZones(state.phase).forEach(function (z) {
-      var c = chip(zoneLabel(z), state.zone === z, counts[z] || 0, null, ZONE_ICON[z]);
+      var c = zoneChip(z, state.zone === z, counts[z] || 0);
       c.addEventListener("click", function () {
         state.zone = (state.zone === z) ? "" : z;
         state.boss = "";

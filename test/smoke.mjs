@@ -54,11 +54,11 @@ ok(!phaseChips().some((c) => c.classList.contains("chip--all")),
 // A phase is a tile, not a pill: it is the one control you set and leave, so it
 // carries its raid's art at a size you can read across the room.
 ok(phaseChips().every((c) => c.classList.contains("chip--phase")), "each phase is a tile");
-ok(phaseChips().every((c) => c.querySelector(".phase-split img")), "each carries raid art");
+ok(phaseChips().every((c) => c.querySelector(".art-split img")), "each carries raid art");
 
 // one strip per RAID, which is not the same as per zone: the crafted pseudo-zone has
 // no bosses and no art, so phase 3 shows two strips for three zones
-const strips = (n) => chipByText("#phase-chips", "Phase " + n).querySelectorAll(".phase-split img");
+const strips = (n) => chipByText("#phase-chips", "Phase " + n).querySelectorAll(".art-split img");
 ok(strips(1).length === 3, `phase 1 shows its three raids (got ${strips(1).length})`);
 ok(strips(3).length === 2, `phase 3 shows two - crafted has no art to show (got ${strips(3).length})`);
 ok(strips(4).length === 1, `phase 4 shows its one (got ${strips(4).length})`);
@@ -66,7 +66,7 @@ ok(/illidan/.test(strips(3)[0].src) && /archimonde/.test(strips(3)[1].src),
    "in zone order, each raid flying its final boss");
 ok(/Crafted/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),
    "and the tooltip still names the zone that cannot be pictured");
-ok(phaseChips().every((c) => c.querySelector(".phase-label") && c.querySelector(".phase-count")),
+ok(phaseChips().every((c) => c.querySelector(".art-label") && c.querySelector(".art-count")),
    "with the label over the art and the count in the corner");
 ok(/Black Temple/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),
    `and the raids it covers on hover: "${chipByText("#phase-chips", "Phase 3").dataset.tip}"`);
@@ -149,9 +149,18 @@ click(chipByText("#zone-chips", "Black Temple"));
 const zoneChips = [...doc.querySelectorAll("#zone-chips .chip")];
 const bossChips = [...doc.querySelectorAll("#boss-chips .chip")];
 
-// chip 0 in each group is the "All" chip and gets no icon
-ok(zoneChips.slice(1).every((c) => c.querySelector("img.chip-icon")), "all 3 zone chips have an icon");
-ok(!zoneChips[0].querySelector("img"), '"All" chip has no icon');
+// Zones are art tiles too - the same language as the phases one level down, so the
+// two read as parent and child rather than as two unrelated rows.
+ok(zoneChips.slice(1).every((c) => c.classList.contains("chip--art")),
+   "zone chips share the tile treatment with the phases");
+ok(zoneChips.slice(1).every((c) => c.classList.contains("chip--zone")),
+   "under their own class, so they can be sized differently");
+ok(zoneChips.slice(1).every((c) => c.querySelectorAll(".art-split img").length === 1),
+   "each showing its one zone's art");
+ok(!zoneChips[0].querySelector("img"), '"All" chip has no art');
+ok(/\.chip--phase\s*\{[^}]*height:\s*84px/.test(cssText) &&
+   /\.chip--zone\s*\{[^}]*height:\s*46px/.test(cssText),
+   "and a zone tile is visibly smaller than a phase tile, which is what ranks them");
 ok(bossChips.slice(1).every((c) => c.querySelector("img.chip-icon")), `all ${bossChips.length - 1} boss chips have an icon`);
 ok(!bossChips[0].querySelector("img"), "the boss row's All chip has no icon either");
 

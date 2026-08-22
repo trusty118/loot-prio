@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 514 checks, should be all green
+npm test             # 517 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -238,11 +238,18 @@ the rings, not the page.
 
 ### Phase, zone, boss
 
-**Phases are tiles, not pills**, 168x84, carrying **one strip of art per raid** — Phase 1
-shows three, Phase 3 two. Unpicked tiles are desaturated and dimmed; the picked one is full
-colour with a gold label, so which tier you are in reads without being read. `phaseChip()`
-builds them rather than `chip()`: a label over art with a count in the corner is not a chip
-layout, and `chip()` already carries three flags.
+**Phase and zone are art tiles, not pills.** Both answer "where am I", so they share one
+language — art behind, label over it, count in the corner, dim until picked — and `artChip()`
+builds both. What separates them is size: a **phase is 168x84** and carries **one strip per
+raid** (Phase 1 shows three, Phase 3 two); a **zone is 124x46** and carries its one. That
+difference is what says which sits above the other, so keep them apart if either is restyled.
+
+The zone tile adds a bottom scrim (`.chip--zone::after`) that the phase tile does not need: at
+46px the art is busy exactly where the label lands, and a text-shadow alone stops carrying it.
+
+Bosses stay pills — third level, smallest, and a row of up to 13 of them has no room to be
+anything else. `chip()` still builds those; `artChip()` exists because a label over art with a
+count in a corner is not a chip layout, and `chip()` already carries three flags.
 
 `phaseRaids()` is **not** `phaseZones()`. The crafted pseudo-zone has no bosses and no art, so
 it gets no strip — having a `BOSS_ORDER` entry is the test, rather than naming it, so a future

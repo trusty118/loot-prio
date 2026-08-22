@@ -185,15 +185,12 @@ a:hover { color: var(--gold-bright); }
 
 .chip:hover { background: #302820; color: var(--text); }
 
-/* ---------- phase tiles ----------
-   The phase is the one control you set and leave, so it gets room the others do not:
-   a 2:1 tile carrying its raid's Encounter Journal art, at the 256x128 those come in.
-   Unpicked tiles are dimmed and desaturated so the current phase reads at a glance
-   from across the room, which is the whole point of using art here. */
-.chip--phase {
+/* ---------- art tiles: phase and zone ----------
+   Both answer "where am I", so they share a language - art behind, label over it, count
+   in the corner, dim until picked. The size is what separates them: a phase tile is
+   twice a zone tile, and that difference is what says which sits above the other. */
+.chip--art {
   position: relative;
-  width: 168px;
-  height: 84px;
   padding: 0;
   border-radius: var(--radius);
   overflow: hidden;
@@ -201,16 +198,15 @@ a:hover { color: var(--gold-bright); }
   background: var(--bg-panel-2);
 }
 
-/* One strip per raid, so a phase covering three raids shows three. Each strip takes an
-   equal share and crops to fill, which is what lets a 128x64 portrait sit in a tall
-   narrow box without distorting. */
-.phase-split {
+/* one strip per image, each taking an equal share and cropping to fill - which is what
+   lets a 128x64 portrait sit in a tall narrow box without distorting */
+.art-split {
   position: absolute;
   inset: 0;
   display: flex;
 }
 
-.phase-split img {
+.art-split img {
   flex: 1 1 0;
   min-width: 0;
   height: 100%;
@@ -220,45 +216,60 @@ a:hover { color: var(--gold-bright); }
 }
 
 /* a hairline seam, so two portraits do not blend into one confusing image */
-.phase-split img + img { border-left: 1px solid rgba(0, 0, 0, .55); }
+.art-split img + img { border-left: 1px solid rgba(0, 0, 0, .55); }
 
-.chip--phase:hover .phase-split img { filter: grayscale(.2) brightness(.8); }
+.chip--art:hover .art-split img { filter: grayscale(.2) brightness(.8); }
 
-.chip--phase[aria-pressed="true"] .phase-split img {
+.chip--art[aria-pressed="true"] .art-split img {
   filter: none;
   transform: scale(1.03);   /* a touch of life on the one you are in */
 }
 
 /* the label sits on the art, so it carries its own contrast rather than relying on
    whatever happens to be behind it */
-.phase-label {
+.art-label {
   position: relative;
   z-index: 1;
-  padding: 6px 9px;
-  font-size: .82rem;
   font-weight: 600;
   color: var(--text);
   text-shadow: 0 1px 3px #000, 0 0 10px #000;
 }
 
-.chip--phase[aria-pressed="true"] .phase-label { color: var(--gold-bright); }
+.chip--art[aria-pressed="true"] .art-label { color: var(--gold-bright); }
 
-.phase-count {
+.art-count {
   position: absolute;
   z-index: 1;
-  top: 5px;
-  right: 7px;
   margin: 0;
   opacity: 1;
   color: var(--text-dim);
   text-shadow: 0 1px 3px #000, 0 0 8px #000;
 }
 
-.chip--phase[aria-pressed="true"] { border-color: var(--gold-bright); }
-.chip--phase[aria-pressed="true"] .phase-count { color: var(--gold); }
+.chip--art[aria-pressed="true"] { border-color: var(--gold-bright); }
+.chip--art[aria-pressed="true"] .art-count { color: var(--gold); }
 
-/* a phase with nothing in it yet says so by being flat, not by being hidden */
-.chip--phase:not([aria-pressed="true"]) .phase-count { opacity: .8; }
+/* --- the phase, at full size --- */
+.chip--phase { width: 168px; height: 84px; }
+.chip--phase .art-label { padding: 6px 9px; font-size: .82rem; }
+.chip--phase .art-count { top: 5px; right: 7px; }
+
+/* --- the zone, the same idea one level down ---
+   Half the height, and the label sits on a scrim rather than floating on the art: at
+   this size a portrait is busy right where the text lands, and a shadow alone stops
+   carrying it. */
+.chip--zone { width: 124px; height: 46px; }
+.chip--zone .art-label { padding: 3px 7px; font-size: .74rem; }
+.chip--zone .art-count { top: 3px; right: 6px; font-size: .68rem; }
+
+.chip--zone::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 60%;
+  background: linear-gradient(to top, rgba(0, 0, 0, .8), transparent);
+  pointer-events: none;
+}
 
 /* Class and spec chips are the icon and nothing else - a name and a count on each
    of 27 chips buried the icons they were labelling. Both live in the tooltip. */
