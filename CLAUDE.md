@@ -654,8 +654,19 @@ editor refuses the drop and says why, so it cannot produce data that fails valid
 returned against [docs/design-brief.md](docs/design-brief.md). Every neutral cooled to slate so
 that **gold and the three item-quality colours are the only warm things on screen** — those are
 the colours that carry meaning, and on the old warm browns they were competing with the
-furniture. Nothing marked fixed in the brief moved: `--gold`, `--gold-bright`, `--epic`,
+furniture. Nothing marked fixed in the brief moved at the time: `--gold`, `--gold-bright`, `--epic`,
 `--legendary` and `--artifact` are byte-identical, and the BiS rings were not touched at all.
+
+**The accent has since moved to fel green `#8fce00`** (bright `#b8f13a`), Aug 2026 — Outland's
+colour, on a TBC guide. The tokens keep their `--gold` names on purpose: renaming 58 usages
+buys nothing when a later expansion just changes the two values again. Green is normally wrong
+for a WoW page, since `#1eff00` is uncommon quality; it is safe here only because every item in
+this dataset is epic or legendary, so **no green item name ever renders**. It also fixed a real
+ambiguity — the old `#d9b45a` sat a few degrees from `--artifact #e6cc80`, so "selected" and
+"expansion BiS" looked alike despite meaning nothing like each other. **The BiS ladder itself
+is still untouched.** Two `rgba()` literals of the old gold (`#spec-chips`, `mark`) were never
+tethered to the token and would have stayed gold on a green page; both `color-mix` off
+`--gold` now, so they cannot drift again.
 The two mute treatments were pushed *harder* (`.35 → .26`, `.25 → .2`) precisely to keep the
 brief's promise — slate raises the floor, so the old values had stopped reading as dimmed.
 
@@ -668,7 +679,7 @@ the rail hides the name that used to be their label.
 
 A visual-direction brief for handing the look to a designer lives in
 [docs/design-brief.md](docs/design-brief.md). It states which colours carry meaning and cannot
-move — the epic/legendary/artifact BiS ladder, gold as "selected", dim as "not you", and the
+move — the epic/legendary/artifact BiS ladder, the accent as "selected", dim as "not you", and the
 phase/zone/boss size ranking — so a restyle does not quietly break the semantics. Keep it
 current if any of those change.
 

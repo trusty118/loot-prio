@@ -51,8 +51,15 @@ This is the part most likely to be broken by a redesign that only considers aest
   in tooltips. A WoW player reads these instantly and has for twenty years. **They are fixed.**
 - **Item names in the table are coloured by quality** by Wowhead's own script — mostly epic
   purple. Any page colour has to sit under that without fighting it.
-- **Gold `#d9b45a` means "this is selected"**, everywhere: chips, tiles, the current phase.
-  One accent, one meaning.
+- **One accent means "this is selected"**, everywhere: chips, tiles, the current phase. One
+  accent, one meaning. It is **fel green `#8fce00`** (bright `#b8f13a`) as of Aug 2026 —
+  Outland's own colour, on a TBC guide. The tokens are still named `--gold`/`--gold-bright`;
+  that is historical and deliberate, since a later expansion just changes the two values.
+  Green is normally wrong for a WoW page, because `#1eff00` is uncommon quality — safe here
+  only because every item in this dataset is epic or legendary, so no green item name ever
+  renders. The swap also fixed a real ambiguity: the old gold sat a few degrees from
+  `--artifact #e6cc80`, so "selected" and "expansion BiS" looked alike despite meaning
+  nothing like each other.
 - **Dimmed and desaturated means "not you"** — spec icons in a priority line that are not your
   spec, and unpicked phase tiles. The contrast between lit and dim is doing real work.
 - **Size ranks the navigation**: phase tile 168×84 → zone tile 124×46 → boss pill. Three levels
@@ -71,7 +78,7 @@ Current palette, for reference rather than as a constraint:
 --bg #000        --bg-panel #1e1913   --bg-panel-2 #262019   --bg-row #1a1510
 --line #3a3128   --line-soft #2c251d
 --text #ece3d4   --text-dim #a89a85   --text-faint #7d7160
---gold #d9b45a   --gold-bright #f0cf82
+--gold #8fce00   --gold-bright #b8f13a   (fel green; token names are historical)
 --radius 6px     --font "Segoe UI", system-ui, …
 ```
 
