@@ -74,8 +74,13 @@ ok([...new Set(crafted)].length === 3,
    `three crafted zones, one per tier that has craftables: ${[...new Set(crafted)].join(", ")}`);
 ok([...new Set(crafted)].every((z) => new RegExp('"' + z.replace(/[()]/g, "\\$&") + '": "Crafted"').test(appSource)),
    "each renders as plain Crafted, since two are never on screen together");
-ok(/illidan/.test(strips(3)[0].src) && /archimonde/.test(strips(3)[1].src),
-   "in zone order, each raid flying its final boss");
+// Phase 3 carries an artOrder, which is display only - Archimonde leads on the tile
+// while Black Temple still leads everywhere the zone order matters.
+ok(/archimonde/.test(strips(3)[0].src) && /illidan/.test(strips(3)[1].src),
+   "each raid flies its final boss, in the tile's own order");
+ok([...doc.querySelectorAll("#zone-chips .chip")]
+     .filter((c) => !c.classList.contains("chip--all"))[0].textContent.includes("Black Temple"),
+   "the zone row is unmoved by it");
 ok(/Crafted/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),
    "and the tooltip still names the zone that cannot be pictured");
 ok(phaseChips().every((c) => c.querySelector(".art-label")), "with the label over the art");
