@@ -378,6 +378,40 @@ ok(!oneHNames.some((t) => t.startsWith("2H")), "no 2H type leaked into the 1H bu
 ok(!oneHNames.some((t) => ["Mace", "Sword", "Dagger", "Axe", "Fist"].includes(t)),
    "no weapon is left without a hand count now that the slot column is collapsed");
 
+// --- Slot and Type are drawn by the page, not by the OS -------------------------------
+// A native select's popup cannot be styled at all, so these two were the only controls
+// still looking like macOS. The <select> stays as the source of truth - everything above
+// and below this block drives it directly - and the custom menu is a skin over it.
+{
+  // the previous block left #type=Tier Token on, and Head + Tier Token really is 0 rows
+  doc.getElementById("type-select").value = "";
+  doc.getElementById("type-select").dispatchEvent(new window.Event("change"));
+
+  const slotSel0 = doc.getElementById("slot-select");
+  ok(slotSel0.trigger, "the Slot select has a trigger built over it");
+  ok(slotSel0.parentNode.classList.contains("field--enhanced"),
+     "and its field is only marked enhanced once that trigger exists, so a failure leaves a working select");
+  ok(slotSel0.trigger.querySelector(".opt-trigger-name").textContent === "All slots",
+     `the trigger shows what the select says (got "${slotSel0.trigger.querySelector(".opt-trigger-name").textContent}")`);
+
+  slotSel0.trigger.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+  const om = doc.querySelector(".opt-menu");
+  ok(om && om.style.display === "block", "clicking it opens a menu of the page's own making");
+  const shown = [...om.querySelectorAll(".opt-item-name")].map((n) => n.textContent);
+  const real = [...slotSel0.querySelectorAll("option")].map((o) => o.textContent);
+  ok(JSON.stringify(shown) === JSON.stringify(real),
+     `and it mirrors the select's own options exactly (${shown.length} of them)`);
+
+  // picking one has to drive the select, or nothing downstream hears about it
+  const headIdx = real.findIndex((t) => t.startsWith("Head"));
+  om.querySelectorAll(".opt-item")[headIdx].dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+  ok(slotSel0.value === "Head", `picking an option sets the select (got "${slotSel0.value}")`);
+  ok(rows().length === 12, `and the table follows it (got ${rows().length})`);
+  ok(om.style.display === "none", "and the menu closes behind it");
+
+  slotSel0.value = ""; slotSel0.dispatchEvent(new window.Event("change"));
+}
+
 // slot dropdown: weapons collapse to one option, ranged and relic merge
 typeSel.value = ""; typeSel.dispatchEvent(new window.Event("change"));
 const slotSel = doc.getElementById("slot-select");

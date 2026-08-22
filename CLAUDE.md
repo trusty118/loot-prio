@@ -802,6 +802,15 @@ current if any of those change.
   new one returns 200 before wiring it up. Boss portraits are Encounter Journal art
   (`ui-ej-boss-*.png`) with irregular slugs — `najentus`, `kazrogal`, no leading "the" on
   the Illidari Council.
+- **Slot and Type are drawn by the page, not by the OS.** A native `<select>`'s popup is
+  rendered by the operating system — its background, highlight and font are unreachable from
+  CSS — so those two were the only controls on the page still looking like macOS. The
+  `<select>` **stays and is still the source of truth**: `fillSelect()` rebuilds it, `app.js`
+  reads it, the URL drives it and the tests set `.value` on it. The menu is a skin, and the
+  native control is hidden **only once its trigger has been built**, so an enhancement that
+  fails to construct leaves a working select rather than nothing. Arrow keys, Home/End, Enter
+  and Escape all had to be written by hand — that is what a native select gives away for free
+  and what replacing one costs.
 - **Two control panels**: `.controls--where` (phase → zone → boss) and `.controls--refine` —
   everything that narrows the table, which is type, slot, search **and who you are**. Class
   and spec used to have a panel of their own at the top; they are filters, so they sit with

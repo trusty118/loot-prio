@@ -1773,6 +1773,8 @@
 
     fillSelect(el.type, types, state.type, typeCounts, "All types");
     fillSelect(el.slot, slots, state.slot, slotCounts, "All slots");
+    syncOptTrigger(el.type);
+    syncOptTrigger(el.slot);
   }
 
   /* ---------- the editor ----------
@@ -3031,6 +3033,125 @@
   }
 
 
+
+  /* ---------- the option menus ----------
+     A native <select>'s popup is drawn by the operating system, not the page: its
+     background, its highlight and its font are all unreachable from CSS. So Slot and
+     Type looked like macOS while every other menu on the page looked like this site.
+     The only way to match is to draw the list ourselves.
+
+     The <select> stays and remains the source of truth - it is what app.js reads, what
+     fillSelect() rebuilds, and what the tests drive. This is a skin over it, so if the
+     enhancement ever fails to build, the field is still a working select rather than
+     nothing at all: the native one is only hidden once its trigger exists.
+
+     Fifth overlay, same shell and the same placeUnder() as the other four. */
+
+  var optMenu = null;
+  var optFor = null;          /* the <select> the open menu belongs to */
+
+  function closeOptMenu() {
+    if (optMenu) optMenu.style.display = "none";
+    if (optFor && optFor.trigger) optFor.trigger.setAttribute("aria-expanded", "false");
+    optFor = null;
+  }
+
+  function buildOptMenu() {
+    optMenu = document.createElement("div");
+    optMenu.className = "list-menu opt-menu";
+    optMenu.setAttribute("role", "listbox");
+    optMenu.style.display = "none";
+    document.body.appendChild(optMenu);
+  }
+
+  function optItems() {
+    return [].slice.call(optMenu.querySelectorAll(".opt-item"));
+  }
+
+  /* Arrow keys, Home/End, Enter and Escape - everything the native control gave away
+     for free and has to be paid back by hand. */
+  function optKeydown(e) {
+    var items = optItems();
+    var at = items.indexOf(document.activeElement);
+    if (e.key === "Escape") { e.preventDefault(); var t = optFor.trigger; closeOptMenu(); t.focus(); return; }
+    if (e.key === "ArrowDown") { e.preventDefault(); (items[at + 1] || items[0]).focus(); return; }
+    if (e.key === "ArrowUp") { e.preventDefault(); (items[at - 1] || items[items.length - 1]).focus(); return; }
+    if (e.key === "Home") { e.preventDefault(); items[0].focus(); return; }
+    if (e.key === "End") { e.preventDefault(); items[items.length - 1].focus(); }
+  }
+
+  function openOptMenu(sel) {
+    if (!optMenu) { buildOptMenu(); optMenu.addEventListener("keydown", optKeydown); }
+    if (optFor === sel) { closeOptMenu(); return; }
+    closePop();
+    closeOpMenu();
+    closeAcctMenu();
+    closeListMenu();
+    optFor = sel;
+    optMenu.innerHTML = "";
+
+    [].forEach.call(sel.options, function (o) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "opt-item" + (o.value === sel.value ? " opt-item--current" : "");
+      b.setAttribute("role", "option");
+      b.setAttribute("aria-selected", o.value === sel.value ? "true" : "false");
+
+      var tick = document.createElement("span");
+      tick.className = "lm-tick";
+      tick.textContent = o.value === sel.value ? "\u2713" : "";
+      tick.setAttribute("aria-hidden", "true");
+      var name = document.createElement("span");
+      name.className = "opt-item-name";
+      name.textContent = o.textContent;
+      b.appendChild(tick);
+      b.appendChild(name);
+
+      b.addEventListener("click", function () {
+        sel.value = o.value;
+        closeOptMenu();
+        sel.dispatchEvent(new Event("change", { bubbles: true }));
+        sel.trigger.focus();
+      });
+      optMenu.appendChild(b);
+    });
+
+    optMenu.style.display = "block";
+    sel.trigger.setAttribute("aria-expanded", "true");
+    placeUnder(optMenu, sel.trigger);
+    var current = optMenu.querySelector(".opt-item--current") || optMenu.querySelector(".opt-item");
+    if (current) current.focus();
+  }
+
+  /* The trigger shows whatever the select currently says, so everything that already
+     rebuilds the options - fillSelect(), the url, Reset - keeps working untouched. */
+  function syncOptTrigger(sel) {
+    if (!sel || !sel.trigger) return;
+    var o = sel.options[sel.selectedIndex];
+    sel.trigger.querySelector(".opt-trigger-name").textContent = o ? o.textContent : "";
+  }
+
+  function enhanceSelect(sel, label) {
+    if (!sel || !sel.parentNode) return;
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "opt-trigger";
+    b.setAttribute("aria-haspopup", "listbox");
+    b.setAttribute("aria-expanded", "false");
+    b.setAttribute("aria-label", label);
+    b.innerHTML = '<span class="opt-trigger-name"></span>' +
+                  '<span class="opt-trigger-caret" aria-hidden="true">&#9662;</span>';
+    b.addEventListener("mousedown", function (ev) { ev.stopPropagation(); });
+    b.addEventListener("click", function (ev) { ev.stopPropagation(); openOptMenu(sel); });
+
+    sel.trigger = b;
+    sel.parentNode.insertBefore(b, sel);
+    /* only now is the native one redundant - if any of the above had thrown, the field
+       would still be a working select */
+    sel.parentNode.classList.add("field--enhanced");
+    syncOptTrigger(sel);
+  }
+
   /* ---------- the list menu ----------
      The third overlay built on the same machinery as .prio-pop and .prio-menu: created
      once, parented to <body> so no scroll container can clip it, positioned by
@@ -3466,6 +3587,8 @@
   /* ---------- wiring ---------- */
 
   function bind() {
+    enhanceSelect(el.slot, "Slot");
+    enhanceSelect(el.type, "Type");
     el.type.addEventListener("change", function () { state.type = el.type.value; update(); });
     el.slot.addEventListener("change", function () { state.slot = el.slot.value; update(); });
 
@@ -3518,6 +3641,9 @@
     document.addEventListener("mousedown", function (e) {
       if (listMenu && listMenu.style.display !== "none" && !listMenu.contains(e.target)) {
         closeListMenu();
+      }
+      if (optMenu && optMenu.style.display !== "none" && !optMenu.contains(e.target)) {
+        closeOptMenu();
       }
     });
 
