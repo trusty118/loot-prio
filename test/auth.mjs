@@ -101,6 +101,12 @@ function boot({ configured = false, sdk = null } = {}) {
 const $ = (w, id) => w.document.getElementById(id);
 const shown = (w, id) => { const n = $(w, id); return !!n && !n.hidden; };
 const acctName = (w) => ($(w, "account-name") || {}).textContent || "";
+/* New lives in the list menu now, so making one means opening it first. */
+const newList = (w) => {
+  $(w, "list-trigger").click();
+  const m = w.document.querySelector(".list-menu");
+  [...m.querySelectorAll(".lm-item")].find((b) => /New list/.test(b.textContent)).click();
+};
 /* Sign out lives in the account menu now, so reaching it means opening that first -
    which is itself the thing worth asserting. */
 const openAcct = (w) => { $(w, "account").click(); return w.document.querySelector(".acct-menu"); };
@@ -215,7 +221,7 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   ok(!shown(w, "sign-out"), "and no sign-out while nobody is signed in");
 
   // a list made while signed out belongs to this browser
-  $(w, "tpl-new").click();
+  newList(w);
   await settle();
   ok(w.localStorage.getItem("lootprio.templates").includes("priorities"),
      "signed out, a new list is written to localStorage");
@@ -249,7 +255,7 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
 
   // 6. a list made while signed in goes to the account, not to this browser
   const localBefore = w.localStorage.getItem("lootprio.templates");
-  $(w, "tpl-new").click();
+  newList(w);
   await settle();
   ok(sdk._rows.size === 1, `signed in, a new list is written to the account (got ${sdk._rows.size})`);
   ok(w.localStorage.getItem("lootprio.templates") === localBefore,
