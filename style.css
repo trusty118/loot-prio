@@ -14,9 +14,15 @@
   --text-dim: #98a2b3;
   --text-faint: #6b7482;
 
-  /* One accent, one meaning: selected. The token names are historical - this is fel
-     green now, Outland's own colour, because the site is a TBC guide and the accent may
-     as well say so. A later expansion would just change these two values again.
+  /* One accent, one meaning: selected. The token names are historical - this is green
+     now, for TBC, and a later expansion just changes these two values again.
+
+     Jade, not Outland's fel green. Fel is the more literal answer and was tried first:
+     at #8fce00 it is a bright yellow-green, and against a palette deliberately cooled
+     to slate it read as acid - the one hot thing on a cold page, shouting from every
+     All chip. Jade keeps the green while sitting down into the palette rather than
+     fighting it, and being cooler it leaves more room between the accent and the warm
+     --artifact gold below.
 
      Green is normally a bad accent for a WoW page, because #1eff00 is uncommon quality.
      It is safe here for a reason specific to this dataset: every item on this site is
@@ -26,8 +32,8 @@
      It also fixes something that was quietly wrong. The old #d9b45a sat a few degrees
      from --artifact #e6cc80, so "selected" and "expansion BiS" - two things with no
      relationship at all - looked like the same colour. They no longer do. */
-  --gold: #8fce00;
-  --gold-bright: #b8f13a;
+  --gold: #2fbf71;
+  --gold-bright: #58dc93;
 
   /* WoW item-quality colours, reused for the BiS longevity ladder:
      epic -> legendary -> artifact, matching how long an item stays BiS */

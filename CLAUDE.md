@@ -657,8 +657,11 @@ the colours that carry meaning, and on the old warm browns they were competing w
 furniture. Nothing marked fixed in the brief moved at the time: `--gold`, `--gold-bright`, `--epic`,
 `--legendary` and `--artifact` are byte-identical, and the BiS rings were not touched at all.
 
-**The accent has since moved to fel green `#8fce00`** (bright `#b8f13a`), Aug 2026 — Outland's
-colour, on a TBC guide. The tokens keep their `--gold` names on purpose: renaming 58 usages
+**The accent has since moved to jade `#2fbf71`** (bright `#58dc93`), Aug 2026 — green, for
+TBC. Jade rather than Outland's fel green: that was tried first, and at `#8fce00` a bright
+yellow-green was the one hot thing on a page deliberately cooled to slate. Being cooler, jade
+also leaves more room between the accent and the warm `--artifact` gold. The tokens keep their
+`--gold` names on purpose: renaming 58 usages
 buys nothing when a later expansion just changes the two values again. Green is normally wrong
 for a WoW page, since `#1eff00` is uncommon quality; it is safe here only because every item in
 this dataset is epic or legendary, so **no green item name ever renders**. It also fixed a real
