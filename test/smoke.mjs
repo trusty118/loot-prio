@@ -846,13 +846,16 @@ ok(!footer.includes("Item IDs"), "wowsims/Wowhead attribution paragraph removed"
 ok(!footer.includes("Shorthand"), "shorthand paragraph removed");
 ok(!doc.querySelector(".site-footer .shorthand"), "no leftover shorthand element");
 ok(footer.includes("Not affiliated with Blizzard"), "Blizzard disclaimer kept");
-// The banner title is deliberately generic now ("Classic WoW Loot Prios"), so the
-// credit has to be carried by the tagline beside it. CLAUDE.md section 8 requires
-// attribution to stay prominent, and a title that no longer names him is exactly
-// how that erodes by accident.
-const banner = doc.querySelector(".site-header").textContent;
-ok(/zatar_wow/.test(banner), `the banner still credits the source: "${banner.replace(/\s+/g, " ").trim().slice(0, 90)}"`);
-ok(doc.querySelector(".site-header a[href*='zatar_wow']"), "and links to them from the banner");
+// The banner carries no credit any more - by decision, not by accident: it moves to the
+// lists themselves once those carry an author. Until then the footer is the ONLY place
+// on the page that names the source, so CLAUDE.md section 8 now rests entirely on it.
+// If this fails, attribution has left the site altogether.
+ok(!doc.querySelector(".site-header a[href*='zatar_wow']"),
+   "the banner is title-only, with no credit in it");
+ok(doc.querySelector(".site-footer a[href*='zatar_wow']"),
+   "so the footer is the one place carrying it, and must keep doing so");
+ok(doc.querySelector(".site-header h1").textContent.trim() === "TBC Loot Prio Lists",
+   `the banner is just the name: "${doc.querySelector(".site-header h1").textContent.trim()}"`);
 
 ok(footer.includes("zatar_wow") && footer.includes("Veramos") && footer.includes("Lemonism"),
    "creator credits kept");

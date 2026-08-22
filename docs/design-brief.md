@@ -1,4 +1,4 @@
-# Classic WoW Loot Prios — visual direction brief
+# TBC Loot Prio Lists — visual direction brief
 
 ## What this is
 
@@ -8,9 +8,10 @@ per item) and **"what should I be rolling on"** (a player filters to their own s
 adults playing a 2007 game in 2026, usually on a second monitor **during a raid**, often
 glancing at it for two seconds between pulls. Speed of recognition matters more than beauty.
 
-The priorities are one person's published calls, mirrored with permission-in-spirit and credited
-prominently. That is the site's whole reason to exist, so the credit in the banner and footer is
-not decoration.
+The priorities are one person's published calls, mirrored and credited. That is the site's whole
+reason to exist. The credit currently lives **only in the footer** — the banner is the title
+alone — and it is moving onto the lists themselves in a later feature, so treat the footer's
+"About & credit" section as load-bearing rather than boilerplate.
 
 **Live site:** https://trusty118.github.io/loot-prio/
 
