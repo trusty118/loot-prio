@@ -815,11 +815,15 @@
 
      The service-role key is the one that bypasses those policies. It must never appear
      in this repo, in this file, or in any client. */
-  /* Empty until the Supabase project exists - see docs/login-setup.md. Empty is a
-     supported state, not a broken one: no config means no sign-in button and the site
-     behaves exactly as it did before login was built. */
-  var SUPABASE_URL = "";
-  var SUPABASE_ANON_KEY = "";
+  /* Empty is still a supported state, not a broken one - see docs/login-setup.md. No
+     config means no sign-in button and a site that behaves exactly as it did before
+     login existed, which is what every test in this repo except test/auth.mjs runs as.
+
+     The publishable key is safe here on one condition, which Supabase states on the
+     page it is copied from: RLS is enabled on `lists` and a policy is configured. That
+     policy is the only thing standing between this key and every list in the table. */
+  var SUPABASE_URL = "https://korqkbphefucdqwxezso.supabase.co";
+  var SUPABASE_ANON_KEY = "sb_publishable_JYJyZ_R_0a5_igZkGnY3Vw_S6B9pHrL";
 
   var sb = null;            /* the Supabase client, once it exists */
   var session = null;       /* the signed-in session, or null */
