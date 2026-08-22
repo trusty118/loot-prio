@@ -1,16 +1,20 @@
 :root {
-  /* Black behind and between the panels. The panels stay warm, so the separation now
-     comes from the panel being lighter than the page rather than from its border - and
-     the item-quality colours in the table sit on black the way they do in the game. */
-  --bg: #000;
-  --bg-panel: #1e1913;
-  --bg-panel-2: #262019;
-  --bg-row: #1a1510;
-  --line: #3a3128;
-  --line-soft: #2c251d;
-  --text: #ece3d4;
-  --text-dim: #a89a85;
-  --text-faint: #7d7160;
+  /* Cooled to slate, so gold and the item-quality colours are the only warm things
+     on screen. Those are the colours that carry meaning here, and on the old warm
+     browns they were competing with the furniture. The page is a hair off black
+     rather than #000, so a panel can sit *under* it as well as over it - the banner
+     and the insides of the strips do exactly that. */
+  --bg: #07080a;
+  --bg-panel: #14181f;
+  --bg-panel-2: #1b2029;
+  --bg-row: #10141a;
+  --line: #262d38;
+  --line-soft: #1c222b;
+  --text: #e4e8ef;
+  --text-dim: #98a2b3;
+  --text-faint: #6b7482;
+
+  /* FIXED - gold means selected, everywhere, one meaning. */
   --gold: #d9b45a;
   --gold-bright: #f0cf82;
 
@@ -20,9 +24,17 @@
   --legendary: #ff8000;
   --artifact: #e6cc80;
 
+  --panel-head: #191e26;   /* boss-head, and the row hover that has to match it */
+  --header-bg: #0e1116;    /* the banner, and the inside of a joined strip */
+  --bar-bg: #12161d;       /* the sticky refine bar */
 
-  --radius: 6px;
+  --radius: 4px;           /* was 6px - colder reads as tighter */
+  --radius-sm: 3px;        /* icons and tags, where 4px looks like a mistake */
+
   --font: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  /* micro-labels and counts. No webfont: there is no build step, and a network font
+     is one more thing to fail mid-raid. */
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 * { box-sizing: border-box; }
@@ -54,8 +66,8 @@ a:hover { color: var(--gold-bright); }
 
 .site-header {
   border-bottom: 1px solid var(--line);
-  background: linear-gradient(180deg, #241d15 0%, #16120d 100%);
-  padding: 26px 0 22px;
+  background: var(--header-bg);
+  padding: 12px 0;            /* was 26px 0 22px - 26px of vertical space back */
 }
 
 /* Title left, list controls right, wrapping to two lines on a narrow window rather
@@ -71,13 +83,17 @@ a:hover { color: var(--gold-bright); }
 
 .site-title { min-width: 0; }
 
+/* The title had to be big when it carried a tagline under it. It doesn't any more,
+   and the page is a tool you glance at, not a landing page. */
 .site-header h1 {
   margin: 0;
-  font-size: 1.7rem;
-  letter-spacing: .4px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: .2px;
   color: var(--gold-bright);
-  text-shadow: 0 1px 0 #000;
+  text-shadow: none;          /* flat banner now - nothing to lift off */
 }
+
 
 /* ---------- controls ---------- */
 
@@ -95,15 +111,36 @@ a:hover { color: var(--gold-bright); }
 
 .controls:first-child { margin-top: 22px; }
 
+/* The where-panel loses its box. Art tiles already separate themselves from the page
+   - they are opaque rectangles - so a card around them was boxing in a gap rather
+   than grouping anything. Must stay after `.controls` above to beat it. */
+.controls--where {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 14px 0 0;
+}
+
 /* Only the last panel pins: it is the one adjusted while reading the results, it
    carries the count, and it sits directly above them. Two sticky panels would fight
-   over the same slot. */
+   over the same slot.
+
+   It is also the only panel that still has a boundary, and it draws it as two
+   hairlines across the full width rather than as a rounded card - so it reads as a
+   bar over the results instead of as a third panel among them. */
 .controls--refine {
   position: sticky;
   top: 0;
   z-index: 20;
-  margin-bottom: 18px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, .45);
+  margin: 14px 0 18px;
+  padding: 9px 18px;
+  background: var(--bar-bg);
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .5);
 }
 
 /* `display: flex` on .control-row would otherwise beat the browser's [hidden] rule */
@@ -120,13 +157,17 @@ a:hover { color: var(--gold-bright); }
 
 /* Only the Type/Slot/Search fields still carry one. The chip rows dropped theirs:
    every row opens with its own "All zones" / "All classes" chip, which names it
-   just as well, and the label column was stealing 46px from every row. */
+   just as well, and the label column was stealing 46px from every row.
+
+   Mono at 10px, because these are furniture: they name the control beside them and
+   should never be read before it. Same treatment as the counts, for the same reason. */
 .control-label {
-  font-size: .72rem;
-  text-transform: uppercase;
-  letter-spacing: .09em;
-  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: 10px;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text-faint);
 }
 
 .chips {
@@ -177,7 +218,7 @@ a:hover { color: var(--gold-bright); }
   background: #000;   /* same reason as the tiles: alpha edges want black behind */
 }
 
-.chip:hover { background: #302820; color: var(--text); }
+.chip:hover { background: #232a35; color: var(--text); }
 
 /* ---------- art tiles: phase and zone ----------
    Both answer "where am I", so they share a language - art behind, label over it, count
@@ -209,17 +250,19 @@ a:hover { color: var(--gold-bright); }
   height: 100%;
   object-fit: cover;
   transition: filter .15s, transform .15s;
-  filter: grayscale(.65) brightness(.55);
+  filter: grayscale(.85) brightness(.45);
 }
 
 /* a hairline seam, so two portraits do not blend into one confusing image */
 .art-split img + img { border-left: 1px solid rgba(0, 0, 0, .55); }
 
-.chip--art:hover .art-split img { filter: grayscale(.2) brightness(.8); }
+.chip--art:hover .art-split img { filter: grayscale(.35) brightness(.7); }
 
+/* No scale on the selected tile any more: at 62px it clips against the border
+   instead of reading as lift. */
 .chip--art[aria-pressed="true"] .art-split img {
   filter: none;
-  transform: scale(1.03);   /* a touch of life on the one you are in */
+  transform: none;
 }
 
 /* the label sits on the art, so it carries its own contrast rather than relying on
@@ -228,66 +271,98 @@ a:hover { color: var(--gold-bright); }
   position: relative;
   z-index: 1;
   font-weight: 600;
-  color: var(--text);
-  text-shadow: 0 1px 3px #000, 0 0 10px #000;
+  color: var(--text-dim);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .9);
 }
 
 .chip--art[aria-pressed="true"] .art-label { color: var(--gold-bright); }
 
 .chip--art[aria-pressed="true"] { border-color: var(--gold-bright); }
 
-/* --- the phase, at full size --- */
-.chip--phase { width: 168px; height: 84px; }
-.chip--phase .art-label { padding: 6px 9px; font-size: .82rem; }
+/* --- the phase, at full size ---
+   168x84 -> 132x62. The ladder is what says which control sits above which, so all
+   three levels came down together and the gaps between them are unchanged:
+   132x62 -> 104x38 -> 34px. */
+.chip--phase { width: 148px; height: 72px; }
+.chip--phase .art-label { padding: 5px 8px; font-size: 13px; }
 
-/* --- the zone, the same idea one level down ---
-   Half the height, and the label sits on a scrim rather than floating on the art: at
-   this size a portrait is busy right where the text lands, and a shadow alone stops
-   carrying it. */
-.chip--zone { width: 124px; height: 46px; }
-.chip--zone .art-label { padding: 3px 7px; font-size: .74rem; }
-
-.chip--zone::after {
+/* At 84px the phase art was quiet where the label landed and a text-shadow carried
+   it. At 62px it isn't, so the phase tile now takes the scrim the zone always had. */
+.chip--phase::after {
   content: "";
   position: absolute;
   inset: auto 0 0 0;
-  height: 60%;
-  background: linear-gradient(to top, rgba(0, 0, 0, .8), transparent);
+  height: 70%;
+  background: linear-gradient(to top, rgba(4, 6, 9, .92), transparent);
+  pointer-events: none;
+}
+
+/* --- the zone, the same idea one level down ---
+   The label sits on a scrim rather than floating on the art: at this size a portrait
+   is busy right where the text lands, and a shadow alone stops carrying it. */
+.chip--zone { width: 112px; height: 48px; }
+.chip--zone .art-label { padding: 3px 7px; font-size: 11px; color: var(--text); }
+
+/* Full height, not the bottom 60%: at 38px there is no part of the tile the text
+   isn't sitting on. */
+.chip--zone::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(4, 6, 9, .9), rgba(4, 6, 9, .2));
   pointer-events: none;
 }
 
 /* Class and spec chips are the icon and nothing else - a name and a count on each
-   of 27 chips buried the icons they were labelling. Both live in the tooltip. */
+   of 27 chips buried the icons they were labelling. Both live in the tooltip.
+
+   Each one gives up its own border, background and padding: the strip around them
+   carries all three now, so ten chips cost one border instead of ten. See
+   .chips--who below. */
 .chip--icon {
-  padding: 3px;
-  border-radius: var(--radius);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-sm);
   cursor: pointer;
 }
 
 .chip--icon .chip-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 4px;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: var(--radius-sm);
   transition: filter .12s, opacity .12s;
-  filter: grayscale(.5);
-  opacity: .78;
+  filter: grayscale(.8);
+  opacity: .8;
 }
 
+.chip--icon:hover { background: transparent; }
 .chip--icon:hover .chip-icon { filter: none; opacity: 1; }
 
-/* Pressed reads as a lit icon inside a gold frame, rather than the gold fill the
-   text chips use - filling the box behind a 30px icon leaves nothing but a rim. */
+/* Pressed is an OUTLINE, never a fill. Two reasons, and the second is the one that
+   matters: a fill behind a 26px icon leaves nothing visible but a rim, and an
+   outline is drawn outside the box model, so pressing a chip cannot change the
+   strip's metrics and shift the chip next to it out from under the cursor. */
 .chip--icon[aria-pressed="true"] {
-  background: color-mix(in srgb, var(--gold) 22%, transparent);
-  border-color: var(--gold-bright);
+  background: transparent;
+  border: 0;
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 1px;
 }
 
 .chip--icon[aria-pressed="true"] .chip-icon { filter: none; opacity: 1; }
 
+/* Once something in the strip is picked, everything else in it steps back - the same
+   "not you" language the priority lines use, one level softer. */
+.chips--who:has(.chip--icon[aria-pressed="true"]) .chip--icon:not([aria-pressed="true"]) .chip-icon {
+  opacity: .38;
+}
+
 .chip[aria-pressed="true"] {
   background: var(--gold);
   border-color: var(--gold-bright);
-  color: #1a1409;
+  color: #14181f;
   font-weight: 600;
 }
 
@@ -300,11 +375,13 @@ a:hover { color: var(--gold-bright); }
 
 /* The BiS-only toggle sits at the end of the spec row but isn't one of its
    options, so it takes the epic purple of the BiS rings it filters on rather than
-   the gold every other pressed chip uses. */
+   the gold every other pressed chip uses. Its resting border is softened off the
+   pure epic hue so it sits down beside the gold-framed spec strip rather than
+   competing with it; pressed is still full epic. */
 .chip--toggle {
   margin-left: 8px;
   color: color-mix(in srgb, var(--epic) 60%, var(--text));
-  border-color: color-mix(in srgb, var(--epic) 50%, transparent);
+  border-color: #3d2a52;
   background: color-mix(in srgb, var(--epic) 12%, transparent);
 }
 
@@ -319,6 +396,89 @@ a:hover { color: var(--gold-bright); }
   background: var(--epic);
   border-color: var(--epic);
   color: #f6efff;
+}
+
+/* ---------- the boss rail ----------
+   Karazhan is thirteen bosses. As pills that is thirteen borders, thirteen gaps and
+   two wrapped lines; as one strip of portraits it is ~786px, which fits a 900px
+   half-screen window without wrapping. The portrait is what you recognise anyway -
+   these are the same Encounter Journal images the boss headings use.
+
+   The face carries the art and nothing else. No count, for the same reason the phase
+   and zone tiles don't carry one - a number over art is clutter, and the "N of 195
+   items" line above the table already answers it. No name either: that moves to the
+   existing data-tip/.tip mechanism, which is instant (no browser title delay), so
+   hovering the rail reads names as fast as reading pills did. Both survive in the
+   aria-label, which is the only way a screen reader gets them. */
+#boss-chips {
+  flex-wrap: nowrap;
+  gap: 0;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--header-bg);
+}
+
+#boss-chips .chip {
+  position: relative;
+  padding: 0;
+  border: 0;
+  border-right: 1px solid var(--line-soft);
+  border-radius: 0;
+  background: transparent;
+  min-width: 0;
+}
+
+#boss-chips .chip:last-child { border-right: 0; }
+
+/* The name lives in the tooltip now. Not on the All cell, which is a word and
+   nothing else - hiding its label would leave an empty 9px box. */
+#boss-chips .chip:not(.chip--all) .chip-label { display: none; }
+
+#boss-chips .chip .chip-icon {
+  width: 76px;
+  height: 44px;
+  flex: none;
+  border: 0;
+  border-radius: 0;
+  object-fit: cover;
+  filter: grayscale(.55) brightness(.62);
+  transition: filter .12s;
+}
+
+#boss-chips .chip:hover { background: transparent; }
+#boss-chips .chip:hover .chip-icon { filter: grayscale(.3) brightness(.8); }
+
+/* Selected is a lit portrait over a gold wash with a gold edge under it, rather than
+   the gold fill a pill uses - a fill would bury the art the rail exists to show. */
+#boss-chips .chip[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+  box-shadow: inset 0 -3px 0 0 var(--gold);
+  color: inherit;
+  font-weight: inherit;
+}
+
+#boss-chips .chip[aria-pressed="true"] .chip-icon { filter: none; }
+
+/* the row's leading All chip becomes the rail's first cell */
+#boss-chips .chip--all {
+  min-width: 0;
+  padding: 0 9px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  border-right: 1px solid var(--line);
+}
+
+#boss-chips .chip--all[aria-pressed="true"] {
+  background: transparent;
+  box-shadow: none;
+  color: var(--gold-bright);
 }
 
 .control-row--inputs {
@@ -338,29 +498,72 @@ a:hover { color: var(--gold-bright); }
    into this one occasionally. */
 .field--grow { flex: 0 1 300px; min-width: 180px; }
 
-/* Who you are, inline with the filters. Wraps to its own line when the row runs out,
-   which is what happens on a narrow window once a class is picked. */
+/* A label floating above a bordered box costs a line of height and reads as two
+   things. Welded into one bordered unit it costs none and reads as one control with
+   its name on the front. */
+.field--joined {
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-panel);
+  overflow: hidden;
+}
+
+.field--joined .control-label {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.field--joined select,
+.field--joined input {
+  border: 0;
+  border-left: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  min-width: 0;
+}
+
+/* Who you are, inline with the filters, pushed to the right-hand end of the bar.
+   Wraps to its own line when the row runs out, which is what happens on a narrow
+   window once a class is picked. */
 .who-inline {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 6px;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
+  margin-left: auto;
   min-width: 0;
 }
 
-.who-inline .chips--who { flex: 0 1 auto; }
+/* Ten pills become one control. The strip carries the border, the background and the
+   padding that each chip used to carry for itself: ~470px of chrome becomes ~256px,
+   and the row reads as one thing you pick from rather than as ten things. */
+.who-inline .chips--who {
+  flex: 0 1 auto;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--header-bg);
+}
 
 /* `display` on something the code hides with [hidden] has to be guarded, or the
    attribute loses - see the note in CLAUDE.md section 4. */
 .who-specs { display: flex; align-items: center; }
 .who-specs[hidden] { display: none; }
 
-/* a hairline between the classes and the specs they narrow to, so the two rows do
-   not read as one undifferentiated wall of icons */
-.who-specs {
-  padding-left: 6px;
-  border-left: 1px solid var(--line);
+/* The divider is gone. A hairline said "these are two rows"; what actually needed
+   saying is that the right-hand strip narrows the left-hand one, and a gold frame
+   around the specs says that - it is the same gold that marks the class you picked. */
+.who-specs { padding-left: 0; border-left: 0; }
+
+#spec-chips {
+  border-color: var(--gold);
+  background: rgba(217, 180, 90, .10);
 }
 
 select, input[type="search"] {
@@ -421,47 +624,49 @@ select:focus-visible, input:focus-visible, .chip:focus-visible, button:focus-vis
 
 .boss-head {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 10px;
   flex-wrap: wrap;
   margin: 0;
-  padding: 10px 14px;
-  background: linear-gradient(180deg, #2c241a 0%, #221c15 100%);
+  padding: 8px 12px;
+  background: var(--panel-head);   /* flat: the gradient was the last warm surface */
   border-bottom: 1px solid var(--line);
   font-size: 1rem;
   color: var(--gold-bright);
 }
 
+/* The bottom rung of the size ladder: phase tile 132x62, zone tile 104x38, this. */
 .boss-portrait {
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   flex: none;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--line);
-  background: #0d0a07;
+  background: #000;
   align-self: center;
 }
 
 /* the boss is the heading; the zone is a subordinate tag that follows it */
 .boss-head .boss-name {
-  font-size: 1.22rem;
-  font-weight: 700;
+  font-size: 1.15rem;
+  font-weight: 600;
   color: var(--gold-bright);
   letter-spacing: .2px;
 }
 
 .boss-head .zone-tag {
-  font-size: .68rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: .1em;
+  letter-spacing: .11em;
   color: var(--text-faint);
   font-weight: 600;
   border: 1px solid var(--line);
-  border-radius: 3px;
-  padding: 1px 6px;
+  border-radius: 2px;
+  padding: 3px 6px;
   position: relative;
-  top: -1px;
+  top: 0;
 }
 
 
@@ -512,7 +717,7 @@ th.sortable {
   transition: color .12s, background .12s;
 }
 
-th.sortable:hover { color: var(--text); background: #2a231b; }
+th.sortable:hover { color: var(--text); background: var(--bg-panel-2); }
 th.sortable.is-sorted { color: var(--gold); }
 
 .sort-arrow {
@@ -532,7 +737,7 @@ tbody td {
 }
 
 tbody tr:last-child td { border-bottom: 0; }
-tbody tr:hover { background: #221c15; }
+tbody tr:hover { background: var(--panel-head); }
 
 /* widths live on the <colgroup>; these only carry appearance */
 /* Marks a row the source guide never covered. Same quiet tag language as the
@@ -541,13 +746,14 @@ tbody tr:hover { background: #221c15; }
 .item-tag {
   display: inline-block;
   margin-left: 8px;
-  font-size: .62rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: .08em;
+  letter-spacing: .11em;
   color: var(--text-faint);
   font-weight: 600;
   border: 1px solid var(--line);
-  border-radius: 3px;
+  border-radius: 2px;
   padding: 0 5px;
   vertical-align: middle;
   white-space: nowrap;
@@ -590,11 +796,11 @@ tbody td { overflow-wrap: break-word; }
 
 /* dimmed when this class isn't what the current filters asked for */
 .class-icon--muted {
-  opacity: .25;
+  opacity: .2;
   filter: grayscale(1);
 }
 
-tbody tr:hover .class-icon--muted { opacity: .45; }
+tbody tr:hover .class-icon--muted { opacity: .4; }
 
 /* Operators between the icons. A span rather than bare text so each one can
    carry a data-tip - the instant-tooltip mechanism picks up any [data-tip]. */
@@ -623,13 +829,17 @@ tbody tr:hover .class-icon--muted { opacity: .45; }
 /* Everyone who isn't the selected class or spec, dimmed rather than removed: the
    point of the filter is where you stand in the line, which needs the rest of the
    line still visible. Lighter-handed than .class-icon--muted, because these carry
-   the BiS rings and a fully greyed ring reads as no ring. */
+   the BiS rings and a fully greyed ring reads as no ring.
+
+   Pushed harder than the warm palette needed: on brown, .35 read as clearly dimmed;
+   on slate the floor is higher and it stopped reading as anything at all. The
+   contrast between lit and dim is doing real work here, so it has to keep working. */
 .spec-icon--muted {
-  opacity: .35;
-  filter: grayscale(.65);
+  opacity: .26;
+  filter: grayscale(1) contrast(.8);
 }
 
-tbody tr:hover .spec-icon--muted { opacity: .6; }
+tbody tr:hover .spec-icon--muted { opacity: .5; }
 
 /* BiS markers, drawn as rings rather than borders so the icon keeps its size and
    a double ring can sit outside a single one without shifting the row.
@@ -764,7 +974,7 @@ mark {
 .site-footer {
   margin-top: 44px;
   border-top: 1px solid var(--line);
-  background: #100d09;
+  background: #0a0c10;
   padding: 26px 0 40px;
   color: var(--text-dim);
   font-size: .87rem;
@@ -782,6 +992,31 @@ mark {
 .site-footer .disclaimer { color: var(--text-faint); font-size: .82rem; }
 
 /* ---------- responsive ---------- */
+
+/* 900px is the real target: this page lives on a second monitor beside the game, or
+   in half a screen next to it. Everything above the table costs 168px at this width,
+   which is what the whole restyle was for - so nothing here hides a control that a
+   raider needs, it only takes the slack out. */
+@media (max-width: 1000px) {
+  .wrap { padding: 0 14px; }
+  .site-header { padding: 8px 0; }
+
+  /* the tiles share the width instead of holding a fixed size */
+  .chip--phase { width: auto; flex: 1 1 0; height: 48px; }
+  .chip--zone  { width: auto; flex: 1 1 0; height: 32px; }
+  .chip--phase .art-label { font-size: 12px; }
+
+  /* the rail scrolls sideways rather than wrapping - wrapping is what it exists to
+     avoid, and a rail that wraps is just pills with the names taken off */
+  #boss-chips { width: 100%; }
+  #boss-chips .chip .chip-icon { width: 56px; height: 34px; }
+
+  .chip--icon .chip-icon { width: 22px; height: 22px; }
+
+  /* Type is the first to go: Slot and the search box both answer questions it can't,
+     and the class strip is the reason anyone is looking at this bar. */
+  .field--type { display: none; }
+}
 
 @media (max-width: 760px) {
   .controls--refine { position: static; }
@@ -862,7 +1097,7 @@ mark {
 .btn-edit[aria-pressed="true"] {
   background: var(--gold);
   border-color: var(--gold-bright);
-  color: #1a1409;
+  color: #14181f;
   font-weight: 600;
 }
 
@@ -890,7 +1125,7 @@ mark {
   background: var(--bg-panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, .55);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, .7);
 }
 
 .prio-menu-item {
@@ -935,7 +1170,7 @@ mark {
   background: var(--bg-panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, .55);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, .7);
 }
 
 .prio-pop-find {
@@ -1023,6 +1258,9 @@ mark {
    isn't a wall of crosses */
 .prio-x {
   position: absolute;
+  border-color: #3a2a2e;
+  background: #2a1c1a;
+  color: #ffb4a8;
   top: -6px;
   right: -2px;
   display: none;
@@ -1068,6 +1306,17 @@ mark {
 }
 
 .prio-add:hover, .prio-reset:hover { color: var(--gold); border-color: var(--gold); }
+
+/* On a row with nothing in the priority column the + is the only thing there is to
+   do, so it should not also be the quietest thing in the cell. Solid gold there,
+   dashed ghost everywhere else - where it is one option among icons already on the
+   line, and shouting would be wrong. */
+.col-prio--editing:not(:has(.prio-edit)) .prio-add {
+  color: #14181f;
+  background: var(--gold);
+  border: 1px solid var(--gold-bright);
+  font-weight: 600;
+}
 /* ---------- dragging ----------
    A press that moves becomes a drag: the icon dims in place, a half-size ghost
    follows the pointer, and the gap it would land in is marked. Dragging clear of
@@ -1098,15 +1347,22 @@ mark {
 
 .drag-ghost .prio-x { display: none; }
 
-/* the gap the icon lands in */
-.prio-drop { box-shadow: -3px 0 0 0 var(--gold); }
-.prio-drop-after { box-shadow: 3px 0 0 0 var(--gold); }
+/* The gap the icon lands in. Inset rather than outset, and 2px: an outset shadow
+   sat under the icon beside it and read as a smudge against a 38px tile. */
+.prio-drop { box-shadow: inset 2px 0 0 0 var(--gold); }
+.prio-drop-after { box-shadow: inset -2px 0 0 0 var(--gold); }
 
 /* dragged clear of the line: release here and it comes off */
-/* a line with no icons has nothing to mark, so the cell is the target - which is
-   every row of a list you have only just started */
+/* A line with no icons has nothing to mark, so the cell itself is the target - which
+   is every row of a list you have only just started.
+
+   This class lands on the <td>. It must never set `display`, a width or a padding:
+   the results tables are table-layout: fixed, and anything that changes this cell's
+   box shifts every other column in the row while you are dragging over it. An
+   outline is drawn outside the box model and costs no layout, which is the whole
+   reason it is an outline and not a border. */
 .prio-drop-empty {
-  outline: 1px dashed var(--gold);
+  outline: 2px dashed var(--gold);
   outline-offset: -3px;
   border-radius: var(--radius);
 }

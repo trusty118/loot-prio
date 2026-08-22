@@ -21,7 +21,7 @@
     </div>
 
     <div class="template-bar" id="template-bar">
-      <label class="field field--tpl">
+      <label class="field field--tpl field--joined">
         <span class="control-label">List</span>
         <select id="tpl-list"></select>
       </label>
@@ -69,15 +69,17 @@
   <section class="controls controls--refine" aria-label="Refine results">
 
     <div class="control-row control-row--inputs">
-      <label class="field">
+      <!-- field--type is what the 900px rule hides: at half-screen Slot and the search
+           box answer questions Type can't, so Type is the one that goes. -->
+      <label class="field field--joined field--type">
         <span class="control-label">Type</span>
         <select id="type-select"></select>
       </label>
-      <label class="field">
+      <label class="field field--joined">
         <span class="control-label">Slot</span>
         <select id="slot-select"></select>
       </label>
-      <label class="field field--grow">
+      <label class="field field--grow field--joined">
         <span class="control-label">Search</span>
         <input type="search" id="search" placeholder="Item, boss, class, note&hellip;" autocomplete="off">
       </label>
@@ -86,6 +88,7 @@
            gave back. No visible labels: each row opens with its own "All" chip, and
            the group's aria-label names it for a screen reader. -->
       <div class="who-inline">
+        <span class="control-label">Me</span>
         <div class="chips chips--who" id="class-chips" role="group" aria-label="Class"></div>
         <!-- hidden until a class is picked; app.js toggles the attribute -->
         <div class="who-specs" id="spec-row" hidden>
