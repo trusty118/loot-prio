@@ -1,8 +1,16 @@
 # Live shared links — the SQL
 
-Server-side sharing needs two columns and one function. Run this in the Supabase
-**SQL Editor**; it is safe to run on the existing `lists` table and does not touch
-any rows.
+Server-side sharing needs two columns and one function.
+
+> **Run [`verify/sharing.sql`](../verify/sharing.sql), not this file.** Open that and copy
+> all of it into the Supabase **SQL Editor**. The block below is the same text, reproduced
+> here so this page explains itself — but a Markdown heading pasted into a SQL editor is a
+> `syntax error at or near "##"`, which is exactly what happens when someone copies the
+> page instead of the fence.
+
+It is safe to run on the existing `lists` table, does not touch any rows, and is safe to
+re-run: the `alter table` lines are `if not exists` and the function is `create or
+replace`.
 
 ```sql
 -- A share link points at a token, never at the list id. Ids are `t_9f3c` - four hex
