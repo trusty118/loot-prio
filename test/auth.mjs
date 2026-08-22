@@ -298,7 +298,9 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   // Copy link, from the list menu
   $(w, "list-trigger").click();
   const menu = w.document.querySelector(".list-menu");
-  [...menu.querySelectorAll(".lm-item")].find((b) => b.textContent.trim() === "Copy link").click();
+  const share = [...menu.querySelectorAll(".lm-item")].find((b) => /^Share this list/.test(b.textContent));
+  ok(share, "before it is shared, the action says it will share rather than just copy");
+  share.click();
   await settle();
 
   ok(/[?&]s=/.test(copied), `signed in, the link carries a token rather than the list (${copied.slice(0, 60)}\u2026)`);
@@ -318,6 +320,14 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   ok(seen.data.length === 1, "the token opens the list for someone who has the link");
   const wrong = await sdk.rpc("get_shared_list", { token: "not-the-token" });
   ok(wrong.data.length === 0, "and a token that is not it opens nothing");
+
+  // once it is public, copying really is just copying, and the label says so
+  $(w, "list-trigger").click();
+  const m1 = w.document.querySelector(".list-menu");
+  ok([...m1.querySelectorAll(".lm-item")].some((b) => b.textContent.trim() === "Copy link"),
+     "once shared, the same action is honestly just Copy link");
+  ok(!/Share this list/.test(m1.textContent), "and no longer offers to share what is already shared");
+  m1.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
 
   // Stop sharing
   $(w, "list-trigger").click();

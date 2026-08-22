@@ -3323,9 +3323,13 @@
       var from = activeTemplate ? activeTemplate.name : "zatar's list";
       startList(copyOfCurrent("Copy of " + from), "Copied " + from);
     }));
-    listMenu.appendChild(menuItem("Copy link", "", function () {
-      closeListMenu(); copyShareLink();
-    }));
+    /* The label has to say what the click does, and that differs by state. Signed in on
+       a list of yours the first press *publishes* it - anyone with the link can then read
+       it - so calling that "Copy link" hides the part that matters. Once it is already
+       shared, copying really is just copying. Signed out it always was. */
+    var willPublish = signedIn() && supabaseReady() && activeIsMine && !activeTemplate.shared;
+    listMenu.appendChild(menuItem(willPublish ? "Share this list\u2026" : "Copy link", "",
+      function () { closeListMenu(); copyShareLink(); }));
 
     if (activeIsMine && activeTemplate.shared) {
       listMenu.appendChild(menuItem("Stop sharing", "", function () {

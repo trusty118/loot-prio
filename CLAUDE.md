@@ -642,6 +642,12 @@ zatar's** — jsdom cannot measure layout, but it can assert the mechanism.
 
 ### Sharing by link
 
+**The action is named for what it does, which differs by state.** Signed in on a list of
+yours, the first press *publishes* it — anyone with the link can then read it — so it reads
+`Share this list…`. Once it is already shared, copying really is just copying, so it reads
+`Copy link`, with `Stop sharing` beneath. Signed out it is always `Copy link`, because that
+is all it ever is. A label that hides a side effect is a bad label.
+
 **Two paths, chosen by whether you are signed in, and they mean different things.**
 
 **Signed in → `?s=<token>`, and the link is live.** It carries a token, not the list, so it
