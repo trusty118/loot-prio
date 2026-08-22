@@ -108,7 +108,7 @@
       zones: ["Serpentshrine Cavern", "Tempest Keep", "Crafted (Nether Vortex)"] },
     { id: "P3", label: "Phase 3", zones: ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"] },
     { id: "P4", label: "Phase 4", zones: ["Zul'Aman"] },
-    { id: "P5", label: "Phase 5", zones: ["Sunwell Plateau"] }
+    { id: "P5", label: "Phase 5", zones: ["Sunwell Plateau", "Crafted (Sunmote)"] }
   ];
 
   /* The raids of a phase, which is not quite its zones: the crafted pseudo-zone has no
@@ -148,7 +148,8 @@
      phase above them decides which one is. */
   var ZONE_LABEL = {
     "Crafted (Nether Vortex)": "Crafted",
-    "Crafted (Heart of Darkness)": "Crafted"
+    "Crafted (Heart of Darkness)": "Crafted",
+    "Crafted (Sunmote)": "Crafted"
   };
 
   /* Encounter Journal boss portraits (128x64 PNG). TBC bosses have no achievement
@@ -230,6 +231,7 @@
     "Mount Hyjal": JOURNAL + "archimonde.png",
     "Crafted (Nether Vortex)": ICON + "inv_elemental_mote_nether.jpg",
     "Crafted (Heart of Darkness)": ICON + "spell_shadow_demonictactics.jpg",
+    "Crafted (Sunmote)": ICON + "spell_nature_elementalshields.jpg",
     "Zul'Aman": JOURNAL + "daakara.png",
     "Sunwell Plateau": JOURNAL + "kiljaeden.png"
   };

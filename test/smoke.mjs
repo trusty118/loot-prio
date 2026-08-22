@@ -62,6 +62,18 @@ const strips = (n) => chipByText("#phase-chips", "Phase " + n).querySelectorAll(
 ok(strips(1).length === 3, `phase 1 shows its three raids (got ${strips(1).length})`);
 ok(strips(3).length === 2, `phase 3 shows two - crafted has no art to show (got ${strips(3).length})`);
 ok(strips(4).length === 1, `phase 4 shows its one (got ${strips(4).length})`);
+ok(strips(5).length === 1, `phase 5 shows Sunwell only, not its crafted tier (got ${strips(5).length})`);
+ok(strips(2).length === 2, `phase 2 likewise shows two raids (got ${strips(2).length})`);
+
+// Three phases have a crafted tier, each named for the material it is gated on. They
+// behave identically because nothing special-cases them: no bosses means no art strip
+// and an empty boss row, and the display label is the same for all three.
+const appSource = fs.readFileSync(path.join(root, "app.js"), "utf8");
+const crafted = [...appSource.matchAll(/"(Crafted \([^"]+\))"/g)].map((m) => m[1]);
+ok([...new Set(crafted)].length === 3,
+   `three crafted zones, one per tier that has craftables: ${[...new Set(crafted)].join(", ")}`);
+ok([...new Set(crafted)].every((z) => new RegExp('"' + z.replace(/[()]/g, "\\$&") + '": "Crafted"').test(appSource)),
+   "each renders as plain Crafted, since two are never on screen together");
 ok(/illidan/.test(strips(3)[0].src) && /archimonde/.test(strips(3)[1].src),
    "in zone order, each raid flying its final boss");
 ok(/Crafted/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),

@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 519 checks, should be all green
+npm test             # 523 checks, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -296,10 +296,10 @@ at peak there are ~40 controls on screen, and the phase row is 6 of them. The we
 boss row (up to 13) and the class row (10).
 
 `PHASES` in `app.js` is the five TBC content phases and the zones each opened, in release
-order, and `BOSS_ORDER` now carries the kill order for **all nine raid zones**. Phases 2 and 3
+order, and `BOSS_ORDER` now carries the kill order for **all nine raid zones**. Phases 2, 3 and 5
 each also carry a **crafted zone**, named for the material it is gated on — `Crafted (Nether
-Vortex)` and `Crafted (Heart of Darkness)` — both of which render as plain `Crafted`, since
-they are never on screen together. They have no bosses and no `BOSS_ORDER` entry, which is
+Vortex)`, `Crafted (Heart of Darkness)`, `Crafted (Sunmote)` — all of which render as plain
+`Crafted`, since no two are ever on screen together. They have no bosses and no `BOSS_ORDER` entry, which is
 exactly what keeps them off the phase tile's art strips. **Only Phase 3 has
 items**: everything else is chips reading `0`, so the shape of the expansion is visible and an
 item has a boss to arrive under. `ZONE_ORDER` is derived from `PHASES`, which keeps
