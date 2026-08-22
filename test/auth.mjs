@@ -100,6 +100,10 @@ function boot({ configured = false, sdk = null } = {}) {
 
 const $ = (w, id) => w.document.getElementById(id);
 const shown = (w, id) => { const n = $(w, id); return !!n && !n.hidden; };
+const acctName = (w) => ($(w, "account-name") || {}).textContent || "";
+/* Sign out lives in the account menu now, so reaching it means opening that first -
+   which is itself the thing worth asserting. */
+const openAcct = (w) => { $(w, "account").click(); return w.document.querySelector(".acct-menu"); };
 
 // ---------------------------------------------------------------------------------
 // 1. The anon key is publishable; the service key never is.
@@ -168,7 +172,7 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
 
   sdk.auth._signIn("Late");
   await settle();
-  ok(shown(w, "account") && $(w, "account").textContent === "Late",
+  ok(shown(w, "account") && acctName(w) === "Late",
      "and signing in works normally afterwards");
 }
 
@@ -219,51 +223,45 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
 
   sdk.auth._signIn("Trusty");
   await settle();
-  ok(shown(w, "account") && $(w, "account").textContent === "Trusty",
-     `signed in, the bar shows who you are (got "${$(w, "account").textContent}")`);
-  ok(shown(w, "sign-out") && !shown(w, "sign-in"), "and offers sign-out instead of sign-in");
+  ok(shown(w, "account") && acctName(w) === "Trusty",
+     `signed in, the bar shows who you are (got "${acctName(w)}")`);
+  ok(!shown(w, "sign-in"), "and stops offering to sign in");
 
-  // 5. the merge offer: local lists exist, the account is empty
-  ok(shown(w, "tpl-merge"),
-     "local lists + an empty account -> offered the chance to copy them up");
-  $(w, "tpl-merge").click();
-  await settle();
-  ok(sdk._rows.size === 1, `the list is copied into the account (got ${sdk._rows.size})`);
+  // The account control is a menu, not two more buttons on an already busy bar.
+  const menu = openAcct(w);
+  ok(menu && menu.style.display === "block", "clicking the account opens a menu");
+  ok($(w, "account").getAttribute("aria-expanded") === "true", "and says so on aria-expanded");
+  ok(/Signed in as/.test(menu.textContent) && /Trusty/.test(menu.textContent),
+     "which states who you are rather than offering your own name as a button");
+  ok([...menu.querySelectorAll(".acct-item")].some((b) => b.textContent === "Sign out"),
+     "and carries Sign out");
+
+  // Escape closes it, like the other two overlays
+  menu.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  ok(menu.style.display === "none", "Escape closes it, as it does the other two overlays");
+
+  // 5. Signing in does not touch what this browser had. There is deliberately no
+  //    "copy my local lists up" offer: the two stores are simply separate, and a list
+  //    made signed out stays where it was made rather than following you around.
+  ok(sdk._rows.size === 0, "signing in copies nothing into the account by itself");
   ok(w.localStorage.getItem("lootprio.templates").includes("priorities"),
-     "and the local copy is left exactly where it was - nothing is destroyed");
-  ok(!shown(w, "tpl-merge"), "the offer does not linger once taken");
+     "and leaves this browser's lists exactly where they were");
 
   // 6. a list made while signed in goes to the account, not to this browser
   const localBefore = w.localStorage.getItem("lootprio.templates");
   $(w, "tpl-new").click();
   await settle();
-  ok(sdk._rows.size === 2, `signed in, a new list is written to the account (got ${sdk._rows.size})`);
+  ok(sdk._rows.size === 1, `signed in, a new list is written to the account (got ${sdk._rows.size})`);
   ok(w.localStorage.getItem("lootprio.templates") === localBefore,
      "and localStorage is not touched - the store really did swap");
 
   // 7. signing out returns you to this browser's lists, losing nothing either side
-  $(w, "sign-out").click();
+  const m2 = openAcct(w);
+  [...m2.querySelectorAll(".acct-item")].find((b) => b.textContent === "Sign out").click();
   await settle();
   ok(shown(w, "sign-in") && !shown(w, "account"), "signing out returns the sign-in button");
-  ok(sdk._rows.size === 2, "the account keeps its lists");
+  ok(sdk._rows.size === 1, "the account keeps its lists");
   ok(w.localStorage.getItem("lootprio.templates") === localBefore, "and this browser keeps its own");
-}
-
-// ---------------------------------------------------------------------------------
-// 8. The offer is not made when the account already has lists - otherwise every
-//    sign-in would quietly duplicate everything.
-// ---------------------------------------------------------------------------------
-{
-  const sdk = fakeSupabase();
-  sdk._rows.set("t_existing", { id: "t_existing", name: "Already up there", v: 1, priorities: {} });
-  const w = boot({ configured: true, sdk });
-  await settle();
-  $(w, "tpl-new").click();          // give this browser a local list too
-  await settle();
-  sdk.auth._signIn("Trusty");
-  await settle();
-  ok(!shown(w, "tpl-merge"),
-     "an account that already has lists is never offered a merge, so nothing duplicates");
 }
 
 console.log(fail.length ? `\n${fail.length} FAILURES` : "\nAll checks passed");

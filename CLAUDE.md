@@ -542,12 +542,17 @@ matter what the client asks for. **The service-role key bypasses those policies 
 never appear in this repo**; `test/auth.mjs` greps for it, and for any pasted JWT literal,
 with comments stripped first so the file can still explain the rule without failing on it.
 
-**Local lists do not follow you into an account by themselves.** The store swaps the moment
-you sign in, so without help someone's first sign-in makes their work appear to vanish — it
-hasn't, it is still in `localStorage`, just no longer what the dropdown reads. `offerMerge()`
-offers to copy it up, in place in the bar, and **only when the account is empty**: offering
-it every time would silently duplicate everything on every sign-in. The local copies are
-never moved or deleted, so answering wrong costs nothing.
+**The two stores are simply separate, and that is deliberate.** A list made signed out lives
+in `localStorage`; a list made signed in lives in the account. Signing in swaps which one the
+dropdown reads, so local lists stop appearing — they are not deleted, and signing out shows
+them again.
+
+**There is no "copy my local lists into my account" offer, and one was built and removed.**
+It appeared on the bar when the account was empty and this browser had lists. Two things were
+wrong with it: it was an offer with no way to decline, so it sat there until pressed, on a bar
+that was already too busy; and it existed to solve a problem nobody actually has, since the
+lists are one sign-out away and nothing is lost. **Don't rebuild it** — if the disappearing
+lists ever genuinely confuse someone, the fix is to say so in words, not to add a button.
 
 **There is no Save button.** A list is written when it is made and again on every edit
 (`saveNow()`), so it is in the dropdown from birth and nothing is lost by forgetting to press

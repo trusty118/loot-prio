@@ -652,9 +652,8 @@
     editToggle: document.getElementById("edit-toggle"),
     tplShare: document.getElementById("tpl-share"),
     signIn: document.getElementById("sign-in"),
-    signOut: document.getElementById("sign-out"),
     account: document.getElementById("account"),
-    tplMerge: document.getElementById("tpl-merge"),
+    accountName: document.getElementById("account-name"),
     tplDelete: document.getElementById("tpl-delete"),
     tplLinkOut: document.getElementById("tpl-link-out"),
     tplLinkField: document.getElementById("tpl-link-field"),
@@ -844,6 +843,31 @@
 
   /* The Discord display name, for the bar. Falls back through what Discord actually
      sends before giving up on a label rather than rendering "undefined". */
+  /* The one image on this page that does not come from wow.zamimg.com, and the only
+     one whose URL is chosen by someone else. Built here rather than sitting empty in
+     the markup - an <img> with no src is a request for the page itself in some
+     browsers - and it removes itself if Discord's CDN will not serve it, leaving the
+     name, which was always the part that mattered. */
+  function renderAvatar() {
+    var have = el.account && el.account.querySelector(".account-avatar");
+    var url = accountAvatar();
+    if (!url) { if (have) have.remove(); return; }
+    if (have && have.getAttribute("src") === url) return;
+    if (have) have.remove();
+    var img = document.createElement("img");
+    img.className = "account-avatar";
+    img.alt = "";
+    img.setAttribute("onerror", "this.remove()");
+    img.src = url;
+    el.account.insertBefore(img, el.account.firstChild);
+  }
+
+  function accountAvatar() {
+    if (!signedIn()) return "";
+    var m = session.user.user_metadata || {};
+    return m.avatar_url || m.picture || "";
+  }
+
   function accountName() {
     if (!signedIn()) return "";
     var m = session.user.user_metadata || {};
@@ -1479,8 +1503,14 @@
 
   /* A zone is the same idea one level down, at half the size. */
   function zoneChip(z, active, count) {
+    /* A crafted zone is pictured by a square item icon rather than a 2:1 Encounter
+       Journal portrait, so cover-cropping it into a wide tile throws most of it away.
+       Having no BOSS_ORDER entry is the test, not the name - the same rule the phase
+       tiles use to decide which zones get an art strip - so a future crafted-style
+       zone gets this for free. */
+    var cls = "chip--zone" + (BOSS_ORDER[z] ? "" : " chip--emblem");
     return artChip({
-      cls: "chip--zone",
+      cls: cls,
       active: active,
       label: zoneLabel(z),
       count: count,
@@ -2679,7 +2709,6 @@
 
   var savedLists = [];        /* store.list() is async; this is its cached answer */
   var deleteArmed = false;    /* Delete asks once, in place, instead of confirm() */
-  var mergeOffer = false;     /* local lists found on first sign-in - offer to keep them */
 
   /* ---------- signing in ----------
      Discord only. Every raider has one, it is the easiest of the three OAuth flows,
@@ -2724,8 +2753,70 @@
     });
   }
 
+  /* ---------- the account menu ----------
+     The third overlay on this page, and built like the other two: created once,
+     parented to <body> so no scroll container can clip it, positioned by placeUnder()
+     rather than by arithmetic of its own, and closed by Escape or a click away. */
+
+  var acctMenu = null;
+
+  function closeAcctMenu() {
+    if (acctMenu) acctMenu.style.display = "none";
+    if (el.account) el.account.setAttribute("aria-expanded", "false");
+  }
+
+  function buildAcctMenu() {
+    acctMenu = document.createElement("div");
+    acctMenu.className = "acct-menu";
+    acctMenu.setAttribute("role", "menu");
+    acctMenu.setAttribute("aria-label", "Account");
+    acctMenu.style.display = "none";
+
+    /* Who you are, stated rather than actionable - the button that opened this shows a
+       name, and a menu whose first line repeats it without saying what it is reads as a
+       thing you should click. */
+    var who = document.createElement("div");
+    who.className = "acct-who";
+    var w1 = document.createElement("span");
+    w1.className = "acct-who-label";
+    w1.textContent = "Signed in as";
+    var w2 = document.createElement("span");
+    w2.className = "acct-who-name";
+    who.appendChild(w1);
+    who.appendChild(w2);
+    acctMenu.appendChild(who);
+
+    var out = document.createElement("button");
+    out.type = "button";
+    out.className = "acct-item";
+    out.setAttribute("role", "menuitem");
+    out.textContent = "Sign out";
+    out.addEventListener("click", function () { closeAcctMenu(); signOut(); });
+    acctMenu.appendChild(out);
+
+    acctMenu.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { e.preventDefault(); closeAcctMenu(); el.account.focus(); }
+    });
+
+    document.body.appendChild(acctMenu);
+  }
+
+  function toggleAcctMenu() {
+    if (!acctMenu) buildAcctMenu();
+    if (acctMenu.style.display === "block") { closeAcctMenu(); return; }
+    closePop();                       /* only one overlay at a time */
+    closeOpMenu();
+    acctMenu.querySelector(".acct-who-name").textContent = accountName();
+    acctMenu.style.display = "block";
+    el.account.setAttribute("aria-expanded", "true");
+    placeUnder(acctMenu, el.account);
+    var first = acctMenu.querySelector(".acct-item");
+    if (first) first.focus();
+  }
+
   function signOut() {
     if (!supabaseReady()) return;
+    closeAcctMenu();
     sb.auth.signOut().then(function () {
       /* Back to this browser's own lists. Nothing of theirs is deleted either side of
          the line: the account keeps its rows, localStorage keeps its own. */
@@ -2734,44 +2825,7 @@
     });
   }
 
-  /* Local lists do not follow you into the account by themselves, and the store swaps
-     the moment you sign in - so without this, someone's first act of signing in makes
-     their work appear to vanish. It has not: it is still in localStorage, just no
-     longer what the dropdown is reading.
 
-     So offer to copy it up, in place in the bar, the same two-step shape Delete uses.
-     The local copies are left exactly where they are, never moved or deleted, so
-     answering wrong costs nothing. */
-  function offerMerge() {
-    localStore.list().then(function (local) {
-      if (!local.length) return;
-      return remoteStore.list().then(function (remote) {
-        /* only worth asking when the account is empty - once there are lists up there,
-           silently duplicating everything on every sign-in would be its own bug */
-        mergeOffer = !remote.length;
-        renderTemplateBar();
-      });
-    }).catch(function () { /* offline or paused: not worth a message of its own */ });
-  }
-
-  function doMerge() {
-    mergeOffer = false;
-    announce("Copying your lists\u2026");
-    localStore.list().then(function (local) {
-      return Promise.all(local.map(function (row) {
-        return localStore.load(row.id).then(function (t) {
-          return t ? remoteStore.save(t) : null;
-        });
-      }));
-    }).then(function (done) {
-      announce(done.length + (done.length === 1 ? " list" : " lists") +
-                 " copied to your account. The copies on this device are untouched.");
-      refreshLists();
-    }).catch(function (err) {
-      announce("Could not copy your lists: " + err.message);
-      renderTemplateBar();
-    });
-  }
 
   /* Wiring the session to the store. Runs on load and on every auth change, which is
      also how a redirect back from Discord is picked up - the SDK parses the URL,
@@ -2826,11 +2880,8 @@
       /* the lists on screen belonged to whoever was signed in a moment ago */
       if (was !== signedIn()) openTemplate(null, false);
       refreshLists();
-      if (!was && signedIn()) {
-        offerMerge();
-        /* the filters you left behind, now that the round trip is over */
-        if (restoreReturn()) update();
-      }
+      /* the filters you left behind, now that the round trip is over */
+      if (!was && signedIn() && restoreReturn()) update();
       renderTemplateBar();
     });
 
@@ -2896,10 +2947,14 @@
     /* No sign-in button at all when it could not work - an unconfigured project or a
        blocked CDN should read as "this site has no accounts", not as a broken button. */
     show(el.signIn, supabaseReady() && !signedIn());
-    show(el.signOut, supabaseReady() && signedIn());
     show(el.account, supabaseReady() && signedIn());
-    show(el.tplMerge, mergeOffer);
-    if (signedIn() && el.account) el.account.textContent = accountName();
+
+    if (signedIn()) {
+      if (el.accountName) el.accountName.textContent = accountName();
+      renderAvatar();
+    } else {
+      closeAcctMenu();
+    }
 
     show(el.tplName, activeIsMine);
     show(el.tplDirty, activeIsMine && unsaved);
@@ -2957,8 +3012,10 @@
     });
 
     if (el.signIn) el.signIn.addEventListener("click", signIn);
-    if (el.signOut) el.signOut.addEventListener("click", signOut);
-    if (el.tplMerge) el.tplMerge.addEventListener("click", doMerge);
+    if (el.account) el.account.addEventListener("click", function (ev) {
+      ev.stopPropagation();           /* opening it must not count as a click away */
+      toggleAcctMenu();
+    });
 
     el.tplCopy.addEventListener("click", function () {
       var from = activeTemplate ? activeTemplate.name : "zatar's list";
@@ -3159,6 +3216,9 @@
       if (opMenu && opMenu.style.display !== "none" &&
           !opMenu.contains(e.target) &&
           !(e.target.closest && e.target.closest(".prio-op--editing"))) closeOpMenu();
+      if (acctMenu && acctMenu.style.display !== "none" && !acctMenu.contains(e.target)) {
+        closeAcctMenu();
+      }
     });
 
     window.addEventListener("hashchange", function () {
