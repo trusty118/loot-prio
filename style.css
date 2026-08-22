@@ -14,9 +14,20 @@
   --text-dim: #98a2b3;
   --text-faint: #6b7482;
 
-  /* FIXED - gold means selected, everywhere, one meaning. */
-  --gold: #d9b45a;
-  --gold-bright: #f0cf82;
+  /* One accent, one meaning: selected. The token names are historical - this is fel
+     green now, Outland's own colour, because the site is a TBC guide and the accent may
+     as well say so. A later expansion would just change these two values again.
+
+     Green is normally a bad accent for a WoW page, because #1eff00 is uncommon quality.
+     It is safe here for a reason specific to this dataset: every item on this site is
+     epic or legendary, so no green item name ever renders and there is nothing for it
+     to be confused with.
+
+     It also fixes something that was quietly wrong. The old #d9b45a sat a few degrees
+     from --artifact #e6cc80, so "selected" and "expansion BiS" - two things with no
+     relationship at all - looked like the same colour. They no longer do. */
+  --gold: #8fce00;
+  --gold-bright: #b8f13a;
 
   /* WoW item-quality colours, reused for the BiS longevity ladder:
      epic -> legendary -> artifact, matching how long an item stays BiS */
@@ -563,7 +574,9 @@ a:hover { color: var(--gold-bright); }
 
 #spec-chips {
   border-color: var(--gold);
-  background: rgba(217, 180, 90, .10);
+  /* colour-mixed off the token rather than a hard-coded rgba: the literal here was the
+     old gold, and it would have stayed gold while everything around it went green */
+  background: color-mix(in srgb, var(--gold) 10%, transparent);
 }
 
 select, input[type="search"] {
@@ -953,7 +966,7 @@ tbody tr:hover .spec-icon--muted { opacity: .5; }
 .tip-bis--3 { color: var(--artifact); }
 
 mark {
-  background: rgba(217, 180, 90, .28);
+  background: color-mix(in srgb, var(--gold) 28%, transparent);
   color: inherit;
   border-radius: 2px;
   padding: 0 1px;
