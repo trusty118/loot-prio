@@ -711,10 +711,12 @@ own full pass over the filtered pool (~36 passes per render).
 
 ## 8. Attribution (required, keep it prominent)
 
-**The banner title is generic — "Classic WoW Loot Prios" — so the credit rides on the
-tagline beside it**, and `test/smoke.mjs` asserts the banner names and links zatar_wow. A
-title that no longer says whose calls these are is exactly how the attribution erodes by
-accident, so if the banner is reworked again, the credit moves with it.
+**The banner is the title alone — "TBC Loot Prio Lists" — and carries no credit.** That was a
+decision, not an oversight: the credit moves onto the lists themselves once those carry an
+author. Until that ships, **the footer is the only place on the page naming the source**, so
+§8 rests entirely on it. `test/smoke.mjs` asserts exactly that — banner clean, footer
+crediting — so if the footer is ever reworked, the failure says attribution has left the site
+rather than letting it go quietly.
 
 The priorities are the work of **[zatar_wow](https://twitch.tv/zatar_wow)**, whose site
 `tbc.classicwowbuilds.com` has been offline for years. This is a community mirror, not
