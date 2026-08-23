@@ -563,7 +563,7 @@ character. Whether a write is outstanding lives in a module-level `unsaved`, del
 ### The bar, and the list menu behind it
 
 ```
-TBC Loot Prio Lists              LIST [ My list      ▾ ]  [ Edit ]   [ @macka118 ▾ ]
+Loot Prio Lists                  LIST [ My list      ▾ ]  [ Edit ]   [ @macka118 ▾ ]
 ```
 
 **Two controls plus the account zone, in every state. Nothing hides, nothing unhides,
@@ -666,6 +666,24 @@ one query; shared lists should be readable by people who have the link, not enum
 people who do not. `get_shared_list(token)` can only return a row that is both flagged
 `shared` and matched by an exact token, and the `lists` table itself stays unreadable to
 anonymous callers. `docs/sharing-setup.md` has the SQL and the two curl checks that prove it.
+
+**The recipient needs no account, and that is the point.** `supabaseReady()` checks
+`sb && supabaseConfigured()`, deliberately **not** `signedIn()`, and the SQL grants
+`execute` on `get_shared_list` to `anon` as well as `authenticated`. Most people who open
+a shared link will never sign in — it is the primary path through the feature, so
+`test/auth.mjs` exercises it on a window that never calls `_signIn()`. It also asserts the
+recipient side honours `Stop sharing`: a token whose row is no longer flagged opens
+nothing. Without that, the button would be a lie told only to the sharer.
+
+**Shared links depend on the Supabase project being awake.** The free tier pauses after
+~a week idle (see `docs/sharing-setup.md`), and a paused project fails as a transport
+error rather than an empty answer — which is why the two cases say different things.
+
+**A shared link that cannot be resolved says so; losing sign-in does not.** `whenSupabaseReady()`
+takes a failure callback for exactly this. The absent sign-in button already communicates
+"no accounts here", but a visitor who followed a link to one specific list would otherwise be
+looking at a different list with nothing to explain the swap. The page still renders behind
+the message: it costs the shared list, not the site.
 
 **Signed out → `#t=`, exactly as before.** There is nothing in a database to point at, and
 the site has to keep working without one. That link is frozen and size-capped, which is the
@@ -959,7 +977,7 @@ own full pass over the filtered pool (~36 passes per render).
 
 ## 8. Attribution (required, keep it prominent)
 
-**The banner is the title alone — "TBC Loot Prio Lists" — and carries no credit.** That was a
+**The banner is the title alone — currently "Loot Prio Lists" — and carries no credit.** That was a
 decision, not an oversight: the credit moves onto the lists themselves once those carry an
 author. Until that ships, **the footer is the only place on the page naming the source**, so
 §8 rests entirely on it. `test/smoke.mjs` asserts exactly that — banner clean, footer

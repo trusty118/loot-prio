@@ -946,8 +946,12 @@ ok(!doc.querySelector(".site-header a[href*='zatar_wow']"),
    "the banner is title-only, with no credit in it");
 ok(doc.querySelector(".site-footer a[href*='zatar_wow']"),
    "so the footer is the one place carrying it, and must keep doing so");
-ok(doc.querySelector(".site-header h1").textContent.trim() === "TBC Loot Prio Lists",
-   `the banner is just the name: "${doc.querySelector(".site-header h1").textContent.trim()}"`);
+// Pinned against the <title> rather than against a literal, because the point of this
+// assertion is that the banner is the name and nothing else - not that the name is any
+// particular string. A literal here fails on every rename, which reads as "you broke
+// attribution" when nothing about attribution moved.
+ok(doc.querySelector(".site-header h1").textContent.trim() === doc.title.trim(),
+   `the banner is just the name, and the same one the tab says: "${doc.querySelector(".site-header h1").textContent.trim()}" / "${doc.title.trim()}"`);
 
 ok(footer.includes("zatar_wow") && footer.includes("Veramos") && footer.includes("Lemonism"),
    "creator credits kept");

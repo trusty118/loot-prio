@@ -2909,20 +2909,30 @@
      appears at all, on exactly the machine where you would be testing it. Wait for the
      tag instead. Checking the global first matters: if the script has already run, its
      load event has already fired and will never fire again. */
-  function whenSupabaseReady(cb) {
+  function whenSupabaseReady(cb, onFail) {
     if (window.supabase) { cb(); return; }
     var tag = document.getElementById("supabase-sdk");
     /* absent by design - jsdom, or someone stripped the tag. Not an error. */
-    if (!tag) return;
-    tag.addEventListener("load", function () { if (window.supabase) cb(); });
+    if (!tag) { if (onFail) onFail(); return; }
+    tag.addEventListener("load", function () { if (window.supabase) cb(); else if (onFail) onFail(); });
     tag.addEventListener("error", function () {
       if (window.console) console.warn("sign-in unavailable: the Supabase SDK did not load");
+      if (onFail) onFail();
     });
   }
 
   function initAuth() {
     if (!supabaseConfigured()) return;
-    whenSupabaseReady(startAuth);
+    /* Losing sign-in is allowed to be quiet: the button is simply absent, which says
+       "no accounts here" well enough. A shared link is not, because the visitor asked
+       for one specific list and would otherwise be looking at a different one with
+       nothing to explain the swap. */
+    whenSupabaseReady(startAuth, function () {
+      if (hasShareToken()) {
+        announce("That shared link could not be opened right now - try again in a moment");
+        update();
+      }
+    });
   }
 
   function startAuth() {
@@ -3577,6 +3587,10 @@
   /* Someone else's list, fetched by token. The table itself stays unreadable to an
      anonymous caller - this goes through a security-definer function that can only
      return a row that is both flagged shared and matched by an exact token. */
+  function hasShareToken() {
+    return /[?&]s=([^&]+)/.test(location.search);
+  }
+
   function loadSharedByToken() {
     var m = /[?&]s=([^&]+)/.exec(location.search);
     if (!m) return false;
@@ -3584,7 +3598,11 @@
     sb.rpc("get_shared_list", { token: decodeURIComponent(m[1]) }).then(function (res) {
       var row = res.data && res.data.length ? res.data[0] : null;
       if (res.error || !row) {
-        announce(res.error ? "That shared link did not work: " + res.error.message
+        /* A paused project fails as a transport error rather than an empty answer, and
+           the raw message is a Postgres string nobody outside this repo can act on.
+           Empty means the token is wrong or the list was unshared - both of which are
+           the same thing to whoever is holding the link. */
+        announce(res.error ? "That shared link could not be opened right now - try again in a moment"
                            : "That link does not open a list any more");
         update();
         return;
