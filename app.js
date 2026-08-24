@@ -159,8 +159,13 @@
     for (var i = PHASES.length - 1; i >= 0; i--) {
       var zones = PHASES[i].zones;
       for (var j = 0; j < ALL.length; j++) {
+        /* His calls, not any priority. Zul'Aman and Sunwell rows carry a priority now
+           too - seeded from their BiS lists so the column is not blank - and counting
+           those would land the site on Sunwell again, which is the thing this rule
+           exists to prevent. prioritySource is what tells them apart. */
         if (zones.indexOf(ALL[j].zone) !== -1 &&
-            (ALL[j].priority || []).length) return PHASES[i].id;
+            (ALL[j].priority || []).length &&
+            !ALL[j].prioritySource) return PHASES[i].id;
       }
     }
     /* no priorities at all - fall back to the last phase with any items */

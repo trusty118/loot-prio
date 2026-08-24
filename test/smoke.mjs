@@ -800,6 +800,26 @@ ok(!doc.querySelector("#results").textContent.includes("*"),
 ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
    "rows with no markers render no rings");
 
+// --- seeded orderings, and the line they must not cross -------------------------------
+// Zul'Aman and Sunwell rows are seeded from their BiS lists, so the priority column says
+// something and the rings have icons to hang off. The risk is that a generated ordering
+// reads as one of zatar's, which is what CLAUDE.md section 8 forbids.
+{
+  const seeded = data.filter((r) => r.prioritySource === "bis");
+  ok(seeded.length > 0, `rows outside the guide are seeded from BiS (${seeded.length})`);
+  ok(seeded.every((r) => r.unsourced),
+     "every seeded row is still marked unsourced - the guide really did not cover it");
+  ok(seeded.every((r) => (r.priority || []).every((p, i) => i === 0 || p.op === "=")),
+     "and every seeded ordering is flat: nothing here ranks anyone above anyone");
+  ok(seeded.every((r) => (r.priority || []).every((p) => p.spec)),
+     "seeded entries name specs, since BiS is per spec");
+
+  // his own rows must never acquire one
+  const his = data.filter((r) => !r.unsourced);
+  ok(his.every((r) => !r.prioritySource),
+     `none of the ${his.length} rows he covered carries a source - absent is what means "his"`);
+}
+
 // --- rings follow the phase, and carry why ------------------------------------------
 // bis.json holds P3, P4 and P5 now. A ring has to mean "BiS for me in the phase I am
 // reading", not "BiS at some point" - and the lookup was keyed by spec alone, so a
@@ -905,8 +925,13 @@ const P3_ZONES = ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"];
 const unsourced = data.filter((r) => r.unsourced && P3_ZONES.includes(r.zone));
 ok(unsourced.length === 13,
    `13 of the guide's own phase are marked unsourced (got ${unsourced.length})`);
-ok(unsourced.every((r) => r.priority.length === 0),
-   "an unsourced record never carries a priority - there is no call to record");
+// An unsourced row may now carry an ordering, but only one that says where it came
+// from. Without prioritySource it would read as one of his calls, which is the whole
+// thing CLAUDE.md section 8 forbids - check_priority.py makes that pairing an error.
+ok(unsourced.every((r) => r.priority.length === 0 || r.prioritySource),
+   "an unsourced record carries no priority unless it names a source for it");
+ok(data.every((r) => !r.prioritySource || r.unsourced),
+   "and nothing the guide did cover carries a source - absent is what means 'his'");
 ok(data.filter((r) => !r.unsourced).length === 182,
    "the creator's original 182 are still exactly that");
 
@@ -951,8 +976,14 @@ ok(proseRows.length === 0,
 const blank = [...doc.querySelectorAll("tbody tr")]
   .filter((tr) => tr.children[3].textContent.trim() === "" &&
                   tr.children[3].querySelectorAll("img").length === 0);
-// 23 the creator left open, plus the 13 he never covered
-ok(blank.length === 36, `36 items render a blank priority cell (got ${blank.length})`);
+// The creator's own open calls, plus any of his phase's unsourced rows that BiS could
+// not seed either. Derived from the data rather than pinned: seeding moves this number
+// and a literal would fail for a reason that says nothing about rendering.
+const expectBlank = data.filter((r) =>
+  ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone) &&
+  (r.priority || []).length === 0).length;
+ok(blank.length === expectBlank,
+   `rows with nothing to say render an empty cell, not "undefined" (${expectBlank})`);
 ok(data.filter((r) => !r.priority.length && !r.unsourced).length === 23,
    "23 of them are the creator's own 'whoever needs it' calls");
 ok(!doc.body.textContent.includes("undefined"), "no undefined leaks from the empty strings");
@@ -1282,7 +1313,9 @@ const phasesWithCalls = phasesWithItems.filter((id) => {
                   P2: ["Serpentshrine Cavern", "Tempest Keep", "Crafted (Nether Vortex)"],
                   P3: ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"],
                   P4: ["Zul'Aman"], P5: ["Sunwell Plateau", "Crafted (Sunmote)"] }[id];
-  return data.some((r) => zones.includes(r.zone) && (r.priority || []).length);
+  // his calls, not any ordering: the seeded ones carry a source and do not count
+  return data.some((r) => zones.includes(r.zone) && (r.priority || []).length &&
+                          !r.prioritySource);
 });
 ok(window.location.hash.includes("phase=" + phasesWithCalls[phasesWithCalls.length - 1]),
    `the landing phase is the last one carrying his calls (${phasesWithCalls.join(", ")})`);
@@ -1635,8 +1668,11 @@ ok(itemNames().some((n) => n.includes("Band of the Eternal Champion")),
    "Survival sees the Band it is BiS for, even though no priority names it");
 const bandRow = rowFor("Band of the Eternal Champion");
 ok(bandRow.querySelector(".item-tag"), "and it still carries its 'not in the guide' tag");
-ok(bandRow.children[3].querySelectorAll("img").length === 0,
-   "with an empty priority column, so it never reads as one of the creator's calls");
+// The column is no longer empty - it is seeded from BiS so the row says something - so
+// what keeps it from reading as one of his calls is the marker, not the blankness.
+const bandRec = data.find((r) => r.item === "Band of the Eternal Champion");
+ok(bandRec.unsourced && bandRec.prioritySource === "bis",
+   "and its ordering says it came from BiS, not from him");
 
 click(doc.getElementById("reset"));
 click(chipByTip("#class-chips", "Paladin"));

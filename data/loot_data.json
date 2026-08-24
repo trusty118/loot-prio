@@ -814,9 +814,14 @@
    "Physical",
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "FeralCat"
+   }
+  ],
   "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Black Temple",
@@ -1035,9 +1040,14 @@
    "Physical",
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
   "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Black Temple",
@@ -1239,9 +1249,46 @@
    "Physical",
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Fury"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
   "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Black Temple",
@@ -1254,9 +1301,14 @@
   "roles": [
    "Healer"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
   "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Black Temple",
@@ -1460,9 +1512,18 @@
   "roles": [
    "Healer"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
   "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Black Temple",
@@ -1476,9 +1537,14 @@
    "Caster",
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "ProtPal"
+   }
+  ],
   "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Black Temple",
@@ -1746,9 +1812,26 @@
    "Physical",
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "ProtWarr",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   }
+  ],
   "unsourced": true,
-  "notes": "Drops from Essence of Anger, the third phase of the encounter. Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Drops from Essence of Anger, the third phase of the encounter. Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Black Temple",
@@ -2972,10 +3055,43 @@
    "Physical",
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "BM"
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
   "unsourced": true,
   "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Mount Hyjal",
@@ -2988,10 +3104,27 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Ele"
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "unsourced": true,
   "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Mount Hyjal",
@@ -3004,10 +3137,15 @@
   "roles": [
    "Healer"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "unsourced": true,
   "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Mount Hyjal",
@@ -3229,9 +3367,18 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   }
+  ],
   "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Mount Hyjal",
@@ -4464,9 +4611,50 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "RestoShaman",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -4699,10 +4887,15 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "BalanceDruid"
+   }
+  ],
   "notes": "",
   "unsourced": true,
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -4731,9 +4924,14 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Ele"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -4887,9 +5085,22 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "BM"
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -4935,9 +5146,14 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -4997,9 +5213,14 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "FeralCat"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -5043,10 +5264,43 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
   "unsourced": true,
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -5075,9 +5329,22 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -5139,9 +5406,14 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -5169,9 +5441,18 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -5245,10 +5526,55 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralBear",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
   "notes": "",
   "unsourced": true,
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -5293,9 +5619,14 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -5354,9 +5685,18 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "BM"
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -5415,10 +5755,55 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "ProtWarr",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
   "notes": "",
   "unsourced": true,
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -5431,10 +5816,31 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arcane"
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
   "unsourced": true,
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -5496,9 +5902,14 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Ret"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Zul'Aman",
@@ -5559,9 +5970,14 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5574,9 +5990,22 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Assass"
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5590,10 +6019,15 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
   "notes": "",
   "unsourced": true,
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5608,9 +6042,14 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5656,9 +6095,22 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5731,9 +6183,50 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5747,9 +6240,22 @@
    "Tank",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "ProtPal",
+    "op": "="
+   },
+   {
+    "spec": "FeralBear",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5762,9 +6268,46 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5777,9 +6320,22 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5792,9 +6348,46 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5853,9 +6446,26 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "AffliLock"
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5884,9 +6494,18 @@
   "roles": [
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "ProtPal",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5900,9 +6519,14 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Ele"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5915,9 +6539,50 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5930,9 +6595,18 @@
   "roles": [
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "ProtPal",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -5990,10 +6664,51 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
   "notes": "",
   "unsourced": true,
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6007,9 +6722,22 @@
    "Tank",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "ProtPal",
+    "op": "="
+   },
+   {
+    "spec": "FeralBear",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6022,9 +6750,14 @@
   "roles": [
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6039,9 +6772,14 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6054,9 +6792,22 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6069,9 +6820,14 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Ret"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6084,9 +6840,30 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6114,9 +6891,18 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "FeralBear"
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6146,9 +6932,22 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6176,9 +6975,46 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6192,9 +7028,14 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6208,9 +7049,30 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "Disc",
+    "op": "="
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoShaman",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6240,9 +7102,14 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6255,9 +7122,38 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6321,9 +7217,14 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "FeralBear"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6337,9 +7238,14 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6353,10 +7259,19 @@
    "Tank",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "spec": "FeralBear",
+    "op": "="
+   }
+  ],
   "notes": "",
   "unsourced": true,
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6400,9 +7315,14 @@
    "Tank",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "ProtPal"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6433,9 +7353,14 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6449,10 +7374,43 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
   "unsourced": true,
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6466,9 +7424,18 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6481,9 +7448,30 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6497,9 +7485,22 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6528,9 +7529,14 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6543,10 +7549,55 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
   "notes": "",
   "unsourced": true,
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6575,10 +7626,47 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
   "unsourced": true,
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6591,10 +7679,23 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
   "unsourced": true,
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6657,9 +7758,54 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6672,9 +7818,50 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "RestoShaman",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6689,9 +7876,14 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6704,9 +7896,46 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Ret"
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6720,9 +7949,14 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6735,9 +7969,30 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6750,9 +8005,22 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Assass"
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6765,9 +8033,26 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "BM"
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6781,9 +8066,14 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Ele"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6797,9 +8087,38 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6812,10 +8131,35 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "BM"
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   }
+  ],
   "notes": "",
   "unsourced": true,
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6829,9 +8173,30 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "Disc",
+    "op": "="
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoShaman",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6845,9 +8210,46 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6861,9 +8263,22 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6877,9 +8292,22 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6892,9 +8320,42 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6923,9 +8384,22 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6939,9 +8413,38 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6954,9 +8457,42 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -6969,9 +8505,18 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -7001,9 +8546,26 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Ret"
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -7016,9 +8578,14 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Enh"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -7031,9 +8598,38 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -7047,9 +8643,22 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -7062,9 +8671,14 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -7078,9 +8692,14 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Ele"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
@@ -7094,9 +8713,14 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
   "notes": "",
-  "unsourced": true
+  "unsourced": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Sunwell Plateau",
