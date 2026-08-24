@@ -144,11 +144,24 @@
      hardcoded, so it follows the content - when Zul'Aman items arrive, Phase 4 becomes
      the landing phase without anyone editing this. Needs ALL, so it cannot be a static
      initialiser; state.phase is set from it once the data is in. */
+  /* The last phase carrying one of zatar's CALLS, not merely one carrying items.
+     Those were the same thing while only Phase 3 had loot; adding Zul'Aman and Sunwell
+     separated them, and "last with items" would land every first-time visitor on
+     Sunwell - a page whose priority column is empty on every row, because he never
+     covered it. The site exists to show his calls, so it opens where they are. Every
+     other phase is still one click away. */
   function defaultPhase() {
     for (var i = PHASES.length - 1; i >= 0; i--) {
       var zones = PHASES[i].zones;
       for (var j = 0; j < ALL.length; j++) {
-        if (zones.indexOf(ALL[j].zone) !== -1) return PHASES[i].id;
+        if (zones.indexOf(ALL[j].zone) !== -1 &&
+            (ALL[j].priority || []).length) return PHASES[i].id;
+      }
+    }
+    /* no priorities at all - fall back to the last phase with any items */
+    for (var a = PHASES.length - 1; a >= 0; a--) {
+      for (var b = 0; b < ALL.length; b++) {
+        if (PHASES[a].zones.indexOf(ALL[b].zone) !== -1) return PHASES[a].id;
       }
     }
     return PHASES[0].id;
@@ -2316,12 +2329,15 @@
     a.innerHTML = highlight(rec.item, state.q);
     td.appendChild(a);
 
-    /* These 13 rows are real T6 loot the source guide never mentions, found by
-       auditing the BiS guides against this dataset. They are worth listing, but
-       the whole point of the site is that the priorities are one person's calls -
-       so a row carrying none of his has to say so rather than read as an item he
-       had no opinion on. */
-    if (rec.unsourced) {
+    /* Real loot the source guide never mentions. Worth listing, but the whole point of
+       the site is that the priorities are one person's calls - so a row carrying none
+       of his has to say so rather than read as an item he had no opinion on.
+
+       Not on every row of a raid he never covered, though. In Black Temple and Hyjal
+       these are 13 exceptions among 182 and the tag is the information; in Zul'Aman and
+       Sunwell every row is one, and a tag on all of them is furniture. There it is said
+       once, on the group heading - see zoneUnsourced(). */
+    if (rec.unsourced && !zoneUnsourced(rec.zone)) {
       var tag = document.createElement("span");
       tag.className = "item-tag";
       tag.textContent = UNSOURCED_TAG;
@@ -2609,6 +2625,26 @@
     update();
   }
 
+  /* Whether a zone is outside the guide entirely, rather than merely having gaps in
+     it. Cached because it walks ALL and renderGroup runs once per boss group, and keyed
+     on ALL itself so the cache cannot outlive the data it came from - clearing it from
+     the loader instead is a different scope, and was silently a no-op. */
+  var UNSOURCED_ZONES = null, UNSOURCED_FOR = null;
+
+  function zoneUnsourced(zone) {
+    if (!UNSOURCED_ZONES || UNSOURCED_FOR !== ALL) {
+      UNSOURCED_FOR = ALL;
+      var any = {}, sourced = {};
+      ALL.forEach(function (r) {
+        any[r.zone] = true;
+        if (!r.unsourced) sourced[r.zone] = true;
+      });
+      UNSOURCED_ZONES = {};
+      Object.keys(any).forEach(function (z) { UNSOURCED_ZONES[z] = !sourced[z]; });
+    }
+    return !!UNSOURCED_ZONES[zone];
+  }
+
   function renderGroup(zone, boss, rows) {
     var section = document.createElement("section");
     section.className = "boss-group";
@@ -2624,7 +2660,12 @@
                   '" alt="" onerror="this.style.display=\'none\'">' : "") +
       '<span class="boss-name">' + highlight(heading, state.q) + "</span>" +
       (boss === NO_BOSS ? "" :
-        '<span class="zone-tag">' + escapeHtml(zoneLabel(zone)) + "</span>");
+        '<span class="zone-tag">' + escapeHtml(zoneLabel(zone)) + "</span>") +
+      /* said once for a raid the guide never covered, instead of on all of its rows */
+      (zoneUnsourced(zone) ?
+        '<span class="zone-tag zone-tag--unsourced" data-tip="' +
+        escapeHtml("Not in the guide - zatar's videos covered Black Temple and Mount Hyjal only") + '">' +
+        escapeHtml(UNSOURCED_TAG) + "</span>" : "");
     section.appendChild(h);
 
     var scroll = document.createElement("div");

@@ -382,8 +382,12 @@ ok(Object.keys(blank.priorities).length === data.length,
    `New still holds all ${data.length} rows (${Object.keys(blank.priorities).length})`);
 ok(Object.values(blank.priorities).every((p) => p.length === 0), "with every priority empty");
 ok(blank.base === "blank", `and says it started from nothing (base: ${blank.base})`);
-ok(d2.querySelectorAll("tbody tr").length === data.length,
-   "the table still renders every item - only the priority column is empty");
+// every item OF THE OPEN PHASE. These were the same number while Phase 3 was the whole
+// dataset; Zul'Aman and Sunwell separated them.
+const inPhase = data.filter((r) =>
+  ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone)).length;
+ok(d2.querySelectorAll("tbody tr").length === inPhase,
+   `the table still renders every item of the phase - only the priority column is empty (${inPhase})`);
 ok(rowFor(d2, ITEM).querySelector(".prio-add"), "each row offers a + to start filling it in");
 
 // --- and it says why the filters find nobody ------------------------------------------------

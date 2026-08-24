@@ -804,6 +804,15 @@ tbody tr:last-child td { border-bottom: 0; }
 tbody tr:hover { background: var(--panel-head); }
 
 /* widths live on the <colgroup>; these only carry appearance */
+/* Said once on a group heading when the whole raid is outside the guide, instead of on
+   every row of it. Quieter than .zone-tag beside it: the zone is the heading's subject,
+   this is a caveat about it. */
+.zone-tag--unsourced {
+  color: var(--text-faint);
+  border-style: dashed;
+  cursor: help;
+}
+
 /* Marks a row the source guide never covered. Same quiet tag language as the
    zone-tag in a group heading, deliberately understated: it is a caveat about
    where the row came from, not a feature of the item. */

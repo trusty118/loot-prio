@@ -104,11 +104,20 @@ ok(rows().length === 195, "and the phase with the data shows all of it");
 
 // clicking the phase you are already on must not leave the page with no phase at all
 click(picked());
-ok(!!picked() && rows().length === 195, "clicking the current phase is a no-op");
+// Derived, not pinned: the dataset grows, and a literal here fails on every addition
+// while saying nothing about whether rendering works.
+const P3_ITEMS = data.filter((r) =>
+  ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone)).length;
+const P3_GROUPS = new Set(data
+  .filter((r) => ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone))
+  .map((r) => r.zone + "|" + r.boss)).size;
 
-ok(rows().length === 195, `renders all 195 rows (got ${rows().length})`);
-ok(groups().length === 17, `renders 17 boss groups (got ${groups().length})`);
-ok(doc.getElementById("count").textContent === "195 of 195 items", `count text: "${doc.getElementById("count").textContent}"`);
+ok(!!picked() && rows().length === P3_ITEMS, "clicking the current phase is a no-op");
+
+ok(rows().length === P3_ITEMS, `the landing phase renders all ${P3_ITEMS} of its rows (got ${rows().length})`);
+ok(groups().length === P3_GROUPS, `in ${P3_GROUPS} boss groups (got ${groups().length})`);
+ok(doc.getElementById("count").textContent === `${P3_ITEMS} of ${data.length} items`,
+   `count text: "${doc.getElementById("count").textContent}"`);
 
 const heads = headText();
 ok(/Mount Hyjal/.test(heads[0]) && /Trash/.test(heads[0]), `first group is Hyjal trash: "${heads[0]}"`);
@@ -135,7 +144,7 @@ ok(headEls.every((h) => {
   return kids.findIndex((k) => k.classList.contains("boss-name")) < tag;
 }), "boss name precedes the zone tag in every header");
 ok(!headEls.some((h) => /\d+\s+items?/.test(h.textContent)), "per-group item counts removed");
-ok(doc.getElementById("count").textContent.includes("of 195"), "the overall count in the toolbar stays");
+ok(doc.getElementById("count").textContent.includes(`of ${data.length}`), "the overall count in the toolbar stays");
 ok(headEls[0].querySelector(".boss-name").textContent.trim() === "Trash",
    `first header's boss-name is the boss, not the zone (got "${headEls[0].querySelector(".boss-name").textContent.trim()}")`);
 
@@ -775,8 +784,10 @@ ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
    "rows with no markers render no rings");
 
 // --- items the source guide never covered ---
-const unsourced = data.filter((r) => r.unsourced);
-ok(unsourced.length === 13, `13 records are marked unsourced (got ${unsourced.length})`);
+const P3_ZONES = ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"];
+const unsourced = data.filter((r) => r.unsourced && P3_ZONES.includes(r.zone));
+ok(unsourced.length === 13,
+   `13 of the guide's own phase are marked unsourced (got ${unsourced.length})`);
 ok(unsourced.every((r) => r.priority.length === 0),
    "an unsourced record never carries a priority - there is no call to record");
 ok(data.filter((r) => !r.unsourced).length === 182,
@@ -789,6 +800,21 @@ ok(tagged.every((t) => t.dataset.tip && /audit/i.test(t.dataset.tip)),
 const taggedRowNames = tagged.map((t) => t.closest("tr").children[0].textContent);
 ok(unsourced.every((r) => taggedRowNames.some((n) => n.includes(r.item))),
    "every unsourced item is one of the tagged rows");
+
+// A raid the guide never covered is a different case, and tagging all 109 of its rows
+// would be furniture rather than information - it is said once on the group heading.
+{
+  const before = doc.getElementById("count").textContent;
+  click(chipByText("#phase-chips", "Phase 5"));
+  const swpRows = [...doc.querySelectorAll("#results tr[data-id]")];
+  ok(swpRows.length > 0 && swpRows.every((tr) => !tr.querySelector(".item-tag")),
+     `no per-row tag in a raid that is unsourced end to end (${swpRows.length} rows)`);
+  const heads = [...doc.querySelectorAll(".zone-tag--unsourced")];
+  ok(heads.length > 0 && heads.every((h) => /guide/i.test(h.dataset.tip || "")),
+     "the group heading carries it instead, and says which raids he did cover");
+  click(doc.getElementById("reset"));
+  ok(doc.getElementById("count").textContent === before, "and reset returns to the guide's phase");
+}
 
 // the four Bands of the Eternal land in Hyjal trash, and say what they really are
 const bands = data.filter((r) => r.item.startsWith("Band of the Eternal"));
@@ -1132,8 +1158,18 @@ const phasesWithItems = ["P1", "P2", "P3", "P4", "P5"].filter((id) => {
                   P4: ["Zul'Aman"], P5: ["Sunwell Plateau"] }[id];
   return data.some((r) => zones.includes(r.zone));
 });
-ok(window.location.hash.includes("phase=" + phasesWithItems[phasesWithItems.length - 1]),
-   `the landing phase is the last one with items (${phasesWithItems.join(", ")})`);
+// The last phase carrying one of his CALLS, not merely one carrying items. Those were
+// the same thing until Zul'Aman and Sunwell arrived with no priorities at all, and
+// landing there would open the site on a page where the priority column is empty.
+const phasesWithCalls = phasesWithItems.filter((id) => {
+  const zones = { P1: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair"],
+                  P2: ["Serpentshrine Cavern", "Tempest Keep", "Crafted (Nether Vortex)"],
+                  P3: ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"],
+                  P4: ["Zul'Aman"], P5: ["Sunwell Plateau", "Crafted (Sunmote)"] }[id];
+  return data.some((r) => zones.includes(r.zone) && (r.priority || []).length);
+});
+ok(window.location.hash.includes("phase=" + phasesWithCalls[phasesWithCalls.length - 1]),
+   `the landing phase is the last one carrying his calls (${phasesWithCalls.join(", ")})`);
 ok(/phase=P\d/.test(window.location.hash), `the phase is always in the url: ${window.location.hash}`);
 
 // an unknown phase in a link falls back rather than emptying the table
@@ -1145,10 +1181,10 @@ ok(rows().length === 195 && window.location.hash.includes("phase=P3"),
 // a phase with no items says so in its own words - there is no "all phases" to escape
 // to now, so an empty phase is the whole page
 click(doc.getElementById("reset"));
-click(chipByText("#phase-chips", "Phase 4"));
-ok(rows().length === 0, "phase 4 has nothing in it yet");
+click(chipByText("#phase-chips", "Phase 1"));
+ok(rows().length === 0, "a phase with no items yet shows none");
 const emptyMsg = doc.querySelector(".empty").textContent;
-ok(/Phase 4/.test(emptyMsg) && /dataset/.test(emptyMsg),
+ok(/Phase 1/.test(emptyMsg) && /dataset/.test(emptyMsg),
    `and says that, rather than blaming the filters: "${emptyMsg}"`);
 ok(doc.querySelectorAll("#zone-chips .chip").length > 0,
    "its zones are still listed, so the phase is visibly a place with nothing in it");
