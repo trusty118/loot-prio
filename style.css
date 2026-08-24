@@ -352,11 +352,18 @@ a:hover { color: var(--gold-bright); }
 .chip--zone { width: 112px; height: 48px; }
 .chip--zone .art-label { padding: 3px 7px; font-size: 11px; color: var(--text); }
 
-/* A square item icon in a 112x48 tile. object-fit: cover scales it until the tile is
+/* A square item icon in a landscape box. object-fit: cover scales it until the box is
    full, which for a square in a wide box means cropping away everything but the middle
    band - and cover is already the smallest scale that fills, so there is no way to show
    more of it while still filling. Contain instead: the whole icon, centred, on the
-   black the tile already uses behind soft-alpha art. */
+   black these surfaces already use behind soft-alpha art.
+
+   Two surfaces wear this: the crafted zone tiles, pictured by their material, and the
+   Trash and Timed Chest chips in the boss rail. The rail's half is a separate rule
+   further down, because it has to sit after the cover rule it ties with on specificity -
+   and a selector list broken across the two of them left this one dangling into the next
+   comment, which silently merged it with .chip--emblem::after and cost the crafted tiles
+   their contain. */
 .chip--emblem .art-split img { object-fit: contain; }
 
 /* Nothing under it worth protecting, and the label needs the contrast more than the
@@ -473,6 +480,10 @@ a:hover { color: var(--gold-bright); }
    hovering the rail reads names as fast as reading pills did. Both survive in the
    aria-label, which is the only way a screen reader gets them. */
 #boss-chips {
+  /* .chips sets flex: 1 1 auto, which stretches the rail across the whole row however
+     few bosses it holds. width: max-content cannot stop a flex item growing - only
+     flex-grow: 0 can. */
+  flex: 0 0 auto;
   flex-wrap: nowrap;
   gap: 0;
   width: max-content;
@@ -510,17 +521,43 @@ a:hover { color: var(--gold-bright); }
   transition: filter .12s;
 }
 
+/* Trash and Timed Chest fly square item icons rather than 2:1 journal portraits, so
+   cover keeps only the middle band of them - the same problem the crafted zone tiles
+   have, and the same fix.
+
+   It has to sit AFTER the cover rule above. Both selectors are one id and two classes,
+   so they tie on specificity and source order decides; written beside the crafted-tile
+   rule further up the file, this one silently lost. */
+#boss-chips .chip--emblem .chip-icon { object-fit: contain; }
+
 #boss-chips .chip:hover { background: transparent; }
 #boss-chips .chip:hover .chip-icon { filter: var(--art-dim-hover); }
 
 /* Selected is a lit portrait over a gold wash with a gold edge under it, rather than
    the gold fill a pill uses - a fill would bury the art the rail exists to show. */
+/* Picked has to read like a picked phase or zone tile. The tiles say it with
+   border-color; the rail cannot, because its cells share borders and changing one would
+   shift the row.
+
+   It also cannot say it on the cell itself. An inset box-shadow and a background are
+   both painted UNDER the element's children, and the portrait fills the cell edge to
+   edge - so the first two attempts at this were invisible for that reason rather than
+   for want of contrast. It takes an overlay drawn on top of the image. */
 #boss-chips .chip[aria-pressed="true"] {
-  background: color-mix(in srgb, var(--gold) 12%, transparent);
-  box-shadow: inset 0 -3px 0 0 var(--gold);
   color: inherit;
   font-weight: inherit;
+  z-index: 1;                       /* the ring sits over its neighbours' borders */
 }
+
+#boss-chips .chip[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 2px var(--gold-bright);
+  background: color-mix(in srgb, var(--gold) 24%, transparent);
+  pointer-events: none;
+}
+
 
 #boss-chips .chip[aria-pressed="true"] .chip-icon { filter: none; }
 
@@ -865,6 +902,20 @@ tbody td { overflow-wrap: break-word; }
 }
 
 tbody tr:hover .class-icon--muted { opacity: .4; }
+
+/* Where an ordering came from, when it did not come from the guide. Deliberately the
+   quietest thing in the cell: the same micro-label treatment the LIST and SLOT fields
+   used, sitting inline before the icons rather than tagging the row. It is a statement
+   about the line, not a warning about it. */
+.prio-from {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  color: var(--text-faint);
+  margin-right: 7px;
+  vertical-align: middle;
+}
 
 /* Operators between the icons. A span rather than bare text so each one can
    carry a data-tip - the instant-tooltip mechanism picks up any [data-tip]. */

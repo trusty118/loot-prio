@@ -563,7 +563,7 @@ character. Whether a write is outstanding lives in a module-level `unsaved`, del
 ### The bar, and the list menu behind it
 
 ```
-TBC Loot Prio Lists              LIST [ My list      ▾ ]  [ Edit ]   [ @macka118 ▾ ]
+Loot Prio Lists                  LIST [ My list      ▾ ]  [ Edit ]   [ @macka118 ▾ ]
 ```
 
 **Two controls plus the account zone, in every state. Nothing hides, nothing unhides,
@@ -667,6 +667,24 @@ people who do not. `get_shared_list(token)` can only return a row that is both f
 `shared` and matched by an exact token, and the `lists` table itself stays unreadable to
 anonymous callers. `docs/sharing-setup.md` has the SQL and the two curl checks that prove it.
 
+**The recipient needs no account, and that is the point.** `supabaseReady()` checks
+`sb && supabaseConfigured()`, deliberately **not** `signedIn()`, and the SQL grants
+`execute` on `get_shared_list` to `anon` as well as `authenticated`. Most people who open
+a shared link will never sign in — it is the primary path through the feature, so
+`test/auth.mjs` exercises it on a window that never calls `_signIn()`. It also asserts the
+recipient side honours `Stop sharing`: a token whose row is no longer flagged opens
+nothing. Without that, the button would be a lie told only to the sharer.
+
+**Shared links depend on the Supabase project being awake.** The free tier pauses after
+~a week idle (see `docs/sharing-setup.md`), and a paused project fails as a transport
+error rather than an empty answer — which is why the two cases say different things.
+
+**A shared link that cannot be resolved says so; losing sign-in does not.** `whenSupabaseReady()`
+takes a failure callback for exactly this. The absent sign-in button already communicates
+"no accounts here", but a visitor who followed a link to one specific list would otherwise be
+looking at a different list with nothing to explain the swap. The page still renders behind
+the message: it costs the shared list, not the site.
+
 **Signed out → `#t=`, exactly as before.** There is nothing in a database to point at, and
 the site has to keep working without one. That link is frozen and size-capped, which is the
 honest trade.
@@ -691,12 +709,21 @@ is written to your store, and Make a copy is how you keep it.
 
 ### The editing gestures
 
-| Action | Pointer | Keyboard |
-|---|---|---|
-| Reorder | drag the icon along its line | ← → |
-| Remove | the × | Delete |
-| Operator | click the `>`, pick from the menu | Enter (steps) |
-| Add | `+`, then click an icon or drag one onto any line | `+`, type, Enter |
+**The editor is pointer-only, by decision (Aug 2026).**
+
+| Action | How |
+|---|---|
+| Reorder | drag the icon along its line |
+| Remove | the × |
+| Operator | click the `>`, pick from the menu |
+| Add | `+`, then click an icon — or drag one onto any line |
+
+Every action used to have a keyboard form as well. **Two consequences of dropping them, both
+worth knowing rather than rediscovering.** The editor is no longer keyboard operable, which is
+an accessibility regression and not merely fewer tests. And **reordering is now drag-only, so
+nothing automated covers it** — jsdom can dispatch a keydown but cannot drag, so a reordering
+regression will only ever be caught by hand at `localhost:8642`. Remove, operator and add all
+kept click paths and are still tested.
 
 Pointer events, **not HTML5 drag-and-drop** — these icons sit in a `table-layout: fixed`
 cell, where HTML5 drop targets are unreliable. A press only becomes a drag past
@@ -723,8 +750,8 @@ empty, which is every row of a list you have only just started.
 
 **The operator is picked, not cycled.** Clicking it opens `.prio-menu` — the five, worded from
 `OPERATORS[op].label`, with the current one marked — so `~=` is one click rather than four.
-`setOp(list, at, op)` is the primitive and `cycleOp()` delegates to it, because Enter on an
-entry still steps: there is nothing to aim at on a keyboard. The menu and the add popover share
+`setOp(list, at, op)` is the only primitive now; `cycleOp()` went with the keyboard, since
+stepping existed only because there is nothing to aim at on a keyboard. The menu and the add popover share
 `placeUnder()` for anchoring, so the two can't drift into two versions of the same arithmetic,
 and both close on Escape, on a click away, on leaving edit mode, and on opening another list.
 
@@ -754,9 +781,8 @@ opens anchored under that row's `+`, so saying so again was repeating what you c
 is on the dialog's `aria-label`, for the reader that cannot see where it opened. Weapon proficiency (no Priest with a polearm) is the obvious next
 layer of the same kind and is not built.
 
-**Every gesture has a keyboard form**, which is both the accessibility requirement and the
-only reason the editor is testable — jsdom can dispatch a keydown but cannot drag. Dragging
-itself is checked by hand at `localhost:8642`.
+**Escape still closes the popover and the menus**, and that is not a leftover: it closes all
+five overlays on this page, and is overlay behaviour rather than an editing gesture.
 
 **The repeat rule is enforced in the editor, not just the validator.** `allowsRepeat()` is
 the JS port of the rule in `check_priority.py`: a spec may appear twice only when the item
@@ -875,8 +901,8 @@ current if any of those change.
 - `test/bis-fallback.mjs` — a missing or malformed `bis.json` degrades gracefully.
 - `test/edit-mode.mjs` — that zatar's list is read-only and a list of your own is not; New,
   Make a copy, the dropdown, the name field, two-step Delete, and that an edit is in the store
-  with nothing pressed to put it there. Then the editor through its keyboard and click paths:
-  reorder, remove, operator cycling, the add popover and its search, the repeat rule, reset,
+  with nothing pressed to put it there. Then the editor through its click paths: remove via the
+  ×, the operator menu, the add popover and its search, the repeat rule, reset,
   and that `ALL` is never mutated. It also greps its own source — so a `window.prompt` can't
   creep back — and asserts **every icon carries `draggable="false"`**, which is the only part
   of the drag gesture jsdom can reach and the exact thing that was broken.
@@ -959,7 +985,7 @@ own full pass over the filtered pool (~36 passes per render).
 
 ## 8. Attribution (required, keep it prominent)
 
-**The banner is the title alone — "TBC Loot Prio Lists" — and carries no credit.** That was a
+**The banner is the title alone — currently "Loot Prio Lists" — and carries no credit.** That was a
 decision, not an oversight: the credit moves onto the lists themselves once those carry an
 author. Until that ships, **the footer is the only place on the page naming the source**, so
 §8 rests entirely on it. `test/smoke.mjs` asserts exactly that — banner clean, footer

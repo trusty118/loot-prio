@@ -86,9 +86,9 @@ function fakeSupabase() {
 /* `configured` decides whether the page believes it has a project to talk to. The keys
    are consts inside the IIFE, which is the right place for them - so the test edits the
    source rather than app.js growing a hook that exists only for tests. */
-function boot({ configured = false, sdk = null } = {}) {
+function boot({ configured = false, sdk = null, url = "" } = {}) {
   const dom = new JSDOM(fs.readFileSync(path.join(root, "index.html"), "utf8"),
-    { runScripts: "outside-only", url: "https://x.test/loot-prio/" });
+    { runScripts: "outside-only", url: "https://x.test/loot-prio/" + url });
   const { window } = dom;
   Object.assign(window, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
   window.fetch = (u) => {
@@ -357,6 +357,102 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   await settle();
   ok(/#t=/.test(copied), "signed out, Copy link still puts the whole list in the url");
   ok(!/[?&]s=/.test(copied), "because there is nothing in a database to point at");
+}
+
+// ---------------------------------------------------------------------------------
+// The recipient, signed out. This is the primary path through sharing - most people
+// who open a link will never have a Discord account - and it was the one path with no
+// test at all. Nothing below calls _signIn().
+// ---------------------------------------------------------------------------------
+const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
+{
+  const sdk = fakeSupabase();
+  sdk._rows.set("t_shared", {
+    id: "t_shared", name: "Trusty's raid list", created: "2026-08-23", v: 1, base: "zatar",
+    priorities: Object.fromEntries(data.map((r) => [r.id, r.item === BULWARK ? [{ spec: "Fury" }] : []])),
+    share_token: "tok_abc123", shared: true
+  });
+
+  const w = boot({ configured: true, sdk, url: "?s=tok_abc123" });
+  await settle();
+
+  ok($(w, "list-trigger-name").textContent === "Trusty's raid list",
+     `a ?s= link opens the list with no account at all (got "${$(w, "list-trigger-name").textContent}")`);
+  ok(w.document.querySelector(`tr[data-id="${BULWARK_ID}"] .spec-icon`),
+     "and it is the sharer's list that renders, not the guide's");
+
+  // reference, not a workspace
+  ok($(w, "edit-toggle").disabled, "it opens read-only - someone else's list is not yours to edit");
+  ok(!w.localStorage.getItem("lootprio.templates"),
+     "and nothing of theirs is written into this browser's store");
+  ok(shown(w, "sign-in"), "the recipient is still offered sign-in, but never required to");
+
+  $(w, "list-trigger").click();
+  const menu = w.document.querySelector(".list-menu");
+  ok(/following this list/i.test(menu.textContent),
+     "the menu says plainly that this is someone else's");
+  ok([...menu.querySelectorAll(".lm-item")].some((b) => b.textContent.trim() === "Make a copy"),
+     "and Make a copy is how you keep it");
+  ok(![...menu.querySelectorAll(".lm-item")].some((b) => /Delete|Rename/.test(b.textContent)),
+     "with no Rename or Delete, because it is not yours to change");
+}
+
+// A token that is not a token opens nothing, and says so rather than silently
+// showing the guide's list as though the link had been fine.
+{
+  const sdk = fakeSupabase();
+  const w = boot({ configured: true, sdk, url: "?s=not-a-real-token" });
+  await settle();
+  ok(!$(w, "list-trigger-name").textContent.includes("raid"), "an unknown token opens no list");
+  ok(/does not open a list/i.test($(w, "edit-msg").textContent),
+     `and says so rather than silently showing the guide's ("${$(w, "edit-msg").textContent}")`);
+  ok(w.document.querySelectorAll("#results tr[data-id]").length > 0,
+     "while the page itself still works - a dead link costs the list, not the site");
+}
+
+// Stop sharing has to be honoured on the recipient's side, not just hidden from the
+// sharer's menu. This is the assertion standing between that button and a link that
+// keeps working anyway.
+{
+  const sdk = fakeSupabase();
+  sdk._rows.set("t_off", {
+    id: "t_off", name: "Unshared list", created: "2026-08-23", v: 1, base: "zatar",
+    priorities: Object.fromEntries(data.map((r) => [r.id, []])),
+    share_token: "tok_off", shared: false
+  });
+  const w = boot({ configured: true, sdk, url: "?s=tok_off" });
+  await settle();
+  ok($(w, "list-trigger-name").textContent !== "Unshared list",
+     "a token whose list has been unshared opens nothing");
+  ok(/does not open a list/i.test($(w, "edit-msg").textContent),
+     "and the recipient is told, rather than left looking at the wrong list");
+}
+
+// A shared link that cannot be resolved has to say so. Losing sign-in is allowed to be
+// quiet - the absent button says "no accounts here" well enough - but a visitor who
+// followed a link to one specific list would otherwise be looking at a different one
+// with nothing at all to explain the swap.
+{
+  const w = boot({ configured: true, url: "?s=tok_abc123" });   // configured, but no SDK
+  await settle();
+  w.document.getElementById("supabase-sdk").dispatchEvent(new w.Event("error"));
+  await settle();
+
+  ok(/could not be opened/i.test($(w, "edit-msg").textContent),
+     `a link that cannot be resolved says so ("${$(w, "edit-msg").textContent}")`);
+  ok(w.document.querySelectorAll("#results tr[data-id]").length > 0,
+     "and the page still works behind the message - it costs the list, not the site");
+}
+
+// The same failure without a ?s= link stays silent, because there is nothing the reader
+// asked for and did not get.
+{
+  const w = boot({ configured: true });
+  await settle();
+  w.document.getElementById("supabase-sdk").dispatchEvent(new w.Event("error"));
+  await settle();
+  ok(!$(w, "edit-msg").textContent,
+     "with no shared link in play, a failed SDK says nothing - losing sign-in is not news");
 }
 
 console.log(fail.length ? `\n${fail.length} FAILURES` : "\nAll checks passed");

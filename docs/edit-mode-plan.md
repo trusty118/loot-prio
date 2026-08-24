@@ -91,7 +91,11 @@ All inline, in the row, only while one of your lists is open.
   was abandoned silently. With `img.draggable = false` in place the gesture is precise, so a
   grip would only have added a second thing to aim at in a narrow column. `onDrag()`,
   `makeGhost()`, `dropSlot()` and `markSlot()` stay; dropping outside the line returns the entry
-  home rather than deleting; arrow keys still reorder.
+  home rather than deleting.
+
+  > **Superseded, Aug 2026:** the editor is pointer-only. Arrow keys no longer reorder, and
+  > neither Delete nor Enter do anything on an icon. Reordering is therefore drag-only and
+  > untestable in jsdom.
 - **Remove — the `×` only.** One deliberate control, already there.
 - **Add — from the row.** A `+` at the end of each line opens a small popover anchored to that
   row: a search field and the class/spec icons grouped by class, built from `REG.classes` /

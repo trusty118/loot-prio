@@ -22,6 +22,11 @@ DOUBLE_SLOTS = {"Finger", "Trinket", "One-Hand", "Main-Hand", "Off-Hand"}
 
 ROLE_TAGS = {"Physical", "Caster", "Healer", "Tank", "Tier"}
 
+# Where an ordering came from, when it did not come from the guide. Absent is the
+# ordinary case and means zatar's own call - which is why it must stay absent on the
+# 182 rows that are his.
+PRIORITY_SOURCES = {"bis"}
+
 # Armour proficiency: a class wears its own type and everything below it. This is a
 # hard rule the editor enforces, so the data must never contradict it.
 ARMOUR_RANK = {"Cloth": 1, "Leather": 2, "Mail": 3, "Plate": 4}
@@ -74,9 +79,24 @@ def main():
                 f"{where}: empty priority and no notes - the guide's wording for this "
                 f"one was never recorded"
             )
-        # the marker means "the guide gave no call", so a call contradicts it
-        if rec.get("unsourced") and prio:
-            errors.append(f"{where}: marked unsourced but has a priority - drop the marker")
+        # The marker means "the guide gave no call", so a call contradicts it - unless
+        # the record says where the call came from instead. Zul'Aman and Sunwell are
+        # outside the guide entirely, and their rows are seeded from the BiS lists so the
+        # priority column is not blank on 173 items; `prioritySource` is what keeps that
+        # from reading as one of his orderings. An unsourced row with a priority and NO
+        # source is still an error, which is the case this was written for.
+        source = rec.get("prioritySource")
+        if rec.get("unsourced") and prio and not source:
+            errors.append(
+                f"{where}: marked unsourced but has a priority and no prioritySource - "
+                f"either drop the marker or say where the ordering came from")
+        if source and source not in PRIORITY_SOURCES:
+            errors.append(
+                f"{where}: prioritySource={source!r}, expected one of {sorted(PRIORITY_SOURCES)}")
+        if source and not rec.get("unsourced"):
+            errors.append(
+                f"{where}: has prioritySource={source!r} but is not marked unsourced - "
+                f"the guide's own calls carry no source, that is what the default means")
 
         seen = set()
         for i, e in enumerate(prio):

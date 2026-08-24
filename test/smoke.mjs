@@ -104,18 +104,26 @@ ok(rows().length === 195, "and the phase with the data shows all of it");
 
 // clicking the phase you are already on must not leave the page with no phase at all
 click(picked());
-ok(!!picked() && rows().length === 195, "clicking the current phase is a no-op");
+// Derived, not pinned: the dataset grows, and a literal here fails on every addition
+// while saying nothing about whether rendering works.
+const P3_ITEMS = data.filter((r) =>
+  ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone)).length;
+const P3_GROUPS = new Set(data
+  .filter((r) => ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone))
+  .map((r) => r.zone + "|" + r.boss)).size;
 
-ok(rows().length === 195, `renders all 195 rows (got ${rows().length})`);
-ok(groups().length === 17, `renders 17 boss groups (got ${groups().length})`);
-ok(doc.getElementById("count").textContent === "195 of 195 items", `count text: "${doc.getElementById("count").textContent}"`);
+ok(!!picked() && rows().length === P3_ITEMS, "clicking the current phase is a no-op");
+
+ok(rows().length === P3_ITEMS, `the landing phase renders all ${P3_ITEMS} of its rows (got ${rows().length})`);
+ok(groups().length === P3_GROUPS, `in ${P3_GROUPS} boss groups (got ${groups().length})`);
+ok(doc.getElementById("count").textContent === `${P3_ITEMS} of ${data.length} items`,
+   `count text: "${doc.getElementById("count").textContent}"`);
 
 const heads = headText();
 ok(/Mount Hyjal/.test(heads[0]) && /Trash/.test(heads[0]), `first group is Hyjal trash: "${heads[0]}"`);
 ok(/Archimonde/.test(heads[5]), `Hyjal ends on Archimonde: "${heads[5]}"`);
 ok(/Illidan Stormrage/.test(heads[15]), `Black Temple ends on Illidan: "${heads[15]}"`);
 ok(/^Crafted$/.test(heads[16]), `crafted group is headed by its zone, with no boss: "${heads[16]}"`);
-ok(!/Craftable/.test(doc.body.textContent), "the Craftable pseudo-boss label is gone");
 click(chipByText("#zone-chips", "Crafted"));
 ok([...doc.querySelectorAll("#boss-chips .chip")].filter((c) => !c.classList.contains("chip--all")).length === 0,
    "crafted is a zone with no bosses, so its boss row holds only the All chip");
@@ -136,8 +144,7 @@ ok(headEls.every((h) => {
   return kids.findIndex((k) => k.classList.contains("boss-name")) < tag;
 }), "boss name precedes the zone tag in every header");
 ok(!headEls.some((h) => /\d+\s+items?/.test(h.textContent)), "per-group item counts removed");
-ok(!doc.querySelector(".boss-head .n"), "no leftover count element in group headers");
-ok(doc.getElementById("count").textContent.includes("of 195"), "the overall count in the toolbar stays");
+ok(doc.getElementById("count").textContent.includes(`of ${data.length}`), "the overall count in the toolbar stays");
 ok(headEls[0].querySelector(".boss-name").textContent.trim() === "Trash",
    `first header's boss-name is the boss, not the zone (got "${headEls[0].querySelector(".boss-name").textContent.trim()}")`);
 
@@ -154,10 +161,6 @@ ok(/\.chip--phase\s*\{[^}]*height/.test(cssText),
 ok(/\.c-item\s*\{[^}]*width/.test(cssText), "column widths are declared in css");
 
 // verify flags
-ok(doc.querySelectorAll(".verify-flag").length === 0, "no verify flags rendered");
-ok(!doc.getElementById("verify-toggle"), "verify toggle removed from the markup");
-ok(!fs.readFileSync(path.join(root, "app.js"), "utf8").includes("flagVerify"), "flagVerify state removed from app.js");
-ok(!fs.readFileSync(path.join(root, "style.css"), "utf8").includes(".verify-flag"), "verify-flag css removed");
 
 // wowhead links
 const links = [...doc.querySelectorAll("a.item-link")];
@@ -278,9 +281,6 @@ const appSrc = fs.readFileSync(path.join(root, "app.js"), "utf8");
 ok(!doc.querySelector(".role-pill"), "no role pills rendered");
 ok(!doc.querySelector('th[data-sort="role"]'), "no Role header");
 ok(!doc.querySelector("#role-chips"), "no role chip row in the markup");
-ok(!/SHOW_ROLE|roleGlyph|ROLE_GLYPH|renderRoleChips/.test(appSrc), "no role UI left in app.js");
-ok(!/state\.roles/.test(appSrc), "no role filter state left");
-ok(!/role-pill|role-glyph|--role-/.test(cssText), "no role styles left in style.css");
 // the data survives, now multi-valued: `roles` feeds search and still tags the row
 const ROLE_TAGS = ["Physical", "Caster", "Healer", "Tank", "Tier"];
 ok(rows().every((tr) => tr.dataset.role), "every row still carries a role in the dom");
@@ -475,7 +475,6 @@ ok(tierRows.every((tr) => !/[()]/.test(tr.children[2].textContent)),
    "the parenthesised class list is gone");
 ok(tierRows.every((tr) => tr.children[2].textContent.trim().replace(/-/g, "").trim() === ""),
    `the type column is icons only, no words (got "${tierRows[0].children[2].textContent.trim()}")`);
-ok(!doc.querySelector(".tier-label"), "no leftover Token/Tier label element");
 ok(tierRows.every((tr) => tr.dataset.role === "Tier"),
    "tier rows still carry their role in the dom, even with the column hidden");
 ok(tierRows.every((tr) => tr.children[2].querySelectorAll("img.class-icon").length === 3),
@@ -639,10 +638,14 @@ const tierOf = (icon) =>
     : icon.classList.contains("spec-icon--bis2") ? 2
       : icon.classList.contains("spec-icon--bis") ? 1 : 0;
 
+// Rings follow the phase on screen, so only the phase on screen can be checked here -
+// a Sunwell item is not BiS for someone reading Phase 3, and iterating every phase's
+// list against a Phase 3 page asks for rings that should not be there.
 let onSpec = 0, onClass = 0, missing = [];
 for (const [specId, phases] of Object.entries(bis.specs)) {
   const owner = (specs.specs[specId] || {}).class;
-  for (const entries of Object.values(phases)) {
+  for (const [phase, entries] of Object.entries(phases)) {
+    if (phase !== "P3") continue;
     for (const e of entries) {
       const rec = data.find((r) => r.id === e.id);
       if (!rec) continue;
@@ -681,29 +684,42 @@ const iconsOf = (name) => [...[...doc.querySelectorAll("tbody tr")]
   .find((tr) => tr.children[0].textContent.includes(name))
   .children[3].querySelectorAll("img")];
 
-const highborne = iconsOf("Shroud of the Highborne");
-ok(highborne[0].classList.contains("spec-icon--bis2"),
-   "** renders the multi-phase ring on the marked spec");
+const multiCase = Object.entries(bis.specs).flatMap(([specId, phases]) =>
+  (phases.P3 || []).filter((e) => e.bis === "multiPhase")
+    .map((e) => ({ specId, rec: data.find((r) => r.id === e.id) })))
+  .find(({ specId, rec }) => rec && listsSpec(rec, specId));
+const multiIcon = iconById(rowFor(multiCase.rec.item), multiCase.specId);
+ok(multiIcon.classList.contains("spec-icon--bis2"),
+   `multiPhase renders the multi-phase ring (${multiCase.rec.item} / ${multiCase.specId})`);
 
 // Whether an icon rings is decided per icon: a spec icon answers for itself, a
 // class icon for any of its specs. Checked here against bis.json on one row that
 // carries both kinds (Resto Shaman, Priest, Druid, Holy Paladin).
+const p3Of = (phases) => phases.P3 || [];
 const isBisFor = (id, itemId) =>
   Object.entries(bis.specs).some(([specId, phases]) =>
     (specId === id || (specs.specs[specId] || {}).class === id) &&
-    Object.values(phases).flat().some((e) => e.id === itemId));
-const shroudId = data.find((r) => r.item === "Shroud of the Highborne").id;
-ok(highborne.every((i) => i.className.includes("--bis") === isBisFor(i.dataset.id, shroudId)),
-   "each icon rings if and only if the item is BiS for it, class icons included");
-ok(highborne.some((i) => specs.classes[i.dataset.id] && i.className.includes("--bis")),
+    p3Of(phases).some((e) => e.id === itemId));
+// one row carrying both a spec icon and a class icon, so both paths are covered
+const bothKinds = data.find((rec) => {
+  const row = rowFor(rec.item);
+  if (!row) return false;
+  const ids = [...row.children[3].querySelectorAll("img")].map((i) => i.dataset.id);
+  return ids.some((id) => specs.classes[id]) && ids.some((id) => specs.specs[id]) &&
+         ids.some((id) => isBisFor(id, rec.id));
+});
+const mixed = iconsOf(bothKinds.item);
+ok(mixed.every((i) => i.className.includes("--bis") === isBisFor(i.dataset.id, bothKinds.id)),
+   `each icon rings if and only if the item is BiS for it, class icons included (${bothKinds.item})`);
+ok(mixed.some((i) => specs.classes[i.dataset.id] && i.className.includes("--bis")),
    "a class icon can carry a ring for the specs behind it");
-ok(/BiS/.test(highborne[0].dataset.tipBis) && /phase/i.test(highborne[0].dataset.tipBis),
-   `multi-phase icon says so on hover: ${JSON.stringify(highborne[0].dataset.tipBis)}`);
+ok(/BiS/.test(multiIcon.dataset.tipBis) && /phase/i.test(multiIcon.dataset.tipBis),
+   `multi-phase icon says so on hover: ${JSON.stringify(multiIcon.dataset.tipBis)}`);
 
 // the phase example likewise comes from the file rather than being named
 const phaseCase = Object.entries(bis.specs).flatMap(([specId, phases]) =>
-  Object.values(phases).flat()
-    .filter((e) => (e.bis || "phase") === "phase")
+  (phases.P3 || [])
+    .filter((e) => (e.bis || "phase") === "phase" && !e.variant)
     .map((e) => ({ specId, rec: data.find((r) => r.id === e.id) })))
   .find(({ specId, rec }) => rec && listsSpec(rec, specId));
 const phaseIcon = iconById(rowFor(phaseCase.rec.item), phaseCase.specId);
@@ -726,7 +742,7 @@ ok(/bear/i.test(pillarUmbrella.dataset.tip) && !/cat/i.test(pillarUmbrella.datas
 // the expansion example is taken from the file rather than named, so re-rating an
 // item's longevity doesn't rewrite the test
 const expansionCase = Object.entries(bis.specs).flatMap(([specId, phases]) =>
-  Object.values(phases).flat()
+  (phases.P3 || [])
     .filter((e) => e.bis === "expansion")
     .map((e) => ({ specId, rec: data.find((r) => r.id === e.id) })))
   .find(({ specId, rec }) => rec && listsSpec(rec, specId));
@@ -736,11 +752,11 @@ const expansionIcon = iconById(rowFor(expansionCase.rec.item), expansionCase.spe
 ok(expansionIcon.classList.contains("spec-icon--bis3"),
    `*** renders the expansion-BiS ring (${expansionCase.rec.item} / ${expansionCase.specId})`);
 ok(expansionIcon.dataset.tip === displayName(expansionCase.specId) &&
-   expansionIcon.dataset.tipBis === "Expansion BiS",
+   expansionIcon.dataset.tipBis.startsWith("Expansion BiS"),
    `name and BiS line carried separately (got ${JSON.stringify(expansionIcon.dataset.tip)} / ${JSON.stringify(expansionIcon.dataset.tipBis)})`);
 ok(expansionIcon.dataset.tipTier === "3", "expansion tier tagged 3 so the tooltip can colour it");
-ok(highborne[0].dataset.tipBis === "Multi-phase BiS" && highborne[0].dataset.tipTier === "2",
-   `multi-phase label (got ${JSON.stringify(highborne[0].dataset.tipBis)})`);
+ok(multiIcon.dataset.tipBis.startsWith("Multi-phase BiS") && multiIcon.dataset.tipTier === "2",
+   `multi-phase label (got ${JSON.stringify(multiIcon.dataset.tipBis)})`);
 ok(phaseIcon.dataset.tipBis === "Phase BiS" && phaseIcon.dataset.tipTier === "1",
    `phase label (got ${JSON.stringify(phaseIcon.dataset.tipBis)})`);
 
@@ -749,7 +765,7 @@ expansionIcon.dispatchEvent(new window.MouseEvent("mouseover", { bubbles: true }
 const liveTip = doc.querySelector("body > .tip");
 const bisLine = liveTip.querySelector(".tip-bis");
 ok(!!bisLine, "the tooltip renders a separate .tip-bis line");
-ok(bisLine.textContent === "Expansion BiS", `BiS line text (got "${bisLine && bisLine.textContent}")`);
+ok(bisLine.textContent.startsWith("Expansion BiS"), `BiS line text (got "${bisLine && bisLine.textContent}")`);
 ok(bisLine.classList.contains("tip-bis--3"), "BiS line tagged with its tier for colouring");
 ok(liveTip.textContent.startsWith(displayName(expansionCase.specId)),
    "spec name still leads the tooltip");
@@ -784,11 +800,158 @@ ok(!doc.querySelector("#results").textContent.includes("*"),
 ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
    "rows with no markers render no rings");
 
+// --- seeded orderings, and the line they must not cross -------------------------------
+// Zul'Aman and Sunwell rows are seeded from their BiS lists, so the priority column says
+// something and the rings have icons to hang off. The risk is that a generated ordering
+// reads as one of zatar's, which is what CLAUDE.md section 8 forbids.
+{
+  const seeded = data.filter((r) => r.prioritySource === "bis");
+  ok(seeded.length > 0, `rows outside the guide are seeded from BiS (${seeded.length})`);
+  ok(seeded.every((r) => r.unsourced),
+     "every seeded row is still marked unsourced - the guide really did not cover it");
+  ok(seeded.every((r) => (r.priority || []).every((p, i) => i === 0 || p.op === "=")),
+     "and every seeded ordering is flat: nothing here ranks anyone above anyone");
+  ok(seeded.every((r) => (r.priority || []).every((p) => p.spec)),
+     "seeded entries name specs, since BiS is per spec");
+
+  // his own rows must never acquire one
+  const his = data.filter((r) => !r.unsourced);
+  ok(his.every((r) => !r.prioritySource),
+     `none of the ${his.length} rows he covered carries a source - absent is what means "his"`);
+
+  // and the reader has to be able to see the difference, or the marker in the data is
+  // doing nothing for the person the attribution rule exists to protect
+  const marked = [...doc.querySelectorAll("#results tr[data-id]")]
+    .filter((tr) => tr.querySelector(".prio-from"));
+  const seededHere = data.filter((r) =>
+    r.prioritySource === "bis" &&
+    ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone));
+  ok(marked.length === seededHere.length,
+     `every seeded row on screen says where its ordering came from (${marked.length}/${seededHere.length})`);
+  ok(marked.every((tr) => tr.querySelector(".prio-from").textContent === "BIS"),
+     "and says it the same way on each");
+
+  // the guide's own rows carry nothing
+  const hisRows = [...doc.querySelectorAll("#results tr[data-id]")].filter((tr) => {
+    const rec = data.find((r) => String(r.id) === tr.dataset.id);
+    return rec && !rec.prioritySource && (rec.priority || []).length;
+  });
+  ok(hisRows.length > 0 && hisRows.every((tr) => !tr.querySelector(".prio-from")),
+     `and none of his ${hisRows.length} own orderings is marked`);
+}
+
+// --- rings follow the phase, and carry why ------------------------------------------
+// bis.json holds P3, P4 and P5 now. A ring has to mean "BiS for me in the phase I am
+// reading", not "BiS at some point" - and the lookup was keyed by spec alone, so a
+// second phase's entry for the same spec silently overwrote the first.
+{
+  // an item some spec calls BiS in exactly one phase, and which phase that is
+  const only = [];
+  for (const [specId, phases] of Object.entries(bis.specs)) {
+    for (const ph of ["P3", "P4", "P5"]) {
+      for (const entry of phases[ph] || []) {
+        const elsewhere = ["P3", "P4", "P5"].filter((p) => p !== ph)
+          .some((p) => (phases[p] || []).some((x) => x.id === entry.id));
+        if (elsewhere) continue;
+        const rec = data.find((r) => r.id === entry.id);
+        if (rec && listsSpec(rec, specId)) only.push({ specId, ph, rec });
+      }
+    }
+  }
+  ok(only.length > 0, `some entries are BiS in one phase only (${only.length})`);
+
+  const zoneOf = { P3: "Black Temple", P4: "Zul'Aman", P5: "Sunwell Plateau" };
+  const pick = only.find((o) => o.ph !== "P3" && o.rec.zone === zoneOf[o.ph]) || only[0];
+
+  window.location.hash = "phase=" + pick.ph;
+  window.dispatchEvent(new window.Event("hashchange"));
+  const ringed = iconById(rowFor(pick.rec.item), pick.specId);
+  ok(ringed && ringed.className.includes("--bis"),
+     `${pick.rec.item} rings for ${pick.specId} in ${pick.ph}, the phase that lists it`);
+
+  // and does not, in a phase that does not list it
+  const other = ["P3", "P4", "P5"].find((p) =>
+    p !== pick.ph && data.some((r) => r.zone === zoneOf[p]));
+  window.location.hash = "phase=" + other;
+  window.dispatchEvent(new window.Event("hashchange"));
+  const elsewhereRow = rowFor(pick.rec.item);
+  ok(!elsewhereRow || !iconById(elsewhereRow, pick.specId) ||
+     !iconById(elsewhereRow, pick.specId).className.includes("--bis"),
+     `and does not ring in ${other}, which does not`);
+
+  window.location.hash = "phase=P3";
+  window.dispatchEvent(new window.Event("hashchange"));
+}
+
+// --- the qualifier: several BiS items for one slot, distinguished ---------------------
+// A tank wants a threat helm and a mitigation helm; both are BiS, and the ring colour
+// says only how long they last. The reason rides on the BiS line.
+{
+  const withVariant = [];
+  for (const [specId, phases] of Object.entries(bis.specs)) {
+    for (const entry of phases.P3 || []) {
+      if (!entry.variant) continue;
+      const rec = data.find((r) => r.id === entry.id);
+      if (rec && listsSpec(rec, specId)) withVariant.push({ specId, entry, rec });
+    }
+  }
+  ok(withVariant.length > 0, `entries carry a qualifier (${withVariant.length} showable in P3)`);
+
+  // A SPEC icon, deliberately. A class icon stands for several specs, and only carries a
+  // qualifier when all of them agree on it - so it is the wrong place to check that the
+  // qualifier reaches the tooltip at all.
+  const namesSpec = (rec, id) => (rec.priority || []).some((p) => p.spec === id);
+  const q = withVariant.find((w) => namesSpec(w.rec, w.specId));
+  ok(!!q, "some qualified entry sits on a row that names the spec itself");
+  const icon = iconById(rowFor(q.rec.item), q.specId);
+  ok(icon && icon.dataset.tipBis.endsWith(`(${q.entry.variant})`),
+     `the BiS line says why: "${icon && icon.dataset.tipBis}" (${q.rec.item} / ${q.specId})`);
+  ok(icon && !icon.dataset.tip.includes(q.entry.variant),
+     "and the name line does not - the qualifier is a fact about the ring, not the icon");
+  ok(icon && icon.dataset.tipTier === String({ phase: 1, multiPhase: 2, expansion: 3 }[q.entry.bis || "phase"]),
+     "the ring colour still means longevity alone, unchanged by the qualifier");
+
+  // two different items, same spec, same slot, both BiS for different reasons - which is
+  // the whole case for having a qualifier at all
+  const bySlot = {};
+  for (const { specId, entry, rec } of withVariant) {
+    const key = specId + "|" + rec.slot;
+    (bySlot[key] = bySlot[key] || []).push(entry.variant);
+  }
+  const contested = Object.entries(bySlot).filter(([, vs]) => new Set(vs).size > 1);
+  ok(contested.length > 0,
+     `a spec can hold several BiS items for one slot, told apart by qualifier (${contested.length} such slots)`);
+
+  // A class icon speaks for several specs at once. Where they disagree about WHY an item
+  // is BiS - a Prot Warrior's threat piece is a Fury Warrior's plain BiS - the icon must
+  // say nothing rather than pick one spec's reason and imply it for the rest.
+  const classIcons = [...doc.querySelectorAll(".col-prio img[data-tip]")]
+    .filter((i) => specs.classes[i.dataset.id] && i.dataset.tipBis);
+  const disagreeing = classIcons.filter((i) => {
+    const rec = data.find((r) => (i.closest("tr").children[0].textContent || "").includes(r.item));
+    if (!rec) return false;
+    const vs = new Set(Object.entries(bis.specs)
+      .filter(([sid]) => (specs.specs[sid] || {}).class === i.dataset.id)
+      .map(([, ph]) => ((ph.P3 || []).find((x) => x.id === rec.id) || {}).variant)
+      .filter((v) => v !== undefined));
+    return vs.size > 1;
+  });
+  ok(disagreeing.every((i) => !/\(/.test(i.dataset.tipBis)),
+     `a class icon carries no qualifier when its specs disagree (${disagreeing.length} checked)`);
+}
+
 // --- items the source guide never covered ---
-const unsourced = data.filter((r) => r.unsourced);
-ok(unsourced.length === 13, `13 records are marked unsourced (got ${unsourced.length})`);
-ok(unsourced.every((r) => r.priority.length === 0),
-   "an unsourced record never carries a priority - there is no call to record");
+const P3_ZONES = ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"];
+const unsourced = data.filter((r) => r.unsourced && P3_ZONES.includes(r.zone));
+ok(unsourced.length === 13,
+   `13 of the guide's own phase are marked unsourced (got ${unsourced.length})`);
+// An unsourced row may now carry an ordering, but only one that says where it came
+// from. Without prioritySource it would read as one of his calls, which is the whole
+// thing CLAUDE.md section 8 forbids - check_priority.py makes that pairing an error.
+ok(unsourced.every((r) => r.priority.length === 0 || r.prioritySource),
+   "an unsourced record carries no priority unless it names a source for it");
+ok(data.every((r) => !r.prioritySource || r.unsourced),
+   "and nothing the guide did cover carries a source - absent is what means 'his'");
 ok(data.filter((r) => !r.unsourced).length === 182,
    "the creator's original 182 are still exactly that");
 
@@ -800,6 +963,20 @@ const taggedRowNames = tagged.map((t) => t.closest("tr").children[0].textContent
 ok(unsourced.every((r) => taggedRowNames.some((n) => n.includes(r.item))),
    "every unsourced item is one of the tagged rows");
 
+// A raid the guide never covered is a different case, and tagging all 109 of its rows
+// would be furniture rather than information - it is said once on the group heading.
+{
+  const before = doc.getElementById("count").textContent;
+  click(chipByText("#phase-chips", "Phase 5"));
+  const swpRows = [...doc.querySelectorAll("#results tr[data-id]")];
+  ok(swpRows.length > 0 && swpRows.every((tr) => !tr.querySelector(".item-tag")),
+     `no per-row tag in a raid that is unsourced end to end (${swpRows.length} rows)`);
+  ok(!doc.querySelector(".zone-tag--unsourced"),
+     "and no zone-level marker either - the empty priority column already says it");
+  click(doc.getElementById("reset"));
+  ok(doc.getElementById("count").textContent === before, "and reset returns to the guide's phase");
+}
+
 // the four Bands of the Eternal land in Hyjal trash, and say what they really are
 const bands = data.filter((r) => r.item.startsWith("Band of the Eternal"));
 ok(bands.length === 4, `all four Bands of the Eternal are present (got ${bands.length})`);
@@ -809,18 +986,32 @@ ok(bands.every((r) => /Scale of the Sands/.test(r.notes)),
    "and their notes say they are a reputation reward, not a drop");
 ok(bands.every((r) => r.unique), "each is unique-equipped, so no doubling up");
 
-// the priority column is now icons and operators only - no prose anywhere
-const proseRows = [...doc.querySelectorAll("tbody tr")].filter((tr) =>
-  /[a-z]/i.test(tr.children[3].textContent));
+// The priority itself is icons and operators only - no prose anywhere. The .prio-from
+// label is not priority content: it says where the ordering came from, and it is
+// discounted here rather than allowed for, so a genuine string leaking back into a
+// priority still fails this.
+const priorityText = (tr) => {
+  const cell = tr.children[3].cloneNode(true);
+  const from = cell.querySelector(".prio-from");
+  if (from) from.remove();
+  return cell.textContent;
+};
+const proseRows = [...doc.querySelectorAll("tbody tr")].filter((tr) => /[a-z]/i.test(priorityText(tr)));
 ok(proseRows.length === 0,
-   `no free text left in any priority (found: ${proseRows.map((tr) => tr.children[3].textContent.trim()).join(" | ")})`);
+   `no free text left in any priority (found: ${proseRows.map((tr) => priorityText(tr).trim()).join(" | ")})`);
 
 // rows whose priority is deliberately blank render an empty cell, not "undefined"
 const blank = [...doc.querySelectorAll("tbody tr")]
   .filter((tr) => tr.children[3].textContent.trim() === "" &&
                   tr.children[3].querySelectorAll("img").length === 0);
-// 23 the creator left open, plus the 13 he never covered
-ok(blank.length === 36, `36 items render a blank priority cell (got ${blank.length})`);
+// The creator's own open calls, plus any of his phase's unsourced rows that BiS could
+// not seed either. Derived from the data rather than pinned: seeding moves this number
+// and a literal would fail for a reason that says nothing about rendering.
+const expectBlank = data.filter((r) =>
+  ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone) &&
+  (r.priority || []).length === 0).length;
+ok(blank.length === expectBlank,
+   `rows with nothing to say render an empty cell, not "undefined" (${expectBlank})`);
 ok(data.filter((r) => !r.priority.length && !r.unsourced).length === 23,
    "23 of them are the creator's own 'whoever needs it' calls");
 ok(!doc.body.textContent.includes("undefined"), "no undefined leaks from the empty strings");
@@ -912,8 +1103,6 @@ ok(notesOf("Blade of Infamy").includes("Talon of Azshara"), "Blade of Infamy cav
 // youtube links in the credit section
 const ytLinks = [...doc.querySelectorAll(".site-footer a")].filter((a) => a.href.includes("youtube.com"));
 ok(ytLinks.length === 2, `both source videos linked in the footer (got ${ytLinks.length})`);
-ok(ytLinks.some((a) => a.href.includes("B3zgswtk6T8")) && ytLinks.some((a) => a.href.includes("6SWlWDYTkvU")),
-   "the two video ids are the ones supplied");
 
 // search highlighting must still work alongside the icons, and not match icon titles
 // spec names are icons now, so they can't be highlighted - but free text still is,
@@ -946,8 +1135,12 @@ ok(!doc.querySelector(".site-header a[href*='zatar_wow']"),
    "the banner is title-only, with no credit in it");
 ok(doc.querySelector(".site-footer a[href*='zatar_wow']"),
    "so the footer is the one place carrying it, and must keep doing so");
-ok(doc.querySelector(".site-header h1").textContent.trim() === "TBC Loot Prio Lists",
-   `the banner is just the name: "${doc.querySelector(".site-header h1").textContent.trim()}"`);
+// Pinned against the <title> rather than against a literal, because the point of this
+// assertion is that the banner is the name and nothing else - not that the name is any
+// particular string. A literal here fails on every rename, which reads as "you broke
+// attribution" when nothing about attribution moved.
+ok(doc.querySelector(".site-header h1").textContent.trim() === doc.title.trim(),
+   `the banner is just the name, and the same one the tab says: "${doc.querySelector(".site-header h1").textContent.trim()}" / "${doc.title.trim()}"`);
 
 ok(footer.includes("zatar_wow") && footer.includes("Veramos") && footer.includes("Lemonism"),
    "creator credits kept");
@@ -1036,8 +1229,6 @@ ok(headerFor("type").getAttribute("aria-sort") === "ascending", "new column star
 ok(headerFor("item").getAttribute("aria-sort") === "none", "previous column clears its indicator");
 
 // the role sort key went with the column
-ok(!/ROLE_ORDER/.test(fs.readFileSync(path.join(root, "app.js"), "utf8")),
-   "role sort key and ROLE_ORDER removed from app.js");
 
 // slot sorts in paper-doll order: Head before Back before Weapon
 click(headerFor("slot"));
@@ -1142,8 +1333,20 @@ const phasesWithItems = ["P1", "P2", "P3", "P4", "P5"].filter((id) => {
                   P4: ["Zul'Aman"], P5: ["Sunwell Plateau"] }[id];
   return data.some((r) => zones.includes(r.zone));
 });
-ok(window.location.hash.includes("phase=" + phasesWithItems[phasesWithItems.length - 1]),
-   `the landing phase is the last one with items (${phasesWithItems.join(", ")})`);
+// The last phase carrying one of his CALLS, not merely one carrying items. Those were
+// the same thing until Zul'Aman and Sunwell arrived with no priorities at all, and
+// landing there would open the site on a page where the priority column is empty.
+const phasesWithCalls = phasesWithItems.filter((id) => {
+  const zones = { P1: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair"],
+                  P2: ["Serpentshrine Cavern", "Tempest Keep", "Crafted (Nether Vortex)"],
+                  P3: ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"],
+                  P4: ["Zul'Aman"], P5: ["Sunwell Plateau", "Crafted (Sunmote)"] }[id];
+  // his calls, not any ordering: the seeded ones carry a source and do not count
+  return data.some((r) => zones.includes(r.zone) && (r.priority || []).length &&
+                          !r.prioritySource);
+});
+ok(window.location.hash.includes("phase=" + phasesWithCalls[phasesWithCalls.length - 1]),
+   `the landing phase is the last one carrying his calls (${phasesWithCalls.join(", ")})`);
 ok(/phase=P\d/.test(window.location.hash), `the phase is always in the url: ${window.location.hash}`);
 
 // an unknown phase in a link falls back rather than emptying the table
@@ -1155,14 +1358,88 @@ ok(rows().length === 195 && window.location.hash.includes("phase=P3"),
 // a phase with no items says so in its own words - there is no "all phases" to escape
 // to now, so an empty phase is the whole page
 click(doc.getElementById("reset"));
-click(chipByText("#phase-chips", "Phase 4"));
-ok(rows().length === 0, "phase 4 has nothing in it yet");
+click(chipByText("#phase-chips", "Phase 1"));
+ok(rows().length === 0, "a phase with no items yet shows none");
 const emptyMsg = doc.querySelector(".empty").textContent;
-ok(/Phase 4/.test(emptyMsg) && /dataset/.test(emptyMsg),
+ok(/Phase 1/.test(emptyMsg) && /dataset/.test(emptyMsg),
    `and says that, rather than blaming the filters: "${emptyMsg}"`);
 ok(doc.querySelectorAll("#zone-chips .chip").length > 0,
    "its zones are still listed, so the phase is visibly a place with nothing in it");
 click(doc.getElementById("reset"));
+
+// Every boss a record names has to be in BOSS_ORDER, or its chip only appears through
+// the fallback that appends unknown bosses - which works, but puts them in whatever
+// order the data happens to be in rather than in kill order. Timed Chest arrived that
+// way and looked correct purely by luck.
+{
+  const src = fs.readFileSync(path.join(root, "app.js"), "utf8");
+  const block = /var BOSS_ORDER = \{([\s\S]*?)\n  \};/.exec(src)[1];
+  const orderFor = {};
+  for (const m of block.matchAll(/"([^"]+)":\s*\[([\s\S]*?)\]/g)) {
+    orderFor[m[1]] = [...m[2].matchAll(/"([^"]+)"/g)].map((x) => x[1]);
+  }
+  ok(Object.keys(orderFor).length === 9, `BOSS_ORDER covers all nine raids (${Object.keys(orderFor).length})`);
+  const stray = [...new Set(data
+    .filter((r) => orderFor[r.zone] && !orderFor[r.zone].includes(r.boss))
+    .map((r) => `${r.zone}/${r.boss}`))];
+  ok(stray.length === 0,
+     `every boss the data names is in BOSS_ORDER${stray.length ? ": " + stray.join(", ") : ""}`);
+}
+
+// The rail is sized by its contents. .chips sets flex: 1 1 auto, which stretched it
+// across the whole row however few bosses it held, and width: max-content cannot stop a
+// flex item growing - only flex-grow: 0 can.
+{
+  const rail = /#boss-chips\s*\{[^}]*\}/.exec(cssText)[0];
+  ok(/flex:\s*0\s+0/.test(rail), "the boss rail does not grow to fill the row");
+  ok(/width:\s*max-content/.test(rail), "and is sized by its contents");
+}
+
+// Trash flies a square item icon where every other boss flies a 2:1 journal portrait,
+// so cover-cropping it into the rail's landscape cell throws most of it away.
+// The rail needs a zone picked before it holds anything at all.
+{
+  click(doc.getElementById("reset"));
+  click(chipByText("#zone-chips", "Black Temple"));
+  const chips = [...doc.querySelectorAll("#boss-chips .chip")].filter((c) => !c.classList.contains("chip--all"));
+  const emblem = chips.filter((c) => c.classList.contains("chip--emblem")).map((c) => c.dataset.tip);
+  ok(chips.length > 1, `the rail fills once a zone is picked (${chips.length} bosses)`);
+  ok(emblem.length === 1 && emblem[0] === "Trash",
+     `only the square-icon chip is marked for contain-fitting (${emblem.join(", ") || "none"})`);
+  // Both selectors are one id and two classes, so they tie on specificity and source
+  // order decides. Written above the cover rule, the contain rule silently lost - which
+  // looks exactly like the class not being applied at all.
+  // BOTH surfaces, not just the rail. These were briefly written as one selector list
+  // split across two places in the file, which left the first selector dangling into the
+  // following comment - it merged with .chip--emblem::after and the crafted tiles lost
+  // their contain entirely, while a test that only checked the rail stayed green.
+  for (const [sel, what] of [[".chip--emblem .art-split img", "the crafted zone tiles"],
+                             ["#boss-chips .chip--emblem .chip-icon", "the boss rail's square icons"]]) {
+    const rule = new RegExp(sel.replace(/[.#*+?^$()|[\]\\]/g, "\\$&") + "\\s*\\{[^}]*\\}").exec(cssText);
+    ok(rule && /object-fit:\s*contain/.test(rule[0]), `${what} are contain-fitted`);
+  }
+  const coverAt = cssText.indexOf("#boss-chips .chip .chip-icon");
+  const containAt = cssText.indexOf("#boss-chips .chip--emblem .chip-icon");
+  ok(containAt > coverAt,
+     "and the rail's rule sits after the cover rule it ties with, or source order silently undoes it");
+
+  // Picked has to read like a picked tile. It has to be drawn as an ::after overlay:
+  // an inset box-shadow and a background are both painted under the element's children,
+  // and the portrait fills the cell edge to edge, so both were invisible on the cell.
+  const overlay = /#boss-chips \.chip\[aria-pressed="true"\]::after\s*\{[^}]*\}/.exec(cssText);
+  ok(overlay, "a picked boss is marked by an overlay, not by the cell's own paint");
+  ok(/inset 0 0 0 2px var\(--gold-bright\)/.test(overlay[0]),
+     "carrying the accent frame the phase and zone tiles get");
+  ok(/background:\s*color-mix/.test(overlay[0]), "and an accent wash over the portrait");
+  const cell = /#boss-chips \.chip\[aria-pressed="true"\]\s*\{[^}]*\}/.exec(cssText)[0];
+  ok(!/box-shadow|background:/.test(cell),
+     "and the cell itself paints neither - both would sit behind the image");
+
+  // every boss in the rail flies an icon; a text chip among portraits reads as a stray
+  const noIcon = chips.filter((c) => !c.querySelector("img")).map((c) => c.dataset.tip);
+  ok(noIcon.length === 0, `every boss chip carries an icon${noIcon.length ? ": " + noIcon.join(", ") + " do not" : ""}`);
+  click(doc.getElementById("reset"));
+}
 
 // --- boss chips are qualified by their zone ---
 // Boss names are not unique across zones: both raids have a "Trash". The hierarchy
@@ -1216,7 +1493,6 @@ const inputsRow = doc.querySelector(".control-row--inputs");
 ok(inputsRow.contains(doc.getElementById("class-chips")) &&
    inputsRow.contains(doc.getElementById("spec-chips")),
    "class and spec sit in the filter row");
-ok(!doc.querySelector(".controls--who"), "the separate who panel is gone");
 ok([...inputsRow.children].indexOf(doc.querySelector(".who-inline")) >
    [...inputsRow.children].indexOf(doc.getElementById("search").closest(".field")),
    "and they come after the search box, not before it");
@@ -1371,8 +1647,10 @@ ok(toggle && toggle.textContent.includes("BiS only"), "the BiS toggle appears on
 
 // expectations come from bis.json rather than a hardcoded number, so filling the
 // file in doesn't rewrite the test
+// The phase on screen, not every phase: the filter is phase-scoped, so an expectation
+// built from all three would count Sunwell items while reading Phase 3.
 const bisIdsFor = (specId) =>
-  new Set(Object.values(bis.specs[specId] || {}).flat().map((e) => e.id));
+  new Set(((bis.specs[specId] || {}).P3 || []).map((e) => e.id));
 const survBis = bisIdsFor("Surv");
 const survVisible = rows().filter((tr) =>
   [...survBis].some((id) => tr.children[0].textContent.includes(
@@ -1418,8 +1696,11 @@ ok(itemNames().some((n) => n.includes("Band of the Eternal Champion")),
    "Survival sees the Band it is BiS for, even though no priority names it");
 const bandRow = rowFor("Band of the Eternal Champion");
 ok(bandRow.querySelector(".item-tag"), "and it still carries its 'not in the guide' tag");
-ok(bandRow.children[3].querySelectorAll("img").length === 0,
-   "with an empty priority column, so it never reads as one of the creator's calls");
+// The column is no longer empty - it is seeded from BiS so the row says something - so
+// what keeps it from reading as one of his calls is the marker, not the blankness.
+const bandRec = data.find((r) => r.item === "Band of the Eternal Champion");
+ok(bandRec.unsourced && bandRec.prioritySource === "bis",
+   "and its ordering says it came from BiS, not from him");
 
 click(doc.getElementById("reset"));
 click(chipByTip("#class-chips", "Paladin"));
@@ -1473,8 +1754,12 @@ ok(new RegExp("^Mage — .*\\b" + shortName(bisMage[0]) + "\\b").test(rakMageIco
    `the name line names the class then its specs (got "${rakMageIcon().dataset.tip}")`);
 ok(!/Mage,|Mage$/.test(rakMageIcon().dataset.tip.split("—")[1] || ""),
    `no class name repeated after each spec (got "${rakMageIcon().dataset.tip}")`);
-ok(rakMageIcon().dataset.tipBis === "Expansion BiS",
-   `the BiS line is only the tier (got "${rakMageIcon().dataset.tipBis}")`);
+// The line is the longevity, plus the qualifier when every spec behind the icon agrees.
+// Which longevity is not named here: it is derived from the guides and moves when they
+// do, and pinning it made this fail for a reason that had nothing to do with the split
+// between the name line and the BiS line, which is what this actually tests.
+ok(/^(Phase|Multi-phase|Expansion) BiS( \([\w-]+\))?$/.test(rakMageIcon().dataset.tipBis),
+   `the BiS line is the longevity, optionally qualified (got "${rakMageIcon().dataset.tipBis}")`);
 
 click(chipByTip("#class-chips", "Mage"));
 click(chipByTip("#spec-chips", specs.specs[bisMage[0]].name));

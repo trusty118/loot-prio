@@ -85,6 +85,10 @@
       "Azgalor",
       "Archimonde"
     ],
+      /* The timed chests come last: they reward the whole run rather than mark a step
+         through it. Four chests folded into one source - three and four hold the same
+         five rings, and the question is which source, not which chest. No portrait
+         exists, which chip() handles by falling back to the name, as for the Chess Event. */
     "Zul'Aman": [
       "Trash",
       "Nalorakk",
@@ -92,7 +96,8 @@
       "Jan'alai",
       "Halazzi",
       "Hex Lord Malacrass",
-      "Zul'jin"
+      "Zul'jin",
+      "Timed Chest"
     ],
     "Sunwell Plateau": [
       "Trash",
@@ -144,11 +149,29 @@
      hardcoded, so it follows the content - when Zul'Aman items arrive, Phase 4 becomes
      the landing phase without anyone editing this. Needs ALL, so it cannot be a static
      initialiser; state.phase is set from it once the data is in. */
+  /* The last phase carrying one of zatar's CALLS, not merely one carrying items.
+     Those were the same thing while only Phase 3 had loot; adding Zul'Aman and Sunwell
+     separated them, and "last with items" would land every first-time visitor on
+     Sunwell - a page whose priority column is empty on every row, because he never
+     covered it. The site exists to show his calls, so it opens where they are. Every
+     other phase is still one click away. */
   function defaultPhase() {
     for (var i = PHASES.length - 1; i >= 0; i--) {
       var zones = PHASES[i].zones;
       for (var j = 0; j < ALL.length; j++) {
-        if (zones.indexOf(ALL[j].zone) !== -1) return PHASES[i].id;
+        /* His calls, not any priority. Zul'Aman and Sunwell rows carry a priority now
+           too - seeded from their BiS lists so the column is not blank - and counting
+           those would land the site on Sunwell again, which is the thing this rule
+           exists to prevent. prioritySource is what tells them apart. */
+        if (zones.indexOf(ALL[j].zone) !== -1 &&
+            (ALL[j].priority || []).length &&
+            !ALL[j].prioritySource) return PHASES[i].id;
+      }
+    }
+    /* no priorities at all - fall back to the last phase with any items */
+    for (var a = PHASES.length - 1; a >= 0; a--) {
+      for (var b = 0; b < ALL.length; b++) {
+        if (PHASES[a].zones.indexOf(ALL[b].zone) !== -1) return PHASES[a].id;
       }
     }
     return PHASES[0].id;
@@ -234,6 +257,9 @@
     "Azgalor": JOURNAL + "azgalor.png",
     "Archimonde": JOURNAL + "archimonde.png",
     "Trash": ICON + "inv_misc_bag_08.jpg",
+    /* No journal portrait exists for a chest, so it takes an item icon like Trash does
+       - a text chip in a rail of portraits reads as something that fell out of it. */
+    "Timed Chest": ICON + "inv_box_01.jpg",
     "—": ICON + "spell_shadow_demonictactics.jpg"
   };
 
@@ -1062,14 +1088,6 @@
     return normaliseList(out);
   }
 
-  /* Step to the next operator. The pointer picks from a menu instead - four clicks
-     to reach "~=" was one of the complaints - but stepping is the right thing on a
-     keyboard, where there is nothing to aim at. */
-  function cycleOp(list, at) {
-    if (at < 1 || at >= list.length) return list;
-    var next = (OP_LIST.indexOf(list[at].op) + 1) % OP_LIST.length;
-    return setOp(list, at, OP_LIST[next]);
-  }
 
   /* Applies an edited list to the active template. There is always one: editable
      cells are only rendered for a list of your own. */
@@ -1642,6 +1660,11 @@
            can't be turned off); the aria-label is what a screen reader gets, since a
            display:none label is out of the accessible name. */
         var c = chip(bossLabel(b), active, null, null, BOSS_ICON[b]);
+        /* Almost every boss flies a 2:1 Encounter Journal portrait, which cover-crops
+           into the rail's 76x44 cell exactly right. Trash flies a square item icon,
+           and cover-cropping a square into a landscape box throws away most of it -
+           the same problem the crafted zone tiles have, and the same fix. */
+        if ((BOSS_ICON[b] || "").indexOf(JOURNAL) !== 0) c.classList.add("chip--emblem");
         c.dataset.tip = bossLabel(b);
         c.setAttribute("aria-label", bossLabel(b) + ", " + n + " items");
         c.addEventListener("click", function () {
@@ -1785,9 +1808,14 @@
   }
 
   /* ---------- the editor ----------
-     Every action has a keyboard form as well as a pointer one. That is partly
-     accessibility and partly how the editor is testable at all: jsdom can dispatch a
-     keydown but cannot drag. */
+     Pointer only, by decision. Every action used to have a keyboard form as well, which
+     was partly accessibility and partly the only reason the editor was testable - jsdom
+     can dispatch a keydown but cannot drag.
+
+     Two consequences to know rather than rediscover. The editor is not keyboard
+     operable. And reordering is now drag-only, so **nothing automated covers it** -
+     remove, operator and add all still have click paths and stay tested, but a
+     reordering regression will only ever be caught by hand at localhost:8642. */
 
   var editMsg = "";        /* why the last edit was refused, shown under the toolbar */
 
@@ -1828,8 +1856,8 @@
 
   /* ---------- dragging ----------
      Pointer events rather than HTML5 drag-and-drop: these icons live in a
-     table-layout: fixed cell, where HTML5 DnD drop targets are unreliable. Every
-     gesture here has the keyboard equivalent above, which is what the tests drive. */
+     table-layout: fixed cell, where HTML5 DnD drop targets are unreliable. This is the
+     only way to reorder, so it is also the only part of the editor no test can reach. */
 
   var DRAG_SLOP = 4;      /* px of movement before a press counts as a drag, not a click */
 
@@ -1927,21 +1955,21 @@
   function editableIcon(rec, list, index, resolved, entry) {
     var wrap = document.createElement("span");
     wrap.className = "prio-edit";
-    wrap.tabIndex = 0;
     wrap.dataset.index = String(index);
     wrap.setAttribute("role", "listitem");
+    /* The position is still worth announcing - it is the whole meaning of the line -
+       but there are no keys left to name. */
     wrap.setAttribute("aria-label",
-      resolved.name + ", position " + (index + 1) + " of " + list.length +
-      ". Left and right arrows move, Delete removes, Enter changes the operator.");
+      resolved.name + ", position " + (index + 1) + " of " + list.length);
 
     var mark = bisMark(resolved, rec.id);
-    wrap.appendChild(specIcon(resolved, mark.tier, mark.specs));
+    wrap.appendChild(specIcon(resolved, mark.tier, mark.specs, mark.variant));
 
     var x = document.createElement("button");
     x.type = "button";
     x.className = "prio-x";
     x.textContent = "×";
-    x.tabIndex = -1;                    /* the wrapper is the tab stop, Delete removes */
+    x.tabIndex = -1;
     x.setAttribute("aria-hidden", "true");
     x.addEventListener("click", function (e) {
       e.stopPropagation();
@@ -1950,28 +1978,9 @@
     });
     wrap.appendChild(x);
 
-    wrap.addEventListener("keydown", function (e) {
-      var handled = true;
-      if (e.key === "ArrowLeft") applyEdit(rec, moveEntry(list, index, index - 1));
-      else if (e.key === "ArrowRight") applyEdit(rec, moveEntry(list, index, index + 1));
-      else if (e.key === "Delete" || e.key === "Backspace") applyEdit(rec, removeEntry(list, index));
-      else if (e.key === "Enter" || e.key === " ") applyEdit(rec, cycleOp(list, index));
-      else handled = false;
-      if (!handled) return;
-      e.preventDefault();
-      announce("");
-      update();
-      /* keep the moved icon focused so arrows can be held down */
-      var sel = "tr[data-id='" + rec.id + "'] .prio-edit";
-      var all = el.results.querySelectorAll(sel);
-      var want = e.key === "ArrowLeft" ? index - 1 : e.key === "ArrowRight" ? index + 1 : index;
-      var next = all[Math.max(0, Math.min(all.length - 1, want))];
-      if (next) next.focus();
-    });
-
     /* Drag to reorder. Dropping anywhere but on a line does nothing: taking an icon
-       off is the x and the Delete key, both deliberate. Dragging clear of the row
-       used to remove it, which fired by accident more often than on purpose. */
+       off is the x, deliberately. Dragging clear of the row used to remove it, which
+       fired by accident more often than on purpose. */
     onDrag(wrap, {
       over: function (ev) {
         var td = wrap.parentNode;
@@ -2195,7 +2204,7 @@
     var field = document.createElement("input");
     field.type = "search";
     field.className = "prio-pop-find";
-    field.placeholder = "Type to narrow, Enter to take the first";
+    field.placeholder = "Type to narrow";
     field.setAttribute("aria-label", "Find a class or spec");
     pop.appendChild(field);
 
@@ -2223,11 +2232,9 @@
     });
 
     field.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") { e.preventDefault(); closePop(); return; }
-      if (e.key !== "Enter") return;
-      e.preventDefault();
-      var first = pop.querySelector(".prio-pop-icon");
-      if (first) first.click();
+      /* Escape only. It closes all five overlays on this page and is not an editing
+         gesture - the editor itself is pointer-only. */
+      if (e.key === "Escape") { e.preventDefault(); closePop(); }
     });
 
     pop.addEventListener("keydown", function (e) {
@@ -2340,12 +2347,15 @@
     a.innerHTML = highlight(rec.item, state.q);
     td.appendChild(a);
 
-    /* These 13 rows are real T6 loot the source guide never mentions, found by
-       auditing the BiS guides against this dataset. They are worth listing, but
-       the whole point of the site is that the priorities are one person's calls -
-       so a row carrying none of his has to say so rather than read as an item he
-       had no opinion on. */
-    if (rec.unsourced) {
+    /* Real loot the source guide never mentions. Worth listing, but the whole point of
+       the site is that the priorities are one person's calls - so a row carrying none
+       of his has to say so rather than read as an item he had no opinion on.
+
+       Not on every row of a raid he never covered, though. In Black Temple and Hyjal
+       these are 13 exceptions among 182 and the tag is the information; in Zul'Aman and
+       Sunwell every row is one, and a tag on all of them is furniture. Those raids carry
+       no marker at all - the priority column is simply empty, which says it. */
+    if (rec.unsourced && !zoneUnsourced(rec.zone)) {
       var tag = document.createElement("span");
       tag.className = "item-tag";
       tag.textContent = UNSOURCED_TAG;
@@ -2377,19 +2387,26 @@
     if (at < text.length) parent.appendChild(document.createTextNode(text.slice(at)));
   }
 
-  /* How long an item stays best-in-slot, marked with trailing asterisks in the
-     priority string: * this phase, ** several phases, *** the whole expansion.
-     Colours borrow the item-quality ladder - epic purple, then gold, then
-     legendary orange - so "rarer" reads as "lasts longer". */
-  var BIS_TIERS = {
+  /* How long an item stays best-in-slot. Colours borrow WoW's item-quality ladder -
+     epic purple, then legendary orange, then artifact gold - so "rarer" reads as
+     "lasts longer".
+
+     Called LONGEVITY rather than "tier". "Tier" already means something else in this
+     dataset - the T6 armour tokens, `type: "Tier Token (Pal/Priest/Lock)"` - and using
+     one word for both has confused a reader at least once. */
+  var BIS_LONGEVITY = {
     1: { cls: "spec-icon--bis", label: "Phase BiS" },
     2: { cls: "spec-icon--bis2", label: "Multi-phase BiS" },
     3: { cls: "spec-icon--bis3", label: "Expansion BiS" }
   };
 
-  var BIS_TIER_BY_NAME = { "phase": 1, "multiPhase": 2, "expansion": 3 };
+  var BIS_LONGEVITY_BY_NAME = { "phase": 1, "multiPhase": 2, "expansion": 3 };
 
-  /* Flattened from data/bis.json: "Spec Name|itemId" -> tier number.
+  /* Flattened from data/bis.json: "P3|ProtWarr|32375" -> { longevity, variant }.
+
+     The phase is part of the key because bis.json holds all three now, and a spec can
+     list the same item in several of them - keyed by spec alone, the last phase read
+     silently overwrote every earlier one.
      BIS_BY_SPEC keeps the per-spec shape the file is written in, which is what a
      spec filter would read from later. */
   var BIS = {};
@@ -2405,19 +2422,34 @@
       Object.keys(phases).forEach(function (phase) {
         (phases[phase] || []).forEach(function (entry) {
           if (!entry || entry.id == null) return;
-          var tier = BIS_TIER_BY_NAME[entry.bis || "phase"] || 1;
-          BIS[specName + "|" + entry.id] = tier;
+          var longevity = BIS_LONGEVITY_BY_NAME[entry.bis || "phase"] || 1;
+          BIS[phase + "|" + specName + "|" + entry.id] =
+            { longevity: longevity, variant: entry.variant || "" };
           (BIS_BY_SPEC[specName] = BIS_BY_SPEC[specName] || []).push({
-            id: entry.id, item: entry.item, tier: tier, phase: phase
+            id: entry.id, item: entry.item, longevity: longevity,
+            variant: entry.variant || "", phase: phase
           });
         });
       });
     });
   }
 
-  /* keyed by the registry identifier (ProtWarr), matching data/bis.json */
+  /* Keyed by the registry identifier (ProtWarr), matching data/bis.json, and scoped to
+     the phase on screen: a Sunwell item is not BiS for someone reading Phase 3, and a
+     ring that ignored the phase would answer "BiS at some point" rather than "BiS for me
+     now" - which is the question a loot council is actually asking. */
+  function bisAt(specId, itemId) {
+    return BIS[state.phase + "|" + specId + "|" + itemId] || null;
+  }
+
+  function bisVariant(specId, itemId) {
+    var hit = bisAt(specId, itemId);
+    return hit ? hit.variant : "";
+  }
+
   function bisTier(specId, itemId) {
-    return BIS[specId + "|" + itemId] || 0;
+    var hit = bisAt(specId, itemId);
+    return hit ? hit.longevity : 0;
   }
 
   /* What ring an icon should carry, and who it is for. A spec icon answers for
@@ -2433,7 +2465,8 @@
     var stands_for = covers(resolved.id);
 
     if (REG.specs[resolved.id] && !stands_for.length) {
-      return { tier: bisTier(resolved.id, itemId), specs: [] };
+      return { tier: bisTier(resolved.id, itemId), specs: [],
+               variant: bisVariant(resolved.id, itemId) };
     }
 
     /* an umbrella spec aggregates like a class does, over the specs it covers */
@@ -2443,14 +2476,20 @@
       : pickedSpecs(resolved.id);
     if (picked.length) ids = picked;
 
-    var tier = 0, names = [];
+    /* A class icon can stand for two specs wanting the item for opposite reasons - a
+       Prot Warrior's threat piece is a Fury Warrior's plain BiS. Only carry a qualifier
+       up when every ringed spec behind the icon agrees on it; otherwise the icon would
+       claim one spec's reason on behalf of all of them. */
+    var tier = 0, names = [], variants = {};
     ids.forEach(function (id) {
       var t = bisTier(id, itemId);
       if (!t) return;
       if (t > tier) tier = t;
       names.push(shortSpecName(id, resolved.name));
+      variants[bisVariant(id, itemId)] = 1;
     });
-    return { tier: tier, specs: names };
+    var agreed = Object.keys(variants);
+    return { tier: tier, specs: names, variant: agreed.length === 1 ? agreed[0] : "" };
   }
 
   /* These names only ever appear on the icon they belong to, listing what it
@@ -2472,10 +2511,10 @@
     return spec.name;
   }
 
-  function specIcon(spec, bis, forSpecs) {
-    var tier = BIS_TIERS[bis];
+  function specIcon(spec, bis, forSpecs, variant) {
+    var lasts = BIS_LONGEVITY[bis];
     var img = document.createElement("img");
-    img.className = "spec-icon" + (tier ? " " + tier.cls : "");
+    img.className = "spec-icon" + (lasts ? " " + lasts.cls : "");
     /* which registry entry this icon is, so nothing downstream has to work it out
        from the display name - forms make that lossy ("Feral Druid (cat)") */
     if (spec.id) img.dataset.id = spec.id;
@@ -2486,14 +2525,20 @@
     var who = spec.name +
       (forSpecs && forSpecs.length ? " — " + forSpecs.join(", ") : "");
 
-    img.alt = who + (tier ? " (" + tier.label + ")" : "");
+    /* The qualifier says WHY it is BiS, where a spec has more than one answer for a
+       slot - a tank's threat helm and mitigation helm are both BiS. It rides on the
+       longevity line, not the name line: it is a fact about the ring rather than about
+       the icon, and the ring's colour keeps meaning longevity alone. */
+    var bisLine = lasts ? lasts.label + (variant ? " (" + variant + ")" : "") : "";
+
+    img.alt = who + (bisLine ? " (" + bisLine + ")" : "");
     /* data-tip rather than title: the native tooltip has a ~1s delay the browser
        won't let us change, and these need to read as fast as the item tooltips.
        The BiS line is carried separately so the tooltip can colour it to match
        the ring on the icon. */
     img.dataset.tip = who;
-    if (tier) {
-      img.dataset.tipBis = tier.label;
+    if (lasts) {
+      img.dataset.tipBis = bisLine;
       img.dataset.tipTier = String(bis);
     }
     img.setAttribute("aria-label", img.alt);
@@ -2521,6 +2566,23 @@
       return td;
     }
     if (!list || !list.length) return td;
+
+    /* An ordering that is not one of zatar's has to say so, or the site presents someone
+       else's work as his - which is what CLAUDE.md section 8 is about. Zul'Aman and
+       Sunwell rows are seeded from their BiS lists, and on screen a seeded line is
+       indistinguishable from a call he made.
+
+       One muted word, on the 96 rows it applies to. The last attempt at this put a tag
+       and a hover explanation on every group heading of two whole raids, which is
+       furniture; the fix was not to say nothing, it was to say it once, quietly, where
+       it is true. `prioritySource` already exists and is already validated, so this is
+       a render decision and not a data one. */
+    if (rec.prioritySource === "bis") {
+      var from = document.createElement("span");
+      from.className = "prio-from";
+      from.textContent = "BIS";
+      td.appendChild(from);
+    }
 
     /* With a class or spec selected, everyone else in the line dims, so where you
        stand reads at a glance. Same idea as class-icon--muted on tier tokens; the
@@ -2555,7 +2617,7 @@
         td.appendChild(raceIcon);
       }
       var mark = bisMark(resolved, rec.id);
-      var icon = specIcon(resolved, mark.tier, mark.specs);
+      var icon = specIcon(resolved, mark.tier, mark.specs, mark.variant);
       if (muted) icon.classList.add("spec-icon--muted");
       td.appendChild(icon);
     });
@@ -2631,6 +2693,26 @@
       state.dir = "asc";
     }
     update();
+  }
+
+  /* Whether a zone is outside the guide entirely, rather than merely having gaps in
+     it. Cached because it walks ALL and renderGroup runs once per boss group, and keyed
+     on ALL itself so the cache cannot outlive the data it came from - clearing it from
+     the loader instead is a different scope, and was silently a no-op. */
+  var UNSOURCED_ZONES = null, UNSOURCED_FOR = null;
+
+  function zoneUnsourced(zone) {
+    if (!UNSOURCED_ZONES || UNSOURCED_FOR !== ALL) {
+      UNSOURCED_FOR = ALL;
+      var any = {}, sourced = {};
+      ALL.forEach(function (r) {
+        any[r.zone] = true;
+        if (!r.unsourced) sourced[r.zone] = true;
+      });
+      UNSOURCED_ZONES = {};
+      Object.keys(any).forEach(function (z) { UNSOURCED_ZONES[z] = !sourced[z]; });
+    }
+    return !!UNSOURCED_ZONES[zone];
   }
 
   function renderGroup(zone, boss, rows) {
@@ -2909,20 +2991,30 @@
      appears at all, on exactly the machine where you would be testing it. Wait for the
      tag instead. Checking the global first matters: if the script has already run, its
      load event has already fired and will never fire again. */
-  function whenSupabaseReady(cb) {
+  function whenSupabaseReady(cb, onFail) {
     if (window.supabase) { cb(); return; }
     var tag = document.getElementById("supabase-sdk");
     /* absent by design - jsdom, or someone stripped the tag. Not an error. */
-    if (!tag) return;
-    tag.addEventListener("load", function () { if (window.supabase) cb(); });
+    if (!tag) { if (onFail) onFail(); return; }
+    tag.addEventListener("load", function () { if (window.supabase) cb(); else if (onFail) onFail(); });
     tag.addEventListener("error", function () {
       if (window.console) console.warn("sign-in unavailable: the Supabase SDK did not load");
+      if (onFail) onFail();
     });
   }
 
   function initAuth() {
     if (!supabaseConfigured()) return;
-    whenSupabaseReady(startAuth);
+    /* Losing sign-in is allowed to be quiet: the button is simply absent, which says
+       "no accounts here" well enough. A shared link is not, because the visitor asked
+       for one specific list and would otherwise be looking at a different one with
+       nothing to explain the swap. */
+    whenSupabaseReady(startAuth, function () {
+      if (hasShareToken()) {
+        announce("That shared link could not be opened right now - try again in a moment");
+        update();
+      }
+    });
   }
 
   function startAuth() {
@@ -3577,6 +3669,10 @@
   /* Someone else's list, fetched by token. The table itself stays unreadable to an
      anonymous caller - this goes through a security-definer function that can only
      return a row that is both flagged shared and matched by an exact token. */
+  function hasShareToken() {
+    return /[?&]s=([^&]+)/.test(location.search);
+  }
+
   function loadSharedByToken() {
     var m = /[?&]s=([^&]+)/.exec(location.search);
     if (!m) return false;
@@ -3584,7 +3680,11 @@
     sb.rpc("get_shared_list", { token: decodeURIComponent(m[1]) }).then(function (res) {
       var row = res.data && res.data.length ? res.data[0] : null;
       if (res.error || !row) {
-        announce(res.error ? "That shared link did not work: " + res.error.message
+        /* A paused project fails as a transport error rather than an empty answer, and
+           the raw message is a Postgres string nobody outside this repo can act on.
+           Empty means the token is wrong or the list was unshared - both of which are
+           the same thing to whoever is holding the link. */
+        announce(res.error ? "That shared link could not be opened right now - try again in a moment"
                            : "That link does not open a list any more");
         update();
         return;

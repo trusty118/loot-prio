@@ -1,4 +1,4 @@
-# TBC Loot Prio Lists — visual direction brief
+# Loot Prio Lists — visual direction brief
 
 ## What this is
 

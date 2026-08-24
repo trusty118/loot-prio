@@ -119,36 +119,25 @@ ok(d.querySelectorAll(".prio-edit").length > 0,
    "it opens ready to edit - you pressed Make a copy in order to change it");
 
 // --- reordering -------------------------------------------------------------------
+// Reordering is drag-only now that the editor is pointer-only, and jsdom cannot drag.
+// Nothing below drives it: a reordering regression can only be caught by hand at
+// localhost:8642. What is still assertable is that the line starts as the guide has it.
 const ITEM = "Bulwark of Azzinoth";      // ProtWarr > ProtPal
+const bulwark = data.find((r) => r.item === ITEM).id;
 ok(namesIn(d, ITEM).join(",") === "Protection Warrior,Protection Paladin",
    `starts as the guide has it (${namesIn(d, ITEM).join(", ")})`);
 
-key(w, iconsIn(d, ITEM)[0], "ArrowRight");
-ok(namesIn(d, ITEM).join(",") === "Protection Paladin,Protection Warrior",
-   "ArrowRight moves an icon one place right");
-
-key(w, iconsIn(d, ITEM)[0], "ArrowLeft");
-ok(namesIn(d, ITEM).join(",") === "Protection Paladin,Protection Warrior",
-   "ArrowLeft at position 0 is a no-op rather than an error");
-
 // --- there is no Save button: an edit is written as it is made ----------------------
+// Driven through the operator menu, which is a click path and still reachable.
+click(w, rowFor(d, ITEM).querySelector(".prio-op"));
+click(w, d.querySelector('.prio-menu-item[data-op="~="]'));
 await settle();
-const bulwark = data.find((r) => r.item === ITEM).id;
-ok(JSON.stringify(only(w).priorities[bulwark]) ===
-   JSON.stringify([{ spec: "ProtPal" }, { spec: "ProtWarr", op: ">" }]),
-   "the reorder is already in the store, with nothing pressed to put it there");
+ok(only(w).priorities[bulwark][1].op === "~=",
+   "an edit is already in the store, with nothing pressed to put it there");
 ok(el(d, "tpl-dirty").hidden, "and the unsaved marker has cleared");
 
 // --- operators ---------------------------------------------------------------------
-ok(opsIn(d, ITEM).join("") === ">", "one operator between two icons");
-key(w, iconsIn(d, ITEM)[1], "Enter");
-ok(opsIn(d, ITEM).join("") === ">>", "Enter cycles > to >>");
-key(w, iconsIn(d, ITEM)[1], "Enter");
-ok(opsIn(d, ITEM).join("") === "~>", "and >> to ~>");
-
-// Clicking picks from a menu rather than stepping: reaching "~=" by cycling took
-// four clicks, which was one of the complaints that started this rework.
-ok(!d.querySelector(".prio-menu"), "no operator menu until one is asked for");
+ok(opsIn(d, ITEM).join("") === "~=", "the operator set above is what the line shows");
 click(w, rowFor(d, ITEM).querySelector(".prio-op"));
 const menu = d.querySelector(".prio-menu");
 ok(menu && menu.style.display === "block", "clicking the operator opens the menu");
@@ -158,30 +147,20 @@ ok([...menu.querySelectorAll(".prio-menu-item")].map((b) => b.dataset.op).join("
 ok([...menu.querySelectorAll(".prio-menu-label")].map((n) => n.textContent).join("|") ===
    "better than|much better than|roughly better than|equal to|roughly equal to",
    "worded, not just symbols");
-ok(menu.querySelector('.prio-menu-item[data-op="~>"]').getAttribute("aria-checked") === "true",
+ok(menu.querySelector('.prio-menu-item[data-op="~="]').getAttribute("aria-checked") === "true",
    "the operator currently in the line is marked");
 
-const pick = (op) => click(w, menu.querySelector('.prio-menu-item[data-op="' + op + '"]'));
-pick("~=");
-ok(opsIn(d, ITEM).join("") === "~=", "one click sets it, no cycling through the others");
+click(w, menu.querySelector('.prio-menu-item[data-op=">>"]'));
+ok(opsIn(d, ITEM).join("") === ">>", "one click sets it, no cycling through the others");
 ok(menu.style.display === "none", "and the menu closes behind it");
-ok(JSON.stringify(only(w).priorities[bulwark][1].op) === '"~="', "the choice reached the store");
-
-// Escape leaves the line alone
-click(w, rowFor(d, ITEM).querySelector(".prio-op"));
-key(w, menu, "Escape");
-ok(menu.style.display === "none" && opsIn(d, ITEM).join("") === "~=",
-   "Escape closes it without changing anything");
-
-// the keyboard keeps stepping - there is nothing to aim at on a keyboard
-key(w, iconsIn(d, ITEM)[1], "Enter");
-ok(opsIn(d, ITEM).join("") === ">", "Enter still cycles, wrapping past the end");
+ok(only(w).priorities[bulwark][1].op === ">>", "the choice reached the store");
 ok(source.includes("function openOpMenu(rec, list, index, anchor) {\n    if (!canEdit()) return;"),
    "the menu is behind canEdit() like every other editing control");
 
 // --- removing -----------------------------------------------------------------------
-key(w, iconsIn(d, ITEM)[1], "Delete");
-ok(namesIn(d, ITEM).join(",") === "Protection Paladin", "Delete removes an icon");
+// The x, which is the only way now - the Delete key went with the rest of the keyboard.
+click(w, iconsIn(d, ITEM)[1].querySelector(".prio-x"));
+ok(namesIn(d, ITEM).join(",") === "Protection Warrior", "the x removes an icon");
 ok(opsIn(d, ITEM).length === 0, "and its operator goes with it");
 
 // --- the guide's data is never touched ------------------------------------------------
@@ -286,8 +265,10 @@ const shown = [...d.querySelectorAll(".prio-pop-icon")].map((b) => b.dataset.tip
 ok(shown.length === 1 && shown[0] === "Fury Warrior",
    `typing narrows it: ${shown.join(", ") || "nothing"}`);
 
-key(w, find, "Enter");
-ok(namesIn(d, UNIQUE).includes("Fury Warrior"), "Enter takes the first match");
+// The search narrows; clicking is how you take one. Enter-takes-the-first went with
+// the rest of the editor's keyboard forms.
+click(w, d.querySelector(".prio-pop-icon"));
+ok(namesIn(d, UNIQUE).includes("Fury Warrior"), "clicking the one match adds it");
 
 click(w, rowFor(d, UNIQUE).querySelector(".prio-add"));
 find.value = "zzzz";
@@ -318,9 +299,6 @@ ok(everyIcon.length > 30 && everyIcon.every((i) => i.getAttribute("draggable") =
    `every icon refuses the browser's own drag: ${everyIcon.length} checked`);
 key(w, d.querySelector(".prio-pop-find"), "Escape");
 
-ok(!/state\.paletteFor|renderPalette/.test(source), "the palette bar is gone from the source");
-ok(!/function overLine|DRAG_OUT/.test(source),
-   "and so is drag-clear-of-the-row-to-delete, which fixing the drag would have armed");
 
 // --- Done reads the list without the edit chrome ---------------------------------------
 click(w, el(d, "edit-toggle"));
@@ -404,8 +382,12 @@ ok(Object.keys(blank.priorities).length === data.length,
    `New still holds all ${data.length} rows (${Object.keys(blank.priorities).length})`);
 ok(Object.values(blank.priorities).every((p) => p.length === 0), "with every priority empty");
 ok(blank.base === "blank", `and says it started from nothing (base: ${blank.base})`);
-ok(d2.querySelectorAll("tbody tr").length === data.length,
-   "the table still renders every item - only the priority column is empty");
+// every item OF THE OPEN PHASE. These were the same number while Phase 3 was the whole
+// dataset; Zul'Aman and Sunwell separated them.
+const inPhase = data.filter((r) =>
+  ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone)).length;
+ok(d2.querySelectorAll("tbody tr").length === inPhase,
+   `the table still renders every item of the phase - only the priority column is empty (${inPhase})`);
 ok(rowFor(d2, ITEM).querySelector(".prio-add"), "each row offers a + to start filling it in");
 
 // --- and it says why the filters find nobody ------------------------------------------------

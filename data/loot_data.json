@@ -814,9 +814,14 @@
    "Physical",
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "FeralCat"
+   }
+  ],
   "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Black Temple",
@@ -1035,9 +1040,14 @@
    "Physical",
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
   "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Black Temple",
@@ -1239,9 +1249,46 @@
    "Physical",
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Fury"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
   "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Black Temple",
@@ -1254,9 +1301,14 @@
   "roles": [
    "Healer"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
   "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Black Temple",
@@ -1460,9 +1512,18 @@
   "roles": [
    "Healer"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
   "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Black Temple",
@@ -1476,9 +1537,14 @@
    "Caster",
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "ProtPal"
+   }
+  ],
   "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Black Temple",
@@ -1746,9 +1812,26 @@
    "Physical",
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "ProtWarr",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   }
+  ],
   "unsourced": true,
-  "notes": "Drops from Essence of Anger, the third phase of the encounter. Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Drops from Essence of Anger, the third phase of the encounter. Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Black Temple",
@@ -2972,10 +3055,43 @@
    "Physical",
    "Tank"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "BM"
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
   "unsourced": true,
   "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Mount Hyjal",
@@ -2988,10 +3104,27 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Ele"
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
   "unsourced": true,
   "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Mount Hyjal",
@@ -3004,10 +3137,15 @@
   "roles": [
    "Healer"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
   "unsourced": true,
   "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "unique": true
+  "unique": true,
+  "prioritySource": "bis"
  },
  {
   "zone": "Mount Hyjal",
@@ -3229,9 +3367,18 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   }
+  ],
   "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
+  "prioritySource": "bis"
  },
  {
   "zone": "Mount Hyjal",
@@ -4405,5 +4552,4190 @@
    }
   ],
   "notes": "CRAFTED (BoP). Not BiS; tier preferred. R Shaman: temp."
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Akil'zon",
+  "item": "Akil'zon's Talonblade",
+  "id": 33214,
+  "wowhead": "https://www.wowhead.com/tbc/item=33214",
+  "slot": "One-Hand",
+  "type": "Sword",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Akil'zon",
+  "item": "Bloodstained Elven Battlevest",
+  "id": 33215,
+  "wowhead": "https://www.wowhead.com/tbc/item=33215",
+  "slot": "Chest",
+  "type": "Plate",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Akil'zon",
+  "item": "Chestguard of Hidden Purpose",
+  "id": 33216,
+  "wowhead": "https://www.wowhead.com/tbc/item=33216",
+  "slot": "Chest",
+  "type": "Plate",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Akil'zon",
+  "item": "Brooch of Nature's Mercy",
+  "id": 33281,
+  "wowhead": "https://www.wowhead.com/tbc/item=33281",
+  "slot": "Neck",
+  "type": "Neck",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "RestoShaman",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Akil'zon",
+  "item": "Amani Punisher",
+  "id": 33283,
+  "wowhead": "https://www.wowhead.com/tbc/item=33283",
+  "slot": "Main-Hand",
+  "type": "Mace",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Akil'zon",
+  "item": "Mojo-mender's Mask",
+  "id": 33286,
+  "wowhead": "https://www.wowhead.com/tbc/item=33286",
+  "slot": "Head",
+  "type": "Mail",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Akil'zon",
+  "item": "Signet of Ancient Magics",
+  "id": 33293,
+  "wowhead": "https://www.wowhead.com/tbc/item=33293",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Nalorakk",
+  "item": "Jungle Stompers",
+  "id": 33191,
+  "wowhead": "https://www.wowhead.com/tbc/item=33191",
+  "slot": "Feet",
+  "type": "Plate",
+  "roles": [
+   "Tank"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Nalorakk",
+  "item": "Robes of Heavenly Purpose",
+  "id": 33203,
+  "wowhead": "https://www.wowhead.com/tbc/item=33203",
+  "slot": "Chest",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Nalorakk",
+  "item": "Pauldrons of Primal Fury",
+  "id": 33206,
+  "wowhead": "https://www.wowhead.com/tbc/item=33206",
+  "slot": "Shoulder",
+  "type": "Mail",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Nalorakk",
+  "item": "Bladeangel's Money Belt",
+  "id": 33211,
+  "wowhead": "https://www.wowhead.com/tbc/item=33211",
+  "slot": "Waist",
+  "type": "Leather",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Nalorakk",
+  "item": "Fury of the Ursine",
+  "id": 33285,
+  "wowhead": "https://www.wowhead.com/tbc/item=33285",
+  "slot": "Wrist",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Nalorakk",
+  "item": "Mask of Introspection",
+  "id": 33327,
+  "wowhead": "https://www.wowhead.com/tbc/item=33327",
+  "slot": "Head",
+  "type": "Plate",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Nalorakk",
+  "item": "Fury",
+  "id": 33640,
+  "wowhead": "https://www.wowhead.com/tbc/item=33640",
+  "slot": "Off-Hand",
+  "type": "Fist",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Jan'alai",
+  "item": "Bulwark of the Amani Empire",
+  "id": 33326,
+  "wowhead": "https://www.wowhead.com/tbc/item=33326",
+  "slot": "Off-Hand",
+  "type": "Shield",
+  "roles": [
+   "Tank"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Jan'alai",
+  "item": "Arrow-fall Chestguard",
+  "id": 33328,
+  "wowhead": "https://www.wowhead.com/tbc/item=33328",
+  "slot": "Chest",
+  "type": "Mail",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Jan'alai",
+  "item": "Shadowtooth Trollskin Cuirass",
+  "id": 33329,
+  "wowhead": "https://www.wowhead.com/tbc/item=33329",
+  "slot": "Chest",
+  "type": "Leather",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Jan'alai",
+  "item": "Enamelled Disc of Mojo",
+  "id": 33332,
+  "wowhead": "https://www.wowhead.com/tbc/item=33332",
+  "slot": "Off-Hand",
+  "type": "Shield",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Jan'alai",
+  "item": "Wub's Cursed Hexblade",
+  "id": 33354,
+  "wowhead": "https://www.wowhead.com/tbc/item=33354",
+  "slot": "Main-Hand",
+  "type": "Dagger",
+  "roles": [
+   "Healer",
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "BalanceDruid"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "unique": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Jan'alai",
+  "item": "Helm of Natural Regeneration",
+  "id": 33356,
+  "wowhead": "https://www.wowhead.com/tbc/item=33356",
+  "slot": "Head",
+  "type": "Leather",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Jan'alai",
+  "item": "Footpads of Madness",
+  "id": 33357,
+  "wowhead": "https://www.wowhead.com/tbc/item=33357",
+  "slot": "Feet",
+  "type": "Cloth",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Ele"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Halazzi",
+  "item": "The Savage's Choker",
+  "id": 33297,
+  "wowhead": "https://www.wowhead.com/tbc/item=33297",
+  "slot": "Neck",
+  "type": "Neck",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Halazzi",
+  "item": "Spaulders of the Advocate",
+  "id": 33299,
+  "wowhead": "https://www.wowhead.com/tbc/item=33299",
+  "slot": "Shoulder",
+  "type": "Plate",
+  "roles": [
+   "Healer",
+   "Caster",
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Halazzi",
+  "item": "Shoulderpads of Dancing Blades",
+  "id": 33300,
+  "wowhead": "https://www.wowhead.com/tbc/item=33300",
+  "slot": "Shoulder",
+  "type": "Leather",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Halazzi",
+  "item": "Skullshatter Warboots",
+  "id": 33303,
+  "wowhead": "https://www.wowhead.com/tbc/item=33303",
+  "slot": "Feet",
+  "type": "Plate",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Halazzi",
+  "item": "Robe of Departed Spirits",
+  "id": 33317,
+  "wowhead": "https://www.wowhead.com/tbc/item=33317",
+  "slot": "Chest",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Halazzi",
+  "item": "Shimmer-pelt Vest",
+  "id": 33322,
+  "wowhead": "https://www.wowhead.com/tbc/item=33322",
+  "slot": "Chest",
+  "type": "Leather",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Halazzi",
+  "item": "Avalanche Leggings",
+  "id": 33533,
+  "wowhead": "https://www.wowhead.com/tbc/item=33533",
+  "slot": "Legs",
+  "type": "Mail",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Hex Lord Malacrass",
+  "item": "Prowler's Strikeblade",
+  "id": 33298,
+  "wowhead": "https://www.wowhead.com/tbc/item=33298",
+  "slot": "One-Hand",
+  "type": "Dagger",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Hex Lord Malacrass",
+  "item": "Heartless",
+  "id": 33388,
+  "wowhead": "https://www.wowhead.com/tbc/item=33388",
+  "slot": "One-Hand",
+  "type": "Sword",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Hex Lord Malacrass",
+  "item": "Dagger of Bad Mojo",
+  "id": 33389,
+  "wowhead": "https://www.wowhead.com/tbc/item=33389",
+  "slot": "One-Hand",
+  "type": "Dagger",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "BM"
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Hex Lord Malacrass",
+  "item": "Battleworn Tuskguard",
+  "id": 33421,
+  "wowhead": "https://www.wowhead.com/tbc/item=33421",
+  "slot": "Head",
+  "type": "Plate",
+  "roles": [
+   "Tank"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Hex Lord Malacrass",
+  "item": "Coif of the Jungle Stalker",
+  "id": 33432,
+  "wowhead": "https://www.wowhead.com/tbc/item=33432",
+  "slot": "Head",
+  "type": "Mail",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Hex Lord Malacrass",
+  "item": "Girdle of Stromgarde's Hope",
+  "id": 33446,
+  "wowhead": "https://www.wowhead.com/tbc/item=33446",
+  "slot": "Waist",
+  "type": "Plate",
+  "roles": [
+   "Healer",
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Hex Lord Malacrass",
+  "item": "Hood of Hexing",
+  "id": 33453,
+  "wowhead": "https://www.wowhead.com/tbc/item=33453",
+  "slot": "Head",
+  "type": "Cloth",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Hex Lord Malacrass",
+  "item": "Hood of the Third Eye",
+  "id": 33463,
+  "wowhead": "https://www.wowhead.com/tbc/item=33463",
+  "slot": "Head",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Hex Lord Malacrass",
+  "item": "Hex Lord's Voodoo Pauldrons",
+  "id": 33464,
+  "wowhead": "https://www.wowhead.com/tbc/item=33464",
+  "slot": "Shoulder",
+  "type": "Mail",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Hex Lord Malacrass",
+  "item": "Staff of Primal Fury",
+  "id": 33465,
+  "wowhead": "https://www.wowhead.com/tbc/item=33465",
+  "slot": "Two-Hand",
+  "type": "Staff",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "FeralCat"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Hex Lord Malacrass",
+  "item": "Cloak of Ancient Rituals",
+  "id": 33592,
+  "wowhead": "https://www.wowhead.com/tbc/item=33592",
+  "slot": "Back",
+  "type": "Cloak",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Hex Lord Malacrass",
+  "item": "Tome of Diabolic Remedy",
+  "id": 33828,
+  "wowhead": "https://www.wowhead.com/tbc/item=33828",
+  "slot": "Trinket",
+  "type": "Trinket",
+  "roles": [
+   "Healer"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Hex Lord Malacrass",
+  "item": "Hex Shrunken Head",
+  "id": 33829,
+  "wowhead": "https://www.wowhead.com/tbc/item=33829",
+  "slot": "Trinket",
+  "type": "Trinket",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "unique": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Hex Lord Malacrass",
+  "item": "Tiny Voodoo Mask",
+  "id": 34029,
+  "wowhead": "https://www.wowhead.com/tbc/item=34029",
+  "slot": "Trinket",
+  "type": "Trinket",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Zul'jin",
+  "item": "Loop of Cursed Bones",
+  "id": 33466,
+  "wowhead": "https://www.wowhead.com/tbc/item=33466",
+  "slot": "Neck",
+  "type": "Neck",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Zul'jin",
+  "item": "Blade of Twisted Visions",
+  "id": 33467,
+  "wowhead": "https://www.wowhead.com/tbc/item=33467",
+  "slot": "Main-Hand",
+  "type": "Sword",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Zul'jin",
+  "item": "Dark Blessing",
+  "id": 33468,
+  "wowhead": "https://www.wowhead.com/tbc/item=33468",
+  "slot": "Main-Hand",
+  "type": "Mace",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Zul'jin",
+  "item": "Hauberk of the Empire's Champion",
+  "id": 33469,
+  "wowhead": "https://www.wowhead.com/tbc/item=33469",
+  "slot": "Chest",
+  "type": "Mail",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Zul'jin",
+  "item": "Two-toed Sandals",
+  "id": 33471,
+  "wowhead": "https://www.wowhead.com/tbc/item=33471",
+  "slot": "Feet",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "RestoShaman"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Zul'jin",
+  "item": "Chestguard of the Warlord",
+  "id": 33473,
+  "wowhead": "https://www.wowhead.com/tbc/item=33473",
+  "slot": "Chest",
+  "type": "Plate",
+  "roles": [
+   "Tank"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Zul'jin",
+  "item": "Ancient Amani Longbow",
+  "id": 33474,
+  "wowhead": "https://www.wowhead.com/tbc/item=33474",
+  "slot": "Ranged",
+  "type": "Bow",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Zul'jin",
+  "item": "Cleaver of the Unforgiving",
+  "id": 33476,
+  "wowhead": "https://www.wowhead.com/tbc/item=33476",
+  "slot": "One-Hand",
+  "type": "Axe",
+  "roles": [
+   "Tank"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Zul'jin",
+  "item": "Jin'rohk, The Great Apocalypse",
+  "id": 33478,
+  "wowhead": "https://www.wowhead.com/tbc/item=33478",
+  "slot": "Two-Hand",
+  "type": "Sword",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Zul'jin",
+  "item": "Grimgrin Faceguard",
+  "id": 33479,
+  "wowhead": "https://www.wowhead.com/tbc/item=33479",
+  "slot": "Head",
+  "type": "Leather",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Zul'jin",
+  "item": "Ancient Aqir Artifact",
+  "id": 33830,
+  "wowhead": "https://www.wowhead.com/tbc/item=33830",
+  "slot": "Trinket",
+  "type": "Trinket",
+  "roles": [
+   "Tank"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Zul'jin",
+  "item": "Berserker's Call",
+  "id": 33831,
+  "wowhead": "https://www.wowhead.com/tbc/item=33831",
+  "slot": "Trinket",
+  "type": "Trinket",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralBear",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "unique": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Cord of Braided Troll Hair",
+  "id": 33480,
+  "wowhead": "https://www.wowhead.com/tbc/item=33480",
+  "slot": "Waist",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Pauldrons of Stone Resolve",
+  "id": 33481,
+  "wowhead": "https://www.wowhead.com/tbc/item=33481",
+  "slot": "Shoulder",
+  "type": "Plate",
+  "roles": [
+   "Tank"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Life-step Belt",
+  "id": 33483,
+  "wowhead": "https://www.wowhead.com/tbc/item=33483",
+  "slot": "Waist",
+  "type": "Leather",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Mantle of Ill Intent",
+  "id": 33489,
+  "wowhead": "https://www.wowhead.com/tbc/item=33489",
+  "slot": "Shoulder",
+  "type": "Cloth",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Staff of Dark Mending",
+  "id": 33490,
+  "wowhead": "https://www.wowhead.com/tbc/item=33490",
+  "slot": "Two-Hand",
+  "type": "Staff",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Tuskbreaker",
+  "id": 33491,
+  "wowhead": "https://www.wowhead.com/tbc/item=33491",
+  "slot": "Ranged",
+  "type": "Gun",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Trollbane",
+  "id": 33492,
+  "wowhead": "https://www.wowhead.com/tbc/item=33492",
+  "slot": "Two-Hand",
+  "type": "Axe",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "BM"
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Umbral Shiv",
+  "id": 33493,
+  "wowhead": "https://www.wowhead.com/tbc/item=33493",
+  "slot": "One-Hand",
+  "type": "Dagger",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Amani Divining Staff",
+  "id": 33494,
+  "wowhead": "https://www.wowhead.com/tbc/item=33494",
+  "slot": "Two-Hand",
+  "type": "Staff",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Rage",
+  "id": 33495,
+  "wowhead": "https://www.wowhead.com/tbc/item=33495",
+  "slot": "Main-Hand",
+  "type": "Fist",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Signet of Primal Wrath",
+  "id": 33496,
+  "wowhead": "https://www.wowhead.com/tbc/item=33496",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "ProtWarr",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "unique": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Mana Attuned Band",
+  "id": 33497,
+  "wowhead": "https://www.wowhead.com/tbc/item=33497",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Arcane"
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "unique": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Signet of the Quiet Forest",
+  "id": 33498,
+  "wowhead": "https://www.wowhead.com/tbc/item=33498",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Signet of the Last Defender",
+  "id": 33499,
+  "wowhead": "https://www.wowhead.com/tbc/item=33499",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Tank"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Signet of Eternal Life",
+  "id": 33500,
+  "wowhead": "https://www.wowhead.com/tbc/item=33500",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Cloak of Fiends",
+  "id": 33590,
+  "wowhead": "https://www.wowhead.com/tbc/item=33590",
+  "slot": "Back",
+  "type": "Cloak",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Ret"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Shadowcaster's Drape",
+  "id": 33591,
+  "wowhead": "https://www.wowhead.com/tbc/item=33591",
+  "slot": "Back",
+  "type": "Cloak",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Shadowhunter's Treads",
+  "id": 33805,
+  "wowhead": "https://www.wowhead.com/tbc/item=33805",
+  "slot": "Feet",
+  "type": "Mail",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Zul'Aman",
+  "boss": "Timed Chest",
+  "item": "Elunite Imbued Leggings",
+  "id": 33971,
+  "wowhead": "https://www.wowhead.com/tbc/item=33971",
+  "slot": "Legs",
+  "type": "Leather",
+  "roles": [
+   "Healer",
+   "Caster",
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kalecgos",
+  "item": "Dragonscale-Encrusted Longblade",
+  "id": 34164,
+  "wowhead": "https://www.wowhead.com/tbc/item=34164",
+  "slot": "One-Hand",
+  "type": "Sword",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kalecgos",
+  "item": "Fang of Kalecgos",
+  "id": 34165,
+  "wowhead": "https://www.wowhead.com/tbc/item=34165",
+  "slot": "One-Hand",
+  "type": "Dagger",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Assass"
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kalecgos",
+  "item": "Band of Lucent Beams",
+  "id": 34166,
+  "wowhead": "https://www.wowhead.com/tbc/item=34166",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "unique": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kalecgos",
+  "item": "Legplates of the Holy Juggernaut",
+  "id": 34167,
+  "wowhead": "https://www.wowhead.com/tbc/item=34167",
+  "slot": "Legs",
+  "type": "Plate",
+  "roles": [
+   "Healer",
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kalecgos",
+  "item": "Starstalker Legguards",
+  "id": 34168,
+  "wowhead": "https://www.wowhead.com/tbc/item=34168",
+  "slot": "Legs",
+  "type": "Mail",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kalecgos",
+  "item": "Breeches of Natural Aggression",
+  "id": 34169,
+  "wowhead": "https://www.wowhead.com/tbc/item=34169",
+  "slot": "Legs",
+  "type": "Leather",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kalecgos",
+  "item": "Pantaloons of Calming Strife",
+  "id": 34170,
+  "wowhead": "https://www.wowhead.com/tbc/item=34170",
+  "slot": "Legs",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kalecgos",
+  "item": "Bracers of the Forgotten Conqueror",
+  "id": 34848,
+  "wowhead": "https://www.wowhead.com/tbc/item=34848",
+  "slot": "Wrist",
+  "type": "Tier Token (Pal/Priest/Lock)",
+  "roles": [
+   "Tier"
+  ],
+  "priority": [],
+  "notes": "Also drops from Eredar Twins.",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kalecgos",
+  "item": "Bracers of the Forgotten Protector",
+  "id": 34851,
+  "wowhead": "https://www.wowhead.com/tbc/item=34851",
+  "slot": "Wrist",
+  "type": "Tier Token (War/Hunter/Shaman)",
+  "roles": [
+   "Tier"
+  ],
+  "priority": [],
+  "notes": "Also drops from Eredar Twins.",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kalecgos",
+  "item": "Bracers of the Forgotten Vanquisher",
+  "id": 34852,
+  "wowhead": "https://www.wowhead.com/tbc/item=34852",
+  "slot": "Wrist",
+  "type": "Tier Token (Rogue/Mage/Druid)",
+  "roles": [
+   "Tier"
+  ],
+  "priority": [],
+  "notes": "Also drops from Eredar Twins.",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Brutallus",
+  "item": "Reign of Misery",
+  "id": 34176,
+  "wowhead": "https://www.wowhead.com/tbc/item=34176",
+  "slot": "Main-Hand",
+  "type": "Mace",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Brutallus",
+  "item": "Clutch of Demise",
+  "id": 34177,
+  "wowhead": "https://www.wowhead.com/tbc/item=34177",
+  "slot": "Neck",
+  "type": "Neck",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Brutallus",
+  "item": "Collar of the Pit Lord",
+  "id": 34178,
+  "wowhead": "https://www.wowhead.com/tbc/item=34178",
+  "slot": "Neck",
+  "type": "Neck",
+  "roles": [
+   "Tank",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "ProtPal",
+    "op": "="
+   },
+   {
+    "spec": "FeralBear",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Brutallus",
+  "item": "Heart of the Pit",
+  "id": 34179,
+  "wowhead": "https://www.wowhead.com/tbc/item=34179",
+  "slot": "Off-Hand",
+  "type": "+33 Stamina",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Brutallus",
+  "item": "Felfury Legplates",
+  "id": 34180,
+  "wowhead": "https://www.wowhead.com/tbc/item=34180",
+  "slot": "Legs",
+  "type": "Plate",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Brutallus",
+  "item": "Leggings of Calamity",
+  "id": 34181,
+  "wowhead": "https://www.wowhead.com/tbc/item=34181",
+  "slot": "Legs",
+  "type": "Cloth",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Brutallus",
+  "item": "Belt of the Forgotten Conqueror",
+  "id": 34853,
+  "wowhead": "https://www.wowhead.com/tbc/item=34853",
+  "slot": "Waist",
+  "type": "Tier Token (Pal/Priest/Lock)",
+  "roles": [
+   "Tier"
+  ],
+  "priority": [],
+  "notes": "Also drops from Eredar Twins.",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Brutallus",
+  "item": "Belt of the Forgotten Protector",
+  "id": 34854,
+  "wowhead": "https://www.wowhead.com/tbc/item=34854",
+  "slot": "Waist",
+  "type": "Tier Token (War/Hunter/Shaman)",
+  "roles": [
+   "Tier"
+  ],
+  "priority": [],
+  "notes": "Also drops from Eredar Twins.",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Brutallus",
+  "item": "Belt of the Forgotten Vanquisher",
+  "id": 34855,
+  "wowhead": "https://www.wowhead.com/tbc/item=34855",
+  "slot": "Waist",
+  "type": "Tier Token (Rogue/Mage/Druid)",
+  "roles": [
+   "Tier"
+  ],
+  "priority": [],
+  "notes": "Also drops from Eredar Twins.",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Felmyst",
+  "item": "Grand Magister's Staff of Torrents",
+  "id": 34182,
+  "wowhead": "https://www.wowhead.com/tbc/item=34182",
+  "slot": "Two-Hand",
+  "type": "Staff",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "AffliLock"
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Felmyst",
+  "item": "Brooch of the Highborne",
+  "id": 34184,
+  "wowhead": "https://www.wowhead.com/tbc/item=34184",
+  "slot": "Neck",
+  "type": "Neck",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Felmyst",
+  "item": "Sword Breaker's Bulwark",
+  "id": 34185,
+  "wowhead": "https://www.wowhead.com/tbc/item=34185",
+  "slot": "Off-Hand",
+  "type": "Shield",
+  "roles": [
+   "Tank"
+  ],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "ProtPal",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Felmyst",
+  "item": "Chain Links of the Tumultuous Storm",
+  "id": 34186,
+  "wowhead": "https://www.wowhead.com/tbc/item=34186",
+  "slot": "Legs",
+  "type": "Mail",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Ele"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Felmyst",
+  "item": "Leggings of the Immortal Night",
+  "id": 34188,
+  "wowhead": "https://www.wowhead.com/tbc/item=34188",
+  "slot": "Legs",
+  "type": "Leather",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Felmyst",
+  "item": "Borderland Fortress Grips",
+  "id": 34352,
+  "wowhead": "https://www.wowhead.com/tbc/item=34352",
+  "slot": "Hands",
+  "type": "Plate",
+  "roles": [
+   "Tank"
+  ],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "ProtPal",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Felmyst",
+  "item": "Boots of the Forgotten Conqueror",
+  "id": 34856,
+  "wowhead": "https://www.wowhead.com/tbc/item=34856",
+  "slot": "Feet",
+  "type": "Tier Token (Pal/Priest/Lock)",
+  "roles": [
+   "Tier"
+  ],
+  "priority": [],
+  "notes": "Also drops from Eredar Twins.",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Felmyst",
+  "item": "Boots of the Forgotten Protector",
+  "id": 34857,
+  "wowhead": "https://www.wowhead.com/tbc/item=34857",
+  "slot": "Feet",
+  "type": "Tier Token (War/Hunter/Shaman)",
+  "roles": [
+   "Tier"
+  ],
+  "priority": [],
+  "notes": "Also drops from Eredar Twins.",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Felmyst",
+  "item": "Boots of the Forgotten Vanquisher",
+  "id": 34858,
+  "wowhead": "https://www.wowhead.com/tbc/item=34858",
+  "slot": "Feet",
+  "type": "Tier Token (Rogue/Mage/Druid)",
+  "roles": [
+   "Tier"
+  ],
+  "priority": [],
+  "notes": "Also drops from Eredar Twins.",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Band of Ruinous Delight",
+  "id": 34189,
+  "wowhead": "https://www.wowhead.com/tbc/item=34189",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "unique": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Crimson Paragon's Cover",
+  "id": 34190,
+  "wowhead": "https://www.wowhead.com/tbc/item=34190",
+  "slot": "Back",
+  "type": "Cloak",
+  "roles": [
+   "Tank",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "ProtPal",
+    "op": "="
+   },
+   {
+    "spec": "FeralBear",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Pauldrons of Perseverance",
+  "id": 34192,
+  "wowhead": "https://www.wowhead.com/tbc/item=34192",
+  "slot": "Shoulder",
+  "type": "Plate",
+  "roles": [
+   "Tank"
+  ],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Spaulders of the Thalassian Savior",
+  "id": 34193,
+  "wowhead": "https://www.wowhead.com/tbc/item=34193",
+  "slot": "Shoulder",
+  "type": "Plate",
+  "roles": [
+   "Healer",
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Mantle of the Golden Forest",
+  "id": 34194,
+  "wowhead": "https://www.wowhead.com/tbc/item=34194",
+  "slot": "Shoulder",
+  "type": "Mail",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Shoulderpads of Vehemence",
+  "id": 34195,
+  "wowhead": "https://www.wowhead.com/tbc/item=34195",
+  "slot": "Shoulder",
+  "type": "Leather",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Ret"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Golden Bow of Quel'Thalas",
+  "id": 34196,
+  "wowhead": "https://www.wowhead.com/tbc/item=34196",
+  "slot": "Ranged",
+  "type": "Bow",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Shiv of Exsanguination",
+  "id": 34197,
+  "wowhead": "https://www.wowhead.com/tbc/item=34197",
+  "slot": "One-Hand",
+  "type": "Dagger",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Stanchion of Primal Instinct",
+  "id": 34198,
+  "wowhead": "https://www.wowhead.com/tbc/item=34198",
+  "slot": "Two-Hand",
+  "type": "Staff",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "FeralBear"
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Archon's Gavel",
+  "id": 34199,
+  "wowhead": "https://www.wowhead.com/tbc/item=34199",
+  "slot": "Main-Hand",
+  "type": "Mace",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Shawl of Wonderment",
+  "id": 34202,
+  "wowhead": "https://www.wowhead.com/tbc/item=34202",
+  "slot": "Shoulder",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Grip of Mannoroth",
+  "id": 34203,
+  "wowhead": "https://www.wowhead.com/tbc/item=34203",
+  "slot": "Off-Hand",
+  "type": "Fist",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Amulet of Unfettered Magics",
+  "id": 34204,
+  "wowhead": "https://www.wowhead.com/tbc/item=34204",
+  "slot": "Neck",
+  "type": "Neck",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Shroud of Redeemed Souls",
+  "id": 34205,
+  "wowhead": "https://www.wowhead.com/tbc/item=34205",
+  "slot": "Back",
+  "type": "Cloak",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Book of Highborne Hymns",
+  "id": 34206,
+  "wowhead": "https://www.wowhead.com/tbc/item=34206",
+  "slot": "Off-Hand",
+  "type": "+33 Stamina",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "Disc",
+    "op": "="
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoShaman",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Equilibrium Epaulets",
+  "id": 34208,
+  "wowhead": "https://www.wowhead.com/tbc/item=34208",
+  "slot": "Shoulder",
+  "type": "Mail",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Spaulders of Reclamation",
+  "id": 34209,
+  "wowhead": "https://www.wowhead.com/tbc/item=34209",
+  "slot": "Shoulder",
+  "type": "Leather",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Amice of the Convoker",
+  "id": 34210,
+  "wowhead": "https://www.wowhead.com/tbc/item=34210",
+  "slot": "Shoulder",
+  "type": "Cloth",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Sin'dorei Pendant of Conquest",
+  "id": 35290,
+  "wowhead": "https://www.wowhead.com/tbc/item=35290",
+  "slot": "Neck",
+  "type": "Neck",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Sin'dorei Pendant of Salvation",
+  "id": 35291,
+  "wowhead": "https://www.wowhead.com/tbc/item=35291",
+  "slot": "Neck",
+  "type": "Neck",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Eredar Twins",
+  "item": "Sin'dorei Pendant of Triumph",
+  "id": 35292,
+  "wowhead": "https://www.wowhead.com/tbc/item=35292",
+  "slot": "Neck",
+  "type": "Neck",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Harness of Carnal Instinct",
+  "id": 34211,
+  "wowhead": "https://www.wowhead.com/tbc/item=34211",
+  "slot": "Chest",
+  "type": "Leather",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "FeralBear"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Sunglow Vest",
+  "id": 34212,
+  "wowhead": "https://www.wowhead.com/tbc/item=34212",
+  "slot": "Chest",
+  "type": "Leather",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Ring of Hardened Resolve",
+  "id": 34213,
+  "wowhead": "https://www.wowhead.com/tbc/item=34213",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Tank",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "spec": "FeralBear",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "unique": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Muramasa",
+  "id": 34214,
+  "wowhead": "https://www.wowhead.com/tbc/item=34214",
+  "slot": "One-Hand",
+  "type": "Sword",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Warharness of Reckless Fury",
+  "id": 34215,
+  "wowhead": "https://www.wowhead.com/tbc/item=34215",
+  "slot": "Chest",
+  "type": "Plate",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Heroic Judicator's Chestguard",
+  "id": 34216,
+  "wowhead": "https://www.wowhead.com/tbc/item=34216",
+  "slot": "Chest",
+  "type": "Plate",
+  "roles": [
+   "Tank",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "ProtPal"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Vicious Hawkstrider Hauberk",
+  "id": 34228,
+  "wowhead": "https://www.wowhead.com/tbc/item=34228",
+  "slot": "Chest",
+  "type": "Mail",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Garments of Serene Shores",
+  "id": 34229,
+  "wowhead": "https://www.wowhead.com/tbc/item=34229",
+  "slot": "Chest",
+  "type": "Mail",
+  "roles": [
+   "Healer",
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Ring of Omnipotence",
+  "id": 34230,
+  "wowhead": "https://www.wowhead.com/tbc/item=34230",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "unique": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Aegis of Angelic Fortune",
+  "id": 34231,
+  "wowhead": "https://www.wowhead.com/tbc/item=34231",
+  "slot": "Off-Hand",
+  "type": "Shield",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Fel Conquerer Raiments",
+  "id": 34232,
+  "wowhead": "https://www.wowhead.com/tbc/item=34232",
+  "slot": "Chest",
+  "type": "Cloth",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Robes of Faltered Light",
+  "id": 34233,
+  "wowhead": "https://www.wowhead.com/tbc/item=34233",
+  "slot": "Chest",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Shadowed Gauntlets of Paroxysm",
+  "id": 34234,
+  "wowhead": "https://www.wowhead.com/tbc/item=34234",
+  "slot": "Hands",
+  "type": "Leather",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Gauntlets of the Soothed Soul",
+  "id": 34240,
+  "wowhead": "https://www.wowhead.com/tbc/item=34240",
+  "slot": "Hands",
+  "type": "Plate",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Blackened Naaru Sliver",
+  "id": 34427,
+  "wowhead": "https://www.wowhead.com/tbc/item=34427",
+  "slot": "Trinket",
+  "type": "Trinket",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "unique": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Steely Naaru Sliver",
+  "id": 34428,
+  "wowhead": "https://www.wowhead.com/tbc/item=34428",
+  "slot": "Trinket",
+  "type": "Trinket",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Shifting Naaru Sliver",
+  "id": 34429,
+  "wowhead": "https://www.wowhead.com/tbc/item=34429",
+  "slot": "Trinket",
+  "type": "Trinket",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "unique": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Glimmering Naaru Sliver",
+  "id": 34430,
+  "wowhead": "https://www.wowhead.com/tbc/item=34430",
+  "slot": "Trinket",
+  "type": "Trinket",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "unique": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Sin'dorei Band of Dominance",
+  "id": 35282,
+  "wowhead": "https://www.wowhead.com/tbc/item=35282",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Sin'dorei Band of Salvation",
+  "id": 35283,
+  "wowhead": "https://www.wowhead.com/tbc/item=35283",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "M'uru",
+  "item": "Sin'dorei Band of Triumph",
+  "id": 35284,
+  "wowhead": "https://www.wowhead.com/tbc/item=35284",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true,
+  "unique": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Cloak of Unforgivable Sin",
+  "id": 34241,
+  "wowhead": "https://www.wowhead.com/tbc/item=34241",
+  "slot": "Back",
+  "type": "Cloak",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Tattered Cape of Antonidas",
+  "id": 34242,
+  "wowhead": "https://www.wowhead.com/tbc/item=34242",
+  "slot": "Back",
+  "type": "Cloak",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "RestoShaman",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Helm of Burning Righteousness",
+  "id": 34243,
+  "wowhead": "https://www.wowhead.com/tbc/item=34243",
+  "slot": "Head",
+  "type": "Plate",
+  "roles": [
+   "Healer",
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Duplicitous Guise",
+  "id": 34244,
+  "wowhead": "https://www.wowhead.com/tbc/item=34244",
+  "slot": "Head",
+  "type": "Leather",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Ret"
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "FeralCat",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Cover of Ursol the Wise",
+  "id": 34245,
+  "wowhead": "https://www.wowhead.com/tbc/item=34245",
+  "slot": "Head",
+  "type": "Leather",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Apolyon, the Soul-Render",
+  "id": 34247,
+  "wowhead": "https://www.wowhead.com/tbc/item=34247",
+  "slot": "Two-Hand",
+  "type": "Sword",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Crux of the Apocalypse",
+  "id": 34329,
+  "wowhead": "https://www.wowhead.com/tbc/item=34329",
+  "slot": "One-Hand",
+  "type": "Dagger",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Assass"
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Hand of the Deceiver",
+  "id": 34331,
+  "wowhead": "https://www.wowhead.com/tbc/item=34331",
+  "slot": "Main-Hand",
+  "type": "Fist",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "BM"
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Cowl of Gul'dan",
+  "id": 34332,
+  "wowhead": "https://www.wowhead.com/tbc/item=34332",
+  "slot": "Head",
+  "type": "Mail",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Ele"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Coif of Alleria",
+  "id": 34333,
+  "wowhead": "https://www.wowhead.com/tbc/item=34333",
+  "slot": "Head",
+  "type": "Mail",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Thori'dal, the Stars' Fury",
+  "id": 34334,
+  "wowhead": "https://www.wowhead.com/tbc/item=34334",
+  "slot": "Ranged",
+  "type": "Bow",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "BM"
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Assass",
+    "op": "="
+   },
+   {
+    "spec": "Combat",
+    "op": "="
+   },
+   {
+    "spec": "Sub",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "unique": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Hammer of Sanctification",
+  "id": 34335,
+  "wowhead": "https://www.wowhead.com/tbc/item=34335",
+  "slot": "Main-Hand",
+  "type": "Mace",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "Disc",
+    "op": "="
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoShaman",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Sunflare",
+  "id": 34336,
+  "wowhead": "https://www.wowhead.com/tbc/item=34336",
+  "slot": "Main-Hand",
+  "type": "Dagger",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Golden Staff of the Sin'dorei",
+  "id": 34337,
+  "wowhead": "https://www.wowhead.com/tbc/item=34337",
+  "slot": "Two-Hand",
+  "type": "Staff",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Cowl of Light's Purity",
+  "id": 34339,
+  "wowhead": "https://www.wowhead.com/tbc/item=34339",
+  "slot": "Head",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Dark Conjuror's Collar",
+  "id": 34340,
+  "wowhead": "https://www.wowhead.com/tbc/item=34340",
+  "slot": "Head",
+  "type": "Cloth",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Borderland Paingrips",
+  "id": 34341,
+  "wowhead": "https://www.wowhead.com/tbc/item=34341",
+  "slot": "Hands",
+  "type": "Plate",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Handguards of the Dawn",
+  "id": 34342,
+  "wowhead": "https://www.wowhead.com/tbc/item=34342",
+  "slot": "Hands",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Thalassian Ranger Gauntlets",
+  "id": 34343,
+  "wowhead": "https://www.wowhead.com/tbc/item=34343",
+  "slot": "Hands",
+  "type": "Mail",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Handguards of Defiled Worlds",
+  "id": 34344,
+  "wowhead": "https://www.wowhead.com/tbc/item=34344",
+  "slot": "Hands",
+  "type": "Cloth",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Crown of Anasterian",
+  "id": 34345,
+  "wowhead": "https://www.wowhead.com/tbc/item=34345",
+  "slot": "Head",
+  "type": "Plate",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Arms"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Kil'jaeden",
+  "item": "Cover of Ursoc the Mighty",
+  "id": 34403,
+  "wowhead": "https://www.wowhead.com/tbc/item=34403",
+  "slot": "Head",
+  "type": "Leather",
+  "roles": [
+   "Healer",
+   "Caster",
+   "Physical"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Trash",
+  "item": "Shivering Felspine",
+  "id": 34183,
+  "wowhead": "https://www.wowhead.com/tbc/item=34183",
+  "slot": "Two-Hand",
+  "type": "Polearm",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Ret"
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   },
+   {
+    "spec": "Marks",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Trash",
+  "item": "Mounting Vengeance",
+  "id": 34346,
+  "wowhead": "https://www.wowhead.com/tbc/item=34346",
+  "slot": "Off-Hand",
+  "type": "Fist",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Enh"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Trash",
+  "item": "Wand of the Demonsoul",
+  "id": 34347,
+  "wowhead": "https://www.wowhead.com/tbc/item=34347",
+  "slot": "Ranged",
+  "type": "Wand",
+  "roles": [
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "Frost",
+    "op": "="
+   },
+   {
+    "spec": "AffliLock",
+    "op": "="
+   },
+   {
+    "spec": "DemoLock",
+    "op": "="
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Trash",
+  "item": "Wand of Cleansing Light",
+  "id": 34348,
+  "wowhead": "https://www.wowhead.com/tbc/item=34348",
+  "slot": "Ranged",
+  "type": "Wand",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "Disc"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": "="
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Trash",
+  "item": "Blade of Life's Inevitability",
+  "id": 34349,
+  "wowhead": "https://www.wowhead.com/tbc/item=34349",
+  "slot": "Ranged",
+  "type": "Thrown",
+  "roles": [
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Trash",
+  "item": "Gauntlets of the Ancient Shadowmoon",
+  "id": 34350,
+  "wowhead": "https://www.wowhead.com/tbc/item=34350",
+  "slot": "Hands",
+  "type": "Mail",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "priority": [
+   {
+    "spec": "Ele"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Trash",
+  "item": "Tranquil Majesty Wraps",
+  "id": 34351,
+  "wowhead": "https://www.wowhead.com/tbc/item=34351",
+  "slot": "Hands",
+  "type": "Leather",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
+  "notes": "",
+  "unsourced": true,
+  "prioritySource": "bis"
+ },
+ {
+  "zone": "Sunwell Plateau",
+  "boss": "Trash",
+  "item": "Ring of Harmonic Beauty",
+  "id": 35733,
+  "wowhead": "https://www.wowhead.com/tbc/item=35733",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "priority": [],
+  "notes": "",
+  "unsourced": true
  }
 ]
