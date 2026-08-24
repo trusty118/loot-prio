@@ -358,10 +358,13 @@ a:hover { color: var(--gold-bright); }
    more of it while still filling. Contain instead: the whole icon, centred, on the
    black these surfaces already use behind soft-alpha art.
 
-   Two places wear this: the crafted zone tiles, which are pictured by their material,
-   and the Trash chip in the boss rail, which is pictured by a bag. */
-.chip--emblem .art-split img,
-#boss-chips .chip--emblem .chip-icon { object-fit: contain; }
+   Two surfaces wear this: the crafted zone tiles, pictured by their material, and the
+   Trash and Timed Chest chips in the boss rail. The rail's half is a separate rule
+   further down, because it has to sit after the cover rule it ties with on specificity -
+   and a selector list broken across the two of them left this one dangling into the next
+   comment, which silently merged it with .chip--emblem::after and cost the crafted tiles
+   their contain. */
+.chip--emblem .art-split img { object-fit: contain; }
 
 /* Nothing under it worth protecting, and the label needs the contrast more than the
    emblem needs the room. */
@@ -517,6 +520,15 @@ a:hover { color: var(--gold-bright); }
   filter: var(--art-dim);
   transition: filter .12s;
 }
+
+/* Trash and Timed Chest fly square item icons rather than 2:1 journal portraits, so
+   cover keeps only the middle band of them - the same problem the crafted zone tiles
+   have, and the same fix.
+
+   It has to sit AFTER the cover rule above. Both selectors are one id and two classes,
+   so they tie on specificity and source order decides; written beside the crafted-tile
+   rule further up the file, this one silently lost. */
+#boss-chips .chip--emblem .chip-icon { object-fit: contain; }
 
 #boss-chips .chip:hover { background: transparent; }
 #boss-chips .chip:hover .chip-icon { filter: var(--art-dim-hover); }

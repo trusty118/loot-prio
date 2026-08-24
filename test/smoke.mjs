@@ -1228,8 +1228,22 @@ click(doc.getElementById("reset"));
   ok(chips.length > 1, `the rail fills once a zone is picked (${chips.length} bosses)`);
   ok(emblem.length === 1 && emblem[0] === "Trash",
      `only the square-icon chip is marked for contain-fitting (${emblem.join(", ") || "none"})`);
-  ok(/#boss-chips \.chip--emblem \.chip-icon\s*\{[^}]*object-fit:\s*contain/.test(cssText),
-     "and the rule that fits it is the one the crafted zone tiles already use");
+  // Both selectors are one id and two classes, so they tie on specificity and source
+  // order decides. Written above the cover rule, the contain rule silently lost - which
+  // looks exactly like the class not being applied at all.
+  // BOTH surfaces, not just the rail. These were briefly written as one selector list
+  // split across two places in the file, which left the first selector dangling into the
+  // following comment - it merged with .chip--emblem::after and the crafted tiles lost
+  // their contain entirely, while a test that only checked the rail stayed green.
+  for (const [sel, what] of [[".chip--emblem .art-split img", "the crafted zone tiles"],
+                             ["#boss-chips .chip--emblem .chip-icon", "the boss rail's square icons"]]) {
+    const rule = new RegExp(sel.replace(/[.#*+?^$()|[\]\\]/g, "\\$&") + "\\s*\\{[^}]*\\}").exec(cssText);
+    ok(rule && /object-fit:\s*contain/.test(rule[0]), `${what} are contain-fitted`);
+  }
+  const coverAt = cssText.indexOf("#boss-chips .chip .chip-icon");
+  const containAt = cssText.indexOf("#boss-chips .chip--emblem .chip-icon");
+  ok(containAt > coverAt,
+     "and the rail's rule sits after the cover rule it ties with, or source order silently undoes it");
 
   // Picked has to read like a picked tile. It has to be drawn as an ::after overlay:
   // an inset box-shadow and a background are both painted under the element's children,
