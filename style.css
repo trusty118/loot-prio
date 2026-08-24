@@ -523,18 +523,27 @@ a:hover { color: var(--gold-bright); }
 
 /* Selected is a lit portrait over a gold wash with a gold edge under it, rather than
    the gold fill a pill uses - a fill would bury the art the rail exists to show. */
-/* Picked reads the same as a picked phase or zone tile - a full accent frame - rather
-   than the thin underline it used to get. The tiles say it with border-color; the rail
-   cannot, because its cells share borders and changing one would shift the row. An
-   inset ring draws inside the cell and costs no layout, which is the same reason the
-   class strip uses an outline. */
+/* Picked has to read like a picked phase or zone tile. The tiles say it with
+   border-color; the rail cannot, because its cells share borders and changing one would
+   shift the row.
+
+   It also cannot say it on the cell itself. An inset box-shadow and a background are
+   both painted UNDER the element's children, and the portrait fills the cell edge to
+   edge - so the first two attempts at this were invisible for that reason rather than
+   for want of contrast. It takes an overlay drawn on top of the image. */
 #boss-chips .chip[aria-pressed="true"] {
-  background: color-mix(in srgb, var(--gold) 16%, transparent);
-  box-shadow: inset 0 0 0 2px var(--gold-bright);
   color: inherit;
   font-weight: inherit;
   z-index: 1;                       /* the ring sits over its neighbours' borders */
-  position: relative;
+}
+
+#boss-chips .chip[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 2px var(--gold-bright);
+  background: color-mix(in srgb, var(--gold) 24%, transparent);
+  pointer-events: none;
 }
 
 
@@ -820,15 +829,6 @@ tbody tr:last-child td { border-bottom: 0; }
 tbody tr:hover { background: var(--panel-head); }
 
 /* widths live on the <colgroup>; these only carry appearance */
-/* Said once on a group heading when the whole raid is outside the guide, instead of on
-   every row of it. Quieter than .zone-tag beside it: the zone is the heading's subject,
-   this is a caveat about it. */
-.zone-tag--unsourced {
-  color: var(--text-faint);
-  border-style: dashed;
-  cursor: help;
-}
-
 /* Marks a row the source guide never covered. Same quiet tag language as the
    zone-tag in a group heading, deliberately understated: it is a caveat about
    where the row came from, not a feature of the item. */

@@ -252,6 +252,9 @@
     "Azgalor": JOURNAL + "azgalor.png",
     "Archimonde": JOURNAL + "archimonde.png",
     "Trash": ICON + "inv_misc_bag_08.jpg",
+    /* No journal portrait exists for a chest, so it takes an item icon like Trash does
+       - a text chip in a rail of portraits reads as something that fell out of it. */
+    "Timed Chest": ICON + "inv_box_01.jpg",
     "—": ICON + "spell_shadow_demonictactics.jpg"
   };
 
@@ -2345,8 +2348,8 @@
 
        Not on every row of a raid he never covered, though. In Black Temple and Hyjal
        these are 13 exceptions among 182 and the tag is the information; in Zul'Aman and
-       Sunwell every row is one, and a tag on all of them is furniture. There it is said
-       once, on the group heading - see zoneUnsourced(). */
+       Sunwell every row is one, and a tag on all of them is furniture. Those raids carry
+       no marker at all - the priority column is simply empty, which says it. */
     if (rec.unsourced && !zoneUnsourced(rec.zone)) {
       var tag = document.createElement("span");
       tag.className = "item-tag";
@@ -2670,12 +2673,7 @@
                   '" alt="" onerror="this.style.display=\'none\'">' : "") +
       '<span class="boss-name">' + highlight(heading, state.q) + "</span>" +
       (boss === NO_BOSS ? "" :
-        '<span class="zone-tag">' + escapeHtml(zoneLabel(zone)) + "</span>") +
-      /* said once for a raid the guide never covered, instead of on all of its rows */
-      (zoneUnsourced(zone) ?
-        '<span class="zone-tag zone-tag--unsourced" data-tip="' +
-        escapeHtml("Not in the guide - zatar's videos covered Black Temple and Mount Hyjal only") + '">' +
-        escapeHtml(UNSOURCED_TAG) + "</span>" : "");
+        '<span class="zone-tag">' + escapeHtml(zoneLabel(zone)) + "</span>");
     section.appendChild(h);
 
     var scroll = document.createElement("div");

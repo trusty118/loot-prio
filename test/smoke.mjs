@@ -809,9 +809,8 @@ ok(unsourced.every((r) => taggedRowNames.some((n) => n.includes(r.item))),
   const swpRows = [...doc.querySelectorAll("#results tr[data-id]")];
   ok(swpRows.length > 0 && swpRows.every((tr) => !tr.querySelector(".item-tag")),
      `no per-row tag in a raid that is unsourced end to end (${swpRows.length} rows)`);
-  const heads = [...doc.querySelectorAll(".zone-tag--unsourced")];
-  ok(heads.length > 0 && heads.every((h) => /guide/i.test(h.dataset.tip || "")),
-     "the group heading carries it instead, and says which raids he did cover");
+  ok(!doc.querySelector(".zone-tag--unsourced"),
+     "and no zone-level marker either - the empty priority column already says it");
   click(doc.getElementById("reset"));
   ok(doc.getElementById("count").textContent === before, "and reset returns to the guide's phase");
 }
@@ -1232,12 +1231,21 @@ click(doc.getElementById("reset"));
   ok(/#boss-chips \.chip--emblem \.chip-icon\s*\{[^}]*object-fit:\s*contain/.test(cssText),
      "and the rule that fits it is the one the crafted zone tiles already use");
 
-  // picked has to read like a picked tile does, not as a thin underline
-  const rule = /#boss-chips \.chip\[aria-pressed="true"\]\s*\{[^}]*\}/.exec(cssText)[0];
-  ok(/inset 0 0 0 2px var\(--gold-bright\)/.test(rule),
-     "a picked boss gets the full accent frame the phase and zone tiles get");
-  ok(!/border(-\w+)?:/.test(rule),
-     "drawn as an inset ring, not a border - the rail's cells share borders and one would shift the row");
+  // Picked has to read like a picked tile. It has to be drawn as an ::after overlay:
+  // an inset box-shadow and a background are both painted under the element's children,
+  // and the portrait fills the cell edge to edge, so both were invisible on the cell.
+  const overlay = /#boss-chips \.chip\[aria-pressed="true"\]::after\s*\{[^}]*\}/.exec(cssText);
+  ok(overlay, "a picked boss is marked by an overlay, not by the cell's own paint");
+  ok(/inset 0 0 0 2px var\(--gold-bright\)/.test(overlay[0]),
+     "carrying the accent frame the phase and zone tiles get");
+  ok(/background:\s*color-mix/.test(overlay[0]), "and an accent wash over the portrait");
+  const cell = /#boss-chips \.chip\[aria-pressed="true"\]\s*\{[^}]*\}/.exec(cssText)[0];
+  ok(!/box-shadow|background:/.test(cell),
+     "and the cell itself paints neither - both would sit behind the image");
+
+  // every boss in the rail flies an icon; a text chip among portraits reads as a stray
+  const noIcon = chips.filter((c) => !c.querySelector("img")).map((c) => c.dataset.tip);
+  ok(noIcon.length === 0, `every boss chip carries an icon${noIcon.length ? ": " + noIcon.join(", ") + " do not" : ""}`);
   click(doc.getElementById("reset"));
 }
 
