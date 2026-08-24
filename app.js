@@ -1958,7 +1958,7 @@
       resolved.name + ", position " + (index + 1) + " of " + list.length);
 
     var mark = bisMark(resolved, rec.id);
-    wrap.appendChild(specIcon(resolved, mark.tier, mark.specs));
+    wrap.appendChild(specIcon(resolved, mark.tier, mark.specs, mark.variant));
 
     var x = document.createElement("button");
     x.type = "button";
@@ -2382,19 +2382,26 @@
     if (at < text.length) parent.appendChild(document.createTextNode(text.slice(at)));
   }
 
-  /* How long an item stays best-in-slot, marked with trailing asterisks in the
-     priority string: * this phase, ** several phases, *** the whole expansion.
-     Colours borrow the item-quality ladder - epic purple, then gold, then
-     legendary orange - so "rarer" reads as "lasts longer". */
-  var BIS_TIERS = {
+  /* How long an item stays best-in-slot. Colours borrow WoW's item-quality ladder -
+     epic purple, then legendary orange, then artifact gold - so "rarer" reads as
+     "lasts longer".
+
+     Called LONGEVITY rather than "tier". "Tier" already means something else in this
+     dataset - the T6 armour tokens, `type: "Tier Token (Pal/Priest/Lock)"` - and using
+     one word for both has confused a reader at least once. */
+  var BIS_LONGEVITY = {
     1: { cls: "spec-icon--bis", label: "Phase BiS" },
     2: { cls: "spec-icon--bis2", label: "Multi-phase BiS" },
     3: { cls: "spec-icon--bis3", label: "Expansion BiS" }
   };
 
-  var BIS_TIER_BY_NAME = { "phase": 1, "multiPhase": 2, "expansion": 3 };
+  var BIS_LONGEVITY_BY_NAME = { "phase": 1, "multiPhase": 2, "expansion": 3 };
 
-  /* Flattened from data/bis.json: "Spec Name|itemId" -> tier number.
+  /* Flattened from data/bis.json: "P3|ProtWarr|32375" -> { longevity, variant }.
+
+     The phase is part of the key because bis.json holds all three now, and a spec can
+     list the same item in several of them - keyed by spec alone, the last phase read
+     silently overwrote every earlier one.
      BIS_BY_SPEC keeps the per-spec shape the file is written in, which is what a
      spec filter would read from later. */
   var BIS = {};
@@ -2410,19 +2417,34 @@
       Object.keys(phases).forEach(function (phase) {
         (phases[phase] || []).forEach(function (entry) {
           if (!entry || entry.id == null) return;
-          var tier = BIS_TIER_BY_NAME[entry.bis || "phase"] || 1;
-          BIS[specName + "|" + entry.id] = tier;
+          var longevity = BIS_LONGEVITY_BY_NAME[entry.bis || "phase"] || 1;
+          BIS[phase + "|" + specName + "|" + entry.id] =
+            { longevity: longevity, variant: entry.variant || "" };
           (BIS_BY_SPEC[specName] = BIS_BY_SPEC[specName] || []).push({
-            id: entry.id, item: entry.item, tier: tier, phase: phase
+            id: entry.id, item: entry.item, longevity: longevity,
+            variant: entry.variant || "", phase: phase
           });
         });
       });
     });
   }
 
-  /* keyed by the registry identifier (ProtWarr), matching data/bis.json */
+  /* Keyed by the registry identifier (ProtWarr), matching data/bis.json, and scoped to
+     the phase on screen: a Sunwell item is not BiS for someone reading Phase 3, and a
+     ring that ignored the phase would answer "BiS at some point" rather than "BiS for me
+     now" - which is the question a loot council is actually asking. */
+  function bisAt(specId, itemId) {
+    return BIS[state.phase + "|" + specId + "|" + itemId] || null;
+  }
+
+  function bisVariant(specId, itemId) {
+    var hit = bisAt(specId, itemId);
+    return hit ? hit.variant : "";
+  }
+
   function bisTier(specId, itemId) {
-    return BIS[specId + "|" + itemId] || 0;
+    var hit = bisAt(specId, itemId);
+    return hit ? hit.longevity : 0;
   }
 
   /* What ring an icon should carry, and who it is for. A spec icon answers for
@@ -2438,7 +2460,8 @@
     var stands_for = covers(resolved.id);
 
     if (REG.specs[resolved.id] && !stands_for.length) {
-      return { tier: bisTier(resolved.id, itemId), specs: [] };
+      return { tier: bisTier(resolved.id, itemId), specs: [],
+               variant: bisVariant(resolved.id, itemId) };
     }
 
     /* an umbrella spec aggregates like a class does, over the specs it covers */
@@ -2448,14 +2471,20 @@
       : pickedSpecs(resolved.id);
     if (picked.length) ids = picked;
 
-    var tier = 0, names = [];
+    /* A class icon can stand for two specs wanting the item for opposite reasons - a
+       Prot Warrior's threat piece is a Fury Warrior's plain BiS. Only carry a qualifier
+       up when every ringed spec behind the icon agrees on it; otherwise the icon would
+       claim one spec's reason on behalf of all of them. */
+    var tier = 0, names = [], variants = {};
     ids.forEach(function (id) {
       var t = bisTier(id, itemId);
       if (!t) return;
       if (t > tier) tier = t;
       names.push(shortSpecName(id, resolved.name));
+      variants[bisVariant(id, itemId)] = 1;
     });
-    return { tier: tier, specs: names };
+    var agreed = Object.keys(variants);
+    return { tier: tier, specs: names, variant: agreed.length === 1 ? agreed[0] : "" };
   }
 
   /* These names only ever appear on the icon they belong to, listing what it
@@ -2477,10 +2506,10 @@
     return spec.name;
   }
 
-  function specIcon(spec, bis, forSpecs) {
-    var tier = BIS_TIERS[bis];
+  function specIcon(spec, bis, forSpecs, variant) {
+    var lasts = BIS_LONGEVITY[bis];
     var img = document.createElement("img");
-    img.className = "spec-icon" + (tier ? " " + tier.cls : "");
+    img.className = "spec-icon" + (lasts ? " " + lasts.cls : "");
     /* which registry entry this icon is, so nothing downstream has to work it out
        from the display name - forms make that lossy ("Feral Druid (cat)") */
     if (spec.id) img.dataset.id = spec.id;
@@ -2491,14 +2520,20 @@
     var who = spec.name +
       (forSpecs && forSpecs.length ? " — " + forSpecs.join(", ") : "");
 
-    img.alt = who + (tier ? " (" + tier.label + ")" : "");
+    /* The qualifier says WHY it is BiS, where a spec has more than one answer for a
+       slot - a tank's threat helm and mitigation helm are both BiS. It rides on the
+       longevity line, not the name line: it is a fact about the ring rather than about
+       the icon, and the ring's colour keeps meaning longevity alone. */
+    var bisLine = lasts ? lasts.label + (variant ? " (" + variant + ")" : "") : "";
+
+    img.alt = who + (bisLine ? " (" + bisLine + ")" : "");
     /* data-tip rather than title: the native tooltip has a ~1s delay the browser
        won't let us change, and these need to read as fast as the item tooltips.
        The BiS line is carried separately so the tooltip can colour it to match
        the ring on the icon. */
     img.dataset.tip = who;
-    if (tier) {
-      img.dataset.tipBis = tier.label;
+    if (lasts) {
+      img.dataset.tipBis = bisLine;
       img.dataset.tipTier = String(bis);
     }
     img.setAttribute("aria-label", img.alt);
@@ -2560,7 +2595,7 @@
         td.appendChild(raceIcon);
       }
       var mark = bisMark(resolved, rec.id);
-      var icon = specIcon(resolved, mark.tier, mark.specs);
+      var icon = specIcon(resolved, mark.tier, mark.specs, mark.variant);
       if (muted) icon.classList.add("spec-icon--muted");
       td.appendChild(icon);
     });

@@ -638,10 +638,14 @@ const tierOf = (icon) =>
     : icon.classList.contains("spec-icon--bis2") ? 2
       : icon.classList.contains("spec-icon--bis") ? 1 : 0;
 
+// Rings follow the phase on screen, so only the phase on screen can be checked here -
+// a Sunwell item is not BiS for someone reading Phase 3, and iterating every phase's
+// list against a Phase 3 page asks for rings that should not be there.
 let onSpec = 0, onClass = 0, missing = [];
 for (const [specId, phases] of Object.entries(bis.specs)) {
   const owner = (specs.specs[specId] || {}).class;
-  for (const entries of Object.values(phases)) {
+  for (const [phase, entries] of Object.entries(phases)) {
+    if (phase !== "P3") continue;
     for (const e of entries) {
       const rec = data.find((r) => r.id === e.id);
       if (!rec) continue;
@@ -680,29 +684,42 @@ const iconsOf = (name) => [...[...doc.querySelectorAll("tbody tr")]
   .find((tr) => tr.children[0].textContent.includes(name))
   .children[3].querySelectorAll("img")];
 
-const highborne = iconsOf("Shroud of the Highborne");
-ok(highborne[0].classList.contains("spec-icon--bis2"),
-   "** renders the multi-phase ring on the marked spec");
+const multiCase = Object.entries(bis.specs).flatMap(([specId, phases]) =>
+  (phases.P3 || []).filter((e) => e.bis === "multiPhase")
+    .map((e) => ({ specId, rec: data.find((r) => r.id === e.id) })))
+  .find(({ specId, rec }) => rec && listsSpec(rec, specId));
+const multiIcon = iconById(rowFor(multiCase.rec.item), multiCase.specId);
+ok(multiIcon.classList.contains("spec-icon--bis2"),
+   `multiPhase renders the multi-phase ring (${multiCase.rec.item} / ${multiCase.specId})`);
 
 // Whether an icon rings is decided per icon: a spec icon answers for itself, a
 // class icon for any of its specs. Checked here against bis.json on one row that
 // carries both kinds (Resto Shaman, Priest, Druid, Holy Paladin).
+const p3Of = (phases) => phases.P3 || [];
 const isBisFor = (id, itemId) =>
   Object.entries(bis.specs).some(([specId, phases]) =>
     (specId === id || (specs.specs[specId] || {}).class === id) &&
-    Object.values(phases).flat().some((e) => e.id === itemId));
-const shroudId = data.find((r) => r.item === "Shroud of the Highborne").id;
-ok(highborne.every((i) => i.className.includes("--bis") === isBisFor(i.dataset.id, shroudId)),
-   "each icon rings if and only if the item is BiS for it, class icons included");
-ok(highborne.some((i) => specs.classes[i.dataset.id] && i.className.includes("--bis")),
+    p3Of(phases).some((e) => e.id === itemId));
+// one row carrying both a spec icon and a class icon, so both paths are covered
+const bothKinds = data.find((rec) => {
+  const row = rowFor(rec.item);
+  if (!row) return false;
+  const ids = [...row.children[3].querySelectorAll("img")].map((i) => i.dataset.id);
+  return ids.some((id) => specs.classes[id]) && ids.some((id) => specs.specs[id]) &&
+         ids.some((id) => isBisFor(id, rec.id));
+});
+const mixed = iconsOf(bothKinds.item);
+ok(mixed.every((i) => i.className.includes("--bis") === isBisFor(i.dataset.id, bothKinds.id)),
+   `each icon rings if and only if the item is BiS for it, class icons included (${bothKinds.item})`);
+ok(mixed.some((i) => specs.classes[i.dataset.id] && i.className.includes("--bis")),
    "a class icon can carry a ring for the specs behind it");
-ok(/BiS/.test(highborne[0].dataset.tipBis) && /phase/i.test(highborne[0].dataset.tipBis),
-   `multi-phase icon says so on hover: ${JSON.stringify(highborne[0].dataset.tipBis)}`);
+ok(/BiS/.test(multiIcon.dataset.tipBis) && /phase/i.test(multiIcon.dataset.tipBis),
+   `multi-phase icon says so on hover: ${JSON.stringify(multiIcon.dataset.tipBis)}`);
 
 // the phase example likewise comes from the file rather than being named
 const phaseCase = Object.entries(bis.specs).flatMap(([specId, phases]) =>
-  Object.values(phases).flat()
-    .filter((e) => (e.bis || "phase") === "phase")
+  (phases.P3 || [])
+    .filter((e) => (e.bis || "phase") === "phase" && !e.variant)
     .map((e) => ({ specId, rec: data.find((r) => r.id === e.id) })))
   .find(({ specId, rec }) => rec && listsSpec(rec, specId));
 const phaseIcon = iconById(rowFor(phaseCase.rec.item), phaseCase.specId);
@@ -725,7 +742,7 @@ ok(/bear/i.test(pillarUmbrella.dataset.tip) && !/cat/i.test(pillarUmbrella.datas
 // the expansion example is taken from the file rather than named, so re-rating an
 // item's longevity doesn't rewrite the test
 const expansionCase = Object.entries(bis.specs).flatMap(([specId, phases]) =>
-  Object.values(phases).flat()
+  (phases.P3 || [])
     .filter((e) => e.bis === "expansion")
     .map((e) => ({ specId, rec: data.find((r) => r.id === e.id) })))
   .find(({ specId, rec }) => rec && listsSpec(rec, specId));
@@ -735,11 +752,11 @@ const expansionIcon = iconById(rowFor(expansionCase.rec.item), expansionCase.spe
 ok(expansionIcon.classList.contains("spec-icon--bis3"),
    `*** renders the expansion-BiS ring (${expansionCase.rec.item} / ${expansionCase.specId})`);
 ok(expansionIcon.dataset.tip === displayName(expansionCase.specId) &&
-   expansionIcon.dataset.tipBis === "Expansion BiS",
+   expansionIcon.dataset.tipBis.startsWith("Expansion BiS"),
    `name and BiS line carried separately (got ${JSON.stringify(expansionIcon.dataset.tip)} / ${JSON.stringify(expansionIcon.dataset.tipBis)})`);
 ok(expansionIcon.dataset.tipTier === "3", "expansion tier tagged 3 so the tooltip can colour it");
-ok(highborne[0].dataset.tipBis === "Multi-phase BiS" && highborne[0].dataset.tipTier === "2",
-   `multi-phase label (got ${JSON.stringify(highborne[0].dataset.tipBis)})`);
+ok(multiIcon.dataset.tipBis.startsWith("Multi-phase BiS") && multiIcon.dataset.tipTier === "2",
+   `multi-phase label (got ${JSON.stringify(multiIcon.dataset.tipBis)})`);
 ok(phaseIcon.dataset.tipBis === "Phase BiS" && phaseIcon.dataset.tipTier === "1",
    `phase label (got ${JSON.stringify(phaseIcon.dataset.tipBis)})`);
 
@@ -748,7 +765,7 @@ expansionIcon.dispatchEvent(new window.MouseEvent("mouseover", { bubbles: true }
 const liveTip = doc.querySelector("body > .tip");
 const bisLine = liveTip.querySelector(".tip-bis");
 ok(!!bisLine, "the tooltip renders a separate .tip-bis line");
-ok(bisLine.textContent === "Expansion BiS", `BiS line text (got "${bisLine && bisLine.textContent}")`);
+ok(bisLine.textContent.startsWith("Expansion BiS"), `BiS line text (got "${bisLine && bisLine.textContent}")`);
 ok(bisLine.classList.contains("tip-bis--3"), "BiS line tagged with its tier for colouring");
 ok(liveTip.textContent.startsWith(displayName(expansionCase.specId)),
    "spec name still leads the tooltip");
@@ -782,6 +799,106 @@ ok(!doc.querySelector("#results").textContent.includes("*"),
 // a row nobody has marked is untouched
 ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
    "rows with no markers render no rings");
+
+// --- rings follow the phase, and carry why ------------------------------------------
+// bis.json holds P3, P4 and P5 now. A ring has to mean "BiS for me in the phase I am
+// reading", not "BiS at some point" - and the lookup was keyed by spec alone, so a
+// second phase's entry for the same spec silently overwrote the first.
+{
+  // an item some spec calls BiS in exactly one phase, and which phase that is
+  const only = [];
+  for (const [specId, phases] of Object.entries(bis.specs)) {
+    for (const ph of ["P3", "P4", "P5"]) {
+      for (const entry of phases[ph] || []) {
+        const elsewhere = ["P3", "P4", "P5"].filter((p) => p !== ph)
+          .some((p) => (phases[p] || []).some((x) => x.id === entry.id));
+        if (elsewhere) continue;
+        const rec = data.find((r) => r.id === entry.id);
+        if (rec && listsSpec(rec, specId)) only.push({ specId, ph, rec });
+      }
+    }
+  }
+  ok(only.length > 0, `some entries are BiS in one phase only (${only.length})`);
+
+  const zoneOf = { P3: "Black Temple", P4: "Zul'Aman", P5: "Sunwell Plateau" };
+  const pick = only.find((o) => o.ph !== "P3" && o.rec.zone === zoneOf[o.ph]) || only[0];
+
+  window.location.hash = "phase=" + pick.ph;
+  window.dispatchEvent(new window.Event("hashchange"));
+  const ringed = iconById(rowFor(pick.rec.item), pick.specId);
+  ok(ringed && ringed.className.includes("--bis"),
+     `${pick.rec.item} rings for ${pick.specId} in ${pick.ph}, the phase that lists it`);
+
+  // and does not, in a phase that does not list it
+  const other = ["P3", "P4", "P5"].find((p) =>
+    p !== pick.ph && data.some((r) => r.zone === zoneOf[p]));
+  window.location.hash = "phase=" + other;
+  window.dispatchEvent(new window.Event("hashchange"));
+  const elsewhereRow = rowFor(pick.rec.item);
+  ok(!elsewhereRow || !iconById(elsewhereRow, pick.specId) ||
+     !iconById(elsewhereRow, pick.specId).className.includes("--bis"),
+     `and does not ring in ${other}, which does not`);
+
+  window.location.hash = "phase=P3";
+  window.dispatchEvent(new window.Event("hashchange"));
+}
+
+// --- the qualifier: several BiS items for one slot, distinguished ---------------------
+// A tank wants a threat helm and a mitigation helm; both are BiS, and the ring colour
+// says only how long they last. The reason rides on the BiS line.
+{
+  const withVariant = [];
+  for (const [specId, phases] of Object.entries(bis.specs)) {
+    for (const entry of phases.P3 || []) {
+      if (!entry.variant) continue;
+      const rec = data.find((r) => r.id === entry.id);
+      if (rec && listsSpec(rec, specId)) withVariant.push({ specId, entry, rec });
+    }
+  }
+  ok(withVariant.length > 0, `entries carry a qualifier (${withVariant.length} showable in P3)`);
+
+  // A SPEC icon, deliberately. A class icon stands for several specs, and only carries a
+  // qualifier when all of them agree on it - so it is the wrong place to check that the
+  // qualifier reaches the tooltip at all.
+  const namesSpec = (rec, id) => (rec.priority || []).some((p) => p.spec === id);
+  const q = withVariant.find((w) => namesSpec(w.rec, w.specId));
+  ok(!!q, "some qualified entry sits on a row that names the spec itself");
+  const icon = iconById(rowFor(q.rec.item), q.specId);
+  ok(icon && icon.dataset.tipBis.endsWith(`(${q.entry.variant})`),
+     `the BiS line says why: "${icon && icon.dataset.tipBis}" (${q.rec.item} / ${q.specId})`);
+  ok(icon && !icon.dataset.tip.includes(q.entry.variant),
+     "and the name line does not - the qualifier is a fact about the ring, not the icon");
+  ok(icon && icon.dataset.tipTier === String({ phase: 1, multiPhase: 2, expansion: 3 }[q.entry.bis || "phase"]),
+     "the ring colour still means longevity alone, unchanged by the qualifier");
+
+  // two different items, same spec, same slot, both BiS for different reasons - which is
+  // the whole case for having a qualifier at all
+  const bySlot = {};
+  for (const { specId, entry, rec } of withVariant) {
+    const key = specId + "|" + rec.slot;
+    (bySlot[key] = bySlot[key] || []).push(entry.variant);
+  }
+  const contested = Object.entries(bySlot).filter(([, vs]) => new Set(vs).size > 1);
+  ok(contested.length > 0,
+     `a spec can hold several BiS items for one slot, told apart by qualifier (${contested.length} such slots)`);
+
+  // A class icon speaks for several specs at once. Where they disagree about WHY an item
+  // is BiS - a Prot Warrior's threat piece is a Fury Warrior's plain BiS - the icon must
+  // say nothing rather than pick one spec's reason and imply it for the rest.
+  const classIcons = [...doc.querySelectorAll(".col-prio img[data-tip]")]
+    .filter((i) => specs.classes[i.dataset.id] && i.dataset.tipBis);
+  const disagreeing = classIcons.filter((i) => {
+    const rec = data.find((r) => (i.closest("tr").children[0].textContent || "").includes(r.item));
+    if (!rec) return false;
+    const vs = new Set(Object.entries(bis.specs)
+      .filter(([sid]) => (specs.specs[sid] || {}).class === i.dataset.id)
+      .map(([, ph]) => ((ph.P3 || []).find((x) => x.id === rec.id) || {}).variant)
+      .filter((v) => v !== undefined));
+    return vs.size > 1;
+  });
+  ok(disagreeing.every((i) => !/\(/.test(i.dataset.tipBis)),
+     `a class icon carries no qualifier when its specs disagree (${disagreeing.length} checked)`);
+}
 
 // --- items the source guide never covered ---
 const P3_ZONES = ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"];
@@ -1469,8 +1586,10 @@ ok(toggle && toggle.textContent.includes("BiS only"), "the BiS toggle appears on
 
 // expectations come from bis.json rather than a hardcoded number, so filling the
 // file in doesn't rewrite the test
+// The phase on screen, not every phase: the filter is phase-scoped, so an expectation
+// built from all three would count Sunwell items while reading Phase 3.
 const bisIdsFor = (specId) =>
-  new Set(Object.values(bis.specs[specId] || {}).flat().map((e) => e.id));
+  new Set(((bis.specs[specId] || {}).P3 || []).map((e) => e.id));
 const survBis = bisIdsFor("Surv");
 const survVisible = rows().filter((tr) =>
   [...survBis].some((id) => tr.children[0].textContent.includes(
@@ -1571,8 +1690,12 @@ ok(new RegExp("^Mage — .*\\b" + shortName(bisMage[0]) + "\\b").test(rakMageIco
    `the name line names the class then its specs (got "${rakMageIcon().dataset.tip}")`);
 ok(!/Mage,|Mage$/.test(rakMageIcon().dataset.tip.split("—")[1] || ""),
    `no class name repeated after each spec (got "${rakMageIcon().dataset.tip}")`);
-ok(rakMageIcon().dataset.tipBis === "Expansion BiS",
-   `the BiS line is only the tier (got "${rakMageIcon().dataset.tipBis}")`);
+// The line is the longevity, plus the qualifier when every spec behind the icon agrees.
+// Which longevity is not named here: it is derived from the guides and moves when they
+// do, and pinning it made this fail for a reason that had nothing to do with the split
+// between the name line and the BiS line, which is what this actually tests.
+ok(/^(Phase|Multi-phase|Expansion) BiS( \([\w-]+\))?$/.test(rakMageIcon().dataset.tipBis),
+   `the BiS line is the longevity, optionally qualified (got "${rakMageIcon().dataset.tipBis}")`);
 
 click(chipByTip("#class-chips", "Mage"));
 click(chipByTip("#spec-chips", specs.specs[bisMage[0]].name));

@@ -22,6 +22,19 @@ BIS = ROOT / "data" / "bis.json"
 SPECS = ROOT / "data" / "specs.json"
 
 VALID_TIERS = {"phase", "multiPhase", "expansion"}
+
+# Why an item is BiS, where a spec has more than one answer for a slot: a tank wants a
+# threat cape and a mitigation cape; a Human melee's set differs from a Draenei's. A
+# CLOSED set on purpose - fetch_bis.py maps Wowhead's own wording onto it and reports
+# anything it cannot place, so this list grows by decision rather than by a guide
+# inventing a phrase. Absent means "the BiS item for that slot", which is most entries.
+VALID_VARIANTS = {
+    "threat", "mitigation", "regen", "throughput", "balanced",       # what it is for
+    "hit", "haste", "crit", "spellpower", "expertise",               # the stat chased
+    "dagger", "shield", "mainhand", "offhand",                       # the weapon setup
+    "human", "non-human",                                           # racials that change it
+    "pair", "individually", "overall",                              # as a set, or alone
+}
 RACES = {"Orc", "Human"}
 
 
@@ -86,6 +99,17 @@ def main():
                 tier = entry.get("bis", "phase")
                 if tier not in VALID_TIERS:
                     errors.append(f"{label}: {rec['item']} has bis={tier!r}, expected one of {sorted(VALID_TIERS)}")
+
+                variant = entry.get("variant")
+                if variant is not None and variant not in VALID_VARIANTS:
+                    errors.append(
+                        f"{label}: {rec['item']} has variant={variant!r}, which is not in the "
+                        f"closed set - add it to VALID_VARIANTS deliberately, or map it in "
+                        f"fetch_bis.py, but do not let a guide's wording through unexamined")
+                # reserved for user-managed BiS lists, where the uploader needs their own
+                # words; nothing generated should be populating it yet
+                if entry.get("note") is not None and not isinstance(entry["note"], str):
+                    errors.append(f"{label}: {rec['item']} has a non-string note")
 
                 # Will a ring actually be visible? The renderer draws one when the
                 # priority names this spec, or names its class - a class icon

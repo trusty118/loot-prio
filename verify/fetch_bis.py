@@ -19,9 +19,11 @@ data/loot_data.json is READ ONLY here. It supplies the id set to intersect again
 and the names to cross-check; nothing in this script writes a priority.
 """
 
+import hashlib
 import json
 import re
 import sys
+import tempfile
 import time
 import urllib.error
 import urllib.request
@@ -32,12 +34,78 @@ LOOT = ROOT / "data" / "loot_data.json"
 SPECS = ROOT / "data" / "specs.json"
 BIS = ROOT / "data" / "bis.json"
 SOURCES = Path(__file__).resolve().parent / "bis-sources.json"
+CHANGES = Path(__file__).resolve().parent / "bis-longevity-changes.csv"
 
 WOWSIMS = "https://raw.githubusercontent.com/wowsims/tbc/master/ui/{}/presets.ts"
 UA = {"User-Agent": "loot-prio/1.0"}
 
-# the guide's gear tables start under this heading
-BIS_HEADING = re.compile(r"Best In Slot Gear.{0,80}?Phase\s*3", re.I | re.S)
+# the guide's gear tables start under this heading, whichever phase it is for
+BIS_HEADING = re.compile(r"Best In Slot Gear.{0,90}?Phase\s*([345])", re.I | re.S)
+
+# One Wowhead guide per spec per phase. P4 and P5 are derived from the P3 url rather
+# than listed: the slugs differ by a single segment, and all 56 resolve.
+PHASE_SLUG = {"P3": "-bt-hyjal-phase-3-", "P4": "-za-phase-4-", "P5": "-swp-phase-5-"}
+PHASES = ["P3", "P4", "P5"]
+
+# The rank column says WHY an item is BiS, and until now that was read and thrown away.
+# Wowhead's wording is not fixed - the same idea arrives as "Best Mitigation", "Best Mit
+# Skewed" and "Mitigation + Hit" - so it is mapped onto a closed vocabulary rather than
+# shown raw. Anything unmapped keeps its entry, carries no variant, and is REPORTED: the
+# set grows when we decide it does, never because a guide invented a phrase.
+VARIANT_MAP = [
+    # what the item is for
+    (re.compile(r"\bthreat\b|\bTPS\b", re.I), "threat"),
+    (re.compile(r"\bmit(igation)?\b|\bsurvivability\b|\bdefensive\b|\bdefense swap\b", re.I), "mitigation"),
+    (re.compile(r"\bregen\b|\binnervate\b", re.I), "regen"),
+    (re.compile(r"\bthroughput\b", re.I), "throughput"),
+    (re.compile(r"\bbalanced?\b", re.I), "balanced"),
+    # which stat it is chased for. The hit ranks arrive as cap percentages rather than
+    # the word - "Best 6% and 9%" is the spell hit cap with and without talents.
+    (re.compile(r"\bhaste\b", re.I), "haste"),
+    (re.compile(r"\bhit\b|\b[369]%", re.I), "hit"),
+    (re.compile(r"\bcrit\b", re.I), "crit"),
+    (re.compile(r"\bspell ?power\b", re.I), "spellpower"),
+    (re.compile(r"\bexpertise\b", re.I), "expertise"),
+    # which weapon the build uses, and which hand it goes in
+    (re.compile(r"\bdagger\b", re.I), "dagger"),
+    (re.compile(r"\bshield\b", re.I), "shield"),
+    (re.compile(r"\bMH\b|\bmain ?hand\b", re.I), "mainhand"),
+    (re.compile(r"\bOH\b|\boff ?hand\b", re.I), "offhand"),
+    # a race that changes the answer - the case that prompted all of this, and it turns
+    # out Wowhead does say it: "2nd bis for humans", "2nd bis for non-humans"
+    (re.compile(r"\bnon-?humans?\b", re.I), "non-human"),
+    (re.compile(r"\bhumans?\b", re.I), "human"),
+    # two of the same item, or one judged on its own rather than as part of a set
+    (re.compile(r"\bpair\b|\bx2\b", re.I), "pair"),
+    (re.compile(r"\bindividually\b", re.I), "individually"),
+    (re.compile(r"\boverall\b", re.I), "overall"),
+]
+
+# "BiS" said in more words. These are not qualifiers, and swallowing them is what keeps
+# 50-odd entries from carrying a meaningless one. Checked AFTER the variants, so
+# "Best in slot (2.6 MH)" still resolves as mainhand rather than being flattened here.
+PLAIN_RANK = re.compile(
+    r"^(bis|best|best in slot|best pve|best personal|best all game|"
+    r"p[345](\s+\w+)?\s*bis|bis\s*\(small upgrade\)|"
+    r"best(\s+in\s+slot)?\s*\(all\))$", re.I)
+
+
+def variant_for(rank):
+    """(variant or None, unmapped rank or None) for one rank cell.
+
+    Variants are tested before the plain list on purpose: several ranks are "best in
+    slot" plus a qualifier in brackets, and testing plain first would throw the
+    qualifier away.
+    """
+    rank = (rank or "").strip()
+    if not rank:
+        return None, None
+    for pattern, name in VARIANT_MAP:
+        if pattern.search(rank):
+            return name, None
+    if PLAIN_RANK.match(rank):
+        return None, None
+    return None, rank
 
 ROW = re.compile(r"<tr.*?</tr>", re.S)
 CELL = re.compile(r"<td[^>]*>(.*?)</td>", re.S)
@@ -59,11 +127,24 @@ NOT_BIS = re.compile(
 TIERS = {1: "phase", 2: "multiPhase", 3: "expansion"}
 
 
+# 84 guide pages per run, and the mapping table takes several passes to get right.
+# Without a cache on disk that is 84 requests per pass, which is how this earned a
+# string of 403s - so every fetch is kept, and a re-run costs Wowhead nothing. Delete
+# the directory to force a refresh.
+CACHE_DIR = Path(tempfile.gettempdir()) / "loot-prio-bis-cache"
+
+
 def get(url, as_json=False):
-    req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=30) as r:
-        raw = r.read().decode("utf-8", "replace")
-    time.sleep(0.15)   # be polite
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    hit = CACHE_DIR / (hashlib.sha1(url.encode()).hexdigest() + ".txt")
+    if hit.exists():
+        raw = hit.read_text(encoding="utf-8")
+    else:
+        req = urllib.request.Request(url, headers=UA)
+        with urllib.request.urlopen(req, timeout=30) as r:
+            raw = r.read().decode("utf-8", "replace")
+        hit.write_text(raw, encoding="utf-8")
+        time.sleep(1.0)   # be polite: one page a second when actually fetching
     return json.loads(raw) if as_json else raw
 
 
@@ -72,10 +153,10 @@ def text(html):
 
 
 def bis_rows(html, where):
-    """(item id, item name) for every row a guide ranks BiS, in page order."""
+    """(item id, item name, rank) for every row a guide ranks BiS, in page order."""
     start = BIS_HEADING.search(html)
     if not start:
-        raise ValueError(f"{where}: no 'Best In Slot ... Phase 3' heading - page layout changed?")
+        raise ValueError(f"{where}: no 'Best In Slot ... Phase N' heading - page layout changed?")
 
     out, ranks = [], set()
     for row in ROW.findall(html[start.end():]):
@@ -88,7 +169,7 @@ def bis_rows(html, where):
         rank = text(cells[0])
         ranks.add(rank)
         if RANKED_BIS.search(rank) and not NOT_BIS.search(rank):
-            out.append((int(link.group(1)), text(link.group(2))))
+            out.append((int(link.group(1)), text(link.group(2)), rank))
 
     if not out:
         raise ValueError(f"{where}: no rows ranked BiS - ranks seen: {sorted(ranks)[:8]}")
@@ -142,57 +223,113 @@ def main():
         print(f"ERROR: bis-sources.json names specs that are not in specs.json: {unknown}")
         return 1
 
-    built, dropped, mismatches, failures = {}, [], [], []
-    no_longevity = []
+    built, sim_presets = {}, {}
+    dropped, mismatches, failures, unmapped = [], [], [], {}
+    sim_disagrees, longevity_changes = [], []
 
     for spec in sources:
         if only and spec not in only:
             continue
         source = sources[spec]
 
-        rows = []
+        # --- every phase's guide, so longevity can be observed rather than guessed ---
+        per_phase = {}
         try:
-            for url in source["p3"]:
-                html = GUIDE_CACHE.setdefault(url, get(url))
-                rows += bis_rows(html, spec)
+            for phase in PHASES:
+                urls = source.get(phase.lower())
+                if not urls:
+                    urls = [u.replace(PHASE_SLUG["P3"], PHASE_SLUG[phase]) for u in source["p3"]]
+                rows = []
+                for url in urls:
+                    rows += bis_rows(GUIDE_CACHE.setdefault(url, get(url)), f"{spec} {phase}")
+                per_phase[phase] = rows
         except (urllib.error.URLError, TimeoutError, ValueError) as e:
             failures.append(f"{spec}: {e}")
             continue
 
-        try:
-            p4 = preset_ids(source.get("wowsims"), "P4")
-            p5 = preset_ids(source.get("wowsims"), "P5")
-        except (urllib.error.URLError, TimeoutError) as e:
-            failures.append(f"{spec} wowsims: {e}")
-            continue
-        if not source.get("wowsims"):
-            no_longevity.append(spec)
+        listed = {ph: {r[0] for r in rows} for ph, rows in per_phase.items()}
 
-        entries, seen = [], set()
-        for item_id, name in rows:
-            if item_id in seen:
-                continue
-            seen.add(item_id)
+        # --- how long it lasts, counted forward from the phase in hand ---
+        # Wowhead covers every spec; wowsims has no preset for the eight that are not
+        # meta, so it cannot decide this for anyone - its silence would read as "one
+        # phase" rather than as "unknown". It cross-checks instead, below.
+        def tier_from(phase, item_id):
+            run = 0
+            for ph in PHASES[PHASES.index(phase):]:
+                if item_id in listed[ph]:
+                    run += 1
+                else:
+                    break
+            return min(max(run, 1), 3)
 
-            rec = by_id.get(item_id)
-            if not rec:
-                dropped.append((spec, item_id, name))
-                continue
-            if name and rec["item"] != name:
-                mismatches.append(f"{spec}: id {item_id} is {rec['item']!r} here, {name!r} on Wowhead")
+        phases_out = {}
+        for phase in PHASES:
+            entries, seen = [], set()
+            for item_id, name, rank in per_phase[phase]:
+                if item_id in seen:
+                    continue
+                seen.add(item_id)
+                rec = by_id.get(item_id)
+                if not rec:
+                    dropped.append((spec, phase, item_id, name))
+                    continue
+                if name and rec["item"] != name:
+                    mismatches.append(
+                        f"{spec}: id {item_id} is {rec['item']!r} here, {name!r} on Wowhead")
 
-            tier = 3 if item_id in p5 else 2 if item_id in p4 else 1
-            entry = {"id": item_id, "item": rec["item"]}
-            if tier > 1:
-                entry["bis"] = TIERS[tier]
-            entries.append(entry)
+                entry = {"id": item_id, "item": rec["item"]}
+                tier = tier_from(phase, item_id)
+                if tier > 1:
+                    entry["bis"] = TIERS[tier]
+                variant, miss = variant_for(rank)
+                if variant:
+                    entry["variant"] = variant
+                if miss:
+                    unmapped.setdefault(miss, []).append(f"{spec} {phase}")
+                entries.append(entry)
+            if entries:
+                phases_out[phase] = sorted(entries, key=lambda e: (e["item"], e.get("variant", "")))
 
-        if entries:
-            built[spec] = {"P3": sorted(entries, key=lambda e: e["item"])}
-        print(f"  {spec:<13} {len(entries):>2} kept, {len([d for d in dropped if d[0] == spec]):>2} not in this dataset")
+        if phases_out:
+            built[spec] = phases_out
+
+        # --- wowsims: kept, and used as a cross-check ---
+        # Wowhead decides what renders, because it is the only source covering all 28
+        # specs. wowsims is stored beside it rather than thrown away: the plan is to let
+        # people choose their BiS data source, and that needs the other source's answer
+        # to still exist. Nothing reads it yet.
+        if source.get("wowsims"):
+            try:
+                sim = {2: preset_ids(source["wowsims"], "P4"), 3: preset_ids(source["wowsims"], "P5")}
+            except (urllib.error.URLError, TimeoutError) as e:
+                failures.append(f"{spec} wowsims: {e}")
+                sim = None
+            if sim:
+                sim_presets[spec] = {"P4": sorted(sim[2]), "P5": sorted(sim[3])}
+                for entry in phases_out.get("P3", []):
+                    ours = {"phase": 1, "multiPhase": 2, "expansion": 3}[entry.get("bis", "phase")]
+                    theirs = 3 if entry["id"] in sim[3] else 2 if entry["id"] in sim[2] else 1
+                    if ours != theirs:
+                        sim_disagrees.append(
+                            f"{spec} / {entry['item']}: guides say {TIERS[ours]}, "
+                            f"wowsims presets say {TIERS[theirs]}")
+
+        # --- what moves against the file as it stands ---
+        was = {e["id"]: e.get("bis", "phase")
+               for e in current.get("specs", {}).get(spec, {}).get("P3", [])}
+        for entry in phases_out.get("P3", []):
+            old = was.get(entry["id"])
+            now = entry.get("bis", "phase")
+            if old and old != now:
+                longevity_changes.append(f"{spec} / {entry['item']}: {old} -> {now}")
+
+        counts = " ".join(f"{ph}:{len(phases_out.get(ph, []))}" for ph in PHASES)
+        print(f"  {spec:<13} {counts}")
         if verbose:
-            for e in sorted(entries, key=lambda e: e["item"]):
-                print(f"      {e.get('bis', 'phase'):<10} {e['item']}")
+            for ph in PHASES:
+                for e in phases_out.get(ph, []):
+                    q = f" ({e['variant']})" if e.get("variant") else ""
+                    print(f"      {ph} {e.get('bis', 'phase'):<10} {e['item']}{q}")
 
     if failures:
         print(f"\nFAILED ({len(failures)}) - nothing written:")
@@ -200,59 +337,44 @@ def main():
             print(f"  {f}")
         return 1
 
-    # --- what changes against the file as it stands -------------------------
-    conflicts, additions, uncorroborated = [], 0, []
-    merged = json.loads(json.dumps(current))   # deep copy; keeps note + key order
+    merged = json.loads(json.dumps(current))
+    merged.setdefault("specs", {})
+    for spec, phases_out in built.items():
+        merged["specs"][spec] = phases_out
+    if sim_presets:
+        # A sibling key, not a field on each entry: choosing a data source swaps the
+        # whole list, so the two answers sit side by side rather than interleaved.
+        merged["wowsimsPresets"] = dict(sorted(sim_presets.items()))
 
-    for spec, phases in built.items():
-        have = {e["id"]: e for e in current.get("specs", {}).get(spec, {}).get("P3", [])}
-        keep = []
-        for entry in phases["P3"]:
-            old = have.get(entry["id"])
-            if old:
-                # an existing hand-set tier is left exactly as it is; a disagreement
-                # is reported for a human to rule on rather than overwritten. Specs
-                # with no wowsims preset can't disagree - their tier is the default,
-                # not a derivation, so comparing it would invent a conflict.
-                derived = sources[spec].get("wowsims")
-                if derived and old.get("bis", "phase") != entry.get("bis", "phase"):
-                    conflicts.append(
-                        f"{spec} / {entry['item']}: file says {old.get('bis', 'phase')}, "
-                        f"wowsims presets say {entry.get('bis', 'phase')}"
-                    )
-                keep.append(old)
-            else:
-                keep.append(entry)
-                additions += 1
-        for item_id, old in have.items():
-            if item_id not in {e["id"] for e in phases["P3"]}:
-                uncorroborated.append(f"{spec} / {old['item']} - kept, but not BiS in the Phase 3 guide")
-                keep.append(old)
-        merged.setdefault("specs", {})[spec] = {"P3": sorted(keep, key=lambda e: e["item"])}
+    total = sum(len(v) for sp in merged["specs"].values() for v in sp.values())
+    variants = sum(1 for sp in merged["specs"].values() for v in sp.values()
+                   for e in v if e.get("variant"))
+    print(f"\n{total} entries across {len(merged['specs'])} specs, {variants} carrying a variant")
 
-    total = sum(len(p["P3"]) for p in merged.get("specs", {}).values())
-    print(f"\n{total} entries across {len(merged.get('specs', {}))} specs ({additions} new)")
-
-    if no_longevity:
-        print(f"\nno wowsims preset, so everything stays 'phase' ({len(no_longevity)}): {', '.join(no_longevity)}")
+    if unmapped:
+        print(f"\nrank wordings with no variant ({len(unmapped)}) - entry kept, qualifier left off:")
+        for rank, where in sorted(unmapped.items(), key=lambda kv: -len(kv[1])):
+            print(f"  {len(where):>3}x  {rank}")
+    if longevity_changes:
+        print(f"\nP3 longevity that moves, now it is derived from the guides "
+              f"({len(longevity_changes)}) - written to {CHANGES.name}")
+        CHANGES.write_text(
+            "spec,item,was,now\n" + "\n".join(
+                c.replace(" / ", ",").replace(": ", ",").replace(" -> ", ",")
+                for c in longevity_changes) + "\n", encoding="utf-8")
+    if sim_disagrees:
+        print(f"\nwowsims disagrees with the guides ({len(sim_disagrees)}) - guides win, "
+              f"listed so the gap is visible:")
+        for d in sim_disagrees[:20]:
+            print(f"  {d}")
+        if len(sim_disagrees) > 20:
+            print(f"  ... and {len(sim_disagrees) - 20} more")
     if dropped:
-        print(f"\nBiS on Wowhead but not in this dataset ({len(dropped)}) - dropped, not added:")
-        for spec, item_id, name in dropped[:40]:
-            print(f"  {spec:<13} {item_id:<7} {name}")
-        if len(dropped) > 40:
-            print(f"  ... and {len(dropped) - 40} more")
+        print(f"\nBiS on Wowhead but not in this dataset ({len(dropped)}) - dropped, not added")
     if mismatches:
         print(f"\nname mismatches ({len(mismatches)}):")
         for m in mismatches:
             print(f"  {m}")
-    if uncorroborated:
-        print(f"\nalready in bis.json, not in the guide ({len(uncorroborated)}):")
-        for u in uncorroborated:
-            print(f"  {u}")
-    if conflicts:
-        print(f"\ntier conflicts ({len(conflicts)}) - file wins, rule on these by hand:")
-        for c in conflicts:
-            print(f"  {c}")
 
     if not write:
         print("\nDry run. Re-run with --write to apply.")
