@@ -818,6 +818,26 @@ ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
   const his = data.filter((r) => !r.unsourced);
   ok(his.every((r) => !r.prioritySource),
      `none of the ${his.length} rows he covered carries a source - absent is what means "his"`);
+
+  // and the reader has to be able to see the difference, or the marker in the data is
+  // doing nothing for the person the attribution rule exists to protect
+  const marked = [...doc.querySelectorAll("#results tr[data-id]")]
+    .filter((tr) => tr.querySelector(".prio-from"));
+  const seededHere = data.filter((r) =>
+    r.prioritySource === "bis" &&
+    ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone));
+  ok(marked.length === seededHere.length,
+     `every seeded row on screen says where its ordering came from (${marked.length}/${seededHere.length})`);
+  ok(marked.every((tr) => tr.querySelector(".prio-from").textContent === "BIS"),
+     "and says it the same way on each");
+
+  // the guide's own rows carry nothing
+  const hisRows = [...doc.querySelectorAll("#results tr[data-id]")].filter((tr) => {
+    const rec = data.find((r) => String(r.id) === tr.dataset.id);
+    return rec && !rec.prioritySource && (rec.priority || []).length;
+  });
+  ok(hisRows.length > 0 && hisRows.every((tr) => !tr.querySelector(".prio-from")),
+     `and none of his ${hisRows.length} own orderings is marked`);
 }
 
 // --- rings follow the phase, and carry why ------------------------------------------
@@ -966,11 +986,19 @@ ok(bands.every((r) => /Scale of the Sands/.test(r.notes)),
    "and their notes say they are a reputation reward, not a drop");
 ok(bands.every((r) => r.unique), "each is unique-equipped, so no doubling up");
 
-// the priority column is now icons and operators only - no prose anywhere
-const proseRows = [...doc.querySelectorAll("tbody tr")].filter((tr) =>
-  /[a-z]/i.test(tr.children[3].textContent));
+// The priority itself is icons and operators only - no prose anywhere. The .prio-from
+// label is not priority content: it says where the ordering came from, and it is
+// discounted here rather than allowed for, so a genuine string leaking back into a
+// priority still fails this.
+const priorityText = (tr) => {
+  const cell = tr.children[3].cloneNode(true);
+  const from = cell.querySelector(".prio-from");
+  if (from) from.remove();
+  return cell.textContent;
+};
+const proseRows = [...doc.querySelectorAll("tbody tr")].filter((tr) => /[a-z]/i.test(priorityText(tr)));
 ok(proseRows.length === 0,
-   `no free text left in any priority (found: ${proseRows.map((tr) => tr.children[3].textContent.trim()).join(" | ")})`);
+   `no free text left in any priority (found: ${proseRows.map((tr) => priorityText(tr).trim()).join(" | ")})`);
 
 // rows whose priority is deliberately blank render an empty cell, not "undefined"
 const blank = [...doc.querySelectorAll("tbody tr")]

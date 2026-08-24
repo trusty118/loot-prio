@@ -2567,6 +2567,23 @@
     }
     if (!list || !list.length) return td;
 
+    /* An ordering that is not one of zatar's has to say so, or the site presents someone
+       else's work as his - which is what CLAUDE.md section 8 is about. Zul'Aman and
+       Sunwell rows are seeded from their BiS lists, and on screen a seeded line is
+       indistinguishable from a call he made.
+
+       One muted word, on the 96 rows it applies to. The last attempt at this put a tag
+       and a hover explanation on every group heading of two whole raids, which is
+       furniture; the fix was not to say nothing, it was to say it once, quietly, where
+       it is true. `prioritySource` already exists and is already validated, so this is
+       a render decision and not a data one. */
+    if (rec.prioritySource === "bis") {
+      var from = document.createElement("span");
+      from.className = "prio-from";
+      from.textContent = "BIS";
+      td.appendChild(from);
+    }
+
     /* With a class or spec selected, everyone else in the line dims, so where you
        stand reads at a glance. Same idea as class-icon--muted on tier tokens; the
        tooltip is untouched, so a dimmed icon still names itself on hover. */

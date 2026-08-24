@@ -903,6 +903,20 @@ tbody td { overflow-wrap: break-word; }
 
 tbody tr:hover .class-icon--muted { opacity: .4; }
 
+/* Where an ordering came from, when it did not come from the guide. Deliberately the
+   quietest thing in the cell: the same micro-label treatment the LIST and SLOT fields
+   used, sitting inline before the icons rather than tagging the row. It is a statement
+   about the line, not a warning about it. */
+.prio-from {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  color: var(--text-faint);
+  margin-right: 7px;
+  vertical-align: middle;
+}
+
 /* Operators between the icons. A span rather than bare text so each one can
    carry a data-tip - the instant-tooltip mechanism picks up any [data-tip]. */
 .prio-op {
