@@ -540,6 +540,90 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
      "and the hint's text is in the markup, not built from a message");
 }
 
+// --- notes are yours to edit, on the same terms the priorities are ------------------
+// The whole point of tonight's session: start from his calls and his wording, change
+// both by discussion, share the result.
+{
+  const w7 = boot();
+  await settle();
+  const d7 = w7.document;
+
+  // A row he actually wrote a note on, found in the DOM rather than hardcoded, so this
+  // survives the dataset being re-sourced.
+  const noteRow = [...d7.querySelectorAll("tbody tr")]
+    .find((tr) => tr.querySelector("td.col-notes").textContent.trim().length > 10);
+  const item = noteRow.children[0].textContent.trim();
+  const rec = data.find((r) => item.includes(r.item));
+  const his = rec.notes;
+
+  const cell = (dd) => rowFor(dd, rec.item).querySelector("td.col-notes");
+  ok(!cell(d7).querySelector(".note-text"),
+     "on the guide's list a note is text, not something you can click into");
+
+  doMenu(w7, "Make a copy");
+  await settle();
+  ok(Object.keys(only(w7).notes).length === data.length,
+     "a copy takes his notes with it, all of them, the way it takes his priorities");
+  ok(only(w7).notes[rec.id] === his, "and they start as his wording exactly");
+
+  // Click the note, type, blur. There is no Save button here either.
+  const open = () => { click(w7, cell(d7).querySelector(".note-text"));
+                       return cell(d7).querySelector(".note-field"); };
+  let field = open();
+  ok(field, "with a list of your own open, clicking a note opens a field");
+  ok(field.value === his, "prefilled with what the row already said");
+
+  const MINE = "Ours: goes to the Prot Warr first, agreed in Thursday's run.";
+  field.value = MINE;
+  field.dispatchEvent(new w7.Event("blur"));
+  await settle();
+
+  ok(only(w7).notes[rec.id] === MINE, "blur writes it to the store, with nothing pressed");
+  ok(cell(d7).textContent.includes(MINE), "and the row now reads your wording");
+  ok(rec.notes === his && data.find((r) => r.id === rec.id).notes === his,
+     "the guide's own note is untouched - ALL is never mutated");
+
+  // Search reads the same overlay the cell does, or it would keep finding wording that
+  // is no longer on the page.
+  const q = el(d7, "search");
+  q.value = "Thursday's run";
+  q.dispatchEvent(new w7.Event("input"));
+  await settle();
+  ok(rowFor(d7, rec.item), "search finds your note");
+  q.value = his.slice(0, 24);
+  q.dispatchEvent(new w7.Event("input"));
+  await settle();
+  ok(!rowFor(d7, rec.item), "and no longer finds the wording you replaced");
+  q.value = "";
+  q.dispatchEvent(new w7.Event("input"));
+  await settle();
+
+  // Escape abandons rather than commits, so a misclick into a note costs nothing.
+  field = open();
+  field.value = "typed by accident";
+  key(w7, field, "Escape");
+  await settle();
+  ok(only(w7).notes[rec.id] === MINE, "Escape leaves the note as it was");
+
+  // One row back to his, without abandoning the list.
+  const reset = cell(d7).querySelector(".note-reset");
+  ok(reset, "a changed note offers a reset");
+  click(w7, reset);
+  await settle();
+  ok(only(w7).notes[rec.id] === his, "which puts his wording back");
+  ok(!cell(d7).querySelector(".note-reset"),
+     "and the reset goes away, because there is nothing left to undo");
+  ok(only(w7).priorities[rec.id].length === (rec.priority || []).length,
+     "resetting a note does not touch the priority beside it");
+
+  // A blank list is nobody's list, so it does not arrive carrying his words.
+  doMenu(w7, "+  New list");
+  await settle();
+  const blank = Object.values(saved(w7)).find((t) => t.base === "blank");
+  ok(Object.keys(blank.notes).length === data.length && blank.notes[rec.id] === "",
+     "a blank list starts with no notes at all - you asked for nobody's list");
+}
+
 // --- no browser dialogs anywhere ------------------------------------------------------------
 ok(!/window\.(prompt|confirm)\s*\(/.test(source),
    "app.js asks nothing through a browser dialog");

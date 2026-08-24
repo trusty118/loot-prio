@@ -112,6 +112,17 @@ bad((d) => { d.priorities["32375"] = [{ spec: "ProtWarr", class: "Warrior" }]; }
 bad((d) => { d.v = 99; }, "a version we don't understand");
 bad((d) => { delete d.priorities; }, "no priorities at all");
 
+/* Notes travel on a shared list too, and are just as untrusted. The cell renders through
+   highlight(), which escapes - these are the model's own rules, before that. */
+bad((d) => { d.notes = [1, 2]; }, "notes that are not an object");
+bad((d) => { d.notes = { 32375: 42 }; }, "a note that is not a string");
+bad((d) => { d.notes = { 32375: "x".repeat(5000) }; }, "a note long enough to break the link");
+
+/* notes is optional and absent means "the guide's", which is the whole reason v did not
+   have to move: every list saved before tonight, and every link already sent, still opens. */
+ok(api.validateTemplate({ v: t.v, name: t.name, base: t.base, priorities: t.priorities }) === null,
+   "a template with no notes at all still opens - absent means his");
+
 const junk = await api.decodeTemplate("z!!!!not-base64!!!!").then(() => null, (e) => e.message);
 ok(typeof junk === "string", `a damaged link is refused: ${junk}`);
 

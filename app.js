@@ -716,20 +716,36 @@
     return rec.priority;
   }
 
+  /* The same overlay, for the notes column. A note you have written wins; absent means
+     the guide's, which is why a template saved before notes existed still reads correctly
+     and why TEMPLATE_VERSION did not have to move.
+
+     Everything asking what a row SAYS goes through this, exactly as everything asking
+     what it RANKS goes through effectivePriority - including the search haystack, or a
+     search would keep finding wording you had already replaced. */
+  function effectiveNotes(rec) {
+    if (activeTemplate && activeTemplate.notes) {
+      var own = activeTemplate.notes[rec.id];
+      if (typeof own === "string") return own;
+    }
+    return rec.notes || "";
+  }
+
   /* False for an item the active template has never heard of - added to the dataset
      after it was saved. The row still renders, from the guide's data, and says so. */
   function inTemplate(rec) {
     return !activeTemplate || !!activeTemplate.priorities[rec.id];
   }
 
-  function makeTemplate(name, base, priorities) {
+  function makeTemplate(name, base, priorities, notes) {
     return {
       v: TEMPLATE_VERSION,
       id: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       name: name,
       created: new Date().toISOString().slice(0, 10),
       base: base,
-      priorities: priorities
+      priorities: priorities,
+      notes: notes || {}
     };
   }
 
@@ -737,7 +753,7 @@
      this row showing", so one function copies the guide's list, one of yours, or one
      that arrived on a link, without branching on which of the three it is. */
   function copyOfCurrent(name) {
-    var priorities = {};
+    var priorities = {}, notes = {};
     ALL.forEach(function (rec) {
       /* deep copy: editing one must never reach into ALL */
       priorities[rec.id] = (effectivePriority(rec) || []).map(function (e) {
@@ -745,17 +761,26 @@
         Object.keys(e).forEach(function (k) { c[k] = e[k]; });
         return c;
       });
+      /* Notes are copied for the same reason the priorities are: a copy is a full
+         snapshot of what was on screen, so it reads identically the moment it is made
+         and diverges only where you change it. */
+      notes[rec.id] = effectiveNotes(rec);
     });
     return makeTemplate(name || "My priorities",
-      activeTemplate ? activeTemplate.id : "zatar", priorities);
+      activeTemplate ? activeTemplate.id : "zatar", priorities, notes);
   }
 
   /* Nobody's list yet: all 195 rows, every priority empty. Still a full copy, so it
      validates, encodes and shares exactly like any other. */
   function newBlankTemplate(name) {
-    var priorities = {};
-    ALL.forEach(function (rec) { priorities[rec.id] = []; });
-    return makeTemplate(name || "My list", "blank", priorities);
+    var priorities = {}, notes = {};
+    ALL.forEach(function (rec) {
+      priorities[rec.id] = [];
+      /* Blank means blank. The guide's notes are not seeded here the way they are into
+         a copy - you asked for nobody's list, and his wording is somebody's. */
+      notes[rec.id] = "";
+    });
+    return makeTemplate(name || "My list", "blank", priorities, notes);
   }
 
   /* ---------- template storage ----------
@@ -1120,6 +1145,23 @@
     }));
   }
 
+  /* One note, written into the template. Never into ALL - the guide's own wording has to
+     survive so a reset has something to go back to, which is the same reason the
+     priorities are an overlay rather than an edit in place. */
+  function setNote(rec, text) {
+    if (!activeTemplate || !activeIsMine) return;
+    if (!activeTemplate.notes) activeTemplate.notes = {};
+    if (activeTemplate.notes[rec.id] === text) return;
+    activeTemplate.notes[rec.id] = text.slice(0, MAX_NOTE);
+    unsaved = true;
+    saveNow();
+  }
+
+  function resetNote(rec) {
+    if (!activeTemplate || !activeIsMine) return;
+    setNote(rec, rec.notes || "");
+  }
+
   /* ---------- sharing ----------
      gzip via CompressionStream where the browser has it (11.6 KB -> ~2.1 KB), plain
      base64 where it doesn't. The marker byte says which, so a link made in one
@@ -1199,10 +1241,25 @@
   /* A shared template is untrusted input. Check it against the registry and the
      editing rules before any of it reaches the table, and say what is wrong rather
      than rendering something broken. */
+  /* Long enough for a paragraph of reasoning, short enough that 368 of them can't be
+     used to make a share link nobody can open. */
+  var MAX_NOTE = 600;
+
   function validateTemplate(doc) {
     if (!doc || typeof doc !== "object") return "not a template";
     if (doc.v !== TEMPLATE_VERSION) return "made by a different version of this site";
     if (!doc.priorities || typeof doc.priorities !== "object") return "no priorities in it";
+    /* notes is optional - a template saved before notes existed has none, and absent
+       means "the guide's". Present and wrong is still refused. */
+    if (doc.notes != null) {
+      if (typeof doc.notes !== "object" || Array.isArray(doc.notes)) return "broken notes in it";
+      var nids = Object.keys(doc.notes);
+      for (var n = 0; n < nids.length; n++) {
+        var note = doc.notes[nids[n]];
+        if (typeof note !== "string") return "item " + nids[n] + " has a broken note";
+        if (note.length > MAX_NOTE) return "item " + nids[n] + ": the note is too long";
+      }
+    }
 
     var byId = {};
     ALL.forEach(function (r) { byId[r.id] = r; });
@@ -1333,7 +1390,7 @@
     if (state.q) {
       var q = state.q.toLowerCase();
       /* search both the raw and displayed forms, so "2H mace" and "mace" both hit */
-      var hay = [rec.item, rec.boss, rec.zone, priorityText(effectivePriority(rec)), rec.notes,
+      var hay = [rec.item, rec.boss, rec.zone, priorityText(effectivePriority(rec)), effectiveNotes(rec),
                  rec.slot, slotGroup(rec.slot), rec.type, typeLabel(rec), (rec.roles || []).join(" "),
                  rec.unsourced ? UNSOURCED_TAG : ""]
         .join("   ").toLowerCase();
@@ -2664,12 +2721,84 @@
 
     tr.appendChild(canEdit() ? editablePriorityCell(rec) : priorityCell(rec));
 
-    var notes = document.createElement("td");
-    notes.className = "col-notes";
-    notes.innerHTML = highlight(rec.notes, state.q);
-    tr.appendChild(notes);
+    tr.appendChild(canEdit() ? editableNotesCell(rec) : notesCell(rec));
 
     return tr;
+  }
+
+  function notesCell(rec) {
+    var td = document.createElement("td");
+    td.className = "col-notes";
+    td.innerHTML = highlight(effectiveNotes(rec), state.q);
+    return td;
+  }
+
+  /* Click the note to change it, blur to keep it - the same shape the rest of the editor
+     has, and the same absence of a Save button.
+
+     A textarea rather than an input: these run to a sentence or two, and a one-line box
+     hides the end of your own reasoning. It is created on the click rather than always
+     being there, because a row you are not editing should read as text, and 368 textareas
+     per render is real cost for nothing. */
+  function editableNotesCell(rec) {
+    var td = document.createElement("td");
+    td.className = "col-notes col-notes--edit";
+
+    var text = document.createElement("div");
+    text.className = "note-text";
+    var body = highlight(effectiveNotes(rec), state.q);
+    if (body) text.innerHTML = body;
+    else {
+      text.className += " note-text--empty";
+      text.textContent = "Add a note";
+    }
+    text.setAttribute("role", "button");
+    text.dataset.tip = "Click to edit";
+
+    text.addEventListener("click", function () {
+      var field = document.createElement("textarea");
+      field.className = "note-field";
+      field.value = effectiveNotes(rec);
+      field.rows = 3;
+      /* The same cap validateTemplate() enforces, so a list of your own can never be one
+         your own validator would refuse when it comes back off a link. */
+      field.maxLength = MAX_NOTE;
+      field.setAttribute("aria-label", "Note for " + rec.item);
+      td.replaceChild(field, text);
+      field.focus();
+      field.selectionStart = field.selectionEnd = field.value.length;
+
+      /* blur fires again while update() tears the row down, so the commit is guarded */
+      var done = false;
+      field.addEventListener("blur", function () {
+        if (done) return;
+        done = true;
+        setNote(rec, field.value.trim());
+        update();
+      });
+      field.addEventListener("keydown", function (ev) {
+        /* Escape abandons the edit. Enter is a newline - these are sentences, and there
+           is no Save button for it to stand in for. */
+        if (ev.key === "Escape") { ev.preventDefault(); done = true; update(); }
+      });
+    });
+
+    td.appendChild(text);
+
+    /* Offered only while your note differs from his, the same rule .prio-reset follows.
+       On an unsourced row there is no note of his, so it reads as clearing yours. */
+    if ((rec.notes || "") !== effectiveNotes(rec)) {
+      var reset = document.createElement("button");
+      reset.type = "button";
+      reset.className = "note-reset";
+      reset.textContent = "\u21BA";
+      reset.dataset.tip = rec.notes ? "Back to zatar's note" : "Clear this note";
+      reset.setAttribute("aria-label", "Reset the note on " + rec.item);
+      reset.addEventListener("click", function () { resetNote(rec); update(); });
+      td.appendChild(reset);
+    }
+
+    return td;
   }
 
   /* Sort state is global, so every boss group stays in step - sorting one section

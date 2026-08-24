@@ -438,6 +438,23 @@ priority cells, `selectionHas()`/`priorityHas()` behind the class/spec filter, a
 search haystack. Two deliberate exceptions read `rec.priority` precisely because they want
 the original — the reset button, and whether to offer one.
 
+**`effectiveNotes()` is the same overlay for the notes column, added Aug 2026**, and the
+same rule applies: the cell reads it, and so does the **search haystack** — otherwise a
+search keeps finding wording you have already replaced, which is the bug the priority
+haystack was already written to avoid.
+
+Notes are yours on exactly the terms the priorities are. `copyOfCurrent()` seeds
+`template.notes` from `effectiveNotes(rec)` for all 368 records, you edit them, and
+`base: "zatar"` records where they came from — there is no new attribution question,
+because it is the one the priorities already answered. `newBlankTemplate()` deliberately
+does **not** seed them: you asked for nobody's list, and his wording is somebody's.
+
+**`notes` is optional and `TEMPLATE_VERSION` did not move.** Absent means "the guide's", so
+every list saved before this and every share link already sent still opens. `validateTemplate()`
+refuses a `notes` that is present and wrong — not an object, a value that is not a string, or
+one longer than `MAX_NOTE` (600), which is also the textarea's `maxLength` so a list of your
+own can never be one your own validator would refuse when it comes back off a link.
+
 ### Whose list is on screen
 
 Three views, one variable and one flag:
@@ -717,6 +734,14 @@ is written to your store, and Make a copy is how you keep it.
 | Remove | the × |
 | Operator | click the `>`, pick from the menu |
 | Add | `+`, then click an icon — or drag one onto any line |
+| Note | click the note, type, click away |
+
+The note is the one editing control that is a **text field**, so typing in it is not an
+"editing gesture" in the sense the keyboard ones were and dropping those did not reach it.
+Escape abandons, blur commits, Enter is a newline — there is no Save button for it to stand
+in for. The field is built on the click rather than always being there: 368 textareas per
+render is real cost, and a row you are not editing should read as text. The `↺` beside it
+appears only while your wording differs from his.
 
 Every action used to have a keyboard form as well. **Two consequences of dropping them, both
 worth knowing rather than rediscovering.** The editor is no longer keyboard operable, which is
