@@ -1062,14 +1062,6 @@
     return normaliseList(out);
   }
 
-  /* Step to the next operator. The pointer picks from a menu instead - four clicks
-     to reach "~=" was one of the complaints - but stepping is the right thing on a
-     keyboard, where there is nothing to aim at. */
-  function cycleOp(list, at) {
-    if (at < 1 || at >= list.length) return list;
-    var next = (OP_LIST.indexOf(list[at].op) + 1) % OP_LIST.length;
-    return setOp(list, at, OP_LIST[next]);
-  }
 
   /* Applies an edited list to the active template. There is always one: editable
      cells are only rendered for a list of your own. */
@@ -1785,9 +1777,14 @@
   }
 
   /* ---------- the editor ----------
-     Every action has a keyboard form as well as a pointer one. That is partly
-     accessibility and partly how the editor is testable at all: jsdom can dispatch a
-     keydown but cannot drag. */
+     Pointer only, by decision. Every action used to have a keyboard form as well, which
+     was partly accessibility and partly the only reason the editor was testable - jsdom
+     can dispatch a keydown but cannot drag.
+
+     Two consequences to know rather than rediscover. The editor is not keyboard
+     operable. And reordering is now drag-only, so **nothing automated covers it** -
+     remove, operator and add all still have click paths and stay tested, but a
+     reordering regression will only ever be caught by hand at localhost:8642. */
 
   var editMsg = "";        /* why the last edit was refused, shown under the toolbar */
 
@@ -1828,8 +1825,8 @@
 
   /* ---------- dragging ----------
      Pointer events rather than HTML5 drag-and-drop: these icons live in a
-     table-layout: fixed cell, where HTML5 DnD drop targets are unreliable. Every
-     gesture here has the keyboard equivalent above, which is what the tests drive. */
+     table-layout: fixed cell, where HTML5 DnD drop targets are unreliable. This is the
+     only way to reorder, so it is also the only part of the editor no test can reach. */
 
   var DRAG_SLOP = 4;      /* px of movement before a press counts as a drag, not a click */
 
@@ -1927,12 +1924,12 @@
   function editableIcon(rec, list, index, resolved, entry) {
     var wrap = document.createElement("span");
     wrap.className = "prio-edit";
-    wrap.tabIndex = 0;
     wrap.dataset.index = String(index);
     wrap.setAttribute("role", "listitem");
+    /* The position is still worth announcing - it is the whole meaning of the line -
+       but there are no keys left to name. */
     wrap.setAttribute("aria-label",
-      resolved.name + ", position " + (index + 1) + " of " + list.length +
-      ". Left and right arrows move, Delete removes, Enter changes the operator.");
+      resolved.name + ", position " + (index + 1) + " of " + list.length);
 
     var mark = bisMark(resolved, rec.id);
     wrap.appendChild(specIcon(resolved, mark.tier, mark.specs));
@@ -1941,7 +1938,7 @@
     x.type = "button";
     x.className = "prio-x";
     x.textContent = "×";
-    x.tabIndex = -1;                    /* the wrapper is the tab stop, Delete removes */
+    x.tabIndex = -1;
     x.setAttribute("aria-hidden", "true");
     x.addEventListener("click", function (e) {
       e.stopPropagation();
@@ -1950,28 +1947,9 @@
     });
     wrap.appendChild(x);
 
-    wrap.addEventListener("keydown", function (e) {
-      var handled = true;
-      if (e.key === "ArrowLeft") applyEdit(rec, moveEntry(list, index, index - 1));
-      else if (e.key === "ArrowRight") applyEdit(rec, moveEntry(list, index, index + 1));
-      else if (e.key === "Delete" || e.key === "Backspace") applyEdit(rec, removeEntry(list, index));
-      else if (e.key === "Enter" || e.key === " ") applyEdit(rec, cycleOp(list, index));
-      else handled = false;
-      if (!handled) return;
-      e.preventDefault();
-      announce("");
-      update();
-      /* keep the moved icon focused so arrows can be held down */
-      var sel = "tr[data-id='" + rec.id + "'] .prio-edit";
-      var all = el.results.querySelectorAll(sel);
-      var want = e.key === "ArrowLeft" ? index - 1 : e.key === "ArrowRight" ? index + 1 : index;
-      var next = all[Math.max(0, Math.min(all.length - 1, want))];
-      if (next) next.focus();
-    });
-
     /* Drag to reorder. Dropping anywhere but on a line does nothing: taking an icon
-       off is the x and the Delete key, both deliberate. Dragging clear of the row
-       used to remove it, which fired by accident more often than on purpose. */
+       off is the x, deliberately. Dragging clear of the row used to remove it, which
+       fired by accident more often than on purpose. */
     onDrag(wrap, {
       over: function (ev) {
         var td = wrap.parentNode;
@@ -2195,7 +2173,7 @@
     var field = document.createElement("input");
     field.type = "search";
     field.className = "prio-pop-find";
-    field.placeholder = "Type to narrow, Enter to take the first";
+    field.placeholder = "Type to narrow";
     field.setAttribute("aria-label", "Find a class or spec");
     pop.appendChild(field);
 
@@ -2223,11 +2201,9 @@
     });
 
     field.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") { e.preventDefault(); closePop(); return; }
-      if (e.key !== "Enter") return;
-      e.preventDefault();
-      var first = pop.querySelector(".prio-pop-icon");
-      if (first) first.click();
+      /* Escape only. It closes all five overlays on this page and is not an editing
+         gesture - the editor itself is pointer-only. */
+      if (e.key === "Escape") { e.preventDefault(); closePop(); }
     });
 
     pop.addEventListener("keydown", function (e) {

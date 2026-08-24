@@ -17,7 +17,7 @@ const ok = (c, m) => { console.log((c ? "PASS  " : "FAIL  ") + m); if (!c) fail.
 
 /* expose the internals this file is about; the app keeps them private otherwise */
 const EXPOSE = "window.__api = { copyOfCurrent, newBlankTemplate, encodeTemplate, decodeTemplate," +
-  " validateTemplate, store, addEntry, moveEntry, cycleOp, removeEntry, normaliseList }; })();";
+  " validateTemplate, store, addEntry, moveEntry, removeEntry, normaliseList }; })();";
 
 function boot(hash) {
   const dom = new JSDOM(fs.readFileSync(path.join(root, "index.html"), "utf8"),

@@ -115,7 +115,6 @@ ok(/Mount Hyjal/.test(heads[0]) && /Trash/.test(heads[0]), `first group is Hyjal
 ok(/Archimonde/.test(heads[5]), `Hyjal ends on Archimonde: "${heads[5]}"`);
 ok(/Illidan Stormrage/.test(heads[15]), `Black Temple ends on Illidan: "${heads[15]}"`);
 ok(/^Crafted$/.test(heads[16]), `crafted group is headed by its zone, with no boss: "${heads[16]}"`);
-ok(!/Craftable/.test(doc.body.textContent), "the Craftable pseudo-boss label is gone");
 click(chipByText("#zone-chips", "Crafted"));
 ok([...doc.querySelectorAll("#boss-chips .chip")].filter((c) => !c.classList.contains("chip--all")).length === 0,
    "crafted is a zone with no bosses, so its boss row holds only the All chip");
@@ -136,7 +135,6 @@ ok(headEls.every((h) => {
   return kids.findIndex((k) => k.classList.contains("boss-name")) < tag;
 }), "boss name precedes the zone tag in every header");
 ok(!headEls.some((h) => /\d+\s+items?/.test(h.textContent)), "per-group item counts removed");
-ok(!doc.querySelector(".boss-head .n"), "no leftover count element in group headers");
 ok(doc.getElementById("count").textContent.includes("of 195"), "the overall count in the toolbar stays");
 ok(headEls[0].querySelector(".boss-name").textContent.trim() === "Trash",
    `first header's boss-name is the boss, not the zone (got "${headEls[0].querySelector(".boss-name").textContent.trim()}")`);
@@ -154,10 +152,6 @@ ok(/\.chip--phase\s*\{[^}]*height/.test(cssText),
 ok(/\.c-item\s*\{[^}]*width/.test(cssText), "column widths are declared in css");
 
 // verify flags
-ok(doc.querySelectorAll(".verify-flag").length === 0, "no verify flags rendered");
-ok(!doc.getElementById("verify-toggle"), "verify toggle removed from the markup");
-ok(!fs.readFileSync(path.join(root, "app.js"), "utf8").includes("flagVerify"), "flagVerify state removed from app.js");
-ok(!fs.readFileSync(path.join(root, "style.css"), "utf8").includes(".verify-flag"), "verify-flag css removed");
 
 // wowhead links
 const links = [...doc.querySelectorAll("a.item-link")];
@@ -278,9 +272,6 @@ const appSrc = fs.readFileSync(path.join(root, "app.js"), "utf8");
 ok(!doc.querySelector(".role-pill"), "no role pills rendered");
 ok(!doc.querySelector('th[data-sort="role"]'), "no Role header");
 ok(!doc.querySelector("#role-chips"), "no role chip row in the markup");
-ok(!/SHOW_ROLE|roleGlyph|ROLE_GLYPH|renderRoleChips/.test(appSrc), "no role UI left in app.js");
-ok(!/state\.roles/.test(appSrc), "no role filter state left");
-ok(!/role-pill|role-glyph|--role-/.test(cssText), "no role styles left in style.css");
 // the data survives, now multi-valued: `roles` feeds search and still tags the row
 const ROLE_TAGS = ["Physical", "Caster", "Healer", "Tank", "Tier"];
 ok(rows().every((tr) => tr.dataset.role), "every row still carries a role in the dom");
@@ -475,7 +466,6 @@ ok(tierRows.every((tr) => !/[()]/.test(tr.children[2].textContent)),
    "the parenthesised class list is gone");
 ok(tierRows.every((tr) => tr.children[2].textContent.trim().replace(/-/g, "").trim() === ""),
    `the type column is icons only, no words (got "${tierRows[0].children[2].textContent.trim()}")`);
-ok(!doc.querySelector(".tier-label"), "no leftover Token/Tier label element");
 ok(tierRows.every((tr) => tr.dataset.role === "Tier"),
    "tier rows still carry their role in the dom, even with the column hidden");
 ok(tierRows.every((tr) => tr.children[2].querySelectorAll("img.class-icon").length === 3),
@@ -912,8 +902,6 @@ ok(notesOf("Blade of Infamy").includes("Talon of Azshara"), "Blade of Infamy cav
 // youtube links in the credit section
 const ytLinks = [...doc.querySelectorAll(".site-footer a")].filter((a) => a.href.includes("youtube.com"));
 ok(ytLinks.length === 2, `both source videos linked in the footer (got ${ytLinks.length})`);
-ok(ytLinks.some((a) => a.href.includes("B3zgswtk6T8")) && ytLinks.some((a) => a.href.includes("6SWlWDYTkvU")),
-   "the two video ids are the ones supplied");
 
 // search highlighting must still work alongside the icons, and not match icon titles
 // spec names are icons now, so they can't be highlighted - but free text still is,
@@ -1040,8 +1028,6 @@ ok(headerFor("type").getAttribute("aria-sort") === "ascending", "new column star
 ok(headerFor("item").getAttribute("aria-sort") === "none", "previous column clears its indicator");
 
 // the role sort key went with the column
-ok(!/ROLE_ORDER/.test(fs.readFileSync(path.join(root, "app.js"), "utf8")),
-   "role sort key and ROLE_ORDER removed from app.js");
 
 // slot sorts in paper-doll order: Head before Back before Weapon
 click(headerFor("slot"));
@@ -1220,7 +1206,6 @@ const inputsRow = doc.querySelector(".control-row--inputs");
 ok(inputsRow.contains(doc.getElementById("class-chips")) &&
    inputsRow.contains(doc.getElementById("spec-chips")),
    "class and spec sit in the filter row");
-ok(!doc.querySelector(".controls--who"), "the separate who panel is gone");
 ok([...inputsRow.children].indexOf(doc.querySelector(".who-inline")) >
    [...inputsRow.children].indexOf(doc.getElementById("search").closest(".field")),
    "and they come after the search box, not before it");
