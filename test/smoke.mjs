@@ -1499,6 +1499,16 @@ ok([...inputsRow.children].indexOf(doc.querySelector(".who-inline")) >
 ok(/\.field--grow\s*\{[^}]*flex:\s*0/.test(cssText),
    "the search box no longer takes every spare pixel");
 
+/* The spec strip sits UNDER the class strip, and that takes two rules agreeing: the
+   who block stacks, and the row it sits in aligns to the top. Bottom-aligned, the block's
+   lower storey lines up with Slot/Type/Search/Reset and the class strip floats above the
+   row on a line of its own - which is what happened the first time this was built, and is
+   invisible in jsdom because it cannot lay anything out. Both halves are pinned. */
+ok(/\.who-inline\s*\{[^}]*flex-direction:\s*column/.test(cssText),
+   "the who block stacks class over spec");
+ok(/\.control-row--inputs\s*\{[^}]*align-items:\s*flex-start/.test(cssText),
+   "and its row aligns to the top, so the spec strip hangs rather than the class strip floating");
+
 // two panels: where it drops, then everything that narrows the table - type, slot,
 // search and who you are. Which list you are on lives in the banner, because it is
 // not filtering and it applies to the whole page.

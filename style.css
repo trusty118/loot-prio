@@ -580,9 +580,18 @@ a:hover { color: var(--gold-bright); }
   color: var(--gold-bright);
 }
 
+/* Top-aligned, not bottom-aligned, and that is what makes the spec strip hang.
+   .who-inline is the one two-storey item in this row: class strip, spec strip under it.
+   Aligned to the bottom, its LOWER storey lined up with Slot, Type, Search and Reset and
+   the class strip floated above them - one control on a line of its own and everything
+   else on a line below. Aligned to the top, the class strip sits level with the rest of
+   the row, which is where it belongs, and the spec row drops beneath it where it reads as
+   narrowing the strip above. Every control here is single-height (the Slot and Type labels
+   went, and Search wears .field--joined), so there is no stacked label wanting its baseline
+   at the bottom. */
 .control-row--inputs {
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 12px;
 }
 
