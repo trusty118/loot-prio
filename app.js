@@ -85,6 +85,10 @@
       "Azgalor",
       "Archimonde"
     ],
+      /* The timed chests come last: they reward the whole run rather than mark a step
+         through it. Four chests folded into one source - three and four hold the same
+         five rings, and the question is which source, not which chest. No portrait
+         exists, which chip() handles by falling back to the name, as for the Chess Event. */
     "Zul'Aman": [
       "Trash",
       "Nalorakk",
@@ -92,7 +96,8 @@
       "Jan'alai",
       "Halazzi",
       "Hex Lord Malacrass",
-      "Zul'jin"
+      "Zul'jin",
+      "Timed Chest"
     ],
     "Sunwell Plateau": [
       "Trash",

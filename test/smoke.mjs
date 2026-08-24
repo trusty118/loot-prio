@@ -1190,6 +1190,25 @@ ok(doc.querySelectorAll("#zone-chips .chip").length > 0,
    "its zones are still listed, so the phase is visibly a place with nothing in it");
 click(doc.getElementById("reset"));
 
+// Every boss a record names has to be in BOSS_ORDER, or its chip only appears through
+// the fallback that appends unknown bosses - which works, but puts them in whatever
+// order the data happens to be in rather than in kill order. Timed Chest arrived that
+// way and looked correct purely by luck.
+{
+  const src = fs.readFileSync(path.join(root, "app.js"), "utf8");
+  const block = /var BOSS_ORDER = \{([\s\S]*?)\n  \};/.exec(src)[1];
+  const orderFor = {};
+  for (const m of block.matchAll(/"([^"]+)":\s*\[([\s\S]*?)\]/g)) {
+    orderFor[m[1]] = [...m[2].matchAll(/"([^"]+)"/g)].map((x) => x[1]);
+  }
+  ok(Object.keys(orderFor).length === 9, `BOSS_ORDER covers all nine raids (${Object.keys(orderFor).length})`);
+  const stray = [...new Set(data
+    .filter((r) => orderFor[r.zone] && !orderFor[r.zone].includes(r.boss))
+    .map((r) => `${r.zone}/${r.boss}`))];
+  ok(stray.length === 0,
+     `every boss the data names is in BOSS_ORDER${stray.length ? ": " + stray.join(", ") : ""}`);
+}
+
 // --- boss chips are qualified by their zone ---
 // Boss names are not unique across zones: both raids have a "Trash". The hierarchy
 // means only one zone's bosses are ever on screen, so the two chips can no longer be
