@@ -1652,6 +1652,11 @@
            can't be turned off); the aria-label is what a screen reader gets, since a
            display:none label is out of the accessible name. */
         var c = chip(bossLabel(b), active, null, null, BOSS_ICON[b]);
+        /* Almost every boss flies a 2:1 Encounter Journal portrait, which cover-crops
+           into the rail's 76x44 cell exactly right. Trash flies a square item icon,
+           and cover-cropping a square into a landscape box throws away most of it -
+           the same problem the crafted zone tiles have, and the same fix. */
+        if ((BOSS_ICON[b] || "").indexOf(JOURNAL) !== 0) c.classList.add("chip--emblem");
         c.dataset.tip = bossLabel(b);
         c.setAttribute("aria-label", bossLabel(b) + ", " + n + " items");
         c.addEventListener("click", function () {

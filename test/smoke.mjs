@@ -1209,6 +1209,38 @@ click(doc.getElementById("reset"));
      `every boss the data names is in BOSS_ORDER${stray.length ? ": " + stray.join(", ") : ""}`);
 }
 
+// The rail is sized by its contents. .chips sets flex: 1 1 auto, which stretched it
+// across the whole row however few bosses it held, and width: max-content cannot stop a
+// flex item growing - only flex-grow: 0 can.
+{
+  const rail = /#boss-chips\s*\{[^}]*\}/.exec(cssText)[0];
+  ok(/flex:\s*0\s+0/.test(rail), "the boss rail does not grow to fill the row");
+  ok(/width:\s*max-content/.test(rail), "and is sized by its contents");
+}
+
+// Trash flies a square item icon where every other boss flies a 2:1 journal portrait,
+// so cover-cropping it into the rail's landscape cell throws most of it away.
+// The rail needs a zone picked before it holds anything at all.
+{
+  click(doc.getElementById("reset"));
+  click(chipByText("#zone-chips", "Black Temple"));
+  const chips = [...doc.querySelectorAll("#boss-chips .chip")].filter((c) => !c.classList.contains("chip--all"));
+  const emblem = chips.filter((c) => c.classList.contains("chip--emblem")).map((c) => c.dataset.tip);
+  ok(chips.length > 1, `the rail fills once a zone is picked (${chips.length} bosses)`);
+  ok(emblem.length === 1 && emblem[0] === "Trash",
+     `only the square-icon chip is marked for contain-fitting (${emblem.join(", ") || "none"})`);
+  ok(/#boss-chips \.chip--emblem \.chip-icon\s*\{[^}]*object-fit:\s*contain/.test(cssText),
+     "and the rule that fits it is the one the crafted zone tiles already use");
+
+  // picked has to read like a picked tile does, not as a thin underline
+  const rule = /#boss-chips \.chip\[aria-pressed="true"\]\s*\{[^}]*\}/.exec(cssText)[0];
+  ok(/inset 0 0 0 2px var\(--gold-bright\)/.test(rule),
+     "a picked boss gets the full accent frame the phase and zone tiles get");
+  ok(!/border(-\w+)?:/.test(rule),
+     "drawn as an inset ring, not a border - the rail's cells share borders and one would shift the row");
+  click(doc.getElementById("reset"));
+}
+
 // --- boss chips are qualified by their zone ---
 // Boss names are not unique across zones: both raids have a "Trash". The hierarchy
 // means only one zone's bosses are ever on screen, so the two chips can no longer be

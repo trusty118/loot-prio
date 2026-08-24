@@ -352,12 +352,16 @@ a:hover { color: var(--gold-bright); }
 .chip--zone { width: 112px; height: 48px; }
 .chip--zone .art-label { padding: 3px 7px; font-size: 11px; color: var(--text); }
 
-/* A square item icon in a 112x48 tile. object-fit: cover scales it until the tile is
+/* A square item icon in a landscape box. object-fit: cover scales it until the box is
    full, which for a square in a wide box means cropping away everything but the middle
    band - and cover is already the smallest scale that fills, so there is no way to show
    more of it while still filling. Contain instead: the whole icon, centred, on the
-   black the tile already uses behind soft-alpha art. */
-.chip--emblem .art-split img { object-fit: contain; }
+   black these surfaces already use behind soft-alpha art.
+
+   Two places wear this: the crafted zone tiles, which are pictured by their material,
+   and the Trash chip in the boss rail, which is pictured by a bag. */
+.chip--emblem .art-split img,
+#boss-chips .chip--emblem .chip-icon { object-fit: contain; }
 
 /* Nothing under it worth protecting, and the label needs the contrast more than the
    emblem needs the room. */
@@ -473,6 +477,10 @@ a:hover { color: var(--gold-bright); }
    hovering the rail reads names as fast as reading pills did. Both survive in the
    aria-label, which is the only way a screen reader gets them. */
 #boss-chips {
+  /* .chips sets flex: 1 1 auto, which stretches the rail across the whole row however
+     few bosses it holds. width: max-content cannot stop a flex item growing - only
+     flex-grow: 0 can. */
+  flex: 0 0 auto;
   flex-wrap: nowrap;
   gap: 0;
   width: max-content;
@@ -515,12 +523,20 @@ a:hover { color: var(--gold-bright); }
 
 /* Selected is a lit portrait over a gold wash with a gold edge under it, rather than
    the gold fill a pill uses - a fill would bury the art the rail exists to show. */
+/* Picked reads the same as a picked phase or zone tile - a full accent frame - rather
+   than the thin underline it used to get. The tiles say it with border-color; the rail
+   cannot, because its cells share borders and changing one would shift the row. An
+   inset ring draws inside the cell and costs no layout, which is the same reason the
+   class strip uses an outline. */
 #boss-chips .chip[aria-pressed="true"] {
-  background: color-mix(in srgb, var(--gold) 12%, transparent);
-  box-shadow: inset 0 -3px 0 0 var(--gold);
+  background: color-mix(in srgb, var(--gold) 16%, transparent);
+  box-shadow: inset 0 0 0 2px var(--gold-bright);
   color: inherit;
   font-weight: inherit;
+  z-index: 1;                       /* the ring sits over its neighbours' borders */
+  position: relative;
 }
+
 
 #boss-chips .chip[aria-pressed="true"] .chip-icon { filter: none; }
 
