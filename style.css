@@ -580,9 +580,18 @@ a:hover { color: var(--gold-bright); }
   color: var(--gold-bright);
 }
 
+/* Top-aligned, not bottom-aligned, and that is what makes the spec strip hang.
+   .who-inline is the one two-storey item in this row: class strip, spec strip under it.
+   Aligned to the bottom, its LOWER storey lined up with Slot, Type, Search and Reset and
+   the class strip floated above them - one control on a line of its own and everything
+   else on a line below. Aligned to the top, the class strip sits level with the rest of
+   the row, which is where it belongs, and the spec row drops beneath it where it reads as
+   narrowing the strip above. Every control here is single-height (the Slot and Type labels
+   went, and Search wears .field--joined), so there is no stacked label wanting its baseline
+   at the bottom. */
 .control-row--inputs {
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 12px;
 }
 
@@ -628,10 +637,14 @@ a:hover { color: var(--gold-bright); }
 /* Who you are, inline with the filters, pushed to the right-hand end of the bar.
    Wraps to its own line when the row runs out, which is what happens on a narrow
    window once a class is picked. */
+/* The specs sit UNDER the classes, not beside them. Side by side the two strips read as
+   one long row of icons, and which set narrows which is not obvious - the gold frame was
+   meant to carry that and cannot carry it sideways. Right-aligned because the whole block
+   is already right-anchored, so both strips end on the same edge. */
 .who-inline {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-end;
   gap: 6px;
   flex: 0 1 auto;
   margin-left: auto;
@@ -655,9 +668,9 @@ a:hover { color: var(--gold-bright); }
 .who-specs { display: flex; align-items: center; }
 .who-specs[hidden] { display: none; }
 
-/* The divider is gone. A hairline said "these are two rows"; what actually needed
-   saying is that the right-hand strip narrows the left-hand one, and a gold frame
-   around the specs says that - it is the same gold that marks the class you picked. */
+/* The divider is gone. A hairline said "these are two rows"; what actually needed saying
+   is that the lower strip narrows the one above it, and a gold frame around the specs says
+   that - it is the same gold that marks the class you picked. */
 .who-specs { padding-left: 0; border-left: 0; }
 
 #spec-chips {
@@ -1929,6 +1942,55 @@ mark {
   border: 1px solid var(--gold-bright);
   font-weight: 600;
 }
+/* ---------- editable notes ----------
+   The note column under canEdit(). It reads as text until you click it, so a finished
+   list is a list and not a form; the affordance is the hover, not a permanent box.
+
+   No `display` anywhere in here: this is a <td> in a table-layout: fixed table, and
+   changing its display shifts every column beside it (CLAUDE.md ss5). */
+
+.col-notes--edit { position: relative; }
+
+.note-text {
+  cursor: text;
+  border-radius: var(--radius);
+  padding: 2px 4px;
+  margin: -2px -4px;                 /* so the hover box doesn't nudge the text */
+  border: 1px dashed transparent;
+}
+
+.note-text:hover { border-color: var(--line); }
+
+.note-text--empty { color: var(--text-faint); font-style: italic; }
+
+.note-field {
+  font: inherit;
+  font-size: .85rem;
+  width: 100%;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 4px 6px;
+  resize: vertical;
+}
+
+/* Sits with the note rather than beside it: the priority reset can share a line with
+   the icons, and a paragraph has no line to share. */
+.note-reset {
+  font: inherit;
+  font-size: .9rem;
+  margin-top: 4px;
+  padding: 0 6px;
+  color: var(--text-faint);
+  background: transparent;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.note-reset:hover { color: var(--gold); border-color: var(--gold); }
+
 /* ---------- dragging ----------
    A press that moves becomes a drag: the icon dims in place, a half-size ghost
    follows the pointer, and the gap it would land in is marked. Dragging clear of
