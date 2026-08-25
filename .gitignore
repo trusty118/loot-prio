@@ -11,3 +11,8 @@ node_modules/
 
 # per-machine Claude Code settings
 .claude/
+
+# Design handoff packages, dropped in the root to be unpacked and applied. The repo
+# carries the applied result - docs/design-brief.md and the CSS - not the archive, and
+# Pages serves this directory, so a committed zip would be publicly downloadable too.
+*.zip
