@@ -265,7 +265,7 @@ need one at 168x84 and does at 72px: the art is busy exactly where the label lan
 text-shadow alone stops carrying it.
 
 **No item count, and no name, on the face of anything carrying art.** The number is noise where
-the art is doing the work, and the `N of 699 items` line above the table already answers it.
+the art is doing the work, and the `N of N items` line above the table already answers it.
 Both stay in the `aria-label` — the only way a screen reader gets them — and the boss name is
 additionally on `data-tip`, since the rail is the one level whose label is hidden rather than
 absent. **This overturns the old rule that boss chips keep their counts**, which was correct
@@ -584,8 +584,18 @@ character. Whether a write is outstanding lives in a module-level `unsaved`, del
 ### The bar, and the list menu behind it
 
 ```
-Loot Prio Lists                  LIST [ My list      ▾ ]  [ Edit ]   [ @macka118 ▾ ]
+Loot Prio Lists                                                    [ @macka118 ▾ ]
+
+[phase tiles] [zone tiles] [boss rail]
+[All][class icons]
+[All][spec icons ....][9 items]
+──────── sticky from here ────────
+                        PRIORITY LIST [ My list ▾ ]  [ Edit priorities ]
+[All slots] [All types] [SEARCH____________] [Reset]
 ```
+
+**The list picker moved out of the banner and now leads the sticky bar, beside `Edit`,
+Aug 2026** — see §5. Everything below still holds; only where the bar lives changed.
 
 **Two controls plus the account zone, in every state. Nothing hides, nothing unhides,
 nothing changes width.** That is the whole design, and it replaced a bar that went from
@@ -903,21 +913,79 @@ current if any of those change.
   and what replacing one costs.
 - **Two control panels**: `.controls--where` (phase → zone → boss) and `.controls--refine` —
   everything that narrows the table, which is type, slot, search **and who you are**. Class
-  and spec used to have a panel of their own at the top; they are filters, so they sit with
-  the filters, to the right of the search box, and `.field--grow` caps that box at 300px to
-  make the room (you scan the icons, you type in the box occasionally).
-- **Which list you are on lives in the banner**, top right, not in a panel: it is not
-  filtering, and it applies to the whole page rather than to the rows below it. The split is what
-  makes the last one read as narrowing the results rather than as another way of choosing
-  them. The class and spec strips are the exception and belong there: they are filters, and
-  they sit at the right-hand end of that bar. **Only `.controls--refine` is sticky** — it is the one
-  adjusted while reading, it carries the count, and it sits directly above the results;
-  two sticky panels would fight over `top: 0`.
+  and spec used to have a panel of their own at the top; they are filters, so they belong
+  with the filters. **Which panel** is the rule; which row of it is not, and the row moved.
+
+  **The strips sit on a row of their own inside that panel (`.control-row--who`), anchored
+  left, Aug 2026.** They spent a while beside the search box, which was fine at nine class
+  icons and fell apart at twenty-eight spec icons. `.who-inline` was right-aligned, so the
+  spec strip grew **leftward** — ~935px of it, sprawling under Slot, Type and Search — and
+  once it was that wide it no longer fitted beside the search box, so `.control-row--inputs`
+  wrapped it onto a second line and took Reset and Edit down with it. The class strip ended
+  up floating mid-row, attached to nothing.
+
+  On its own row the two strips share a left edge, the spec strip grows **rightward**, and
+  it has the whole panel to grow into: all 28 specs fit on one line at desktop width and it
+  wraps within its own row below ~1000px. The class strip never moves, whatever is picked
+  under it. Three rules carry that and `test/smoke.mjs` pins all three against the
+  stylesheet source, because jsdom lays nothing out: `.who-inline` is a **column**, it is
+  **`align-items: flex-start`**, and it has **no `margin-left: auto`** — that last one is
+  what made it grow the wrong way.
+
+  **`#edit-toggle` carries its own `margin-left: auto`**, which is why Edit stayed at the
+  right-hand end when the who block left the row. Don't move it onto a neighbour.
+
+  `.field--grow` still caps the search box at 300px, but no longer to make room for icons
+  beside it — there are none now. It stays capped on its own merits: you type in it
+  occasionally and never read from it.
+- **The class and spec strips are the last row of `.controls--where`; the list picker and
+  `Edit` lead `.controls--refine`, Aug 2026.** The strips read as the end of one sequence —
+  *which phase, which zone, which boss, who for* — rather than as another filter among the
+  dropdowns.
+
+  **The strips gave up stickiness for that, and it was chosen rather than overlooked.**
+  `.controls--where` does not stick, so they scroll away on a 699-row table, and they *are*
+  filters you adjust while reading rows. The where panel is also five rows deep before the
+  results begin. Both are the price of the grouping.
+
+  **The picker and `Edit` must stay together.** They were split for exactly one commit and
+  it left a dead end: `Edit` is `disabled` on someone else's list with
+  `title="Make a copy to edit"`, and `Make a copy` is inside the picker's menu, which was
+  then a panel away. A control and the thing that arms it belong within a glance of each
+  other. `test/smoke.mjs` pins that they share a row.
+
+  **`.list-zone` is one box, not three loose children** — picker, hint and `Edit` — and it
+  carries the row's single `margin-left: auto`. Three loose children each finding their own
+  way right is what `.account-zone`'s comment warns about upstream, and at half-screen it
+  did exactly that: the row wrapped, `Edit` came off the end alone and landed on the
+  **left**. `test/smoke.mjs` pins the auto margin on the zone and **none** on
+  `#edit-toggle` or `.edit-hint`, **stripping CSS comments first** — `style.css` discusses
+  auto margins in prose, and a rule-body grep finds the discussion and calls it the defect.
+  `test/auth.mjs` solves the same trap the same way for the service-role key.
+
+  **The banner carries the title and the account zone, and nothing else.** Signing in is
+  about *you*, not about which list is open.
+
+  **The picker is deliberately NOT accented.** `--gold` is `--fel` and it means *selected*
+  everywhere on this page; `docs/design-brief.md` lists it as a colour that carries meaning
+  and must not move. Prominence is size, weight and contrast instead — a `.95rem`
+  600-weight name, a border mixed one step brighter than the hairline every other field
+  wears, and the lifted `--bg-panel-2` fill. `test/smoke.mjs` asserts the trigger's rule
+  contains **no** `--gold`/`--fel`, because "make it stand out" invites painting it green.
+
+  **Only `.controls--refine` is sticky** — it carries the count and sits directly above the
+  results; two sticky panels would fight over `top: 0`.
+
+- **The count's denominator is the phase's total, not the dataset's** (`phaseTotal()`).
+  A phase is always set and only one is ever rendered, so `132 of 699` measured the
+  fraction against 567 rows that could not have appeared whatever the filters said.
+  Unfiltered, every phase now reads `N of N` — 199 in Phase 1, 132 in Phase 2, 195 in
+  Phase 3 — which is the honest version of that line.
 - **Chip rows have no visible label**, and each leads with a bare `All` chip carrying no
   count, so the rows line up down one edge. What the row is, and what its All chip clears,
   live in `aria-label` (on the `role="group"`) and in `data-tip` — `allChip()` sets both,
   so a new row should go through it rather than calling `chip()` directly. Counts stay on
-  the individual chips; the row total is already the `N of 699 items` line.
+  the individual chips; the row total is already the `N of N items` line.
 
 ---
 
