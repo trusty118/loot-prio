@@ -58,6 +58,8 @@ create table lists (
   v           int  not null,
   base        text,
   priorities  jsonb not null,
+  notes       jsonb,
+  author      text,
   updated_at  timestamptz not null default now()
 );
 
@@ -67,6 +69,10 @@ alter table lists enable row level security;
 create policy "own lists" on lists for all
   using (auth.uid() = user_id) with check (auth.uid() = user_id);
 ```
+
+`notes` and `author` were added later — if your table predates them, run
+`verify/notes-and-author.sql`, which adds both and updates `get_shared_list` to return
+them. Without it, notes save silently and come back empty for signed-in users.
 
 **Do not skip the last two statements.** Without RLS enabled *and* a policy, the anon key
 would let anyone read every list in the table. With them, the database itself refuses —
