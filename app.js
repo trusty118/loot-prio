@@ -1857,8 +1857,17 @@
       var bisRows = filtered("bis").filter(function (r) {
         return state.specs.some(function (id) { return bisTier(id, r.id); });
       });
-      var toggle = chip("BiS only", state.bisOnly, bisRows.length);
+      /* Reads "8 items" rather than "BiS only 8". The label carries the count and
+         there is no separate badge, so it says how many rather than naming the rule.
+         What it DOES is still on the tooltip and the aria-label, because a control
+         whose face is a number has to explain itself somewhere - otherwise the only
+         way to learn what it filters is to press it and compare. */
+      var toggle = chip(bisRows.length + (bisRows.length === 1 ? " item" : " items"),
+                        state.bisOnly, null);
       toggle.classList.add("chip--toggle");
+      toggle.dataset.tip = "Show only what is BiS for the specs you picked";
+      toggle.setAttribute("aria-label",
+        "Show only the " + bisRows.length + " items that are BiS for the specs you picked");
       toggle.addEventListener("click", function () {
         state.bisOnly = !state.bisOnly;
         update();

@@ -1690,7 +1690,14 @@ click(chipByTip("#spec-chips", "Survival Hunter"));
 const survRows = rows().length;
 ok(survRows === 26, `spec=Survival -> 26 rows (got ${survRows})`);
 const toggle = doc.querySelector("#spec-chips .chip--toggle");
-ok(toggle && toggle.textContent.includes("BiS only"), "the BiS toggle appears once a spec is picked");
+ok(toggle, "the BiS toggle appears once a spec is picked");
+/* Its face is the count - "8 items" - so what it filters lives on the tooltip and the
+   aria-label. A control whose label is a number has to explain itself somewhere, or
+   pressing it and comparing is the only way to find out what it does. */
+ok(/^\d+ items?$/.test(toggle.textContent.trim()),
+   `and reads as a count, not as a rule: "${toggle.textContent.trim()}"`);
+ok(/bis/i.test(toggle.dataset.tip) && /bis/i.test(toggle.getAttribute("aria-label")),
+   "with what it actually does on the tooltip and the aria-label");
 
 // expectations come from bis.json rather than a hardcoded number, so filling the
 // file in doesn't rewrite the test
@@ -1702,8 +1709,8 @@ const survBis = bisIdsFor("Surv");
 const survVisible = rows().filter((tr) =>
   [...survBis].some((id) => tr.children[0].textContent.includes(
     (data.find((r) => r.id === id) || {}).item || ""))).length;
-ok(Number(toggle.querySelector(".n").textContent) === survVisible,
-   `the toggle counts what it would leave (says ${toggle.querySelector(".n").textContent}, ${survVisible} visible)`);
+ok(parseInt(toggle.textContent, 10) === survVisible,
+   `the toggle counts what it would leave (says ${toggle.textContent.trim()}, ${survVisible} visible)`);
 click(toggle);
 ok(rows().length === survVisible && rows().length > 0,
    `BiS only -> ${survVisible} rows (got ${rows().length})`);
