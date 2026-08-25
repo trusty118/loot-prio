@@ -1664,9 +1664,10 @@ for (const cls of [...cssText.matchAll(/\.(field--[a-z]+)\s*\{[^}]*display:\s*no
 
 const bareCss = cssText.replace(/\/\*[\s\S]*?\*\//g, "");
 // Document-wide, not `main [hidden]`. The scope used to be main, which quietly meant
-// the template bar was never checked - and the bar lives in <header>, which is where
-// BOTH of the occurrences this test exists to catch actually happened (.control-row
-// and .tpl-link-out). A guard that does not cover the scene of the crime is not a guard.
+// the template bar was never checked - and at the time the bar lived in <header>, which
+// is where the occurrences this test exists to catch actually happened (.control-row and
+// the since-retired .tpl-link-out). A guard that does not cover the scene of the crime
+// is not a guard, so it stays document-wide even though the bar has moved since.
 const hiddenEls = [...doc.querySelectorAll("[hidden]")];
 ok(hiddenEls.length > 0, `markup hides some controls up front (${hiddenEls.length})`);
 
@@ -1921,6 +1922,49 @@ ok(rows().length === 195, `reset clears the spec filter (got ${rows().length})`)
 ok(!doc.querySelector("#spec-chips .chip--toggle"), "reset drops the BiS toggle");
 ok(doc.getElementById("spec-row").hidden, "reset hides the spec row again");
 ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priority icons");
+
+// --- sharing has a control you can see, and it works in every state --------------------
+/* The assertion that was missing. `Copy link` sat in the list menu and, on zatar's list,
+   did NOTHING: copyShareLink() opened with `if (!activeTemplate) return;`, so the first
+   share control most people ever meet - the one you see before you have made a list of
+   your own - wrote no clipboard, showed no message and raised no error. It passed 739
+   checks. What is pinned now is that a link comes out in every state it is offered. */
+{
+  click(doc.getElementById("reset"));
+  const trigger = doc.getElementById("share-trigger");
+  ok(trigger && !trigger.hidden && !trigger.disabled,
+     "the share control is on the bar, always, and never disabled");
+  ok(trigger.dataset.tip && trigger.getAttribute("aria-label"),
+     "icon-only, so it names itself for a pointer and for a screen reader");
+  ok(doc.querySelector(".list-zone").contains(trigger),
+     "and sits with the list it shares and the Edit that changes it");
+
+  click(chipByText("#phase-chips", "Phase 3"));
+  click(chipByTip("#class-chips", "Warrior"));
+  click(trigger);
+  const pop = doc.querySelector(".share-pop");
+  ok(pop && pop.style.display === "block", "clicking it opens the popover");
+
+  /* the link arrives through a promise - signed in it is a round trip to the database,
+     so the field is filled when it resolves rather than on the click */
+  await new Promise((r) => setTimeout(r, 50));
+  const field = pop.querySelector(".share-field");
+  ok(field, "which shows a link, on zatar's list, where the old menu item did nothing");
+  ok(pop.querySelector(".share-copy"), "with a Copy button beside it");
+
+  /* what it hands over is the view: the hash already carries phase, zone, boss, class,
+     spec and the search, so "here is what I am looking at" is a real thing to send */
+  ok(/class=Warrior/.test(field.value) && /phase=P3/.test(field.value),
+     `and the link carries the filters that are on (${field.value.slice(-40)})`);
+
+  // it is the seventh overlay and closes like the other six
+  pop.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  ok(pop.style.display === "none", "Escape closes it");
+  click(trigger);
+  doc.dispatchEvent(new window.MouseEvent("mousedown", { bubbles: true }));
+  ok(pop.style.display === "none", "and so does a mousedown outside it");
+  click(doc.getElementById("reset"));
+}
 
 // --- a priority icon filters to whoever it names -------------------------------------
 /* The priority line is the content of this page, and until now it was inert: you read

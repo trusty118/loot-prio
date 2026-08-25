@@ -95,8 +95,14 @@ ok(triggerName(d) === "zatar's list", `the trigger says whose list is on screen:
   const m = openMenu(w);
   ok(!act(w, "Rename\u2026"), "no Rename on a list that is not yours");
   ok(!act(w, "Delete list\u2026"), "and no Delete either");
-  ok(act(w, "Make a copy") && act(w, "Copy link") && act(w, "+  New list"),
-     "but New, Make a copy and Copy link are all offered");
+  ok(act(w, "Make a copy") && act(w, "+  New list"),
+     "but New and Make a copy are both offered");
+  /* Sharing left the menu entirely - it has a control on the bar and a popover of its
+     own. It was an item four deep in here that most people never opened, and on zatar's
+     list it did NOTHING: copyShareLink() returned early when activeTemplate was null, so
+     the first share control anyone meets was dead. */
+  ok(!/Copy link|Share this|Stop sharing/.test(m.textContent),
+     "and nothing about sharing is in this menu any more");
   ok(/Make a copy to build your own/.test(m.textContent),
      "and it says in words why the other two are absent, rather than just omitting them");
   closeMenu(w);
@@ -508,8 +514,8 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
   const onMine = barKids(w4.document);
   ok(onZatar === onMine,
      `the bar holds the same controls either way, so nothing moves\n        ${onZatar}`);
-  ok(!/:hidden/.test(onZatar.replace(/tpl-dirty:hidden|tpl-link-out:hidden/g, "")),
-     "and nothing in it is hidden except the two transient markers");
+  ok(!/:hidden/.test(onZatar.replace(/tpl-dirty:hidden/g, "")),
+     "and nothing in it is hidden except the dirty marker");
 }
 
 // --- Edit lives with the rows it changes, not with the list controls ---------------------------
