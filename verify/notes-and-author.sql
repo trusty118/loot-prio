@@ -18,7 +18,18 @@ alter table lists add column if not exists author text;
 -- Same shape as before: security definer so it can see past the `auth.uid() = user_id`
 -- policy, and still only ever able to return one row that is both flagged shared and
 -- matched by an exact token. The table itself stays unreadable to anonymous callers.
-create or replace function public.get_shared_list(token text)
+--
+-- DROP FIRST, and it is not optional: `create or replace` refuses to change a function's
+-- return type ("cannot change return type of existing function"), and adding notes and
+-- author to the returns table is exactly that. Dropping resets the grants too, which is
+-- why the revoke/grant at the bottom run after the create rather than being assumed.
+--
+-- Shared links stop resolving between the drop and the create. That is a fraction of a
+-- second inside one transaction, and the alternative - a second function under a new
+-- name - would leave the old one behind still handing out rows without notes.
+drop function if exists public.get_shared_list(text);
+
+create function public.get_shared_list(token text)
 returns table (id text, name text, created date, v int, base text,
                priorities jsonb, notes jsonb, author text)
 language sql
