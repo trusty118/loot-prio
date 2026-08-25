@@ -450,6 +450,21 @@ Notes are yours on exactly the terms the priorities are. `copyOfCurrent()` seeds
 because it is the one the priorities already answered. `newBlankTemplate()` deliberately
 does **not** seed them: you asked for nobody's list, and his wording is somebody's.
 
+**Notes did not reach the database for their first weeks, and the shape of that bug is
+worth keeping.** `remoteStore.save()`'s upsert never named a `notes` column, so a signed-in
+edit saved, appeared to work, and was gone on the next load — while working perfectly signed
+**out**, where `localStore` writes the whole blob. Nothing errored: an upsert silently drops
+what it does not mention. Every `?s=` recipient read the guide's notes rather than the
+sharer's, because `get_shared_list` did not select the column either.
+
+Three defences now, because one was clearly not enough. `test/auth.mjs` edits a note through
+the table and asserts it reached the account; it asserts a `?s=` recipient reads it; and the
+**fake Supabase projects the columns `get_shared_list` declares** rather than handing back
+whole rows, with `RPC_COLUMNS` pinned against `verify/notes-and-author.sql`. A fake that
+returns the whole row cannot reproduce a missing-column bug at all — which is exactly why
+the original shipped green. **Any new field on a template needs all three: the upsert, the
+SQL, and `rowToTemplate()`.**
+
 **`notes` is optional and `TEMPLATE_VERSION` did not move.** Absent means "the guide's", so
 every list saved before this and every share link already sent still opens. `validateTemplate()`
 refuses a `notes` that is present and wrong — not an object, a value that is not a string, or
@@ -1161,6 +1176,27 @@ credited in-video to **Veramos**, arms-warrior input to **Lemonism**.
 
 Item IDs and slots came from [wowsims/tbc](https://github.com/wowsims/tbc). Icons and
 tooltips from [Wowhead](https://www.wowhead.com/tbc).
+
+**Lists carry an author, and it is shown only where something attested it.**
+`makeTemplate()` stamps `accountName()` when you are signed in; signed out it stays empty,
+and a list with no author claims none rather than claiming to be anonymous. A **copy takes
+your name**, not the name of the list it came from — a copy is yours from the moment you
+make it, which is the other half of what `base` records.
+
+**A list with no author picks one up on its next save** (`saveNow()`). Every list made
+before the field existed has none, and those are exactly the lists worth sharing — the ones
+with work in them. It fills a blank and **never overwrites**, so making a copy of someone
+else's list cannot quietly relabel the original, and re-saving while signed out cannot blank
+one. Safe because `activeIsMine` already guarantees what it needs to: a list in your own
+store is yours by definition, so writing your name in is recording a fact, not making a claim.
+
+`attestedAuthor()` is the gate between *an author is set* and *an author is shown*. A `#t=`
+link carries whatever the sender put in the payload, so someone could stamp it `zatar` and
+pass their calls off as his — which is the exact thing this section exists to prevent. A
+`?s=` list came out of the database under its owner's `auth.uid()`, and `loadSharedByToken()`
+marks it `sharedFrom: "server"`; only that marker opens the gate. A `#t=` list shows no
+byline and keeps its "shared with you" label. **Your own lists show no byline either** — it
+would be your own name on every row, which says nothing.
 
 **182 of the 699 rows are zatar's.** His videos covered Black Temple and Mount Hyjal, and
 that is the whole of his guide. The other 517 are loot from the raids he never covered —

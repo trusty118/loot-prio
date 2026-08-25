@@ -779,6 +779,12 @@
     return !activeTemplate || !!activeTemplate.priorities[rec.id];
   }
 
+  /* Whose list this is, stamped when it is made. Signed out it is empty and stays empty:
+     a list with no author claims none, which is not the same as claiming to be anonymous.
+
+     A COPY takes YOUR name, not the name of the list it came from. That is the whole
+     point - a copy is your list from the moment you make it, which is the same rule
+     `base` already records the other half of. */
   function makeTemplate(name, base, priorities, notes) {
     return {
       v: TEMPLATE_VERSION,
@@ -786,9 +792,26 @@
       name: name,
       created: new Date().toISOString().slice(0, 10),
       base: base,
+      author: signedIn() ? accountName() : "",
       priorities: priorities,
       notes: notes || {}
     };
+  }
+
+  /* Whether an author is worth showing, which is NOT the same as whether one is set.
+
+     A #t= link carries whatever the sender put in the payload, so its author is
+     unverified - someone could stamp it "zatar" and pass their calls off as his, which
+     is precisely what CLAUDE.md section 8 exists to prevent. A list in your own store you
+     know the provenance of, and a ?s= list came out of the database under its owner's
+     auth.uid(). Those two are attested; a #t= list is not, and shows no byline at all.
+
+     `sharedFrom` is set only by loadSharedByToken(), so it is the marker for "the server
+     told us this", never something a payload can claim for itself. */
+  function attestedAuthor(t) {
+    if (!t || !t.author) return "";
+    if (t === activeTemplate && !activeIsMine && !t.sharedFrom) return "";
+    return t.author;
   }
 
   /* A copy of whatever is on screen. effectivePriority() already answers "what is
@@ -1000,6 +1023,10 @@
       v: row.v,
       base: row.base,
       priorities: row.priorities,
+      /* both default rather than being required: a row written before these columns
+         existed returns null, and absent notes already means "the guide's" */
+      notes: row.notes || {},
+      author: row.author || "",
       /* carried so the menu knows whether to offer Stop sharing, and so a second
          Copy link reuses the token the first one minted rather than orphaning it */
       share_token: row.share_token || null,
@@ -1041,6 +1068,12 @@
       /* user_id is left to the column default (auth.uid()); sending it from the client
          would be a claim the database has to check anyway, and the RLS policy is the
          thing that decides. */
+      /* Every field the template carries has to be named here. An upsert silently
+         drops what it does not mention, so a column missing from this object is not an
+         error anywhere - it is a field that saves, appears to work, and is gone on the
+         next load. `notes` was exactly that between Aug 2026 and this fix: editable
+         notes worked signed out, where localStore writes the whole blob, and vanished
+         signed in. */
       return sb.from("lists").upsert({
         id: t.id,
         name: t.name,
@@ -1048,6 +1081,8 @@
         v: t.v,
         base: t.base,
         priorities: t.priorities,
+        notes: t.notes || {},
+        author: t.author || null,
         share_token: t.share_token || null,
         shared: !!t.shared,
         updated_at: new Date().toISOString()
@@ -1173,6 +1208,16 @@
   function saveNow() {
     if (!activeTemplate || !activeIsMine) return Promise.resolve();
     var t = activeTemplate;
+    /* Fill in a missing author on the way past. Every list made before the field existed
+       has none, so sharing one showed no byline at all - and those are exactly the lists
+       worth sharing, being the ones with work in them.
+
+       Safe because of what activeIsMine already guarantees: a list in your own store is
+       yours by definition, so writing your name into a blank is recording a fact rather
+       than making a claim. It never OVERWRITES - a list that already names someone keeps
+       that name, so making a copy of a shared list cannot quietly relabel the original,
+       and re-saving offline (signedIn() false) cannot blank one either. */
+    if (!t.author && signedIn()) t.author = accountName();
     return store.save(t).then(function () {
       if (activeTemplate === t) { unsaved = false; renderTemplateBar(); }
     }, function (err) {
@@ -1287,6 +1332,10 @@
      used to make a share link nobody can open. */
   var MAX_NOTE = 600;
 
+  /* Long enough for any Discord display name, short enough that it cannot be used to
+     smuggle a paragraph into a byline. */
+  var MAX_AUTHOR = 60;
+
   function validateTemplate(doc) {
     if (!doc || typeof doc !== "object") return "not a template";
     if (doc.v !== TEMPLATE_VERSION) return "made by a different version of this site";
@@ -1301,6 +1350,13 @@
         if (typeof note !== "string") return "item " + nids[n] + " has a broken note";
         if (note.length > MAX_NOTE) return "item " + nids[n] + ": the note is too long";
       }
+    }
+    /* author is optional the same way - absent means nobody claimed one. Present and
+       wrong is refused; present and merely UNVERIFIED is a separate question, answered
+       by attestedAuthor() at render time rather than here. */
+    if (doc.author != null) {
+      if (typeof doc.author !== "string") return "broken author on it";
+      if (doc.author.length > MAX_AUTHOR) return "the author name is too long";
     }
 
     var byId = {};
@@ -3558,6 +3614,9 @@
         var n = (activeIsMine && activeTemplate && activeTemplate.id === t.id)
           ? filledCount(activeTemplate.priorities) : t.filled;
         listMenu.appendChild(listRow(
+          /* no byline under Your lists - it would be your own name on every row, which
+             says nothing. Whose a list is only becomes a question once it is someone
+             else's, and that is the Following section below. */
           t.name, n,
           activeIsMine && activeTemplate && activeTemplate.id === t.id, "",
           function () { closeListMenu(); openById(t.id); }));
@@ -3568,10 +3627,16 @@
     listMenu.appendChild(listRow("zatar's list", zatarFilled(), !activeTemplate, "by zatar",
       function () { closeListMenu(); showZatar(); announce("Showing zatar's list"); update(); }));
     /* a list that arrived on a link is not in the store, so it needs a row of its own or
-       the menu would claim zatar's list was the one on screen */
+       the menu would claim zatar's list was the one on screen.
+
+       This is where the credit CLAUDE.md section 8 promised actually lands: someone opens
+       your link and the menu says whose calls they are reading. Only where the server
+       attested it - see attestedAuthor(). Where it did not, the row falls back to saying
+       how the list arrived rather than claiming a name nobody checked. */
     if (activeTemplate && !activeIsMine) {
+      var who = attestedAuthor(activeTemplate);
       listMenu.appendChild(listRow(activeTemplate.name, filledCount(activeTemplate.priorities),
-        true, "shared with you",
+        true, who ? "by " + who : "shared with you",
         function () { closeListMenu(); }));
     }
 
@@ -3882,6 +3947,8 @@
       }
       var why = validateTemplate(row);
       if (why) { announce("That shared list will not load: " + why); update(); return; }
+      /* the server said so, not the payload - which is what lets its author be shown */
+      row.sharedFrom = "server";
       openTemplate(row, false);
       announce("Opened shared list: " + row.name + " - Make a copy to change it");
       update();

@@ -25,6 +25,10 @@ const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8")
 const data = rd("loot_data.json"), bis = rd("bis.json"), specs = rd("specs.json");
 const source = fs.readFileSync(path.join(root, "app.js"), "utf8");
 
+/* What get_shared_list actually returns. Kept beside the fake and pinned against the
+   migration, so the two cannot drift. */
+const RPC_COLUMNS = ["id", "name", "created", "v", "base", "priorities", "notes", "author"];
+
 const fail = [];
 const ok = (c, m) => { console.log((c ? "PASS  " : "FAIL  ") + m); if (!c) fail.push(m); };
 const settle = () => new Promise((r) => setTimeout(r, 400));
@@ -66,7 +70,15 @@ function fakeSupabase() {
     rpc: (name, args) => {
       if (name !== "get_shared_list") return Promise.resolve({ data: null, error: { message: "no such function" } });
       const hit = [...rows.values()].find((r) => r.shared === true && r.share_token === args.token);
-      return Promise.resolve({ data: hit ? [hit] : [], error: null });
+      /* PROJECTED, not returned whole. The real function names its columns, so a field
+         the client writes but the SQL never selects arrives as undefined - which is
+         exactly how notes shipped broken: saved, apparently fine, absent on every read.
+         A fake that hands back the whole row cannot reproduce that. RPC_COLUMNS is
+         checked against verify/notes-and-author.sql below. */
+      return Promise.resolve({
+        data: hit ? [Object.fromEntries(RPC_COLUMNS.map((c) => [c, hit[c]]))] : [],
+        error: null
+      });
     },
     auth: {
       getSession: () => Promise.resolve({ data: { session }, error: null }),
@@ -454,6 +466,111 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
   ok(!$(w, "edit-msg").textContent,
      "with no shared link in play, a failed SDK says nothing - losing sign-in is not news");
 }
+
+// --- notes and author survive the round trip through the account -------------------
+/* The bug this covers: remoteStore.save()'s upsert never named a `notes` column, so a
+   signed-in edit saved, appeared to work, and was gone on the next load - while working
+   perfectly signed out, where localStore writes the whole blob. Nothing errored. The
+   missing assertion was this one, driven the way a person does it: edit the note in the
+   table and look at what reached the account. */
+{
+  const sdk = fakeSupabase();
+  const w = boot({ configured: true, sdk });
+  await settle();
+  sdk.auth._signIn("Trusty");
+  await settle();
+  newList(w);
+  await settle();
+
+  const stored = () => sdk._rows.values().next().value;
+  ok(stored(), "signed in, a new list is written to the account");
+  ok(stored().notes !== undefined && stored().author !== undefined,
+     "the upsert names notes and author - an unnamed column saves silently and reads back empty");
+  ok(stored().author === "Trusty", `and the list records who made it (${JSON.stringify(stored().author)})`);
+
+  // now edit a note through the table, exactly as the editor does
+  const d = w.document;
+  const cell = [...d.querySelectorAll("tbody tr")].map((tr) => tr.querySelector("td.col-notes"))
+    .find((td) => td && td.querySelector(".note-text"));
+  ok(cell, "a list of your own opens with the notes editable");
+  cell.querySelector(".note-text").dispatchEvent(new w.MouseEvent("click", { bubbles: true }));
+  const field = cell.querySelector(".note-field");
+  field.value = "Ours: Prot Warr first.";
+  field.dispatchEvent(new w.Event("blur"));
+  await settle();
+
+  const written = Object.values(stored().notes || {}).filter(Boolean);
+  ok(written.includes("Ours: Prot Warr first."),
+     `the note reached the account, not just memory (${written.length} notes stored)`);
+
+  // and it reaches whoever holds the ?s= link - the other half the SQL controls
+  stored().shared = true;
+  stored().share_token = "tok-notes";
+  const seen = await sdk.rpc("get_shared_list", { token: "tok-notes" });
+  const row = seen.data[0];
+  ok(row.notes && Object.values(row.notes).includes("Ours: Prot Warr first."),
+     "and a ?s= recipient reads your notes, not the guide's");
+  ok(row.author === "Trusty", "and is told whose list it is");
+}
+
+/* The fake projects the columns the real function returns. If those two lists drift, a
+   field can be written by the client, stored, and silently absent for every recipient -
+   which is the shape of the notes bug. Pinned against the migration itself. */
+{
+  const sql = fs.readFileSync(path.join(root, "verify", "notes-and-author.sql"), "utf8");
+  const declared = (sql.match(/returns table \(([\s\S]*?)\)\s*\n/) || [])[1] || "";
+  const cols = declared.split(",").map((c) => c.trim().split(/\s+/)[0]).filter(Boolean);
+  ok(cols.join() === RPC_COLUMNS.join(),
+     `the fake returns exactly what get_shared_list declares (${cols.join(", ")})`);
+  const upsert = (source.match(/from\("lists"\)\.upsert\(\{([\s\S]*?)\}\)/) || [])[1] || "";
+  ["notes", "author", "priorities"].forEach((f) => {
+    ok(new RegExp("\\b" + f + ":").test(upsert),
+       `the upsert names ${f} - an unnamed column saves silently and reads back empty`);
+  });
+}
+
+// --- a list made before authors existed picks one up on its next save ---------------
+/* Every list that predates the field has a null author, so sharing one showed no byline -
+   and those are the lists with work in them. Filling the blank is recording a fact: a list
+   in your own store is yours by definition, which is what activeIsMine already means. */
+{
+  const sdk = fakeSupabase();
+  const w = boot({ configured: true, sdk });
+  await settle();
+  sdk.auth._signIn("Trusty");
+  await settle();
+  newList(w);
+  await settle();
+
+  const stored = () => sdk._rows.values().next().value;
+  // rewind it to what an old row looks like, then make an edit
+  stored().author = null;
+  const d = w.document;
+  const cell = [...d.querySelectorAll("tbody tr")].map((tr) => tr.querySelector("td.col-notes"))
+    .find((td) => td && td.querySelector(".note-text"));
+  cell.querySelector(".note-text").dispatchEvent(new w.MouseEvent("click", { bubbles: true }));
+  const field = cell.querySelector(".note-field");
+  field.value = "backfill me";
+  field.dispatchEvent(new w.Event("blur"));
+  await settle();
+
+  ok(stored().author === "Trusty",
+     `an authorless list of yours picks your name up on its next save (${JSON.stringify(stored().author)})`);
+}
+
+/* It fills a blank and never overwrites, so copying someone else's list cannot quietly
+   relabel it, and the guard is on the source rather than on the caller. */
+ok(/if \(!t\.author && signedIn\(\)\) t\.author = accountName\(\);/.test(source),
+   "the backfill only fires on a missing author, and only while signed in");
+
+// --- an author is only shown where something attested it ---------------------------
+/* A #t= link carries whatever the sender put in it, so its author is unverified: someone
+   could stamp it "zatar" and pass their calls off as his, which is what CLAUDE.md
+   section 8 exists to prevent. attestedAuthor() is what refuses to render that. */
+ok(/function attestedAuthor/.test(source) && /sharedFrom/.test(source),
+   "there is a gate between 'an author is set' and 'an author is shown'");
+ok(/row\.sharedFrom = "server"/.test(source),
+   "and only the server-resolved path sets the marker that opens it");
 
 console.log(fail.length ? `\n${fail.length} FAILURES` : "\nAll checks passed");
 process.exit(fail.length ? 1 : 0);
