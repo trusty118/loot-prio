@@ -1831,5 +1831,61 @@ ok(!doc.querySelector("#spec-chips .chip--toggle"), "reset drops the BiS toggle"
 ok(doc.getElementById("spec-row").hidden, "reset hides the spec row again");
 ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priority icons");
 
+// --- a priority icon filters to whoever it names -------------------------------------
+/* The priority line is the content of this page, and until now it was inert: you read
+   "Prot Warrior > Prot Paladin" and then went to the chip row to act on it. */
+{
+  click(doc.getElementById("reset"));
+  const iconFor = (id) => [...doc.querySelectorAll("td.col-prio img.spec-icon")]
+    .find((i) => i.dataset.id === id);
+  /* the leading All chip reads as pressed when nothing else is, which is correct on
+     screen and noise here - what is being asserted is which specs were picked */
+  const pressed = (sel) => [...doc.querySelectorAll(sel + " .chip[aria-pressed=true]")]
+    .filter((c) => !c.classList.contains("chip--all"))
+    .map((c) => c.dataset.tip);
+
+  const before = rows().length;
+  const specIcon = iconFor("ProtWarr");
+  ok(specIcon.getAttribute("role") === "button" && specIcon.getAttribute("tabindex") === "0",
+     "a priority icon is reachable as a control, not just paintable");
+  ok(specIcon.classList.contains("spec-icon--link"),
+     "and carries the class the cursor affordance hangs off");
+
+  click(specIcon);
+  ok(rows().length < before, `clicking one narrows the table (${before} -> ${rows().length})`);
+  // a spec is a refinement of its class and is never a selection on its own, so both land
+  ok(pressed("#class-chips").join() === "Warrior" &&
+     pressed("#spec-chips").join() === "Protection Warrior",
+     `it sets the class as well as the spec (${pressed("#class-chips")} / ${pressed("#spec-chips")})`);
+  ok(/class=Warrior/.test(window.location.hash) && /spec=ProtWarr/.test(window.location.hash),
+     `and the selection is linkable like any other (${window.location.hash})`);
+
+  // the way back out is the same icon: otherwise every click narrows and only the chip
+  // row can widen, which makes an icon a one-way door
+  click(iconFor("ProtWarr"));
+  ok(rows().length === before, `clicking the same icon again clears it (${rows().length})`);
+
+  // a class entry filters to the class - 104 of the entries name one
+  const clsIcon = iconFor("Rogue");
+  ok(clsIcon, "a class-level entry renders an icon too");
+  click(clsIcon);
+  ok(pressed("#class-chips").join() === "Rogue" && pressed("#spec-chips").length === 0,
+     "a class icon picks the class and leaves the specs open");
+  click(doc.getElementById("reset"));
+
+  // a dimmed icon is exactly the one you might want to switch to, so it stays live
+  click(chipByTip("#class-chips", "Warrior"));
+  const dimmed = [...doc.querySelectorAll("td.col-prio .spec-icon--muted")][0];
+  ok(dimmed && dimmed.classList.contains("spec-icon--link"),
+     "a dimmed icon is still clickable - 'not you' is who you might become");
+
+  // a race icon prefixes an entry and names no spec, so it is not a control
+  click(doc.getElementById("reset"));
+  const race = doc.querySelector("td.col-prio .spec-icon--race");
+  ok(race && !race.classList.contains("spec-icon--link") && !race.dataset.id,
+     "a race icon carries no id and is not clickable - the spec beside it is the target");
+  click(doc.getElementById("reset"));
+}
+
 console.log(fail.length ? `\n${fail.length} FAILURES` : "\nAll checks passed");
 process.exit(fail.length ? 1 : 0);

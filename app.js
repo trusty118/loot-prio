@@ -468,6 +468,38 @@
     });
   }
 
+  /* Point the class/spec filter at one registry identifier, from wherever it was named.
+     A spec sets its class too, because a spec is a refinement of its class and never a
+     selection in its own right - the chip rows enforce the same rule, and a spec left
+     standing without its class would be dropped on the next read anyway.
+
+     Clicking what is already the whole selection clears it, so the icons are a way in
+     AND a way back out. Without that, every click narrows and only the chip row can
+     widen, which makes an icon a one-way door. */
+  function focusOn(id) {
+    var spec = REG.specs[id];
+    var clsId = spec ? spec["class"] : (REG.classes[id] ? id : "");
+    if (!clsId) return;
+
+    var already = spec
+      ? state.classes.length === 1 && state.classes[0] === clsId &&
+        state.specs.length === 1 && state.specs[0] === id
+      : state.classes.length === 1 && state.classes[0] === clsId && !state.specs.length;
+
+    if (already) {
+      state.classes = [];
+      state.specs = [];
+    } else {
+      state.classes = [clsId];
+      state.specs = spec ? [id] : [];
+    }
+    /* BiS only rides on the specs that were picked when it was turned on, so a new
+       selection must not inherit it - state.specs changing under it would silently
+       re-aim a filter the reader set for something else. */
+    state.bisOnly = false;
+    update();
+  }
+
   function selectionSpeaksTo(entry) {
     return state.classes.some(function (clsId) {
       var picked = pickedSpecs(clsId);
@@ -2455,17 +2487,22 @@
 
   /* Flattened from data/bis.json: "P3|ProtWarr|32375" -> { longevity, variant }.
 
-     The phase is part of the key because bis.json holds all three now, and a spec can
-     list the same item in several of them - keyed by spec alone, the last phase read
+     The phase is part of the key because bis.json holds all five, and a spec can list
+     the same item in several of them - keyed by spec alone, the last phase read
      silently overwrote every earlier one.
-     BIS_BY_SPEC keeps the per-spec shape the file is written in, which is what a
-     spec filter would read from later. */
+
+     There was a second index here, BIS_BY_SPEC, kept in the per-spec shape the file is
+     written in and described as the natural source for "click a spec icon to see that
+     spec's list". That feature is built now and did not need it: the click sets
+     state.classes/state.specs and the existing filter does the rest, so the answer stays
+     one lookup through bisTier() rather than a second copy of the same data. It was
+     rebuilt from bis.json on every load and read by nothing, which is the shape of thing
+     that makes a feature look half-finished when it is not started. Four lines to bring
+     back if a cross-phase view ever needs the per-spec shape. */
   var BIS = {};
-  var BIS_BY_SPEC = {};
 
   function indexBis(doc) {
     BIS = {};
-    BIS_BY_SPEC = {};
     var specs = (doc && doc.specs) || {};
 
     Object.keys(specs).forEach(function (specName) {
@@ -2473,13 +2510,10 @@
       Object.keys(phases).forEach(function (phase) {
         (phases[phase] || []).forEach(function (entry) {
           if (!entry || entry.id == null) return;
-          var longevity = BIS_LONGEVITY_BY_NAME[entry.bis || "phase"] || 1;
-          BIS[phase + "|" + specName + "|" + entry.id] =
-            { longevity: longevity, variant: entry.variant || "" };
-          (BIS_BY_SPEC[specName] = BIS_BY_SPEC[specName] || []).push({
-            id: entry.id, item: entry.item, longevity: longevity,
-            variant: entry.variant || "", phase: phase
-          });
+          BIS[phase + "|" + specName + "|" + entry.id] = {
+            longevity: BIS_LONGEVITY_BY_NAME[entry.bis || "phase"] || 1,
+            variant: entry.variant || ""
+          };
         });
       });
     });
@@ -2601,6 +2635,30 @@
     return img;
   }
 
+  /* Turn a rendered priority icon into a way to filter by whoever it names.
+
+     Applied HERE and not inside specIcon(), deliberately: the editor renders its icons
+     through the same function, and there a press is the start of a drag. An icon that
+     also filtered would fight the gesture it is already carrying.
+
+     It stays an <img> with role="button" rather than becoming a real <button>, because
+     the drag code, the tests and bisMark() all reach for `img.spec-icon` - wrapping it
+     would be a structural change to serve a behavioural one. The keyboard handler is
+     what a <button> would have given for free, and is written out instead.
+
+     A race icon never gets this: it carries no registry id, and the entry it prefixes
+     is the thing worth filtering on. */
+  function makeFocusable(icon, id) {
+    if (!id || (!REG.specs[id] && !REG.classes[id])) return;
+    icon.classList.add("spec-icon--link");
+    icon.setAttribute("role", "button");
+    icon.setAttribute("tabindex", "0");
+    icon.addEventListener("click", function () { focusOn(id); });
+    icon.addEventListener("keydown", function (ev) {
+      if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); focusOn(id); }
+    });
+  }
+
   /* Priority is an ordered list, each entry naming the operator that links it to
      the previous one. Icons come from the registry; operators render as text
      between them. No parsing, so an unknown identifier is a visible gap with a
@@ -2672,6 +2730,7 @@
       var mark = bisMark(resolved, rec.id);
       var icon = specIcon(resolved, mark.tier, mark.specs, mark.variant);
       if (muted) icon.classList.add("spec-icon--muted");
+      makeFocusable(icon, resolved.id);
       td.appendChild(icon);
     });
 
