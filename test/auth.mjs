@@ -529,6 +529,40 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
   });
 }
 
+// --- a list made before authors existed picks one up on its next save ---------------
+/* Every list that predates the field has a null author, so sharing one showed no byline -
+   and those are the lists with work in them. Filling the blank is recording a fact: a list
+   in your own store is yours by definition, which is what activeIsMine already means. */
+{
+  const sdk = fakeSupabase();
+  const w = boot({ configured: true, sdk });
+  await settle();
+  sdk.auth._signIn("Trusty");
+  await settle();
+  newList(w);
+  await settle();
+
+  const stored = () => sdk._rows.values().next().value;
+  // rewind it to what an old row looks like, then make an edit
+  stored().author = null;
+  const d = w.document;
+  const cell = [...d.querySelectorAll("tbody tr")].map((tr) => tr.querySelector("td.col-notes"))
+    .find((td) => td && td.querySelector(".note-text"));
+  cell.querySelector(".note-text").dispatchEvent(new w.MouseEvent("click", { bubbles: true }));
+  const field = cell.querySelector(".note-field");
+  field.value = "backfill me";
+  field.dispatchEvent(new w.Event("blur"));
+  await settle();
+
+  ok(stored().author === "Trusty",
+     `an authorless list of yours picks your name up on its next save (${JSON.stringify(stored().author)})`);
+}
+
+/* It fills a blank and never overwrites, so copying someone else's list cannot quietly
+   relabel it, and the guard is on the source rather than on the caller. */
+ok(/if \(!t\.author && signedIn\(\)\) t\.author = accountName\(\);/.test(source),
+   "the backfill only fires on a missing author, and only while signed in");
+
 // --- an author is only shown where something attested it ---------------------------
 /* A #t= link carries whatever the sender put in it, so its author is unverified: someone
    could stamp it "zatar" and pass their calls off as his, which is what CLAUDE.md

@@ -1183,6 +1183,13 @@ and a list with no author claims none rather than claiming to be anonymous. A **
 your name**, not the name of the list it came from — a copy is yours from the moment you
 make it, which is the other half of what `base` records.
 
+**A list with no author picks one up on its next save** (`saveNow()`). Every list made
+before the field existed has none, and those are exactly the lists worth sharing — the ones
+with work in them. It fills a blank and **never overwrites**, so making a copy of someone
+else's list cannot quietly relabel the original, and re-saving while signed out cannot blank
+one. Safe because `activeIsMine` already guarantees what it needs to: a list in your own
+store is yours by definition, so writing your name in is recording a fact, not making a claim.
+
 `attestedAuthor()` is the gate between *an author is set* and *an author is shown*. A `#t=`
 link carries whatever the sender put in the payload, so someone could stamp it `zatar` and
 pass their calls off as his — which is the exact thing this section exists to prevent. A

@@ -1208,6 +1208,16 @@
   function saveNow() {
     if (!activeTemplate || !activeIsMine) return Promise.resolve();
     var t = activeTemplate;
+    /* Fill in a missing author on the way past. Every list made before the field existed
+       has none, so sharing one showed no byline at all - and those are exactly the lists
+       worth sharing, being the ones with work in them.
+
+       Safe because of what activeIsMine already guarantees: a list in your own store is
+       yours by definition, so writing your name into a blank is recording a fact rather
+       than making a claim. It never OVERWRITES - a list that already names someone keeps
+       that name, so making a copy of a shared list cannot quietly relabel the original,
+       and re-saving offline (signedIn() false) cannot blank one either. */
+    if (!t.author && signedIn()) t.author = accountName();
     return store.save(t).then(function () {
       if (activeTemplate === t) { unsaved = false; renderTemplateBar(); }
     }, function (err) {
