@@ -30,7 +30,7 @@ its data and will show a load error otherwise.
 
 ## 2. The data
 
-### `data/loot_data.json` — 195 items, the source of truth
+### `data/loot_data.json` — 699 items, the source of truth
 
 Flat array, grouped in the file by zone then boss in kill order, so a boss's items sit
 together for hand-editing.
@@ -46,20 +46,21 @@ together for hand-editing.
 | `priority` | Ordered list of entries, each naming the operator linking it to the previous one — see §3 |
 | `notes` | Caveats. All conditional wording lives here, never in `priority` |
 | `unique` | `true` only on the 23 unique items. **Absent means not unique** — see Repeats in §3 |
-| `unsourced` | `true` on the 13 items the source guide never covered. **Absent means it is zatar's** |
+| `unsourced` | `true` on the 517 rows nobody hand-ranked. **Absent means it is zatar's** |
+| `prioritySource` | `"bis"` on a priority a script wrote. Only legal with `unsourced`, and what puts SEEDED on the row |
 
 **`priority` is structured data, not prose.**
 
 **An empty `priority` means two different things, and they must not be conflated.** On the
 182 records that came from the videos it means zatar gave a call and the call was "whoever
-needs it" — his wording lives in `notes`, and 23 rows are like this. On the 13 `unsourced`
-records it means he never mentioned the item at all; they were found by auditing Wowhead's
-BiS guides against this dataset (see `verify/missing-items.md`) and they render with a
-**"not in the guide"** tag, because a row carrying none of his calls must not read as one he
-had no opinion on. `check_priority.py` enforces the distinction: an empty priority with
-neither `notes` nor `unsourced` is a warning, and `unsourced` on a record that *has* a
-priority is an error — if someone later records a call for one of these, the marker comes
-off in the same edit.
+needs it" — his wording lives in `notes`, and 23 rows are like this. On an `unsourced`
+record it means nobody has ranked the item at all.
+
+`check_priority.py` enforces the distinction: an empty priority with neither `notes` nor
+`unsourced` is a warning, and an `unsourced` record that *has* a priority is an **error**
+unless it also names a `prioritySource` — which is what stops a generated ordering passing
+for a considered one. If someone later ranks one of these by hand, both markers come off in
+the same edit.
 
 **`roles` replaced the single-valued `role`, Aug 2026.** One word could not say that a plate
 piece is wanted by both a Retribution and a Protection Paladin. It was seeded by
@@ -264,7 +265,7 @@ need one at 168x84 and does at 72px: the art is busy exactly where the label lan
 text-shadow alone stops carrying it.
 
 **No item count, and no name, on the face of anything carrying art.** The number is noise where
-the art is doing the work, and the `N of 195 items` line above the table already answers it.
+the art is doing the work, and the `N of 699 items` line above the table already answers it.
 Both stay in the `aria-label` — the only way a screen reader gets them — and the boss name is
 additionally on `data-tip`, since the rail is the one level whose label is hidden rather than
 absent. **This overturns the old rule that boss chips keep their counts**, which was correct
@@ -469,7 +470,7 @@ list in your own store is a workspace — `canEdit()` is `activeTemplate && acti
 state.editing`, and it is what `renderRow` and `renderPalette` gate on. You get one of your
 own two ways, the way Office does it:
 
-- **New** → `newBlankTemplate()`, all 195 rows with every priority empty, `base: "blank"`.
+- **New** → `newBlankTemplate()`, all 699 rows with every priority empty, `base: "blank"`.
 - **Make a copy** → `copyOfCurrent()`, which deep-copies `effectivePriority(rec)` for every
   record. That one function copies the guide's list, one of yours, or a shared one, without
   branching on which — and it is the only way to keep someone else's link.
@@ -489,8 +490,11 @@ rows through a filter the other 182 fail would make your own list lie about itse
   "v": 1, "base": "zatar", "priorities": { "32375": [ { "spec": "ProtWarr" } ] } }
 ```
 
-A **full copy** of all 195 priorities, not a diff — 11.6 KB of JSON, **2,263 characters**
-gzipped and base64url'd, which fits a URL comfortably. Two consequences, both handled
+A **full copy** of all 699 priorities, not a diff — **~4,700 characters** gzipped and
+base64url'd. It grows with the dataset, and stays workable because it rides in the
+**hash**: a fragment never reaches a server, so there is no request-line limit to hit and
+the only ceiling is the address bar. The `?s=` path pays none of this — a token is ~30
+characters whatever the list holds. Two consequences, both handled
 rather than hidden:
 
 - **It is frozen.** Later corrections to `loot_data.json` don't reach a saved template;
@@ -594,7 +598,7 @@ Three consequences worth keeping:
 
 - **`Edit` is not in the banner at all.** It lives in `.controls--refine`, the sticky panel,
   because it acts on the rows below it — the banner answers *which list am I on*, this answers
-  *change these calls*. On a 195-row page the banner scrolls away immediately, taking the
+  *change these calls*. On a 699-row page the banner scrolls away immediately, taking the
   control that changes what you are looking at with it. Armed, it gives **three signals**: the
   button fills, the bar tints (`.controls--refine.is-editing`), and a fixed-text hint says so.
   A `min-width: 118px` keeps `Edit priorities` and `Done editing` the same width, because this
@@ -619,7 +623,7 @@ Three consequences worth keeping:
 `renderTemplateBar()` **directly and never `update()`** — `update()` is what calls
 `renderTemplateBar` in the first place.
 
-**Rows count what is *ranked*, not what is held.** Every list is a full copy of all 195
+**Rows count what is *ranked*, not what is held.** Every list is a full copy of all 699
 records, so an item count is the same number on every row and says nothing — `159 ranked`
 for zatar's, `0 ranked` for a list you have just started, is the number that separates
 them. `store.list()` returns it as `filled`; `localStore` gets it free from the blob it
@@ -913,7 +917,7 @@ current if any of those change.
   count, so the rows line up down one edge. What the row is, and what its All chip clears,
   live in `aria-label` (on the `role="group"`) and in `data-tip` — `allChip()` sets both,
   so a new row should go through it rather than calling `chip()` directly. Counts stay on
-  the individual chips; the row total is already the `N of 195 items` line.
+  the individual chips; the row total is already the `N of 699 items` line.
 
 ---
 
@@ -947,6 +951,38 @@ They can't cover anything needing a real browser: Wowhead's script doesn't compl
 data fetch under jsdom, so **item icons and item tooltips are untested** — check those by
 eye at `localhost:8642`.
 
+Importing a phase's loot, in order — each is a dry run until `--write`:
+
+```bash
+python3 verify/scrape_drops.py                          # guides -> p1p2-drops.json
+python3 verify/fetch_items.py --drops p1p2-drops.json   # + the item database -> rows
+python3 verify/fetch_bis.py                             # every spec, every phase
+python3 verify/seed_priority.py                         # a starting order for new rows
+python3 verify/regroup.py                               # zone, then kill order
+```
+
+**`scrape_drops.py` refuses rather than skipping.** Its `HEADINGS` table maps a guide's
+section names onto `BOSS_ORDER`, and a heading it has never seen is an error — a silent
+skip is how a whole boss goes missing and nobody notices. It is also where the guides'
+irregularities are recorded: Wowhead spells one boss `Grull`, the Opera Event's three
+outcomes share one table, and Karazhan's three Servant's Quarters rare spawns fold into
+the one `Basement` source.
+
+**`fetch_items.py` drops anything that is not gear, and says what it dropped.** Two rules,
+because one is not enough: below **epic** quality (which is also what keeps the green accent
+unambiguous — see §4), and any slot that is not equippable. The second rule exists because
+`Pattern: Soulcloth Vest` is a *purple*: quality cannot tell a pattern, a mount, a quest item
+or a 20-slot bag from loot, but "can you wear it" can. 17 rows were caught this way in Phases
+1 and 2.
+
+**Tier tokens are the exception to that rule** and are resolved by name, because a token
+reports its classes where gear reports a slot. **T4 and T5 group the classes differently
+from T6** — Priest is with Warlock at T6 and with Warrior below it — so `TOKEN_SET` in the
+tool and `TIER_CLASSES` in `app.js` each carry **six** groupings, not three under different
+names. A token type missing from `TIER_CLASSES` renders as bare text rather than three class
+icons, which reads as "we don't know who this is for"; `test/smoke.mjs` pins that every type
+in the data is known.
+
 Validators, all exiting non-zero on error:
 
 - `python3 verify/check_priority.py` — every identifier resolves, operators are valid and
@@ -968,8 +1004,19 @@ structured priority), `verify/fetch_unique.py` (re-runnable if the item set chan
   Malefic/Gronnstalker's/Tempest armour, which are what the 15 **tokens** turn into and are
   correctly not listed. The 8 real ones were added. Full audit in `verify/missing-items.md`;
   expect tier armour to keep showing as "not in this dataset" on every `fetch_bis.py` run.
+- **Phases 1 and 2 imported, Aug 2026.** Karazhan, Gruul's Lair, Magtheridon's Lair,
+  Serpentshrine Cavern and Tempest Keep — 331 rows, taking the dataset from 368 to 699, with
+  BiS for all five phases (1,889 entries) and priorities seeded for the new rows. Every chip
+  in the expansion now has loot behind it. `Crafted (Nether Vortex)` is the one exception and
+  still reads 0: crafted gear is not in the raid loot guides, so it needs its own source.
+- **Zul'Aman trash drops are still missing**, which is why that chip reads 0.
 - **Still not included:** gems, and Mother Shahraz's shadow-resistance set — intentional
   omissions by the creator — and tier set pieces, per the above.
+- **The seeded orderings are provisional.** 268 rows carry a flat `=` line from BiS, marked
+  SEEDED. They are a starting point to be refined, not an answer.
+- **`roles` on the imported rows are stats-derived, not BiS-derived.** `fetch_items.py` reads
+  them off the item's own stats, which is blunt on hybrids; `verify/seed_roles.py` is the
+  better source and has not been re-run since the import.
 - Planned but not built: alias-aware search, and a rank display for the unused
   `positions()`. See §2 and §4.
 - **The Role column and filter were deleted, Aug 2026.** The class/spec filter answers the
@@ -984,7 +1031,13 @@ structured priority), `verify/fetch_unique.py` (re-runnable if the item set chan
 
 ### Pagination — considered and declined, Aug 2026
 
-All 195 items render on one page, in 17 boss groups: ~2,400 elements under `#results`. A full `update()` profiled in jsdom at ~180ms median, of which
+**The dataset nearly quadrupled and the per-render cost did not move**, because a phase is
+always set: the page renders one phase's zones, never the whole 699. Phase 1 is the largest
+at ~200 items, which is about the size Phase 3 was when this was measured. Importing Phases
+1 and 2 added rows to the file, not to any single render.
+
+The measurement, from when 195 items were all of them: 17 boss groups, ~2,400 elements under
+`#results`. A full `update()` profiled in jsdom at ~180ms median, of which
 **~82% is DOM construction** and ~0.1ms is the filtering logic. jsdom is roughly an order
 of magnitude slower at DOM work than a browser, so the real cost is well under that.
 
@@ -1027,14 +1080,22 @@ credited in-video to **Veramos**, arms-warrior input to **Lemonism**.
 Item IDs and slots came from [wowsims/tbc](https://github.com/wowsims/tbc). Icons and
 tooltips from [Wowhead](https://www.wowhead.com/tbc).
 
-**182 of the 195 rows are zatar's; 13 are not.** Those 13 are T6 items the videos never
-mention, added in Aug 2026 so the loot tables are complete. They carry `unsourced: true`, hold
-no priority, and render with a "not in the guide" tag so no reader mistakes them for his
-calls. `verify/missing-items.md` is the record.
+**182 of the 699 rows are zatar's.** His videos covered Black Temple and Mount Hyjal, and
+that is the whole of his guide. The other 517 are loot from the raids he never covered —
+Phases 1, 2, 4 and 5, imported so the tables are complete — plus 13 T6 items the videos
+skipped. All of them carry `unsourced: true`. `verify/missing-items.md` records the 13.
+
+**Nothing on screen frames a row as missing from a guide any more, and that was a decision.**
+A `NOT IN THE GUIDE` tag was right while the site was a mirror of one guide with holes in
+it; it stopped being right once lists became the product and zatar's became one of them.
+What replaced it is narrower and still true: a priority a script generated says **SEEDED**,
+because the claim worth making is *nobody has ranked this yet*, not *this is missing from
+somebody's guide*. `unsourced` survives in the data as plumbing — `unsourcedBis()` and
+`check_priority.py` both read it — and renders nowhere.
 
 **The BiS rings are not zatar's either** and must never be presented as if they were — the
 videos gave loot-council priorities, not per-spec BiS lists. `data/bis.json` comes from Wowhead's
-per-spec Phase 3 (BT/Hyjal) BiS guides, one per spec, each URL recorded in
+per-spec BiS guides, one per spec per phase, each URL recorded in
 `verify/bis-sources.json`; how long an item stays BiS is derived from
 [wowsims/tbc](https://github.com/wowsims/tbc) P4/P5 gear presets. Where the two sources
 disagree with each other — 47 entries whose spec the priority never names — both are left

@@ -614,6 +614,25 @@ ok([...vanq.querySelectorAll("img")].some((i) => i.dataset.tip === "Feral Druid 
 ok(doc.querySelectorAll(".col-type img.class-icon").length === 45,
    `15 tier tokens x 3 class icons = 45 (${doc.querySelectorAll(".col-type img.class-icon").length})`);
 
+/* Every token type in the data has to be in TIER_CLASSES, or it renders as bare text
+   with no class icons - which reads as "we do not know who this is for" rather than as
+   a bug. Tier 4 and 5 group the classes DIFFERENTLY from Tier 6 (Priest sits with
+   Warlock at T6 and with Warrior below it), so this cannot be checked by pattern. */
+{
+  const tokenTypes = [...new Set(data.filter((r) => r.type.startsWith("Tier Token"))
+    .map((r) => r.type))];
+  ok(tokenTypes.length === 6, `six token groupings across T4, T5 and T6 (${tokenTypes.length})`);
+  const known = appSource.match(/var TIER_CLASSES = \{[^}]*\}/)[0];
+  ok(tokenTypes.every((t) => known.includes(`"${t}"`)),
+     `app.js knows every one of them (missing: ${tokenTypes.filter((t) => !known.includes(`"${t}"`)).join(", ")})`);
+  // and the three classes on each are three DIFFERENT real classes
+  const groups = tokenTypes.map((t) => (known.match(new RegExp(`"${t.replace(/[()/]/g, "\\$&")}":\\s*\\[([^\\]]*)\\]`)) || [])[1]);
+  ok(groups.every((g) => g && [...new Set(g.match(/"([^"]+)"/g))].length === 3),
+     "each names three distinct classes");
+  ok(groups.every((g) => g.match(/"([^"]+)"/g).every((c) => specs.classes[c.slice(1, -1)])),
+     "and every class in them is one the registry knows");
+}
+
 // --- BiS comes from data/bis.json, not from the priority string ---
 ok(!JSON.stringify(data).includes("*"), "no asterisk markers left in loot_data.json");
 ok(bis.specs && Object.keys(bis.specs).length >= 4, "bis.json has spec entries");
@@ -641,7 +660,12 @@ const tierOf = (icon) =>
 // Rings follow the phase on screen, so only the phase on screen can be checked here -
 // a Sunwell item is not BiS for someone reading Phase 3, and iterating every phase's
 // list against a Phase 3 page asks for rings that should not be there.
-let onSpec = 0, onClass = 0, missing = [];
+/* A phase's BiS list names items from EARLIER raids too - a Karazhan trinket can still
+   be BiS in Phase 3 - and those items are in the dataset now that Phase 1 and 2 are
+   imported. They are simply not on the Phase 3 page, so there is no row to ring. That
+   is the phase filter working, not a missing ring, and it is counted rather than
+   ignored so the skip can never quietly grow to cover a real regression. */
+let onSpec = 0, onClass = 0, offPhase = 0, missing = [];
 for (const [specId, phases] of Object.entries(bis.specs)) {
   const owner = (specs.specs[specId] || {}).class;
   for (const [phase, entries] of Object.entries(phases)) {
@@ -650,6 +674,7 @@ for (const [specId, phases] of Object.entries(bis.specs)) {
       const rec = data.find((r) => r.id === e.id);
       if (!rec) continue;
       const row = rowFor(rec.item);
+      if (!row) { offPhase++; continue; }        // lives in an earlier phase's raid
       const want = tierNum[e.bis || "phase"];
 
       if (listsSpec(rec, specId)) {
@@ -671,10 +696,13 @@ for (const [specId, phases] of Object.entries(bis.specs)) {
 ok(missing.length === 0, `every showable bis entry produced a ring (missing: ${missing.slice(0, 4).join("; ")})`);
 ok(onSpec > 50 && onClass > 50,
    `rings land on both spec and class icons (${onSpec} spec, ${onClass} class)`);
+ok(offPhase > 0 && onSpec + onClass > offPhase,
+   `P3 BiS names earlier raids' loot, which the phase filter keeps off the page ` +
+   `(${offPhase} off-phase vs ${onSpec + onClass} ringed)`);
 
 // an item with no entry anywhere in bis.json must have no ring
 const bisIds = new Set(Object.values(bis.specs).flatMap((p) => Object.values(p).flat()).map((e) => e.id));
-const cleanRec = data.find((r) => !bisIds.has(r.id) && r.priority.length);
+const cleanRec = data.find((r) => !bisIds.has(r.id) && r.priority.length && rowFor(r.item));
 const unmarked = rowFor(cleanRec.item);
 ok([...unmarked.children[3].querySelectorAll("img")].every((i) => !i.className.includes("--bis")),
    `an item absent from bis.json has no rings (${cleanRec.item})`);
@@ -687,7 +715,7 @@ const iconsOf = (name) => [...[...doc.querySelectorAll("tbody tr")]
 const multiCase = Object.entries(bis.specs).flatMap(([specId, phases]) =>
   (phases.P3 || []).filter((e) => e.bis === "multiPhase")
     .map((e) => ({ specId, rec: data.find((r) => r.id === e.id) })))
-  .find(({ specId, rec }) => rec && listsSpec(rec, specId));
+  .find(({ specId, rec }) => rec && listsSpec(rec, specId) && rowFor(rec.item));
 const multiIcon = iconById(rowFor(multiCase.rec.item), multiCase.specId);
 ok(multiIcon.classList.contains("spec-icon--bis2"),
    `multiPhase renders the multi-phase ring (${multiCase.rec.item} / ${multiCase.specId})`);
@@ -721,7 +749,7 @@ const phaseCase = Object.entries(bis.specs).flatMap(([specId, phases]) =>
   (phases.P3 || [])
     .filter((e) => (e.bis || "phase") === "phase" && !e.variant)
     .map((e) => ({ specId, rec: data.find((r) => r.id === e.id) })))
-  .find(({ specId, rec }) => rec && listsSpec(rec, specId));
+  .find(({ specId, rec }) => rec && listsSpec(rec, specId) && rowFor(rec.item));
 const phaseIcon = iconById(rowFor(phaseCase.rec.item), phaseCase.specId);
 ok(phaseIcon.classList.contains("spec-icon--bis"),
    `* renders the single BiS ring (${phaseCase.rec.item} / ${phaseCase.specId})`);
@@ -745,7 +773,7 @@ const expansionCase = Object.entries(bis.specs).flatMap(([specId, phases]) =>
   (phases.P3 || [])
     .filter((e) => e.bis === "expansion")
     .map((e) => ({ specId, rec: data.find((r) => r.id === e.id) })))
-  .find(({ specId, rec }) => rec && listsSpec(rec, specId));
+  .find(({ specId, rec }) => rec && listsSpec(rec, specId) && rowFor(rec.item));
 ok(!!expansionCase, "the file has at least one expansion-BiS entry on a spec the priority names");
 
 const expansionIcon = iconById(rowFor(expansionCase.rec.item), expansionCase.specId);
@@ -828,7 +856,7 @@ ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
     ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone));
   ok(marked.length === seededHere.length,
      `every seeded row on screen says where its ordering came from (${marked.length}/${seededHere.length})`);
-  ok(marked.every((tr) => tr.querySelector(".prio-from").textContent === "BIS"),
+  ok(marked.every((tr) => tr.querySelector(".prio-from").textContent === "SEEDED"),
      "and says it the same way on each");
 
   // the guide's own rows carry nothing
@@ -837,7 +865,7 @@ ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
     return rec && !rec.prioritySource && (rec.priority || []).length;
   });
   ok(hisRows.length > 0 && hisRows.every((tr) => !tr.querySelector(".prio-from")),
-     `and none of his ${hisRows.length} own orderings is marked`);
+     `and none of the ${hisRows.length} hand-ranked orderings is marked`);
 }
 
 // --- rings follow the phase, and carry why ------------------------------------------
@@ -892,7 +920,10 @@ ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
     for (const entry of phases.P3 || []) {
       if (!entry.variant) continue;
       const rec = data.find((r) => r.id === entry.id);
-      if (rec && listsSpec(rec, specId)) withVariant.push({ specId, entry, rec });
+      // on the page, not merely in the dataset - P3 BiS names earlier raids' loot too
+      if (rec && listsSpec(rec, specId) && rowFor(rec.item)) {
+        withVariant.push({ specId, entry, rec });
+      }
     }
   }
   ok(withVariant.length > 0, `entries carry a qualifier (${withVariant.length} showable in P3)`);
@@ -955,26 +986,25 @@ ok(data.every((r) => !r.prioritySource || r.unsourced),
 ok(data.filter((r) => !r.unsourced).length === 182,
    "the creator's original 182 are still exactly that");
 
-const tagged = [...doc.querySelectorAll("tbody tr .item-tag")];
-ok(tagged.length === 13, `each unsourced row is tagged in the table (got ${tagged.length})`);
-ok(tagged.every((t) => t.dataset.tip && /audit/i.test(t.dataset.tip)),
-   "the tag explains itself on hover");
-const taggedRowNames = tagged.map((t) => t.closest("tr").children[0].textContent);
-ok(unsourced.every((r) => taggedRowNames.some((n) => n.includes(r.item))),
-   "every unsourced item is one of the tagged rows");
+/* Nothing on screen frames a row as missing from a guide. The site carries several
+   people's lists now and zatar's is one of them, so "not in the guide" named a
+   distinction that stopped being the site's organising idea. `unsourced` survives in
+   the data as plumbing - it is what unsourcedBis() and check_priority.py read - and
+   that split is the thing worth pinning: the flag lives, the framing does not. */
+ok(!doc.querySelector(".item-tag") && !doc.querySelector(".zone-tag--unsourced"),
+   "no row or zone is marked as missing from a guide");
+ok(!/not in the guide/i.test(appSource) && !/not in the guide/i.test(cssText),
+   "and the phrase is gone from the source, not merely unrendered");
+ok(unsourced.length > 0,
+   `the unsourced flag is still in the data, where the filter and the validator read it (${unsourced.length} rows)`);
 
-// A raid the guide never covered is a different case, and tagging all 109 of its rows
-// would be furniture rather than information - it is said once on the group heading.
 {
   const before = doc.getElementById("count").textContent;
   click(chipByText("#phase-chips", "Phase 5"));
   const swpRows = [...doc.querySelectorAll("#results tr[data-id]")];
-  ok(swpRows.length > 0 && swpRows.every((tr) => !tr.querySelector(".item-tag")),
-     `no per-row tag in a raid that is unsourced end to end (${swpRows.length} rows)`);
-  ok(!doc.querySelector(".zone-tag--unsourced"),
-     "and no zone-level marker either - the empty priority column already says it");
+  ok(swpRows.length > 0, `Phase 5 still renders its rows (${swpRows.length})`);
   click(doc.getElementById("reset"));
-  ok(doc.getElementById("count").textContent === before, "and reset returns to the guide's phase");
+  ok(doc.getElementById("count").textContent === before, "and reset returns to the landing phase");
 }
 
 // the four Bands of the Eternal land in Hyjal trash, and say what they really are
@@ -1262,31 +1292,34 @@ const zoneChipNames = () => [...doc.querySelectorAll("#zone-chips .chip")]
   .filter((c) => !c.classList.contains("chip--all")).map((c) => c.textContent.replace(/\d+$/, "").trim());
 
 ok([1, 2, 3, 4, 5].every((n) => phaseChip(n)), "all five phases have a chip");
-ok(/, 0 items/.test(phaseChip(1).getAttribute("aria-label")),
-   "a phase with no items is still offered, and says so where it does not clutter");
+const phaseItems = (n) => Number((/,\s*(\d+) items/.exec(phaseChip(n).getAttribute("aria-label")) || [])[1]);
+ok([1, 2, 3, 4, 5].every((n) => phaseItems(n) > 0),
+   `every phase carries loot now (${[1,2,3,4,5].map(phaseItems).join("/")})`);
 
 click(phaseChip(1));
 ok(zoneChipNames().join(", ") === "Karazhan, Gruul's Lair, Magtheridon's Lair",
    `phase 1 opens its own zones: ${zoneChipNames().join(", ")}`);
-ok(rows().length === 0, "and nothing is listed under it yet");
+ok(rows().length === phaseItems(1), `and lists them: ${rows().length} rows`);
 
-// the empty zones have their bosses too, so a phase opens onto something real
 click(chipByText("#zone-chips", "Karazhan"));
 const bossNames = () => [...doc.querySelectorAll("#boss-chips .chip")]
   .filter((c) => !c.classList.contains("chip--all")).map((c) => c.textContent.replace(/\d+$/, "").trim());
 // The rail shows art alone, so the count lives in the aria-label ("Moroes, 6 items").
 const bossCount = (c) => (/,\s*(\d+) items$/.exec(c.getAttribute("aria-label") || "") || [])[1];
-ok(bossNames().length === 12, `Karazhan lists its 12 encounters (got ${bossNames().length})`);
-ok(bossNames()[0] === "Trash" && bossNames()[11] === "Nightbane",
-   `in kill order: ${bossNames()[0]} ... ${bossNames()[11]}`);
+// 11 encounters, plus Trash and Basement - the two sources with no place in a kill order
+ok(bossNames().length === 13, `Karazhan lists its 13 sources (got ${bossNames().length})`);
+ok(bossNames()[0] === "Trash" && bossNames()[1] === "Basement" && bossNames()[12] === "Nightbane",
+   `in kill order behind the two non-boss sources: ${bossNames().slice(0, 2).join(", ")} ... ${bossNames()[12]}`);
 ok([...doc.querySelectorAll("#boss-chips .chip")]
-     .filter((c) => !c.classList.contains("chip--all")).every((c) => bossCount(c) === "0"),
-   "every one reads 0 until items arrive");
+     .filter((c) => !c.classList.contains("chip--all")).every((c) => Number(bossCount(c)) > 0),
+   "and every one of them dropped something");
+/* Chess has no journal portrait, and neither do the three Servant's Quarters rare
+   spawns behind Basement - they are not Encounter Journal bosses at all. Both fall
+   back to text, which is what chip() does when the art 404s. */
 ok([...doc.querySelectorAll("#boss-chips .chip")]
-     .filter((c) => !c.classList.contains("chip--all") && !/Chess/.test(c.textContent))
+     .filter((c) => !c.classList.contains("chip--all") && !/Chess|Basement/.test(c.textContent))
      .every((c) => c.querySelector("img.chip-icon")),
-   "and each carries a portrait, bar the Chess Event which has none in the journal");
-ok(rows().length === 0, "with no items listed under any of them yet");
+   "each carries a portrait, bar Chess and Basement which have none in the journal");
 
 click(phaseChip(2));
 ok(zoneChipNames().join(", ") === "Serpentshrine Cavern, Tempest Keep, Crafted",
@@ -1355,16 +1388,18 @@ await new Promise((r) => setTimeout(r, 50));
 ok(rows().length === 195 && window.location.hash.includes("phase=P3"),
    `an unknown phase falls back to the default (${window.location.hash})`);
 
-// a phase with no items says so in its own words - there is no "all phases" to escape
-// to now, so an empty phase is the whole page
+/* Every phase carries loot now, so nothing triggers phaseIsEmpty() any more. It stays
+   because the next expansion arrives the same way this content did - phases first,
+   loot after - and an empty phase is the whole page when there is no "all phases" to
+   escape to. Asserted against the source, since no data can reach it. */
 click(doc.getElementById("reset"));
-click(chipByText("#phase-chips", "Phase 1"));
-ok(rows().length === 0, "a phase with no items yet shows none");
-const emptyMsg = doc.querySelector(".empty").textContent;
-ok(/Phase 1/.test(emptyMsg) && /dataset/.test(emptyMsg),
-   `and says that, rather than blaming the filters: "${emptyMsg}"`);
-ok(doc.querySelectorAll("#zone-chips .chip").length > 0,
-   "its zones are still listed, so the phase is visibly a place with nothing in it");
+[1, 2, 3, 4, 5].forEach((n) => {
+  click(chipByText("#phase-chips", "Phase " + n));
+  ok(rows().length > 0 && !doc.querySelector(".empty"),
+     `Phase ${n} lists loot rather than an empty-phase message (${rows().length} rows)`);
+});
+ok(/phaseIsEmpty\(\)\s*\?/.test(appSource) && /isn't in the dataset yet/.test(appSource),
+   "and the empty-phase message survives for the next phase that arrives before its loot does");
 click(doc.getElementById("reset"));
 
 // Every boss a record names has to be in BOSS_ORDER, or its chip only appears through
@@ -1594,8 +1629,10 @@ ok(rows().length === 21, `class=Mage -> 21 rows: 20 named + Band of the Eternal 
 // An empty priority survives a filter only when the row is unsourced AND the item
 // is BiS for the selection - the creator's own "whoever needs it" rows never do.
 const emptyPrioRows = rows().filter((tr) => tr.children[3].querySelectorAll("img.spec-icon").length === 0);
-ok(emptyPrioRows.every((tr) => tr.querySelector(".item-tag")),
-   "the only priority-less rows shown are the unsourced ones");
+ok(emptyPrioRows.every((tr) => {
+  const rec = data.find((r) => tr.children[0].textContent.includes(r.item));
+  return rec && rec.unsourced;
+}), "the only priority-less rows shown are the ones nobody ranked");
 ok(emptyPrioRows.every((tr) => {
   const rec = data.find((r) => tr.children[0].textContent.includes(r.item));
   return rec && Object.keys(bis.specs).some((id) => specs.specs[id].class === "Mage" &&
@@ -1704,10 +1741,8 @@ click(chipByTip("#class-chips", "Hunter"));
 click(chipByTip("#spec-chips", "Survival Hunter"));
 ok(itemNames().some((n) => n.includes("Band of the Eternal Champion")),
    "Survival sees the Band it is BiS for, even though no priority names it");
-const bandRow = rowFor("Band of the Eternal Champion");
-ok(bandRow.querySelector(".item-tag"), "and it still carries its 'not in the guide' tag");
 // The column is no longer empty - it is seeded from BiS so the row says something - so
-// what keeps it from reading as one of his calls is the marker, not the blankness.
+// what keeps a placeholder from reading as a considered ordering is the marker.
 const bandRec = data.find((r) => r.item === "Band of the Eternal Champion");
 ok(bandRec.unsourced && bandRec.prioritySource === "bis",
    "and its ordering says it came from BiS, not from him");

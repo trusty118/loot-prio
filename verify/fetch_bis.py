@@ -20,6 +20,7 @@ and the names to cross-check; nothing in this script writes a priority.
 """
 
 import hashlib
+import functools
 import json
 import re
 import sys
@@ -40,12 +41,16 @@ WOWSIMS = "https://raw.githubusercontent.com/wowsims/tbc/master/ui/{}/presets.ts
 UA = {"User-Agent": "loot-prio/1.0"}
 
 # the guide's gear tables start under this heading, whichever phase it is for
-BIS_HEADING = re.compile(r"Best In Slot Gear.{0,90}?Phase\s*([345])", re.I | re.S)
+BIS_HEADING = re.compile(r"Best In Slot Gear.{0,90}?Phase\s*([12345])", re.I | re.S)
 
-# One Wowhead guide per spec per phase. P4 and P5 are derived from the P3 url rather
-# than listed: the slugs differ by a single segment, and all 56 resolve.
+# One Wowhead guide per spec per phase. P4 and P5 are derived from the P3 url - the
+# slugs differ by a single segment - but P1 and P2 cannot be, so they are listed in
+# bis-sources.json instead. Wowhead writes three different url families here: P3/P4/P5
+# share one, P1 swaps the tail of it, and P2 lives under /guide/classes/ entirely.
+# Phase 2 is also the one phase written PER SPEC where Phase 3 is per class, so five
+# specs have a better source at P2 than they do at P3.
 PHASE_SLUG = {"P3": "-bt-hyjal-phase-3-", "P4": "-za-phase-4-", "P5": "-swp-phase-5-"}
-PHASES = ["P3", "P4", "P5"]
+PHASES = ["P1", "P2", "P3", "P4", "P5"]
 
 # The rank column says WHY an item is BiS, and until now that was read and thrown away.
 # Wowhead's wording is not fixed - the same idea arrives as "Best Mitigation", "Best Mit
@@ -86,7 +91,7 @@ VARIANT_MAP = [
 # "Best in slot (2.6 MH)" still resolves as mainhand rather than being flattened here.
 PLAIN_RANK = re.compile(
     r"^(bis|best|best in slot|best pve|best personal|best all game|"
-    r"p[345](\s+\w+)?\s*bis|bis\s*\(small upgrade\)|"
+    r"p[12345](\s+\w+)?\s*bis|bis\s*\(small upgrade\)|"
     r"best(\s+in\s+slot)?\s*\(all\))$", re.I)
 
 
@@ -119,10 +124,22 @@ TAGS = re.compile(r"<[^>]+>")
 # anywhere, unless it is qualified into something that is not this phase's answer.
 # "Near Best" and "Second Best" fail the leading-word test on purpose.
 RANKED_BIS = re.compile(r"^best\b|\bbis\b", re.I)
-NOT_BIS = re.compile(
-    r"alternative|option|pre-?raid|pvp|seasonal|phase\s*2|^p2\b|until tier|second",
-    re.I,
-)
+
+# Rejections that hold whatever phase is being read.
+NOT_BIS_ALWAYS = r"alternative|option|pre-?raid|pvp|seasonal|until tier|second"
+
+
+@functools.lru_cache(maxsize=None)
+def not_bis_for(phase):
+    """Ranks that are not THIS phase's answer.
+
+    This used to be one constant that rejected any row naming phase 2 - correct inside a
+    P3 guide, where "P2 BiS" is last tier's answer, and catastrophic inside a P2 one,
+    where it rejects every row on the page. What is meant is "some OTHER phase's
+    answer", so the phase in hand has to decide which digits those are.
+    """
+    others = "".join(d for d in "12345" if d != phase[1])
+    return re.compile(rf"{NOT_BIS_ALWAYS}|phase\s*[{others}]\b|^p[{others}]\b", re.I)
 
 TIERS = {1: "phase", 2: "multiPhase", 3: "expansion"}
 
@@ -152,8 +169,9 @@ def text(html):
     return re.sub(r"\s+", " ", TAGS.sub(" ", html)).replace("&#39;", "'").replace("&amp;", "&").strip()
 
 
-def bis_rows(html, where):
+def bis_rows(html, where, phase):
     """(item id, item name, rank) for every row a guide ranks BiS, in page order."""
+    not_bis = not_bis_for(phase)
     start = BIS_HEADING.search(html)
     if not start:
         raise ValueError(f"{where}: no 'Best In Slot ... Phase N' heading - page layout changed?")
@@ -168,7 +186,7 @@ def bis_rows(html, where):
             continue
         rank = text(cells[0])
         ranks.add(rank)
-        if RANKED_BIS.search(rank) and not NOT_BIS.search(rank):
+        if RANKED_BIS.search(rank) and not not_bis.search(rank):
             out.append((int(link.group(1)), text(link.group(2)), rank))
 
     if not out:
@@ -241,7 +259,8 @@ def main():
                     urls = [u.replace(PHASE_SLUG["P3"], PHASE_SLUG[phase]) for u in source["p3"]]
                 rows = []
                 for url in urls:
-                    rows += bis_rows(GUIDE_CACHE.setdefault(url, get(url)), f"{spec} {phase}")
+                    rows += bis_rows(GUIDE_CACHE.setdefault(url, get(url)),
+                                     f"{spec} {phase}", phase)
                 per_phase[phase] = rows
         except (urllib.error.URLError, TimeoutError, ValueError) as e:
             failures.append(f"{spec}: {e}")
