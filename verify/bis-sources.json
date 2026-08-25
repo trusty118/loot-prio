@@ -1,116 +1,440 @@
 {
- "note": "Where each spec's BiS data comes from, and the input to verify/fetch_bis.py. Umbrella specs have no entry here - FeralDruid gears as bear or as cat and never as one set, so FeralBear and FeralCat are sourced separately from Wowhead's tank and dps guides. p3 is one or more Wowhead Phase 3 (Black Temple / Mount Hyjal) BiS guides - every url here was checked for a 200 before it went in. wowsims says which wowsims/tbc preset file supplies the longevity check (does a P3 item survive into the P4/P5 preset), with match naming the preset when one file holds several specs; null wowsims means no preset exists for that spec, so its entries stay at the default phase tier. Some guides serve two or three specs at once - Wowhead writes one rogue and one priest-healer guide - so the same url legitimately appears more than once.",
+ "note": "Where each spec's BiS data comes from, and the input to verify/fetch_bis.py. Umbrella specs have no entry here - FeralDruid gears as bear or as cat and never as one set, so FeralBear and FeralCat are sourced separately from Wowhead's tank and dps guides. p1, p2 and p3 are one or more Wowhead BiS guides for that phase - Karazhan/Gruul/Magtheridon, SSC/Tempest Keep, and Black Temple/Mount Hyjal. Every url here was checked for a 200 before it went in. P4 and P5 are still derived from p3 by a slug swap and are not listed. The three url families are genuinely different shapes, which is why p1 and p2 are stored rather than derived: p1 swaps the tail of the p3 slug, while p2 lives under /guide/classes/ entirely. P1 and P2 group specs exactly as P3 does - one rogue guide, one priest-healer guide - so the same url legitimately appears several times. CHECK THESE WITHOUT FOLLOWING REDIRECTS: a per-spec p2 url like classes/rogue/assassination/ answers 301 to the WOTLK guide of the same name, so a checker that follows the hop reports a cheerful 200 for a page that is the wrong expansion. Eight urls were wrong that way and only the parser caught it. wowsims says which wowsims/tbc preset file supplies the longevity check (does a P3 item survive into the P4/P5 preset), with match naming the preset when one file holds several specs; null wowsims means no preset exists for that spec, so its entries stay at the default phase tier. Some guides serve two or three specs at once - Wowhead writes one rogue and one priest-healer guide - so the same url legitimately appears more than once.",
  "specs": {
   "Arms": {
-   "p3": ["https://www.wowhead.com/tbc/guide/arms-warrior-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["warrior"], "match": "Arms" }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/arms-warrior-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/warrior/arms/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/arms-warrior-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "warrior"
+    ],
+    "match": "Arms"
+   }
   },
   "Fury": {
-   "p3": ["https://www.wowhead.com/tbc/guide/fury-warrior-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["warrior"], "match": "Fury" }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/fury-warrior-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/warrior/fury/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/fury-warrior-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "warrior"
+    ],
+    "match": "Fury"
+   }
   },
   "ProtWarr": {
-   "p3": ["https://www.wowhead.com/tbc/guide/protection-warrior-tank-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["protection_warrior"], "match": null }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/protection-warrior-tank-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/warrior/protection/tank-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/protection-warrior-tank-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "protection_warrior"
+    ],
+    "match": null
+   }
   },
   "HolyPal": {
-   "p3": ["https://www.wowhead.com/tbc/guide/holy-paladin-healer-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/holy-paladin-healer-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/paladin/holy/healer-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/holy-paladin-healer-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
    "wowsims": null
   },
   "ProtPal": {
-   "p3": ["https://www.wowhead.com/tbc/guide/paladin-tank-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["protection_paladin"], "match": null }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/paladin-tank-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/paladin/tank-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/paladin-tank-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "protection_paladin"
+    ],
+    "match": null
+   }
   },
   "Ret": {
-   "p3": ["https://www.wowhead.com/tbc/guide/retribution-paladin-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["retribution_paladin"], "match": null }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/retribution-paladin-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/paladin/retribution/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/retribution-paladin-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "retribution_paladin"
+    ],
+    "match": null
+   }
   },
   "BM": {
-   "p3": ["https://www.wowhead.com/tbc/guide/beast-mastery-hunter-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["hunter"], "match": "BM" }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/beast-mastery-hunter-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/hunter/beast-mastery/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/beast-mastery-hunter-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "hunter"
+    ],
+    "match": "BM"
+   }
   },
   "Marks": {
-   "p3": ["https://www.wowhead.com/tbc/guide/marksmanship-hunter-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/marksmanship-hunter-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/hunter/marksmanship/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/marksmanship-hunter-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
    "wowsims": null
   },
   "Surv": {
-   "p3": ["https://www.wowhead.com/tbc/guide/survival-hunter-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["hunter"], "match": "SV" }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/survival-hunter-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/hunter/survival/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/survival-hunter-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "hunter"
+    ],
+    "match": "SV"
+   }
   },
   "Assass": {
-   "p3": ["https://www.wowhead.com/tbc/guide/rogue-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["rogue"], "match": null }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/rogue-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/rogue/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/rogue-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "rogue"
+    ],
+    "match": null
+   }
   },
   "Combat": {
-   "p3": ["https://www.wowhead.com/tbc/guide/rogue-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["rogue"], "match": null }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/rogue-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/rogue/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/rogue-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "rogue"
+    ],
+    "match": null
+   }
   },
   "Sub": {
-   "p3": ["https://www.wowhead.com/tbc/guide/rogue-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["rogue"], "match": null }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/rogue-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/rogue/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/rogue-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "rogue"
+    ],
+    "match": null
+   }
   },
   "Disc": {
-   "p3": ["https://www.wowhead.com/tbc/guide/priest-healer-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/priest-healer-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/priest/healer-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/priest-healer-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
    "wowsims": null
   },
   "HolyPriest": {
-   "p3": ["https://www.wowhead.com/tbc/guide/priest-healer-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/priest-healer-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/priest/healer-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/priest-healer-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
    "wowsims": null
   },
   "Shadow": {
-   "p3": ["https://www.wowhead.com/tbc/guide/shadow-priest-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["shadow_priest"], "match": null }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/shadow-priest-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/priest/shadow/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/shadow-priest-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "shadow_priest"
+    ],
+    "match": null
+   }
   },
   "Ele": {
-   "p3": ["https://www.wowhead.com/tbc/guide/elemental-shaman-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["elemental_shaman"], "match": null }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/elemental-shaman-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/shaman/elemental/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/elemental-shaman-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "elemental_shaman"
+    ],
+    "match": null
+   }
   },
   "Enh": {
-   "p3": ["https://www.wowhead.com/tbc/guide/enhancement-shaman-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["enhancement_shaman"], "match": null }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/enhancement-shaman-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/shaman/enhancement/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/enhancement-shaman-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "enhancement_shaman"
+    ],
+    "match": null
+   }
   },
   "RestoShaman": {
-   "p3": ["https://www.wowhead.com/tbc/guide/shaman-healer-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/shaman-healer-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/shaman/healer-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/shaman-healer-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
    "wowsims": null
   },
   "Arcane": {
-   "p3": ["https://www.wowhead.com/tbc/guide/arcane-mage-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["mage"], "match": "Arcane" }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/arcane-mage-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/mage/arcane/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/arcane-mage-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "mage"
+    ],
+    "match": "Arcane"
+   }
   },
   "Fire": {
-   "p3": ["https://www.wowhead.com/tbc/guide/fire-mage-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["mage"], "match": "Fire" }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/fire-mage-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/mage/fire/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/fire-mage-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "mage"
+    ],
+    "match": "Fire"
+   }
   },
   "Frost": {
-   "p3": ["https://www.wowhead.com/tbc/guide/frost-mage-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["mage"], "match": "Frost" }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/frost-mage-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/mage/frost/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/frost-mage-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "mage"
+    ],
+    "match": "Frost"
+   }
   },
   "AffliLock": {
-   "p3": ["https://www.wowhead.com/tbc/guide/affliction-warlock-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/affliction-warlock-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/warlock/affliction/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/affliction-warlock-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
    "wowsims": null
   },
   "DemoLock": {
-   "p3": ["https://www.wowhead.com/tbc/guide/demonology-warlock-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/demonology-warlock-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/warlock/demonology/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/demonology-warlock-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
    "wowsims": null
   },
   "DestroLock": {
-   "p3": ["https://www.wowhead.com/tbc/guide/destruction-warlock-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["warlock"], "match": null }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/destruction-warlock-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/warlock/destruction/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/destruction-warlock-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "warlock"
+    ],
+    "match": null
+   }
   },
   "BalanceDruid": {
-   "p3": ["https://www.wowhead.com/tbc/guide/balance-druid-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["balance_druid"], "match": null }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/balance-druid-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/druid/balance/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/balance-druid-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "balance_druid"
+    ],
+    "match": null
+   }
   },
   "FeralCat": {
-   "p3": ["https://www.wowhead.com/tbc/guide/feral-druid-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["feral_druid"], "match": null }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/feral-druid-dps-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/druid/feral/dps-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/feral-druid-dps-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "feral_druid"
+    ],
+    "match": null
+   }
   },
   "FeralBear": {
-   "p3": ["https://www.wowhead.com/tbc/guide/feral-druid-tank-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
-   "wowsims": { "dirs": ["feral_tank_druid"], "match": null }
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/feral-druid-tank-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/druid/feral/tank-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/feral-druid-tank-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
+   "wowsims": {
+    "dirs": [
+     "feral_tank_druid"
+    ],
+    "match": null
+   }
   },
   "RestoDruid": {
-   "p3": ["https://www.wowhead.com/tbc/guide/druid-healer-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"],
+   "p1": [
+    "https://www.wowhead.com/tbc/guide/druid-healer-karazhan-best-in-slot-gear-burning-crusade-classic-wow"
+   ],
+   "p2": [
+    "https://www.wowhead.com/tbc/guide/classes/druid/healer-bis-gear-pve-phase-2"
+   ],
+   "p3": [
+    "https://www.wowhead.com/tbc/guide/druid-healer-bt-hyjal-phase-3-best-in-slot-gear-burning-crusade"
+   ],
    "wowsims": null
   }
  }

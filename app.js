@@ -30,6 +30,11 @@
   var BOSS_ORDER = {
     "Karazhan": [
       "Trash",
+      /* Hyakiss, Rokad and Shadikith - three rare spawns in the Servant's Quarters,
+         folded into one card. They are not Encounter Journal bosses and have no
+         portrait art, so this chip falls back to text the way the Chess Event does.
+         It sits beside Trash because neither has a place in a kill order. */
+      "Basement",
       "Attumen the Huntsman",
       "Moroes",
       "Maiden of Virtue",
@@ -109,10 +114,6 @@
       "Kil'jaeden"
     ]
   };
-
-  /* shown on rows the source guide never covered, and in the search haystack so
-     the set is reachable by typing it */
-  var UNSOURCED_TAG = "not in the guide";
 
   /* The five content phases of TBC, and the zones each one opened. Only Phase 3 has
      items in the dataset so far; the rest are here so the shape of the whole
@@ -332,10 +333,16 @@
   /* Tier tokens render as the three class icons. Which classes each token serves
      is fixed by the game, so it stays here; everything about those classes -
      icon, armour, roles - comes from the registry. */
+  /* Tier 4 and Tier 5 share one set of groupings, Tier 6 uses another - Priest is with
+     Warlock at T6 and with Warrior at T4/T5 - so these are six entries and not three
+     under different names. Taken from the tokens' own "Classes:" lines. */
   var TIER_CLASSES = {
     "Tier Token (Pal/Priest/Lock)": ["Paladin", "Priest", "Warlock"],
     "Tier Token (War/Hunter/Shaman)": ["Warrior", "Hunter", "Shaman"],
-    "Tier Token (Rogue/Mage/Druid)": ["Rogue", "Mage", "Druid"]
+    "Tier Token (Rogue/Mage/Druid)": ["Rogue", "Mage", "Druid"],
+    "Tier Token (Pal/Rogue/Shaman)": ["Paladin", "Rogue", "Shaman"],
+    "Tier Token (War/Priest/Druid)": ["Warrior", "Priest", "Druid"],
+    "Tier Token (Hunter/Mage/Lock)": ["Hunter", "Mage", "Warlock"]
   };
 
   function tierClasses(rec) {
@@ -491,17 +498,20 @@
     });
   }
 
-  /* An unsourced row names nobody, so selectionHas() can never match it - but the
-     BiS data can, and these are real T6 items: 11 of the 13 are BiS for at least
-     one spec. Without this, Band of the Eternal Champion is BiS for eight physical
-     specs and reachable from none of them. The row still shows an empty priority
-     column and its "not in the guide" tag, so nothing about it reads as a call. */
+  /* A row nobody has ranked names nobody, so selectionHas() can never match it - but
+     the BiS data can, and these are real items. Without this, Band of the Eternal
+     Champion is BiS for eight physical specs and reachable from none of them.
+
+     `unsourced` is the data flag for "no ranking came with this row". Nothing on screen
+     says so any more - the empty priority column says it - but the flag is still what
+     marks which rows this bridge is for, and what check_priority.py requires before it
+     will accept a seeded ordering. */
   function unsourcedBis(rec) {
     if (!rec.unsourced) return false;
-    /* Only while reading the guide. It is a bridge across a gap in HIS data, so with
-       a list of your own open there is no gap to bridge: those rows have a priority
-       column you control like any other, and letting 13 of them through a filter the
-       other 182 fail would make your own list lie about itself. */
+    /* Only while reading a list you did not write. It bridges a gap in someone else's
+       ranking, so with a list of your own open there is no gap to bridge: those rows
+       have a priority column you control like any other, and letting them through a
+       filter the rest fail would make your own list lie about itself. */
     if (activeTemplate) return false;
     return SELECTED_SPECS.some(function (id) { return bisTier(id, rec.id); });
   }
@@ -1391,8 +1401,7 @@
       var q = state.q.toLowerCase();
       /* search both the raw and displayed forms, so "2H mace" and "mace" both hit */
       var hay = [rec.item, rec.boss, rec.zone, priorityText(effectivePriority(rec)), effectiveNotes(rec),
-                 rec.slot, slotGroup(rec.slot), rec.type, typeLabel(rec), (rec.roles || []).join(" "),
-                 rec.unsourced ? UNSOURCED_TAG : ""]
+                 rec.slot, slotGroup(rec.slot), rec.type, typeLabel(rec), (rec.roles || []).join(" ")]
         .join("   ").toLowerCase();
       if (hay.indexOf(q) === -1) return false;
     }
@@ -2404,21 +2413,6 @@
     a.innerHTML = highlight(rec.item, state.q);
     td.appendChild(a);
 
-    /* Real loot the source guide never mentions. Worth listing, but the whole point of
-       the site is that the priorities are one person's calls - so a row carrying none
-       of his has to say so rather than read as an item he had no opinion on.
-
-       Not on every row of a raid he never covered, though. In Black Temple and Hyjal
-       these are 13 exceptions among 182 and the tag is the information; in Zul'Aman and
-       Sunwell every row is one, and a tag on all of them is furniture. Those raids carry
-       no marker at all - the priority column is simply empty, which says it. */
-    if (rec.unsourced && !zoneUnsourced(rec.zone)) {
-      var tag = document.createElement("span");
-      tag.className = "item-tag";
-      tag.textContent = UNSOURCED_TAG;
-      tag.dataset.tip = "Not in the source guide - added from the Phase 3 BiS audit";
-      td.appendChild(tag);
-    }
     return td;
   }
 
@@ -2624,20 +2618,22 @@
     }
     if (!list || !list.length) return td;
 
-    /* An ordering that is not one of zatar's has to say so, or the site presents someone
-       else's work as his - which is what CLAUDE.md section 8 is about. Zul'Aman and
-       Sunwell rows are seeded from their BiS lists, and on screen a seeded line is
-       indistinguishable from a call he made.
+    /* A line a script wrote, not one anybody ranked. seed_priority.py fills these from
+       the BiS lists - every spec that calls the item best-in-slot, joined with "=" -
+       so the column is not blank on the raids no guide covered. Flat and provisional,
+       and it has to say so, or a placeholder reads as a considered ordering.
 
-       One muted word, on the 96 rows it applies to. The last attempt at this put a tag
-       and a hover explanation on every group heading of two whole raids, which is
-       furniture; the fix was not to say nothing, it was to say it once, quietly, where
-       it is true. `prioritySource` already exists and is already validated, so this is
-       a render decision and not a data one. */
+       It says SEEDED rather than BIS because the claim is about who did the ranking,
+       not where the data came from. That was always what it meant; naming it after its
+       source made it look like a statement about one particular guide, which it is not.
+
+       One muted word, on the rows it applies to. An earlier attempt put a tag and a
+       hover explanation on every group heading of two whole raids, which is furniture;
+       the fix was not to say nothing, it was to say it once, quietly, where it is true. */
     if (rec.prioritySource === "bis") {
       var from = document.createElement("span");
       from.className = "prio-from";
-      from.textContent = "BIS";
+      from.textContent = "SEEDED";
       td.appendChild(from);
     }
 
@@ -2828,22 +2824,6 @@
      it. Cached because it walks ALL and renderGroup runs once per boss group, and keyed
      on ALL itself so the cache cannot outlive the data it came from - clearing it from
      the loader instead is a different scope, and was silently a no-op. */
-  var UNSOURCED_ZONES = null, UNSOURCED_FOR = null;
-
-  function zoneUnsourced(zone) {
-    if (!UNSOURCED_ZONES || UNSOURCED_FOR !== ALL) {
-      UNSOURCED_FOR = ALL;
-      var any = {}, sourced = {};
-      ALL.forEach(function (r) {
-        any[r.zone] = true;
-        if (!r.unsourced) sourced[r.zone] = true;
-      });
-      UNSOURCED_ZONES = {};
-      Object.keys(any).forEach(function (z) { UNSOURCED_ZONES[z] = !sourced[z]; });
-    }
-    return !!UNSOURCED_ZONES[zone];
-  }
-
   function renderGroup(zone, boss, rows) {
     var section = document.createElement("section");
     section.className = "boss-group";

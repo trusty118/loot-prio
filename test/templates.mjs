@@ -91,7 +91,17 @@ ok((await api.store.list()).length === 0, "and can be deleted");
 // --- url round-trip -------------------------------------------------------------
 const code = await api.encodeTemplate(t);
 ok(code[0] === "z", "encodes gzipped where the browser supports it");
-ok(code.length < 4000, `a whole 195-item list fits a url: ${code.length} characters`);
+/* A full copy of every record, gzipped and base64url'd. It grows with the dataset -
+   2,263 characters at 195 items, ~4,700 at 706 - and that is the honest cost of a link
+   that carries the list itself. It stays workable because it rides in the HASH: a
+   fragment never reaches a server, so no 414 is possible and the only real ceiling is
+   the browser's address bar, which is tens of thousands of characters everywhere.
+
+   The signed-in path does not pay this at all - ?s= carries a ~30 character token
+   whatever the list holds, which is why unbounded notes were possible in the first
+   place. The cap here is loose on purpose: it exists to catch the encoding breaking,
+   not to police a size that is expected to move whenever loot is added. */
+ok(code.length < 20000, `a whole ${Object.keys(t.priorities).length}-item list fits a url: ${code.length} characters`);
 const decoded = await api.decodeTemplate(code);
 ok(JSON.stringify(decoded.priorities) === JSON.stringify(t.priorities), "and survives the round trip");
 ok(api.validateTemplate(decoded) === null, "the decoded template validates");

@@ -202,8 +202,17 @@ ok(!offered().includes("Mage") && !offered().includes("Arcane Mage"),
 ok(offered().includes("Warrior"), "but a Warrior, who wants exactly that, is offered");
 
 // --- layer 1: proficiency, on items where armour actually decides ------------------
-const PLATE = data.find((r) => r.type === "Plate").item;
-const CLOTH = data.find((r) => r.type === "Cloth").item;
+/* Picked from what is ON THE PAGE, not from the first match in the file. One phase is
+   ever rendered, so a plain data.find() lands on whichever zone happens to sit at the
+   top of loot_data.json - which moved the moment Phase 1 was imported and the file was
+   regrouped into kill order. */
+const onPage = (pred) => data.find((r) => pred(r) && rowFor(d, r.item));
+const PLATE = onPage((r) => r.type === "Plate").item;
+/* Caster cloth specifically. The assertions below want Mage AND Priest offered, and a
+   Caster item reaches Priest through Shadow - no cloth piece in the set is tagged both
+   Caster and Healer. Picking "the first cloth item" got this by luck until the file was
+   regrouped and the luck changed, which is the whole reason it is spelled out now. */
+const CLOTH = onPage((r) => r.type === "Cloth" && r.roles.includes("Caster")).item;
 
 click(w, rowFor(d, PLATE).querySelector(".prio-add"));
 const onPlate = offered();
