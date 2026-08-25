@@ -633,6 +633,40 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
      "a blank list starts with no notes at all - you asked for nobody's list");
 }
 
+// --- the editor never gets the filter click-through --------------------------------
+/* In a read row a priority icon filters to whoever it names. In the editor the same
+   icon is a drag handle, and a press that also filtered would fight the gesture it is
+   already carrying. priorityCell() adds the behaviour, specIcon() stays inert - so the
+   two modes cannot drift into sharing it. */
+{
+  const w9 = boot();
+  await settle();
+  const d9 = w9.document;
+  const icons = () => [...d9.querySelectorAll("td.col-prio img.spec-icon")];
+
+  ok(icons().some((i) => i.classList.contains("spec-icon--link")),
+     "reading the guide, priority icons are controls");
+
+  doMenu(w9, "Make a copy");
+  await settle();
+  ok(el(d9, "edit-toggle").getAttribute("aria-pressed") === "true",
+     "a copy opens ready to edit");
+  ok(icons().length > 0 && !icons().some((i) => i.classList.contains("spec-icon--link")),
+     `editing, none of the ${icons().length} icons is a filter control`);
+  ok(!icons().some((i) => i.getAttribute("role") === "button"),
+     "and none claims to be a button, so the drag is the only gesture on them");
+
+  const before = [...d9.querySelectorAll("#results tr[data-id]")].length;
+  click(w9, icons()[0]);
+  await settle();
+  ok([...d9.querySelectorAll("#results tr[data-id]")].length === before,
+     "clicking one while editing does not filter the table out from under you");
+
+  // and it is added where it can be kept apart, not in the shared icon builder
+  ok(!/function specIcon[\s\S]{0,1400}spec-icon--link/.test(source),
+     "specIcon() does not add it - priorityCell() does");
+}
+
 // --- no browser dialogs anywhere ------------------------------------------------------------
 ok(!/window\.(prompt|confirm)\s*\(/.test(source),
    "app.js asks nothing through a browser dialog");

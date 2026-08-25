@@ -1024,10 +1024,24 @@ structured priority), `verify/fetch_unique.py` (re-runnable if the item set chan
   search index (typing "healer" still works), and still tags each row via `data-role`, but
   nothing renders it. "Tier Token" returned to the type dropdown at the same time — the
   Tier role chip had been the only way to reach those 15 items.
-- Planned but not built: clicking a spec icon in a priority line to jump straight to that
-  spec's filtered view. `BIS_BY_SPEC` in `app.js` is still unread by anything — the filter
-  goes through `bisTier()` — and is the natural source for a "show me this spec's whole BiS
-  list" view.
+- **Clicking a spec icon filters to it, Aug 2026.** The priority line was the content of
+  the page and inert: you read "Prot Warrior > Prot Paladin" and then walked to the chip row
+  to act on it. Now the icon *is* the control — `focusOn()` sets `state.classes`/`state.specs`
+  and everything downstream is the filter that already existed. A spec sets its class too,
+  since a spec is never a selection on its own; a class icon picks the class and leaves the
+  specs open; clicking what is already the whole selection **clears** it, so an icon is a way
+  back out as well as a way in.
+
+  Two things it deliberately does not touch. **The editor never gets it** — there a press
+  starts a drag, and an icon that also filtered would fight the gesture it carries; it is
+  added in `priorityCell()`, not in `specIcon()`, so the two modes cannot drift into sharing
+  it. And a **race icon** is not a control: it carries no registry id, and the spec beside it
+  is the thing worth filtering on.
+
+  `BIS_BY_SPEC` was removed in the same change. It was billed here as the natural source for
+  this feature and turned out not to be needed — the click reuses the filter, so the answer
+  stays one lookup through `bisTier()` instead of a second copy of `bis.json` rebuilt on
+  every load and read by nothing.
 
 ### Pagination — considered and declined, Aug 2026
 

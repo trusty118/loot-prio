@@ -942,6 +942,18 @@ tbody tr:hover .class-icon--muted { opacity: .4; }
    Pushed harder than the warm palette needed: on brown, .35 read as clearly dimmed;
    on slate the floor is higher and it stopped reading as anything at all. The
    contrast between lit and dim is doing real work here, so it has to keep working. */
+/* A priority icon filters to whoever it names. The affordance is the cursor and a
+   lift on hover - no border, no fill, because a BiS ring already lives on this icon
+   and a second outline would read as a second tier.
+
+   Never applied in the editor: there a press starts a drag, so specIcon() stays inert
+   and priorityCell() adds this. A dimmed icon keeps it - "not you" is exactly the
+   icon you might want to switch to. */
+.spec-icon--link { cursor: pointer; }
+.spec-icon--link:hover { filter: brightness(1.15); }
+.spec-icon--muted.spec-icon--link:hover { opacity: .7; filter: grayscale(.5); }
+.spec-icon--link:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
 .spec-icon--muted {
   opacity: .26;
   filter: grayscale(1) contrast(.8);
