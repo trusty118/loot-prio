@@ -116,8 +116,14 @@ ok(!!picked() && rows().length === P3_ITEMS, "clicking the current phase is a no
 
 ok(rows().length === P3_ITEMS, `the landing phase renders all ${P3_ITEMS} of its rows (got ${rows().length})`);
 ok(groups().length === P3_GROUPS, `in ${P3_GROUPS} boss groups (got ${groups().length})`);
-ok(doc.getElementById("count").textContent === `${P3_ITEMS} of ${data.length} items`,
+/* The denominator is the PHASE's total, not the dataset's. Only one phase is ever
+   rendered, so measuring against all 699 counted rows that could not have appeared
+   whatever the filters said - the fraction was against the wrong whole. Unfiltered,
+   the two halves match. */
+ok(doc.getElementById("count").textContent === `${P3_ITEMS} of ${P3_ITEMS} items`,
    `count text: "${doc.getElementById("count").textContent}"`);
+ok(P3_ITEMS < data.length,
+   `and that is a real distinction - the phase holds ${P3_ITEMS} of ${data.length}`);
 
 const heads = headText();
 ok(/Mount Hyjal/.test(heads[0]) && /Trash/.test(heads[0]), `first group is Hyjal trash: "${heads[0]}"`);
@@ -144,7 +150,8 @@ ok(headEls.every((h) => {
   return kids.findIndex((k) => k.classList.contains("boss-name")) < tag;
 }), "boss name precedes the zone tag in every header");
 ok(!headEls.some((h) => /\d+\s+items?/.test(h.textContent)), "per-group item counts removed");
-ok(doc.getElementById("count").textContent.includes(`of ${data.length}`), "the overall count in the toolbar stays");
+ok(/^\d+ of \d+ items$/.test(doc.getElementById("count").textContent.trim()),
+   `the overall count in the toolbar stays: "${doc.getElementById("count").textContent}"`);
 ok(headEls[0].querySelector(".boss-name").textContent.trim() === "Trash",
    `first header's boss-name is the boss, not the zone (got "${headEls[0].querySelector(".boss-name").textContent.trim()}")`);
 
@@ -1393,11 +1400,20 @@ ok(rows().length === 195 && window.location.hash.includes("phase=P3"),
    loot after - and an empty phase is the whole page when there is no "all phases" to
    escape to. Asserted against the source, since no data can reach it. */
 click(doc.getElementById("reset"));
+const seenTotals = [];
 [1, 2, 3, 4, 5].forEach((n) => {
   click(chipByText("#phase-chips", "Phase " + n));
   ok(rows().length > 0 && !doc.querySelector(".empty"),
      `Phase ${n} lists loot rather than an empty-phase message (${rows().length} rows)`);
+  /* and the count's denominator follows the phase rather than standing at the dataset
+     total - unfiltered, every phase reads "N of N" */
+  const txt = doc.getElementById("count").textContent.trim();
+  seenTotals.push(Number(txt.split(" of ")[1].replace(" items", "")));
+  ok(txt === `${rows().length} of ${rows().length} items`,
+     `Phase ${n} measures itself against itself: "${txt}"`);
 });
+ok(new Set(seenTotals).size > 1 && seenTotals.every((t) => t < data.length),
+   `each phase has its own total, none of them the dataset's ${data.length} (${seenTotals.join(", ")})`);
 ok(/phaseIsEmpty\(\)\s*\?/.test(appSource) && /isn't in the dataset yet/.test(appSource),
    "and the empty-phase message survives for the next phase that arrives before its loot does");
 click(doc.getElementById("reset"));
@@ -1522,38 +1538,104 @@ const chipByTip = (sel, name) =>
 click(doc.getElementById("reset"));
 ok(doc.getElementById("class-chips") && doc.getElementById("spec-chips"),
    "class and spec chip rows exist");
-// Class and spec are filters, so they sit with the filters - to the right of the
-// search box, which was capped to make room for them.
-const inputsRow = doc.querySelector(".control-row--inputs");
-ok(inputsRow.contains(doc.getElementById("class-chips")) &&
-   inputsRow.contains(doc.getElementById("spec-chips")),
-   "class and spec sit in the filter row");
-ok([...inputsRow.children].indexOf(doc.querySelector(".who-inline")) >
-   [...inputsRow.children].indexOf(doc.getElementById("search").closest(".field")),
-   "and they come after the search box, not before it");
-ok(/\.field--grow\s*\{[^}]*flex:\s*0/.test(cssText),
-   "the search box no longer takes every spare pixel");
+/* Who you are sits at the foot of the where-hierarchy: which phase, which zone, which
+   boss, who for. They are filters, and they spent a while in the refine panel on those
+   grounds; they read better as the last answer in that sequence. The cost is that this
+   panel is NOT sticky, so they scroll away - see the note beside the sticky assertion. */
+const wherePanel = doc.querySelector(".controls--where");
+ok(wherePanel.contains(doc.getElementById("class-chips")) &&
+   wherePanel.contains(doc.getElementById("spec-chips")),
+   "class and spec sit at the foot of the where-hierarchy");
+ok([...doc.querySelectorAll(".controls--where .control-row")].pop()
+     .contains(doc.querySelector(".who-inline")),
+   "as its last row, under the boss rail");
+ok(!doc.querySelector(".site-header #class-chips"),
+   "and never in the banner, which answers a different question entirely");
 
-/* The spec strip sits UNDER the class strip, and that takes two rules agreeing: the
-   who block stacks, and the row it sits in aligns to the top. Bottom-aligned, the block's
-   lower storey lines up with Slot/Type/Search/Reset and the class strip floats above the
-   row on a line of its own - which is what happened the first time this was built, and is
-   invisible in jsdom because it cannot lay anything out. Both halves are pinned. */
+const rowClasses = [...doc.querySelectorAll(".controls--refine .control-row")]
+  .map((r) => r.className.replace("control-row ", ""));
+/* Which list is open leads the sticky bar, with Slot/Type/Search under it and the count
+   last. Reset stays with the filters it clears rather than travelling with the picker. */
+ok(rowClasses.join(" > ") === "control-row--list > control-row--inputs > control-row--meta",
+   `the panel reads list, then inputs, then the count (${rowClasses.join(" > ")})`);
+ok(doc.querySelector(".control-row--inputs").contains(doc.getElementById("reset")),
+   "Reset stays with the filters it clears");
+
+/* Prominence without spending the accent. --gold means "selected" everywhere on this
+   page, and the design brief lists it as a colour that carries meaning - so the picker
+   gets size and contrast instead. Asserted because the obvious "fix" for a control that
+   does not stand out is to paint it green, which would quietly break what green says. */
+ok(doc.querySelector("#list-trigger .control-label").textContent.trim() === "Priority List",
+   "the label names what it picks");
+const triggerRule = (cssText.replace(/\/\*[\s\S]*?\*\//g, "")
+  .match(/\.list-trigger\s*\{[^}]*\}/) || [""])[0];
+ok(!/var\(--gold/.test(triggerRule) && !/var\(--fel/.test(triggerRule),
+   "and does not wear the accent, which is reserved for 'selected'");
+ok(/font-weight:\s*600/.test(cssText.match(/\.list-trigger-name\s*\{[^}]*\}/)[0]),
+   "the open list's name is set heavier than the fields around it");
+
+/* Three rules carry the geometry and jsdom lays nothing out, so they are pinned against
+   the stylesheet source - the same way the [hidden] guard is. The block stacks; it
+   anchors LEFT so class and spec share an edge and the spec strip grows right; and it no
+   longer pushes itself across the row, which is what made it grow the wrong way. */
 ok(/\.who-inline\s*\{[^}]*flex-direction:\s*column/.test(cssText),
    "the who block stacks class over spec");
-ok(/\.control-row--inputs\s*\{[^}]*align-items:\s*flex-start/.test(cssText),
-   "and its row aligns to the top, so the spec strip hangs rather than the class strip floating");
+const whoRule = cssText.match(/\.who-inline\s*\{[^}]*\}/)[0];
+ok(/align-items:\s*flex-start/.test(whoRule),
+   "anchored left, so the two strips share an edge and the spec strip grows right");
+ok(!/margin-left:\s*auto/.test(whoRule),
+   "and it no longer shoves itself to the right, which is what made it grow leftward");
+ok(/\.list-zone\s*\{[^}]*margin-left:\s*auto/.test(cssText),
+   "the list zone is what pushes the pair over");
+ok(/\.field--grow\s*\{[^}]*flex:\s*0/.test(cssText),
+   "the search box still does not take every spare pixel");
 
 // two panels: where it drops, then everything that narrows the table - type, slot,
-// search and who you are. Which list you are on lives in the banner, because it is
-// not filtering and it applies to the whole page.
+// search and who you are.
 const panels = [...doc.querySelectorAll("main .controls")];
 ok(panels.map((p) => p.className.replace("controls ", "")).join(" > ") ===
    "controls--where > controls--refine",
    `panel order: ${panels.map((p) => p.className.replace("controls ", "")).join(" > ")}`);
-ok(doc.querySelector(".site-header").contains(doc.getElementById("template-bar")),
-   "the list controls sit in the banner");
-ok(!doc.querySelector("main #template-bar"), "and not among the filters");
+
+/* The picker and the Edit it arms lead the sticky bar, together. They were split for one
+   commit - picker under the boss rail, Edit down here - and that left a dead end: Edit is
+   disabled on someone else's list with title="Make a copy to edit", and Make a copy is
+   inside the picker's menu, which was then a panel away. */
+ok(doc.querySelector(".controls--refine").contains(doc.getElementById("template-bar")),
+   "the list picker sits in the sticky bar");
+ok(!doc.querySelector(".site-header #template-bar") &&
+   !doc.querySelector(".controls--where #template-bar"),
+   "and neither in the banner nor up with the where-hierarchy");
+const listRow = doc.querySelector(".control-row--list");
+ok(listRow.contains(doc.getElementById("template-bar")) &&
+   listRow.contains(doc.getElementById("edit-toggle")),
+   "the picker and Edit share a row - separating them is the defect this repairs");
+
+/* Both are in the sticky panel, which is the point: Edit is pressed while reading rows,
+   and the picker's menu is where Make a copy lives. The strips gave that up in exchange -
+   they are up in the where panel now and will scroll away. */
+ok(/\.controls--refine\s*\{[^}]*position:\s*sticky/.test(cssText),
+   "and that bar is the sticky one, so both stay on screen");
+/* Signing in is about you, not about which list is open, so it did NOT come along. */
+ok(doc.querySelector(".site-header .account-zone"),
+   "the account zone stays in the banner - it is not a list control");
+
+/* One auto margin in that row. A second further along would split the free space and
+   prise Edit away from the list it acts on, which is the defect .account-zone's own
+   comment warns about upstream. */
+/* Comments stripped first. style.css *explains* why Edit must not carry its own auto
+   margin, and a rule-body grep would find the explanation and call it the defect - the
+   same trap test/auth.mjs solves the same way for the service-role key. */
+const cssBare = cssText.replace(/\/\*[\s\S]*?\*\//g, "");
+const ruleFor = (sel) => (cssBare.match(new RegExp(sel.replace(/[.#\[\]="-]/g, "\\$&") + "\\s*\\{[^}]*\\}")) || [""])[0];
+/* One auto margin in that row, on Edit. The hint must not grow one: two of them would
+   split the free space and prise the pair apart as the hint appears, which is the defect
+   .account-zone's comment warns about upstream. */
+ok(/margin-left:\s*auto/.test(ruleFor(".list-zone")),
+   "the list zone pushes the pair to the right-hand end");
+ok(!/margin-left:\s*auto/.test(ruleFor("#edit-toggle")) &&
+   !/margin-left:\s*auto/.test(ruleFor(".edit-hint")),
+   "and neither Edit nor its hint carries one, so the pair cannot drift apart");
 ok(doc.querySelector(".controls--refine").nextElementSibling === doc.getElementById("results"),
    "the filters sit directly above the results they narrow");
 
@@ -1603,8 +1685,10 @@ const refine = doc.querySelector(".controls--refine");
 ok(["type-select", "slot-select", "search", "reset", "count"]
    .every((id) => refine.contains(doc.getElementById(id))),
    "type, slot, search, reset and the count all sit in the refine panel");
-ok(refine.querySelectorAll(".chips").length === 2,
-   "the only chip rows in it are the class and spec ones");
+ok(refine.querySelectorAll(".chips").length === 0,
+   "no chip rows left in it - class and spec moved up to the where panel");
+ok(doc.querySelectorAll(".controls--where .chips").length === 5,
+   "phase, zone, boss, class and spec are all chip rows up there");
 ok(refine.nextElementSibling === doc.getElementById("results"),
    "the refine panel sits directly above the results it narrows");
 ok(/\.controls--refine\s*\{[^}]*position:\s*sticky/.test(cssText) &&

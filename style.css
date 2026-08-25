@@ -580,15 +580,12 @@ a:hover { color: var(--gold-bright); }
   color: var(--gold-bright);
 }
 
-/* Top-aligned, not bottom-aligned, and that is what makes the spec strip hang.
-   .who-inline is the one two-storey item in this row: class strip, spec strip under it.
-   Aligned to the bottom, its LOWER storey lined up with Slot, Type, Search and Reset and
-   the class strip floated above them - one control on a line of its own and everything
-   else on a line below. Aligned to the top, the class strip sits level with the rest of
-   the row, which is where it belongs, and the spec row drops beneath it where it reads as
-   narrowing the strip above. Every control here is single-height (the Slot and Type labels
-   went, and Search wears .field--joined), so there is no stacked label wanting its baseline
-   at the bottom. */
+/* Every control in this row is single-height - the Slot and Type labels went, and Search
+   wears .field--joined - so tops and bottoms line up either way and flex-start is simply
+   the row default. It used to matter: .who-inline was a two-storey item here and the
+   alignment decided whether its lower storey or its upper one sat level with everything
+   else. That block has a row of its own now, and this rule no longer has an argument
+   behind it. */
 .control-row--inputs {
   flex-wrap: wrap;
   align-items: flex-start;
@@ -604,6 +601,10 @@ a:hover { color: var(--gold-bright); }
 /* The search box used to take every spare pixel. It is capped now, because the room
    is better spent on the class and spec icons beside it - you scan those, you type
    into this one occasionally. */
+/* Capped, though no longer to make room for the icons that used to sit beside it -
+   they have their own row now. It stays capped on its own merits: this box is typed
+   into occasionally and read from never, so the width it would take by default is
+   width the rest of the row can use. */
 .field--grow { flex: 0 1 300px; min-width: 180px; }
 
 /* A label floating above a bordered box costs a line of height and reads as two
@@ -641,15 +642,23 @@ a:hover { color: var(--gold-bright); }
    one long row of icons, and which set narrows which is not obvious - the gold frame was
    meant to carry that and cannot carry it sideways. Right-aligned because the whole block
    is already right-anchored, so both strips end on the same edge. */
+/* Class over spec, both anchored LEFT. The two together were right-aligned while they
+   shared the search box's row, which meant the spec strip grew leftward - fine at six
+   icons, and at twenty-eight it ran ~935px under Slots and Search and then wrapped the
+   row it was in. Anchored left on a row of its own it grows the only direction there is
+   room in, and the class strip above it never moves whatever is picked below. */
 .who-inline {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 6px;
   flex: 0 1 auto;
-  margin-left: auto;
   min-width: 0;
 }
+
+/* No display of its own: .control-row supplies it, and .control-row[hidden] is what
+   keeps the attribute winning if this row is ever hidden (CLAUDE.md section 5). */
+.control-row--who { flex-wrap: wrap; }
 
 /* Ten pills become one control. The strip carries the border, the background and the
    padding that each chip used to carry for itself: ~470px of chrome becomes ~256px,
@@ -1153,11 +1162,28 @@ mark {
 /* In the banner now, top right. Aligned on the BOTTOM edge, not the middle: the List
    control is a label stacked above a select, so it is taller than the buttons beside
    it, and centring made everything float against that stack. */
+/* The list controls, now at the right-hand end of the filter row rather than in the
+   banner. This is the ONLY margin-left:auto in that row: it absorbs the free space, so
+   everything after it - the edit hint, Edit itself - packs against the right edge as one
+   group. A second auto margin further along would split the free space between the two
+   and spread them apart, which is what .account-zone's comment warns about upstream. */
 .template-bar {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+/* The picker and the Edit it arms, as ONE box pushed to the right-hand end of the sticky
+   bar. Three loose children each finding their own way right is what .account-zone's
+   comment warns about upstream, and at half-screen it did exactly that: the row wrapped,
+   Edit came off the end alone and landed on the LEFT, away from the list it acts on. */
+.list-zone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-left: auto;
 }
 
 /* the label sits directly on the select, matching the Type/Slot/Search fields */
@@ -1181,6 +1207,12 @@ mark {
 /* The trigger wears .field--joined, exactly as the old List select did, so the bar
    keeps one field language. A button rather than a <select> because what it opens is
    a menu with sections, actions and two confirm panels - not a list of options. */
+/* The most prominent control in the panel, and NOT by using the accent. --gold is --fel
+   and it means "selected" everywhere on this page - chips, the picked phase, the BiS
+   toggle - and docs/design-brief.md lists that as a colour that carries meaning and must
+   not move. A permanently-present control wearing it would blur what green says. So the
+   emphasis is size, weight and contrast: a bigger name, a border a step brighter than the
+   hairline every other field wears, and the lifted fill the selects already use. */
 .list-trigger {
   align-items: center;
   font: inherit;
@@ -1188,7 +1220,14 @@ mark {
   color: var(--text);
   cursor: pointer;
   padding: 0;
+  background: var(--bg-panel-2);
+  /* mixed off a token rather than a new literal, the way #spec-chips and mark do - a
+     hard-coded slate here would not follow if the neutrals are ever re-cooled */
+  border-color: color-mix(in srgb, var(--text-dim) 45%, var(--line));
 }
+
+/* the label reads rather than recedes: this one names the thing the site is for */
+.list-trigger .control-label { color: var(--text-dim); }
 
 .list-trigger:hover { border-color: var(--gold); }
 .list-trigger[aria-expanded="true"] { border-color: var(--gold); }
@@ -1198,8 +1237,10 @@ mark {
 .list-trigger-name {
   min-width: 190px;
   text-align: left;
-  padding: 5px 8px;
-  border-left: 1px solid var(--line);
+  padding: 4px 10px;
+  font-size: .95rem;
+  font-weight: 600;
+  border-left: 1px solid color-mix(in srgb, var(--text-dim) 45%, var(--line));
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1512,7 +1553,8 @@ mark {
 /* 1. the button fills - the one place a fill is right, because this is a mode rather
       than a selection */
 #edit-toggle {
-  margin-left: auto;
+  /* no margin-left:auto: .list-zone around it already pushed the pair right, and a second
+     one here would split the free space and prise Edit away from the list it arms */
   min-width: 118px;
 }
 
@@ -1538,7 +1580,6 @@ mark {
 
 .edit-hint {
   display: inline-block;
-  margin-left: auto;
   font-size: 12px;
   color: var(--fel-bright);
   white-space: nowrap;

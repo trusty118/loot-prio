@@ -2962,9 +2962,23 @@
     return Object.keys(p).every(function (k) { return !p[k] || !p[k].length; });
   }
 
+  /* How many items the phase on screen holds. The denominator has to be the phase's
+     total, not the dataset's: a phase is always set and only one is ever rendered, so
+     "132 of 699" measured the fraction against 567 rows that could not have been shown
+     whatever the filters said. Phase 3 reading "195 of 195" with nothing filtered is
+     the honest version of that line. */
+  function phaseTotal() {
+    var zones = phaseZones(state.phase);
+    var n = 0;
+    for (var i = 0; i < ALL.length; i++) {
+      if (zones.indexOf(ALL[i].zone) !== -1) n++;
+    }
+    return n;
+  }
+
   function renderResults() {
     var rows = filtered();
-    el.count.textContent = rows.length + " of " + ALL.length + " items";
+    el.count.textContent = rows.length + " of " + phaseTotal() + " items";
     el.results.innerHTML = "";
 
     if (!rows.length) {
