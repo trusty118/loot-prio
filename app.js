@@ -719,8 +719,7 @@
     signIn: document.getElementById("sign-in"),
     account: document.getElementById("account"),
     accountName: document.getElementById("account-name"),
-    tplLinkOut: document.getElementById("tpl-link-out"),
-    tplLinkField: document.getElementById("tpl-link-field"),
+    shareTrigger: document.getElementById("share-trigger"),
     editMsg: document.getElementById("edit-msg"),
     editHint: document.getElementById("edit-hint"),
     refine: document.querySelector(".controls--refine")
@@ -3671,19 +3670,9 @@
       var from = activeTemplate ? activeTemplate.name : "zatar's list";
       startList(copyOfCurrent("Copy of " + from), "Copied " + from);
     }));
-    /* The label has to say what the click does, and that differs by state. Signed in on
-       a list of yours the first press *publishes* it - anyone with the link can then read
-       it - so calling that "Copy link" hides the part that matters. Once it is already
-       shared, copying really is just copying. Signed out it always was. */
-    var willPublish = signedIn() && supabaseReady() && activeIsMine && !activeTemplate.shared;
-    listMenu.appendChild(menuItem(willPublish ? "Share this list\u2026" : "Copy link", "",
-      function () { closeListMenu(); copyShareLink(); }));
-
-    if (activeIsMine && activeTemplate.shared) {
-      listMenu.appendChild(menuItem("Stop sharing", "", function () {
-        closeListMenu(); stopSharing();
-      }));
-    }
+    /* Nothing about sharing lives here any more. It has its own control on the bar and
+       its own popover, because an item four deep in a dropdown is not something people
+       find - and Stop sharing belongs next to the link it stops, not next to Delete. */
 
     if (activeIsMine) {
       listMenu.appendChild(document.createElement("hr"));
@@ -3803,32 +3792,55 @@
     });
   }
 
-  function copyShareLink() {
-    if (!activeTemplate) return;
-    var server = shareServerSide();
-    if (server) {
-      server.then(function (url) {
-        deliverLink(url, "Link copied - anyone with it sees your edits as you make them");
-        refreshLists();
-      }, function (err) { announce("Could not share: " + err.message); });
-      return;
+  /* Would pressing Share PUBLISH something, or is there already a link to hand over?
+     The popover asks this to decide which face to open on, and the answer is also what
+     stops it publishing as a side effect of being looked at. */
+  function shareWouldPublish() {
+    return !!(activeTemplate && activeIsMine && signedIn() && supabaseReady()
+              && !activeTemplate.shared);
+  }
+
+  /* The link for whatever is on screen, as a promise. Three cases, and the third used to
+     be a silent no-op: copyShareLink() opened with `if (!activeTemplate) return;`, so on
+     zatar's list the menu offered Copy link, you pressed it, and nothing happened at all -
+     no clipboard write, no message, no error. That is the first share control most people
+     ever meet, since it is what you see before you have made a list of your own. */
+  function shareLink() {
+    /* Nobody's list: the page itself, filters and all. location.hash already carries
+       phase, zone, boss, class, spec and the search - "here is what I am looking at" is
+       a real thing to send someone, and it is what the dead item was pretending to do. */
+    if (!activeTemplate) {
+      return Promise.resolve(location.origin + location.pathname + location.hash);
     }
+    var server = shareServerSide();
+    if (server) return server.then(function (url) { refreshLists(); return url; });
     /* Signed out there is nothing in the database to point at, so the whole list travels
        in the link exactly as it always has. It is capped and frozen, and that is the
        honest trade for a site that has to work without a backend. */
-    encodeTemplate(activeTemplate).then(function (code) {
-      var url = location.origin + location.pathname + "#t=" + code;
-      deliverLink(url, "Link copied (" + url.length + " characters)");
-    }, function (err) { announce(err.message); });
+    return encodeTemplate(activeTemplate).then(function (code) {
+      return location.origin + location.pathname + "#t=" + code;
+    });
   }
 
-  function deliverLink(url, said) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(url).then(function () { announce(said); },
-                                              function () { offerLink(url); });
-    } else {
-      offerLink(url);
+  /* What the link DOES, which differs by how it was made. Said next to the link rather
+     than only in a toast, because it is the thing a person needs before sending it. */
+  function shareBlurb(url) {
+    if (!activeTemplate) return "Opens the page on the phase, zone and filters you have set.";
+    if (url.indexOf("?s=") !== -1) {
+      return "Anyone with this link can read the list, and sees your edits as you make them.";
     }
+    return "This link carries the whole list, frozen as it is now - " +
+           url.length + " characters, so it may be too long for some chat apps.";
+  }
+
+  function copyToClipboard(url) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(url).then(
+        function () { announce("Link copied"); },
+        function () { announce("Could not reach the clipboard - copy it from the box"); });
+    }
+    announce("Copy the link from the box");
+    return Promise.resolve();
   }
 
   /* New and Make a copy differ only in what they seed. Both write the list at once,
@@ -3848,6 +3860,16 @@
        trigger's own mousedown closes the menu and its click reopens it - which looks
        like the menu ignoring every second press. */
     el.listTrigger.addEventListener("mousedown", function (ev) { ev.stopPropagation(); });
+
+    if (el.shareTrigger) {
+      /* both halves, for the same reason the list trigger does it: without the mousedown
+         guard the document handler closes the popover and the click reopens it */
+      el.shareTrigger.addEventListener("mousedown", function (ev) { ev.stopPropagation(); });
+      el.shareTrigger.addEventListener("click", function (ev) {
+        ev.stopPropagation();
+        toggleSharePop();
+      });
+    }
     el.listTrigger.addEventListener("click", function (ev) {
       ev.stopPropagation();
       toggleListMenu();
@@ -3868,23 +3890,136 @@
     });
   }
 
-  /* No clipboard API, or it refused: the link goes in a field, selected, to be copied
-     by hand. Anything rather than a grey browser box in the middle of the page. */
-  function offerLink(url) {
-    if (!el.tplLinkField) return;
-    el.tplLinkField.value = url;
-    el.tplLinkOut.hidden = false;
-    el.tplLinkField.focus();
-    el.tplLinkField.select();
-    announce("Copy this link (" + url.length + " characters)");
+  /* ---------- the share popover ----------
+     The seventh overlay, and built like the other six: created once, parented to <body>
+     so no scroll container can clip it, positioned by placeUnder() rather than by
+     arithmetic of its own, closed by Escape and by an outside mousedown.
+
+     Two faces, swapped in place, the way the list menu swaps rename and delete:
+
+       "publish"  a list of yours, signed in, not shared yet. States what sharing does,
+                  and a button to do it. This face exists so that OPENING the popover
+                  never publishes - looking at a thing must not change it.
+       "link"     the link in a field with Copy beside it, plus Stop sharing where there
+                  is something to stop. Everything else opens straight onto this: signed
+                  out, zatar's list, or a list already shared has nothing to publish. */
+
+  var sharePop = null;
+
+  function closeSharePop() {
+    if (sharePop) sharePop.style.display = "none";
+    if (el.shareTrigger) el.shareTrigger.setAttribute("aria-expanded", "false");
   }
 
-  /* A #t= link opens someone else's list. It is untrusted input, so it is validated
-     before any of it reaches the table, and refused out loud if it does not hold up.
-     It opens as reference, not as yours: Make a copy is how you keep it. */
-  /* 128 bits from the platform's CSPRNG, base64url'd. Never the list id: ids are
-     `t_9f3c`, four hex characters, so a link built from one could be guessed by trying
-     ids until something came back. */
+  function buildSharePop() {
+    sharePop = document.createElement("div");
+    sharePop.className = "share-pop";
+    sharePop.setAttribute("role", "dialog");
+    sharePop.setAttribute("aria-label", "Share this list");
+    sharePop.style.display = "none";
+    document.body.appendChild(sharePop);
+
+    sharePop.addEventListener("keydown", function (ev) {
+      if (ev.key === "Escape") { ev.preventDefault(); closeSharePop(); el.shareTrigger.focus(); }
+    });
+  }
+
+  function renderSharePublishFace() {
+    sharePop.innerHTML = "";
+    var head = document.createElement("p");
+    head.className = "share-head";
+    head.textContent = "Share \u201c" + activeTemplate.name + "\u201d";
+    sharePop.appendChild(head);
+
+    var body = document.createElement("p");
+    body.className = "share-note";
+    body.textContent = "Publishing gives you a short link. Anyone who has it can read the " +
+      "list and will see your edits as you make them. You can stop at any time.";
+    sharePop.appendChild(body);
+
+    var go = document.createElement("button");
+    go.type = "button";
+    go.className = "share-go";
+    go.textContent = "Share this list";
+    go.addEventListener("click", function () { renderShareLinkFace(); });
+    sharePop.appendChild(go);
+    go.focus();
+  }
+
+  function renderShareLinkFace() {
+    sharePop.innerHTML = "";
+    var head = document.createElement("p");
+    head.className = "share-head";
+    head.textContent = activeTemplate ? "Link to \u201c" + activeTemplate.name + "\u201d"
+                                      : "Link to this view";
+    sharePop.appendChild(head);
+
+    var row = document.createElement("div");
+    row.className = "share-row";
+    var field = document.createElement("input");
+    field.type = "text";
+    field.className = "share-field";
+    field.readOnly = true;
+    field.value = "Preparing\u2026";
+    field.setAttribute("aria-label", "Share link");
+    var copy = document.createElement("button");
+    copy.type = "button";
+    copy.className = "share-copy";
+    copy.textContent = "Copy";
+    copy.disabled = true;
+    row.appendChild(field);
+    row.appendChild(copy);
+    sharePop.appendChild(row);
+
+    var note = document.createElement("p");
+    note.className = "share-note";
+    sharePop.appendChild(note);
+
+    shareLink().then(function (url) {
+      field.value = url;
+      note.textContent = shareBlurb(url);
+      copy.disabled = false;
+      copy.addEventListener("click", function () {
+        field.select();
+        copyToClipboard(url);
+      });
+      field.focus();
+      field.select();
+      /* the link is longer than the field once published, and the panel is anchored
+         under a button whose position has not moved - re-place in case it grew */
+      placeUnder(sharePop, el.shareTrigger);
+
+      if (activeTemplate && activeIsMine && activeTemplate.shared) {
+        var stop = document.createElement("button");
+        stop.type = "button";
+        stop.className = "share-stop";
+        stop.textContent = "Stop sharing";
+        stop.addEventListener("click", function () {
+          closeSharePop();
+          stopSharing();
+        });
+        sharePop.appendChild(stop);
+      }
+    }, function (err) {
+      field.value = "";
+      note.textContent = "Could not make a link: " + err.message;
+    });
+  }
+
+  function toggleSharePop() {
+    if (!sharePop) buildSharePop();
+    if (sharePop.style.display === "block") { closeSharePop(); return; }
+    closePop();                       /* only one overlay at a time */
+    closeOpMenu();
+    closeListMenu();
+    closeAcctMenu();
+    sharePop.style.display = "block";
+    el.shareTrigger.setAttribute("aria-expanded", "true");
+    if (shareWouldPublish()) renderSharePublishFace();
+    else renderShareLinkFace();
+    placeUnder(sharePop, el.shareTrigger);
+  }
+
   function makeShareToken() {
     var b = new Uint8Array(16);
     (window.crypto || window.msCrypto).getRandomValues(b);
@@ -4102,6 +4237,9 @@
       }
       if (optMenu && optMenu.style.display !== "none" && !optMenu.contains(e.target)) {
         closeOptMenu();
+      }
+      if (sharePop && sharePop.style.display !== "none" && !sharePop.contains(e.target)) {
+        closeSharePop();
       }
     });
 

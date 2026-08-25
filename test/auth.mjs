@@ -123,6 +123,10 @@ const $ = (w, id) => w.document.getElementById(id);
 const shown = (w, id) => { const n = $(w, id); return !!n && !n.hidden; };
 const acctName = (w) => ($(w, "account-name") || {}).textContent || "";
 /* New lives in the list menu now, so making one means opening it first. */
+/* the popover fills the field asynchronously, so the assertion reads it back rather
+   than racing it */
+const copiedFieldValue = (w) => w.document.querySelector(".share-field").value;
+
 const newList = (w) => {
   $(w, "list-trigger").click();
   const m = w.document.querySelector(".list-menu");
@@ -307,12 +311,25 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   let copied = "";
   w.navigator.clipboard = { writeText: (t) => { copied = t; return Promise.resolve(); } };
 
-  // Copy link, from the list menu
-  $(w, "list-trigger").click();
-  const menu = w.document.querySelector(".list-menu");
-  const share = [...menu.querySelectorAll(".lm-item")].find((b) => /^Share this list/.test(b.textContent));
-  ok(share, "before it is shared, the action says it will share rather than just copy");
-  share.click();
+  /* Sharing has its own control now, and its own popover - it is not in the list menu.
+     On an unshared list of yours the popover opens on a face that says what publishing
+     does and offers a button, so that LOOKING at it never publishes. */
+  $(w, "share-trigger").click();
+  await settle();
+  let pop = w.document.querySelector(".share-pop");
+  ok(pop && pop.style.display === "block", "the share button opens a popover");
+  ok(!pop.querySelector(".share-field"),
+     "which does not show a link yet - opening it must not publish anything");
+  ok([...sdk._rows.values()][0].shared !== true,
+     "and nothing has been published by merely opening it");
+  const go = pop.querySelector(".share-go");
+  ok(go, "it offers to share, and says so before doing it");
+  go.click();
+  await settle();
+
+  ok(pop.querySelector(".share-field").value === copiedFieldValue(w),
+     "then the link appears in a field you can select");
+  pop.querySelector(".share-copy").click();
   await settle();
 
   ok(/[?&]s=/.test(copied), `signed in, the link carries a token rather than the list (${copied.slice(0, 60)}\u2026)`);
@@ -333,19 +350,20 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   const wrong = await sdk.rpc("get_shared_list", { token: "not-the-token" });
   ok(wrong.data.length === 0, "and a token that is not it opens nothing");
 
-  // once it is public, copying really is just copying, and the label says so
-  $(w, "list-trigger").click();
-  const m1 = w.document.querySelector(".list-menu");
-  ok([...m1.querySelectorAll(".lm-item")].some((b) => b.textContent.trim() === "Copy link"),
-     "once shared, the same action is honestly just Copy link");
-  ok(!/Share this list/.test(m1.textContent), "and no longer offers to share what is already shared");
-  m1.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  // once it is public there is nothing left to publish, so the popover skips that face
+  $(w, "share-trigger").click();   // close
+  $(w, "share-trigger").click();   // and reopen
+  await settle();
+  pop = w.document.querySelector(".share-pop");
+  ok(pop.querySelector(".share-field") && !pop.querySelector(".share-go"),
+     "reopened on a shared list it goes straight to the link - there is nothing left to publish");
 
-  // Stop sharing
-  $(w, "list-trigger").click();
-  const m2 = w.document.querySelector(".list-menu");
-  const stop = [...m2.querySelectorAll(".lm-item")].find((b) => b.textContent.trim() === "Stop sharing");
-  ok(stop, "a live link needs a way to stop being one, so the menu offers it");
+  // Stop sharing lives next to the link it stops, not next to Delete
+  const stop = pop.querySelector(".share-stop");
+  ok(stop, "a live link needs a way to stop being one, and it sits with the link");
+  ok(!/Stop sharing/.test(w.document.querySelector(".list-menu") ?
+      w.document.querySelector(".list-menu").textContent : ""),
+     "and no longer clutters the list menu");
   stop.click();
   await settle();
   ok([...sdk._rows.values()][0].shared === false, "which clears the flag");
@@ -363,12 +381,21 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   await settle();
   let copied = "";
   w.navigator.clipboard = { writeText: (t) => { copied = t; return Promise.resolve(); } };
-  $(w, "list-trigger").click();
-  const menu = w.document.querySelector(".list-menu");
-  [...menu.querySelectorAll(".lm-item")].find((b) => b.textContent.trim() === "Copy link").click();
+  /* Signed out there is nothing to publish, so the popover opens straight onto the link */
+  $(w, "share-trigger").click();
   await settle();
-  ok(/#t=/.test(copied), "signed out, Copy link still puts the whole list in the url");
+  const pop = w.document.querySelector(".share-pop");
+  ok(pop.querySelector(".share-field") && !pop.querySelector(".share-go"),
+     "signed out the popover shows the link at once - nothing to publish");
+  pop.querySelector(".share-copy").click();
+  await settle();
+  ok(/#t=/.test(copied), "signed out, the link still puts the whole list in the url");
   ok(!/[?&]s=/.test(copied), "because there is nothing in a database to point at");
+  /* and it says so, because that link is long enough to be refused by some chat apps */
+  ok(/frozen|characters/.test(pop.querySelector(".share-note").textContent),
+     `the panel warns what kind of link it is: "${pop.querySelector(".share-note").textContent}"`);
+  ok(!pop.querySelector(".share-stop"),
+     "and offers no Stop sharing - nothing was published to stop");
 }
 
 // ---------------------------------------------------------------------------------

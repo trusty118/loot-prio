@@ -688,11 +688,48 @@ zatar's** — jsdom cannot measure layout, but it can assert the mechanism.
 
 ### Sharing by link
 
-**The action is named for what it does, which differs by state.** Signed in on a list of
-yours, the first press *publishes* it — anyone with the link can then read it — so it reads
-`Share this list…`. Once it is already shared, copying really is just copying, so it reads
-`Copy link`, with `Stop sharing` beneath. Signed out it is always `Copy link`, because that
-is all it ever is. A label that hides a side effect is a bad label.
+**Sharing has its own control and its own popover, Aug 2026 — nothing about it is in the
+list menu.** It used to be an item four deep in that dropdown, which is to say nobody found
+it. `#share-trigger` sits in `.list-zone` between the picker and `Edit`: *which list · give
+it to someone · change it.* Icon-only, name on `data-tip` and `aria-label`.
+
+**The item it replaced was dead in the state most people meet first.** `copyShareLink()`
+opened `if (!activeTemplate) return;`, so on zatar's list the menu offered `Copy link`, you
+pressed it, and **nothing happened** — no clipboard write, no message, no error. That is the
+first share control anyone sees, since it is what you get before making a list of your own,
+and it passed 739 checks. `test/smoke.mjs` now pins that a link comes out **in every state
+the control is offered in**, which is the assertion that was missing.
+
+**The popover is the seventh overlay** and is built like the other six: created once,
+parented to `<body>`, positioned by `placeUnder()`, closed by Escape and by an outside
+`mousedown`. Two faces, swapped in place the way the list menu swaps rename and delete:
+
+- **publish** — a list of yours, signed in, not shared yet. Says what publishing does, and
+  offers a button. This face exists so that *opening* the popover never publishes: looking
+  at a thing must not change it. It is the same instinct that named the old menu item
+  `Share this list…` rather than `Copy link` — a label, or a panel, that hides a side effect
+  is a bad one.
+- **link** — the URL in a read-only field, selected on open, with **Copy** beside it and
+  `Stop sharing` beneath where there is something to stop. Everything else opens straight
+  onto this: signed out, zatar's list, or an already-shared list has nothing to publish.
+
+**`Stop sharing` moved here from the menu**, next to the link it stops rather than next to
+Delete.
+
+**On zatar's list the link is the current page URL, hash and all** — `location.hash` already
+carries phase, zone, boss, class, spec and the search, so *here is what I am looking at* is
+a real thing to send, and it is what the dead item was pretending to do.
+
+**`offerLink()` and `#tpl-link-out` are gone.** That hidden field existed only to reveal the
+link by hand when the clipboard API refused — which is exactly what the popover now is,
+permanently. Removing it also removed one of the three `[hidden]`-versus-`display` traps §5
+records.
+
+**The popover's buttons wear the accent and the trigger does not**, which is not a
+contradiction. Green means *selected* **on the page, among things you can select** — so the
+trigger, sitting on the bar among chips, stays quiet slate. Inside an overlay there is
+nothing selectable and the accent reads as "this is the button", the same licence
+`.prio-add` takes when the `+` is the only thing to do in an empty cell.
 
 **Two paths, chosen by whether you are signed in, and they mean different things.**
 
@@ -897,8 +934,11 @@ current if any of those change.
   bitten three times** — `.control-row`, `.tpl-link-out`, and `.btn-discord`, which would
   have pinned the sign-in button to the bar whether or not you were signed in. The third one
   also exposed that the guard was scoped to `main [hidden]`, so it never covered the template
-  bar — which is in `<header>`, and is where all three actually happened. It is document-wide
-  now. A guard that does not cover the scene of the crime is not a guard.
+  bar — which was in `<header>` at the time, and is where all three actually happened. It is
+  document-wide now, and stays that way even though the bar has since moved into
+  `.controls--refine`. A guard that does not cover the scene of the crime is not a guard.
+  (`.tpl-link-out` no longer exists — the share popover replaced what it was for — but it is
+  named here because the lesson is about the rule, not the element.)
 - **Don't hide table cells with `display: none`.** The tables are `table-layout: fixed`;
   hiding a cell makes the rest shift into the wrong columns. Don't generate the column —
   that is how the Role column was removed.
