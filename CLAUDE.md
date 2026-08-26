@@ -86,6 +86,10 @@ from `priorityText()`, which resolves full names, so **15 of the 44 found zero r
 `Boomkin`, `SPriest`, `BM`, `Prot Warrior`, `H Pal` among them. The other 29 worked only by
 accident, being substrings of the rendered name (`Fury`, `Arms`, `Mage`).
 
+**Adding one is a data edit and nothing else** — a line in `aliases`, and it works. The
+smoke test computes which shorthands *should* match from `specs.json` rather than listing
+them, so a new one extends the test rather than dating it.
+
 `indexRegistry()` now builds `ALIAS_WORDS`, the reverse index — identifier → the shorthands
 for it — **once per registry load, not per keystroke**, because search runs over every row on
 every character typed. `priorityText()` appends them.

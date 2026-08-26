@@ -403,6 +403,9 @@
   "Ele": "Ele",
   "Ret": "Ret",
   "War": "Warrior",
-  "BM": "BM"
+  "BM": "BM",
+  "Boomie": "BalanceDruid",
+  "Enh": "Enh",
+  "Kebab": "Fury"
  }
 }

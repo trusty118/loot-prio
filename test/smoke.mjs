@@ -496,7 +496,8 @@ ok(rows().length > 0, `search "Kael'thas" -> ${rows().length} rows`);
 
   const expected = Object.entries(specs.aliases)
     .filter(([, t]) => onScreen.has(target(t)));
-  ok(expected.length > 20, `most aliases name something on this phase (${expected.length} of 44)`);
+  ok(expected.length > 20,
+     `most aliases name something on this phase (${expected.length} of ${Object.keys(specs.aliases).length})`);
 
   const dead = [];
   for (const [word] of expected) {
