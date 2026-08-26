@@ -19,6 +19,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { until, sleep } from "./helpers.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
@@ -31,7 +32,9 @@ const RPC_COLUMNS = ["id", "name", "created", "v", "base", "priorities", "notes"
 
 const fail = [];
 const ok = (c, m) => { console.log((c ? "PASS  " : "FAIL  ") + m); if (!c) fail.push(m); };
-const settle = () => new Promise((r) => setTimeout(r, 400));
+/* Given a condition, waits only until it holds; given nothing, falls back to the old
+   flat nap. Every remaining bare settle() is one where there is nothing to poll for. */
+const settle = (cond) => (cond ? until(cond) : sleep(400));
 
 /* ---------- a fake Supabase ----------
    Only the surface app.js actually uses. Deliberately not a mock that records calls:
@@ -160,7 +163,7 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
 // ---------------------------------------------------------------------------------
 {
   const w = boot();
-  await settle();
+  await settle(() => w.document.querySelector("tbody tr"));
   ok(!shown(w, "sign-in"), "no project configured -> no sign-in button, rather than a broken one");
   ok(!shown(w, "sign-out") && !shown(w, "account"), "and nothing claiming you are signed in");
   ok(w.document.querySelectorAll("#results tr[data-id]").length > 0,
@@ -172,7 +175,7 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
 // ---------------------------------------------------------------------------------
 {
   const w = boot({ configured: true });          // no window.supabase
-  await settle();
+  await settle(() => w.document.querySelector("tbody tr"));
   ok(!shown(w, "sign-in"), "configured but SDK blocked -> still no sign-in button");
   ok(w.document.querySelectorAll("#results tr[data-id]").length > 0,
      "and the page is unaffected: a blocked CDN costs sign-in, not the site");
@@ -190,19 +193,19 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
 {
   const sdk = fakeSupabase();
   const w = boot({ configured: true });          // no window.supabase at boot
-  await settle();
+  await settle(() => w.document.querySelector("tbody tr"));
   ok(!shown(w, "sign-in"), "SDK not loaded yet -> no sign-in button (correct so far)");
 
   // the deferred <script> finishes: it sets the global, then fires load
   w.supabase = { createClient: () => sdk };
   w.document.getElementById("supabase-sdk").dispatchEvent(new w.Event("load"));
-  await settle();
+  await settle(() => shown(w, "sign-in"));
 
   ok(shown(w, "sign-in"),
      "the SDK arriving late still turns sign-in on - app.js waits for the tag");
 
   sdk.auth._signIn("Late");
-  await settle();
+  await settle(() => shown(w, "account") && acctName(w) === "Late");
   ok(shown(w, "account") && acctName(w) === "Late",
      "and signing in works normally afterwards");
 }
@@ -227,7 +230,8 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
       s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
   };
   w.eval(source);
-  await settle();
+  await settle();   /* a real wait: the assertion is that writeUrl did NOT eat the OAuth
+                       code, and the code is already there to begin with */
 
   ok(w.location.search === "?code=abc123",
      `an OAuth code survives boot, when update() rewrites the url (got "${w.location.search}")`);
@@ -241,19 +245,19 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
 {
   const sdk = fakeSupabase();
   const w = boot({ configured: true, sdk });
-  await settle();
+  await settle(() => w.document.querySelector("tbody tr"));
   ok(shown(w, "sign-in"), "configured and loaded -> the sign-in button appears");
   ok(!shown(w, "sign-out"), "and no sign-out while nobody is signed in");
 
   // a list made while signed out belongs to this browser
   newList(w);
-  await settle();
+  await settle(() => w.localStorage.getItem("lootprio.templates") && w.localStorage.getItem("lootprio.templates").includes("priorities"));
   ok(w.localStorage.getItem("lootprio.templates").includes("priorities"),
      "signed out, a new list is written to localStorage");
   ok(sdk._rows.size === 0, "and nothing is sent to the account, because there isn't one");
 
   sdk.auth._signIn("Trusty");
-  await settle();
+  await settle(() => shown(w, "account"));
   ok(shown(w, "account") && acctName(w) === "Trusty",
      `signed in, the bar shows who you are (got "${acctName(w)}")`);
   ok(!shown(w, "sign-in"), "and stops offering to sign in");
@@ -281,7 +285,7 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   // 6. a list made while signed in goes to the account, not to this browser
   const localBefore = w.localStorage.getItem("lootprio.templates");
   newList(w);
-  await settle();
+  await settle(() => w.localStorage.getItem("lootprio.templates") && w.localStorage.getItem("lootprio.templates").includes("priorities"));
   ok(sdk._rows.size === 1, `signed in, a new list is written to the account (got ${sdk._rows.size})`);
   ok(w.localStorage.getItem("lootprio.templates") === localBefore,
      "and localStorage is not touched - the store really did swap");
@@ -289,7 +293,7 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   // 7. signing out returns you to this browser's lists, losing nothing either side
   const m2 = openAcct(w);
   [...m2.querySelectorAll(".acct-item")].find((b) => b.textContent === "Sign out").click();
-  await settle();
+  await settle(() => shown(w, "sign-in") && !shown(w, "account"));
   ok(shown(w, "sign-in") && !shown(w, "account"), "signing out returns the sign-in button");
   ok(sdk._rows.size === 1, "the account keeps its lists");
   ok(w.localStorage.getItem("lootprio.templates") === localBefore, "and this browser keeps its own");
@@ -302,11 +306,11 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
 {
   const sdk = fakeSupabase();
   const w = boot({ configured: true, sdk });
-  await settle();
+  await settle(() => w.document.querySelector("tbody tr"));
   sdk.auth._signIn("Trusty");
-  await settle();
+  await settle(() => shown(w, "account"));
   newList(w);
-  await settle();
+  await settle(() => w.localStorage.getItem("lootprio.templates") && w.localStorage.getItem("lootprio.templates").includes("priorities"));
 
   let copied = "";
   w.navigator.clipboard = { writeText: (t) => { copied = t; return Promise.resolve(); } };
@@ -315,7 +319,7 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
      On an unshared list of yours the popover opens on a face that says what publishing
      does and offers a button, so that LOOKING at it never publishes. */
   $(w, "share-trigger").click();
-  await settle();
+  await settle(() => w.document.querySelector(".share-pop"));
   let pop = w.document.querySelector(".share-pop");
   ok(pop && pop.style.display === "block", "the share button opens a popover");
   ok(!pop.querySelector(".share-field"),
@@ -325,12 +329,12 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   const go = pop.querySelector(".share-go");
   ok(go, "it offers to share, and says so before doing it");
   go.click();
-  await settle();
+  await settle(() => { const c = pop.querySelector(".share-copy"); return c && !c.disabled; });
 
   ok(pop.querySelector(".share-field").value === copiedFieldValue(w),
      "then the link appears in a field you can select");
   pop.querySelector(".share-copy").click();
-  await settle();
+  await settle(() => copied);
 
   ok(/[?&]s=/.test(copied), `signed in, the link carries a token rather than the list (${copied.slice(0, 60)}\u2026)`);
   ok(copied.length < 200, `and it is short whatever the list holds (${copied.length} chars)`);
@@ -353,7 +357,10 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   // once it is public there is nothing left to publish, so the popover skips that face
   $(w, "share-trigger").click();   // close
   $(w, "share-trigger").click();   // and reopen
-  await settle();
+  await settle(() => {
+    const p = w.document.querySelector(".share-pop");
+    return p && p.style.display === "block" && p.querySelector(".share-stop");
+  });
   pop = w.document.querySelector(".share-pop");
   ok(pop.querySelector(".share-field") && !pop.querySelector(".share-go"),
      "reopened on a shared list it goes straight to the link - there is nothing left to publish");
@@ -365,7 +372,7 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
       w.document.querySelector(".list-menu").textContent : ""),
      "and no longer clutters the list menu");
   stop.click();
-  await settle();
+  await settle(() => [...sdk._rows.values()][0] && [...sdk._rows.values()][0].shared === false);
   ok([...sdk._rows.values()][0].shared === false, "which clears the flag");
   const after = await sdk.rpc("get_shared_list", { token });
   ok(after.data.length === 0, "and the link stops opening it, token or not");
@@ -376,19 +383,24 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
 // ---------------------------------------------------------------------------------
 {
   const w = boot();
-  await settle();
+  await settle(() => w.document.querySelector("tbody tr"));
   newList(w);
-  await settle();
+  await settle(() => w.localStorage.getItem("lootprio.templates") && w.localStorage.getItem("lootprio.templates").includes("priorities"));
   let copied = "";
   w.navigator.clipboard = { writeText: (t) => { copied = t; return Promise.resolve(); } };
   /* Signed out there is nothing to publish, so the popover opens straight onto the link */
   $(w, "share-trigger").click();
-  await settle();
+  /* the link is built asynchronously either way, and .share-copy stays disabled with
+     its listener unattached until it is ready */
+  await settle(() => {
+    const c = w.document.querySelector(".share-pop .share-copy");
+    return c && !c.disabled;
+  });
   const pop = w.document.querySelector(".share-pop");
   ok(pop.querySelector(".share-field") && !pop.querySelector(".share-go"),
      "signed out the popover shows the link at once - nothing to publish");
   pop.querySelector(".share-copy").click();
-  await settle();
+  await settle(() => copied);
   ok(/#t=/.test(copied), "signed out, the link still puts the whole list in the url");
   ok(!/[?&]s=/.test(copied), "because there is nothing in a database to point at");
   /* and it says so, because that link is long enough to be refused by some chat apps */
@@ -413,7 +425,7 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
   });
 
   const w = boot({ configured: true, sdk, url: "?s=tok_abc123" });
-  await settle();
+  await settle(() => w.document.querySelector("tbody tr"));
 
   ok($(w, "list-trigger-name").textContent === "Trusty's raid list",
      `a ?s= link opens the list with no account at all (got "${$(w, "list-trigger-name").textContent}")`);
@@ -441,7 +453,7 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
 {
   const sdk = fakeSupabase();
   const w = boot({ configured: true, sdk, url: "?s=not-a-real-token" });
-  await settle();
+  await settle(() => w.document.querySelector("tbody tr"));
   ok(!$(w, "list-trigger-name").textContent.includes("raid"), "an unknown token opens no list");
   ok(/does not open a list/i.test($(w, "edit-msg").textContent),
      `and says so rather than silently showing the guide's ("${$(w, "edit-msg").textContent}")`);
@@ -460,7 +472,7 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
     share_token: "tok_off", shared: false
   });
   const w = boot({ configured: true, sdk, url: "?s=tok_off" });
-  await settle();
+  await settle(() => w.document.querySelector("tbody tr"));
   ok($(w, "list-trigger-name").textContent !== "Unshared list",
      "a token whose list has been unshared opens nothing");
   ok(/does not open a list/i.test($(w, "edit-msg").textContent),
@@ -473,9 +485,9 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
 // with nothing at all to explain the swap.
 {
   const w = boot({ configured: true, url: "?s=tok_abc123" });   // configured, but no SDK
-  await settle();
+  await settle(() => w.document.querySelector("tbody tr"));
   w.document.getElementById("supabase-sdk").dispatchEvent(new w.Event("error"));
-  await settle();
+  await settle(() => /could not be opened/i.test($(w, "edit-msg").textContent));
 
   ok(/could not be opened/i.test($(w, "edit-msg").textContent),
      `a link that cannot be resolved says so ("${$(w, "edit-msg").textContent}")`);
@@ -487,9 +499,9 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
 // asked for and did not get.
 {
   const w = boot({ configured: true });
-  await settle();
+  await settle(() => w.document.querySelector("tbody tr"));
   w.document.getElementById("supabase-sdk").dispatchEvent(new w.Event("error"));
-  await settle();
+  await settle();   /* a real wait: the assertion is that nothing was said at all */
   ok(!$(w, "edit-msg").textContent,
      "with no shared link in play, a failed SDK says nothing - losing sign-in is not news");
 }
@@ -503,11 +515,11 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
 {
   const sdk = fakeSupabase();
   const w = boot({ configured: true, sdk });
-  await settle();
+  await settle(() => w.document.querySelector("tbody tr"));
   sdk.auth._signIn("Trusty");
-  await settle();
+  await settle(() => shown(w, "account"));
   newList(w);
-  await settle();
+  await settle(() => w.localStorage.getItem("lootprio.templates") && w.localStorage.getItem("lootprio.templates").includes("priorities"));
 
   const stored = () => sdk._rows.values().next().value;
   ok(stored(), "signed in, a new list is written to the account");
@@ -524,7 +536,7 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
   const field = cell.querySelector(".note-field");
   field.value = "Ours: Prot Warr first.";
   field.dispatchEvent(new w.Event("blur"));
-  await settle();
+  await settle(() => Object.values((stored() || {}).notes || {}).some(Boolean));
 
   const written = Object.values(stored().notes || {}).filter(Boolean);
   ok(written.includes("Ours: Prot Warr first."),
@@ -563,11 +575,11 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
 {
   const sdk = fakeSupabase();
   const w = boot({ configured: true, sdk });
-  await settle();
+  await settle(() => w.document.querySelector("tbody tr"));
   sdk.auth._signIn("Trusty");
-  await settle();
+  await settle(() => shown(w, "account"));
   newList(w);
-  await settle();
+  await settle(() => w.localStorage.getItem("lootprio.templates") && w.localStorage.getItem("lootprio.templates").includes("priorities"));
 
   const stored = () => sdk._rows.values().next().value;
   // rewind it to what an old row looks like, then make an edit
@@ -579,7 +591,7 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
   const field = cell.querySelector(".note-field");
   field.value = "backfill me";
   field.dispatchEvent(new w.Event("blur"));
-  await settle();
+  await settle(() => (stored() || {}).author === "Trusty");
 
   ok(stored().author === "Trusty",
      `an authorless list of yours picks your name up on its next save (${JSON.stringify(stored().author)})`);

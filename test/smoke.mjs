@@ -2,6 +2,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { until, sleep } from "./helpers.mjs";
 
 // resolve the repo root from this file, so it works on any machine or cwd
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -22,7 +23,15 @@ window.fetch = (url) => {
 
 window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
 
-await new Promise((r) => setTimeout(r, 300));
+await until(() => window.document.querySelector("tbody tr"));
+
+/* The search box is debounced by 120ms in app.js, and when it fires update() writes
+   q= into the hash - so the hash is the signal that the typing has actually landed,
+   rather than a nap long enough to hope it has. */
+const typed = (q) => until(() => {
+  const p = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+  return (p.get("q") || "") === q;      /* decoded, so no guessing at the encoding */
+});
 
 const doc = window.document;
 const fail = [];
@@ -338,6 +347,10 @@ ok([...typeSel.querySelectorAll("option")].some((o) => o.value === "Tier Token")
    "the hidden option reappears when a link selects it, so it can be cleared");
 window.location.hash = "";
 window.dispatchEvent(new window.Event("hashchange"));
+/* jsdom queues a hashchange of its own for that assignment. Left pending it fires at
+   the next await, and the app's handler resets the search box to state.q - silently
+   undoing anything typed before then. Drain it here rather than be surprised later. */
+await sleep(20);
 
 // weapons split by hand count; 18 + 7 + 6 = the 31 that used to be one bucket
 const typeOpts = [...typeSel.querySelectorAll("option")].map((o) => o.value);
@@ -436,11 +449,13 @@ ok(bySlot("Head") === 12, `unrelated slots unaffected: Head -> 12 (got ${rows().
 slotSel.value = ""; slotSel.dispatchEvent(new window.Event("change"));
 
 // search still finds both the raw and displayed vocabulary
-const searchBox = doc.getElementById("search");
+const searchBox = { set value(v) { doc.getElementById("search").value = v; },
+                    get value() { return doc.getElementById("search").value; },
+                    dispatchEvent: (e) => doc.getElementById("search").dispatchEvent(e) };
 const searchFor = async (q) => {
   searchBox.value = q;
   searchBox.dispatchEvent(new window.Event("input"));
-  await new Promise((r) => setTimeout(r, 200));
+  await typed(q);
   return rows().length;
 };
 ok(await searchFor("1H Mace") > 0, 'search "1H Mace" finds relabelled items');
@@ -453,14 +468,14 @@ click(doc.getElementById("reset"));
 const search = doc.getElementById("search");
 search.value = "Illidan";
 search.dispatchEvent(new window.Event("input"));
-await new Promise((r) => setTimeout(r, 250));
+await typed("Illidan");
 ok(rows().length > 0, `search "Illidan" -> ${rows().length} rows`);
 ok(doc.querySelectorAll("mark").length > 0, "search highlights matches");
 
 // html-escaping through the highlight path
 search.value = "Kael'thas";
 search.dispatchEvent(new window.Event("input"));
-await new Promise((r) => setTimeout(r, 250));
+await typed("Kael'thas");
 ok(!doc.body.innerHTML.includes("&amp;#39;</mark>") || true, "apostrophe search does not crash");
 ok(rows().length > 0, `search "Kael'thas" -> ${rows().length} rows`);
 
@@ -916,6 +931,7 @@ ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
 
   window.location.hash = "phase=P3";
   window.dispatchEvent(new window.Event("hashchange"));
+  await sleep(20);   /* drain jsdom's own queued hashchange - see the note above */
 }
 
 // --- the qualifier: several BiS items for one slot, distinguished ---------------------
@@ -1056,11 +1072,11 @@ ok(!doc.body.textContent.includes("undefined"), "no undefined leaks from the emp
 // searching still works even though the words are no longer displayed
 searchBox.value = "Boomkin";
 searchBox.dispatchEvent(new window.Event("input"));
-await new Promise((r) => setTimeout(r, 200));
+await typed("Boomkin");
 ok(rows().length > 0, `search finds items by a spec name that is no longer rendered (${rows().length} rows)`);
 searchBox.value = "";
 searchBox.dispatchEvent(new window.Event("input"));
-await new Promise((r) => setTimeout(r, 200));
+await typed("");
 
 // longest-match wins: "Prot Pal" must not render as "Prot" + "Pal"
 const bulwark = [...doc.querySelectorAll("tbody tr")]
@@ -1148,7 +1164,7 @@ ok(ytLinks.length === 2, `both source videos linked in the footer (got ${ytLinks
 // columns - the guard that matters is that it never leaks into an icon title
 searchBox.value = "casters";
 searchBox.dispatchEvent(new window.Event("input"));
-await new Promise((r) => setTimeout(r, 200));
+await typed("casters");
 ok(doc.querySelectorAll("mark").length > 0, `search still highlights (${doc.querySelectorAll("mark").length} marks)`);
 ok(doc.querySelectorAll(".col-prio mark").length === 0,
    "nothing to highlight in the priority column now that it is icons only");
@@ -1156,7 +1172,7 @@ ok([...doc.querySelectorAll("mark")].every((m) => m.textContent.toLowerCase() ==
    "highlight only wraps the searched word, not icon titles");
 searchBox.value = "";
 searchBox.dispatchEvent(new window.Event("input"));
-await new Promise((r) => setTimeout(r, 200));
+await typed("");
 
 // --- footer ---
 const footer = doc.querySelector(".site-footer").textContent;

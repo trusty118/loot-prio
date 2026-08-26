@@ -7,6 +7,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { until, sleep } from "./helpers.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
@@ -32,7 +33,9 @@ function boot(hash) {
   window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8").replace("})();", EXPOSE));
   return window;
 }
-const settle = () => new Promise((r) => setTimeout(r, 400));
+/* Given a condition, waits only until it holds; given nothing, falls back to the old
+   flat nap. Every remaining bare settle() is one where there is nothing to poll for. */
+const settle = (cond) => (cond ? until(cond) : sleep(400));
 
 /* A fixed sleep is a race, and this one lost about 40% of the time on a loaded
    machine: booting a shared list means fetches, promises and a gzip round trip through
@@ -54,7 +57,7 @@ async function waitFor(cond, what, ms = 5000) {
 }
 
 const w = boot();
-await settle();
+await settle(() => w.__api && w.document.querySelector("tbody tr"));
 const api = w.__api;
 
 // --- what a template is --------------------------------------------------------

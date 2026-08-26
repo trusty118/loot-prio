@@ -2,6 +2,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { until } from "./helpers.mjs";
 
 // resolve the repo root from this file, so it works on any machine or cwd
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -20,7 +21,7 @@ async function boot(bisResponse) {
     Promise.resolve({ ok: true, status: 200,
       json: () => Promise.resolve(String(url).includes("specs.json") ? specs : data) });
   window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
-  await new Promise((r) => setTimeout(r, 400));
+  await until(() => window.document.querySelector("tbody tr"));
   return window.document;
 }
 

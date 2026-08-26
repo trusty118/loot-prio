@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 524 checks, should be all green
+npm test             # 755 checks in ~25s, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -1069,6 +1069,38 @@ current if any of those change.
   local copy. The keys are consts inside the IIFE — the right place for them — so the test
   rewrites the source string rather than `app.js` growing a hook that exists only for tests.
   **The OAuth redirect itself cannot happen in jsdom** and is checked by hand, like the drag.
+
+### Waiting: `test/helpers.mjs`
+
+**Never sleep for a fixed time.** `until(pred)` polls the condition the test is actually
+waiting for and continues the moment it holds; `settle(cond)` is the same thing in the files
+that already had a `settle`. Flat naps cost 30 of the suite's 47 seconds and were the
+flaky-test pattern besides — too short and it fails on a slow machine, too long and nobody
+learns it was too short. The suite runs in ~25s now for the same 755 checks.
+
+`until` **resolves on timeout rather than throwing**, so the assertion after it fails with
+the message it already had. Keep that: a broken test must report what it always reported.
+
+Three rules learned by getting each of them wrong:
+
+- **The predicate must cover what the next line needs, not just the next assertion.** The list
+  menu's rows come from an async refresh, so waiting for "the view changed" then clicking a row
+  that had not rendered took the file out with a TypeError — and the run still said 0 failures,
+  because it had exited early. **Check the count, not just the colour.**
+- **It must be about the new state, not something already true.** `.share-pop` is one reused
+  element, so "does it exist" is true from the first open onward. The app's own readiness
+  signal — `.share-copy` being enabled, which is when its click listener is attached — is the
+  thing to wait for.
+- **An assertion that something did NOT happen cannot be polled**, because the poll passes on
+  the first tick against a state that has not settled. Those keep a real `sleep`, and each one
+  in the suite says in a comment why it is not an `until`.
+
+**Assigning `location.hash` makes jsdom queue a hashchange of its own**, on top of any the
+test dispatches by hand. Left pending it fires at the next `await` and runs the app's handler,
+which resets the search box to `state.q` — silently undoing anything typed since. `smoke.mjs`
+drains it with a `sleep(20)` after each assignment. This was already happening before the
+suite was made fast: three search assertions were passing on the unfiltered table, because
+`> 0` is true whether the search ran or not.
 
 They can't cover anything needing a real browser: Wowhead's script doesn't complete its
 data fetch under jsdom, so **item icons and item tooltips are untested** — check those by

@@ -11,6 +11,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { until, sleep } from "./helpers.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
@@ -39,7 +40,9 @@ function boot(hash) {
   return window;
 }
 
-const settle = () => new Promise((r) => setTimeout(r, 400));
+/* Given a condition, waits only until it holds; given nothing, falls back to the old
+   flat nap. Every remaining bare settle() is one where there is nothing to poll for. */
+const settle = (cond) => (cond ? until(cond) : sleep(400));
 const click = (w, n) => n.dispatchEvent(new w.MouseEvent("click", { bubbles: true }));
 const key = (w, n, k) => n.dispatchEvent(new w.KeyboardEvent("keydown", { key: k, bubbles: true, cancelable: true }));
 const rowFor = (d, name) => [...d.querySelectorAll("tbody tr")]
@@ -79,7 +82,7 @@ const doMenu = (w, label) => { openMenu(w); click(w, act(w, label)); };
 const triggerName = (d) => el(d, "list-trigger-name").textContent;
 
 const w = boot();
-await settle();
+await settle(() => w.document.querySelector("tbody tr"));
 const d = w.document;
 
 // --- zatar's list is reference, not a workspace ---------------------------------
@@ -110,7 +113,7 @@ ok(triggerName(d) === "zatar's list", `the trigger says whose list is on screen:
 
 // --- Make a copy -----------------------------------------------------------------
 doMenu(w, "Make a copy");
-await settle();
+await settle(() => only(w));
 const copy = only(w);
 ok(Object.keys(copy.priorities).length === data.length,
    `a copy holds all ${data.length} priorities, not a diff (${Object.keys(copy.priorities).length})`);
@@ -137,7 +140,7 @@ ok(namesIn(d, ITEM).join(",") === "Protection Warrior,Protection Paladin",
 // Driven through the operator menu, which is a click path and still reachable.
 click(w, rowFor(d, ITEM).querySelector(".prio-op"));
 click(w, d.querySelector('.prio-menu-item[data-op="~="]'));
-await settle();
+await settle(() => (only(w).priorities[bulwark][1] || {}).op === "~=");
 ok(only(w).priorities[bulwark][1].op === "~=",
    "an edit is already in the store, with nothing pressed to put it there");
 ok(el(d, "tpl-dirty").hidden, "and the unsaved marker has cleared");
@@ -330,7 +333,7 @@ ok(field && field.value === "Copy of zatar's list",
    `Rename opens a field holding the current name: "${field && field.value}"`);
 field.value = "MM hunter list";
 key(w, field, "Enter");
-await settle();
+await settle(() => only(w).name === "MM hunter list");
 ok(only(w).name === "MM hunter list", `Enter saves it: "${only(w).name}"`);
 ok(triggerName(d) === "MM hunter list", "and the trigger follows");
 ok(!d.querySelector(".list-menu[style*='block']"), "and the menu closes behind it");
@@ -338,16 +341,18 @@ ok(!d.querySelector(".list-menu[style*='block']"), "and the menu closes behind i
 // --- switching away and back ------------------------------------------------------------
 const mine = only(w).id;
 openMenu(w);
+await settle(() => row(w, "zatar's list"));
 click(w, row(w, "zatar's list"));
-await settle();
+await settle(() => !d.querySelector(".prio-edit") && el(d, "edit-toggle").disabled);
 ok(!d.querySelector(".prio-edit") && el(d, "edit-toggle").disabled,
    "back on the guide's list, nothing is editable again");
 ok(namesIn(d, ITEM).join(",") === "Protection Warrior,Protection Paladin",
    "and the guide's own order is what shows");
 
 openMenu(w);
+await settle(() => row(w, "MM hunter list"));
 click(w, row(w, "MM hunter list"));
-await settle();
+await settle(() => triggerName(d) === "MM hunter list");
 ok(triggerName(d) === "MM hunter list", "reopening it brings the name back");
 ok(namesIn(d, DOUBLE).length === dbefore + 2, "and the edits are all there");
 ok(!d.querySelector(".prio-edit"), "it opens for reading - Edit is how you change it");
@@ -373,7 +378,7 @@ ok(Object.keys(saved(w)).length === 1, "Keep it leaves the list alone");
 openMenu(w);
 click(w, act(w, "Delete list\u2026"));
 click(w, act(w, "Delete"));
-await settle();
+await settle(() => !saved(w)[doomed]);
 ok(!saved(w)[doomed], "Delete removes it");
 ok(triggerName(d) === "zatar's list" && el(d, "edit-toggle").disabled,
    "and drops back to the guide's list");
@@ -382,16 +387,16 @@ ok(triggerName(d) === "zatar's list" && el(d, "edit-toggle").disabled,
 const undo = el(d, "edit-msg").querySelector(".toast-undo");
 ok(undo, "and the toast offers Undo");
 click(w, undo);
-await settle();
+await settle(() => saved(w)[doomed]);
 ok(saved(w)[doomed], "which puts the list back");
 ok(triggerName(d) === "MM hunter list", "and reopens it");
 
 // --- New: a list of nobody's ---------------------------------------------------------------
 const w2 = boot();
-await settle();
+await settle(() => w2.document.querySelector("tbody tr"));
 const d2 = w2.document;
 doMenu(w2, "+  New list");
-await settle();
+await settle(() => only(w2));
 const blank = only(w2);
 ok(Object.keys(blank.priorities).length === data.length,
    `New still holds all ${data.length} rows (${Object.keys(blank.priorities).length})`);
@@ -409,7 +414,7 @@ ok(rowFor(d2, ITEM).querySelector(".prio-add"), "each row offers a + to start fi
 const warriorChip = [...d2.querySelectorAll("#class-chips .chip")]
   .find((c) => (c.getAttribute("aria-label") || "").includes("Warrior"));
 click(w2, warriorChip);
-await settle();
+await settle(() => d2.querySelector(".empty"));
 ok(d2.querySelector(".empty") && /empty so far/.test(d2.querySelector(".empty").textContent),
    `a blank list explains its zero results: "${(d2.querySelector(".empty") || {}).textContent || ""}"`);
 
@@ -418,7 +423,7 @@ const shared = { v: 1, name: "Someone's list", created: "2026-08-21", base: "zat
   priorities: Object.fromEntries(data.map((r) => [r.id, r.item === ITEM ? [{ spec: "Fury" }] : []])) };
 const code = "r" + Buffer.from(JSON.stringify(shared), "utf8").toString("base64url");
 const w3 = boot("#t=" + code);
-await settle();
+await settle(() => w3.document.querySelector("tbody tr"));
 const d3 = w3.document;
 ok(namesIn(d3, ITEM).join(",") === "Fury Warrior", "a #t= link opens the list it carries");
 ok(!d3.querySelector(".prio-edit") && el(d3, "edit-toggle").disabled,
@@ -428,7 +433,7 @@ ok(triggerName(d3) === "Someone's list",
 ok(Object.keys(saved(w3)).length === 0, "and nothing of theirs is written into your store");
 
 doMenu(w3, "Make a copy");
-await settle();
+await settle(() => only(w3));
 ok(only(w3) && JSON.stringify(only(w3).priorities[bulwark]) === JSON.stringify([{ spec: "Fury" }]),
    "Make a copy is how you keep it, and it copies what was on screen");
 ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
@@ -438,7 +443,7 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
 // every row and says nothing. What separates them is how many carry a priority.
 {
   const w5 = boot();
-  await settle();
+  await settle(() => w5.document.querySelector("tbody tr"));
   const d5 = w5.document;
   const zatarRanked = data.filter((r) => (r.priority || []).length).length;
 
@@ -450,16 +455,16 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
   closeMenu(w5);
 
   doMenu(w5, "+  New list");
-  await settle();
   openMenu(w5);
+  await settle(() => row(w5, "My list"));
   ok(rowCount(w5, "My list") === "0 ranked",
      `a blank list reads 0, which is the honest answer and the useful one (got "${rowCount(w5, "My list")}")`);
   closeMenu(w5);
 
   // a copy carries what it copied, not the dataset size
   doMenu(w5, "Make a copy");
-  await settle();
   openMenu(w5);
+  await settle(() => row(w5, "Copy of My list"));
   ok(rowCount(w5, "Copy of My list") === "0 ranked",
      `copying a blank list copies its emptiness (got "${rowCount(w5, "Copy of My list")}")`);
   closeMenu(w5);
@@ -486,7 +491,7 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
 // --- Escape backs out one level at a time ------------------------------------------------------
 {
   doMenu(w3, "Make a copy");
-  await settle();
+  await settle(() => only(w3));
   const m = openMenu(w3);
   click(w3, act(w3, "Rename\u2026"));
   ok(m.querySelector(".lm-field"), "Rename swaps the panel in place");
@@ -507,10 +512,10 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
     .join(",");
 
   const w4 = boot();
-  await settle();
+  await settle(() => w4.document.querySelector("tbody tr"));
   const onZatar = barKids(w4.document);
   doMenu(w4, "Make a copy");
-  await settle();
+  await settle(() => only(w4));
   const onMine = barKids(w4.document);
   ok(onZatar === onMine,
      `the bar holds the same controls either way, so nothing moves\n        ${onZatar}`);
@@ -521,7 +526,7 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
 // --- Edit lives with the rows it changes, not with the list controls ---------------------------
 {
   const w6 = boot();
-  await settle();
+  await settle(() => w6.document.querySelector("tbody tr"));
   const d6 = w6.document;
   const bar = d6.querySelector(".controls--refine");
   const tog = el(d6, "edit-toggle");
@@ -531,7 +536,7 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
      "and not in the banner, which answers which list rather than change these calls");
 
   doMenu(w6, "+  New list");
-  await settle();
+  await settle(() => tog.getAttribute("aria-pressed") === "true");
 
   // Three signals, because a mode that changes what a click does should be hard to be
   // in without noticing.
@@ -560,7 +565,7 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
 // both by discussion, share the result.
 {
   const w7 = boot();
-  await settle();
+  await settle(() => w7.document.querySelector("tbody tr"));
   const d7 = w7.document;
 
   // A row he actually wrote a note on, found in the DOM rather than hardcoded, so this
@@ -576,7 +581,7 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
      "on the guide's list a note is text, not something you can click into");
 
   doMenu(w7, "Make a copy");
-  await settle();
+  await settle(() => only(w7) && only(w7).notes);
   ok(Object.keys(only(w7).notes).length === data.length,
      "a copy takes his notes with it, all of them, the way it takes his priorities");
   ok(only(w7).notes[rec.id] === his, "and they start as his wording exactly");
@@ -591,7 +596,7 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
   const MINE = "Ours: goes to the Prot Warr first, agreed in Thursday's run.";
   field.value = MINE;
   field.dispatchEvent(new w7.Event("blur"));
-  await settle();
+  await settle(() => only(w7).notes[rec.id] === MINE);
 
   ok(only(w7).notes[rec.id] === MINE, "blur writes it to the store, with nothing pressed");
   ok(cell(d7).textContent.includes(MINE), "and the row now reads your wording");
@@ -603,28 +608,29 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
   const q = el(d7, "search");
   q.value = "Thursday's run";
   q.dispatchEvent(new w7.Event("input"));
-  await settle();
+  await settle(() => rowFor(d7, rec.item));
   ok(rowFor(d7, rec.item), "search finds your note");
   q.value = his.slice(0, 24);
   q.dispatchEvent(new w7.Event("input"));
-  await settle();
+  await settle(() => !rowFor(d7, rec.item));
   ok(!rowFor(d7, rec.item), "and no longer finds the wording you replaced");
   q.value = "";
   q.dispatchEvent(new w7.Event("input"));
-  await settle();
+  await settle(() => rowFor(d7, rec.item));
 
   // Escape abandons rather than commits, so a misclick into a note costs nothing.
   field = open();
   field.value = "typed by accident";
   key(w7, field, "Escape");
-  await settle();
+  await settle();   /* a real wait: the assertion is that nothing was written, and a
+                       poll for "still MINE" would pass before Escape had done anything */
   ok(only(w7).notes[rec.id] === MINE, "Escape leaves the note as it was");
 
   // One row back to his, without abandoning the list.
   const reset = cell(d7).querySelector(".note-reset");
   ok(reset, "a changed note offers a reset");
   click(w7, reset);
-  await settle();
+  await settle(() => only(w7).notes[rec.id] === his);
   ok(only(w7).notes[rec.id] === his, "which puts his wording back");
   ok(!cell(d7).querySelector(".note-reset"),
      "and the reset goes away, because there is nothing left to undo");
@@ -633,7 +639,7 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
 
   // A blank list is nobody's list, so it does not arrive carrying his words.
   doMenu(w7, "+  New list");
-  await settle();
+  await settle(() => Object.values(saved(w7)).find((t) => t.base === "blank"));
   const blank = Object.values(saved(w7)).find((t) => t.base === "blank");
   ok(Object.keys(blank.notes).length === data.length && blank.notes[rec.id] === "",
      "a blank list starts with no notes at all - you asked for nobody's list");
@@ -646,7 +652,7 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
    two modes cannot drift into sharing it. */
 {
   const w9 = boot();
-  await settle();
+  await settle(() => w9.document.querySelector("tbody tr"));
   const d9 = w9.document;
   const icons = () => [...d9.querySelectorAll("td.col-prio img.spec-icon")];
 
@@ -654,7 +660,7 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
      "reading the guide, priority icons are controls");
 
   doMenu(w9, "Make a copy");
-  await settle();
+  await settle(() => el(d9, "edit-toggle").getAttribute("aria-pressed") === "true");
   ok(el(d9, "edit-toggle").getAttribute("aria-pressed") === "true",
      "a copy opens ready to edit");
   ok(icons().length > 0 && !icons().some((i) => i.classList.contains("spec-icon--link")),
@@ -664,7 +670,7 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
 
   const before = [...d9.querySelectorAll("#results tr[data-id]")].length;
   click(w9, icons()[0]);
-  await settle();
+  await settle();   /* a real wait: the assertion is that the table did NOT refilter */
   ok([...d9.querySelectorAll("#results tr[data-id]")].length === before,
      "clicking one while editing does not filter the table out from under you");
 
