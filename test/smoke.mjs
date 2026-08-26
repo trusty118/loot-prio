@@ -479,6 +479,65 @@ await typed("Kael'thas");
 ok(!doc.body.innerHTML.includes("&amp;#39;</mark>") || true, "apostrophe search does not crash");
 ok(rows().length > 0, `search "Kael'thas" -> ${rows().length} rows`);
 
+// --- the shorthands people actually type ------------------------------------------
+/* specs.json carries 44 aliases. They were loaded into REG.aliases and read by NOTHING,
+   so 15 of them found zero rows - Boomkin, SPriest, BM, Prot Warrior, H Pal. The other
+   29 only worked by accident, being substrings of the rendered name (Fury, Arms, Mage).
+   CLAUDE.md posed the choice: wire them into the haystack or drop them. This is wired. */
+{
+  await searchFor("");
+  click(doc.getElementById("reset"));
+
+  /* Which alias SHOULD match is computed from the data rather than listed here, so
+     adding one to specs.json extends this test instead of dating it. An alias whose
+     spec no rendered row happens to name is not expected to find anything. */
+  const target = (t) => {
+    const id = typeof t === "string" ? t : (t && t.spec);
+    if (!id) return null;
+    if (typeof t !== "string" && t.form) {
+      const f = (specs.forms || {})[id];
+      if (f && f[t.form] && f[t.form].spec) return f[t.form].spec;
+    }
+    return id;
+  };
+  const onScreen = new Set();
+  for (const tr of rows()) {
+    const rec = data.find((r) => String(r.id) === tr.dataset.id);
+    for (const e of (rec && rec.priority) || []) {
+      const r = target(e.spec ? { spec: e.spec, form: e.form } : e.class);
+      if (r) onScreen.add(r);
+    }
+  }
+
+  const expected = Object.entries(specs.aliases)
+    .filter(([, t]) => onScreen.has(target(t)));
+  ok(expected.length > 20,
+     `most aliases name something on this phase (${expected.length} of ${Object.keys(specs.aliases).length})`);
+
+  const dead = [];
+  for (const [word] of expected) {
+    if (await searchFor(word) === 0) dead.push(word);
+  }
+  ok(dead.length === 0,
+     `every alias naming a spec on screen finds rows (dead: ${dead.join(", ") || "none"})`);
+
+  /* Two names for one thing find one set of rows. This is the assertion that would have
+     failed before, and it does not care how many rows there are. */
+  ok(await searchFor("Boomkin") === await searchFor("Balance Druid") &&
+     await searchFor("Boomkin") > 0,
+     "Boomkin finds exactly what Balance Druid finds");
+  ok(await searchFor("SPriest") === await searchFor("Shadow Priest") &&
+     await searchFor("SPriest") > 0,
+     "and SPriest what Shadow Priest finds");
+
+  /* A form alias reaches the rows a cat icon renders on, not the FeralDruid umbrella -
+     resolveEntry() collapses the two and the reverse index has to collapse the same way. */
+  ok(await searchFor("Feral Cat") > 0, "a form alias reaches the rows it is drawn on");
+
+  await searchFor("");
+  click(doc.getElementById("reset"));
+}
+
 // --- tier tokens render as class icons only ---
 click(doc.getElementById("reset"));
 
