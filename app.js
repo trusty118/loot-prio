@@ -592,6 +592,10 @@
      not a code edit. */
   var REG = { classes: {}, specs: {}, forms: {}, races: {}, aliases: {} };
 
+  /* registry identifier -> the shorthands people type for it. Search-only; see
+     priorityText(), which is the one thing that reads it. */
+  var ALIAS_WORDS = {};
+
   /* classId -> its spec identifiers, derived rather than stored: it is the same
      fact as spec.class, and two copies of one fact drift. */
   var CLASS_SPECS = {};
@@ -604,6 +608,30 @@
       races: (doc && doc.races) || {},
       aliases: (doc && doc.aliases) || {}
     };
+
+    /* Shorthand -> the identifier it stands for, inverted: identifier -> the shorthands.
+       Built here rather than per keystroke, because search runs over every row on every
+       character typed.
+
+       Forms collapse the same way resolveEntry() collapses them, so "Cat" keys FeralCat
+       and finds the rows a cat icon actually renders on - not the FeralDruid umbrella,
+       which is a different thing on screen.
+
+       An alias whose target the registry does not know is SKIPPED rather than fatal.
+       specs.json fails soft everywhere else on this page; a stale shorthand should cost
+       that one word and nothing more. */
+    ALIAS_WORDS = {};
+    Object.keys(REG.aliases).forEach(function (word) {
+      var t = REG.aliases[word];
+      var id = typeof t === "string" ? t : (t && t.spec);
+      if (!id) return;
+      if (typeof t !== "string" && t.form) {
+        var forms = REG.forms[id];
+        if (forms && forms[t.form] && forms[t.form].spec) id = forms[t.form].spec;
+      }
+      if (!REG.specs[id] && !REG.classes[id]) return;
+      (ALIAS_WORDS[id] = ALIAS_WORDS[id] || []).push(word);
+    });
 
     /* umbrellas are left out: they hold no BiS of their own and are not offered as
        filter chips, so a class stands for the specs you can actually pick */
@@ -670,10 +698,20 @@
   }
 
   /* Plain-text form of a priority, for the search index. */
+  /* The search haystack's view of a priority line, and NOTHING else reads it - which is
+     what makes it safe to put words in here that the page never shows. The column renders
+     icons; this renders the names behind them, plus the shorthands people actually type.
+
+     Fifteen of the forty-four aliases used to find nothing at all: "Boomkin", "SPriest",
+     "BM", "Prot Warrior" and friends. The other twenty-nine only worked by accident, being
+     substrings of the rendered name - "Fury", "Arms", "Mage". */
   function priorityText(list) {
     return (list || []).map(function (entry) {
       var r = resolveEntry(entry);
-      return r ? (r.race ? r.race.name + " " : "") + r.name : "";
+      if (!r) return "";
+      var words = (r.race ? r.race.name + " " : "") + r.name;
+      var also = r.id && ALIAS_WORDS[r.id];
+      return also ? words + " " + also.join(" ") : words;
     }).join(" ");
   }
 

@@ -43,5 +43,38 @@ ok(doc.querySelectorAll(".spec-icon--bis3").length === 0, "empty specs -> no rin
 doc = await boot(() => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}) }));
 ok(doc.querySelectorAll("tbody tr").length === 195, "missing specs key -> table still renders");
 
+// --- a stale alias costs that one word, not the page ------------------------------
+/* specs.json fails soft everywhere else here, and its aliases are no different: one
+   pointing at an identifier the registry does not know is skipped when the reverse index
+   is built. Renaming a spec without sweeping the aliases must not take the site down. */
+{
+  const bent = JSON.parse(JSON.stringify(specs));
+  bent.aliases["Ghost"] = "NoSuchSpec";
+  bent.aliases["Wraith"] = { spec: "AlsoMissing", form: "cat" };
+  bent.aliases["Empty"] = null;
+
+  const dom = new JSDOM(html, { runScripts: "outside-only", url: "https://x.test/" });
+  const { window } = dom;
+  window.console = { warn: () => {}, log: () => {} };
+  window.fetch = (url) => Promise.resolve({ ok: true, status: 200,
+    json: () => Promise.resolve(String(url).includes("specs.json") ? bent
+                              : String(url).includes("bis.json") ? { specs: {} } : data) });
+  window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
+  await new Promise((r) => setTimeout(r, 400));
+  const d = window.document;
+
+  ok(d.querySelectorAll("tbody tr").length === 195,
+     `an alias pointing at nothing -> the table still renders (${d.querySelectorAll("tbody tr").length} rows)`);
+
+  const box = d.getElementById("search");
+  const find = async (q) => {
+    box.value = q; box.dispatchEvent(new window.Event("input"));
+    await new Promise((r) => setTimeout(r, 200));
+    return d.querySelectorAll("#results tr[data-id]").length;
+  };
+  ok(await find("Ghost") === 0, "the broken shorthand finds nothing, rather than everything");
+  ok(await find("Boomkin") > 0, "and the sound ones beside it still work");
+}
+
 console.log(fail.length ? `\n${fail.length} FAILURES` : "\nAll checks passed");
 process.exit(fail.length ? 1 : 0);
