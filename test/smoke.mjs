@@ -15,15 +15,34 @@ const { window } = dom;
 // stub fetch for the local data files
 const bis = JSON.parse(fs.readFileSync(path.join(root, "data/bis.json"), "utf8"));
 const specs = JSON.parse(fs.readFileSync(path.join(root, "data/specs.json"), "utf8"));
+/* the lists that ship with the site - without these the page boots with no starting
+   points, and the priority column is empty on every row */
+const listIndex = JSON.parse(fs.readFileSync(path.join(root, "data/lists/index.json"), "utf8"));
+const zatarList = JSON.parse(fs.readFileSync(path.join(root, "data/lists/zatar-p3.json"), "utf8"));
 window.fetch = (url) => {
   const u = String(url);
-  const body = u.includes("bis.json") ? bis : u.includes("specs.json") ? specs : data;
+  const body = u.includes("lists/index.json") ? listIndex
+             : u.includes("zatar-p3.json") ? zatarList
+             : u.includes("bis.json") ? bis : u.includes("specs.json") ? specs : data;
   return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(body) });
 };
 
 window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
 
 await until(() => window.document.querySelector("tbody tr"));
+
+/* Open the bundled list before asserting anything about priorities. zatar used to be the
+   baseline - no list open MEANT his calls - so every assertion below got them for free.
+   He is a starting point you open now, and with nothing open the priority column is
+   legitimately empty, so the tests have to do what a person does. */
+{
+  const d0 = window.document;
+  d0.getElementById("list-trigger").dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+  const row = [...d0.querySelectorAll(".list-menu .lm-row")]
+    .find((r) => /Zatar/.test(r.textContent));
+  row.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+  await until(() => d0.querySelector("td.col-prio img.spec-icon"));
+}
 
 /* The search box is debounced by 120ms in app.js, and when it fires update() writes
    q= into the hash - so the hash is the signal that the typing has actually landed,
@@ -503,7 +522,7 @@ ok(rows().length > 0, `search "Kael'thas" -> ${rows().length} rows`);
   const onScreen = new Set();
   for (const tr of rows()) {
     const rec = data.find((r) => String(r.id) === tr.dataset.id);
-    for (const e of (rec && rec.priority) || []) {
+    for (const e of (rec && zatarList.priorities[String(rec.id)]) || []) {
       const r = target(e.spec ? { spec: e.spec, form: e.form } : e.class);
       if (r) onScreen.add(r);
     }
@@ -637,7 +656,11 @@ probe.dispatchEvent(new window.FocusEvent("focusout", { bubbles: true }));
 ok(!/\.tip\s*\{[^}]*transition/.test(cssText), "tooltip has no transition, so it appears instantly");
 
 // --- priority is structured data, driven by the registry ---
-ok(data.every((r) => Array.isArray(r.priority)), "every priority is a list, not a string");
+/* Priorities live in the bundled list now, not on the item. The item data holding none
+   is the whole point of the split, so both halves are asserted. */
+ok(data.every((r) => !("priority" in r)), "no priority rides on an item any more");
+ok(Object.values(zatarList.priorities).every((p) => Array.isArray(p)),
+   "and every priority in the bundled list is a list, not a string");
 // 27 playable specs, plus FeralDruid as an umbrella over FeralBear and FeralCat -
 // it stays a valid identifier because the priorities name it, but it is not a spec
 // you can pick and holds no BiS of its own
@@ -654,7 +677,7 @@ ok(Object.keys(specs.classes).length === 9, "registry has 9 classes");
 // identifiers in the data must exist in the registry - this is what makes a typo an error
 const unknown = [];
 for (const rec of data) {
-  for (const e of rec.priority || []) {
+  for (const e of zatarList.priorities[String(rec.id)] || []) {
     const id = e.spec || e.class;
     if (!(specs.specs[id] || specs.classes[id])) unknown.push(`${rec.item}: ${id}`);
   }
@@ -724,7 +747,7 @@ const tierClass = { phase: "spec-icon--bis", multiPhase: "spec-icon--bis2", expa
 // exact membership test rather than a regex over prose
 const displayName = (id) => (specs.specs[id] || specs.classes[id] || {}).name;
 const listsSpec = (rec, id) =>
-  (rec.priority || []).some((e) => (e.spec || e.class) === id);
+  (zatarList.priorities[String(rec.id)] || []).some((e) => (e.spec || e.class) === id);
 
 // Icons carry data-id, so an entry is matched to its icon by identifier rather
 // than by display name - forms ("Feral Druid (cat)") make the name lossy.
@@ -783,7 +806,8 @@ ok(offPhase > 0 && onSpec + onClass > offPhase,
 
 // an item with no entry anywhere in bis.json must have no ring
 const bisIds = new Set(Object.values(bis.specs).flatMap((p) => Object.values(p).flat()).map((e) => e.id));
-const cleanRec = data.find((r) => !bisIds.has(r.id) && r.priority.length && rowFor(r.item));
+const cleanRec = data.find((r) => !bisIds.has(r.id)
+  && (zatarList.priorities[String(r.id)] || []).length && rowFor(r.item));
 const unmarked = rowFor(cleanRec.item);
 ok([...unmarked.children[3].querySelectorAll("img")].every((i) => !i.className.includes("--bis")),
    `an item absent from bis.json has no rings (${cleanRec.item})`);
@@ -909,45 +933,13 @@ ok(!doc.querySelector("#results").textContent.includes("*"),
 ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
    "rows with no markers render no rings");
 
-// --- seeded orderings, and the line they must not cross -------------------------------
-// Zul'Aman and Sunwell rows are seeded from their BiS lists, so the priority column says
-// something and the rings have icons to hang off. The risk is that a generated ordering
-// reads as one of zatar's, which is what CLAUDE.md section 8 forbids.
-{
-  const seeded = data.filter((r) => r.prioritySource === "bis");
-  ok(seeded.length > 0, `rows outside the guide are seeded from BiS (${seeded.length})`);
-  ok(seeded.every((r) => r.unsourced),
-     "every seeded row is still marked unsourced - the guide really did not cover it");
-  ok(seeded.every((r) => (r.priority || []).every((p, i) => i === 0 || p.op === "=")),
-     "and every seeded ordering is flat: nothing here ranks anyone above anyone");
-  ok(seeded.every((r) => (r.priority || []).every((p) => p.spec)),
-     "seeded entries name specs, since BiS is per spec");
+/* The seeded-ordering block stood here - eight assertions that generated lines were flat,
+   marked SEEDED, and never mistaken for zatar's. The 268 seeded rows are gone: each was
+   exactly the specs bis.json already lists, so they duplicated data the page draws as
+   rings. Seeding is an action on a list of your own now, and a line you asked for and
+   then ordered is yours, so there is nothing left to disclaim.
 
-  // his own rows must never acquire one
-  const his = data.filter((r) => !r.unsourced);
-  ok(his.every((r) => !r.prioritySource),
-     `none of the ${his.length} rows he covered carries a source - absent is what means "his"`);
-
-  // and the reader has to be able to see the difference, or the marker in the data is
-  // doing nothing for the person the attribution rule exists to protect
-  const marked = [...doc.querySelectorAll("#results tr[data-id]")]
-    .filter((tr) => tr.querySelector(".prio-from"));
-  const seededHere = data.filter((r) =>
-    r.prioritySource === "bis" &&
-    ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone));
-  ok(marked.length === seededHere.length,
-     `every seeded row on screen says where its ordering came from (${marked.length}/${seededHere.length})`);
-  ok(marked.every((tr) => tr.querySelector(".prio-from").textContent === "SEEDED"),
-     "and says it the same way on each");
-
-  // the guide's own rows carry nothing
-  const hisRows = [...doc.querySelectorAll("#results tr[data-id]")].filter((tr) => {
-    const rec = data.find((r) => String(r.id) === tr.dataset.id);
-    return rec && !rec.prioritySource && (rec.priority || []).length;
-  });
-  ok(hisRows.length > 0 && hisRows.every((tr) => !tr.querySelector(".prio-from")),
-     `and none of the ${hisRows.length} hand-ranked orderings is marked`);
-}
+   What replaced them is asserted below: the item data carries no priorities at all. */
 
 // --- rings follow the phase, and carry why ------------------------------------------
 // bis.json holds P3, P4 and P5 now. A ring has to mean "BiS for me in the phase I am
@@ -1013,7 +1005,8 @@ ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
   // A SPEC icon, deliberately. A class icon stands for several specs, and only carries a
   // qualifier when all of them agree on it - so it is the wrong place to check that the
   // qualifier reaches the tooltip at all.
-  const namesSpec = (rec, id) => (rec.priority || []).some((p) => p.spec === id);
+  const namesSpec = (rec, id) =>
+    (zatarList.priorities[String(rec.id)] || []).some((p) => p.spec === id);
   const q = withVariant.find((w) => namesSpec(w.rec, w.specId));
   ok(!!q, "some qualified entry sits on a row that names the spec itself");
   const icon = iconById(rowFor(q.rec.item), q.specId);
@@ -1053,33 +1046,29 @@ ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
      `a class icon carries no qualifier when its specs disagree (${disagreeing.length} checked)`);
 }
 
-// --- items the source guide never covered ---
-const P3_ZONES = ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"];
-const unsourced = data.filter((r) => r.unsourced && P3_ZONES.includes(r.zone));
-ok(unsourced.length === 13,
-   `13 of the guide's own phase are marked unsourced (got ${unsourced.length})`);
-// An unsourced row may now carry an ordering, but only one that says where it came
-// from. Without prioritySource it would read as one of his calls, which is the whole
-// thing CLAUDE.md section 8 forbids - check_priority.py makes that pairing an error.
-ok(unsourced.every((r) => r.priority.length === 0 || r.prioritySource),
-   "an unsourced record carries no priority unless it names a source for it");
-ok(data.every((r) => !r.prioritySource || r.unsourced),
-   "and nothing the guide did cover carries a source - absent is what means 'his'");
-ok(data.filter((r) => !r.unsourced).length === 182,
-   "the creator's original 182 are still exactly that");
+// --- the item data holds items, and nothing anybody ranked -------------------------
+/* `unsourced` and `prioritySource` are gone with the priorities they described. They
+   marked which rows the guide covered, which only meant something while his calls WERE
+   the item data. A list holds rankings; an item holds facts about an item. */
+ok(data.every((r) => !("unsourced" in r) && !("prioritySource" in r)),
+   "no item carries a flag about whose ranking it came with");
+ok(Object.keys(zatarList.priorities).length === 182,
+   `the creator's original 182 are still exactly that, in his own list (${Object.keys(zatarList.priorities).length})`);
+ok(Object.keys(zatarList.notes).length === 177,
+   `and his 177 notes travelled with them (${Object.keys(zatarList.notes).length})`);
+
+/* A handful of notes are facts about the ITEM rather than anybody's opinion of it -
+   "Also drops from Eredar Twins" - and those stayed behind. They show whatever list is
+   open, including none, because they are true either way. */
+{
+  const facts = data.filter((r) => r.notes);
+  ok(facts.length > 0 && facts.every((r) => /^(Also drops from|Drops from|Reputation reward)/.test(r.notes)),
+     `the notes left on items are facts about the item (${facts.length})`);
+}
 
 /* Nothing on screen frames a row as missing from a guide. The site carries several
    people's lists now and zatar's is one of them, so "not in the guide" named a
-   distinction that stopped being the site's organising idea. `unsourced` survives in
-   the data as plumbing - it is what unsourcedBis() and check_priority.py read - and
-   that split is the thing worth pinning: the flag lives, the framing does not. */
-ok(!doc.querySelector(".item-tag") && !doc.querySelector(".zone-tag--unsourced"),
-   "no row or zone is marked as missing from a guide");
-ok(!/not in the guide/i.test(appSource) && !/not in the guide/i.test(cssText),
-   "and the phrase is gone from the source, not merely unrendered");
-ok(unsourced.length > 0,
-   `the unsourced flag is still in the data, where the filter and the validator read it (${unsourced.length} rows)`);
-
+   distinction that stopped being the site's organising idea. */
 {
   const before = doc.getElementById("count").textContent;
   click(chipByText("#phase-chips", "Phase 5"));
@@ -1116,16 +1105,16 @@ ok(proseRows.length === 0,
 const blank = [...doc.querySelectorAll("tbody tr")]
   .filter((tr) => tr.children[3].textContent.trim() === "" &&
                   tr.children[3].querySelectorAll("img").length === 0);
-// The creator's own open calls, plus any of his phase's unsourced rows that BiS could
-// not seed either. Derived from the data rather than pinned: seeding moves this number
-// and a literal would fail for a reason that says nothing about rendering.
+/* His own "whoever needs it" calls, plus the rows of his phase his list does not hold at
+   all. Derived from the open list rather than pinned - a literal would fail for a reason
+   that says nothing about rendering. */
 const expectBlank = data.filter((r) =>
   ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone) &&
-  (r.priority || []).length === 0).length;
+  (zatarList.priorities[String(r.id)] || []).length === 0).length;
 ok(blank.length === expectBlank,
    `rows with nothing to say render an empty cell, not "undefined" (${expectBlank})`);
-ok(data.filter((r) => !r.priority.length && !r.unsourced).length === 23,
-   "23 of them are the creator's own 'whoever needs it' calls");
+ok(Object.values(zatarList.priorities).filter((p) => !p.length).length === 23,
+   "23 of them are the creator's own 'whoever needs it' calls - his list holds the key with an empty line");
 ok(!doc.body.textContent.includes("undefined"), "no undefined leaks from the empty strings");
 
 // searching still works even though the words are no longer displayed
@@ -1448,20 +1437,15 @@ const phasesWithItems = ["P1", "P2", "P3", "P4", "P5"].filter((id) => {
                   P4: ["Zul'Aman"], P5: ["Sunwell Plateau"] }[id];
   return data.some((r) => zones.includes(r.zone));
 });
-// The last phase carrying one of his CALLS, not merely one carrying items. Those were
-// the same thing until Zul'Aman and Sunwell arrived with no priorities at all, and
-// landing there would open the site on a page where the priority column is empty.
-const phasesWithCalls = phasesWithItems.filter((id) => {
-  const zones = { P1: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair"],
-                  P2: ["Serpentshrine Cavern", "Tempest Keep", "Crafted (Nether Vortex)"],
-                  P3: ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"],
-                  P4: ["Zul'Aman"], P5: ["Sunwell Plateau", "Crafted (Sunmote)"] }[id];
-  // his calls, not any ordering: the seeded ones carry a source and do not count
-  return data.some((r) => zones.includes(r.zone) && (r.priority || []).length &&
-                          !r.prioritySource);
-});
-ok(window.location.hash.includes("phase=" + phasesWithCalls[phasesWithCalls.length - 1]),
-   `the landing phase is the last one carrying his calls (${phasesWithCalls.join(", ")})`);
+/* The landing phase is CURRENT_PHASE, a hand-set constant meaning "the phase the game is
+   on". It used to derive "the last phase carrying zatar's calls", which worked only while
+   his calls WERE the item data - and every derivation available now is a proxy that will
+   eventually disagree with the world. Pinned against the source, because a stale constant
+   is exactly the thing that goes unnoticed for six months. */
+const current = (appSource.match(/var CURRENT_PHASE = "(P\d)"/) || [])[1];
+ok(!!current, `there is a named constant for the phase the game is on (${current})`);
+ok(window.location.hash.includes("phase=" + current),
+   `and the site lands on it (${window.location.hash})`);
 ok(/phase=P\d/.test(window.location.hash), `the phase is always in the url: ${window.location.hash}`);
 
 // an unknown phase in a link falls back rather than emptying the table
@@ -1791,8 +1775,8 @@ ok(rows().length === 21, `class=Mage -> 21 rows: 20 named + Band of the Eternal 
 const emptyPrioRows = rows().filter((tr) => tr.children[3].querySelectorAll("img.spec-icon").length === 0);
 ok(emptyPrioRows.every((tr) => {
   const rec = data.find((r) => tr.children[0].textContent.includes(r.item));
-  return rec && rec.unsourced;
-}), "the only priority-less rows shown are the ones nobody ranked");
+  return rec && !zatarList.priorities[String(rec.id)];
+}), "the only priority-less rows shown are ones the open list never mentions");
 ok(emptyPrioRows.every((tr) => {
   const rec = data.find((r) => tr.children[0].textContent.includes(r.item));
   return rec && Object.keys(bis.specs).some((id) => specs.specs[id].class === "Mage" &&
@@ -1910,9 +1894,12 @@ ok(itemNames().some((n) => n.includes("Band of the Eternal Champion")),
    "Survival sees the Band it is BiS for, even though no priority names it");
 // The column is no longer empty - it is seeded from BiS so the row says something - so
 // what keeps a placeholder from reading as a considered ordering is the marker.
+/* Reached through BiS precisely because his list does not mention it. Nothing invents an
+   ordering for it any more - the column stays empty, which is the honest rendering of
+   "he never ranked this". */
 const bandRec = data.find((r) => r.item === "Band of the Eternal Champion");
-ok(bandRec.unsourced && bandRec.prioritySource === "bis",
-   "and its ordering says it came from BiS, not from him");
+ok(!zatarList.priorities[String(bandRec.id)],
+   "and his list genuinely says nothing about it - the row is reached by BiS alone");
 
 click(doc.getElementById("reset"));
 click(chipByTip("#class-chips", "Paladin"));
@@ -1922,9 +1909,9 @@ ok(!itemNames().some((n) => n.includes("Band of the Eternal Champion")),
 
 // an unsourced item that is BiS for nobody is never pulled in by any filter
 click(doc.getElementById("reset"));
-const orphan = data.find((r) => r.unsourced &&
+const orphan = data.find((r) => !zatarList.priorities[String(r.id)] &&
   !Object.values(bis.specs).some((p) => Object.values(p).flat().some((e) => e.id === r.id)));
-ok(!!orphan, `an unsourced item exists that is BiS for nobody (${orphan && orphan.item})`);
+ok(!!orphan, `an item exists that no list ranks and that is BiS for nobody (${orphan && orphan.item})`);
 click(chipByTip("#class-chips", "Hunter"));
 ok(!itemNames().some((n) => n.includes(orphan.item)),
    `${orphan.item} is BiS for nobody, so no filter surfaces it`);
@@ -1943,7 +1930,8 @@ const catRows = rows().length;
 ok(catRows > 0, `picking cat still matches rows whose priority names FeralDruid (${catRows})`);
 ok(rows().some((tr) => {
   const rec = data.find((r) => tr.children[0].textContent.includes(r.item));
-  return rec && rec.priority.some((e) => e.spec === "FeralDruid" && !e.form);
+  return rec && (zatarList.priorities[String(rec.id)] || [])
+    .some((e) => e.spec === "FeralDruid" && !e.form);
 }), "an unqualified FeralDruid entry answers for whichever form is picked");
 click(doc.getElementById("reset"));
 

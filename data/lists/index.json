@@ -1,0 +1,12 @@
+{
+ "note": "The lists that ship with the site. Each is a starting point somebody can open and copy, not a baseline the page falls back to - nothing falls back any more. Adding one is a data edit: drop the file in, add a line here.",
+ "lists": [
+  {
+   "id": "zatar-p3",
+   "name": "Zatar's Phase 3",
+   "phase": "P3",
+   "author": "zatar",
+   "file": "zatar-p3.json"
+  }
+ ]
+}

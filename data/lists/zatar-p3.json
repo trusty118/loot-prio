@@ -1,0 +1,1970 @@
+{
+ "v": 1,
+ "id": "zatar-p3",
+ "name": "Zatar's Phase 3",
+ "created": "2026-08-26",
+ "base": "zatar",
+ "author": "zatar",
+ "phase": "P3",
+ "priorities": {
+  "32590": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   }
+  ],
+  "34010": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "FeralDruid",
+    "op": ">"
+   }
+  ],
+  "32609": [
+   {
+    "class": "Priest"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   }
+  ],
+  "32592": [
+   {
+    "spec": "Ele"
+   }
+  ],
+  "32591": [
+   {
+    "class": "Warrior"
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   }
+  ],
+  "32589": [
+   {
+    "spec": "Fire"
+   },
+   {
+    "spec": "DestroLock",
+    "op": "="
+   }
+  ],
+  "34009": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   }
+  ],
+  "32945": [
+   {
+    "class": "Rogue"
+   },
+   {
+    "class": "Hunter",
+    "op": "~="
+   }
+  ],
+  "30871": [
+   {
+    "class": "Priest"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   }
+  ],
+  "30870": [
+   {
+    "spec": "Arcane"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   }
+  ],
+  "30863": [
+   {
+    "class": "Warrior"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   }
+  ],
+  "30868": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
+  "30864": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "HolyPal",
+    "op": "="
+   }
+  ],
+  "30862": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
+  "30873": [],
+  "30866": [
+   {
+    "class": "Warrior"
+   }
+  ],
+  "30865": [
+   {
+    "class": "Rogue"
+   }
+  ],
+  "30872": [
+   {
+    "class": "Warlock"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   }
+  ],
+  "30884": [],
+  "30888": [
+   {
+    "class": "Mage"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   }
+  ],
+  "30885": [
+   {
+    "class": "Priest"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   }
+  ],
+  "30879": [
+   {
+    "spec": "Surv"
+   },
+   {
+    "spec": "BM",
+    "op": ">"
+   }
+  ],
+  "30886": [],
+  "30878": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
+  "30874": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
+  "30881": [
+   {
+    "class": "Rogue"
+   },
+   {
+    "spec": "Fury",
+    "op": ">"
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": "="
+   }
+  ],
+  "30883": [
+   {
+    "spec": "FeralDruid"
+   }
+  ],
+  "30882": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   }
+  ],
+  "30895": [
+   {
+    "class": "Priest"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   }
+  ],
+  "30916": [
+   {
+    "spec": "BalanceDruid"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   }
+  ],
+  "30894": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "class": "Warlock",
+    "op": "="
+   }
+  ],
+  "30917": [],
+  "30914": [
+   {
+    "spec": "BalanceDruid"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   }
+  ],
+  "30919": [
+   {
+    "spec": "Ret"
+   }
+  ],
+  "30892": [
+   {
+    "class": "Hunter"
+   }
+  ],
+  "30893": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   }
+  ],
+  "30918": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": ">"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   }
+  ],
+  "30889": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
+  "30899": [],
+  "30898": [
+   {
+    "class": "Rogue"
+   }
+  ],
+  "30900": [
+   {
+    "spec": "Surv"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": ">"
+   }
+  ],
+  "30896": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
+  "30897": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
+  "30901": [
+   {
+    "spec": "BM"
+   },
+   {
+    "spec": "Fury",
+    "op": ">"
+   }
+  ],
+  "31092": [
+   {
+    "class": "Warlock"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   }
+  ],
+  "31094": [
+   {
+    "class": "Hunter"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   }
+  ],
+  "31093": [
+   {
+    "spec": "FeralDruid"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   }
+  ],
+  "30905": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   }
+  ],
+  "30912": [
+   {
+    "class": "Priest"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   }
+  ],
+  "30907": [
+   {
+    "spec": "Ret"
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
+  "30904": [],
+  "30903": [
+   {
+    "class": "Warrior"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   }
+  ],
+  "30911": [
+   {
+    "class": "Priest"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   }
+  ],
+  "30910": [
+   {
+    "class": "Mage"
+   },
+   {
+    "class": "Warlock",
+    "op": "="
+   },
+   {
+    "spec": "ProtPal",
+    "op": ">"
+   }
+  ],
+  "30902": [
+   {
+    "spec": "Arms"
+   }
+  ],
+  "30908": [
+   {
+    "spec": "RestoDruid"
+   },
+   {
+    "class": "Priest",
+    "op": ">"
+   }
+  ],
+  "30909": [
+   {
+    "spec": "Ele"
+   },
+   {
+    "spec": "ProtPal",
+    "op": ">"
+   }
+  ],
+  "30906": [
+   {
+    "spec": "BM"
+   }
+  ],
+  "31097": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   }
+  ],
+  "31095": [
+   {
+    "spec": "Surv"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   },
+   {
+    "spec": "Arms",
+    "op": ">"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   }
+  ],
+  "31096": [
+   {
+    "spec": "FeralDruid"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   }
+  ],
+  "34012": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": ">"
+   }
+  ],
+  "32593": [
+   {
+    "spec": "FeralDruid"
+   }
+  ],
+  "32608": [
+   {
+    "class": "Warrior"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   }
+  ],
+  "32606": [],
+  "32526": [
+   {
+    "spec": "Ret"
+   }
+  ],
+  "32528": [
+   {
+    "spec": "RestoDruid"
+   },
+   {
+    "class": "Priest",
+    "op": ">"
+   },
+   {
+    "class": "Shaman",
+    "op": ">"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   }
+  ],
+  "32527": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   }
+  ],
+  "32943": [
+   {
+    "race": "Human",
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   }
+  ],
+  "34011": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   }
+  ],
+  "32239": [
+   {
+    "class": "Mage"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   }
+  ],
+  "32240": [
+   {
+    "spec": "RestoShaman"
+   }
+  ],
+  "32377": [
+   {
+    "class": "Rogue"
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
+  "32241": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   }
+  ],
+  "32234": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   }
+  ],
+  "32242": [
+   {
+    "spec": "Ele"
+   }
+  ],
+  "32232": [],
+  "32243": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
+  "32245": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   }
+  ],
+  "32238": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": ">"
+   }
+  ],
+  "32247": [
+   {
+    "class": "Warlock"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   }
+  ],
+  "32237": [
+   {
+    "spec": "Ele"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   },
+   {
+    "class": "Warlock",
+    "op": "="
+   }
+  ],
+  "32236": [
+   {
+    "race": "Orc",
+    "spec": "Fury"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   }
+  ],
+  "32248": [
+   {
+    "class": "Hunter"
+   }
+  ],
+  "32256": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   }
+  ],
+  "32259": [
+   {
+    "spec": "Ele"
+   }
+  ],
+  "32258": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   }
+  ],
+  "32250": [],
+  "32260": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   },
+   {
+    "spec": "Arms",
+    "op": ">"
+   }
+  ],
+  "32261": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "class": "Rogue",
+    "op": "="
+   }
+  ],
+  "32255": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": ">"
+   }
+  ],
+  "32253": [
+   {
+    "class": "Hunter"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   }
+  ],
+  "32262": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "race": "Human",
+    "class": "Warrior",
+    "op": ">"
+   }
+  ],
+  "32254": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
+  "32257": [
+   {
+    "class": "Druid"
+   }
+  ],
+  "32263": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
+  "32266": [
+   {
+    "class": "Rogue"
+   },
+   {
+    "spec": "FeralDruid",
+    "op": ">"
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   }
+  ],
+  "32265": [
+   {
+    "spec": "Ret"
+   }
+  ],
+  "32271": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
+  "32264": [
+   {
+    "class": "Hunter"
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   }
+  ],
+  "32275": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   }
+  ],
+  "32276": [
+   {
+    "spec": "Ele"
+   }
+  ],
+  "32279": [
+   {
+    "spec": "ProtPal"
+   }
+  ],
+  "32270": [],
+  "32361": [],
+  "32324": [
+   {
+    "class": "Rogue"
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   }
+  ],
+  "32328": [
+   {
+    "spec": "RestoDruid"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": ">"
+   }
+  ],
+  "32510": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   },
+   {
+    "class": "Warrior",
+    "op": "="
+   }
+  ],
+  "32280": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
+  "32512": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
+  "32330": [
+   {
+    "spec": "Ele"
+   }
+  ],
+  "32348": [
+   {
+    "spec": "Arms"
+   }
+  ],
+  "32326": [
+   {
+    "class": "Warrior"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   }
+  ],
+  "32325": [
+   {
+    "spec": "ProtWarr"
+   }
+  ],
+  "32341": [
+   {
+    "spec": "Fury"
+   },
+   {
+    "spec": "Arms",
+    "op": "="
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   }
+  ],
+  "32335": [
+   {
+    "class": "Warrior"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   }
+  ],
+  "32501": [
+   {
+    "spec": "FeralDruid"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   },
+   {
+    "spec": "ProtPal",
+    "op": ">"
+   }
+  ],
+  "32278": [
+   {
+    "spec": "Fury"
+   },
+   {
+    "spec": "Arms",
+    "op": ">"
+   }
+  ],
+  "32337": [
+   {
+    "class": "Druid"
+   },
+   {
+    "class": "Priest",
+    "op": "="
+   }
+  ],
+  "32338": [],
+  "32340": [],
+  "32334": [],
+  "32333": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "class": "Paladin",
+    "op": ">"
+   }
+  ],
+  "32353": [
+   {
+    "spec": "HolyPal"
+   },
+   {
+    "class": "Priest",
+    "op": ">"
+   }
+  ],
+  "32351": [
+   {
+    "spec": "BalanceDruid"
+   }
+  ],
+  "32347": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   },
+   {
+    "class": "Warrior",
+    "op": "="
+   },
+   {
+    "class": "Hunter",
+    "op": "="
+   },
+   {
+    "class": "Rogue",
+    "op": "="
+   }
+  ],
+  "32352": [
+   {
+    "spec": "BalanceDruid"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   }
+  ],
+  "32517": [],
+  "32346": [
+   {
+    "class": "Hunter"
+   }
+  ],
+  "32354": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
+  "32349": [
+   {
+    "class": "Warlock"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   }
+  ],
+  "32362": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "FeralDruid",
+    "op": ">"
+   }
+  ],
+  "32350": [],
+  "32332": [
+   {
+    "spec": "Ret"
+   }
+  ],
+  "32363": [
+   {
+    "class": "Priest"
+   }
+  ],
+  "32367": [
+   {
+    "spec": "Shadow"
+   }
+  ],
+  "32366": [
+   {
+    "spec": "Surv"
+   },
+   {
+    "spec": "BM",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "FeralDruid",
+    "form": "cat",
+    "op": ">"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   }
+  ],
+  "32365": [
+   {
+    "spec": "Fury"
+   }
+  ],
+  "32370": [
+   {
+    "spec": "HolyPal"
+   }
+  ],
+  "32368": [
+   {
+    "spec": "ProtPal"
+   }
+  ],
+  "32369": [
+   {
+    "class": "Rogue"
+   },
+   {
+    "race": "Human",
+    "spec": "ProtWarr",
+    "op": ">"
+   }
+  ],
+  "31101": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   }
+  ],
+  "31103": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   },
+   {
+    "spec": "Fury",
+    "op": ">"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   }
+  ],
+  "31102": [
+   {
+    "spec": "FeralDruid",
+    "form": "bear"
+   },
+   {
+    "class": "Rogue",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Fire",
+    "op": "="
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Arcane",
+    "op": "="
+   }
+  ],
+  "32519": [
+   {
+    "spec": "RestoDruid"
+   },
+   {
+    "class": "Priest",
+    "op": ">"
+   }
+  ],
+  "32331": [
+   {
+    "class": "Mage"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   }
+  ],
+  "32518": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
+  "32376": [
+   {
+    "spec": "BM"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "Surv",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   }
+  ],
+  "32373": [
+   {
+    "spec": "Fury"
+   },
+   {
+    "spec": "Arms",
+    "op": "="
+   }
+  ],
+  "32505": [
+   {
+    "spec": "Fury"
+   },
+   {
+    "spec": "Arms",
+    "op": "="
+   },
+   {
+    "spec": "BM",
+    "op": ">"
+   },
+   {
+    "spec": "Surv",
+    "op": "="
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   },
+   {
+    "spec": "FeralDruid",
+    "op": ">"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   }
+  ],
+  "31098": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "class": "Warlock",
+    "op": "="
+   },
+   {
+    "spec": "HolyPal",
+    "op": "="
+   },
+   {
+    "spec": "HolyPriest",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": "="
+   }
+  ],
+  "31100": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "BM",
+    "op": ">"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": "="
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "spec": "Arms",
+    "op": "="
+   }
+  ],
+  "31099": [
+   {
+    "spec": "FeralDruid"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": "="
+   }
+  ],
+  "32524": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "class": "Priest",
+    "op": ">"
+   },
+   {
+    "class": "Druid",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   }
+  ],
+  "32525": [
+   {
+    "spec": "Fire"
+   },
+   {
+    "class": "Warlock",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   }
+  ],
+  "32235": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   },
+   {
+    "spec": "Fury",
+    "op": ">"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   }
+  ],
+  "32521": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "ProtPal",
+    "op": ">"
+   }
+  ],
+  "32497": [
+   {
+    "class": "Rogue"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   },
+   {
+    "spec": "Arms",
+    "op": ">>"
+   },
+   {
+    "spec": "Fury",
+    "op": ">"
+   },
+   {
+    "class": "Hunter",
+    "op": "="
+   },
+   {
+    "spec": "FeralDruid",
+    "op": "="
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   }
+  ],
+  "32483": [
+   {
+    "class": "Warlock"
+   },
+   {
+    "class": "Mage",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   }
+  ],
+  "32496": [],
+  "32471": [],
+  "32500": [
+   {
+    "class": "Priest"
+   },
+   {
+    "spec": "RestoShaman",
+    "op": ">"
+   }
+  ],
+  "32374": [
+   {
+    "spec": "Shadow"
+   },
+   {
+    "class": "Warlock",
+    "op": "~>"
+   },
+   {
+    "class": "Mage",
+    "op": "="
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": "="
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   }
+  ],
+  "32375": [
+   {
+    "spec": "ProtWarr"
+   },
+   {
+    "spec": "ProtPal",
+    "op": ">"
+   }
+  ],
+  "32336": [
+   {
+    "spec": "Surv"
+   },
+   {
+    "spec": "BM",
+    "op": ">"
+   }
+  ],
+  "32837": [],
+  "32838": [],
+  "31089": [
+   {
+    "spec": "ProtPal"
+   },
+   {
+    "class": "Warlock",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPal",
+    "op": ">"
+   },
+   {
+    "spec": "Shadow",
+    "op": ">"
+   },
+   {
+    "spec": "HolyPriest",
+    "op": ">"
+   },
+   {
+    "spec": "Ret",
+    "op": ">"
+   }
+  ],
+  "31091": [
+   {
+    "spec": "RestoShaman"
+   },
+   {
+    "spec": "Ele",
+    "op": "="
+   },
+   {
+    "spec": "Arms",
+    "op": ">"
+   },
+   {
+    "spec": "Fury",
+    "op": "="
+   },
+   {
+    "class": "Hunter",
+    "op": ">"
+   },
+   {
+    "spec": "ProtWarr",
+    "op": ">"
+   },
+   {
+    "spec": "Enh",
+    "op": ">"
+   }
+  ],
+  "31090": [
+   {
+    "spec": "FeralDruid"
+   },
+   {
+    "class": "Rogue",
+    "op": ">"
+   },
+   {
+    "spec": "BalanceDruid",
+    "op": ">"
+   },
+   {
+    "spec": "RestoDruid",
+    "op": ">"
+   },
+   {
+    "spec": "Arcane",
+    "op": ">"
+   }
+  ],
+  "32586": [],
+  "32584": [],
+  "32577": [
+   {
+    "spec": "RestoShaman"
+   }
+  ],
+  "32582": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
+  "32574": [
+   {
+    "spec": "Enh"
+   },
+   {
+    "spec": "Ret",
+    "op": "="
+   }
+  ],
+  "32580": [
+   {
+    "spec": "Enh"
+   }
+  ],
+  "32568": [],
+  "32581": [
+   {
+    "spec": "Enh"
+   }
+  ],
+  "32587": [
+   {
+    "spec": "Shadow"
+   }
+  ],
+  "32585": [
+   {
+    "class": "Priest"
+   }
+  ],
+  "32583": [
+   {
+    "spec": "RestoDruid"
+   }
+  ],
+  "32579": [
+   {
+    "spec": "RestoShaman"
+   }
+  ]
+ },
+ "notes": {
+  "32590": "Caster hit cloak; BiS warlock single-target if they use the hit.",
+  "34010": "Prot-war cloak (no defense; ferals often want an armor cloak).",
+  "32609": "High healing; stamina makes it best on priest.",
+  "32592": "Weak; whoever. Elemental: if wanted.",
+  "32591": "BiS armor-pen neck; biggest upgrade / whoever has more armor pen.",
+  "32589": "Great for fire specs only.",
+  "34009": "Prot pally 1H (hit); a decent, not top-tier, caster mace.",
+  "32945": "Bad. Off-hand claw is 32946. Matches T5 enhance look. Hunter: novelty / stat-stick. Roughly equal.",
+  "30871": "BiS Longetivity Wrists.",
+  "30870": "BiS Arcane.",
+  "30863": "BiS Warrior.",
+  "30864": "Not BiS, give to whoever gets the biggest upgrade.",
+  "30862": "BiS for Holy-Light build.",
+  "30873": "Weak item.",
+  "30866": "Temp for Warrior if no Shoulderpads of the Stranger from Hydross.",
+  "30865": "Temp OH for Rogue. Weak item.",
+  "30872": "BiS Caster OH. Give to whoever isn't getting Zhar'doom.",
+  "30884": "Weak item. Niche Spell Pen use.",
+  "30888": "BiS mage crit belt.",
+  "30885": "Spirit/int; pedestrian.",
+  "30879": "BiS hunter belt UNLESS they need hit (then use the Reliquary belt / Boneweave).",
+  "30878": "Hold-over shoulders.",
+  "30874": "Rarely worth it over Mallet / expertise weapon. Prot Warrior: mitigation, niche.",
+  "30881": "Rogue only uses if no Talon of Azshara from Tidewalker. Survival wants 2x.",
+  "30883": "BiS feral staff (non-PvP).",
+  "30882": "BiS rsham shield.",
+  "30895": "Haste belt; druid if it reaches 113 haste.",
+  "30916": "Off-set caster legs used with the 4pc tier.",
+  "30894": "Niche item. Prot uses for threat, Lock uses if they need hit.",
+  "30917": "Often worse than T5.",
+  "30914": "Near-BiS boomkin haste belt.",
+  "30919": "Not great for Ret - only use if no Belt of One-Hundred Deaths from Vashj.",
+  "30892": "Slightly > T5 broken-set; +2% pet crit. Hunter: temp.",
+  "30893": "~Sunhawk; temp.",
+  "30918": "Crit healing mace.",
+  "30889": "Near-BiS prot-war shield; if you get this, pass Bulwark along.",
+  "30899": "Weak item.",
+  "30898": "Niche - weak item.",
+  "30900": "BiS several; BM's BiS if they can't get Cursed Vision.",
+  "30896": "Worse than T5. Prot Warrior: bad.",
+  "30897": "BiS holy-light belt.",
+  "30901": "BiS BM dagger for ArP. Fury can use as OH.",
+  "31092": "Azgalor. H Pal & Ret don't use tier gloves.",
+  "31094": "Azgalor. R Shaman 4pc skips gloves; warriors use offset gloves; enhance tier bad.",
+  "31093": "Mage only uses if they need hit. R Druid uses haste gloves instead.",
+  "30905": "BiS enhance/ret chest. (Was mislisted on the BT tab.)",
+  "30912": "BiS healer legs (druid has a leather alt). Caption said 'Paternity'.",
+  "30907": "Better for ret than hunter/enhance. Ret: temp.",
+  "30904": "Weak item.",
+  "30903": "Not BiS; biggest upgrade.",
+  "30911": "BiS healer off-hand (pair with a 1H). Druid uses a staff.",
+  "30910": "Contested caster 1H sword; pallies take a backseat.",
+  "30902": "BiS arms 2H (armor pen); not for Ret.",
+  "30908": "BiS resto druid staff.",
+  "30909": "BiS ele shield. Prot Paladin really only uses it for threat when speedrunning.",
+  "30906": "BiS BM bow (Survival takes the Illidan bow).",
+  "31097": "Archimonde. Warlock helm gives the wings effect.",
+  "31095": "Survival uses the tier helm over Cursed Vision. Fury only uses if targeting 4pc.",
+  "31096": "Rogue uses this if not getting Cursed Vision of Sargeras from Illidan.",
+  "34012": "Kael'thas cloak is better for Druid/Priest; take this for the mp5.",
+  "32593": "BiS bear mitigation. Not for cat.",
+  "32608": "Temp upgrade. Give to the warrior NOT getting Grips of Silent Justice.",
+  "32606": "Weak.",
+  "32526": "Least-contested haste ring. Give to biggest upgrade after Ret.",
+  "32528": "Healer haste ring. One haste ring each before doubling up. R Druid: if ->113 haste.",
+  "32527": "BiS for all casters. SPriest should get it first if it takes them over 146 haste, otherwise they are last prio.",
+  "32943": "Temp for a human Prot Warr waiting on Blade of Savagery. Temp OH for a Fury Warr, behind PvP Weps & Blade of Infamy.",
+  "34011": "Placeholder, not BiS.",
+  "32239": "BiS mage/warlock/boomkin/ele.",
+  "32240": "Give to biggest upgrade after Shaman.",
+  "32377": "Near-BiS. Don't confuse with Razorfury Mantle.",
+  "32241": "Near tier-helm value.",
+  "32234": "BiS enhance; tied with the leather haste-glove alt.",
+  "32242": "Ele mail caster boots; ~2nd to Slippers of the Seacaller.",
+  "32232": "Any Tank for full mitigation sets.",
+  "32245": "Don't disenchant. Good warrior mitigation too.",
+  "32247": "Great long-term hit ring. Mage: never.",
+  "32237": "Best non-Zhar'doom caster weapon.",
+  "32236": "BiS Orc Fury OH.",
+  "32248": "Too much hit; weak. Hunter: catch-up.",
+  "32256": "Near-BiS several; mage first on the crit belt.",
+  "32259": "2nd BiS ele.",
+  "32258": "Mail healing haste belt.",
+  "32250": "Tier 5 Shoulders are better, avoid.",
+  "32260": "BiS for Enhance & Rogues that need +Hit. Arms can use if they need +Hit.",
+  "32261": "Equal priority.",
+  "32255": "Healing crit shield; frees the Archimonde shield for shaman.",
+  "32262": "BiS for non-Orc Enhance - need 2x",
+  "32254": "BiS tank warrior; humans prefer Mother's fast mace. Prot Warrior: non-human.",
+  "32257": "Feral idol; whoever wants it.",
+  "32263": "No defense; awkward to fit. Prot Warrior: niche.",
+  "32266": "Complex; pairs with the Illidan ring. Rogue: no T5 ring. Feral: hit. Hunter: hit.",
+  "32265": "Weak; Vashj belt better. Ret: if no Vashj belt.",
+  "32271": "2nd BiS; no spirit so good for all healers.",
+  "32264": "Mail; temp upgrade. Ret: temp.",
+  "32275": "Not BiS but better than tier gloves individually.",
+  "32276": "BiS ele belt.",
+  "32279": "Well-itemized prot pally wrists.",
+  "32270": "Any caster needing the +Hit.",
+  "32361": "Any caster needing the +Hit.",
+  "32324": "Huge rogue wrist upgrade. Hunter: if needs hit.",
+  "32328": "BiS for both Druid & Shaman, but Shaman has a Mail alternative in Spiritwalker Gauntlets.",
+  "32510": "Underrated; enhance can use the mail option. Hunter: if needs hit.",
+  "32280": "Insane prot warrior gloves.",
+  "32512": "Plate healing haste belt.",
+  "32330": "BiS ele totem.",
+  "32348": "Weak item, give to undergeared players.",
+  "32326": "Warrior rage weapon.",
+  "32325": "Mitigation gun; good on Mother Shahraz.",
+  "32341": "Best off-set legs for 4pc-tier warriors.",
+  "32335": "BiS on most warrior lists.",
+  "32501": "Anti-crit for bears.",
+  "32278": "Not for 4pc; give to non-4set warriors. Fury: off-set.",
+  "32337": "On par with Kael'thas Cloak. Druid/Priest first.",
+  "32338": "Give to biggest upgrade. Weak item.",
+  "32340": "Give to biggest upgrade. Weak item.",
+  "32334": "Weak item. Hunters get more Agi more from Tier with gems.",
+  "32333": "Good mitigation if no Vashj belt.",
+  "32353": "BiS in the high-mana holy-light pally build. H Pal: regen build.",
+  "32351": "Weak caster wrists. Boomkin: temp.",
+  "32347": "BiS enhance (mail haste gloves).",
+  "32352": "mp5/sp/crit leather boots.",
+  "32517": "Weak item.",
+  "32346": "UNDERRATED - best hunter belt when you need hit. Don't DE / off-spec it.",
+  "32354": "~= tier helm; good hold-over.",
+  "32349": "Most casters use the Kael'thas neck instead. Boomkin: hit.",
+  "32362": "Prot warriors often use the PvP neck.",
+  "32350": "2nd best Healer OH.",
+  "32332": "2H mace; better for Ret than the Archimonde sword.",
+  "32363": "BiS healing wand over the Morgram wand.",
+  "32367": "Near-BiS for Shadow, give to whoever needs +Hit after.",
+  "32366": "BiS many; give to those who DON'T need hit.",
+  "32365": "Lots of hit; temp. Fury: temp.",
+  "32370": "Depends whether the PvP haste-healing neck ships. H Pal: or all healers if no PvP haste neck.",
+  "32368": "Prot pally relic.",
+  "32369": "Biggest single-item rogue upgrade outside glaives.",
+  "31101": "Mother Shahraz.",
+  "31103": "Prot Warriors should use the DPS version.",
+  "31102": "Mother Shahraz.",
+  "32519": "Best non-haste belt for druid/priest.",
+  "32331": "Best caster cloak if you ignore the Illidan healing cloak.",
+  "32518": "Bad; looks like a helm but is a shoulder.",
+  "32376": "2nd BiS several; enhance last.",
+  "32373": "Lots of hit; hold-over while waiting on Cursed Vision / 4pc. Arms: hold-over.",
+  "32505": "No internal cooldown = huge uptime.",
+  "31098": "Illidari Council.",
+  "31100": "Illidari Council.",
+  "31099": "Illidari Council.",
+  "32524": "BiS healer cloak all game. H Pal: Lock if speed-running.",
+  "32525": "Only ~BiS for fire mage. Warlocks only use this if they don't have Vestments of the Sea-witch from Vashj. Ele: temp.",
+  "32235": "BiS every physical DPS except feral.",
+  "32521": "Prot pally usually takes the tier helm for threat.",
+  "32497": "BiS all physical DPS but rogue/enhance gain far more. Much better for Rogue and Enhance than the rest.",
+  "32483": "One of the best items in the phase.",
+  "32496": "Mediocre vs active trinkets except for the mana. Give to the Healer who runs out of mana.",
+  "32471": "Little PvE use. Rogue can use in PvP.",
+  "32500": "Best heal weapon in game; <50% proc wasted on Druid/H Pal.",
+  "32374": "Biggest drama item; SPriest has the slight edge. Shadow Priest is only slightly ahead, due to being shafted for most of the expansion on loot, and this will buff your mage/healer group.",
+  "32375": "Warrior never unequips it.",
+  "32336": "BiS survival; give BM the other bow.",
+  "32837": "Give to the PLAYER not the CLASS.",
+  "32838": "Give to the PLAYER not the CLASS.",
+  "31089": "Warlocks only use this if they don't have Vestments of the Sea-witch from Vashj.",
+  "31091": "Prot Warriors should use the DPS version.",
+  "31090": "Illidan.",
+  "32586": "All casters except Mage.",
+  "32584": "Slightly Priest favoured, but any healer really.",
+  "32577": "CRAFTED (BoE). Mail haste wrists (shaman prefers these).",
+  "32582": "CRAFTED (BoE). Leather haste wrists. R Druid: to reach 113 haste.",
+  "32574": "CRAFTED (BoE). Mail haste wrists; tied with Swiftstrike Bracers.",
+  "32580": "CRAFTED (BoE). Tied with Bindings of Lightning Reflexes. Enhance: Rogue backup.",
+  "32568": "Mail version out-damages these even for Warr/Ret. Weak item.",
+  "32581": "CRAFTED (BoP). Also a leather option; both good for enhance. Enhance: BiS.",
+  "32587": "CRAFTED (BoP). Not BiS but a big jump for SPriest. Shadow Priest: haste breakpoint.",
+  "32585": "CRAFTED (BoP). Healer haste shoulders. Priest: early.",
+  "32583": "CRAFTED (BoP). Leather haste shoulders. R Druid: to reach 113 haste.",
+  "32579": "CRAFTED (BoP). Not BiS; tier preferred. R Shaman: temp."
+ }
+}

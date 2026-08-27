@@ -9,19 +9,28 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const data = JSON.parse(fs.readFileSync(path.join(root, "data/loot_data.json"), "utf8"));
 const specs = JSON.parse(fs.readFileSync(path.join(root, "data/specs.json"), "utf8"));
+const listIndex = JSON.parse(fs.readFileSync(path.join(root, "data/lists/index.json"), "utf8"));
+const zatarList = JSON.parse(fs.readFileSync(path.join(root, "data/lists/zatar-p3.json"), "utf8"));
 const fail = [];
 const ok = (c, m) => { console.log((c ? "PASS  " : "FAIL  ") + m); if (!c) fail.push(m); };
 
+/* Opens the bundled list, the way a link to it would - the priority column is empty
+   without one, and half of what is asserted below is that the icons still render when
+   bis.json fails. */
 async function boot(bisResponse) {
-  const dom = new JSDOM(html, { runScripts: "outside-only", url: "https://x.test/" });
+  const dom = new JSDOM(html, { runScripts: "outside-only",
+    url: "https://x.test/#list=zatar-p3" });
   const { window } = dom;
   window.console = { warn: () => {}, log: () => {} };
-  window.fetch = (url) =>
-    String(url).includes("bis.json") ? bisResponse() :
-    Promise.resolve({ ok: true, status: 200,
-      json: () => Promise.resolve(String(url).includes("specs.json") ? specs : data) });
+  window.fetch = (url) => {
+    const u = String(url);
+    if (u.includes("bis.json")) return bisResponse();
+    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
+      u.includes("lists/index.json") ? listIndex : u.includes("zatar-p3.json") ? zatarList
+      : u.includes("specs.json") ? specs : data) });
+  };
   window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
-  await until(() => window.document.querySelector("tbody tr"));
+  await until(() => window.document.querySelector("td.col-prio img.spec-icon"));
   return window.document;
 }
 
@@ -54,12 +63,17 @@ ok(doc.querySelectorAll("tbody tr").length === 195, "missing specs key -> table 
   bent.aliases["Wraith"] = { spec: "AlsoMissing", form: "cat" };
   bent.aliases["Empty"] = null;
 
-  const dom = new JSDOM(html, { runScripts: "outside-only", url: "https://x.test/" });
+  /* with the bundled list open, since an alias matches what a PRIORITY names and there
+     are no priorities without one */
+  const dom = new JSDOM(html, { runScripts: "outside-only", url: "https://x.test/#list=zatar-p3" });
   const { window } = dom;
   window.console = { warn: () => {}, log: () => {} };
-  window.fetch = (url) => Promise.resolve({ ok: true, status: 200,
-    json: () => Promise.resolve(String(url).includes("specs.json") ? bent
-                              : String(url).includes("bis.json") ? { specs: {} } : data) });
+  window.fetch = (url) => {
+    const u = String(url);
+    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
+      u.includes("lists/index.json") ? listIndex : u.includes("zatar-p3.json") ? zatarList
+      : u.includes("specs.json") ? bent : u.includes("bis.json") ? { specs: {} } : data) });
+  };
   window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
   await new Promise((r) => setTimeout(r, 400));
   const d = window.document;

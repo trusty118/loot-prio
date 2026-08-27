@@ -21,6 +21,7 @@
   var DATA_URL = "data/loot_data.json";
   var BIS_URL = "data/bis.json";
   var SPECS_URL = "data/specs.json";
+  var LISTS_URL = "data/lists/index.json";
 
   /* Encounter order per zone (the JSON is not in kill order). */
   /* Kill order per zone. The seven zones outside Phase 3 have no items yet, so their
@@ -146,36 +147,20 @@
     return phaseZones(id).filter(function (z) { return !!BOSS_ORDER[z]; });
   }
 
-  /* The phase to land on: the last one that actually has items. Derived rather than
-     hardcoded, so it follows the content - when Zul'Aman items arrive, Phase 4 becomes
-     the landing phase without anyone editing this. Needs ALL, so it cannot be a static
-     initialiser; state.phase is set from it once the data is in. */
-  /* The last phase carrying one of zatar's CALLS, not merely one carrying items.
-     Those were the same thing while only Phase 3 had loot; adding Zul'Aman and Sunwell
-     separated them, and "last with items" would land every first-time visitor on
-     Sunwell - a page whose priority column is empty on every row, because he never
-     covered it. The site exists to show his calls, so it opens where they are. Every
-     other phase is still one click away. */
+  /* THE PHASE THE GAME IS CURRENTLY ON. Bump this by hand when a new one releases -
+     roughly every six months - and nothing else needs touching.
+
+     Deliberately a constant rather than derived. Which phase is live in-game is a fact
+     about the world, and every derivation available in here is a proxy that eventually
+     disagrees with it: "the newest list that ships" breaks the day a Phase 5 guest list
+     arrives while the game is still on Phase 3, and "the last phase with items" already
+     points at Sunwell. This used to derive "the last phase carrying zatar's calls", which
+     worked only while his calls were the substrate - they are a list among lists now, and
+     the item data holds no priorities to count. */
+  var CURRENT_PHASE = "P3";
+
   function defaultPhase() {
-    for (var i = PHASES.length - 1; i >= 0; i--) {
-      var zones = PHASES[i].zones;
-      for (var j = 0; j < ALL.length; j++) {
-        /* His calls, not any priority. Zul'Aman and Sunwell rows carry a priority now
-           too - seeded from their BiS lists so the column is not blank - and counting
-           those would land the site on Sunwell again, which is the thing this rule
-           exists to prevent. prioritySource is what tells them apart. */
-        if (zones.indexOf(ALL[j].zone) !== -1 &&
-            (ALL[j].priority || []).length &&
-            !ALL[j].prioritySource) return PHASES[i].id;
-      }
-    }
-    /* no priorities at all - fall back to the last phase with any items */
-    for (var a = PHASES.length - 1; a >= 0; a--) {
-      for (var b = 0; b < ALL.length; b++) {
-        if (PHASES[a].zones.indexOf(ALL[b].zone) !== -1) return PHASES[a].id;
-      }
-    }
-    return PHASES[0].id;
+    return CURRENT_PHASE;
   }
 
   function phaseZones(id) {
@@ -530,21 +515,29 @@
     });
   }
 
-  /* A row nobody has ranked names nobody, so selectionHas() can never match it - but
-     the BiS data can, and these are real items. Without this, Band of the Eternal
-     Champion is BiS for eight physical specs and reachable from none of them.
+  /* With NO LIST OPEN nothing has a priority, so selectionHas() matches nothing and
+     picking a class would empty the table. The BiS data still knows who wants what, so
+     it answers instead: on a bare loot table, "Warrior" means the items that are BiS for
+     a Warrior spec.
 
-     `unsourced` is the data flag for "no ranking came with this row". Nothing on screen
-     says so any more - the empty priority column says it - but the flag is still what
-     marks which rows this bridge is for, and what check_priority.py requires before it
-     will accept a seeded ordering. */
-  function unsourcedBis(rec) {
-    if (!rec.unsourced) return false;
-    /* Only while reading a list you did not write. It bridges a gap in someone else's
-       ranking, so with a list of your own open there is no gap to bridge: those rows
-       have a priority column you control like any other, and letting them through a
-       filter the rest fail would make your own list lie about itself. */
-    if (activeTemplate) return false;
+     This began narrower - it bridged the rows nobody had ranked while zatar's calls were
+     the baseline. Removing the baseline made every row that case, so the flag it keyed
+     on went and the rule generalised.
+
+     Only while reading a list you did not write - which is what this rule always claimed
+     and never quite did. It used to test "no list open", and while zatar's calls were the
+     baseline those were the same thing; for a list arriving on a link they were not, so
+     the bridge was silently off there too. On a list of your OWN there is genuinely no gap
+     to bridge: every row has a priority column you control, and letting BiS through as
+     well would make your list look like it ranks items it does not. */
+  function bisOnlyMatch(rec) {
+    if (activeIsMine) return false;
+    /* Only where the list says NOTHING about the item - no key at all. A key holding an
+       empty line is a deliberate "whoever needs it", and 23 of zatar's are exactly that:
+       he answered, and the answer was nobody in particular. Bridging those would put a
+       row into a filter that asks "where do I stand in this line" when the author's point
+       was that there is no line. An absent key is the different thing: not an answer. */
+    if (activeTemplate && activeTemplate.priorities[rec.id]) return false;
     return SELECTED_SPECS.some(function (id) { return bisTier(id, rec.id); });
   }
 
@@ -787,13 +780,20 @@
     return !!activeTemplate && activeIsMine && state.editing;
   }
 
+  /* The open list's ordering, or nothing. There is no fall-back to the item data any
+     more, because the item data holds no priorities: a priority is something a LIST says,
+     and with no list open the column is honestly empty. Until Aug 2026 this fell through
+     to rec.priority - zatar's - which is what made him the substrate rather than an
+     option, and what made an item a template had never heard of quietly render his call
+     as if it were yours. */
   function effectivePriority(rec) {
-    if (activeTemplate) {
-      var own = activeTemplate.priorities[rec.id];
-      if (own) return own;
-    }
-    return rec.priority;
+    if (!activeTemplate) return EMPTY;
+    return activeTemplate.priorities[rec.id] || EMPTY;
   }
+
+  /* one shared empty array rather than a fresh [] per row per render - this is called
+     for every record on every update, and nothing mutates the result */
+  var EMPTY = [];
 
   /* The same overlay, for the notes column. A note you have written wins; absent means
      the guide's, which is why a template saved before notes existed still reads correctly
@@ -802,6 +802,10 @@
      Everything asking what a row SAYS goes through this, exactly as everything asking
      what it RANKS goes through effectivePriority - including the search haystack, or a
      search would keep finding wording you had already replaced. */
+  /* The same, for notes - with one difference. A handful of notes are facts about the
+     ITEM rather than anybody's opinion of it ("Also drops from Eredar Twins"), and those
+     stayed in the item data when the commentary left. They show whatever list is open,
+     including none, because they are true either way. A list's own note wins over them. */
   function effectiveNotes(rec) {
     if (activeTemplate && activeTemplate.notes) {
       var own = activeTemplate.notes[rec.id];
@@ -915,14 +919,6 @@
     Object.keys(priorities).forEach(function (id) {
       if ((priorities[id] || []).length) n++;
     });
-    return n;
-  }
-
-  /* zatar's own, which is not in any store: 159 of the 195. The other 36 are the rows
-     where his call was "whoever needs it" and the 13 the videos never covered. */
-  function zatarFilled() {
-    var n = 0;
-    ALL.forEach(function (rec) { if ((rec.priority || []).length) n++; });
     return n;
   }
 
@@ -1262,13 +1258,6 @@
     });
   }
 
-  function resetItem(rec) {
-    if (!activeTemplate || !activeIsMine) return;
-    applyEdit(rec, (rec.priority || []).map(function (e) {
-      var c = {}; Object.keys(e).forEach(function (k) { c[k] = e[k]; }); return c;
-    }));
-  }
-
   /* One note, written into the template. Never into ALL - the guide's own wording has to
      survive so a reset has something to go back to, which is the same reason the
      priorities are an overlay rather than an edit in place. */
@@ -1281,9 +1270,55 @@
     saveNow();
   }
 
-  function resetNote(rec) {
+  /* Clears YOUR note rather than restoring anybody's. The key is deleted rather than set
+     to "", so effectiveNotes() falls back properly - on the handful of rows carrying a
+     fact about the item ("Also drops from Eredar Twins") that fact reappears, which is
+     right, because it was never yours to overwrite in the first place. */
+  function clearNote(rec) {
+    if (!activeTemplate || !activeIsMine || !activeTemplate.notes) return;
+    if (!(rec.id in activeTemplate.notes)) return;
+    delete activeTemplate.notes[rec.id];
+    unsaved = true;
+    saveNow();
+  }
+
+  /* Fill the empty priorities on this phase from the BiS data - every spec that calls
+     the item best-in-slot, joined with "=" - as a starting point to drag into an order.
+
+     This is what the 268 stored SEEDED rows used to be. They were exactly this, computed
+     once and written into the item data, where they duplicated bis.json and had to carry
+     a tag explaining they were not anybody's ranking. As an action there is nothing to
+     disclaim: you asked for it, and what you do with the line afterwards is yours.
+
+     Two limits, both so it can only ever add. It touches the phase on screen, not the
+     whole dataset, because seeding 699 rows from one click is not something anyone means.
+     And it skips any row that already has a priority, so it cannot overwrite work. */
+  function seedFromBis() {
     if (!activeTemplate || !activeIsMine) return;
-    setNote(rec, rec.notes || "");
+    var zones = phaseZones(state.phase);
+    var order = Object.keys(REG.specs);
+    var filled = 0;
+
+    ALL.forEach(function (rec) {
+      if (zones.indexOf(rec.zone) === -1) return;
+      if ((activeTemplate.priorities[rec.id] || []).length) return;
+      var specs = order.filter(function (id) { return bisTier(id, rec.id); });
+      if (!specs.length) return;
+      activeTemplate.priorities[rec.id] = specs.map(function (id, i) {
+        return i ? { spec: id, op: "=" } : { spec: id };
+      });
+      filled++;
+    });
+
+    if (!filled) {
+      announce("Nothing to seed here - every item on this phase either has a priority "
+               + "already or is BiS for nobody");
+      return;
+    }
+    unsaved = true;
+    saveNow().then(refreshLists);
+    announce("Seeded " + filled + " items from BiS, all equal - drag to put them in order");
+    update();
   }
 
   /* ---------- sharing ----------
@@ -1506,7 +1541,7 @@
     /* class and spec are one facet: "spec" skips both, so the counts on either row
        are computed as if neither were applied */
     if (skip !== "spec") {
-      if (state.classes.length && !selectionHas(rec) && !unsourcedBis(rec)) return false;
+      if (state.classes.length && !selectionHas(rec) && !bisOnlyMatch(rec)) return false;
       /* "bis" skips only the BiS narrowing, so the toggle can count what it would leave */
       if (skip !== "bis" && state.bisOnly && state.specs.length &&
           !state.specs.some(function (id) { return bisTier(id, rec.id); })) return false;
@@ -1565,6 +1600,13 @@
   function writeUrl() {
     var p = new URLSearchParams();
     if (state.phase) p.set("phase", state.phase);
+    /* Which bundled list is open, by id. Only the bundled ones: they ship with the site,
+       so a recipient can be pointed at one instead of being sent a copy of it. A list of
+       your own has ?s= or #t= for that, and a list from a link already carries itself. */
+    if (activeTemplate && !activeIsMine
+        && OOTB.some(function (e) { return e.id === activeTemplate.id; })) {
+      p.set("list", activeTemplate.id);
+    }
     if (state.zone) p.set("zone", state.zone);
     if (state.boss) p.set("boss", state.boss);
     /* only "Trash" is ambiguous, so only it needs qualifying - the other 14 bosses
@@ -2238,16 +2280,11 @@
     });
     td.appendChild(add);
 
-    if (activeTemplate && rec.priority && rec.priority.length) {
-      var reset = document.createElement("button");
-      reset.type = "button";
-      reset.className = "prio-reset";
-      reset.textContent = "↺";
-      reset.dataset.tip = "Back to zatar's order";
-      reset.setAttribute("aria-label", "Reset " + rec.item + " to the guide's order");
-      reset.addEventListener("click", function () { resetItem(rec); update(); });
-      td.appendChild(reset);
-    }
+    /* There was a per-row "back to zatar's order" here. It reset to rec.priority, and
+       the item data holds no priorities now - there is no baseline to go back to, because
+       a priority is something a list says. Undoing a change means reopening the list you
+       copied from, or not saving; the button would have been a control that could only
+       ever clear the row. */
 
     return td;
   }
@@ -2778,24 +2815,11 @@
     }
     if (!list || !list.length) return td;
 
-    /* A line a script wrote, not one anybody ranked. seed_priority.py fills these from
-       the BiS lists - every spec that calls the item best-in-slot, joined with "=" -
-       so the column is not blank on the raids no guide covered. Flat and provisional,
-       and it has to say so, or a placeholder reads as a considered ordering.
-
-       It says SEEDED rather than BIS because the claim is about who did the ranking,
-       not where the data came from. That was always what it meant; naming it after its
-       source made it look like a statement about one particular guide, which it is not.
-
-       One muted word, on the rows it applies to. An earlier attempt put a tag and a
-       hover explanation on every group heading of two whole raids, which is furniture;
-       the fix was not to say nothing, it was to say it once, quietly, where it is true. */
-    if (rec.prioritySource === "bis") {
-      var from = document.createElement("span");
-      from.className = "prio-from";
-      from.textContent = "SEEDED";
-      td.appendChild(from);
-    }
+    /* The SEEDED tag stood here. It marked lines seed_priority.py wrote from the BiS
+       data, and those are gone: every one was exactly the specs bis.json already lists,
+       so they duplicated data the page draws as rings anyway. Seeding is an action on a
+       list of your own now - see seedFromBis() - and a line you seeded and then ordered
+       is yours, so there is nothing left to disclaim. */
 
     /* With a class or spec selected, everyone else in the line dims, so where you
        stand reads at a glance. Same idea as class-icon--muted on tier tokens; the
@@ -2942,16 +2966,16 @@
 
     td.appendChild(text);
 
-    /* Offered only while your note differs from his, the same rule .prio-reset follows.
-       On an unsourced row there is no note of his, so it reads as clearing yours. */
-    if ((rec.notes || "") !== effectiveNotes(rec)) {
+    /* Offered only where this list carries a note of its own. It clears yours; it does
+       not restore anyone else's, because there is no longer anyone else's to restore. */
+    if (activeTemplate.notes && (rec.id in activeTemplate.notes)) {
       var reset = document.createElement("button");
       reset.type = "button";
       reset.className = "note-reset";
       reset.textContent = "\u21BA";
-      reset.dataset.tip = rec.notes ? "Back to zatar's note" : "Clear this note";
-      reset.setAttribute("aria-label", "Reset the note on " + rec.item);
-      reset.addEventListener("click", function () { resetNote(rec); update(); });
+      reset.dataset.tip = "Clear this note";
+      reset.setAttribute("aria-label", "Clear the note on " + rec.item);
+      reset.addEventListener("click", function () { clearNote(rec); update(); });
       td.appendChild(reset);
     }
 
@@ -3364,7 +3388,9 @@
     if (el.tplLinkOut) el.tplLinkOut.hidden = true;
   }
 
-  function showZatar() { openTemplate(null, false); }
+  /* Back to no list open, which is now a real state rather than a synonym for zatar:
+     the loot table with an empty priority column. */
+  function closeList() { openTemplate(null, false); }
 
   function option(value, label) {
     var o = document.createElement("option");
@@ -3383,8 +3409,10 @@
   function renderTemplateBar() {
     if (!el.listTrigger) return;
 
+    /* No list open is a real state now, not a synonym for zatar's - the priority column
+       is empty and the trigger says so rather than naming somebody. */
     el.listTriggerName.textContent =
-      activeTemplate ? activeTemplate.name : "zatar's list";
+      activeTemplate ? activeTemplate.name : "No list";
 
     /* Disabled, never hidden, and the title says what to do about it - a control that
        vanishes teaches nothing. Weight stays constant across both states and the button
@@ -3660,17 +3688,34 @@
       });
     }
 
-    listMenu.appendChild(menuSection("Following"));
-    listMenu.appendChild(listRow("zatar's list", zatarFilled(), !activeTemplate, "by zatar",
-      function () { closeListMenu(); showZatar(); announce("Showing zatar's list"); update(); }));
+    /* The lists that ship with the site, for the phase on screen. zatar used to be
+       hardcoded here as THE thing you were following when no template was open; he is one
+       entry in data/lists/index.json now, and a phase with no bundled list simply shows
+       no rows here. */
+    var bundled = ootbForPhase();
+    if (bundled.length) {
+      listMenu.appendChild(menuSection("Starting points"));
+      bundled.forEach(function (entry) {
+        var loaded = ootbCache[entry.id];
+        listMenu.appendChild(listRow(
+          entry.name,
+          loaded ? filledCount(loaded.priorities) : null,
+          !!(activeTemplate && activeTemplate.id === entry.id),
+          entry.author ? "by " + entry.author : "",
+          function () { closeListMenu(); openOotb(entry); }));
+      });
+    }
+
     /* a list that arrived on a link is not in the store, so it needs a row of its own or
-       the menu would claim zatar's list was the one on screen.
+       the menu would claim a bundled list was the one on screen.
 
        This is where the credit CLAUDE.md section 8 promised actually lands: someone opens
        your link and the menu says whose calls they are reading. Only where the server
        attested it - see attestedAuthor(). Where it did not, the row falls back to saying
        how the list arrived rather than claiming a name nobody checked. */
-    if (activeTemplate && !activeIsMine) {
+    var isBundled = activeTemplate && OOTB.some(function (e) { return e.id === activeTemplate.id; });
+    if (activeTemplate && !activeIsMine && !isBundled) {
+      listMenu.appendChild(menuSection("Following"));
       var who = attestedAuthor(activeTemplate);
       listMenu.appendChild(listRow(activeTemplate.name, filledCount(activeTemplate.priorities),
         true, who ? "by " + who : "shared with you",
@@ -3685,7 +3730,7 @@
 
     listMenu.appendChild(document.createElement("hr"));
     listMenu.appendChild(menuSection(activeIsMine ? "This list" :
-      activeTemplate ? "Following " + activeTemplate.name : "zatar's list"));
+      activeTemplate ? activeTemplate.name : "No list open"));
 
     /* Said once, plainly, instead of silently offering fewer buttons and leaving the
        reader to notice what is missing. */
@@ -3693,19 +3738,23 @@
       var note = document.createElement("p");
       note.className = "lm-note";
       note.textContent = activeTemplate
-        ? "You're following this list. Make a copy to change anything."
-        : "zatar's calls, as published. Make a copy to build your own.";
+        ? "You're reading this list. Make a copy to change anything."
+        : "No list is open, so the priority column is empty. Open a starting point above, "
+          + "or make a new list.";
       listMenu.appendChild(note);
     }
 
     if (activeIsMine) {
+      listMenu.appendChild(menuItem("Seed empty rows from BiS", "", function () {
+        closeListMenu(); seedFromBis();
+      }));
       listMenu.appendChild(menuItem("Rename\u2026", "", function () {
         menuFace = "rename"; renderListMenu();
       }));
     }
     listMenu.appendChild(menuItem("Make a copy", "", function () {
       closeListMenu();
-      var from = activeTemplate ? activeTemplate.name : "zatar's list";
+      var from = activeTemplate ? activeTemplate.name : "the loot table";
       startList(copyOfCurrent("Copy of " + from), "Copied " + from);
     }));
     /* Nothing about sharing lives here any more. It has its own control on the bar and
@@ -3791,7 +3840,7 @@
     var doomed = activeTemplate;
     closeListMenu();
     store.remove(doomed.id).then(function () {
-      showZatar();
+      closeList();
       update();
       refreshLists();
       /* An undo is worth more than any confirm, which is why the confirm above can stay
@@ -3847,7 +3896,11 @@
     /* Nobody's list: the page itself, filters and all. location.hash already carries
        phase, zone, boss, class, spec and the search - "here is what I am looking at" is
        a real thing to send someone, and it is what the dead item was pretending to do. */
-    if (!activeTemplate) {
+    /* No list, or one that ships with the site: the page URL says it all. The hash
+       carries the phase, the filters and now list=, so the recipient opens exactly what
+       is on screen - and encoding a bundled list into #t= would send someone a 5,700
+       character copy of a list they already have. */
+    if (!activeTemplate || OOTB.some(function (e) { return e.id === activeTemplate.id; })) {
       return Promise.resolve(location.origin + location.pathname + location.hash);
     }
     var server = shareServerSide();
@@ -4294,6 +4347,63 @@
 
   /* BiS is decoration on top of the loot table, so it must never take the page
      down with it: a missing or malformed bis.json costs the rings, nothing else. */
+  /* ---------- the lists that ship with the site ----------
+     Starting points somebody can open and copy - zatar's Phase 3 calls today, guest
+     lists for other phases later. NOT a baseline: nothing falls back to them, and with
+     none open the priority column is empty.
+
+     Fails soft like bis.json. A missing or malformed index costs the options, not the
+     page, and one list failing to load costs that one. */
+
+  var OOTB = [];          /* index entries: id, name, phase, author, file */
+  var ootbCache = {};     /* id -> the loaded template */
+
+  function loadOotb() {
+    return fetch(LISTS_URL, FRESH)
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (doc) {
+        OOTB = (doc && doc.lists) || [];
+      })
+      .catch(function (err) {
+        if (window.console) console.warn("bundled lists unavailable:", err.message);
+        OOTB = [];
+      });
+  }
+
+  /* Loaded on demand and kept, so reopening one costs nothing. It goes through
+     validateTemplate() exactly as a shared list does - a file that ships with the site
+     is not more trustworthy than one that arrives on a link, it is just likelier to be
+     right, and the same validator catches the same mistakes. */
+  function openOotb(entry) {
+    if (ootbCache[entry.id]) { openTemplate(ootbCache[entry.id], false); update(); return; }
+    fetch("data/lists/" + entry.file, FRESH)
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (doc) {
+        var why = validateTemplate(doc);
+        if (why) throw new Error(why);
+        /* it came from this site's own files, so its author is attested the same way a
+           ?s= list's is - see attestedAuthor() */
+        doc.sharedFrom = "server";
+        ootbCache[entry.id] = doc;
+        openTemplate(doc, false);
+        announce("Opened " + doc.name);
+        update();
+      })
+      .catch(function (err) {
+        announce("That list would not open: " + err.message);
+      });
+  }
+
+  function ootbForPhase() {
+    return OOTB.filter(function (e) { return !e.phase || e.phase === state.phase; });
+  }
+
   function loadBis() {
     return fetch(BIS_URL, FRESH)
       .then(function (res) {
@@ -4329,12 +4439,22 @@
       return res.json();
     }),
     loadRegistry(),
-    loadBis()
+    loadBis(),
+    loadOotb()
   ])
     .then(function (results) {
       var data = results[0];
       ALL = data;
       readUrl();
+      /* A list= in the url opens that bundled list, so a link to "here is what I am
+         looking at" carries the calls as well as the filters. Read before update(), which
+         rewrites the hash from state and would drop it. An unknown id is ignored rather
+         than fatal - a link outliving a renamed list should cost the list, not the page. */
+      var wantList = new URLSearchParams(location.hash.replace(/^#/, "")).get("list");
+      if (wantList) {
+        var entry = OOTB.filter(function (e) { return e.id === wantList; })[0];
+        if (entry) openOotb(entry);
+      }
       el.search.value = state.q;
       bind();
       bindTips();
