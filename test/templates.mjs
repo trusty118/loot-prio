@@ -12,6 +12,10 @@ import { until, sleep } from "./helpers.mjs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
 const data = rd("loot_data.json"), bis = rd("bis.json"), specs = rd("specs.json");
+/* the lists that ship with the site - without these the page boots with no
+   starting points, and the priority column is empty on every row */
+const listIndex = JSON.parse(fs.readFileSync(path.join(root, "data", "lists", "index.json"), "utf8"));
+const zatarList = JSON.parse(fs.readFileSync(path.join(root, "data", "lists", "zatar-p3.json"), "utf8"));
 
 const fail = [];
 const ok = (c, m) => { console.log((c ? "PASS  " : "FAIL  ") + m); if (!c) fail.push(m); };
@@ -28,7 +32,8 @@ function boot(hash) {
   window.fetch = (u) => {
     const s = String(u);
     return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
-      s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
+      s.includes("lists/index.json") ? listIndex : s.includes("zatar-p3.json") ? zatarList
+      : s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
   };
   window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8").replace("})();", EXPOSE));
   return window;
@@ -64,11 +69,11 @@ const api = w.__api;
 const t = api.copyOfCurrent("Test list");
 ok(Object.keys(t.priorities).length === data.length,
    `a template is a full copy: ${Object.keys(t.priorities).length} of ${data.length} items`);
-ok(t.v === 1 && t.base === "zatar", "it records its version and what it forked from");
+ok(t.v === 1 && !!t.base, `it records its version and what it forked from (base: ${t.base})`);
 
 t.priorities["32375"] = api.addEntry(t.priorities["32375"], { spec: "Arms" });
-ok(JSON.stringify(data.find((r) => r.id === 32375).priority).indexOf("Arms") === -1,
-   "editing the copy does not reach the loaded data");
+ok(JSON.stringify(zatarList.priorities["32375"]).indexOf("Arms") === -1,
+   "editing the copy does not reach the list it came from");
 
 // --- a blank list is a template like any other ----------------------------------
 const blank = api.newBlankTemplate("Blank list");
@@ -152,7 +157,7 @@ shared.document.getElementById("list-trigger").click();
 const menu = shared.document.querySelector(".list-menu");
 ok([...menu.querySelectorAll(".lm-item")].some((b) => b.textContent.trim() === "Make a copy"),
    "Make a copy is how you keep it");
-ok(/following this list/i.test(menu.textContent),
+ok(/reading this list/i.test(menu.textContent),
    "and the menu says so plainly rather than silently offering fewer actions");
 
 console.log(fail.length ? `\n${fail.length} FAILURES` : "\nAll checks passed");

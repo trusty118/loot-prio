@@ -4,7 +4,7 @@
  * accessibility requirement and the only way this is testable at all - jsdom cannot
  * drag. Dragging is the pointer equivalent of the same actions and is checked by hand.
  *
- * The shape being asserted: zatar's list is reference, a list of your own is a
+ * The shape being asserted: a bundled list is reference, a list of your own is a
  * workspace, and you get one by pressing New or Make a copy.
  */
 import { JSDOM } from "jsdom";
@@ -16,6 +16,10 @@ import { until, sleep } from "./helpers.mjs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
 const data = rd("loot_data.json"), bis = rd("bis.json"), specs = rd("specs.json");
+/* the lists that ship with the site - without these the page boots with no
+   starting points, and the priority column is empty on every row */
+const listIndex = JSON.parse(fs.readFileSync(path.join(root, "data", "lists", "index.json"), "utf8"));
+const zatarList = JSON.parse(fs.readFileSync(path.join(root, "data", "lists", "zatar-p3.json"), "utf8"));
 const source = fs.readFileSync(path.join(root, "app.js"), "utf8");
 const cssText = fs.readFileSync(path.join(root, "style.css"), "utf8");
 const htmlText = fs.readFileSync(path.join(root, "index.html"), "utf8");
@@ -23,9 +27,15 @@ const htmlText = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const fail = [];
 const ok = (c, m) => { console.log((c ? "PASS  " : "FAIL  ") + m); if (!c) fail.push(m); };
 
+/* Defaults to opening the bundled list, the way a link to it would. zatar used to be the
+   baseline - "no list open" MEANT his calls - so these tests got them for free. He is a
+   starting point you open now, and with nothing open the priority column is legitimately
+   empty. Tests that pass their own hash (a #t= link) are opening their own list and get
+   no default. */
 function boot(hash) {
   const dom = new JSDOM(fs.readFileSync(path.join(root, "index.html"), "utf8"),
-    { runScripts: "outside-only", url: "https://x.test/loot-prio/" + (hash || "") });
+    { runScripts: "outside-only",
+      url: "https://x.test/loot-prio/" + (hash || "#list=zatar-p3") });
   const { window } = dom;
   // the platform bits jsdom lacks but every browser has
   Object.assign(window, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
@@ -34,7 +44,8 @@ function boot(hash) {
   window.fetch = (u) => {
     const s = String(u);
     return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
-      s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
+      s.includes("lists/index.json") ? listIndex : s.includes("zatar-p3.json") ? zatarList
+      : s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
   };
   window.eval(source);
   return window;
@@ -85,14 +96,14 @@ const w = boot();
 await settle(() => w.document.querySelector("tbody tr"));
 const d = w.document;
 
-// --- zatar's list is reference, not a workspace ---------------------------------
+// --- a bundled list is reference, not a workspace ---------------------------------
 ok(!d.querySelector(".prio-edit"), "the guide's rows are not editable");
 // Disabled rather than hidden: a control that vanishes teaches nothing, and the title
 // names the way out at the moment you went looking for it.
 ok(el(d, "edit-toggle").disabled, "Edit is disabled, not hidden, on a list that is not yours");
 ok(!el(d, "edit-toggle").hidden, "and it stays in the bar, so nothing reflows when it becomes usable");
 ok(/copy/i.test(el(d, "edit-toggle").title), `and says what to do about it: "${el(d, "edit-toggle").title}"`);
-ok(triggerName(d) === "zatar's list", `the trigger says whose list is on screen: "${triggerName(d)}"`);
+ok(triggerName(d) === "Zatar's Phase 3", `the trigger says whose list is on screen: "${triggerName(d)}"`);
 
 {
   const m = openMenu(w);
@@ -106,7 +117,7 @@ ok(triggerName(d) === "zatar's list", `the trigger says whose list is on screen:
      the first share control anyone meets was dead. */
   ok(!/Copy link|Share this|Stop sharing/.test(m.textContent),
      "and nothing about sharing is in this menu any more");
-  ok(/Make a copy to build your own/.test(m.textContent),
+  ok(/Make a copy to change anything/.test(m.textContent),
      "and it says in words why the other two are absent, rather than just omitting them");
   closeMenu(w);
 }
@@ -119,8 +130,8 @@ ok(Object.keys(copy.priorities).length === data.length,
    `a copy holds all ${data.length} priorities, not a diff (${Object.keys(copy.priorities).length})`);
 ok(JSON.stringify(copy.priorities[data[0].id]) === JSON.stringify(data[0].priority || []),
    "and they match the guide's");
-ok(copy.base === "zatar", `it records what it was copied from (base: ${copy.base})`);
-ok(copy.name === "Copy of zatar's list", `and names itself after it: "${copy.name}"`);
+ok(copy.base === "zatar-p3", `it records what it was copied from (base: ${copy.base})`);
+ok(copy.name === "Copy of Zatar's Phase 3", `and names itself after it: "${copy.name}"`);
 ok(!("dirty" in copy), "no scratch state is written into the store");
 ok(!el(d, "edit-toggle").disabled, "a list of your own makes Edit usable");
 ok(triggerName(d) === copy.name, `and the trigger names it: "${triggerName(d)}"`);
@@ -172,15 +183,20 @@ click(w, iconsIn(d, ITEM)[1].querySelector(".prio-x"));
 ok(namesIn(d, ITEM).join(",") === "Protection Warrior", "the x removes an icon");
 ok(opsIn(d, ITEM).length === 0, "and its operator goes with it");
 
-// --- the guide's data is never touched ------------------------------------------------
-const untouched = data.find((r) => r.item === ITEM).priority;
+// --- the list you copied FROM is never touched ----------------------------------------
+/* It used to be loot_data.json that had to survive editing, because his calls lived
+   there. They live in his own list now, and the rule is the same one: copyOfCurrent()
+   deep-copies, so editing your copy must not reach back into the thing it came from. */
+const untouched = zatarList.priorities[String(data.find((r) => r.item === ITEM).id)];
 ok(JSON.stringify(untouched) === JSON.stringify([{ spec: "ProtWarr" }, { spec: "ProtPal", op: ">" }]),
-   "loot_data.json in memory is unchanged - the template is an overlay");
+   "the bundled list in memory is unchanged - your copy is an overlay, not a reference");
 
-// --- reset ----------------------------------------------------------------------------
-click(w, rowFor(d, ITEM).querySelector(".prio-reset"));
-ok(namesIn(d, ITEM).join(",") === "Protection Warrior,Protection Paladin",
-   "reset puts the guide's order back");
+/* The per-row "back to zatar's order" reset stood here. It restored rec.priority, and the
+   item data holds no priorities now - there is no baseline to go back to, because a
+   priority is something a LIST says. A button that could only ever clear the row is worse
+   than no button. */
+ok(!d.querySelector(".prio-reset"),
+   "no per-row reset: there is no baseline ordering left to reset to");
 
 // --- the add popover, and the repeat rule ----------------------------------------------
 const UNIQUE = "Ring of Deceitful Intent";        // unique, Finger
@@ -329,7 +345,7 @@ click(w, el(d, "edit-toggle"));
 openMenu(w);
 click(w, act(w, "Rename\u2026"));
 const field = d.querySelector(".lm-field");
-ok(field && field.value === "Copy of zatar's list",
+ok(field && field.value === "Copy of Zatar's Phase 3",
    `Rename opens a field holding the current name: "${field && field.value}"`);
 field.value = "MM hunter list";
 key(w, field, "Enter");
@@ -341,8 +357,8 @@ ok(!d.querySelector(".list-menu[style*='block']"), "and the menu closes behind i
 // --- switching away and back ------------------------------------------------------------
 const mine = only(w).id;
 openMenu(w);
-await settle(() => row(w, "zatar's list"));
-click(w, row(w, "zatar's list"));
+await settle(() => row(w, "Zatar's Phase 3"));
+click(w, row(w, "Zatar's Phase 3"));
 await settle(() => !d.querySelector(".prio-edit") && el(d, "edit-toggle").disabled);
 ok(!d.querySelector(".prio-edit") && el(d, "edit-toggle").disabled,
    "back on the guide's list, nothing is editable again");
@@ -380,8 +396,8 @@ click(w, act(w, "Delete list\u2026"));
 click(w, act(w, "Delete"));
 await settle(() => !saved(w)[doomed]);
 ok(!saved(w)[doomed], "Delete removes it");
-ok(triggerName(d) === "zatar's list" && el(d, "edit-toggle").disabled,
-   "and drops back to the guide's list");
+ok(triggerName(d) === "No list" && el(d, "edit-toggle").disabled,
+   "and drops back to no list open - a real state now, not a synonym for zatar's");
 
 // an undo is worth more than any confirm, which is why the confirm can stay light
 const undo = el(d, "edit-msg").querySelector(".toast-undo");
@@ -445,11 +461,11 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
   const w5 = boot();
   await settle(() => w5.document.querySelector("tbody tr"));
   const d5 = w5.document;
-  const zatarRanked = data.filter((r) => (r.priority || []).length).length;
+  const zatarRanked = Object.values(zatarList.priorities).filter((p) => p.length).length;
 
   openMenu(w5);
-  ok(rowCount(w5, "zatar's list") === zatarRanked + " ranked",
-     `zatar's row counts the ${zatarRanked} he actually ranked, not all ${data.length} (got "${rowCount(w5, "zatar's list")}")`);
+  ok(rowCount(w5, "Zatar's Phase 3") === zatarRanked + " ranked",
+     `zatar's row counts the ${zatarRanked} he actually ranked, not all ${data.length} (got "${rowCount(w5, "Zatar's Phase 3")}")`);
   ok(zatarRanked < data.length,
      `and that is a different number from the dataset size, which is the whole point (${zatarRanked} < ${data.length})`);
   closeMenu(w5);
@@ -574,11 +590,12 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
     .find((tr) => tr.querySelector("td.col-notes").textContent.trim().length > 10);
   const item = noteRow.children[0].textContent.trim();
   const rec = data.find((r) => item.includes(r.item));
-  const his = rec.notes;
+  /* his wording lives in his list now, not on the item */
+  const his = zatarList.notes[String(rec.id)];
 
   const cell = (dd) => rowFor(dd, rec.item).querySelector("td.col-notes");
   ok(!cell(d7).querySelector(".note-text"),
-     "on the guide's list a note is text, not something you can click into");
+     "on a list that is not yours a note is text, not something you can click into");
 
   doMenu(w7, "Make a copy");
   await settle(() => only(w7) && only(w7).notes);
@@ -600,8 +617,8 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
 
   ok(only(w7).notes[rec.id] === MINE, "blur writes it to the store, with nothing pressed");
   ok(cell(d7).textContent.includes(MINE), "and the row now reads your wording");
-  ok(rec.notes === his && data.find((r) => r.id === rec.id).notes === his,
-     "the guide's own note is untouched - ALL is never mutated");
+  ok(zatarList.notes[String(rec.id)] === his,
+     "his own note is untouched - the list you copied from is never mutated");
 
   // Search reads the same overlay the cell does, or it would keep finding wording that
   // is no longer on the page.
@@ -626,16 +643,18 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
                        poll for "still MINE" would pass before Escape had done anything */
   ok(only(w7).notes[rec.id] === MINE, "Escape leaves the note as it was");
 
-  // One row back to his, without abandoning the list.
+  /* Clearing one note without abandoning the list. It clears YOURS - it does not restore
+     anybody else's, because with no baseline there is nobody else's to restore. */
+  const priosBefore = only(w7).priorities[rec.id].length;
   const reset = cell(d7).querySelector(".note-reset");
-  ok(reset, "a changed note offers a reset");
+  ok(reset, "a note of your own offers a way to clear it");
   click(w7, reset);
-  await settle(() => only(w7).notes[rec.id] === his);
-  ok(only(w7).notes[rec.id] === his, "which puts his wording back");
+  await settle(() => !(rec.id in (only(w7).notes || {})));
+  ok(!(rec.id in only(w7).notes), "which removes it from your list entirely");
   ok(!cell(d7).querySelector(".note-reset"),
-     "and the reset goes away, because there is nothing left to undo");
-  ok(only(w7).priorities[rec.id].length === (rec.priority || []).length,
-     "resetting a note does not touch the priority beside it");
+     "and the control goes away, because there is nothing left to clear");
+  ok(only(w7).priorities[rec.id].length === priosBefore,
+     "clearing a note does not touch the priority beside it");
 
   // A blank list is nobody's list, so it does not arrive carrying his words.
   doMenu(w7, "+  New list");

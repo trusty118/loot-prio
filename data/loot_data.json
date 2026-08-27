@@ -11,15 +11,7 @@
    "Caster",
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Ele"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -31,19 +23,7 @@
   "type": "Neck",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -56,10 +36,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -72,10 +49,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -87,10 +61,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -102,39 +73,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -146,15 +85,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "FeralBear"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -168,10 +99,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -183,15 +111,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -203,15 +123,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -223,15 +135,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "FeralCat"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -243,15 +147,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Surv"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -263,10 +159,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -278,23 +171,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "Shadow",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -306,15 +183,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "FeralCat"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -326,15 +195,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Surv"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -346,10 +207,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -361,23 +219,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "Shadow",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -389,10 +231,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -404,15 +243,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Surv"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -424,10 +255,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -440,9 +268,6 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -456,31 +281,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -493,19 +294,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -517,23 +306,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -546,10 +319,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -561,15 +331,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "FeralCat"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -582,10 +344,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -598,10 +357,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -614,10 +370,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -630,15 +383,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -650,19 +395,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -674,10 +407,7 @@
   "type": "Crossbow",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -690,15 +420,7 @@
   "roles": [
    "Tank"
   ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -710,39 +432,7 @@
   "type": "Neck",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Arcane"
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -755,10 +445,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -770,10 +457,7 @@
   "type": "Cloak",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -785,10 +469,7 @@
   "type": "Cloak",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -801,10 +482,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -816,47 +494,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -869,10 +507,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -885,15 +520,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -906,19 +533,7 @@
   "roles": [
    "Tank",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -931,9 +546,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -947,9 +559,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -962,15 +571,7 @@
   "type": "Neck",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -983,10 +584,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -998,10 +596,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1013,31 +608,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1049,15 +620,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1070,15 +633,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1091,15 +646,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1113,10 +660,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1129,10 +673,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1144,19 +685,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1170,9 +699,6 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -1186,15 +712,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -1207,15 +725,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -1227,15 +737,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Arcane"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1248,15 +750,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1270,10 +764,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1286,10 +777,7 @@
   "roles": [
    "Tank",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1302,15 +790,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -1322,23 +802,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Arcane"
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1350,10 +814,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1366,15 +827,7 @@
   "roles": [
    "Healer",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Surv"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1387,19 +840,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1412,10 +853,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1428,10 +866,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1444,9 +879,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -1459,10 +891,7 @@
   "type": "Gun",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1475,15 +904,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -1496,10 +917,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1512,23 +930,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -1540,10 +942,7 @@
   "type": "Sword",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1555,10 +954,7 @@
   "type": "Tier Token (Hunter/Mage/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1570,10 +966,7 @@
   "type": "Tier Token (Pal/Rogue/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1585,10 +978,7 @@
   "type": "Tier Token (War/Priest/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1601,39 +991,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -1646,10 +1004,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1662,10 +1017,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1678,10 +1030,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1694,19 +1043,7 @@
   "roles": [
    "Tank",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1718,23 +1055,7 @@
   "type": "Staff",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Fire"
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1747,19 +1068,7 @@
   "roles": [
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "Ele"
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -1773,9 +1082,6 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -1788,19 +1094,7 @@
   "type": "Cloak",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1813,10 +1107,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1829,19 +1120,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1853,10 +1132,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1869,15 +1145,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1891,10 +1159,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1907,10 +1172,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1922,10 +1184,7 @@
   "type": "Mace",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1937,10 +1196,7 @@
   "type": "Thrown",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -1953,19 +1209,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "FeralBear"
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -1978,15 +1222,7 @@
   "roles": [
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -1999,9 +1235,6 @@
   "roles": [
    "Tank"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -2014,10 +1247,7 @@
   "type": "Neck",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2029,43 +1259,7 @@
   "type": "Cloak",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2078,19 +1272,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2103,10 +1285,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2118,10 +1297,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2133,10 +1309,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2150,10 +1323,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2167,10 +1337,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2183,10 +1350,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2198,35 +1362,7 @@
   "type": "Wand",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Arcane"
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2239,19 +1375,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -2264,19 +1388,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2288,10 +1400,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2304,19 +1413,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2328,10 +1425,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2344,51 +1438,7 @@
   "roles": [
    "Tank",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2401,10 +1451,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2418,10 +1465,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2434,10 +1478,7 @@
   "roles": [
    "Tank",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2450,15 +1491,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2470,19 +1503,7 @@
   "type": "Sword",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2494,19 +1515,7 @@
   "type": "+19 Stamina",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Fire"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2520,39 +1529,7 @@
    "Caster",
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -2564,23 +1541,7 @@
   "type": "Neck",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2593,10 +1554,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2608,15 +1566,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2629,23 +1579,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2657,15 +1591,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Surv"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2678,15 +1604,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2698,15 +1616,7 @@
   "type": "Mail",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2720,15 +1630,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2741,15 +1643,7 @@
   "roles": [
    "Tank",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2762,10 +1656,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2778,15 +1669,7 @@
   "roles": [
    "Tank"
   ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -2798,10 +1681,7 @@
   "type": "Tier Token (Hunter/Mage/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2813,10 +1693,7 @@
   "type": "Tier Token (War/Priest/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2828,10 +1705,7 @@
   "type": "Tier Token (Pal/Rogue/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2843,10 +1717,7 @@
   "type": "Cloak",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2858,43 +1729,7 @@
   "type": "Cloak",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2907,31 +1742,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "Disc",
-    "op": "="
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -2944,27 +1755,7 @@
   "roles": [
    "Healer"
   ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -2977,47 +1768,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -3030,35 +1781,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3071,9 +1794,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -3088,39 +1808,7 @@
    "Caster",
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Karazhan",
@@ -3132,15 +1820,7 @@
   "type": "Axe",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3153,31 +1833,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "Disc",
-    "op": "="
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3189,10 +1845,7 @@
   "type": "Axe",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3204,43 +1857,7 @@
   "type": "Bow",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3252,27 +1869,7 @@
   "type": "Neck",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3285,10 +1882,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3301,10 +1895,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3316,10 +1907,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3333,10 +1921,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3349,10 +1934,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3364,27 +1946,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "ProtWarr",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3396,15 +1958,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3417,10 +1971,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3433,10 +1984,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3449,10 +1997,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Karazhan",
@@ -3464,10 +2009,7 @@
   "type": "Shield",
   "roles": [
    "Tank"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3479,10 +2021,7 @@
   "type": "Tier Token (Pal/Rogue/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3494,10 +2033,7 @@
   "type": "Tier Token (War/Priest/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3509,10 +2045,7 @@
   "type": "Tier Token (Hunter/Mage/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3525,27 +2058,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3557,15 +2070,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3577,15 +2082,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "FeralBear"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3598,10 +2095,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3613,23 +2107,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3642,10 +2120,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3657,10 +2132,7 @@
   "type": "Tier Token (Pal/Rogue/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3672,10 +2144,7 @@
   "type": "Tier Token (War/Priest/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3687,10 +2156,7 @@
   "type": "Tier Token (Hunter/Mage/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3703,19 +2169,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Gruul's Lair",
@@ -3728,47 +2182,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Ret"
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Gruul's Lair",
@@ -3781,23 +2195,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3809,10 +2207,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3825,10 +2220,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3840,27 +2232,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3873,10 +2245,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3888,10 +2257,7 @@
   "type": "Mail",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3903,19 +2269,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3929,31 +2283,7 @@
    "Caster",
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Gruul's Lair",
@@ -3965,10 +2295,7 @@
   "type": "Axe",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3980,10 +2307,7 @@
   "type": "Thrown",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Gruul's Lair",
@@ -3995,19 +2319,7 @@
   "type": "Shield",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4019,10 +2331,7 @@
   "type": "Tier Token (Pal/Rogue/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4034,10 +2343,7 @@
   "type": "Tier Token (War/Priest/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4049,10 +2355,7 @@
   "type": "Tier Token (Hunter/Mage/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4065,19 +2368,7 @@
   "roles": [
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   },
-   {
-    "spec": "Shadow",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4089,15 +2380,7 @@
   "type": "Cloak",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "FeralBear"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4109,15 +2392,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4129,23 +2404,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4159,10 +2418,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4174,10 +2430,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4189,23 +2442,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4217,10 +2454,7 @@
   "type": "Polearm",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4233,27 +2467,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4266,35 +2480,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arcane"
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4306,10 +2492,7 @@
   "type": "+23 Stamina",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Magtheridon's Lair",
@@ -4322,19 +2505,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4347,9 +2518,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -4362,27 +2530,7 @@
   "type": "Neck",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4395,9 +2543,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -4411,15 +2556,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4433,15 +2570,7 @@
    "Tank",
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "FeralBear"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4454,9 +2583,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -4471,9 +2597,6 @@
    "Tank",
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -4487,9 +2610,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -4503,43 +2623,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4551,10 +2635,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4566,19 +2647,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4591,19 +2660,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4615,43 +2672,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4664,10 +2685,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4680,19 +2698,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4705,10 +2711,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4720,10 +2723,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4736,35 +2736,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4777,9 +2749,6 @@
   "roles": [
    "Healer"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -4793,15 +2762,7 @@
   "roles": [
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4814,15 +2775,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Ret"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4834,10 +2787,7 @@
   "type": "Neck",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4850,31 +2800,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4886,15 +2812,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Arcane"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4906,10 +2824,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4923,14 +2838,7 @@
    "Healer",
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "Also drops from Leotheras the Blind.",
-  "unsourced": true,
-  "prioritySource": "bis"
+  "notes": "Also drops from Leotheras the Blind."
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4943,10 +2851,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4960,10 +2865,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -4975,23 +2877,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5005,15 +2891,7 @@
    "Tank",
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5025,10 +2903,7 @@
   "type": "Tier Token (Pal/Rogue/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5040,10 +2915,7 @@
   "type": "Tier Token (War/Priest/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5055,10 +2927,7 @@
   "type": "Tier Token (Hunter/Mage/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5071,23 +2940,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5100,19 +2953,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5125,10 +2966,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5141,15 +2979,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5161,19 +2991,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5187,35 +3005,7 @@
    "Caster",
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5227,10 +3017,7 @@
   "type": "Tier Token (Pal/Rogue/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5242,10 +3029,7 @@
   "type": "Tier Token (War/Priest/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5257,10 +3041,7 @@
   "type": "Tier Token (Hunter/Mage/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5273,9 +3054,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -5290,15 +3068,7 @@
    "Caster",
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Fire"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5310,15 +3080,7 @@
   "type": "Neck",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5331,19 +3093,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5355,35 +3105,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5395,10 +3117,7 @@
   "type": "Mace",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5412,19 +3131,7 @@
    "Caster",
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Arcane"
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5438,9 +3145,6 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -5454,15 +3158,7 @@
   "roles": [
    "Tank"
   ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5474,10 +3170,7 @@
   "type": "Neck",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5489,15 +3182,7 @@
   "type": "Cloak",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ret"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5509,10 +3194,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5525,10 +3207,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5541,10 +3220,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5557,10 +3233,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5572,23 +3245,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5601,10 +3258,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5617,31 +3271,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5654,19 +3284,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5678,10 +3296,7 @@
   "type": "Tier Token (Pal/Rogue/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5693,10 +3308,7 @@
   "type": "Tier Token (War/Priest/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5708,10 +3320,7 @@
   "type": "Tier Token (Hunter/Mage/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5724,9 +3333,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -5741,27 +3347,7 @@
    "Healer",
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "Disc",
-    "op": "="
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5775,39 +3361,7 @@
    "Caster",
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5819,39 +3373,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5864,10 +3386,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5879,51 +3398,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "ProtWarr",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5936,27 +3411,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ret"
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5968,15 +3423,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ret"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -5989,15 +3436,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Serpentshrine Cavern",
@@ -6010,9 +3449,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -6027,31 +3463,7 @@
    "Healer",
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "Disc",
-    "op": "="
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Tempest Keep",
@@ -6064,15 +3476,7 @@
   "roles": [
    "Tank"
   ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Tempest Keep",
@@ -6085,15 +3489,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Fire"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6105,10 +3501,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6121,10 +3514,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6137,19 +3527,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6162,10 +3540,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6178,19 +3553,7 @@
   "roles": [
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Tempest Keep",
@@ -6204,15 +3567,7 @@
    "Healer",
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Tempest Keep",
@@ -6224,19 +3579,7 @@
   "type": "Cloak",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6248,43 +3591,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6296,31 +3603,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "ProtWarr",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6334,10 +3617,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6349,15 +3629,7 @@
   "type": "Axe",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Surv"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6369,23 +3641,7 @@
   "type": "Fist",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6397,19 +3653,7 @@
   "type": "Fist",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6421,23 +3665,7 @@
   "type": "Gun",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Assass"
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6450,23 +3678,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "Disc",
-    "op": "="
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6479,9 +3691,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -6495,9 +3704,6 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -6510,10 +3716,7 @@
   "type": "Tier Token (Pal/Rogue/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6525,10 +3728,7 @@
   "type": "Tier Token (War/Priest/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6540,10 +3740,7 @@
   "type": "Tier Token (Hunter/Mage/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6555,10 +3752,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6571,15 +3765,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6592,10 +3778,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6607,10 +3790,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6622,15 +3802,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6643,23 +3815,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Assass"
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Tempest Keep",
@@ -6672,9 +3828,6 @@
   "roles": [
    "Healer"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -6688,15 +3841,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6709,10 +3854,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6724,39 +3866,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6770,27 +3880,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ret"
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6804,15 +3894,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6824,19 +3906,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6848,10 +3918,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6864,10 +3931,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6880,9 +3944,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -6896,15 +3957,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6917,35 +3970,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -6958,9 +3983,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -6974,9 +3996,6 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -6989,10 +4008,7 @@
   "type": "Tier Token (Pal/Rogue/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -7004,10 +4020,7 @@
   "type": "Tier Token (War/Priest/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -7019,10 +4032,7 @@
   "type": "Tier Token (Hunter/Mage/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -7035,55 +4045,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Tempest Keep",
@@ -7096,31 +4058,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "Disc",
-    "op": "="
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -7132,27 +4070,7 @@
   "type": "Cloak",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -7164,43 +4082,7 @@
   "type": "Cloak",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -7213,19 +4095,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Arcane"
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -7238,10 +4108,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -7253,35 +4120,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -7294,19 +4133,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -7318,19 +4145,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -7343,9 +4158,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -7359,31 +4171,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -7395,31 +4183,7 @@
   "type": "Sword",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7431,17 +4195,7 @@
   "type": "Cloak",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "class": "Warlock",
-    "op": ">"
-   }
-  ],
-  "notes": "Caster hit cloak; BiS warlock single-target if they use the hit."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7455,17 +4209,7 @@
    "Physical",
    "Caster",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "FeralDruid",
-    "op": ">"
-   }
-  ],
-  "notes": "Prot-war cloak (no defense; ferals often want an armor cloak)."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7477,17 +4221,7 @@
   "type": "Cloth",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "class": "Priest"
-   },
-   {
-    "spec": "RestoDruid",
-    "op": ">"
-   }
-  ],
-  "notes": "High healing; stamina makes it best on priest."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7499,13 +4233,7 @@
   "type": "Mail",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   }
-  ],
-  "notes": "Weak; whoever. Elemental: if wanted."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7518,17 +4246,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "class": "Warrior"
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   }
-  ],
-  "notes": "BiS armor-pen neck; biggest upgrade / whoever has more armor pen."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7541,16 +4259,6 @@
   "roles": [
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "Fire"
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   }
-  ],
-  "notes": "Great for fire specs only.",
   "unique": true
  },
  {
@@ -7564,25 +4272,7 @@
   "roles": [
    "Caster",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   },
-   {
-    "spec": "Shadow",
-    "op": ">"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "spec": "Ele",
-    "op": ">"
-   }
-  ],
-  "notes": "Prot pally 1H (hit); a decent, not top-tier, caster mace."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7594,17 +4284,7 @@
   "type": "Fist",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "class": "Rogue"
-   },
-   {
-    "class": "Hunter",
-    "op": "~="
-   }
-  ],
-  "notes": "Bad. Off-hand claw is 32946. Matches T5 enhance look. Hunter: novelty / stat-stick. Roughly equal."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7617,10 +4297,8 @@
   "roles": [
    "Tank"
   ],
-  "priority": [],
-  "unsourced": true,
-  "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "unique": true
+  "unique": true,
+  "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit."
  },
  {
   "zone": "Mount Hyjal",
@@ -7634,43 +4312,8 @@
    "Physical",
    "Tank"
   ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "unsourced": true,
-  "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
   "unique": true,
-  "prioritySource": "bis"
+  "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit."
  },
  {
   "zone": "Mount Hyjal",
@@ -7683,27 +4326,8 @@
   "roles": [
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "Ele"
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "unsourced": true,
-  "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
   "unique": true,
-  "prioritySource": "bis"
+  "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit."
  },
  {
   "zone": "Mount Hyjal",
@@ -7716,15 +4340,8 @@
   "roles": [
    "Healer"
   ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "unsourced": true,
-  "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit.",
   "unique": true,
-  "prioritySource": "bis"
+  "notes": "Reputation reward from the Scale of the Sands (Exalted), not a trash drop. Only one Band of Eternity can be equipped. Not covered in the source guide; added from the Phase 3 BiS audit."
  },
  {
   "zone": "Mount Hyjal",
@@ -7736,17 +4353,7 @@
   "type": "Cloth",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "class": "Priest"
-   },
-   {
-    "spec": "RestoDruid",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS Longetivity Wrists."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7758,25 +4365,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Arcane"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "spec": "Ele",
-    "op": ">"
-   },
-   {
-    "class": "Warlock",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS Arcane."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7788,17 +4377,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "class": "Warrior"
-   },
-   {
-    "spec": "Enh",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS Warrior."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7810,13 +4389,7 @@
   "type": "Leather",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": ""
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7828,17 +4401,7 @@
   "type": "Mail",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   },
-   {
-    "spec": "HolyPal",
-    "op": "="
-   }
-  ],
-  "notes": "Not BiS, give to whoever gets the biggest upgrade."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7850,13 +4413,7 @@
   "type": "Plate",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "BiS for Holy-Light build."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7868,9 +4425,7 @@
   "type": "Mail",
   "roles": [
    "Healer"
-  ],
-  "priority": [],
-  "notes": "Weak item."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7882,13 +4437,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "class": "Warrior"
-   }
-  ],
-  "notes": "Temp for Warrior if no Shoulderpads of the Stranger from Hydross."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7901,12 +4450,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "class": "Rogue"
-   }
-  ],
-  "notes": "Temp OH for Rogue. Weak item.",
   "unique": true
  },
  {
@@ -7919,21 +4462,7 @@
   "type": "Off-hand",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "class": "Warlock"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   },
-   {
-    "class": "Mage",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS Caster OH. Give to whoever isn't getting Zhar'doom."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7945,19 +4474,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   }
-  ],
-  "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7969,9 +4486,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "Weak item. Niche Spell Pen use."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -7983,21 +4498,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "class": "Mage"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "class": "Warlock",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS mage crit belt."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8009,17 +4510,7 @@
   "type": "Cloth",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "class": "Priest"
-   },
-   {
-    "spec": "RestoDruid",
-    "op": ">"
-   }
-  ],
-  "notes": "Spirit/int; pedestrian."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8031,17 +4522,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Surv"
-   },
-   {
-    "spec": "BM",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS hunter belt UNLESS they need hit (then use the Reliquary belt / Boneweave)."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8053,9 +4534,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": ""
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8067,13 +4546,7 @@
   "type": "Plate",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "Hold-over shoulders."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8086,13 +4559,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "Rarely worth it over Mallet / expertise weapon. Prot Warrior: mitigation, niche."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8104,25 +4571,7 @@
   "type": "1H Sword",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "class": "Rogue"
-   },
-   {
-    "spec": "Fury",
-    "op": ">"
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   }
-  ],
-  "notes": "Rogue only uses if no Talon of Azshara from Tidewalker. Survival wants 2x."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8135,13 +4584,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "FeralDruid"
-   }
-  ],
-  "notes": "BiS feral staff (non-PvP)."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8153,17 +4596,7 @@
   "type": "Shield",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   },
-   {
-    "spec": "HolyPal",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS rsham shield."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8175,17 +4608,7 @@
   "type": "Cloth",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "class": "Priest"
-   },
-   {
-    "spec": "RestoDruid",
-    "op": ">"
-   }
-  ],
-  "notes": "Haste belt; druid if it reaches 113 haste."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8197,21 +4620,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "BalanceDruid"
-   },
-   {
-    "spec": "Ele",
-    "op": ">"
-   },
-   {
-    "spec": "Shadow",
-    "op": ">"
-   }
-  ],
-  "notes": "Off-set caster legs used with the 4pc tier."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8223,17 +4632,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   },
-   {
-    "class": "Warlock",
-    "op": "="
-   }
-  ],
-  "notes": "Niche item. Prot uses for threat, Lock uses if they need hit."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8245,9 +4644,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "Often worse than T5."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8259,17 +4656,7 @@
   "type": "Leather",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "BalanceDruid"
-   },
-   {
-    "spec": "Ele",
-    "op": ">"
-   }
-  ],
-  "notes": "Near-BiS boomkin haste belt."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8281,13 +4668,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ret"
-   }
-  ],
-  "notes": "Not great for Ret - only use if no Belt of One-Hundred Deaths from Vashj."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8299,13 +4680,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "class": "Hunter"
-   }
-  ],
-  "notes": "Slightly > T5 broken-set; +2% pet crit. Hunter: temp."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8317,17 +4692,7 @@
   "type": "Mail",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   },
-   {
-    "spec": "HolyPal",
-    "op": ">"
-   }
-  ],
-  "notes": "~Sunhawk; temp."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8339,25 +4704,7 @@
   "type": "Mace",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "RestoShaman",
-    "op": ">"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": ">"
-   },
-   {
-    "spec": "RestoDruid",
-    "op": ">"
-   }
-  ],
-  "notes": "Crit healing mace."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8369,13 +4716,7 @@
   "type": "Shield",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "Near-BiS prot-war shield; if you get this, pass Bulwark along."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8387,9 +4728,7 @@
   "type": "Leather",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "Weak item."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8401,13 +4740,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "class": "Rogue"
-   }
-  ],
-  "notes": "Niche - weak item."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8419,25 +4752,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Surv"
-   },
-   {
-    "spec": "Enh",
-    "op": ">"
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS several; BM's BiS if they can't get Cursed Vision."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8450,13 +4765,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "Worse than T5. Prot Warrior: bad."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8468,13 +4777,7 @@
   "type": "Plate",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "BiS holy-light belt."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8487,16 +4790,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Fury",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS BM dagger for ArP. Fury can use as OH.",
   "unique": true
  },
  {
@@ -8509,21 +4802,7 @@
   "type": "Tier Token (Pal/Priest/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "class": "Warlock"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": ">"
-   },
-   {
-    "spec": "Shadow",
-    "op": ">"
-   }
-  ],
-  "notes": "Azgalor. H Pal & Ret don't use tier gloves."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8535,17 +4814,7 @@
   "type": "Tier Token (War/Hunter/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "class": "Hunter"
-   },
-   {
-    "spec": "Ele",
-    "op": ">"
-   }
-  ],
-  "notes": "Azgalor. R Shaman 4pc skips gloves; warriors use offset gloves; enhance tier bad."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8557,25 +4826,7 @@
   "type": "Tier Token (Rogue/Mage/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "spec": "FeralDruid"
-   },
-   {
-    "class": "Rogue",
-    "op": ">"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "class": "Mage",
-    "op": ">"
-   }
-  ],
-  "notes": "Mage only uses if they need hit. R Druid uses haste gloves instead."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8587,17 +4838,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   },
-   {
-    "spec": "Ret",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS enhance/ret chest. (Was mislisted on the BT tab.)"
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8609,17 +4850,7 @@
   "type": "Cloth",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "class": "Priest"
-   },
-   {
-    "spec": "RestoDruid",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS healer legs (druid has a leather alt). Caption said 'Paternity'."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8631,21 +4862,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ret"
-   },
-   {
-    "class": "Hunter",
-    "op": ">"
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   }
-  ],
-  "notes": "Better for ret than hunter/enhance. Ret: temp."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8657,9 +4874,7 @@
   "type": "Plate",
   "roles": [
    "Healer"
-  ],
-  "priority": [],
-  "notes": "Weak item."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8671,17 +4886,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "class": "Warrior"
-   },
-   {
-    "spec": "Ret",
-    "op": ">"
-   }
-  ],
-  "notes": "Not BiS; biggest upgrade."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8693,17 +4898,7 @@
   "type": "Off-hand",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "class": "Priest"
-   },
-   {
-    "spec": "RestoDruid",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS healer off-hand (pair with a 1H). Druid uses a staff."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8717,20 +4912,6 @@
    "Caster",
    "Tank"
   ],
-  "priority": [
-   {
-    "class": "Mage"
-   },
-   {
-    "class": "Warlock",
-    "op": "="
-   },
-   {
-    "spec": "ProtPal",
-    "op": ">"
-   }
-  ],
-  "notes": "Contested caster 1H sword; pallies take a backseat.",
   "unique": true
  },
  {
@@ -8743,13 +4924,7 @@
   "type": "2H Sword",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   }
-  ],
-  "notes": "BiS arms 2H (armor pen); not for Ret."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8761,17 +4936,7 @@
   "type": "2H Staff",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   },
-   {
-    "class": "Priest",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS resto druid staff."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8784,17 +4949,7 @@
   "roles": [
    "Caster",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   },
-   {
-    "spec": "ProtPal",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS ele shield. Prot Paladin really only uses it for threat when speedrunning."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8806,13 +4961,7 @@
   "type": "Bow",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "BM"
-   }
-  ],
-  "notes": "BiS BM bow (Survival takes the Illidan bow)."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8824,33 +4973,7 @@
   "type": "Tier Token (Pal/Priest/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   },
-   {
-    "class": "Warlock",
-    "op": ">"
-   },
-   {
-    "spec": "HolyPal",
-    "op": ">"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": ">"
-   },
-   {
-    "spec": "Shadow",
-    "op": ">"
-   },
-   {
-    "spec": "Ret",
-    "op": ">"
-   }
-  ],
-  "notes": "Archimonde. Warlock helm gives the wings effect."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8862,33 +4985,7 @@
   "type": "Tier Token (War/Hunter/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "spec": "Surv"
-   },
-   {
-    "spec": "Ele",
-    "op": ">"
-   },
-   {
-    "spec": "Arms",
-    "op": ">"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": ">"
-   },
-   {
-    "spec": "ProtWarr",
-    "op": ">"
-   }
-  ],
-  "notes": "Survival uses the tier helm over Cursed Vision. Fury only uses if targeting 4pc."
+  ]
  },
  {
   "zone": "Mount Hyjal",
@@ -8900,29 +4997,7 @@
   "type": "Tier Token (Rogue/Mage/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "spec": "FeralDruid"
-   },
-   {
-    "class": "Rogue",
-    "op": ">"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "spec": "RestoDruid",
-    "op": ">"
-   },
-   {
-    "class": "Mage",
-    "op": ">"
-   }
-  ],
-  "notes": "Rogue uses this if not getting Cursed Vision of Sargeras from Illidan."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -8934,17 +5009,7 @@
   "type": "Cloak",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "RestoShaman",
-    "op": ">"
-   }
-  ],
-  "notes": "Kael'thas cloak is better for Druid/Priest; take this for the mp5."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -8957,13 +5022,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "FeralDruid"
-   }
-  ],
-  "notes": "BiS bear mitigation. Not for cat."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -8975,17 +5034,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "class": "Warrior"
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   }
-  ],
-  "notes": "Temp upgrade. Give to the warrior NOT getting Grips of Silent Justice."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -8997,9 +5046,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "Weak."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9011,13 +5058,7 @@
   "type": "Ring",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ret"
-   }
-  ],
-  "notes": "Least-contested haste ring. Give to biggest upgrade after Ret."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9029,29 +5070,7 @@
   "type": "Ring",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   },
-   {
-    "class": "Priest",
-    "op": ">"
-   },
-   {
-    "class": "Shaman",
-    "op": ">"
-   },
-   {
-    "spec": "RestoDruid",
-    "op": ">"
-   },
-   {
-    "spec": "HolyPal",
-    "op": ">"
-   }
-  ],
-  "notes": "Healer haste ring. One haste ring each before doubling up. R Druid: if ->113 haste."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9063,29 +5082,7 @@
   "type": "Ring",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "class": "Warlock",
-    "op": ">"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "class": "Mage",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS for all casters. SPriest should get it first if it takes them over 146 haste, otherwise they are last prio."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9097,18 +5094,7 @@
   "type": "1H Mace",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "race": "Human",
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   }
-  ],
-  "notes": "Temp for a human Prot Warr waiting on Blade of Savagery. Temp OH for a Fury Warr, behind PvP Weps & Blade of Infamy."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9120,17 +5106,7 @@
   "type": "Shield",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   },
-   {
-    "spec": "Ele",
-    "op": ">"
-   }
-  ],
-  "notes": "Placeholder, not BiS."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9142,29 +5118,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "class": "Mage"
-   },
-   {
-    "class": "Warlock",
-    "op": ">"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "spec": "Ele",
-    "op": ">"
-   },
-   {
-    "spec": "Shadow",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS mage/warlock/boomkin/ele."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9176,13 +5130,7 @@
   "type": "Leather",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   }
-  ],
-  "notes": "Give to biggest upgrade after Shaman."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9194,17 +5142,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "class": "Rogue"
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   }
-  ],
-  "notes": "Near-BiS. Don't confuse with Razorfury Mantle."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9216,17 +5154,7 @@
   "type": "Mail",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   },
-   {
-    "spec": "HolyPal",
-    "op": ">"
-   }
-  ],
-  "notes": "Near tier-helm value."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9238,21 +5166,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   },
-   {
-    "class": "Hunter",
-    "op": ">"
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   }
-  ],
-  "notes": "BiS enhance; tied with the leather haste-glove alt."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9264,13 +5178,7 @@
   "type": "Mail",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   }
-  ],
-  "notes": "Ele mail caster boots; ~2nd to Slippers of the Seacaller."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9284,9 +5192,7 @@
    "Physical",
    "Caster",
    "Tank"
-  ],
-  "priority": [],
-  "notes": "Any Tank for full mitigation sets."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9298,13 +5204,7 @@
   "type": "Plate",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": ""
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9317,17 +5217,7 @@
   "roles": [
    "Caster",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   },
-   {
-    "spec": "ProtWarr",
-    "op": ">"
-   }
-  ],
-  "notes": "Don't disenchant. Good warrior mitigation too."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9340,16 +5230,6 @@
   "roles": [
    "Healer"
   ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "RestoShaman",
-    "op": ">"
-   }
-  ],
-  "notes": "",
   "unique": true
  },
  {
@@ -9363,28 +5243,6 @@
   "roles": [
    "Caster"
   ],
-  "priority": [
-   {
-    "class": "Warlock"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "spec": "Shadow",
-    "op": ">"
-   },
-   {
-    "spec": "Ele",
-    "op": ">"
-   },
-   {
-    "class": "Mage",
-    "op": ">"
-   }
-  ],
-  "notes": "Great long-term hit ring. Mage: never.",
   "unique": true
  },
  {
@@ -9397,29 +5255,7 @@
   "type": "Dagger",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "spec": "Shadow",
-    "op": ">"
-   },
-   {
-    "class": "Mage",
-    "op": ">"
-   },
-   {
-    "class": "Warlock",
-    "op": "="
-   }
-  ],
-  "notes": "Best non-Zhar'doom caster weapon."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9432,21 +5268,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "race": "Orc",
-    "spec": "Fury"
-   },
-   {
-    "spec": "Enh",
-    "op": ">"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   }
-  ],
-  "notes": "BiS Orc Fury OH.",
   "unique": true
  },
  {
@@ -9459,13 +5280,7 @@
   "type": "2H Polearm",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "class": "Hunter"
-   }
-  ],
-  "notes": "Too much hit; weak. Hunter: catch-up."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9477,29 +5292,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "class": "Warlock",
-    "op": ">"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "spec": "Ele",
-    "op": ">"
-   },
-   {
-    "class": "Mage",
-    "op": ">"
-   }
-  ],
-  "notes": "Near-BiS several; mage first on the crit belt."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9511,13 +5304,7 @@
   "type": "Mail",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   }
-  ],
-  "notes": "2nd BiS ele."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9529,17 +5316,7 @@
   "type": "Mail",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   },
-   {
-    "spec": "HolyPal",
-    "op": ">"
-   }
-  ],
-  "notes": "Mail healing haste belt."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9551,9 +5328,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [],
-  "notes": "Tier 5 Shoulders are better, avoid."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9566,21 +5341,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   },
-   {
-    "class": "Rogue",
-    "op": ">"
-   },
-   {
-    "spec": "Arms",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS for Enhance & Rogues that need +Hit. Arms can use if they need +Hit."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9593,16 +5354,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Enh"
-   },
-   {
-    "class": "Rogue",
-    "op": "="
-   }
-  ],
-  "notes": "Equal priority.",
   "unique": true
  },
  {
@@ -9615,17 +5366,7 @@
   "type": "Shield",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "RestoShaman",
-    "op": ">"
-   }
-  ],
-  "notes": "Healing crit shield; frees the Archimonde shield for shaman."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9638,17 +5379,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "class": "Hunter"
-   },
-   {
-    "spec": "ProtWarr",
-    "op": ">"
-   }
-  ],
-  "notes": ""
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9660,18 +5391,7 @@
   "type": "1H Mace",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   },
-   {
-    "race": "Human",
-    "class": "Warrior",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS for non-Orc Enhance - need 2x"
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9684,13 +5404,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "BiS tank warrior; humans prefer Mother's fast mace. Prot Warrior: non-human."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9704,12 +5418,6 @@
    "Physical",
    "Tank"
   ],
-  "priority": [
-   {
-    "class": "Druid"
-   }
-  ],
-  "notes": "Feral idol; whoever wants it.",
   "unique": true
  },
  {
@@ -9722,10 +5430,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9738,15 +5443,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "FeralCat"
-   }
-  ],
-  "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9760,13 +5457,7 @@
    "Physical",
    "Caster",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "No defense; awkward to fit. Prot Warrior: niche."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9780,28 +5471,6 @@
    "Physical",
    "Tank"
   ],
-  "priority": [
-   {
-    "class": "Rogue"
-   },
-   {
-    "spec": "FeralDruid",
-    "op": ">"
-   },
-   {
-    "class": "Hunter",
-    "op": ">"
-   },
-   {
-    "spec": "Enh",
-    "op": ">"
-   },
-   {
-    "spec": "ProtWarr",
-    "op": ">"
-   }
-  ],
-  "notes": "Complex; pairs with the Illidan ring. Rogue: no T5 ring. Feral: hit. Hunter: hit.",
   "unique": true
  },
  {
@@ -9814,13 +5483,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ret"
-   }
-  ],
-  "notes": "Weak; Vashj belt better. Ret: if no Vashj belt."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9832,13 +5495,7 @@
   "type": "Leather",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "2nd BiS; no spirit so good for all healers."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9850,21 +5507,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "class": "Hunter"
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   }
-  ],
-  "notes": "Mail; temp upgrade. Ret: temp."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9876,17 +5519,7 @@
   "type": "Mail",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   },
-   {
-    "spec": "HolyPal",
-    "op": ">"
-   }
-  ],
-  "notes": "Not BiS but better than tier gloves individually."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9898,13 +5531,7 @@
   "type": "Mail",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   }
-  ],
-  "notes": "BiS ele belt."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9917,13 +5544,7 @@
   "roles": [
    "Caster",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   }
-  ],
-  "notes": "Well-itemized prot pally wrists."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9935,9 +5556,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "Any caster needing the +Hit."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9949,9 +5568,7 @@
   "type": "Off-hand",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "Any caster needing the +Hit."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9964,15 +5581,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Black Temple",
@@ -9985,17 +5594,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "class": "Rogue"
-   },
-   {
-    "class": "Hunter",
-    "op": ">"
-   }
-  ],
-  "notes": "Huge rogue wrist upgrade. Hunter: if needs hit."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10007,17 +5606,7 @@
   "type": "Leather",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   },
-   {
-    "spec": "RestoShaman",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS for both Druid & Shaman, but Shaman has a Mail alternative in Spiritwalker Gauntlets."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10029,25 +5618,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   },
-   {
-    "class": "Hunter",
-    "op": ">"
-   },
-   {
-    "spec": "Ret",
-    "op": ">"
-   },
-   {
-    "class": "Warrior",
-    "op": "="
-   }
-  ],
-  "notes": "Underrated; enhance can use the mail option. Hunter: if needs hit."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10060,13 +5631,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "Insane prot warrior gloves."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10078,13 +5643,7 @@
   "type": "Plate",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "Plate healing haste belt."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10096,13 +5655,7 @@
   "type": "Totem",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   }
-  ],
-  "notes": "BiS ele totem."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10114,13 +5667,7 @@
   "type": "2H Axe",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   }
-  ],
-  "notes": "Weak item, give to undergeared players."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10132,17 +5679,7 @@
   "type": "Thrown",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "class": "Warrior"
-   },
-   {
-    "class": "Rogue",
-    "op": ">"
-   }
-  ],
-  "notes": "Warrior rage weapon."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10154,13 +5691,7 @@
   "type": "Gun",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "Mitigation gun; good on Mother Shahraz."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10173,47 +5704,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "Fury"
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10225,15 +5716,7 @@
   "type": "Cloth",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10245,21 +5728,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Fury"
-   },
-   {
-    "spec": "Arms",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": ">"
-   }
-  ],
-  "notes": "Best off-set legs for 4pc-tier warriors."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10272,20 +5741,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "class": "Warrior"
-   },
-   {
-    "spec": "Ret",
-    "op": ">"
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   }
-  ],
-  "notes": "BiS on most warrior lists.",
   "unique": true
  },
  {
@@ -10301,20 +5756,6 @@
    "Caster",
    "Tank"
   ],
-  "priority": [
-   {
-    "spec": "FeralDruid"
-   },
-   {
-    "spec": "ProtWarr",
-    "op": ">"
-   },
-   {
-    "spec": "ProtPal",
-    "op": ">"
-   }
-  ],
-  "notes": "Anti-crit for bears.",
   "unique": true
  },
  {
@@ -10327,17 +5768,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Fury"
-   },
-   {
-    "spec": "Arms",
-    "op": ">"
-   }
-  ],
-  "notes": "Not for 4pc; give to non-4set warriors. Fury: off-set."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10349,17 +5780,7 @@
   "type": "Cloak",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "class": "Druid"
-   },
-   {
-    "class": "Priest",
-    "op": "="
-   }
-  ],
-  "notes": "On par with Kael'thas Cloak. Druid/Priest first."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10371,9 +5792,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "Give to biggest upgrade. Weak item."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10385,9 +5804,7 @@
   "type": "Cloth",
   "roles": [
    "Healer"
-  ],
-  "priority": [],
-  "notes": "Give to biggest upgrade. Weak item."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10399,9 +5816,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "Weak item. Hunters get more Agi more from Tier with gems."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10414,17 +5829,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "class": "Paladin",
-    "op": ">"
-   }
-  ],
-  "notes": "Good mitigation if no Vashj belt."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10436,19 +5841,7 @@
   "type": "Leather",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10461,15 +5854,7 @@
   "roles": [
    "Caster",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   }
-  ],
-  "unsourced": true,
-  "notes": "Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10481,17 +5866,7 @@
   "type": "Cloth",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "class": "Priest",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS in the high-mana holy-light pally build. H Pal: regen build."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10503,13 +5878,7 @@
   "type": "Leather",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "BalanceDruid"
-   }
-  ],
-  "notes": "Weak caster wrists. Boomkin: temp."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10521,29 +5890,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   },
-   {
-    "spec": "Ret",
-    "op": ">"
-   },
-   {
-    "class": "Warrior",
-    "op": "="
-   },
-   {
-    "class": "Hunter",
-    "op": "="
-   },
-   {
-    "class": "Rogue",
-    "op": "="
-   }
-  ],
-  "notes": "BiS enhance (mail haste gloves)."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10555,17 +5902,7 @@
   "type": "Leather",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "BalanceDruid"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   }
-  ],
-  "notes": "mp5/sp/crit leather boots."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10577,9 +5914,7 @@
   "type": "Mail",
   "roles": [
    "Healer"
-  ],
-  "priority": [],
-  "notes": "Weak item."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10591,13 +5926,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "class": "Hunter"
-   }
-  ],
-  "notes": "UNDERRATED - best hunter belt when you need hit. Don't DE / off-spec it."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10609,13 +5938,7 @@
   "type": "Plate",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "~= tier helm; good hold-over."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10627,29 +5950,7 @@
   "type": "Neck",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "class": "Warlock"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "spec": "Shadow",
-    "op": ">"
-   },
-   {
-    "class": "Mage",
-    "op": ">"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   }
-  ],
-  "notes": "Most casters use the Kael'thas neck instead. Boomkin: hit."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10663,17 +5964,7 @@
    "Physical",
    "Caster",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "FeralDruid",
-    "op": ">"
-   }
-  ],
-  "notes": "Prot warriors often use the PvP neck."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10685,9 +5976,7 @@
   "type": "Off-hand",
   "roles": [
    "Healer"
-  ],
-  "priority": [],
-  "notes": "2nd best Healer OH."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10699,13 +5988,7 @@
   "type": "2H Mace",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ret"
-   }
-  ],
-  "notes": "2H mace; better for Ret than the Archimonde sword."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10717,13 +6000,7 @@
   "type": "Wand",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "class": "Priest"
-   }
-  ],
-  "notes": "BiS healing wand over the Morgram wand."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10737,26 +6014,7 @@
    "Physical",
    "Tank"
   ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "ProtWarr",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   }
-  ],
-  "unsourced": true,
-  "notes": "Drops from Essence of Anger, the third phase of the encounter. Not covered in the source guide; added from the Phase 3 BiS audit.",
-  "prioritySource": "bis"
+  "notes": "Drops from Essence of Anger, the third phase of the encounter. Not covered in the source guide; added from the Phase 3 BiS audit."
  },
  {
   "zone": "Black Temple",
@@ -10768,13 +6026,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   }
-  ],
-  "notes": "Near-BiS for Shadow, give to whoever needs +Hit after."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10787,34 +6039,7 @@
   "roles": [
    "Physical",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "Surv"
-   },
-   {
-    "spec": "BM",
-    "op": ">"
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "FeralDruid",
-    "form": "cat",
-    "op": ">"
-   },
-   {
-    "class": "Rogue",
-    "op": ">"
-   },
-   {
-    "spec": "Enh",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS many; give to those who DON'T need hit."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10826,13 +6051,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Fury"
-   }
-  ],
-  "notes": "Lots of hit; temp. Fury: temp."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10844,13 +6063,7 @@
   "type": "Neck",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "Depends whether the PvP haste-healing neck ships. H Pal: or all healers if no PvP haste neck."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10863,13 +6076,7 @@
   "roles": [
    "Caster",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   }
-  ],
-  "notes": "Prot pally relic."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10881,18 +6088,7 @@
   "type": "1H Sword",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "class": "Rogue"
-   },
-   {
-    "race": "Human",
-    "spec": "ProtWarr",
-    "op": ">"
-   }
-  ],
-  "notes": "Biggest single-item rogue upgrade outside glaives."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10904,29 +6100,7 @@
   "type": "Tier Token (Pal/Priest/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   },
-   {
-    "class": "Warlock",
-    "op": ">"
-   },
-   {
-    "spec": "HolyPal",
-    "op": ">"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": ">"
-   },
-   {
-    "spec": "Shadow",
-    "op": ">"
-   }
-  ],
-  "notes": "Mother Shahraz."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10938,33 +6112,7 @@
   "type": "Tier Token (War/Hunter/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "class": "Hunter",
-    "op": ">"
-   },
-   {
-    "spec": "Fury",
-    "op": ">"
-   },
-   {
-    "spec": "ProtWarr",
-    "op": ">"
-   },
-   {
-    "spec": "Enh",
-    "op": ">"
-   }
-  ],
-  "notes": "Prot Warriors should use the DPS version."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -10976,34 +6124,7 @@
   "type": "Tier Token (Rogue/Mage/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "spec": "FeralDruid",
-    "form": "bear"
-   },
-   {
-    "class": "Rogue",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": ">"
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   }
-  ],
-  "notes": "Mother Shahraz."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11015,17 +6136,7 @@
   "type": "Cloth",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   },
-   {
-    "class": "Priest",
-    "op": ">"
-   }
-  ],
-  "notes": "Best non-haste belt for druid/priest."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11037,29 +6148,7 @@
   "type": "Cloak",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "class": "Mage"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "class": "Warlock",
-    "op": ">"
-   },
-   {
-    "spec": "Shadow",
-    "op": ">"
-   }
-  ],
-  "notes": "Best caster cloak if you ignore the Illidan healing cloak."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11071,13 +6160,7 @@
   "type": "Leather",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "Bad; looks like a helm but is a shoulder."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11089,25 +6172,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": ">"
-   },
-   {
-    "spec": "Enh",
-    "op": ">"
-   }
-  ],
-  "notes": "2nd BiS several; enhance last."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11119,17 +6184,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Fury"
-   },
-   {
-    "spec": "Arms",
-    "op": "="
-   }
-  ],
-  "notes": "Lots of hit; hold-over while waiting on Cursed Vision / 4pc. Arms: hold-over."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11143,40 +6198,6 @@
    "Physical",
    "Tank"
   ],
-  "priority": [
-   {
-    "spec": "Fury"
-   },
-   {
-    "spec": "Arms",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": ">"
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": ">"
-   },
-   {
-    "spec": "FeralDruid",
-    "op": ">"
-   },
-   {
-    "class": "Rogue",
-    "op": ">"
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   }
-  ],
-  "notes": "No internal cooldown = huge uptime.",
   "unique": true
  },
  {
@@ -11189,29 +6210,7 @@
   "type": "Tier Token (Pal/Priest/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   },
-   {
-    "class": "Warlock",
-    "op": "="
-   },
-   {
-    "spec": "HolyPal",
-    "op": "="
-   },
-   {
-    "spec": "HolyPriest",
-    "op": ">"
-   },
-   {
-    "spec": "Shadow",
-    "op": "="
-   }
-  ],
-  "notes": "Illidari Council."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11223,37 +6222,7 @@
   "type": "Tier Token (War/Hunter/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   },
-   {
-    "spec": "BM",
-    "op": ">"
-   },
-   {
-    "spec": "ProtWarr",
-    "op": ">"
-   },
-   {
-    "spec": "Ele",
-    "op": ">"
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Arms",
-    "op": "="
-   }
-  ],
-  "notes": "Illidari Council."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11265,29 +6234,7 @@
   "type": "Tier Token (Rogue/Mage/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "spec": "FeralDruid"
-   },
-   {
-    "class": "Rogue",
-    "op": ">"
-   },
-   {
-    "class": "Mage",
-    "op": ">"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "Illidari Council."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11300,25 +6247,7 @@
   "roles": [
    "Caster",
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   },
-   {
-    "class": "Priest",
-    "op": ">"
-   },
-   {
-    "class": "Druid",
-    "op": ">"
-   },
-   {
-    "spec": "HolyPal",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS healer cloak all game. H Pal: Lock if speed-running."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11330,25 +6259,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Fire"
-   },
-   {
-    "class": "Warlock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   }
-  ],
-  "notes": "Only ~BiS for fire mage. Warlocks only use this if they don't have Vestments of the Sea-witch from Vashj. Ele: temp."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11360,29 +6271,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   },
-   {
-    "class": "Hunter",
-    "op": ">"
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "Fury",
-    "op": ">"
-   },
-   {
-    "class": "Rogue",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS every physical DPS except feral."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11396,17 +6285,7 @@
    "Physical",
    "Caster",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": ">"
-   }
-  ],
-  "notes": "Prot pally usually takes the tier helm for threat."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11420,40 +6299,6 @@
    "Physical",
    "Tank"
   ],
-  "priority": [
-   {
-    "class": "Rogue"
-   },
-   {
-    "spec": "Enh",
-    "op": ">"
-   },
-   {
-    "spec": "Arms",
-    "op": ">>"
-   },
-   {
-    "spec": "Fury",
-    "op": ">"
-   },
-   {
-    "class": "Hunter",
-    "op": "="
-   },
-   {
-    "spec": "FeralDruid",
-    "op": "="
-   },
-   {
-    "spec": "ProtWarr",
-    "op": ">"
-   },
-   {
-    "spec": "Ret",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS all physical DPS but rogue/enhance gain far more. Much better for Rogue and Enhance than the rest.",
   "unique": true
  },
  {
@@ -11467,28 +6312,6 @@
   "roles": [
    "Caster"
   ],
-  "priority": [
-   {
-    "class": "Warlock"
-   },
-   {
-    "class": "Mage",
-    "op": ">"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Shadow",
-    "op": ">"
-   }
-  ],
-  "notes": "One of the best items in the phase.",
   "unique": true
  },
  {
@@ -11502,8 +6325,6 @@
   "roles": [
    "Healer"
   ],
-  "priority": [],
-  "notes": "Mediocre vs active trinkets except for the mana. Give to the Healer who runs out of mana.",
   "unique": true
  },
  {
@@ -11517,8 +6338,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "Little PvE use. Rogue can use in PvP.",
   "unique": true
  },
  {
@@ -11531,17 +6350,7 @@
   "type": "Mace",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "class": "Priest"
-   },
-   {
-    "spec": "RestoShaman",
-    "op": ">"
-   }
-  ],
-  "notes": "Best heal weapon in game; <50% proc wasted on Druid/H Pal."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11553,29 +6362,7 @@
   "type": "2H Staff",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "class": "Warlock",
-    "op": "~>"
-   },
-   {
-    "class": "Mage",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   }
-  ],
-  "notes": "Biggest drama item; SPriest has the slight edge. Shadow Priest is only slightly ahead, due to being shafted for most of the expansion on loot, and this will buff your mage/healer group."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11589,17 +6376,7 @@
    "Physical",
    "Caster",
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": ">"
-   }
-  ],
-  "notes": "Warrior never unequips it."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11611,17 +6388,7 @@
   "type": "Bow",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Surv"
-   },
-   {
-    "spec": "BM",
-    "op": ">"
-   }
-  ],
-  "notes": "BiS survival; give BM the other bow."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11634,8 +6401,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "Give to the PLAYER not the CLASS.",
   "unique": true
  },
  {
@@ -11649,8 +6414,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "Give to the PLAYER not the CLASS.",
   "unique": true
  },
  {
@@ -11663,33 +6426,7 @@
   "type": "Tier Token (Pal/Priest/Lock)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   },
-   {
-    "class": "Warlock",
-    "op": ">"
-   },
-   {
-    "spec": "HolyPal",
-    "op": ">"
-   },
-   {
-    "spec": "Shadow",
-    "op": ">"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": ">"
-   },
-   {
-    "spec": "Ret",
-    "op": ">"
-   }
-  ],
-  "notes": "Warlocks only use this if they don't have Vestments of the Sea-witch from Vashj."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11701,37 +6438,7 @@
   "type": "Tier Token (War/Hunter/Shaman)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Arms",
-    "op": ">"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "class": "Hunter",
-    "op": ">"
-   },
-   {
-    "spec": "ProtWarr",
-    "op": ">"
-   },
-   {
-    "spec": "Enh",
-    "op": ">"
-   }
-  ],
-  "notes": "Prot Warriors should use the DPS version."
+  ]
  },
  {
   "zone": "Black Temple",
@@ -11743,29 +6450,7 @@
   "type": "Tier Token (Rogue/Mage/Druid)",
   "roles": [
    "Tier"
-  ],
-  "priority": [
-   {
-    "spec": "FeralDruid"
-   },
-   {
-    "class": "Rogue",
-    "op": ">"
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": ">"
-   },
-   {
-    "spec": "RestoDruid",
-    "op": ">"
-   },
-   {
-    "spec": "Arcane",
-    "op": ">"
-   }
-  ],
-  "notes": "Illidan."
+  ]
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -11777,9 +6462,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "All casters except Mage."
+  ]
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -11791,9 +6474,7 @@
   "type": "Cloth",
   "roles": [
    "Healer"
-  ],
-  "priority": [],
-  "notes": "Slightly Priest favoured, but any healer really."
+  ]
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -11805,13 +6486,7 @@
   "type": "Mail",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   }
-  ],
-  "notes": "CRAFTED (BoE). Mail haste wrists (shaman prefers these)."
+  ]
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -11823,13 +6498,7 @@
   "type": "Leather",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "CRAFTED (BoE). Leather haste wrists. R Druid: to reach 113 haste."
+  ]
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -11841,17 +6510,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   }
-  ],
-  "notes": "CRAFTED (BoE). Mail haste wrists; tied with Swiftstrike Bracers."
+  ]
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -11863,13 +6522,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   }
-  ],
-  "notes": "CRAFTED (BoE). Tied with Bindings of Lightning Reflexes. Enhance: Rogue backup."
+  ]
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -11881,9 +6534,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "Mail version out-damages these even for Warr/Ret. Weak item."
+  ]
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -11895,13 +6546,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   }
-  ],
-  "notes": "CRAFTED (BoP). Also a leather option; both good for enhance. Enhance: BiS."
+  ]
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -11913,13 +6558,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   }
-  ],
-  "notes": "CRAFTED (BoP). Not BiS but a big jump for SPriest. Shadow Priest: haste breakpoint."
+  ]
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -11931,13 +6570,7 @@
   "type": "Cloth",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "class": "Priest"
-   }
-  ],
-  "notes": "CRAFTED (BoP). Healer haste shoulders. Priest: early."
+  ]
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -11949,13 +6582,7 @@
   "type": "Leather",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "CRAFTED (BoP). Leather haste shoulders. R Druid: to reach 113 haste."
+  ]
  },
  {
   "zone": "Crafted (Heart of Darkness)",
@@ -11967,13 +6594,7 @@
   "type": "Mail",
   "roles": [
    "Healer"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   }
-  ],
-  "notes": "CRAFTED (BoP). Not BiS; tier preferred. R Shaman: temp."
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -11985,10 +6606,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12001,10 +6619,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12016,10 +6631,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12031,10 +6643,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12047,10 +6656,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12063,10 +6669,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12078,10 +6681,7 @@
   "type": "Fist",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12093,10 +6693,7 @@
   "type": "Sword",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12108,10 +6705,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12124,10 +6718,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12140,51 +6731,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12196,10 +6743,7 @@
   "type": "Mace",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12212,10 +6756,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12229,9 +6770,6 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -12244,10 +6782,7 @@
   "type": "Shield",
   "roles": [
    "Tank"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12260,10 +6795,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12275,10 +6807,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12291,10 +6820,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12309,15 +6835,7 @@
    "Caster",
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "BalanceDruid"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Zul'Aman",
@@ -12330,10 +6848,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12345,15 +6860,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12365,10 +6872,7 @@
   "type": "Neck",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12382,10 +6886,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12397,10 +6898,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12412,10 +6910,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12428,10 +6923,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12444,10 +6936,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12460,10 +6949,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12476,9 +6962,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -12491,10 +6974,7 @@
   "type": "Sword",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12506,23 +6986,7 @@
   "type": "Dagger",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12534,10 +6998,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12550,10 +7011,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12567,15 +7025,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12587,10 +7037,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12603,10 +7050,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12619,10 +7063,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12634,15 +7075,7 @@
   "type": "Staff",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "FeralCat"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12654,10 +7087,7 @@
   "type": "Cloak",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12670,9 +7100,6 @@
   "roles": [
    "Healer"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -12686,43 +7113,7 @@
   "roles": [
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Zul'Aman",
@@ -12735,9 +7126,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -12750,23 +7138,7 @@
   "type": "Neck",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12779,9 +7151,6 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -12795,9 +7164,6 @@
   "roles": [
    "Caster"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -12811,10 +7177,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12827,15 +7190,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "RestoShaman"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12847,10 +7202,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12862,19 +7214,7 @@
   "type": "Bow",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12886,10 +7226,7 @@
   "type": "Axe",
   "roles": [
    "Tank"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12901,10 +7238,7 @@
   "type": "Sword",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12916,10 +7250,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -12932,9 +7263,6 @@
   "roles": [
    "Tank"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -12948,55 +7276,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Zul'Aman",
@@ -13009,10 +7289,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -13024,10 +7301,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -13040,15 +7314,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -13060,10 +7326,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -13076,10 +7339,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -13091,10 +7351,7 @@
   "type": "Gun",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -13106,19 +7363,7 @@
   "type": "Axe",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -13130,10 +7375,7 @@
   "type": "Dagger",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -13146,10 +7388,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -13161,10 +7400,7 @@
   "type": "Fist",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -13177,55 +7413,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "ProtWarr",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Zul'Aman",
@@ -13238,31 +7426,7 @@
   "roles": [
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "Arcane"
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Zul'Aman",
@@ -13276,9 +7440,6 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -13292,9 +7453,6 @@
   "roles": [
    "Tank"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -13308,9 +7466,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -13323,15 +7478,7 @@
   "type": "Cloak",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ret"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -13343,10 +7490,7 @@
   "type": "Cloak",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -13359,10 +7503,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Zul'Aman",
@@ -13376,10 +7517,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13391,27 +7529,7 @@
   "type": "Polearm",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ret"
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13423,15 +7541,7 @@
   "type": "Fist",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Enh"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13443,39 +7553,7 @@
   "type": "Wand",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13488,23 +7566,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13516,15 +7578,7 @@
   "type": "Thrown",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13537,15 +7591,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13558,15 +7604,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13579,10 +7617,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13594,15 +7629,7 @@
   "type": "Sword",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13614,23 +7641,7 @@
   "type": "Dagger",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Assass"
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13644,15 +7655,7 @@
    "Healer",
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Sunwell Plateau",
@@ -13666,15 +7669,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13687,10 +7682,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13703,10 +7695,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13719,23 +7708,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13748,9 +7721,7 @@
   "roles": [
    "Tier"
   ],
-  "priority": [],
-  "notes": "Also drops from Eredar Twins.",
-  "unsourced": true
+  "notes": "Also drops from Eredar Twins."
  },
  {
   "zone": "Sunwell Plateau",
@@ -13763,9 +7734,7 @@
   "roles": [
    "Tier"
   ],
-  "priority": [],
-  "notes": "Also drops from Eredar Twins.",
-  "unsourced": true
+  "notes": "Also drops from Eredar Twins."
  },
  {
   "zone": "Sunwell Plateau",
@@ -13778,9 +7747,7 @@
   "roles": [
    "Tier"
   ],
-  "priority": [],
-  "notes": "Also drops from Eredar Twins.",
-  "unsourced": true
+  "notes": "Also drops from Eredar Twins."
  },
  {
   "zone": "Sunwell Plateau",
@@ -13792,10 +7759,7 @@
   "type": "Mace",
   "roles": [
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13807,51 +7771,7 @@
   "type": "Neck",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13864,23 +7784,7 @@
   "roles": [
    "Tank",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": "="
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13892,47 +7796,7 @@
   "type": "+33 Stamina",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13944,23 +7808,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -13972,47 +7820,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14025,9 +7833,7 @@
   "roles": [
    "Tier"
   ],
-  "priority": [],
-  "notes": "Also drops from Eredar Twins.",
-  "unsourced": true
+  "notes": "Also drops from Eredar Twins."
  },
  {
   "zone": "Sunwell Plateau",
@@ -14040,9 +7846,7 @@
   "roles": [
    "Tier"
   ],
-  "priority": [],
-  "notes": "Also drops from Eredar Twins.",
-  "unsourced": true
+  "notes": "Also drops from Eredar Twins."
  },
  {
   "zone": "Sunwell Plateau",
@@ -14055,9 +7859,7 @@
   "roles": [
    "Tier"
   ],
-  "priority": [],
-  "notes": "Also drops from Eredar Twins.",
-  "unsourced": true
+  "notes": "Also drops from Eredar Twins."
  },
  {
   "zone": "Sunwell Plateau",
@@ -14070,27 +7872,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "AffliLock"
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14103,10 +7885,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14118,19 +7897,7 @@
   "type": "Shield",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14143,15 +7910,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14163,51 +7922,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14219,19 +7934,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14244,9 +7947,7 @@
   "roles": [
    "Tier"
   ],
-  "priority": [],
-  "notes": "Also drops from Eredar Twins.",
-  "unsourced": true
+  "notes": "Also drops from Eredar Twins."
  },
  {
   "zone": "Sunwell Plateau",
@@ -14259,9 +7960,7 @@
   "roles": [
    "Tier"
   ],
-  "priority": [],
-  "notes": "Also drops from Eredar Twins.",
-  "unsourced": true
+  "notes": "Also drops from Eredar Twins."
  },
  {
   "zone": "Sunwell Plateau",
@@ -14274,9 +7973,7 @@
   "roles": [
    "Tier"
   ],
-  "priority": [],
-  "notes": "Also drops from Eredar Twins.",
-  "unsourced": true
+  "notes": "Also drops from Eredar Twins."
  },
  {
   "zone": "Sunwell Plateau",
@@ -14289,51 +7986,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Sunwell Plateau",
@@ -14346,23 +7999,7 @@
   "roles": [
    "Tank",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   },
-   {
-    "spec": "ProtPal",
-    "op": "="
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14374,15 +8011,7 @@
   "type": "Plate",
   "roles": [
    "Tank"
-  ],
-  "priority": [
-   {
-    "spec": "ProtWarr"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14396,15 +8025,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14416,23 +8037,7 @@
   "type": "Mail",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14444,15 +8049,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ret"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14464,31 +8061,7 @@
   "type": "Bow",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14500,10 +8073,7 @@
   "type": "Dagger",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14515,19 +8085,7 @@
   "type": "Staff",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "FeralBear"
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14540,10 +8098,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14556,23 +8111,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14584,10 +8123,7 @@
   "type": "Fist",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14599,47 +8135,7 @@
   "type": "Neck",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14652,15 +8148,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14673,31 +8161,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "Disc",
-    "op": "="
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14710,10 +8174,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14726,15 +8187,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14746,39 +8199,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14792,9 +8213,6 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -14809,9 +8227,6 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -14825,9 +8240,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -14841,15 +8253,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "FeralBear"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14862,15 +8266,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14884,19 +8280,7 @@
    "Tank",
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   },
-   {
-    "spec": "FeralBear",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Sunwell Plateau",
@@ -14908,10 +8292,7 @@
   "type": "Sword",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14923,10 +8304,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14939,15 +8317,7 @@
   "roles": [
    "Tank",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "ProtPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14960,10 +8330,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14977,15 +8344,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -14999,43 +8358,7 @@
    "Caster",
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Sunwell Plateau",
@@ -15048,19 +8371,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15072,31 +8383,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15109,23 +8396,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15137,10 +8408,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15153,15 +8421,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15174,55 +8434,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Sunwell Plateau",
@@ -15235,9 +8447,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -15251,47 +8460,7 @@
   "roles": [
    "Caster"
   ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Sunwell Plateau",
@@ -15304,23 +8473,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Sunwell Plateau",
@@ -15334,9 +8487,6 @@
    "Caster",
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -15351,9 +8501,6 @@
    "Healer",
    "Caster"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -15367,9 +8514,6 @@
   "roles": [
    "Physical"
   ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true,
   "unique": true
  },
  {
@@ -15382,55 +8526,7 @@
   "type": "Cloak",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15442,51 +8538,7 @@
   "type": "Cloak",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15500,15 +8552,7 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15520,47 +8564,7 @@
   "type": "Leather",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ret"
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   },
-   {
-    "spec": "FeralCat",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15573,15 +8577,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "RestoDruid"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15593,31 +8589,7 @@
   "type": "Sword",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15629,23 +8601,7 @@
   "type": "Dagger",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Assass"
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15657,27 +8613,7 @@
   "type": "Fist",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15690,15 +8626,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Ele"
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15711,39 +8639,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15756,35 +8652,7 @@
   "roles": [
    "Physical"
   ],
-  "priority": [
-   {
-    "spec": "BM"
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Assass",
-    "op": "="
-   },
-   {
-    "spec": "Combat",
-    "op": "="
-   },
-   {
-    "spec": "Sub",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "unique": true,
-  "prioritySource": "bis"
+  "unique": true
  },
  {
   "zone": "Sunwell Plateau",
@@ -15797,31 +8665,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "HolyPal"
-   },
-   {
-    "spec": "Disc",
-    "op": "="
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoShaman",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15834,47 +8678,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Arcane",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15887,23 +8691,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15916,23 +8704,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15944,43 +8716,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -15992,10 +8728,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -16008,23 +8741,7 @@
   "roles": [
    "Healer",
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Disc"
-   },
-   {
-    "spec": "HolyPriest",
-    "op": "="
-   },
-   {
-    "spec": "RestoDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -16037,39 +8754,7 @@
   "roles": [
    "Caster",
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   },
-   {
-    "spec": "Ret",
-    "op": "="
-   },
-   {
-    "spec": "BM",
-    "op": "="
-   },
-   {
-    "spec": "Marks",
-    "op": "="
-   },
-   {
-    "spec": "Surv",
-    "op": "="
-   },
-   {
-    "spec": "Enh",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -16081,43 +8766,7 @@
   "type": "Cloth",
   "roles": [
    "Caster"
-  ],
-  "priority": [
-   {
-    "spec": "Shadow"
-   },
-   {
-    "spec": "Ele",
-    "op": "="
-   },
-   {
-    "spec": "Fire",
-    "op": "="
-   },
-   {
-    "spec": "Frost",
-    "op": "="
-   },
-   {
-    "spec": "AffliLock",
-    "op": "="
-   },
-   {
-    "spec": "DemoLock",
-    "op": "="
-   },
-   {
-    "spec": "DestroLock",
-    "op": "="
-   },
-   {
-    "spec": "BalanceDruid",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -16129,19 +8778,7 @@
   "type": "Plate",
   "roles": [
    "Physical"
-  ],
-  "priority": [
-   {
-    "spec": "Arms"
-   },
-   {
-    "spec": "Fury",
-    "op": "="
-   }
-  ],
-  "notes": "",
-  "unsourced": true,
-  "prioritySource": "bis"
+  ]
  },
  {
   "zone": "Sunwell Plateau",
@@ -16155,9 +8792,6 @@
    "Healer",
    "Caster",
    "Physical"
-  ],
-  "priority": [],
-  "notes": "",
-  "unsourced": true
+  ]
  }
 ]

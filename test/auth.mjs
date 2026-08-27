@@ -24,6 +24,10 @@ import { until, sleep } from "./helpers.mjs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
 const data = rd("loot_data.json"), bis = rd("bis.json"), specs = rd("specs.json");
+/* the lists that ship with the site - without these the page boots with no
+   starting points, and the priority column is empty on every row */
+const listIndex = JSON.parse(fs.readFileSync(path.join(root, "data", "lists", "index.json"), "utf8"));
+const zatarList = JSON.parse(fs.readFileSync(path.join(root, "data", "lists", "zatar-p3.json"), "utf8"));
 const source = fs.readFileSync(path.join(root, "app.js"), "utf8");
 
 /* What get_shared_list actually returns. Kept beside the fake and pinned against the
@@ -109,7 +113,8 @@ function boot({ configured = false, sdk = null, url = "" } = {}) {
   window.fetch = (u) => {
     const s = String(u);
     return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
-      s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
+      s.includes("lists/index.json") ? listIndex : s.includes("zatar-p3.json") ? zatarList
+      : s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
   };
   if (sdk) window.supabase = { createClient: () => sdk };
 
@@ -227,7 +232,8 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   w.fetch = (u) => {
     const s = String(u);
     return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
-      s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
+      s.includes("lists/index.json") ? listIndex : s.includes("zatar-p3.json") ? zatarList
+      : s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
   };
   w.eval(source);
   await settle();   /* a real wait: the assertion is that writeUrl did NOT eat the OAuth
@@ -440,7 +446,7 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
 
   $(w, "list-trigger").click();
   const menu = w.document.querySelector(".list-menu");
-  ok(/following this list/i.test(menu.textContent),
+  ok(/reading this list/i.test(menu.textContent),
      "the menu says plainly that this is someone else's");
   ok([...menu.querySelectorAll(".lm-item")].some((b) => b.textContent.trim() === "Make a copy"),
      "and Make a copy is how you keep it");

@@ -32,6 +32,22 @@ its data and will show a load error otherwise.
 
 ### `data/loot_data.json` — 699 items, the source of truth
 
+**It holds items, and nothing anybody ranked.** Priorities and notes used to live here,
+because zatar's calls *were* the site: `activeTemplate === null` meant "showing zatar" and
+everything a template did not hold fell through to `rec.priority`. That made him the
+substrate rather than a list, and it made an item a template had never heard of quietly
+render his call as if it were yours.
+
+Since Aug 2026 a priority is something a **list** says. His 182 priorities and 177 notes
+live in `data/lists/zatar-p3.json`; `unsourced` and `prioritySource` went with them, along
+with the 268 SEEDED rows — every one of which was exactly the specs `bis.json` already
+lists, so they duplicated data the page draws as rings. **With no list open the priority
+column is empty**, which is the honest rendering of "nobody has ranked this".
+
+A handful of `notes` stayed: facts about the **item** rather than anybody's opinion of it —
+*"Also drops from Eredar Twins"*, *"Reputation reward from the Scale of the Sands"*. They
+show whatever list is open, including none, because they are true either way.
+
 Flat array, grouped in the file by zone then boss in kill order, so a boss's items sit
 together for hand-editing.
 
@@ -43,24 +59,26 @@ together for hand-editing.
 | `slot` | `Head` … `Two-Hand`, `Ranged`, `Relic`. Collapsed for display: all weapon slots → `Weapon`, `Ranged`+`Relic` → `Ranged/Relic` |
 | `type` | Armour class or weapon type. Displayed with tidy-ups: `2H Staff` → `Staff`, bare `Mace` → `1H Mace` (hand count derived from slot) |
 | `roles` | What the item is *for*: any of Physical / Caster / Healer / Tank / Tier, **as a list**. Drives the editor's smart filtering, feeds search, and its first value tags the row as `data-role`. Not rendered — see §6 |
-| `priority` | Ordered list of entries, each naming the operator linking it to the previous one — see §3 |
-| `notes` | Caveats. All conditional wording lives here, never in `priority` |
+| `notes` | **Facts about the item only** — where else it drops, how it is obtained. Opinions live in a list |
 | `unique` | `true` only on the 23 unique items. **Absent means not unique** — see Repeats in §3 |
-| `unsourced` | `true` on the 517 rows nobody hand-ranked. **Absent means it is zatar's** |
-| `prioritySource` | `"bis"` on a priority a script wrote. Only legal with `unsourced`, and what puts SEEDED on the row |
 
-**`priority` is structured data, not prose.**
+### `data/lists/` — the lists that ship with the site
 
-**An empty `priority` means two different things, and they must not be conflated.** On the
-182 records that came from the videos it means zatar gave a call and the call was "whoever
-needs it" — his wording lives in `notes`, and 23 rows are like this. On an `unsourced`
-record it means nobody has ranked the item at all.
+`index.json` names them; each file beside it is a template in the shape
+`validateTemplate()` already enforces, plus a `phase` and an `author`. Today that is
+`zatar-p3.json`. They are **starting points somebody opens and copies**, not a baseline —
+nothing falls back to them, and the picker offers only the ones matching the phase on
+screen.
 
-`check_priority.py` enforces the distinction: an empty priority with neither `notes` nor
-`unsourced` is a warning, and an `unsourced` record that *has* a priority is an **error**
-unless it also names a `prioritySource` — which is what stops a generated ordering passing
-for a considered one. If someone later ranks one of these by hand, both markers come off in
-the same edit.
+**Adding one is a data edit**: drop the file in, add a line to `index.json`. It goes
+through `validateTemplate()` exactly as a shared list does — a file that ships with the
+site is not more trustworthy than one arriving on a link, just likelier to be right — and
+fails soft like `bis.json`, so a bad file costs that option rather than the page.
+
+**An empty priority in a list still means "whoever needs it"**, and 23 of zatar's are
+exactly that: he answered, and the answer was nobody in particular. It is a different
+thing from an item his list does not mention at all — `[]` versus no key — and
+`bisOnlyMatch()` keys on that difference, bridging only the second.
 
 **`roles` replaced the single-valued `role`, Aug 2026.** One word could not say that a plate
 piece is wanted by both a Retribution and a Protection Paladin. It was seeded by
@@ -396,9 +414,9 @@ reads several classes at once. The spec row is `hidden` until a class is picked 
 offers exactly the selected classes' specs — grouped in the order the classes were picked,
 not registry order.
 
-**An `unsourced` row is reached through its BiS, not through a priority.** It names nobody, so
-`selectionHas()` can never match it; `unsourcedBis()` lets it through when the item is BiS for
-a spec the selection stands for. Otherwise Band of the Eternal Champion would be BiS for eight
+**A row the open list never mentions is reached through its BiS, not through a priority.**
+It names nobody, so `selectionHas()` can never match it; `bisOnlyMatch()` lets it through
+when the item is BiS for a spec the selection stands for. Otherwise Band of the Eternal Champion would be BiS for eight
 physical specs and reachable from none of them. The row keeps its empty priority column and
 its tag, so nothing about it reads as one of zatar's calls, and an unsourced item that is BiS
 for nobody (Wraps of Precise Flight) is surfaced by no filter at all. `SELECTED_SPECS` is
@@ -527,7 +545,7 @@ own two ways, the way Office does it:
 is open: a finished list gets read during a raid, and it should not be covered in `×`s. It is
 cleared by every view change (`openTemplate()` is the single place that happens).
 
-**An `unsourced` row is reachable through its BiS only while reading the guide.** That path
+**A row is reachable through its BiS only while reading a list that is not yours.** That path
 bridges a gap in *his* data; with a list of your own open there is no gap, and letting 13
 rows through a filter the other 182 fail would make your own list lie about itself.
 
@@ -553,7 +571,7 @@ rather than hidden:
 A **blank list is a template like any other** — it validates, saves and shares; an empty
 priority is valid data, not a broken one. Its consequence is that it matches no class or spec
 filter, so the chips all read zero. That is honest, and `blankListFiltered()` makes the empty
-results say so rather than look broken. **Don't paper over it by extending `unsourcedBis()`.**
+results say so rather than look broken. **Don't paper over it by extending `bisOnlyMatch()`.**
 
 ### Storage
 
@@ -1200,8 +1218,10 @@ structured priority), `verify/fetch_unique.py` (re-runnable if the item set chan
 - **Zul'Aman trash drops are still missing**, which is why that chip reads 0.
 - **Still not included:** gems, and Mother Shahraz's shadow-resistance set — intentional
   omissions by the creator — and tier set pieces, per the above.
-- **The seeded orderings are provisional.** 268 rows carry a flat `=` line from BiS, marked
-  SEEDED. They are a starting point to be refined, not an answer.
+- **Seeding is an action, not stored data, Aug 2026.** The 268 flat `=` lines that used to
+  ship in `loot_data.json` were each exactly the specs `bis.json` lists for that item in
+  that phase — a duplicate of data the page already draws as rings. `seedFromBis()` fills
+  the empty rows of the phase on screen on demand instead, and only on a list of your own.
 - **`roles` on the imported rows are stats-derived, not BiS-derived.** `fetch_items.py` reads
   them off the item's own stats, which is blunt on hybrids; `verify/seed_roles.py` is the
   better source and has not been re-run since the import.
@@ -1293,6 +1313,12 @@ credited in-video to **Veramos**, arms-warrior input to **Lemonism**.
 Item IDs and slots came from [wowsims/tbc](https://github.com/wowsims/tbc). Icons and
 tooltips from [Wowhead](https://www.wowhead.com/tbc).
 
+**zatar is a list, not the baseline, Aug 2026.** *Zatar's Phase 3* ships in `data/lists/`
+and is offered for Phase 3 like any other starting point. Nothing falls back to it, nothing
+is measured against it, and with no list open the priority column is empty. The credit in
+the footer is unchanged and still required — demoting him from substrate to author changes
+where his work lives, not whose it is.
+
 **Lists carry an author, and it is shown only where something attested it.**
 `makeTemplate()` stamps `accountName()` when you are signed in; signed out it stays empty,
 and a list with no author claims none rather than claiming to be anonymous. A **copy takes
@@ -1317,15 +1343,16 @@ would be your own name on every row, which says nothing.
 **182 of the 699 rows are zatar's.** His videos covered Black Temple and Mount Hyjal, and
 that is the whole of his guide. The other 517 are loot from the raids he never covered —
 Phases 1, 2, 4 and 5, imported so the tables are complete — plus 13 T6 items the videos
-skipped. All of them carry `unsourced: true`. `verify/missing-items.md` records the 13.
+skipped. `verify/missing-items.md` records the 13. His list simply does not hold a key for
+them, which is what the empty priority column says.
 
 **Nothing on screen frames a row as missing from a guide any more, and that was a decision.**
 A `NOT IN THE GUIDE` tag was right while the site was a mirror of one guide with holes in
 it; it stopped being right once lists became the product and zatar's became one of them.
-What replaced it is narrower and still true: a priority a script generated says **SEEDED**,
-because the claim worth making is *nobody has ranked this yet*, not *this is missing from
-somebody's guide*. `unsourced` survives in the data as plumbing — `unsourcedBis()` and
-`check_priority.py` both read it — and renders nowhere.
+**The empty priority column says it now, and says it of every list equally.** A list that
+does not rank an item shows nothing for it, whoever wrote the list — so there is no claim
+to disclaim and no flag to carry. `unsourced`, `prioritySource` and the `SEEDED` tag all
+went with the framing.
 
 **The BiS rings are not zatar's either** and must never be presented as if they were — the
 videos gave loot-council priorities, not per-spec BiS lists. `data/bis.json` comes from Wowhead's
