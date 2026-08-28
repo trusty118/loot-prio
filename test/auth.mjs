@@ -51,17 +51,30 @@ function fakeSupabase() {
 
   const result = (v) => Promise.resolve({ data: v, error: null });
 
+  /* eq() keeps every condition rather than collapsing them onto the id. The guarded
+     save is .update().eq("id").eq("updated_at"), and a fake that ignored the second
+     one would match every time - which is precisely the bug being guarded against. */
   function from() {
-    const q = { _id: null, _single: false };
+    const q = { _eq: {}, _single: false };
     q.select = () => q;
     q.order = () => q;
-    q.eq = (_col, v) => { q._id = v; return q; };
+    q.eq = (col, v) => { q._eq[col] = v; return q; };
     q.maybeSingle = () => { q._single = true; return q; };
     q.upsert = (row) => { rows.set(row.id, row); return result(row); };
+    q.update = (row) => { q._update = row; return q; };
     q.delete = () => { q._del = true; return q; };
+    const hits = () => [...rows.values()].filter((r) =>
+      Object.entries(q._eq).every(([c, v]) => r[c] === v));
     q.then = (res, rej) => {
-      if (q._del) { rows.delete(q._id); return result(null).then(res, rej); }
-      if (q._single) return result(rows.get(q._id) || null).then(res, rej);
+      if (q._del) { rows.delete(q._eq.id); return result(null).then(res, rej); }
+      if (q._update) {
+        /* Postgres updates the rows the WHERE matched, and reports how many. Zero is
+           not an error - it is the answer, and the client has to notice it. */
+        const matched = hits();
+        matched.forEach((r) => rows.set(r.id, Object.assign({}, r, q._update)));
+        return result(matched.map((r) => ({ id: r.id }))).then(res, rej);
+      }
+      if (q._single) return result(rows.get(q._eq.id) || null).then(res, rej);
       return result([...rows.values()]).then(res, rej);
     };
     return q;
@@ -76,14 +89,25 @@ function fakeSupabase() {
        because a fake that is laxer than the thing it stands for tests nothing. */
     rpc: (name, args) => {
       if (name !== "get_shared_list") return Promise.resolve({ data: null, error: { message: "no such function" } });
-      const hit = [...rows.values()].find((r) => r.shared === true && r.share_token === args.token);
+      /* Three conditions now, matching verify/draft-publish.sql: flagged shared, exact
+         token, AND published. A list nobody has published has no version to hand out,
+         which is what "locked until we are happy" actually means. */
+      const hit = [...rows.values()].find((r) => r.shared === true &&
+        r.share_token === args.token && r.published_at);
       /* PROJECTED, not returned whole. The real function names its columns, so a field
          the client writes but the SQL never selects arrives as undefined - which is
          exactly how notes shipped broken: saved, apparently fine, absent on every read.
          A fake that hands back the whole row cannot reproduce that. RPC_COLUMNS is
          checked against verify/notes-and-author.sql below. */
+      /* The SQL selects published_priorities AS priorities. A fake that served the live
+         draft here would pass every assertion below while the real thing served the
+         snapshot - the two would differ precisely where it matters. */
+      const served = hit && Object.assign({}, hit, {
+        priorities: hit.published_priorities,
+        notes: hit.published_notes
+      });
       return Promise.resolve({
-        data: hit ? [Object.fromEntries(RPC_COLUMNS.map((c) => [c, hit[c]]))] : [],
+        data: served ? [Object.fromEntries(RPC_COLUMNS.map((c) => [c, served[c]]))] : [],
         error: null
       });
     },
@@ -427,6 +451,9 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
   sdk._rows.set("t_shared", {
     id: "t_shared", name: "Trusty's raid list", created: "2026-08-23", v: 1, base: "zatar",
     priorities: Object.fromEntries(data.map((r) => [r.id, r.item === BULWARK ? [{ spec: "Fury" }] : []])),
+    published_priorities: Object.fromEntries(data.map((r) => [r.id, r.item === BULWARK ? [{ spec: "Fury" }] : []])),
+    published_notes: {},
+    published_at: "2026-08-23T00:00:00.000Z",
     share_token: "tok_abc123", shared: true
   });
 
@@ -475,6 +502,8 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
   sdk._rows.set("t_off", {
     id: "t_off", name: "Unshared list", created: "2026-08-23", v: 1, base: "zatar",
     priorities: Object.fromEntries(data.map((r) => [r.id, []])),
+    published_priorities: Object.fromEntries(data.map((r) => [r.id, []])),
+    published_at: "2026-08-23T00:00:00.000Z",
     share_token: "tok_off", shared: false
   });
   const w = boot({ configured: true, sdk, url: "?s=tok_off" });
@@ -548,9 +577,14 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
   ok(written.includes("Ours: Prot Warr first."),
      `the note reached the account, not just memory (${written.length} notes stored)`);
 
-  // and it reaches whoever holds the ?s= link - the other half the SQL controls
+  // and it reaches whoever holds the ?s= link - the other half the SQL controls.
+  // Publishing is what puts it there now: the draft is what you edit, the snapshot is
+  // what the link hands out, so flipping `shared` alone would resolve to nothing.
   stored().shared = true;
   stored().share_token = "tok-notes";
+  stored().published_priorities = stored().priorities;
+  stored().published_notes = stored().notes;
+  stored().published_at = new Date().toISOString();
   const seen = await sdk.rpc("get_shared_list", { token: "tok-notes" });
   const row = seen.data[0];
   ok(row.notes && Object.values(row.notes).includes("Ours: Prot Warr first."),
@@ -567,10 +601,14 @@ const BULWARK = "Bulwark of Azzinoth", BULWARK_ID = 32375;
   const cols = declared.split(",").map((c) => c.trim().split(/\s+/)[0]).filter(Boolean);
   ok(cols.join() === RPC_COLUMNS.join(),
      `the fake returns exactly what get_shared_list declares (${cols.join(", ")})`);
-  const upsert = (source.match(/from\("lists"\)\.upsert\(\{([\s\S]*?)\}\)/) || [])[1] || "";
-  ["notes", "author", "priorities"].forEach((f) => {
+  /* The write payload is a named object now, because the save is a guarded update as
+     well as an insert and both send the same row. What is pinned is unchanged: a column
+     the template carries but the write never names is not an error anywhere - it is a
+     field that saves, looks fine, and is gone on the next load. */
+  const upsert = (source.split("var row = {")[1] || "").split("      };")[0];
+  ["notes", "author", "priorities", "updated_at"].forEach((f) => {
     ok(new RegExp("\\b" + f + ":").test(upsert),
-       `the upsert names ${f} - an unnamed column saves silently and reads back empty`);
+       `the write names ${f} - an unnamed column saves silently and reads back empty`);
   });
 }
 
@@ -616,6 +654,175 @@ ok(/function attestedAuthor/.test(source) && /sharedFrom/.test(source),
    "there is a gate between 'an author is set' and 'an author is shown'");
 ok(/row\.sharedFrom = "server"/.test(source),
    "and only the server-resolved path sets the marker that opens it");
+
+// --- a second writer cannot silently overwrite the first ---------------------------
+/* The whole row travels on every save - about 21KB of priorities and notes - so before
+   this guard the second officer to save simply sent their ten-minute-old copy over the
+   top of the first one's work. No error, nothing on screen, and you would find out days
+   later if at all. It is the same silent-write shape as the notes bug above. */
+{
+  const sdk = fakeSupabase();
+  const w = boot({ configured: true, sdk });
+  await settle(() => w.document.querySelector("tbody tr"));
+  sdk.auth._signIn("Trusty");
+  await settle(() => shown(w, "account"));
+  newList(w);
+  await settle(() => sdk._rows.size === 1);
+
+  const id = [...sdk._rows.keys()][0];
+  const firstStamp = sdk._rows.get(id).updated_at;
+  ok(!!firstStamp, "a saved list carries the version it was written at");
+
+  /* somebody else saves the same list from another browser */
+  sdk._rows.set(id, Object.assign({}, sdk._rows.get(id),
+    { name: "Kayla's edit", updated_at: "2099-01-01T00:00:00.000Z" }));
+
+  /* now edit here, on a copy that no longer matches */
+  const cell = [...w.document.querySelectorAll("td.col-notes")]
+    .find((td) => td && td.querySelector(".note-text"));
+  cell.querySelector(".note-text").dispatchEvent(new w.MouseEvent("click", { bubbles: true }));
+  const field = cell.querySelector(".note-field");
+  field.value = "mine, written against a stale copy";
+  field.dispatchEvent(new w.Event("blur"));
+  await settle(() => /reload/i.test($(w, "edit-msg").textContent));
+
+  ok(sdk._rows.get(id).name === "Kayla's edit",
+     "the stale save does not land - the other writer's row is untouched");
+  ok(/reload/i.test($(w, "edit-msg").textContent),
+     `and it says so out loud: "${$(w, "edit-msg").textContent.slice(0, 72)}"`);
+  ok(/still on screen/i.test($(w, "edit-msg").textContent),
+     "telling you the edit is not lost, because it is still in front of you");
+  ok(!!w.document.querySelector(".toast-undo"),
+     "and offers the way out rather than describing it");
+  ok(w.document.querySelector(".toast-undo").textContent === "Reload",
+     `the action is a reload, not an undo (got "${w.document.querySelector(".toast-undo").textContent}")`);
+  ok(!$(w, "tpl-dirty").hidden,
+     "the list still reads as unsaved, because it is - claiming otherwise is the lie this guard removes");
+
+  /* and a save that IS current still goes through */
+  const w2 = boot({ configured: true, sdk: fakeSupabase() });
+  await settle(() => w2.document.querySelector("tbody tr"));
+  const sdk2 = w2.supabase.createClient();
+  sdk2.auth._signIn("Trusty");
+  await settle(() => shown(w2, "account"));
+  newList(w2);
+  await settle(() => sdk2._rows.size === 1);
+  const id2 = [...sdk2._rows.keys()][0];
+  const before2 = sdk2._rows.get(id2).updated_at;
+  const cell2 = [...w2.document.querySelectorAll("td.col-notes")]
+    .find((td) => td && td.querySelector(".note-text"));
+  cell2.querySelector(".note-text").dispatchEvent(new w2.MouseEvent("click", { bubbles: true }));
+  const f2 = cell2.querySelector(".note-field");
+  f2.value = "nobody else is editing";
+  f2.dispatchEvent(new w2.Event("blur"));
+  await settle(() => Object.values(sdk2._rows.get(id2).notes || {}).some(Boolean));
+  ok(Object.values(sdk2._rows.get(id2).notes).includes("nobody else is editing"),
+     "an uncontested save still lands, so the guard is not just refusing everything");
+  ok(sdk2._rows.get(id2).updated_at !== before2,
+     "and moves the version on, so the next save is guarded against this one");
+}
+
+// --- draft and published: the guild reads what you chose, not what you are doing ------
+/* The point of the whole thing. A ?s= link used to serve the row as it stood that
+   instant, so officers reshuffling at 8pm did it on everyone's screen. Now the link
+   carries a token pointing at the row, and the row decides which of its two faces to
+   hand over - so the URL never changes and the content only moves when you say so. */
+{
+  const sdk = fakeSupabase();
+  const w = boot({ configured: true, sdk });
+  await settle(() => w.document.querySelector("tbody tr"));
+  sdk.auth._signIn("Trusty");
+  await settle(() => shown(w, "account"));
+  newList(w);
+  await settle(() => sdk._rows.size === 1);
+  const id = [...sdk._rows.keys()][0];
+  const stored = () => sdk._rows.get(id);
+
+  ok(!stored().published_at, "a new list is a draft - nothing has been published");
+
+  /* the popover opens on the publish face, because there is nothing to hand out yet */
+  $(w, "share-trigger").click();
+  await settle(() => w.document.querySelector(".share-pop .share-go"));
+  const pop = w.document.querySelector(".share-pop");
+  ok(!pop.querySelector(".share-field"),
+     "so it offers to publish rather than showing a link - looking must not publish");
+  ok(/until you publish again/i.test(pop.textContent),
+     "and says the edits after it stay private until you publish again");
+
+  pop.querySelector(".share-go").click();
+  await settle(() => stored().published_at);
+  ok(!!stored().published_at, "publishing stamps the snapshot");
+  await settle(() => {
+    const c = w.document.querySelector(".share-pop .share-copy");
+    return c && !c.disabled;
+  });
+  const link = w.document.querySelector(".share-field").value;
+  ok(/[?&]s=/.test(link), `and hands back a token link (${link.slice(0, 46)}…)`);
+
+  /* now move the draft on, and check the link does NOT move with it */
+  const before = JSON.stringify(stored().published_priorities);
+  const cell = [...w.document.querySelectorAll("td.col-notes")]
+    .find((td) => td && td.querySelector(".note-text"));
+  cell.querySelector(".note-text").dispatchEvent(new w.MouseEvent("click", { bubbles: true }));
+  const field = cell.querySelector(".note-field");
+  field.value = "still arguing about this one";
+  field.dispatchEvent(new w.Event("blur"));
+  await settle(() => Object.values(stored().notes || {}).some(Boolean));
+
+  ok(JSON.stringify(stored().published_priorities) === before,
+     "editing the draft does not touch the published snapshot");
+  const mid = await sdk.rpc("get_shared_list", { token: stored().share_token });
+  ok(!Object.values(mid.data[0].notes || {}).includes("still arguing about this one"),
+     "so the link still serves the old version - the guild is not watching you think");
+
+  /* and the panel says how far apart they have drifted */
+  $(w, "share-trigger").click();
+  $(w, "share-trigger").click();
+  await settle(() => {
+    const c = w.document.querySelector(".share-pop .share-copy");
+    return c && !c.disabled && /changed since/i.test(w.document.querySelector(".share-pop").textContent);
+  });
+  const panel = w.document.querySelector(".share-pop");
+  ok(/1 item has changed since/i.test(panel.textContent),
+     `the panel counts what is waiting to be sent: "${panel.querySelector(".share-note").textContent}"`);
+  const again = [...panel.querySelectorAll(".share-go")]
+    .find((b) => b.textContent === "Publish changes");
+  ok(!!again, "and offers to send them");
+
+  const url1 = w.document.querySelector(".share-field").value;
+  const tokenBefore = stored().share_token;
+  again.click();
+  await settle(() => Object.values(stored().published_notes || {}).some(Boolean));
+  const after = await sdk.rpc("get_shared_list", { token: stored().share_token });
+  ok(Object.values(after.data[0].notes || {}).includes("still arguing about this one"),
+     "publishing again moves what the link serves");
+
+  /* The token is the claim, not the whole url: the url also carries the phase and
+     filters from location.hash, which move for reasons that have nothing to do with
+     publishing. What must never change is where the link points. */
+  ok(stored().share_token === tokenBefore && url1.indexOf(tokenBefore) !== -1,
+     "and it still points at the same token - the guild pins the link once, not once per publish");
+}
+
+// --- a shared but unpublished list hands out nothing ---------------------------------
+/* "Locked until we are happy", in the only place it can actually be enforced. */
+{
+  const sdk = fakeSupabase();
+  sdk._rows.set("t_draft", {
+    id: "t_draft", name: "Officers only", created: "2026-08-28", v: 1, base: "zatar",
+    priorities: Object.fromEntries(data.map((r) => [r.id, []])),
+    share_token: "tok_draft", shared: true          /* flagged, but never published */
+  });
+  const seen = await sdk.rpc("get_shared_list", { token: "tok_draft" });
+  ok(seen.data.length === 0, "a shared list nobody has published resolves to nothing");
+
+  const w = boot({ configured: true, sdk, url: "?s=tok_draft" });
+  await settle(() => w.document.querySelector("tbody tr"));
+  ok(!$(w, "list-trigger-name").textContent.includes("Officers"),
+     "so the link does not open it, however it was flagged");
+  ok(w.document.querySelectorAll("tbody tr").length > 0,
+     "and the page still works behind that - a dead link costs the list, not the site");
+}
 
 console.log(fail.length ? `\n${fail.length} FAILURES` : "\nAll checks passed");
 process.exit(fail.length ? 1 : 0);

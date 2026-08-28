@@ -397,8 +397,8 @@ a:hover { color: var(--gold-bright); }
 }
 
 .chip--icon .chip-icon {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   border: 0;
   border-radius: var(--radius-sm);
   transition: filter .12s, opacity .12s;
@@ -1140,7 +1140,7 @@ mark {
   #boss-chips { width: 100%; }
   #boss-chips .chip .chip-icon { width: 56px; height: 34px; }
 
-  .chip--icon .chip-icon { width: 22px; height: 22px; }
+  .chip--icon .chip-icon { width: 25px; height: 25px; }
 
   /* Type is the first to go: Slot and the search box both answer questions it can't,
      and the class strip is the reason anyone is looking at this bar. */
@@ -1673,6 +1673,48 @@ mark {
 
 /* 3. and it says so in words. Fixed text: variable-length status lives in the toast,
       because text that changes length here would move the button beside it. */
+/* Paired with the attribute, per the rule at the top of this file: a bare `display`
+   beats the browser's [hidden] and has stranded a control on this bar three times. */
+.list-warn[hidden] { display: none; }
+
+/* Deliberately NOT green, gold or orange. Those four colours all mean something on this
+   page - selected, and the three BiS tiers - and docs/design-brief.md lists them as
+   fixed. A warning that borrowed one would read as "expansion BiS" to anyone who had
+   learned the ladder. It stands out by shape, contrast and a glyph instead.
+
+   flex-basis: 100% is what puts it BELOW the picker instead of stretching the row: it is
+   the zone's last child, so it takes the whole of a second line to itself. */
+/* TWO elements, and the split is the whole point. The outer one exists only to take a
+   line: flex-basis: 100% is what breaks the row, and on its own it also stretched the
+   box across the entire zone, which looked like an error bar rather than a note. The
+   inner one is the pill, and shrinks to its text. */
+.list-warn {
+  flex-basis: 100%;
+  display: flex;
+  margin-top: -2px;
+}
+
+.list-warn-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  line-height: 1.3;
+  padding: 6px 10px;
+  color: var(--text-dim);
+  background: var(--bg-panel-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+/* White, so the glyph is the thing the eye lands on. It carries no meaning the palette
+   already spends - the four that do are fel and the three item-quality tiers. */
+.list-warn-icon {
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+}
+
 .edit-hint[hidden] { display: none; }
 
 .edit-hint {

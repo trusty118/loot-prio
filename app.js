@@ -745,6 +745,7 @@
     templateBar: document.getElementById("template-bar"),
     listTrigger: document.getElementById("list-trigger"),
     listTriggerName: document.getElementById("list-trigger-name"),
+    listWarn: document.getElementById("list-warn"),
     tplDirty: document.getElementById("tpl-dirty"),
     editToggle: document.getElementById("edit-toggle"),
     signIn: document.getElementById("sign-in"),
@@ -1063,7 +1064,16 @@
       /* carried so the menu knows whether to offer Stop sharing, and so a second
          Copy link reuses the token the first one minted rather than orphaning it */
       share_token: row.share_token || null,
-      shared: !!row.shared
+      shared: !!row.shared,
+      /* The version this copy was read at. Every save is conditional on it, so a
+         second person's write cannot be silently overwritten by a stale first. */
+      updated_at: row.updated_at || null,
+      /* What the share link is currently handing out. Carried so the owner can be
+         told how far the draft has moved from it; recipients never see these,
+         because get_shared_list returns the published columns AS priorities. */
+      published_priorities: row.published_priorities || null,
+      published_notes: row.published_notes || null,
+      published_at: row.published_at || null
     };
   }
 
@@ -1107,7 +1117,8 @@
          next load. `notes` was exactly that between Aug 2026 and this fix: editable
          notes worked signed out, where localStore writes the whole blob, and vanished
          signed in. */
-      return sb.from("lists").upsert({
+      var stamp = new Date().toISOString();
+      var row = {
         id: t.id,
         name: t.name,
         created: t.created,
@@ -1118,11 +1129,41 @@
         author: t.author || null,
         share_token: t.share_token || null,
         shared: !!t.shared,
-        updated_at: new Date().toISOString()
-      }).then(function (res) {
+        published_priorities: t.published_priorities || null,
+        published_notes: t.published_notes || null,
+        published_at: t.published_at || null,
+        updated_at: stamp
+      };
+
+      function took(res) {
         if (res.error) throw new Error("Could not save: " + res.error.message);
+        /* the write is the new baseline, so the next save is guarded against this one */
+        t.updated_at = stamp;
         return t;
-      });
+      }
+
+      /* A list this browser has never read back has no version to guard against, so it
+         is an insert. Everything else is conditional. */
+      if (!t.updated_at) {
+        return sb.from("lists").upsert(row).then(took);
+      }
+
+      /* THE GUARD. A blind upsert sends this browser's whole ~21KB copy of the list, so
+         two people editing one list meant the second save silently erased the first -
+         no error, nothing on screen, found out days later if ever. Matching on the
+         updated_at we read means the write only lands if nobody else has written since.
+         Zero rows back is not an error from Postgres, so it has to be checked for. */
+      return sb.from("lists").update(row)
+        .eq("id", t.id).eq("updated_at", t.updated_at).select("id")
+        .then(function (res) {
+          if (res.error) throw new Error("Could not save: " + res.error.message);
+          if (!res.data || !res.data.length) {
+            var stale = new Error("This list changed somewhere else while you were editing");
+            stale.stale = true;      /* distinguishable, so saveNow can offer a reload */
+            throw stale;
+          }
+          return took(res);
+        });
     },
     remove: function (id) {
       return sb.from("lists").delete().eq("id", id).then(function (res) {
@@ -1254,6 +1295,20 @@
     return store.save(t).then(function () {
       if (activeTemplate === t) { unsaved = false; renderTemplateBar(); }
     }, function (err) {
+      /* A stale write is the one failure the person can actually act on, and the one
+         that used to happen in silence. unsaved deliberately stays true: the edit is
+         still on screen and still unsaved, and saying otherwise is the lie this whole
+         guard exists to stop telling. */
+      if (err.stale) {
+        /* Asserted rather than assumed: another save may have resolved in between, and
+           whatever it did, THIS edit did not land. The marker has to say so. */
+        unsaved = true;
+        announce("Someone else saved this list while you were editing - reload to see "
+                 + "their version. Your change is still on screen but not saved.",
+                 function () { location.reload(); }, "Reload");
+        renderTemplateBar();
+        return;
+      }
       announce(err.message);
     });
   }
@@ -2071,7 +2126,7 @@
      `undo` is optional and is what lets the delete confirm stay light: an undo is worth
      more than any confirm, and the deleted record is held in the closure until the
      toast clears. */
-  function announce(msg, undo) {
+  function announce(msg, undo, label) {
     editMsg = msg || "";
     if (!el.editMsg) return;
     clearTimeout(toastTimer);
@@ -2086,7 +2141,7 @@
       var b = document.createElement("button");
       b.type = "button";
       b.className = "toast-undo";
-      b.textContent = "Undo";
+      b.textContent = label || "Undo";
       b.addEventListener("click", function () { announce(""); undo(); });
       el.editMsg.appendChild(b);
     }
@@ -3431,6 +3486,8 @@
     show(el.editHint, !!state.editing);
 
     show(el.tplDirty, activeIsMine && unsaved);
+    /* the one state where the table cannot say anything about who gets what */
+    show(el.listWarn, !activeTemplate);
 
     /* No sign-in button at all when it could not work - an unconfigured project or a
        blocked CDN should read as "this site has no accounts", not as a broken button. */
@@ -3737,11 +3794,10 @@
     if (!activeIsMine) {
       var note = document.createElement("p");
       note.className = "lm-note";
-      note.textContent = activeTemplate
-        ? "You're reading this list. Make a copy to change anything."
-        : "No list is open, so the priority column is empty. Open a starting point above, "
-          + "or make a new list.";
-      listMenu.appendChild(note);
+      /* The no-list case is said on the bar now (#list-warn), not in here: a warning you
+         have to open a menu to find is not doing the job. */
+      note.textContent = "You're reading this list. Make a copy to change anything.";
+      if (activeTemplate) listMenu.appendChild(note);
     }
 
     if (activeIsMine) {
@@ -3882,9 +3938,13 @@
   /* Would pressing Share PUBLISH something, or is there already a link to hand over?
      The popover asks this to decide which face to open on, and the answer is also what
      stops it publishing as a side effect of being looked at. */
+  /* The publish face is for a list with nothing to hand out yet. That is now two
+     conditions rather than one: never shared, or shared but never published - the
+     second is what a list looks like between minting a link and deciding the draft is
+     ready, and its link resolves to nothing until it is. */
   function shareWouldPublish() {
     return !!(activeTemplate && activeIsMine && signedIn() && supabaseReady()
-              && !activeTemplate.shared);
+              && (!activeTemplate.shared || !activeTemplate.published_at));
   }
 
   /* The link for whatever is on screen, as a promise. Three cases, and the third used to
@@ -4024,20 +4084,34 @@
 
     var body = document.createElement("p");
     body.className = "share-note";
-    body.textContent = "Publishing gives you a short link. Anyone who has it can read the " +
-      "list and will see your edits as you make them. You can stop at any time.";
+    /* It used to say readers "will see your edits as you make them", which stopped
+       being true the moment publishing became a snapshot. A share panel that describes
+       the wrong behaviour is worse than one that says nothing. */
+    body.textContent = "Publishing gives you a short link to this list as it is right " +
+      "now. Carry on editing afterwards - nobody sees those changes until you publish " +
+      "again. You can stop sharing at any time.";
     sharePop.appendChild(body);
 
     var go = document.createElement("button");
     go.type = "button";
     go.className = "share-go";
-    go.textContent = "Share this list";
-    go.addEventListener("click", function () { renderShareLinkFace(); });
+    go.textContent = "Publish this list";
+    go.addEventListener("click", function () {
+      go.disabled = true;
+      publishNow().then(function () { renderShareLinkFace(); });
+    });
     sharePop.appendChild(go);
     go.focus();
   }
 
+  /* Which render of this face is current. shareLink() is async, and the face is rebuilt
+     whenever it is reopened or republished - so without this an earlier call resolving
+     late writes its url into a field that has already been thrown away, and the one on
+     screen stays on "Preparing..." for good. */
+  var shareRender = 0;
+
   function renderShareLinkFace() {
+    var mine = ++shareRender;
     sharePop.innerHTML = "";
     var head = document.createElement("p");
     head.className = "share-head";
@@ -4067,8 +4141,14 @@
     sharePop.appendChild(note);
 
     shareLink().then(function (url) {
+      if (mine !== shareRender) return;   /* a newer render owns the panel now */
       field.value = url;
-      note.textContent = shareBlurb(url);
+      /* On a list of your own the useful line is not how long the link is, it is how
+         far the draft has drifted from what the guild is actually reading. */
+      /* Only on the account path. Signed out there is nothing to publish - the link IS
+         the list - so that case keeps the warning about how long it is. */
+      note.textContent = (activeTemplate && activeIsMine && signedIn() && supabaseReady())
+        ? publishedBlurb(activeTemplate) : shareBlurb(url);
       copy.disabled = false;
       copy.addEventListener("click", function () {
         field.select();
@@ -4079,6 +4159,19 @@
       /* the link is longer than the field once published, and the panel is anchored
          under a button whose position has not moved - re-place in case it grew */
       placeUnder(sharePop, el.shareTrigger);
+
+      /* Offered only when there is something to send, so the button is never a no-op */
+      if (activeTemplate && activeIsMine && changedSincePublish(activeTemplate)) {
+        var again = document.createElement("button");
+        again.type = "button";
+        again.className = "share-go";
+        again.textContent = "Publish changes";
+        again.addEventListener("click", function () {
+          again.disabled = true;
+          publishNow().then(function () { renderShareLinkFace(); });
+        });
+        sharePop.appendChild(again);
+      }
 
       if (activeTemplate && activeIsMine && activeTemplate.shared) {
         var stop = document.createElement("button");
@@ -4092,6 +4185,7 @@
         sharePop.appendChild(stop);
       }
     }, function (err) {
+      if (mine !== shareRender) return;
       field.value = "";
       note.textContent = "Could not make a link: " + err.message;
     });
@@ -4136,6 +4230,57 @@
       return location.origin + location.pathname + "?s=" +
         encodeURIComponent(activeTemplate.share_token) + location.hash;
     });
+  }
+
+  /* ---------- publishing ----------
+
+     A list has two faces: the draft its owner edits, and the snapshot the share link
+     hands out. Publishing copies one onto the other. The link never changes - it
+     carries a token pointing at the row, and the row decides which version to serve.
+
+     This is a plain update run as the signed-in owner, under the existing
+     `auth.uid() = user_id` policy. It must NEVER become a security-definer function
+     taking a share token: that would let anyone holding the read link publish over the
+     draft, which is the one way this feature could be got badly wrong. */
+
+  function publishNow() {
+    if (!activeTemplate || !activeIsMine) return Promise.resolve();
+    var t = activeTemplate;
+    /* deep-copied, so later edits to the draft cannot reach into what was published */
+    t.published_priorities = JSON.parse(JSON.stringify(t.priorities || {}));
+    t.published_notes = JSON.parse(JSON.stringify(t.notes || {}));
+    t.published_at = new Date().toISOString();
+    unsaved = true;
+    return saveNow();
+  }
+
+  /* How far the draft has moved from what the guild is reading. Counts items, not
+     keystrokes, because "23 items changed" is the number a council can act on. */
+  function changedSincePublish(t) {
+    if (!t || !t.published_at) return 0;
+    var pubP = t.published_priorities || {}, pubN = t.published_notes || {};
+    var liveP = t.priorities || {}, liveN = t.notes || {};
+    var ids = {}, count = 0;
+    Object.keys(liveP).forEach(function (k) { ids[k] = 1; });
+    Object.keys(pubP).forEach(function (k) { ids[k] = 1; });
+    Object.keys(liveN).forEach(function (k) { ids[k] = 1; });
+    Object.keys(pubN).forEach(function (k) { ids[k] = 1; });
+    Object.keys(ids).forEach(function (k) {
+      var pChanged = JSON.stringify(liveP[k] || []) !== JSON.stringify(pubP[k] || []);
+      var nChanged = (liveN[k] || "") !== (pubN[k] || "");
+      if (pChanged || nChanged) count++;
+    });
+    return count;
+  }
+
+  function publishedBlurb(t) {
+    if (!t || !t.published_at) return "Not published yet - nobody can open the link.";
+    var changed = changedSincePublish(t);
+    var when = String(t.published_at).slice(0, 10);
+    return changed
+      ? "Published " + when + ". " + changed + (changed === 1 ? " item has" : " items have")
+        + " changed since - publish again to send them."
+      : "Published " + when + ". The link is up to date.";
   }
 
   function stopSharing() {

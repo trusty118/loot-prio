@@ -14,7 +14,7 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
 npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 755 checks in ~25s, should be all green
+npm test             # 778 checks in ~30s, should be all green
 python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
 ```
 
@@ -643,7 +643,20 @@ lists ever genuinely confuse someone, the fix is to say so in words, not to add 
 
 **There is no Save button.** A list is written when it is made and again on every edit
 (`saveNow()`), so it is in the dropdown from birth and nothing is lost by forgetting to press
-something. The name field is the one thing debounced, at 400 ms, because it fires per
+something.
+
+**A save cannot clobber someone else's, Aug 2026.** The whole row travels on every write —
+~21 KB of priorities and notes — so before this, two people editing one list meant the second
+save sent its ten-minute-old copy over the top of the first one's work. No error, nothing on
+screen, found out days later if at all. It is the same silent-write shape as the `notes` bug
+below. `rowToTemplate()` now carries `updated_at`, and the save is
+`.update(...).eq("id", …).eq("updated_at", …)` — **zero rows back is not an error from
+Postgres, it is the answer**, and it means somebody else wrote first. `saveNow()` says so and
+offers **Reload**, and deliberately leaves `unsaved` true: the edit is still on screen and
+still unsaved, and saying otherwise is the lie the guard exists to stop telling.
+
+**`localStore` is not guarded, and the gap is real rather than hidden**: one browser is one
+writer, but two *tabs* of it are two, and there the last save still wins in silence. The name field is the one thing debounced, at 400 ms, because it fires per
 character. Whether a write is outstanding lives in a module-level `unsaved`, deliberately
 **not** on the template — so scratch state never travels into the store or into a share link.
 
@@ -784,11 +797,50 @@ nothing selectable and the accent reads as "this is the button", the same licenc
 
 **Two paths, chosen by whether you are signed in, and they mean different things.**
 
-**Signed in → `?s=<token>`, and the link is live.** It carries a token, not the list, so it
-is ~30 characters however much the list holds — which is what makes unbounded notes possible
-at all. The recipient reads the row, so a call you fix reaches everyone holding the link.
-`Stop sharing` clears the flag and the link stops resolving; so does deleting the list. That
-is the honest consequence of live rather than a defect.
+**Signed in → `?s=<token>`.** It carries a token, not the list, so it is ~30 characters
+however much the list holds — which is what makes unbounded notes possible at all.
+`Stop sharing` clears the flag and the link stops resolving; so does deleting the list.
+
+#### Draft and published, Aug 2026
+
+**The link used to be live**, serving the row as it stood that instant — so officers
+reshuffling at 8pm were doing it on everyone's screen. A list now has two faces: the
+**draft** its owner edits, and the **published snapshot** the link hands out. They meet only
+when someone presses Publish (`publishNow()`), and `get_shared_list` returns the
+`published_*` columns.
+
+**The URL never changes, and that is the whole point of it being a token.** The link points
+at the row; the row decides which version to serve. One URL, pinned in Discord once, serving
+whatever was last published — so publishing is never "send everyone a new link".
+
+**Publish is a plain owner-authenticated `update` under `auth.uid() = user_id`. It must
+never become a security-definer function taking a share token** — that would let anyone
+holding the read link publish over the draft, and it is the one way this feature can be got
+badly wrong. Reads go through the narrow definer function; writes only ever happen as the
+owner. `verify/draft-publish.sql` says so at the bottom, where someone adding a "publish by
+link" feature would be looking.
+
+`published_at is not null` is the other half of the read condition, and it is what "locked
+until we are happy" means: a list nobody has published resolves to nothing rather than
+leaking the draft. `shared` is untouched and still the link's on/off switch — the two
+answer different questions, *is there a link* and *what does it serve*.
+
+**The migration backfills, and that is not optional.** Every already-shared list has no
+snapshot, so switching the function over without seeding one would make every link in
+circulation return a list with no priorities — which reads as data loss, because that is what
+it looks like. `verify/draft-publish.sql` copies the live columns into the published ones for
+exactly those rows first.
+
+`changedSincePublish()` counts items, not keystrokes, because *"23 items have changed"* is
+the number a loot council can act on. It is what the share panel offers `Publish changes` on.
+
+**`renderShareLinkFace()` carries a render token (`shareRender`).** `shareLink()` is async and
+the face is rebuilt whenever it is reopened or republished, so without it an earlier call
+resolving late writes its url into a field that has already been thrown away — and the panel
+on screen stays on "Preparing…" for good.
+
+**Signed out, none of this appears**, and nothing is lost by that: a `#t=` link *is* the list,
+frozen the moment it is copied, so copying the link already was publishing.
 
 **The token is never the list id.** Ids are `t_9f3c` — four hex characters — so a link built
 from one could be guessed by trying ids until something came back. `makeShareToken()` is 128
@@ -1120,6 +1172,13 @@ current if any of those change.
   local copy. The keys are consts inside the IIFE — the right place for them — so the test
   rewrites the source string rather than `app.js` growing a hook that exists only for tests.
   **The OAuth redirect itself cannot happen in jsdom** and is checked by hand, like the drag.
+
+  It also covers the two Aug 2026 additions, and the fake had to grow for both — a fake that
+  is laxer than the thing it stands for tests nothing. Its `eq()` keeps every condition
+  rather than collapsing them onto the id, or the guarded save would match every time, which
+  is exactly the bug being guarded against; and its `rpc` serves `published_priorities` as
+  `priorities`, because a fake handing back the draft would pass every assertion while the
+  real function served the snapshot.
 
 ### Waiting: `test/helpers.mjs`
 

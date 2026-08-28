@@ -98,6 +98,35 @@ const d = w.document;
 
 // --- a bundled list is reference, not a workspace ---------------------------------
 ok(!d.querySelector(".prio-edit"), "the guide's rows are not editable");
+
+// --- the no-list warning is on the bar, not inside the menu -------------------------
+/* It used to live in the list menu, which meant it only appeared once you had opened the
+   thing it was warning you about. A warning nobody sees is not one. */
+{
+  const warn = el(d, "list-warn");
+  ok(warn, "there is a warning element on the bar");
+  ok(warn.hidden, "hidden while a list is open, because there is nothing to warn about");
+  ok(d.querySelector(".template-bar").parentNode.contains(warn),
+     "and it sits in the list zone, under the picker it is about");
+  ok(warn.parentNode.lastElementChild === warn,
+     "as the zone's last child, which is what lets it take a line of its own");
+  ok((cssText.split(".list-warn {")[1] || "").split("}")[0].includes("flex-basis: 100%"),
+     "and the stylesheet is what puts it there - jsdom lays nothing out, so the rule is the assertion");
+  ok(warn.querySelector(".list-warn-icon"), "it carries a warning glyph");
+  ok(!/No list is open/.test(source),
+     "and the menu no longer carries the wording it moved out of");
+
+  /* and the state it exists for: nothing open, so the priority column says nothing */
+  const wn = boot("#phase=P3");
+  await settle(() => wn.document.querySelector("tbody tr"));
+  const dn = wn.document;
+  ok(!el(dn, "list-warn").hidden, "with no list open it shows, without opening any menu");
+  ok(/empty/i.test(el(dn, "list-warn").textContent),
+     `and says what is wrong: "${el(dn, "list-warn").textContent.trim()}"`);
+  ok(triggerName(dn) === "No list", "beside a picker that says there is none");
+  ok([...dn.querySelectorAll("td.col-prio")].every((td) => !td.textContent.trim()),
+     "which is true - every priority cell really is empty");
+}
 // Disabled rather than hidden: a control that vanishes teaches nothing, and the title
 // names the way out at the moment you went looking for it.
 ok(el(d, "edit-toggle").disabled, "Edit is disabled, not hidden, on a list that is not yours");

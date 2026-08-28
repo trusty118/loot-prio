@@ -1062,7 +1062,13 @@ ok(Object.keys(zatarList.notes).length === 177,
    open, including none, because they are true either way. */
 {
   const facts = data.filter((r) => r.notes);
-  ok(facts.length > 0 && facts.every((r) => /^(Also drops from|Drops from|Reputation reward)/.test(r.notes)),
+  /* "Scale of the Sands - Exalted" is the four Bands of the Eternal. They used to carry a
+     three-sentence note; what a loot council needs from it is where the ring comes from,
+     and the rest was already said better elsewhere - `unique: true` carries the one-per-
+     player rule and is asserted below, and the "not in the source guide" framing was
+     retired from the UI in Aug 2026. The shape being pinned is unchanged: a note left on
+     an item is a fact about the item, never anybody's opinion of it. */
+  ok(facts.length > 0 && facts.every((r) => /^(Also drops from|Drops from|Reputation reward|Scale of the Sands)/.test(r.notes)),
      `the notes left on items are facts about the item (${facts.length})`);
 }
 

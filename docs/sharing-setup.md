@@ -74,3 +74,21 @@ curl -s "$PROJECT_URL/rest/v1/lists?select=id" -H "apikey: $PUBLISHABLE_KEY"
   in the database to point at, and the site has to keep working without one.
 - **Stop sharing** clears the flag; the link stops resolving. Deleting the list does the
   same, which is the honest consequence of a link being live rather than a copy.
+
+## Draft and published (Aug 2026)
+
+`verify/draft-publish.sql` adds three columns and swaps `get_shared_list` over to them, so a
+share link serves the last **published** snapshot rather than the live draft. Run it once, in
+the Supabase SQL editor, the same way as the other two migrations.
+
+**Run it whole, in one go.** The backfill in the middle is what stops every link already in
+circulation returning a list with no priorities in it — it seeds each shared list's snapshot
+with what that link is serving today, so nothing visibly changes for anyone holding one.
+
+Afterwards: a list nobody has published resolves to nothing, which is the point — the link is
+locked until its owner presses Publish. Existing shared lists are treated as already published,
+so they carry on working untouched.
+
+**Nothing here publishes.** Publishing is a plain update run as the signed-in owner under the
+`auth.uid() = user_id` policy. If you ever find yourself writing a `security definer` function
+that publishes, stop: anyone holding the read link could then publish over the draft.
