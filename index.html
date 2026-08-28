@@ -92,16 +92,40 @@
        and is the one panel that stays pinned while you scroll them. -->
   <section class="controls controls--refine" aria-label="Refine results">
 
-    <!-- Which list is open, and the Edit it arms, at the right-hand end of the sticky
-         bar. The two were split for one commit - picker under the boss rail, Edit down
-         here - and that left a dead end: Edit is disabled on someone else's list with
-         title="Make a copy to edit", and Make a copy is inside the picker's menu, which
-         was then a panel away. A control and the thing that arms it belong together.
+    <div class="control-row control-row--inputs">
+      <!-- No labels on these two. Both default to "All slots" / "All types", so the
+           control already names itself and a micro-label beside it was the same word
+           twice. Slot leads because it is the coarser cut and the one reached for more
+           often - you narrow to boots, then to leather. -->
+      <label class="field" aria-label="Slot">
+        <select id="slot-select"></select>
+      </label>
+      <!-- field--type is what the 900px rule hides: at half-screen Slot and the search
+           box answer questions Type can't, so Type is the one that goes. -->
+      <label class="field field--type" aria-label="Type">
+        <select id="type-select"></select>
+      </label>
+      <label class="field field--grow field--joined">
+        <span class="control-label">Search</span>
+        <input type="search" id="search" placeholder="Item, boss, class, note&hellip;" autocomplete="off">
+      </label>
 
-         .list-zone is ONE box, not three loose children. At half-screen the row wraps,
-         and loose children wrap one at a time: Edit came off the end alone and landed on
-         the LEFT, away from the list it arms. Same reasoning as .account-zone. -->
-    <div class="control-row control-row--list">
+      <button type="button" id="reset" class="btn-reset">Reset</button>
+
+      <!-- Which list is open, and the Edit it arms, at the right-hand end of the sticky
+           bar. The two were split for one commit - picker under the boss rail, Edit down
+           here - and that left a dead end: Edit is disabled on someone else's list with
+           title="Make a copy to edit", and Make a copy is inside the picker's menu, which
+           was then a panel away. A control and the thing that arms it belong together.
+
+           .list-zone is ONE box, not three loose children. At half-screen the row wraps,
+           and loose children wrap one at a time: Edit came off the end alone and landed on
+           the LEFT, away from the list it arms. Same reasoning as .account-zone. -->
+      <!-- The list zone sits on the END of the filter row rather than on a row of its
+           own. With a row to itself its margin-left: auto left ~700px of empty bar to
+           its left while the filters packed against the left below it - the bar ran
+           diagonally and the eye crossed it twice. Same box, same auto margin, one
+           row fewer on the one panel that is sticky. -->
       <div class="list-zone">
         <div class="template-bar" id="template-bar">
           <button type="button" id="list-trigger" class="field field--joined field--tpl list-trigger"
@@ -154,27 +178,6 @@
           </span>
         </span>
       </div>
-    </div>
-
-    <div class="control-row control-row--inputs">
-      <!-- No labels on these two. Both default to "All slots" / "All types", so the
-           control already names itself and a micro-label beside it was the same word
-           twice. Slot leads because it is the coarser cut and the one reached for more
-           often - you narrow to boots, then to leather. -->
-      <label class="field" aria-label="Slot">
-        <select id="slot-select"></select>
-      </label>
-      <!-- field--type is what the 900px rule hides: at half-screen Slot and the search
-           box answer questions Type can't, so Type is the one that goes. -->
-      <label class="field field--type" aria-label="Type">
-        <select id="type-select"></select>
-      </label>
-      <label class="field field--grow field--joined">
-        <span class="control-label">Search</span>
-        <input type="search" id="search" placeholder="Item, boss, class, note&hellip;" autocomplete="off">
-      </label>
-
-      <button type="button" id="reset" class="btn-reset">Reset</button>
     </div>
 
     <div class="control-row control-row--meta">

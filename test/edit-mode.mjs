@@ -110,8 +110,14 @@ ok(!d.querySelector(".prio-edit"), "the guide's rows are not editable");
      "and it sits in the list zone, under the picker it is about");
   ok(warn.parentNode.lastElementChild === warn,
      "as the zone's last child, which is what lets it take a line of its own");
-  ok((cssText.split(".list-warn {")[1] || "").split("}")[0].includes("flex-basis: 100%"),
-     "and the stylesheet is what puts it there - jsdom lays nothing out, so the rule is the assertion");
+  /* It used to be flex-basis: 100%, which took the line but ALSO contributed a whole
+     warn line to the zone's intrinsic width - enough to wrap the zone off the merged
+     filter row in exactly the empty-list state it exists for. Absolute is the stronger
+     property: it still takes its own line under the picker, and it cannot widen the row
+     at all. jsdom lays nothing out, so the rule is the assertion. */
+  const warnRule = (cssText.split(".list-warn {")[1] || "").split("}")[0];
+  ok(warnRule.includes("position: absolute") && !warnRule.includes("flex-basis"),
+     "the warning is out of flow, so it cannot stretch the row it hangs under");
   ok(warn.querySelector(".list-warn-icon"), "it carries a warning glyph");
   ok(!/No list is open/.test(source),
      "and the menu no longer carries the wording it moved out of");

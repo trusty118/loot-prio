@@ -673,8 +673,9 @@ Loot Prio Lists                                                    [ @macka118 �
 [All slots] [All types] [SEARCH____________] [Reset]
 ```
 
-**The list picker moved out of the banner and now leads the sticky bar, beside `Edit`,
-Aug 2026** — see §5. Everything below still holds; only where the bar lives changed.
+**The list picker moved out of the banner, and now sits at the right-hand end of the
+sticky bar's filter row beside `Edit`, Aug 2026** — see §5. Everything below still holds;
+only where the bar lives changed.
 
 **Two controls plus the account zone, in every state. Nothing hides, nothing unhides,
 nothing changes width.** That is the whole design, and it replaced a bar that went from
@@ -1097,9 +1098,32 @@ current if any of those change.
   beside it — there are none now. It stays capped on its own merits: you type in it
   occasionally and never read from it.
 - **The class and spec strips are the last row of `.controls--where`; the list picker and
-  `Edit` lead `.controls--refine`, Aug 2026.** The strips read as the end of one sequence —
-  *which phase, which zone, which boss, who for* — rather than as another filter among the
-  dropdowns.
+  `Edit` sit at the right-hand end of `.controls--refine`'s filter row, Aug 2026.** The
+  strips read as the end of one sequence — *which phase, which zone, which boss, who for* —
+  rather than as another filter among the dropdowns.
+
+  **The picker had a row to itself until Aug 2026, and the reason it lost it is the shape
+  of the whole bar rather than anything wrong with the picker.** `.list-zone` carries
+  `margin-left: auto`, so on its own row it left ~700px of empty bar to its left while the
+  filters packed hard against the left below it: the bar ran diagonally, the eye crossed it
+  twice, and the two dead corners were on the one panel that is `position: sticky` and
+  therefore permanently on screen. Merging the two rows took the panel from 169px to ~78px
+  without moving a single control relative to its neighbours. **Don't split them apart again
+  to give the picker room** — the room was never the problem.
+
+  **The no-list warning hangs off the zone, out of flow, and that is load-bearing.** With
+  nothing open the priority column is empty for every row, and `#list-warn` says so under
+  the picker. It lived in the list menu first, which meant it only appeared once you opened
+  the thing it was warning you about. It is two elements: the outer one positions
+  (`position: absolute; top: 100%; left: 0` — the picker's left edge, since the picker is
+  the zone's first child), the inner `.list-warn-box` is the pill and shrinks to its text.
+  It was `flex-basis: 100%` for one commit, and that **contributed a whole warn line to the
+  zone's intrinsic width** — the zone measured ~839px instead of the ~507px its controls
+  need, wrapped off the filter row, and opened a 332px gap inside itself, in exactly the
+  empty-list state it exists for. `.control-row--inputs:has(.list-warn:not([hidden]))`
+  reserves the line instead, so the bar is not permanently taller for a message that is
+  usually absent. The glyph is white on purpose: fel and the three item-quality colours all
+  mean something, and a coloured warning would read as a BiS tier.
 
   **The strips gave up stickiness for that, and it was chosen rather than overlooked.**
   `.controls--where` does not stick, so they scroll away on a 699-row table, and they *are*

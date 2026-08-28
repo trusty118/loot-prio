@@ -588,9 +588,15 @@ a:hover { color: var(--gold-bright); }
    behind it. */
 .control-row--inputs {
   flex-wrap: wrap;
-  align-items: flex-start;
+  /* the list zone is on this row now, and its controls are taller than the fields */
+  align-items: center;
   gap: 12px;
 }
+
+/* The warning is out of flow, so nothing reserves the line it sits on. Reserve it here,
+   and only while it is shown - the bar must not be permanently taller for a message
+   that is usually absent. */
+.control-row--inputs:has(.list-warn:not([hidden])) { padding-bottom: 36px; }
 
 .field {
   display: flex;
@@ -1179,6 +1185,7 @@ mark {
    comment warns about upstream, and at half-screen it did exactly that: the row wrapped,
    Edit came off the end alone and landed on the LEFT, away from the list it acts on. */
 .list-zone {
+  position: relative;      /* the warning hangs off this, see .list-warn */
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1684,14 +1691,23 @@ mark {
 
    flex-basis: 100% is what puts it BELOW the picker instead of stretching the row: it is
    the zone's last child, so it takes the whole of a second line to itself. */
-/* TWO elements, and the split is the whole point. The outer one exists only to take a
-   line: flex-basis: 100% is what breaks the row, and on its own it also stretched the
-   box across the entire zone, which looked like an error bar rather than a note. The
-   inner one is the pill, and shrinks to its text. */
+/* TWO elements, and the split is the whole point. The outer one positions; the inner
+   one is the pill and shrinks to its text.
+
+   It is ABSOLUTE, and that is not cosmetic. As an in-flow child with flex-basis: 100%
+   it contributed a whole warn line to the zone's intrinsic width, so the zone measured
+   ~839px instead of the ~507px its controls need - which on this merged row wrapped the
+   zone onto a second line and opened a 332px gap inside it, in exactly the empty-list
+   state the merge exists to fix. Out of flow it cannot widen the row at all.
+
+   left: 0 is the picker's left edge, because the picker is the zone's first child. */
 .list-warn {
-  flex-basis: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
   display: flex;
-  margin-top: -2px;
+  white-space: nowrap;
 }
 
 .list-warn-box {

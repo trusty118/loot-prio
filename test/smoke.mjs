@@ -1619,12 +1619,22 @@ ok(!doc.querySelector(".site-header #class-chips"),
 
 const rowClasses = [...doc.querySelectorAll(".controls--refine .control-row")]
   .map((r) => r.className.replace("control-row ", ""));
-/* Which list is open leads the sticky bar, with Slot/Type/Search under it and the count
-   last. Reset stays with the filters it clears rather than travelling with the picker. */
-ok(rowClasses.join(" > ") === "control-row--list > control-row--inputs > control-row--meta",
-   `the panel reads list, then inputs, then the count (${rowClasses.join(" > ")})`);
+/* TWO rows, not three. The picker had a row to itself, and its margin-left: auto left
+   ~700px of empty bar beside it while the filters packed against the left below - the bar
+   ran diagonally and the eye crossed it twice. It sits on the end of the filter row now.
+   Reset stays with the filters it clears rather than travelling with the picker. */
+ok(rowClasses.join(" > ") === "control-row--inputs > control-row--meta",
+   `the panel is the filter row then the count (${rowClasses.join(" > ")})`);
 ok(doc.querySelector(".control-row--inputs").contains(doc.getElementById("reset")),
    "Reset stays with the filters it clears");
+
+/* The bug that nearly shipped with the merge: the warning is what decides whether the
+   zone fits beside the filters. In flow it added its own width to the zone and pushed it
+   onto a second line - reinstating the two rows this change removed, in precisely the
+   state it exists for. Out of flow it cannot. jsdom cannot measure, so pin the mechanism
+   and the reservation that replaces the space it no longer takes. */
+ok((cssText.split(".control-row--inputs:has(.list-warn")[1] || "").includes("padding-bottom"),
+   "the row reserves the warning's line itself, only while the warning is shown");
 
 /* Prominence without spending the accent. --gold means "selected" everywhere on this
    page, and the design brief lists it as a colour that carries meaning - so the picker
@@ -1671,10 +1681,12 @@ ok(doc.querySelector(".controls--refine").contains(doc.getElementById("template-
 ok(!doc.querySelector(".site-header #template-bar") &&
    !doc.querySelector(".controls--where #template-bar"),
    "and neither in the banner nor up with the where-hierarchy");
-const listRow = doc.querySelector(".control-row--list");
+const listRow = doc.querySelector(".control-row--inputs");
 ok(listRow.contains(doc.getElementById("template-bar")) &&
    listRow.contains(doc.getElementById("edit-toggle")),
    "the picker and Edit share a row - separating them is the defect this repairs");
+ok(listRow.lastElementChild === doc.querySelector(".list-zone"),
+   "and the zone is the end of that row, which is what its auto margin pushes it to");
 
 /* Both are in the sticky panel, which is the point: Edit is pressed while reading rows,
    and the picker's menu is where Make a copy lives. The strips gave that up in exchange -
