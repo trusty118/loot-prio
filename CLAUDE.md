@@ -160,6 +160,36 @@ entry of `FeralDruid` + `form: "cat"` resolves straight to `FeralCat`.
 
 ### `data/bis.json` — which items are BiS for which spec
 
+**Two sources, chosen in the bar, and they are not equally complete.** `BIS_SOURCES` in
+`app.js` lists them; `indexBis()` builds one index per source and `bisAt()` reads whichever
+`state.bisSource` names, so nothing downstream knows there is a choice.
+
+| | P1 | P2 | P3 | P4 | P5 | specs |
+|---|---|---|---|---|---|---|
+| `specs` (Wowhead) | 283 | 318 | 437 | 460 | 391 | **28 of 28** |
+| `wowsimsPresets` | — | — | — | 324 | 335 | **20 of 28** |
+
+Wowhead is the default because it is the only complete one. **WoWSims has nothing before
+Phase 4** and is missing `AffliLock`, `DemoLock`, `Disc`, `HolyPal`, `HolyPriest`, `Marks`,
+`RestoDruid` and `RestoShaman` entirely — not an import bug, but because `wowsimsPresets`
+was captured as `fetch_bis.py`'s longevity cross-check ("does a P3 item survive into the
+P4/P5 preset") and only ever needed those two phases. Filling it in means extending that
+scraper.
+
+**Choosing a source with nothing to say shows no rings, and does not fall back.** A silent
+fallback would make the control a lie about which data you are reading. `custom` is
+reserved and holds nothing, so it rings nothing — an entry that quietly did nothing would
+read as broken rather than as unbuilt.
+
+**A wowsims entry is a bare item id**, because a preset is the gear a build sims with. It
+carries no longevity tier and no qualifier, so every wowsims ring is phase-tier and
+unqualified. That is the source's limit, not the import's.
+
+**The choice is a preference, not a filter**: it lives in `localStorage`
+(`lootprio.bisSource`) and deliberately **not** in the url, because a link you send should
+not change somebody else's source out from under them. `seedFromBis()` reads it too, so
+seeding a list from WoWSims and from Wowhead gives different lines.
+
 ```json
 "ProtWarr": {
   "P3": [ { "id": 32375, "item": "Bulwark of Azzinoth", "bis": "expansion" } ]
@@ -1308,6 +1338,11 @@ structured priority), `verify/fetch_unique.py` (re-runnable if the item set chan
 - **`roles` on the imported rows are stats-derived, not BiS-derived.** `fetch_items.py` reads
   them off the item's own stats, which is blunt on hybrids; `verify/seed_roles.py` is the
   better source and has not been re-run since the import.
+- **The BiS source toggle shipped, Aug 2026 — with the data behind it incomplete.**
+  WoWSims covers P4/P5 only, for 20 of 28 specs, so choosing it on Phase 3 rings nothing.
+  The control is honest about that rather than falling back. Filling the gap means
+  extending `fetch_bis.py` to pull wowsims presets for all five phases and the 8 missing
+  specs; the table in §2 is what to fill.
 - **Alias-aware search shipped, Aug 2026** — see §2. 15 of the 44 shorthands used to find
   nothing at all.
 - Planned but not built: a rank display for the unused `positions()`. See §3.

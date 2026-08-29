@@ -2004,6 +2004,43 @@ ok(!doc.querySelector("#spec-chips .chip--toggle"), "reset drops the BiS toggle"
 ok(doc.getElementById("spec-row").hidden, "reset hides the spec row again");
 ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priority icons");
 
+// --- the BiS data source is a choice, and it drives the rings ------------------------
+/* Two sources with very different coverage: Wowhead has all five phases and all 28 specs,
+   wowsims has P4/P5 for 20 of them. The control is honest about that by showing what the
+   chosen source actually holds rather than falling back to the other one. */
+{
+  click(doc.getElementById("reset"));
+  const sel = doc.getElementById("bis-source");
+  ok(sel, "there is a BiS data source control");
+  ok([...sel.options].map((o) => o.value).join() === "wowhead,wowsims,custom",
+     `it offers the three sources (${[...sel.options].map((o) => o.value).join()})`);
+  ok(sel.value === "wowhead", "and defaults to Wowhead, the only complete one");
+
+  const rings = () => doc.querySelectorAll(".spec-icon--bis, .spec-icon--bis2, .spec-icon--bis3").length;
+  const withWowhead = rings();
+  ok(withWowhead > 50, `Wowhead rings the Phase 3 rows (${withWowhead})`);
+
+  const pick = (v) => { sel.value = v; sel.dispatchEvent(new window.Event("change")); };
+
+  /* wowsims holds P4 and P5 only, so on Phase 3 it has nothing to say. Showing no rings
+     is the honest answer - quietly falling back to Wowhead would make the control a lie. */
+  pick("wowsims");
+  ok(rings() === 0, `wowsims has no Phase 3 data, so it rings nothing (${rings()})`);
+
+  pick("custom");
+  ok(rings() === 0, "custom is not set up yet, so it rings nothing either");
+
+  pick("wowhead");
+  ok(rings() === withWowhead, "and switching back restores them - nothing is cached per source");
+
+  /* The choice is a preference about reading the page, not a filter on it, so it must
+     never reach the url: a link you send should not change someone else's source. */
+  ok(!/bisSource|bis-source|source=/.test(window.location.hash),
+     `the source stays out of the url (${window.location.hash})`);
+  ok(/localStorage[\s\S]{0,200}lootprio\.bisSource|BIS_SOURCE_KEY/.test(appSource),
+     "it is remembered per browser instead");
+}
+
 // --- sharing has a control you can see, and it works in every state --------------------
 /* The assertion that was missing. `Copy link` sat in the list menu and, on zatar's list,
    did NOTHING: copyShareLink() opened with `if (!activeTemplate) return;`, so the first

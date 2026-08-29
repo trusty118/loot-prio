@@ -695,6 +695,10 @@ a:hover { color: var(--gold-bright); }
   background: color-mix(in srgb, var(--gold) 10%, transparent);
 }
 
+/* The source names are short and the widest is "Custom (not set up)", so this one field
+   opts out of the 150px floor the filters share - it would leave a gap on the right. */
+.field--bis select { min-width: 0; }
+
 select, input[type="search"] {
   font: inherit;
   font-size: .88rem;
@@ -1149,8 +1153,11 @@ mark {
   .chip--icon .chip-icon { width: 25px; height: 25px; }
 
   /* Type is the first to go: Slot and the search box both answer questions it can't,
-     and the class strip is the reason anyone is looking at this bar. */
-  .field--type { display: none; }
+     and the class strip is the reason anyone is looking at this bar. The BiS source goes
+     with it - it is set once and then left alone, so it is the last thing needed at
+     half-screen. Neither is hidden with [hidden], so a plain display rule is safe here. */
+  .field--type,
+  .field--bis { display: none; }
 }
 
 @media (max-width: 760px) {

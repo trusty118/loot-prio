@@ -717,6 +717,7 @@
     classes: [],     // multi-select class identifiers; [] = all
     specs: [],       // multi-select spec identifiers, each refining one of the above
     bisOnly: false,  // narrow to the selected specs' BiS lists
+    bisSource: "wowhead",   // which BiS data the rings come from; see BIS_SOURCES
     roles: [],       // multi-select; [] = all
     type: "",
     slot: "",
@@ -738,6 +739,7 @@
     specRow: document.getElementById("spec-row"),
     type: document.getElementById("type-select"),
     slot: document.getElementById("slot-select"),
+    bisSource: document.getElementById("bis-source"),
     search: document.getElementById("search"),
     reset: document.getElementById("reset"),
     count: document.getElementById("count"),
@@ -897,6 +899,34 @@
 
   var STORE_KEY = "lootprio.templates";
   var SMART_KEY = "lootprio.smartFilter";
+  var BIS_SOURCE_KEY = "lootprio.bisSource";
+
+  /* Where the BiS rings come from. A preference about how you read the page rather than
+     a filter on it, so it lives in this browser and NOT in the url: a link you send
+     should not silently change somebody else's source out from under them.
+
+     Wowhead is the default because it is the only source that is complete - all five
+     phases, all 28 specs. See BIS_SOURCES for what the others hold. */
+  var BIS_SOURCES = [
+    { id: "wowhead", label: "Wowhead" },
+    { id: "wowsims", label: "WoWSims" },
+    /* Reserved. Choosing it shows no rings at all, which is the honest rendering of
+       "you have not supplied any BiS data yet" - the alternative is a menu entry that
+       silently does nothing, which reads as broken rather than as unbuilt. */
+    { id: "custom", label: "Custom (not set up)" }
+  ];
+
+  function bisSource() {
+    try {
+      var v = window.localStorage.getItem(BIS_SOURCE_KEY);
+      return BIS_SOURCES.some(function (s) { return s.id === v; }) ? v : "wowhead";
+    } catch (e) { return "wowhead"; }
+  }
+
+  function setBisSource(id) {
+    try { window.localStorage.setItem(BIS_SOURCE_KEY, id); }
+    catch (e) { /* private browsing: the session still works, it just won't persist */ }
+  }
 
   /* Smart filtering narrows the add popover to specs the item suits. On by default:
      most of the time the full 37 is noise, and the few real exceptions are reached
@@ -2693,20 +2723,40 @@
      rebuilt from bis.json on every load and read by nothing, which is the shape of thing
      that makes a feature look half-finished when it is not started. Four lines to bring
      back if a cross-phase view ever needs the per-spec shape. */
-  var BIS = {};
+  /* One index per source, same key shape, so bisAt() reads whichever is selected and
+     nothing downstream knows there is a choice. */
+  var BIS_INDEX = { wowhead: {}, wowsims: {}, custom: {} };
 
+  /* What each source can say. Wowhead's guides rank an item and qualify it, so its
+     entries carry a longevity tier and a variant. A wowsims preset is a LIST OF ITEM IDS
+     - the gear that build sims with - so it can say "in the preset for this phase" and
+     nothing else. Every wowsims ring is therefore phase-tier and unqualified, which is
+     not a gap in the import: the source does not hold that information. */
   function indexBis(doc) {
-    BIS = {};
+    BIS_INDEX = { wowhead: {}, wowsims: {}, custom: {} };
     var specs = (doc && doc.specs) || {};
+    var sims = (doc && doc.wowsimsPresets) || {};
 
     Object.keys(specs).forEach(function (specName) {
       var phases = specs[specName] || {};
       Object.keys(phases).forEach(function (phase) {
         (phases[phase] || []).forEach(function (entry) {
           if (!entry || entry.id == null) return;
-          BIS[phase + "|" + specName + "|" + entry.id] = {
+          BIS_INDEX.wowhead[phase + "|" + specName + "|" + entry.id] = {
             longevity: BIS_LONGEVITY_BY_NAME[entry.bis || "phase"] || 1,
             variant: entry.variant || ""
+          };
+        });
+      });
+    });
+
+    Object.keys(sims).forEach(function (specName) {
+      var phases = sims[specName] || {};
+      Object.keys(phases).forEach(function (phase) {
+        (phases[phase] || []).forEach(function (id) {
+          if (id == null) return;
+          BIS_INDEX.wowsims[phase + "|" + specName + "|" + id] = {
+            longevity: 1, variant: ""
           };
         });
       });
@@ -2718,7 +2768,8 @@
      ring that ignored the phase would answer "BiS at some point" rather than "BiS for me
      now" - which is the question a loot council is actually asking. */
   function bisAt(specId, itemId) {
-    return BIS[state.phase + "|" + specId + "|" + itemId] || null;
+    var idx = BIS_INDEX[state.bisSource] || BIS_INDEX.wowhead;
+    return idx[state.phase + "|" + specId + "|" + itemId] || null;
   }
 
   function bisVariant(specId, itemId) {
@@ -4418,6 +4469,21 @@
   function bind() {
     enhanceSelect(el.slot, "Slot");
     enhanceSelect(el.type, "Type");
+
+    if (el.bisSource) {
+      BIS_SOURCES.forEach(function (src) {
+        el.bisSource.appendChild(option(src.id, src.label));
+      });
+      el.bisSource.value = state.bisSource;
+      enhanceSelect(el.bisSource, "BiS data source");
+      el.bisSource.addEventListener("change", function () {
+        state.bisSource = el.bisSource.value;
+        setBisSource(state.bisSource);
+        /* the rings are drawn from bisAt() during the render, so redrawing is all it
+           takes - nothing is cached per source beyond the two indexes themselves */
+        update();
+      });
+    }
     el.type.addEventListener("change", function () { state.type = el.type.value; update(); });
     el.slot.addEventListener("change", function () { state.slot = el.slot.value; update(); });
 
@@ -4590,6 +4656,7 @@
     .then(function (results) {
       var data = results[0];
       ALL = data;
+      state.bisSource = bisSource();
       readUrl();
       /* A list= in the url opens that bundled list, so a link to "here is what I am
          looking at" carries the calls as well as the filters. Read before update(), which
