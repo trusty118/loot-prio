@@ -221,6 +221,18 @@ guides rank by purpose (`Best Threat`, `Best Mitigation`) and healers by build
 `Alternative`, `Pre-Raid`, `PvP`, `Best Until Tier 6`). `Near Best` and `Second Best` fail
 the leading-word test deliberately.
 
+**`Load BiS data` is a control on the bar, Aug 2026**, beside `Edit`. It fills the **empty**
+priorities of the phase on screen from the selected source, joined with `=`, as a starting
+point to drag into an order — `seedFromBis()`. It was an item in the list menu, which is to
+say nobody found it; sharing left the menu for the same reason, and it lives in one place
+rather than two.
+
+**Disabled rather than hidden** when the open list is not yours, with a title saying so —
+the rule `Edit` beside it already follows. Two limits make it safe to press: it touches only
+the phase on screen, because seeding 699 rows from one click is not something anyone means,
+and it skips any row that already has a priority, so **it can only ever add**. Pressing it
+twice changes nothing and says so rather than appearing to do nothing.
+
 **With no list open the priority column shows the BiS view**, Aug 2026: every spec an item
 is best-in-slot for, in the phase on screen, from the selected source. Without it the whole
 of `bis.json` was invisible — rings hang off spec icons in the priority column, and with no

@@ -754,6 +754,7 @@
     account: document.getElementById("account"),
     accountName: document.getElementById("account-name"),
     shareTrigger: document.getElementById("share-trigger"),
+    seedBis: document.getElementById("seed-bis"),
     editMsg: document.getElementById("edit-msg"),
     editHint: document.getElementById("edit-hint"),
     refine: document.querySelector(".controls--refine")
@@ -3619,6 +3620,15 @@
        is the same defect this whole rewrite exists to remove. */
     el.editToggle.disabled = !activeIsMine;
     el.editToggle.title = activeIsMine ? "" : "Make a copy to edit";
+
+    /* Same rule, same reason. The title carries what the label cannot say in two words:
+       it fills the EMPTY rows of the phase on screen, so it can only ever add. */
+    if (el.seedBis) {
+      el.seedBis.disabled = !activeIsMine;
+      el.seedBis.title = activeIsMine
+        ? "Fill this phase's empty priorities from the BiS data, all equal, to drag into order"
+        : "Make a copy to load BiS data into it";
+    }
     el.editToggle.setAttribute("aria-pressed", state.editing ? "true" : "false");
     el.editToggle.textContent = state.editing ? "Done editing" : "Edit priorities";
 
@@ -3945,9 +3955,6 @@
     }
 
     if (activeIsMine) {
-      listMenu.appendChild(menuItem("Seed empty rows from BiS", "", function () {
-        closeListMenu(); seedFromBis();
-      }));
       listMenu.appendChild(menuItem("Rename\u2026", "", function () {
         menuFace = "rename"; renderListMenu();
       }));
@@ -4155,6 +4162,10 @@
        trigger's own mousedown closes the menu and its click reopens it - which looks
        like the menu ignoring every second press. */
     el.listTrigger.addEventListener("mousedown", function (ev) { ev.stopPropagation(); });
+
+    if (el.seedBis) {
+      el.seedBis.addEventListener("click", function () { seedFromBis(); });
+    }
 
     if (el.shareTrigger) {
       /* both halves, for the same reason the list trigger does it: without the mousedown
