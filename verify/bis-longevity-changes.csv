@@ -1,6 +1,64 @@
 spec,item,was,now
-Ret,Bindings of Lightning Reflexes,expansion,multiPhase
-Ret,Bow-stitched Leggings,expansion,multiPhase
-Ret,Cursed Vision of Sargeras,expansion,multiPhase
-Ret,Shadowmaster's Boots,expansion,multiPhase
-Ret,Torch of the Damned,expansion,multiPhase
+Arms,Choker of Serrated Blades,multiPhase,phase
+Arms,Unstoppable Aggressor's Ring,multiPhase,phase
+Arms,Madness of the Betrayer,multiPhase,phase
+Arms,Tsunami Talisman,multiPhase,phase
+Arms,Cataclysm's Edge,expansion,multiPhase
+Arms,Twisted Blades of Zarak,multiPhase,phase
+Fury,Choker of Serrated Blades,multiPhase,phase
+Fury,Unstoppable Aggressor's Ring,multiPhase,phase
+Fury,Madness of the Betrayer,multiPhase,phase
+Fury,Twisted Blades of Zarak,multiPhase,phase
+HolyPal,Shroud of the Final Stand,multiPhase,phase
+HolyPal,Bastion of Light,multiPhase,phase
+BM,Shadowmoon Destroyer's Drape,expansion,phase
+BM,Don Alejandro's Money Belt,multiPhase,phase
+BM,Choker of Serrated Blades,multiPhase,phase
+BM,Band of the Eternal Champion,multiPhase,phase
+Marks,Shadowmoon Destroyer's Drape,expansion,phase
+Marks,Don Alejandro's Money Belt,multiPhase,phase
+Marks,Choker of Serrated Blades,multiPhase,phase
+Marks,Band of the Eternal Champion,multiPhase,phase
+Surv,Ravager's Bands,multiPhase,phase
+Ele,Cloak of the Illidari Council,multiPhase,phase
+Ele,Naturewarden's Treads,multiPhase,phase
+Ele,The Lightning Capacitor,expansion,multiPhase
+Enh,Cursed Vision of Sargeras,expansion,multiPhase
+Enh,Swiftstrike Shoulders,expansion,multiPhase
+Enh,Shadowmoon Destroyer's Drape,expansion,multiPhase
+Enh,Bindings of Lightning Reflexes,multiPhase,phase
+Enh,Deadly Cuffs,multiPhase,phase
+Enh,Insidious Bands,multiPhase,phase
+Enh,Grips of Damnation,multiPhase,phase
+Enh,Shadowmaster's Boots,multiPhase,phase
+Enh,Choker of Serrated Blades,multiPhase,phase
+Enh,Band of the Eternal Champion,multiPhase,phase
+Enh,Band of the Ranger-General,multiPhase,phase
+RestoShaman,Swiftheal Wraps,multiPhase,phase
+RestoShaman,Bracers of Renewed Life,multiPhase,phase
+RestoShaman,Belt of Primal Majesty,multiPhase,phase
+RestoShaman,Angelista's Sash,multiPhase,phase
+RestoShaman,Nadina's Pendant of Purity,multiPhase,phase
+RestoShaman,Bastion of Light,expansion,multiPhase
+RestoShaman,Felstone Bulwark,expansion,phase
+Arcane,Shroud of the Highborne,multiPhase,phase
+Arcane,Bracers of Nimble Thought,multiPhase,phase
+Arcane,Band of the Eternal Sage,phase,expansion
+Fire,Chronicle of Dark Secrets,expansion,multiPhase
+AffliLock,Waistwrap of Infinity,multiPhase,phase
+AffliLock,Leggings of Devastation,multiPhase,phase
+DemoLock,Shroud of the Highborne,multiPhase,phase
+DemoLock,Cloak of the Illidari Council,multiPhase,phase
+DemoLock,Waistwrap of Infinity,multiPhase,phase
+DemoLock,Leggings of Devastation,multiPhase,phase
+DemoLock,The Skull of Gul'dan,phase,expansion
+DestroLock,Waistwrap of Infinity,multiPhase,phase
+DestroLock,Leggings of Devastation,multiPhase,phase
+BalanceDruid,Cloak of the Illidari Council,multiPhase,phase
+BalanceDruid,Hammer of Judgement,multiPhase,phase
+FeralBear,Dragonspine Trophy,multiPhase,phase
+RestoDruid,Shroud of the Highborne,expansion,multiPhase
+RestoDruid,Swiftheal Wraps,multiPhase,phase
+RestoDruid,Bracers of Renewed Life,multiPhase,phase
+RestoDruid,Belt of Primal Majesty,multiPhase,phase
+RestoDruid,Scepter of Purification,expansion,multiPhase

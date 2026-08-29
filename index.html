@@ -105,6 +105,14 @@
       <label class="field field--type" aria-label="Type">
         <select id="type-select"></select>
       </label>
+      <!-- Which BiS data the rings come from. A preference about how you read the page
+           rather than a filter on it, so it wears its label the way Search does and is
+           remembered per browser instead of riding in the url - a link you send should
+           not silently change somebody else's source. -->
+      <label class="field field--joined field--bis" aria-label="BiS data source">
+        <span class="control-label">BiS from</span>
+        <select id="bis-source"></select>
+      </label>
       <label class="field field--grow field--joined">
         <span class="control-label">Search</span>
         <input type="search" id="search" placeholder="Item, boss, class, note&hellip;" autocomplete="off">
@@ -159,6 +167,14 @@
              toast - text that changes length in a bar sitting directly above the rows is
              the reflow defect this whole redesign has been removing. -->
         <span class="edit-hint" id="edit-hint" hidden>Editing &mdash; changes save as you make them</span>
+        <!-- Fills the empty rows of the phase on screen from the BiS data, as a starting
+             point to drag into an order. It was only ever an item in the list menu, which
+             is to say nobody found it - the same reason sharing got a control of its own.
+
+             Disabled rather than hidden when the list isn't yours, like Edit beside it:
+             a control that vanishes teaches nothing, a disabled one with a reason teaches
+             the copy path at the moment someone goes looking. -->
+        <button type="button" id="seed-bis" class="btn-seed">Load BiS data</button>
         <!-- Disabled rather than hidden when the open list isn't yours. A control that
              vanishes teaches nothing; a disabled one with a reason teaches the copy path
              at the moment someone went looking for it. -->
@@ -174,7 +190,7 @@
         <span class="list-warn" id="list-warn" role="status" hidden>
           <span class="list-warn-box">
             <span class="list-warn-icon" aria-hidden="true">&#9888;</span>
-            Priorities are empty &mdash; open a list, or make a new one
+            No list open &mdash; showing what is BiS. Open a list, or make a new one
           </span>
         </span>
       </div>

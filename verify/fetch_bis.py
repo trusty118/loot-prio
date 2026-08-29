@@ -143,6 +143,15 @@ def not_bis_for(phase):
 
 TIERS = {1: "phase", 2: "multiPhase", 3: "expansion"}
 
+# How many of a slot one person wears at once. A guide listing three "Best" two-handers
+# is ranking them - the first is BiS and the rest are near-BiS alternatives - but two
+# "Best" rings really are two rings.
+SLOT_CAPACITY = {"Finger": 2, "Trinket": 2, "One-Hand": 2}
+
+
+def capacity(slot):
+    return SLOT_CAPACITY.get(slot, 1)
+
 
 # 84 guide pages per run, and the mapping table takes several passes to get right.
 # Without a cache on disk that is 84 requests per pass, which is how this earned a
@@ -243,6 +252,7 @@ def main():
 
     built, sim_presets = {}, {}
     dropped, mismatches, failures, unmapped = [], [], [], {}
+    near_marked = []
     sim_disagrees, longevity_changes = [], []
 
     for spec in sources:
@@ -266,20 +276,54 @@ def main():
             failures.append(f"{spec}: {e}")
             continue
 
-        listed = {ph: {r[0] for r in rows} for ph, rows in per_phase.items()}
+        # WHICH ROWS ARE ACTUALLY BiS, decided before anything is counted. A guide lists
+        # several rows as "Best" in one slot and ranks them by row order, so everything
+        # past what the slot holds is a near-BiS alternative. It has to be settled first:
+        # a near-BiS row must not count toward how long an item lasted, or a third-choice
+        # sword in P4 would look like the item surviving P4.
+        near_ids = {}
+        for ph, rows in per_phase.items():
+            filled, near_ids[ph] = {}, set()
+            for item_id, name, rank in rows:
+                rec = by_id.get(item_id)
+                if not rec:
+                    continue
+                variant, _ = variant_for(rank)
+                key = (rec["slot"], variant or "")
+                filled[key] = filled.get(key, 0) + 1
+                if filled[key] > capacity(rec["slot"]):
+                    near_ids[ph].add(item_id)
+                    near_marked.append(
+                        f"{spec} {ph} {rec['slot']}: {rec['item']} "
+                        f"(#{filled[key]} listed best)")
+
+        listed = {ph: {r[0] for r in rows if r[0] not in near_ids[ph]}
+                  for ph, rows in per_phase.items()}
 
         # --- how long it lasts, counted forward from the phase in hand ---
         # Wowhead covers every spec; wowsims has no preset for the eight that are not
         # meta, so it cannot decide this for anyone - its silence would read as "one
         # phase" rather than as "unknown". It cross-checks instead, below.
+        # `expansion` means you got it before Sunwell and nothing in Sunwell replaced
+        # it - so the test is whether the LAST phase still names it, not how long a run
+        # it had. An item BiS in P1, P2 and P3 and then dropped is not BiS for the
+        # expansion; one picked up in P4 and still best in Sunwell is.
+        #
+        # This must stay in step with longevityOf() in app.js, which derives the same
+        # thing at render time. The client is what draws the rings; this field is the
+        # record, and check_bis.py reports when the two disagree.
+        last = PHASES[-1]
+
         def tier_from(phase, item_id):
+            if item_id in listed[last] and phase != last:
+                return 3
             run = 0
             for ph in PHASES[PHASES.index(phase):]:
                 if item_id in listed[ph]:
                     run += 1
                 else:
                     break
-            return min(max(run, 1), 3)
+            return 2 if run > 1 else 1
 
         phases_out = {}
         for phase in PHASES:
@@ -297,6 +341,8 @@ def main():
                         f"{spec}: id {item_id} is {rec['item']!r} here, {name!r} on Wowhead")
 
                 entry = {"id": item_id, "item": rec["item"]}
+                if item_id in near_ids[phase]:
+                    entry["near"] = True
                 tier = tier_from(phase, item_id)
                 if tier > 1:
                     entry["bis"] = TIERS[tier]
@@ -306,8 +352,10 @@ def main():
                 if miss:
                     unmapped.setdefault(miss, []).append(f"{spec} {phase}")
                 entries.append(entry)
+            # Entries stay in GUIDE ORDER. Sorting by name here is what used to throw
+            # the ranking away, so three "Best" two-handers all ringed identically.
             if entries:
-                phases_out[phase] = sorted(entries, key=lambda e: (e["item"], e.get("variant", "")))
+                phases_out[phase] = entries
 
         if phases_out:
             built[spec] = phases_out
@@ -388,6 +436,13 @@ def main():
             print(f"  {d}")
         if len(sim_disagrees) > 20:
             print(f"  ... and {len(sim_disagrees) - 20} more")
+    if near_marked:
+        print(f"\nmarked near-BiS ({len(near_marked)}) - listed 'Best' but past what the "
+              f"slot holds, so the guide's own row order says they are alternatives:")
+        for n in near_marked[:20]:
+            print(f"  {n}")
+        if len(near_marked) > 20:
+            print(f"  ... and {len(near_marked) - 20} more")
     if dropped:
         print(f"\nBiS on Wowhead but not in this dataset ({len(dropped)}) - dropped, not added")
     if mismatches:

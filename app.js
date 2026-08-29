@@ -717,6 +717,7 @@
     classes: [],     // multi-select class identifiers; [] = all
     specs: [],       // multi-select spec identifiers, each refining one of the above
     bisOnly: false,  // narrow to the selected specs' BiS lists
+    bisSource: "wowhead",   // which BiS data the rings come from; see BIS_SOURCES
     roles: [],       // multi-select; [] = all
     type: "",
     slot: "",
@@ -738,6 +739,7 @@
     specRow: document.getElementById("spec-row"),
     type: document.getElementById("type-select"),
     slot: document.getElementById("slot-select"),
+    bisSource: document.getElementById("bis-source"),
     search: document.getElementById("search"),
     reset: document.getElementById("reset"),
     count: document.getElementById("count"),
@@ -752,6 +754,7 @@
     account: document.getElementById("account"),
     accountName: document.getElementById("account-name"),
     shareTrigger: document.getElementById("share-trigger"),
+    seedBis: document.getElementById("seed-bis"),
     editMsg: document.getElementById("edit-msg"),
     editHint: document.getElementById("edit-hint"),
     refine: document.querySelector(".controls--refine")
@@ -897,6 +900,34 @@
 
   var STORE_KEY = "lootprio.templates";
   var SMART_KEY = "lootprio.smartFilter";
+  var BIS_SOURCE_KEY = "lootprio.bisSource";
+
+  /* Where the BiS rings come from. A preference about how you read the page rather than
+     a filter on it, so it lives in this browser and NOT in the url: a link you send
+     should not silently change somebody else's source out from under them.
+
+     Wowhead is the default because it is the only source that is complete - all five
+     phases, all 28 specs. See BIS_SOURCES for what the others hold. */
+  var BIS_SOURCES = [
+    { id: "wowhead", label: "Wowhead" },
+    { id: "wowsims", label: "WoWSims" },
+    /* Reserved. Choosing it shows no rings at all, which is the honest rendering of
+       "you have not supplied any BiS data yet" - the alternative is a menu entry that
+       silently does nothing, which reads as broken rather than as unbuilt. */
+    { id: "custom", label: "Custom (not set up)" }
+  ];
+
+  function bisSource() {
+    try {
+      var v = window.localStorage.getItem(BIS_SOURCE_KEY);
+      return BIS_SOURCES.some(function (s) { return s.id === v; }) ? v : "wowhead";
+    } catch (e) { return "wowhead"; }
+  }
+
+  function setBisSource(id) {
+    try { window.localStorage.setItem(BIS_SOURCE_KEY, id); }
+    catch (e) { /* private browsing: the session still works, it just won't persist */ }
+  }
 
   /* Smart filtering narrows the add popover to specs the item suits. On by default:
      most of the time the full 37 is noise, and the few real exceptions are reached
@@ -2693,32 +2724,99 @@
      rebuilt from bis.json on every load and read by nothing, which is the shape of thing
      that makes a feature look half-finished when it is not started. Four lines to bring
      back if a cross-phase view ever needs the per-spec shape. */
-  var BIS = {};
+  /* One index per source, same key shape, so bisAt() reads whichever is selected and
+     nothing downstream knows there is a choice. */
+  var BIS_INDEX = { wowhead: {}, wowsims: {}, custom: {} };
+
+  /* HOW LONG AN ITEM LASTS IS DERIVED HERE, not read from the source, and always
+     WITHIN one source and one spec - Wowhead's phases against Wowhead's, never across.
+
+     `expansion` means what it says: you got the item before Sunwell and nothing in Sunwell
+     replaced it. So the test is whether that source's FINAL phase still names it for that
+     spec, and whether it was gained before then. `multiPhase` is anything that outlives its
+     own phase without reaching the end; everything else is `phase`.
+
+     This replaced a run-length rule - "BiS for three or more consecutive phases" - which
+     was a different claim wearing the same word. An item BiS in P1, P2 and P3 and then
+     dropped is not BiS for the expansion; an item picked up in P4 and still best in Sunwell
+     is, and the old rule called it multiPhase.
+
+     A source with only two phases cannot show `multiPhase` at all: reaching its last phase
+     from its first IS surviving the expansion, as far as that source can see. That is
+     honest about wowsims holding P4 and P5 rather than a gap to paper over.
+
+     A VARIANT is not derivable and is read where a source states one: "best threat" versus
+     "best mitigation" is a judgement the guide made. wowsims states none. */
+  function longevityOf(listedByPhase, phases, phase, itemId) {
+    var last = phases[phases.length - 1];
+    var here = phases.indexOf(phase);
+
+    var survives = !!(listedByPhase[last] && listedByPhase[last][itemId]);
+    if (survives && phase !== last) return 3;
+
+    var run = 0;
+    for (var i = here; i < phases.length; i++) {
+      if (!listedByPhase[phases[i]] || !listedByPhase[phases[i]][itemId]) break;
+      run++;
+    }
+    return run > 1 ? 2 : 1;
+  }
 
   function indexBis(doc) {
-    BIS = {};
-    var specs = (doc && doc.specs) || {};
+    BIS_INDEX = { wowhead: {}, wowsims: {}, custom: {} };
+    indexOneSource(BIS_INDEX.wowhead, (doc && doc.specs) || {}, function (e) {
+      /* A guide lists several rows as "Best" in one slot and says which is actually BiS
+         through row order. fetch_bis.py marks everything past what the slot holds, and a
+         near-BiS alternative is not BiS: no ring, and no claim on how long it lasted. */
+      if (!e || e.id == null || e.near) return null;
+      return { id: e.id, variant: e.variant || "" };
+    });
+    indexOneSource(BIS_INDEX.wowsims, (doc && doc.wowsimsPresets) || {}, function (id) {
+      /* a preset is a bare list of item ids - no qualifier, and no ranking to lose */
+      return id != null ? { id: id, variant: "" } : null;
+    });
+  }
 
-    Object.keys(specs).forEach(function (specName) {
-      var phases = specs[specName] || {};
-      Object.keys(phases).forEach(function (phase) {
-        (phases[phase] || []).forEach(function (entry) {
-          if (!entry || entry.id == null) return;
-          BIS[phase + "|" + specName + "|" + entry.id] = {
-            longevity: BIS_LONGEVITY_BY_NAME[entry.bis || "phase"] || 1,
-            variant: entry.variant || ""
+  /* Two passes per spec, and the first is what makes the derivation possible: you cannot
+     know how long an item lasts until you have read every phase it might last into. Only
+     the phases this source actually holds are considered, in release order. */
+  function indexOneSource(into, bySpec, read) {
+    Object.keys(bySpec).forEach(function (specName) {
+      var raw = bySpec[specName] || {};
+      var phases = PHASE_IDS.filter(function (p) { return raw[p]; });
+
+      var listed = {};
+      phases.forEach(function (phase) {
+        listed[phase] = {};
+        (raw[phase] || []).forEach(function (row) {
+          var e = read(row);
+          if (e) listed[phase][e.id] = true;
+        });
+      });
+
+      phases.forEach(function (phase) {
+        (raw[phase] || []).forEach(function (row) {
+          var e = read(row);
+          if (!e) return;
+          into[phase + "|" + specName + "|" + e.id] = {
+            longevity: longevityOf(listed, phases, phase, e.id),
+            variant: e.variant
           };
         });
       });
     });
   }
 
+  /* the phases in release order, which is the order "survives to" means */
+  var PHASE_IDS = PHASES.map(function (p) { return p.id; });
+
   /* Keyed by the registry identifier (ProtWarr), matching data/bis.json, and scoped to
      the phase on screen: a Sunwell item is not BiS for someone reading Phase 3, and a
      ring that ignored the phase would answer "BiS at some point" rather than "BiS for me
      now" - which is the question a loot council is actually asking. */
   function bisAt(specId, itemId) {
-    return BIS[state.phase + "|" + specId + "|" + itemId] || null;
+    var idx = BIS_INDEX[state.bisSource] || BIS_INDEX.wowhead;
+    return idx[state.phase + "|" + specId + "|" + itemId] || null;
   }
 
   function bisVariant(specId, itemId) {
@@ -2857,6 +2955,53 @@
      the previous one. Icons come from the registry; operators render as text
      between them. No parsing, so an unknown identifier is a visible gap with a
      console warning rather than a silent plain-text fallback. */
+  /* WITH NO LIST OPEN, the column shows what the BiS data knows: every spec this item is
+     best-in-slot for, in the phase on screen, from the selected source.
+
+     Without this the whole thing is invisible. Rings hang off spec icons in the priority
+     column, and with no list there are no icons - so 1,889 BiS entries and the BIS FROM
+     control had nothing to show, while bisOnlyMatch() went on filtering by them. The data
+     could narrow the table and could not be looked at, which is a strange pair.
+
+     IT MUST NOT READ AS A RANKING, because nobody has ranked these. Three things keep it
+     honest: no operators, which is what makes a priority line an ordering rather than a
+     set; registry order rather than any order that implies preference; and a quiet BIS
+     label, without which icons under a column headed PRIORITY simply read as a priority.
+
+     Only when NO list is open. With one open, an item it does not rank stays blank - that
+     is the list saying nothing, and filling it in would make the list look like it ranks
+     things it does not. Deliberately narrower than bisOnlyMatch(), which bridges the
+     FILTER whenever a list is silent: a filter that reaches too far shows you an extra
+     row, a display that reaches too far tells you something untrue. */
+  function bisViewCell(td, rec) {
+    if (activeTemplate) return td;
+
+    var specs = Object.keys(REG.specs).filter(function (id) {
+      return bisTier(id, rec.id);
+    });
+    if (!specs.length) return td;
+
+    var tag = document.createElement("span");
+    tag.className = "prio-from";
+    tag.textContent = "BIS";
+    td.appendChild(tag);
+
+    var picking = state.classes.length > 0;
+    specs.forEach(function (id) {
+      var spec = REG.specs[id];
+      var icon = specIcon({ id: id, name: spec.name, icon: spec.icon },
+                          bisTier(id, rec.id), [], bisVariant(id, rec.id));
+      /* the same "not you" dimming a priority line uses, so a selection reads the same
+         way whichever the column is showing */
+      if (picking && SELECTED_SPECS.indexOf(id) === -1) {
+        icon.classList.add("spec-icon--muted");
+      }
+      makeFocusable(icon, id);
+      td.appendChild(icon);
+    });
+    return td;
+  }
+
   function priorityCell(rec) {
     var td = document.createElement("td");
     td.className = "col-prio";
@@ -2868,7 +3013,7 @@
       appendText(td, list, state.q);
       return td;
     }
-    if (!list || !list.length) return td;
+    if (!list || !list.length) return bisViewCell(td, rec);
 
     /* The SEEDED tag stood here. It marked lines seed_priority.py wrote from the BiS
        data, and those are gone: every one was exactly the specs bis.json already lists,
@@ -3475,6 +3620,15 @@
        is the same defect this whole rewrite exists to remove. */
     el.editToggle.disabled = !activeIsMine;
     el.editToggle.title = activeIsMine ? "" : "Make a copy to edit";
+
+    /* Same rule, same reason. The title carries what the label cannot say in two words:
+       it fills the EMPTY rows of the phase on screen, so it can only ever add. */
+    if (el.seedBis) {
+      el.seedBis.disabled = !activeIsMine;
+      el.seedBis.title = activeIsMine
+        ? "Fill this phase's empty priorities from the BiS data, all equal, to drag into order"
+        : "Make a copy to load BiS data into it";
+    }
     el.editToggle.setAttribute("aria-pressed", state.editing ? "true" : "false");
     el.editToggle.textContent = state.editing ? "Done editing" : "Edit priorities";
 
@@ -3801,9 +3955,6 @@
     }
 
     if (activeIsMine) {
-      listMenu.appendChild(menuItem("Seed empty rows from BiS", "", function () {
-        closeListMenu(); seedFromBis();
-      }));
       listMenu.appendChild(menuItem("Rename\u2026", "", function () {
         menuFace = "rename"; renderListMenu();
       }));
@@ -4011,6 +4162,10 @@
        trigger's own mousedown closes the menu and its click reopens it - which looks
        like the menu ignoring every second press. */
     el.listTrigger.addEventListener("mousedown", function (ev) { ev.stopPropagation(); });
+
+    if (el.seedBis) {
+      el.seedBis.addEventListener("click", function () { seedFromBis(); });
+    }
 
     if (el.shareTrigger) {
       /* both halves, for the same reason the list trigger does it: without the mousedown
@@ -4418,6 +4573,21 @@
   function bind() {
     enhanceSelect(el.slot, "Slot");
     enhanceSelect(el.type, "Type");
+
+    if (el.bisSource) {
+      BIS_SOURCES.forEach(function (src) {
+        el.bisSource.appendChild(option(src.id, src.label));
+      });
+      el.bisSource.value = state.bisSource;
+      enhanceSelect(el.bisSource, "BiS data source");
+      el.bisSource.addEventListener("change", function () {
+        state.bisSource = el.bisSource.value;
+        setBisSource(state.bisSource);
+        /* the rings are drawn from bisAt() during the render, so redrawing is all it
+           takes - nothing is cached per source beyond the two indexes themselves */
+        update();
+      });
+    }
     el.type.addEventListener("change", function () { state.type = el.type.value; update(); });
     el.slot.addEventListener("change", function () { state.slot = el.slot.value; update(); });
 
@@ -4590,6 +4760,7 @@
     .then(function (results) {
       var data = results[0];
       ALL = data;
+      state.bisSource = bisSource();
       readUrl();
       /* A list= in the url opens that bundled list, so a link to "here is what I am
          looking at" carries the calls as well as the filters. Read before update(), which

@@ -127,11 +127,17 @@ ok(!d.querySelector(".prio-edit"), "the guide's rows are not editable");
   await settle(() => wn.document.querySelector("tbody tr"));
   const dn = wn.document;
   ok(!el(dn, "list-warn").hidden, "with no list open it shows, without opening any menu");
-  ok(/empty/i.test(el(dn, "list-warn").textContent),
+  ok(/no list open/i.test(el(dn, "list-warn").textContent),
      `and says what is wrong: "${el(dn, "list-warn").textContent.trim()}"`);
   ok(triggerName(dn) === "No list", "beside a picker that says there is none");
-  ok([...dn.querySelectorAll("td.col-prio")].every((td) => !td.textContent.trim()),
-     "which is true - every priority cell really is empty");
+
+  /* The column is not blank in this state - it shows what the BiS data knows, so the
+     BIS FROM control has something to do and the rings are reachable. The warning has to
+     say THAT rather than "priorities are empty", which stopped being true. */
+  ok([...dn.querySelectorAll("td.col-prio .prio-from")].length > 0,
+     "and the column shows the BiS view rather than nothing at all");
+  ok([...dn.querySelectorAll("td.col-prio .prio-op")].length === 0,
+     "with no operators, so it cannot be mistaken for somebody's ordering");
 }
 // Disabled rather than hidden: a control that vanishes teaches nothing, and the title
 // names the way out at the moment you went looking for it.
@@ -731,6 +737,50 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
   // and it is added where it can be kept apart, not in the shared icon builder
   ok(!/function specIcon[\s\S]{0,1400}spec-icon--link/.test(source),
      "specIcon() does not add it - priorityCell() does");
+}
+
+// --- Load BiS data, the starting point for a list built from scratch -------------------
+/* It was an item in the list menu, which is to say nobody found it - the same reason
+   sharing got a control of its own. It fills the EMPTY rows of the phase on screen, so it
+   can only ever add. */
+{
+  const wS = boot("#phase=P4");
+  await settle(() => wS.document.querySelector("tbody tr"));
+  const dS = wS.document;
+  const btn = el(dS, "seed-bis");
+  const icons = () => dS.querySelectorAll("td.col-prio img.spec-icon").length;
+
+  ok(btn && !btn.hidden, "the control is on the bar, always");
+  ok(btn.disabled && /make a copy/i.test(btn.title),
+     `disabled with a reason when no list of yours is open: "${btn.title}"`);
+  ok(!/Seed empty rows/.test(menuText(wS)),
+     "and it has left the list menu, so there is one place it lives");
+
+  doMenu(wS, "+  New list");
+  await settle(() => only(wS));
+  ok(!btn.disabled, "a list of your own makes it usable");
+  ok(icons() === 0, "which starts with nothing in the priority column");
+
+  click(wS, btn);
+  await settle(() => icons() > 0);
+  ok(icons() > 0, `one press seeds it from the BiS data (${icons()} icons)`);
+
+  /* Flat on purpose: every entry equal, because nothing here ranks them. That is what
+     makes it a starting point rather than an answer. */
+  const t = only(wS);
+  const seeded = Object.values(t.priorities).filter((p) => p.length);
+  ok(seeded.length > 0 && seeded.every((p) => p.every((e, i) => i === 0 || e.op === "=")),
+     `every seeded line is flat - nothing ranks anyone above anyone (${seeded.length} rows)`);
+
+  /* It fills EMPTY rows, so a second press has nothing left to do - which is the same
+     guarantee that stops it overwriting an ordering you made by hand. */
+  const before = JSON.stringify(only(wS).priorities);
+  click(wS, btn);
+  await settle();   /* a real wait: the assertion is that nothing changed */
+  ok(JSON.stringify(only(wS).priorities) === before,
+     "pressing it again changes nothing - it only ever fills what is empty");
+  ok(/nothing to seed/i.test(el(dS, "edit-msg").textContent),
+     `and says so rather than appearing to do nothing: "${el(dS, "edit-msg").textContent}"`);
 }
 
 // --- no browser dialogs anywhere ------------------------------------------------------------

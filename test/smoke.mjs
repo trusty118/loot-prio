@@ -41,7 +41,11 @@ await until(() => window.document.querySelector("tbody tr"));
   const row = [...d0.querySelectorAll(".list-menu .lm-row")]
     .find((r) => /Zatar/.test(r.textContent));
   row.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
-  await until(() => d0.querySelector("td.col-prio img.spec-icon"));
+  /* Wait for something only true ONCE THE LIST IS OPEN. "a spec icon exists" looks like
+     the right signal and is not: with no list open the column shows the BiS specs, so
+     that predicate was already true and everything below ran listless. An operator is
+     the honest signal - only an ordering has one. */
+  await until(() => d0.querySelector("td.col-prio .prio-op"));
 }
 
 /* The search box is debounced by 120ms in app.js, and when it fires update() writes
@@ -775,6 +779,10 @@ for (const [specId, phases] of Object.entries(bis.specs)) {
   for (const [phase, entries] of Object.entries(phases)) {
     if (phase !== "P3") continue;
     for (const e of entries) {
+      /* A guide lists several rows as "Best" in one slot and ranks them by row order;
+         fetch_bis.py marks everything past what the slot holds. A near-BiS alternative
+         is not BiS, so it draws no ring and must not be looked for. */
+      if (e.near) continue;
       const rec = data.find((r) => r.id === e.id);
       if (!rec) continue;
       const row = rowFor(rec.item);
@@ -852,7 +860,7 @@ ok(/BiS/.test(multiIcon.dataset.tipBis) && /phase/i.test(multiIcon.dataset.tipBi
 // the phase example likewise comes from the file rather than being named
 const phaseCase = Object.entries(bis.specs).flatMap(([specId, phases]) =>
   (phases.P3 || [])
-    .filter((e) => (e.bis || "phase") === "phase" && !e.variant)
+    .filter((e) => !e.near && (e.bis || "phase") === "phase" && !e.variant)
     .map((e) => ({ specId, rec: data.find((r) => r.id === e.id) })))
   .find(({ specId, rec }) => rec && listsSpec(rec, specId) && rowFor(rec.item));
 const phaseIcon = iconById(rowFor(phaseCase.rec.item), phaseCase.specId);
@@ -1817,13 +1825,16 @@ ok(chipByTip("#spec-chips", "Fire Mage") && chipByTip("#spec-chips", "Destructio
 
 // refining one class must not narrow the other
 click(chipByTip("#spec-chips", "Fire Mage"));
-ok(rows().length === 27, `Fire + the whole Warlock class -> 27 rows (got ${rows().length})`);
+/* 26, not 27: Waistwrap of Infinity used to be reachable here because it was recorded as
+   BiS for Demonology - and the guide actually lists it SECOND for that slot, a near-BiS
+   alternative. It is marked as one now, so nothing surfaces it as BiS. */
+ok(rows().length === 26, `Fire + the whole Warlock class -> 26 rows (got ${rows().length})`);
 ok(rows().map((tr) => tr.children[0].textContent.trim()).includes("Cowl of the Illidari High Lord"),
    "a Fire-only row survives the refinement");
 
 // dropping a class drops the specs that were refining it
 click(chipByTip("#class-chips", "Mage"));
-ok(rows().length === 23, `Warlock alone -> 23 rows (got ${rows().length})`);
+ok(rows().length === 22, `Warlock alone -> 22 rows (got ${rows().length})`);
 ok(!window.location.hash.includes("spec="), `the Fire refinement went with it: ${window.location.hash}`);
 
 click(doc.getElementById("reset"));
@@ -2003,6 +2014,193 @@ ok(rows().length === 195, `reset clears the spec filter (got ${rows().length})`)
 ok(!doc.querySelector("#spec-chips .chip--toggle"), "reset drops the BiS toggle");
 ok(doc.getElementById("spec-row").hidden, "reset hides the spec row again");
 ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priority icons");
+
+// --- how long an item lasts is DERIVED, not read from the source ---------------------
+/* `expansion` means you got the item before Sunwell and nothing in Sunwell replaced it,
+   so the test is whether that source's LAST phase still names it - not how long a run it
+   had. An item BiS in P1, P2 and P3 and then dropped is not BiS for the expansion.
+   Always within one source and one spec, never across sources. */
+{
+  const PH = ["P1", "P2", "P3", "P4", "P5"];
+  const NAME = { 1: "phase", 2: "multiPhase", 3: "expansion" };
+  const tierOfEntry = (phases, phase, id, ids, order) => {
+    const last = order[order.length - 1];
+    if (ids[last] && ids[last].has(id) && phase !== last) return 3;
+    let run = 0;
+    for (let i = order.indexOf(phase); i < order.length; i++) {
+      if (!ids[order[i]] || !ids[order[i]].has(id)) break;
+      run++;
+    }
+    return run > 1 ? 2 : 1;
+  };
+
+  /* It reproduces every stored tier, which is what keeps the file and the screen saying
+     the same thing - fetch_bis.py computes it when it writes, the client when it draws. */
+  let checked = 0, differ = 0;
+  for (const [, phases] of Object.entries(bis.specs)) {
+    const order = PH.filter((p) => phases[p]);
+    const ids = {};
+    for (const p of order) ids[p] = new Set((phases[p] || []).filter((e) => !e.near).map((e) => e.id));
+    for (const p of order) {
+      for (const e of phases[p] || []) {
+        if (e.near) continue;      /* a near-BiS row makes no claim about lasting */
+        checked++;
+        if (NAME[tierOfEntry(phases, p, e.id, ids, order)] !== (e.bis || "phase")) differ++;
+      }
+    }
+  }
+  ok(checked > 1000 && differ === 0,
+     `the rule reproduces all ${checked} stored tiers (${differ} disagree)`);
+
+  /* A source holding only two phases cannot show multiPhase at all: reaching its last
+     phase from its first IS surviving, as far as that source can see. */
+  const sims = bis.wowsimsPresets || {};
+  let simsExp = 0;
+  for (const [, phases] of Object.entries(sims)) {
+    const order = PH.filter((p) => phases[p]);
+    const ids = {};
+    for (const p of order) ids[p] = new Set(phases[p] || []);
+    for (const p of order) {
+      for (const id of phases[p] || []) {
+        if (tierOfEntry(phases, p, id, ids, order) === 3) simsExp++;
+      }
+    }
+  }
+  ok(simsExp > 0, `wowsims gets real tiers from the same rule (${simsExp} expansion)`);
+  ok(/function longevityOf/.test(appSource) && !/entry\.bis/.test(appSource),
+     "and the client derives it rather than reading the stored field");
+}
+
+/* A guide lists several rows as "Best" in one slot and ranks them by ROW ORDER - the
+   first is BiS, the rest are near-BiS alternatives. Losing that is what made three
+   two-handers ring identically. */
+{
+  const loot = new Map(data.map((r) => [r.id, r]));
+  const CAP = { Finger: 2, Trinket: 2, "One-Hand": 2 };
+  let over = 0, near = 0;
+  for (const [spec, phases] of Object.entries(bis.specs)) {
+    for (const [phase, entries] of Object.entries(phases)) {
+      const group = new Map();
+      for (const e of entries) {
+        if (e.near) { near++; continue; }
+        const rec = loot.get(e.id);
+        if (!rec) continue;
+        const key = rec.slot + "|" + (e.variant || "");
+        group.set(key, (group.get(key) || 0) + 1);
+      }
+      for (const [key, n] of group) {
+        if (n > (CAP[key.split("|")[0]] || 1)) over++;
+      }
+    }
+  }
+  ok(near > 0, `the guides' extra "Best" rows are marked near-BiS (${near})`);
+  ok(over === 0,
+     `and no slot claims more BiS than it can hold (${over} groups over capacity)`);
+}
+
+// --- with no list open, the column shows what the BiS data knows ----------------------
+/* Rings hang off spec icons in the priority column, so with no list there were no icons -
+   1,889 BiS entries and the BIS FROM control had nothing to show, while bisOnlyMatch()
+   went on filtering by them. The data could narrow the table and could not be looked at. */
+{
+  /* its own window: the shared one has a list open, and this is about the state before
+     you pick anything */
+  const bare = new JSDOM(html, { runScripts: "outside-only", url: "https://x.test/loot-prio/" });
+  Object.assign(bare.window, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
+  bare.window.fetch = (url) => {
+    const u = String(url);
+    const body = u.includes("lists/index.json") ? listIndex
+               : u.includes("zatar-p3.json") ? zatarList
+               : u.includes("bis.json") ? bis : u.includes("specs.json") ? specs : data;
+    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(body) });
+  };
+  bare.window.eval(appSource);
+  await until(() => bare.window.document.querySelector("tbody tr"));
+  const bd = bare.window.document;
+  const icons = () => bd.querySelectorAll("td.col-prio img.spec-icon").length;
+  const rings = () => bd.querySelectorAll(".spec-icon--bis, .spec-icon--bis2, .spec-icon--bis3").length;
+
+  ok(bd.getElementById("list-trigger-name").textContent === "No list", "no list is open");
+  ok(icons() > 100, `the priority column shows the BiS specs anyway (${icons()} icons)`);
+  ok(rings() === icons(),
+     `and every one carries a ring, because every one IS a BiS entry (${rings()}/${icons()})`);
+
+  /* It must not read as a ranking, and three things keep it honest. */
+  ok(bd.querySelectorAll("td.col-prio .prio-op").length === 0,
+     "no operators - that is what makes a priority line an ordering rather than a set");
+  ok([...bd.querySelectorAll(".prio-from")].length > 0 &&
+     [...bd.querySelectorAll(".prio-from")].every((n) => n.textContent === "BIS"),
+     "and a quiet BIS label says what you are looking at, the same way on every row");
+
+  /* An item BiS for nobody has nothing to show, so it stays genuinely empty. */
+  const bisIds = new Set(Object.values(bis.specs)
+    .flatMap((p) => Object.values(p).flat()).filter((e) => !e.near).map((e) => e.id));
+  const orphanRow = [...bd.querySelectorAll("tbody tr[data-id]")]
+    .find((tr) => !bisIds.has(Number(tr.dataset.id)));
+  ok(orphanRow && orphanRow.children[3].querySelectorAll("img").length === 0,
+     "an item that is BiS for nobody shows nothing at all");
+
+  /* A source with no data for this phase empties it, which is what makes the control
+     visibly honest rather than apparently broken. */
+  const sel = bd.getElementById("bis-source");
+  sel.value = "wowsims";
+  sel.dispatchEvent(new bare.window.Event("change"));
+  await until(() => icons() === 0);
+  ok(icons() === 0, "switching to a source with no data for this phase empties the column");
+  sel.value = "wowhead";
+  sel.dispatchEvent(new bare.window.Event("change"));
+  await until(() => icons() > 100);
+
+  /* Opening a list replaces the view with what the list says - including saying nothing. */
+  bd.getElementById("list-trigger").dispatchEvent(new bare.window.MouseEvent("click", { bubbles: true }));
+  [...bd.querySelectorAll(".list-menu .lm-row")].find((r) => /Zatar/.test(r.textContent))
+    .dispatchEvent(new bare.window.MouseEvent("click", { bubbles: true }));
+  await until(() => bd.querySelectorAll("td.col-prio .prio-op").length > 0);
+
+  ok(bd.querySelectorAll(".prio-from").length === 0,
+     "opening a list replaces the BiS view with the list's own ordering");
+  const unranked = [...bd.querySelectorAll("tbody tr[data-id]")]
+    .find((tr) => !zatarList.priorities[tr.dataset.id]);
+  ok(unranked && unranked.children[3].querySelectorAll("img").length === 0,
+     "and a row that list does not rank goes blank rather than falling back to BiS");
+}
+
+// --- the BiS data source is a choice, and it drives the rings ------------------------
+/* Two sources with very different coverage: Wowhead has all five phases and all 28 specs,
+   wowsims has P4/P5 for 20 of them. The control is honest about that by showing what the
+   chosen source actually holds rather than falling back to the other one. */
+{
+  click(doc.getElementById("reset"));
+  const sel = doc.getElementById("bis-source");
+  ok(sel, "there is a BiS data source control");
+  ok([...sel.options].map((o) => o.value).join() === "wowhead,wowsims,custom",
+     `it offers the three sources (${[...sel.options].map((o) => o.value).join()})`);
+  ok(sel.value === "wowhead", "and defaults to Wowhead, the only complete one");
+
+  const rings = () => doc.querySelectorAll(".spec-icon--bis, .spec-icon--bis2, .spec-icon--bis3").length;
+  const withWowhead = rings();
+  ok(withWowhead > 50, `Wowhead rings the Phase 3 rows (${withWowhead})`);
+
+  const pick = (v) => { sel.value = v; sel.dispatchEvent(new window.Event("change")); };
+
+  /* wowsims holds P4 and P5 only, so on Phase 3 it has nothing to say. Showing no rings
+     is the honest answer - quietly falling back to Wowhead would make the control a lie. */
+  pick("wowsims");
+  ok(rings() === 0, `wowsims has no Phase 3 data, so it rings nothing (${rings()})`);
+
+  pick("custom");
+  ok(rings() === 0, "custom is not set up yet, so it rings nothing either");
+
+  pick("wowhead");
+  ok(rings() === withWowhead, "and switching back restores them - nothing is cached per source");
+
+  /* The choice is a preference about reading the page, not a filter on it, so it must
+     never reach the url: a link you send should not change someone else's source. */
+  ok(!/bisSource|bis-source|source=/.test(window.location.hash),
+     `the source stays out of the url (${window.location.hash})`);
+  ok(/localStorage[\s\S]{0,200}lootprio\.bisSource|BIS_SOURCE_KEY/.test(appSource),
+     "it is remembered per browser instead");
+}
 
 // --- sharing has a control you can see, and it works in every state --------------------
 /* The assertion that was missing. `Copy link` sat in the list menu and, on zatar's list,

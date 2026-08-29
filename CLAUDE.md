@@ -160,6 +160,36 @@ entry of `FeralDruid` + `form: "cat"` resolves straight to `FeralCat`.
 
 ### `data/bis.json` — which items are BiS for which spec
 
+**Two sources, chosen in the bar, and they are not equally complete.** `BIS_SOURCES` in
+`app.js` lists them; `indexBis()` builds one index per source and `bisAt()` reads whichever
+`state.bisSource` names, so nothing downstream knows there is a choice.
+
+| | P1 | P2 | P3 | P4 | P5 | specs |
+|---|---|---|---|---|---|---|
+| `specs` (Wowhead) | 283 | 318 | 437 | 460 | 391 | **28 of 28** |
+| `wowsimsPresets` | — | — | — | 324 | 335 | **20 of 28** |
+
+Wowhead is the default because it is the only complete one. **WoWSims has nothing before
+Phase 4** and is missing `AffliLock`, `DemoLock`, `Disc`, `HolyPal`, `HolyPriest`, `Marks`,
+`RestoDruid` and `RestoShaman` entirely — not an import bug, but because `wowsimsPresets`
+was captured as `fetch_bis.py`'s longevity cross-check ("does a P3 item survive into the
+P4/P5 preset") and only ever needed those two phases. Filling it in means extending that
+scraper.
+
+**Choosing a source with nothing to say shows no rings, and does not fall back.** A silent
+fallback would make the control a lie about which data you are reading. `custom` is
+reserved and holds nothing, so it rings nothing — an entry that quietly did nothing would
+read as broken rather than as unbuilt.
+
+**A wowsims entry is a bare item id**, because a preset is the gear a build sims with. It
+carries no longevity tier and no qualifier, so every wowsims ring is phase-tier and
+unqualified. That is the source's limit, not the import's.
+
+**The choice is a preference, not a filter**: it lives in `localStorage`
+(`lootprio.bisSource`) and deliberately **not** in the url, because a link you send should
+not change somebody else's source out from under them. `seedFromBis()` reads it too, so
+seeding a list from WoWSims and from Wowhead gives different lines.
+
 ```json
 "ProtWarr": {
   "P3": [ { "id": 32375, "item": "Bulwark of Azzinoth", "bis": "expansion" } ]
@@ -191,11 +221,74 @@ guides rank by purpose (`Best Threat`, `Best Mitigation`) and healers by build
 `Alternative`, `Pre-Raid`, `PvP`, `Best Until Tier 6`). `Near Best` and `Second Best` fail
 the leading-word test deliberately.
 
-The tier is **derived, not guessed**: an item still in that spec's wowsims/tbc P4 preset is
-`multiPhase`, one that survives to P5 is `expansion`. Eight specs have no wowsims preset —
-`HolyPal`, `Marks`, `Disc`, `HolyPriest`, `RestoShaman`, `AffliLock`, `DemoLock`,
-`RestoDruid` — so their entries stay at `phase`, and the tool suppresses tier "conflicts"
-for them, since a default is not a derivation to disagree with.
+**`Load BiS data` is a control on the bar, Aug 2026**, beside `Edit`. It fills the **empty**
+priorities of the phase on screen from the selected source, joined with `=`, as a starting
+point to drag into an order — `seedFromBis()`. It was an item in the list menu, which is to
+say nobody found it; sharing left the menu for the same reason, and it lives in one place
+rather than two.
+
+**Disabled rather than hidden** when the open list is not yours, with a title saying so —
+the rule `Edit` beside it already follows. Two limits make it safe to press: it touches only
+the phase on screen, because seeding 699 rows from one click is not something anyone means,
+and it skips any row that already has a priority, so **it can only ever add**. Pressing it
+twice changes nothing and says so rather than appearing to do nothing.
+
+**With no list open the priority column shows the BiS view**, Aug 2026: every spec an item
+is best-in-slot for, in the phase on screen, from the selected source. Without it the whole
+of `bis.json` was invisible — rings hang off spec icons in the priority column, and with no
+list there were no icons, so 1,889 entries and the `BIS FROM` control had nothing to show
+while `bisOnlyMatch()` went on filtering by them. The data could narrow the table and could
+not be looked at.
+
+**It must not read as a ranking, and three things keep it honest**: no operators, which is
+what makes a priority line an ordering rather than a set; registry order rather than any
+order implying preference; and a quiet `BIS` label, without which icons under a column
+headed PRIORITY simply read as a priority. `.prio-from` styles it — the class was written
+for the old `SEEDED` tag and had been left orphaned.
+
+**Only when NO list is open.** With one open, an item it does not rank stays blank: that is
+the list saying nothing, and filling it in would make the list look like it ranks things it
+does not. Deliberately narrower than `bisOnlyMatch()`, which bridges the *filter* whenever a
+list is silent — a filter that reaches too far shows you an extra row, a display that
+reaches too far tells you something untrue.
+
+**A guide lists several rows as `Best` in one slot and ranks them by ROW ORDER.** Wowhead's
+Arms Phase 4 two-handers are Cataclysm's Edge, then Soul Cleaver, then Twinblade of the
+Phoenix — all three marked `Best`, and only the first is BiS. `fetch_bis.py` used to write
+`sorted(entries, key=item name)`, which threw that away, so all three ringed identically.
+
+Entries are now written **in guide order**, and everything past what the slot holds carries
+**`near: true`** — 215 of 1,889. Grouped by **(slot, variant)**, which is what keeps the
+legitimate cases: a tank's threat helm and mitigation helm are separate groups so both stay
+BiS, and so do two rings. `SLOT_CAPACITY` is 2 for `Finger`, `Trinket` and `One-Hand`, 1
+otherwise, in both `fetch_bis.py` and `check_bis.py`.
+
+**Near-BiS is not BiS**: no ring, and no claim on how long the item lasted. That second half
+matters — a third-choice sword in P4 would otherwise look like the item surviving P4, which
+is exactly how Twinblade of the Phoenix came to look like it lasted the expansion.
+`check_bis.py` fails if any (spec, phase, slot, variant) group claims more BiS than the slot
+can hold, which is the invariant this whole thing exists to enforce.
+
+**How long an item lasts is derived by looking, never taken from a source**, always
+**within one source and one spec**. `expansion` means you got it before Sunwell and nothing
+in Sunwell replaced it — so the test is whether that source's **last phase still names it**,
+not how long a run it had. `multiPhase` outlives its own phase without reaching the end;
+everything else is `phase`.
+
+That replaced a run-length rule ("BiS for three or more consecutive phases"), which was a
+different claim wearing the same word: an item BiS in P1, P2 and P3 and then dropped is not
+BiS for the expansion, and one picked up in P4 and still best in Sunwell is. Cataclysm's
+Edge is the worked example — BiS in P3 and P4, replaced by Apolyon in P5, so `multiPhase`.
+
+`longevityOf()` in `app.js` and `tier_from()` in `fetch_bis.py` compute the same thing, and
+have to stay in step: the client draws the rings, the stored `bis` field is the record, and
+a test asserts the rule reproduces every stored value. A source with only two phases cannot
+show `multiPhase` at all — reaching its last phase from its first *is* surviving, as far as
+that source can see, which is honest about wowsims holding P4 and P5.
+
+**A variant is not derivable and is read where a source states one.** "Best threat" versus
+"best mitigation" is a judgement the guide made, so it comes from the file. wowsims states
+none, so its rings carry no qualifier.
 
 ---
 
@@ -1308,6 +1401,16 @@ structured priority), `verify/fetch_unique.py` (re-runnable if the item set chan
 - **`roles` on the imported rows are stats-derived, not BiS-derived.** `fetch_items.py` reads
   them off the item's own stats, which is blunt on hybrids; `verify/seed_roles.py` is the
   better source and has not been re-run since the import.
+- **`near` is stored and read by nothing on screen.** It marks the 215 entries a guide
+  listed as `Best` past what the slot holds. `check_bis.py` validates it and the client
+  excludes it from rings and longevity, so it is not inert — but nothing *shows* those
+  alternatives, and showing them is the obvious next use. If nothing does within a phase or
+  two it should go rather than accumulate, which is what happened to `BIS_BY_SPEC`.
+- **The BiS source toggle shipped, Aug 2026 — with the data behind it incomplete.**
+  WoWSims covers P4/P5 only, for 20 of 28 specs, so choosing it on Phase 3 rings nothing.
+  The control is honest about that rather than falling back. Filling the gap means
+  extending `fetch_bis.py` to pull wowsims presets for all five phases and the 8 missing
+  specs; the table in §2 is what to fill.
 - **Alias-aware search shipped, Aug 2026** — see §2. 15 of the 44 shorthands used to find
   nothing at all.
 - Planned but not built: a rank display for the unused `positions()`. See §3.
