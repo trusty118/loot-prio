@@ -28,6 +28,10 @@ VALID_TIERS = {"phase", "multiPhase", "expansion"}
 # CLOSED set on purpose - fetch_bis.py maps Wowhead's own wording onto it and reports
 # anything it cannot place, so this list grows by decision rather than by a guide
 # inventing a phrase. Absent means "the BiS item for that slot", which is most entries.
+# How many of a slot one person wears at once, matching fetch_bis.py. More non-near
+# entries than this in one (slot, variant) group means the ranking was lost again.
+SLOT_CAPACITY = {"Finger": 2, "Trinket": 2, "One-Hand": 2}
+
 VALID_VARIANTS = {
     "threat", "mitigation", "regen", "throughput", "balanced",       # what it is for
     "hit", "haste", "crit", "spellpower", "expertise",               # the stat chased
@@ -106,6 +110,13 @@ def main():
                         f"{label}: {rec['item']} has variant={variant!r}, which is not in the "
                         f"closed set - add it to VALID_VARIANTS deliberately, or map it in "
                         f"fetch_bis.py, but do not let a guide's wording through unexamined")
+                # A guide lists several rows as "Best" in one slot and says which is
+                # actually BiS through row ORDER. fetch_bis.py marks everything past what
+                # the slot holds; absent means this one IS best in slot.
+                if entry.get("near") is not None and entry["near"] is not True:
+                    errors.append(f"{label}: {rec['item']} has near={entry['near']!r}, "
+                                  f"expected true or absent")
+
                 # reserved for user-managed BiS lists, where the uploader needs their own
                 # words; nothing generated should be populating it yet
                 if entry.get("note") is not None and not isinstance(entry["note"], str):
@@ -130,7 +141,33 @@ def main():
                         f"not {who}, so no ring will show"
                     )
 
-    print(f"{entries} entries across {len(bis_specs)} specs")
+    # The invariant the row-order fix exists to enforce: within one (spec, phase, slot,
+    # variant) group, no more entries claim to be BiS than the slot can hold. Two rings
+    # are fine; three "Best" two-handers are the ranking having been thrown away again.
+    import collections as _c
+    near_total = 0
+    for spec, phases in bis_specs.items():
+        for phase, entries_list in phases.items():
+            group = _c.defaultdict(int)
+            for e in entries_list:
+                if e.get("near"):
+                    near_total += 1
+                    continue
+                rec = by_id.get(e.get("id"))
+                if not rec:
+                    continue
+                key = (rec["slot"], e.get("variant", ""))
+                group[key] += 1
+            for (slot, variant), n in group.items():
+                cap = SLOT_CAPACITY.get(slot, 1)
+                if n > cap:
+                    errors.append(
+                        f"{spec} {phase} {slot}"
+                        + (f" ({variant})" if variant else "")
+                        + f": {n} entries claim BiS but the slot holds {cap} - "
+                          f"the guide's row order was lost")
+
+    print(f"{entries} entries across {len(bis_specs)} specs, {near_total} marked near-BiS")
 
     if warnings:
         verbose = "--verbose" in sys.argv

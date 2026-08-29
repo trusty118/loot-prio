@@ -775,6 +775,10 @@ for (const [specId, phases] of Object.entries(bis.specs)) {
   for (const [phase, entries] of Object.entries(phases)) {
     if (phase !== "P3") continue;
     for (const e of entries) {
+      /* A guide lists several rows as "Best" in one slot and ranks them by row order;
+         fetch_bis.py marks everything past what the slot holds. A near-BiS alternative
+         is not BiS, so it draws no ring and must not be looked for. */
+      if (e.near) continue;
       const rec = data.find((r) => r.id === e.id);
       if (!rec) continue;
       const row = rowFor(rec.item);
@@ -852,7 +856,7 @@ ok(/BiS/.test(multiIcon.dataset.tipBis) && /phase/i.test(multiIcon.dataset.tipBi
 // the phase example likewise comes from the file rather than being named
 const phaseCase = Object.entries(bis.specs).flatMap(([specId, phases]) =>
   (phases.P3 || [])
-    .filter((e) => (e.bis || "phase") === "phase" && !e.variant)
+    .filter((e) => !e.near && (e.bis || "phase") === "phase" && !e.variant)
     .map((e) => ({ specId, rec: data.find((r) => r.id === e.id) })))
   .find(({ specId, rec }) => rec && listsSpec(rec, specId) && rowFor(rec.item));
 const phaseIcon = iconById(rowFor(phaseCase.rec.item), phaseCase.specId);
@@ -1817,13 +1821,16 @@ ok(chipByTip("#spec-chips", "Fire Mage") && chipByTip("#spec-chips", "Destructio
 
 // refining one class must not narrow the other
 click(chipByTip("#spec-chips", "Fire Mage"));
-ok(rows().length === 27, `Fire + the whole Warlock class -> 27 rows (got ${rows().length})`);
+/* 26, not 27: Waistwrap of Infinity used to be reachable here because it was recorded as
+   BiS for Demonology - and the guide actually lists it SECOND for that slot, a near-BiS
+   alternative. It is marked as one now, so nothing surfaces it as BiS. */
+ok(rows().length === 26, `Fire + the whole Warlock class -> 26 rows (got ${rows().length})`);
 ok(rows().map((tr) => tr.children[0].textContent.trim()).includes("Cowl of the Illidari High Lord"),
    "a Fire-only row survives the refinement");
 
 // dropping a class drops the specs that were refining it
 click(chipByTip("#class-chips", "Mage"));
-ok(rows().length === 23, `Warlock alone -> 23 rows (got ${rows().length})`);
+ok(rows().length === 22, `Warlock alone -> 22 rows (got ${rows().length})`);
 ok(!window.location.hash.includes("spec="), `the Fire refinement went with it: ${window.location.hash}`);
 
 click(doc.getElementById("reset"));
@@ -2005,55 +2012,89 @@ ok(doc.getElementById("spec-row").hidden, "reset hides the spec row again");
 ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priority icons");
 
 // --- how long an item lasts is DERIVED, not read from the source ---------------------
-/* A source says what is BiS in each phase. Whether something lasts LONGER than one phase
-   is a fact about those lists together, so the site works it out: the run of consecutive
-   phases, from the one in hand, that still name the item for that spec. */
+/* `expansion` means you got the item before Sunwell and nothing in Sunwell replaced it,
+   so the test is whether that source's LAST phase still names it - not how long a run it
+   had. An item BiS in P1, P2 and P3 and then dropped is not BiS for the expansion.
+   Always within one source and one spec, never across sources. */
 {
   const PH = ["P1", "P2", "P3", "P4", "P5"];
   const NAME = { 1: "phase", 2: "multiPhase", 3: "expansion" };
-  const runFor = (phases, phase, id, ids) => {
+  const tierOfEntry = (phases, phase, id, ids, order) => {
+    const last = order[order.length - 1];
+    if (ids[last] && ids[last].has(id) && phase !== last) return 3;
     let run = 0;
-    for (let i = PH.indexOf(phase); i < PH.length; i++) {
-      if (!ids[PH[i]] || !ids[PH[i]].has(id)) break;
+    for (let i = order.indexOf(phase); i < order.length; i++) {
+      if (!ids[order[i]] || !ids[order[i]].has(id)) break;
       run++;
     }
-    return Math.min(Math.max(run, 1), 3);
+    return run > 1 ? 2 : 1;
   };
 
-  /* It reproduces every stored `bis` value, which is what lets the client derive rather
-     than trust the field - and is why the same rule can serve a source that states none. */
+  /* It reproduces every stored tier, which is what keeps the file and the screen saying
+     the same thing - fetch_bis.py computes it when it writes, the client when it draws. */
   let checked = 0, differ = 0;
   for (const [, phases] of Object.entries(bis.specs)) {
+    const order = PH.filter((p) => phases[p]);
     const ids = {};
-    for (const p of PH) ids[p] = new Set((phases[p] || []).map((e) => e.id));
-    for (const p of PH) {
+    for (const p of order) ids[p] = new Set((phases[p] || []).filter((e) => !e.near).map((e) => e.id));
+    for (const p of order) {
       for (const e of phases[p] || []) {
+        if (e.near) continue;      /* a near-BiS row makes no claim about lasting */
         checked++;
-        if (NAME[runFor(phases, p, e.id, ids)] !== (e.bis || "phase")) differ++;
+        if (NAME[tierOfEntry(phases, p, e.id, ids, order)] !== (e.bis || "phase")) differ++;
       }
     }
   }
   ok(checked > 1000 && differ === 0,
-     `the run-length rule reproduces all ${checked} stored tiers (${differ} disagree)`);
+     `the rule reproduces all ${checked} stored tiers (${differ} disagree)`);
 
-  /* wowsims states no tier at all - a preset is a bare list of item ids - so before this
-     every wowsims ring was flat. Deriving gives it real ones. */
+  /* A source holding only two phases cannot show multiPhase at all: reaching its last
+     phase from its first IS surviving, as far as that source can see. */
   const sims = bis.wowsimsPresets || {};
-  let simsMulti = 0;
+  let simsExp = 0;
   for (const [, phases] of Object.entries(sims)) {
+    const order = PH.filter((p) => phases[p]);
     const ids = {};
-    for (const p of PH) ids[p] = new Set(phases[p] || []);
-    for (const p of PH) {
-      for (const id of phases[p] || []) if (runFor(phases, p, id, ids) > 1) simsMulti++;
+    for (const p of order) ids[p] = new Set(phases[p] || []);
+    for (const p of order) {
+      for (const id of phases[p] || []) {
+        if (tierOfEntry(phases, p, id, ids, order) === 3) simsExp++;
+      }
     }
   }
-  ok(simsMulti > 0,
-     `wowsims gets real multi-phase tiers from the same rule (${simsMulti} entries)`);
-  ok(/function longevityRun/.test(appSource) && !/entry\.bis/.test(appSource),
+  ok(simsExp > 0, `wowsims gets real tiers from the same rule (${simsExp} expansion)`);
+  ok(/function longevityOf/.test(appSource) && !/entry\.bis/.test(appSource),
      "and the client derives it rather than reading the stored field");
 }
 
-// --- the BiS data source is a choice, and it drives the rings ------------------------
+/* A guide lists several rows as "Best" in one slot and ranks them by ROW ORDER - the
+   first is BiS, the rest are near-BiS alternatives. Losing that is what made three
+   two-handers ring identically. */
+{
+  const loot = new Map(data.map((r) => [r.id, r]));
+  const CAP = { Finger: 2, Trinket: 2, "One-Hand": 2 };
+  let over = 0, near = 0;
+  for (const [spec, phases] of Object.entries(bis.specs)) {
+    for (const [phase, entries] of Object.entries(phases)) {
+      const group = new Map();
+      for (const e of entries) {
+        if (e.near) { near++; continue; }
+        const rec = loot.get(e.id);
+        if (!rec) continue;
+        const key = rec.slot + "|" + (e.variant || "");
+        group.set(key, (group.get(key) || 0) + 1);
+      }
+      for (const [key, n] of group) {
+        if (n > (CAP[key.split("|")[0]] || 1)) over++;
+      }
+    }
+  }
+  ok(near > 0, `the guides' extra "Best" rows are marked near-BiS (${near})`);
+  ok(over === 0,
+     `and no slot claims more BiS than it can hold (${over} groups over capacity)`);
+}
+
+// --- the BiS data source is a choice, and it drives the rings ---// --- the BiS data source is a choice, and it drives the rings ------------------------
 /* Two sources with very different coverage: Wowhead has all five phases and all 28 specs,
    wowsims has P4/P5 for 20 of them. The control is honest about that by showing what the
    chosen source actually holds rather than falling back to the other one. */

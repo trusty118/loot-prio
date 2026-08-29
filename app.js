@@ -2727,76 +2727,87 @@
      nothing downstream knows there is a choice. */
   var BIS_INDEX = { wowhead: {}, wowsims: {}, custom: {} };
 
-  /* HOW LONG AN ITEM LASTS IS DERIVED HERE, not read from the source.
+  /* HOW LONG AN ITEM LASTS IS DERIVED HERE, not read from the source, and always
+     WITHIN one source and one spec - Wowhead's phases against Wowhead's, never across.
 
-     A source says what is BiS in each phase. Whether something is BiS for MORE than one
-     phase is a fact about those lists together, and the honest way to know it is to look:
-     count the run of consecutive phases, from the one in hand, that still name the item
-     for that spec. One phase is `phase`, two is `multiPhase`, three or more `expansion`.
+     `expansion` means what it says: you got the item before Sunwell and nothing in Sunwell
+     replaced it. So the test is whether that source's FINAL phase still names it for that
+     spec, and whether it was gained before then. `multiPhase` is anything that outlives its
+     own phase without reaching the end; everything else is `phase`.
 
-     Doing it here rather than trusting a stored field has two consequences worth having.
-     Every source gets real tiers from the same rule - a wowsims preset is a bare list of
-     item ids and could never have stated one - so a new source needs no scraper change to
-     ring correctly. And the rule lives in one place instead of being duplicated between
-     the client and fetch_bis.py, which computes the same thing when it writes the file.
+     This replaced a run-length rule - "BiS for three or more consecutive phases" - which
+     was a different claim wearing the same word. An item BiS in P1, P2 and P3 and then
+     dropped is not BiS for the expansion; an item picked up in P4 and still best in Sunwell
+     is, and the old rule called it multiPhase.
 
-     Checked rather than assumed: this reproduces all 1,889 stored `bis` values exactly.
-     That field stays in bis.json as fetch_bis.py's own record - check_bis.py validates it
-     and the tool reports disagreements - but nothing on screen reads it any more.
+     A source with only two phases cannot show `multiPhase` at all: reaching its last phase
+     from its first IS surviving the expansion, as far as that source can see. That is
+     honest about wowsims holding P4 and P5 rather than a gap to paper over.
 
-     A VARIANT is different and is NOT derivable: "best threat" versus "best mitigation" is
-     a judgement the guide made, so it is read where a source states one. wowsims states
-     none, so its rings carry no qualifier. */
-  function longevityRun(listedByPhase, phase, itemId) {
+     A VARIANT is not derivable and is read where a source states one: "best threat" versus
+     "best mitigation" is a judgement the guide made. wowsims states none. */
+  function longevityOf(listedByPhase, phases, phase, itemId) {
+    var last = phases[phases.length - 1];
+    var here = phases.indexOf(phase);
+
+    var survives = !!(listedByPhase[last] && listedByPhase[last][itemId]);
+    if (survives && phase !== last) return 3;
+
     var run = 0;
-    for (var i = PHASE_IDS.indexOf(phase); i < PHASE_IDS.length; i++) {
-      if (!listedByPhase[PHASE_IDS[i]] || !listedByPhase[PHASE_IDS[i]][itemId]) break;
+    for (var i = here; i < phases.length; i++) {
+      if (!listedByPhase[phases[i]] || !listedByPhase[phases[i]][itemId]) break;
       run++;
     }
-    return Math.min(Math.max(run, 1), 3);
+    return run > 1 ? 2 : 1;
   }
-
-  /* the phases in release order, which is the order "subsequent" means */
-  var PHASE_IDS = PHASES.map(function (p) { return p.id; });
 
   function indexBis(doc) {
     BIS_INDEX = { wowhead: {}, wowsims: {}, custom: {} };
     indexOneSource(BIS_INDEX.wowhead, (doc && doc.specs) || {}, function (e) {
-      return e && e.id != null ? { id: e.id, variant: e.variant || "" } : null;
+      /* A guide lists several rows as "Best" in one slot and says which is actually BiS
+         through row order. fetch_bis.py marks everything past what the slot holds, and a
+         near-BiS alternative is not BiS: no ring, and no claim on how long it lasted. */
+      if (!e || e.id == null || e.near) return null;
+      return { id: e.id, variant: e.variant || "" };
     });
     indexOneSource(BIS_INDEX.wowsims, (doc && doc.wowsimsPresets) || {}, function (id) {
-      /* a preset is a bare list of item ids - no qualifier to carry */
+      /* a preset is a bare list of item ids - no qualifier, and no ranking to lose */
       return id != null ? { id: id, variant: "" } : null;
     });
   }
 
   /* Two passes per spec, and the first is what makes the derivation possible: you cannot
-     know how long an item lasts until you have read every phase it might last into. */
+     know how long an item lasts until you have read every phase it might last into. Only
+     the phases this source actually holds are considered, in release order. */
   function indexOneSource(into, bySpec, read) {
     Object.keys(bySpec).forEach(function (specName) {
-      var phases = bySpec[specName] || {};
+      var raw = bySpec[specName] || {};
+      var phases = PHASE_IDS.filter(function (p) { return raw[p]; });
 
       var listed = {};
-      Object.keys(phases).forEach(function (phase) {
+      phases.forEach(function (phase) {
         listed[phase] = {};
-        (phases[phase] || []).forEach(function (raw) {
-          var e = read(raw);
+        (raw[phase] || []).forEach(function (row) {
+          var e = read(row);
           if (e) listed[phase][e.id] = true;
         });
       });
 
-      Object.keys(phases).forEach(function (phase) {
-        (phases[phase] || []).forEach(function (raw) {
-          var e = read(raw);
+      phases.forEach(function (phase) {
+        (raw[phase] || []).forEach(function (row) {
+          var e = read(row);
           if (!e) return;
           into[phase + "|" + specName + "|" + e.id] = {
-            longevity: longevityRun(listed, phase, e.id),
+            longevity: longevityOf(listed, phases, phase, e.id),
             variant: e.variant
           };
         });
       });
     });
   }
+
+  /* the phases in release order, which is the order "survives to" means */
+  var PHASE_IDS = PHASES.map(function (p) { return p.id; });
 
   /* Keyed by the registry identifier (ProtWarr), matching data/bis.json, and scoped to
      the phase on screen: a Sunwell item is not BiS for someone reading Phase 3, and a
