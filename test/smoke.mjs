@@ -41,11 +41,13 @@ await until(() => window.document.querySelector("tbody tr"));
   const row = [...d0.querySelectorAll(".list-menu .lm-row")]
     .find((r) => /Zatar/.test(r.textContent));
   row.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
-  /* Wait for something only true ONCE THE LIST IS OPEN. "a spec icon exists" looks like
-     the right signal and is not: with no list open the column shows the BiS specs, so
-     that predicate was already true and everything below ran listless. An operator is
-     the honest signal - only an ordering has one. */
-  await until(() => d0.querySelector("td.col-prio .prio-op"));
+  /* Wait on WHICH LIST IS OPEN, not on anything the render happens to produce. Two
+     earlier proxies died here: "a spec icon exists" broke when the BiS view started
+     drawing icons with no list, and "an operator exists" broke when it started drawing
+     "?" between them. Both were true before the click, so everything below ran listless
+     and 500 checks passed against the wrong state. The picker's name is the only signal
+     that is about the thing being waited for. */
+  await until(() => d0.getElementById("list-trigger-name").textContent === "Zatar's Phase 3");
 }
 
 /* The search box is debounced by 120ms in app.js, and when it fires update() writes
@@ -2126,8 +2128,14 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
      `and every one carries a ring, because every one IS a BiS entry (${rings()}/${icons()})`);
 
   /* It must not read as a ranking, and three things keep it honest. */
-  ok(bd.querySelectorAll("td.col-prio .prio-op").length === 0,
-     "no operators - that is what makes a priority line an ordering rather than a set");
+  /* It used to carry no operators at all, which said "not an ordering" by ABSENCE and
+     left the reader to notice. "?" says it out loud, and reads the way every other line
+     on the page reads. */
+  const viewOps = [...bd.querySelectorAll("td.col-prio .prio-op")];
+  ok(viewOps.length > 0 && viewOps.every((o) => o.textContent === "?"),
+     `every separator is "?", not ranked against (${viewOps.length})`);
+  ok(viewOps.every((o) => /not ranked/i.test(o.dataset.tip || "")),
+     "and says so on hover rather than leaving a bare glyph");
   ok([...bd.querySelectorAll(".prio-from")].length > 0 &&
      [...bd.querySelectorAll(".prio-from")].every((n) => n.textContent === "BIS"),
      "and a quiet BIS label says what you are looking at, the same way on every row");
@@ -2155,7 +2163,7 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
   bd.getElementById("list-trigger").dispatchEvent(new bare.window.MouseEvent("click", { bubbles: true }));
   [...bd.querySelectorAll(".list-menu .lm-row")].find((r) => /Zatar/.test(r.textContent))
     .dispatchEvent(new bare.window.MouseEvent("click", { bubbles: true }));
-  await until(() => bd.querySelectorAll("td.col-prio .prio-op").length > 0);
+  await until(() => bd.getElementById("list-trigger-name").textContent === "Zatar's Phase 3");
 
   ok(bd.querySelectorAll(".prio-from").length === 0,
      "opening a list replaces the BiS view with the list's own ordering");
