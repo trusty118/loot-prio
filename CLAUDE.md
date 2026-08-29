@@ -221,6 +221,25 @@ guides rank by purpose (`Best Threat`, `Best Mitigation`) and healers by build
 `Alternative`, `Pre-Raid`, `PvP`, `Best Until Tier 6`). `Near Best` and `Second Best` fail
 the leading-word test deliberately.
 
+**With no list open the priority column shows the BiS view**, Aug 2026: every spec an item
+is best-in-slot for, in the phase on screen, from the selected source. Without it the whole
+of `bis.json` was invisible — rings hang off spec icons in the priority column, and with no
+list there were no icons, so 1,889 entries and the `BIS FROM` control had nothing to show
+while `bisOnlyMatch()` went on filtering by them. The data could narrow the table and could
+not be looked at.
+
+**It must not read as a ranking, and three things keep it honest**: no operators, which is
+what makes a priority line an ordering rather than a set; registry order rather than any
+order implying preference; and a quiet `BIS` label, without which icons under a column
+headed PRIORITY simply read as a priority. `.prio-from` styles it — the class was written
+for the old `SEEDED` tag and had been left orphaned.
+
+**Only when NO list is open.** With one open, an item it does not rank stays blank: that is
+the list saying nothing, and filling it in would make the list look like it ranks things it
+does not. Deliberately narrower than `bisOnlyMatch()`, which bridges the *filter* whenever a
+list is silent — a filter that reaches too far shows you an extra row, a display that
+reaches too far tells you something untrue.
+
 **A guide lists several rows as `Best` in one slot and ranks them by ROW ORDER.** Wowhead's
 Arms Phase 4 two-handers are Cataclysm's Edge, then Soul Cleaver, then Twinblade of the
 Phoenix — all three marked `Best`, and only the first is BiS. `fetch_bis.py` used to write

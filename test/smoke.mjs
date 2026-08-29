@@ -41,7 +41,11 @@ await until(() => window.document.querySelector("tbody tr"));
   const row = [...d0.querySelectorAll(".list-menu .lm-row")]
     .find((r) => /Zatar/.test(r.textContent));
   row.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
-  await until(() => d0.querySelector("td.col-prio img.spec-icon"));
+  /* Wait for something only true ONCE THE LIST IS OPEN. "a spec icon exists" looks like
+     the right signal and is not: with no list open the column shows the BiS specs, so
+     that predicate was already true and everything below ran listless. An operator is
+     the honest signal - only an ordering has one. */
+  await until(() => d0.querySelector("td.col-prio .prio-op"));
 }
 
 /* The search box is debounced by 120ms in app.js, and when it fires update() writes
@@ -2094,7 +2098,74 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
      `and no slot claims more BiS than it can hold (${over} groups over capacity)`);
 }
 
-// --- the BiS data source is a choice, and it drives the rings ---// --- the BiS data source is a choice, and it drives the rings ------------------------
+// --- with no list open, the column shows what the BiS data knows ----------------------
+/* Rings hang off spec icons in the priority column, so with no list there were no icons -
+   1,889 BiS entries and the BIS FROM control had nothing to show, while bisOnlyMatch()
+   went on filtering by them. The data could narrow the table and could not be looked at. */
+{
+  /* its own window: the shared one has a list open, and this is about the state before
+     you pick anything */
+  const bare = new JSDOM(html, { runScripts: "outside-only", url: "https://x.test/loot-prio/" });
+  Object.assign(bare.window, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
+  bare.window.fetch = (url) => {
+    const u = String(url);
+    const body = u.includes("lists/index.json") ? listIndex
+               : u.includes("zatar-p3.json") ? zatarList
+               : u.includes("bis.json") ? bis : u.includes("specs.json") ? specs : data;
+    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(body) });
+  };
+  bare.window.eval(appSource);
+  await until(() => bare.window.document.querySelector("tbody tr"));
+  const bd = bare.window.document;
+  const icons = () => bd.querySelectorAll("td.col-prio img.spec-icon").length;
+  const rings = () => bd.querySelectorAll(".spec-icon--bis, .spec-icon--bis2, .spec-icon--bis3").length;
+
+  ok(bd.getElementById("list-trigger-name").textContent === "No list", "no list is open");
+  ok(icons() > 100, `the priority column shows the BiS specs anyway (${icons()} icons)`);
+  ok(rings() === icons(),
+     `and every one carries a ring, because every one IS a BiS entry (${rings()}/${icons()})`);
+
+  /* It must not read as a ranking, and three things keep it honest. */
+  ok(bd.querySelectorAll("td.col-prio .prio-op").length === 0,
+     "no operators - that is what makes a priority line an ordering rather than a set");
+  ok([...bd.querySelectorAll(".prio-from")].length > 0 &&
+     [...bd.querySelectorAll(".prio-from")].every((n) => n.textContent === "BIS"),
+     "and a quiet BIS label says what you are looking at, the same way on every row");
+
+  /* An item BiS for nobody has nothing to show, so it stays genuinely empty. */
+  const bisIds = new Set(Object.values(bis.specs)
+    .flatMap((p) => Object.values(p).flat()).filter((e) => !e.near).map((e) => e.id));
+  const orphanRow = [...bd.querySelectorAll("tbody tr[data-id]")]
+    .find((tr) => !bisIds.has(Number(tr.dataset.id)));
+  ok(orphanRow && orphanRow.children[3].querySelectorAll("img").length === 0,
+     "an item that is BiS for nobody shows nothing at all");
+
+  /* A source with no data for this phase empties it, which is what makes the control
+     visibly honest rather than apparently broken. */
+  const sel = bd.getElementById("bis-source");
+  sel.value = "wowsims";
+  sel.dispatchEvent(new bare.window.Event("change"));
+  await until(() => icons() === 0);
+  ok(icons() === 0, "switching to a source with no data for this phase empties the column");
+  sel.value = "wowhead";
+  sel.dispatchEvent(new bare.window.Event("change"));
+  await until(() => icons() > 100);
+
+  /* Opening a list replaces the view with what the list says - including saying nothing. */
+  bd.getElementById("list-trigger").dispatchEvent(new bare.window.MouseEvent("click", { bubbles: true }));
+  [...bd.querySelectorAll(".list-menu .lm-row")].find((r) => /Zatar/.test(r.textContent))
+    .dispatchEvent(new bare.window.MouseEvent("click", { bubbles: true }));
+  await until(() => bd.querySelectorAll("td.col-prio .prio-op").length > 0);
+
+  ok(bd.querySelectorAll(".prio-from").length === 0,
+     "opening a list replaces the BiS view with the list's own ordering");
+  const unranked = [...bd.querySelectorAll("tbody tr[data-id]")]
+    .find((tr) => !zatarList.priorities[tr.dataset.id]);
+  ok(unranked && unranked.children[3].querySelectorAll("img").length === 0,
+     "and a row that list does not rank goes blank rather than falling back to BiS");
+}
+
+// --- the BiS data source is a choice, and it drives the rings ------------------------
 /* Two sources with very different coverage: Wowhead has all five phases and all 28 specs,
    wowsims has P4/P5 for 20 of them. The control is honest about that by showing what the
    chosen source actually holds rather than falling back to the other one. */

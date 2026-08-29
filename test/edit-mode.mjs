@@ -127,11 +127,17 @@ ok(!d.querySelector(".prio-edit"), "the guide's rows are not editable");
   await settle(() => wn.document.querySelector("tbody tr"));
   const dn = wn.document;
   ok(!el(dn, "list-warn").hidden, "with no list open it shows, without opening any menu");
-  ok(/empty/i.test(el(dn, "list-warn").textContent),
+  ok(/no list open/i.test(el(dn, "list-warn").textContent),
      `and says what is wrong: "${el(dn, "list-warn").textContent.trim()}"`);
   ok(triggerName(dn) === "No list", "beside a picker that says there is none");
-  ok([...dn.querySelectorAll("td.col-prio")].every((td) => !td.textContent.trim()),
-     "which is true - every priority cell really is empty");
+
+  /* The column is not blank in this state - it shows what the BiS data knows, so the
+     BIS FROM control has something to do and the rings are reachable. The warning has to
+     say THAT rather than "priorities are empty", which stopped being true. */
+  ok([...dn.querySelectorAll("td.col-prio .prio-from")].length > 0,
+     "and the column shows the BiS view rather than nothing at all");
+  ok([...dn.querySelectorAll("td.col-prio .prio-op")].length === 0,
+     "with no operators, so it cannot be mistaken for somebody's ordering");
 }
 // Disabled rather than hidden: a control that vanishes teaches nothing, and the title
 // names the way out at the moment you went looking for it.

@@ -2954,6 +2954,53 @@
      the previous one. Icons come from the registry; operators render as text
      between them. No parsing, so an unknown identifier is a visible gap with a
      console warning rather than a silent plain-text fallback. */
+  /* WITH NO LIST OPEN, the column shows what the BiS data knows: every spec this item is
+     best-in-slot for, in the phase on screen, from the selected source.
+
+     Without this the whole thing is invisible. Rings hang off spec icons in the priority
+     column, and with no list there are no icons - so 1,889 BiS entries and the BIS FROM
+     control had nothing to show, while bisOnlyMatch() went on filtering by them. The data
+     could narrow the table and could not be looked at, which is a strange pair.
+
+     IT MUST NOT READ AS A RANKING, because nobody has ranked these. Three things keep it
+     honest: no operators, which is what makes a priority line an ordering rather than a
+     set; registry order rather than any order that implies preference; and a quiet BIS
+     label, without which icons under a column headed PRIORITY simply read as a priority.
+
+     Only when NO list is open. With one open, an item it does not rank stays blank - that
+     is the list saying nothing, and filling it in would make the list look like it ranks
+     things it does not. Deliberately narrower than bisOnlyMatch(), which bridges the
+     FILTER whenever a list is silent: a filter that reaches too far shows you an extra
+     row, a display that reaches too far tells you something untrue. */
+  function bisViewCell(td, rec) {
+    if (activeTemplate) return td;
+
+    var specs = Object.keys(REG.specs).filter(function (id) {
+      return bisTier(id, rec.id);
+    });
+    if (!specs.length) return td;
+
+    var tag = document.createElement("span");
+    tag.className = "prio-from";
+    tag.textContent = "BIS";
+    td.appendChild(tag);
+
+    var picking = state.classes.length > 0;
+    specs.forEach(function (id) {
+      var spec = REG.specs[id];
+      var icon = specIcon({ id: id, name: spec.name, icon: spec.icon },
+                          bisTier(id, rec.id), [], bisVariant(id, rec.id));
+      /* the same "not you" dimming a priority line uses, so a selection reads the same
+         way whichever the column is showing */
+      if (picking && SELECTED_SPECS.indexOf(id) === -1) {
+        icon.classList.add("spec-icon--muted");
+      }
+      makeFocusable(icon, id);
+      td.appendChild(icon);
+    });
+    return td;
+  }
+
   function priorityCell(rec) {
     var td = document.createElement("td");
     td.className = "col-prio";
@@ -2965,7 +3012,7 @@
       appendText(td, list, state.q);
       return td;
     }
-    if (!list || !list.length) return td;
+    if (!list || !list.length) return bisViewCell(td, rec);
 
     /* The SEEDED tag stood here. It marked lines seed_priority.py wrote from the BiS
        data, and those are gone: every one was exactly the specs bis.json already lists,
