@@ -221,11 +221,30 @@ guides rank by purpose (`Best Threat`, `Best Mitigation`) and healers by build
 `Alternative`, `Pre-Raid`, `PvP`, `Best Until Tier 6`). `Near Best` and `Second Best` fail
 the leading-word test deliberately.
 
-The tier is **derived, not guessed**: an item still in that spec's wowsims/tbc P4 preset is
-`multiPhase`, one that survives to P5 is `expansion`. Eight specs have no wowsims preset —
-`HolyPal`, `Marks`, `Disc`, `HolyPriest`, `RestoShaman`, `AffliLock`, `DemoLock`,
-`RestoDruid` — so their entries stay at `phase`, and the tool suppresses tier "conflicts"
-for them, since a default is not a derivation to disagree with.
+**How long an item lasts is derived by looking, never taken from a source.** A source says
+what is BiS in each phase; whether something is BiS for *more* than one phase is a fact
+about those lists together. `longevityRun()` counts the run of consecutive phases, from the
+one in hand, that still name the item for that spec — one is `phase`, two `multiPhase`,
+three or more `expansion`.
+
+**The client derives it, not the file.** `indexBis()` runs the rule when it builds each
+source's index, which has two consequences worth having. Every source gets real tiers from
+the same rule — a wowsims preset is a bare list of item ids and could never have *stated*
+one, so before this every wowsims ring was flat; deriving gives it **57** multi-phase
+entries. And the rule lives in one place rather than being duplicated between the client and
+`fetch_bis.py`, which computes the same thing when it writes the file.
+
+Checked rather than assumed: the rule reproduces **all 1,889** stored `bis` values exactly,
+which is what makes it safe to stop reading them. The field stays in `bis.json` as
+`fetch_bis.py`'s own record — `check_bis.py` validates it and the tool reports
+disagreements — but nothing on screen reads it.
+
+**wowsims cannot reach `expansion` yet**, and that is arithmetic rather than a gap: it holds
+P4 and P5 only, so the longest observable run is two.
+
+**A variant is not derivable and is read where a source states one.** "Best threat" versus
+"best mitigation" is a judgement the guide made, so it comes from the file. wowsims states
+none, so its rings carry no qualifier.
 
 ---
 

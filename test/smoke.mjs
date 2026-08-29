@@ -2004,6 +2004,55 @@ ok(!doc.querySelector("#spec-chips .chip--toggle"), "reset drops the BiS toggle"
 ok(doc.getElementById("spec-row").hidden, "reset hides the spec row again");
 ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priority icons");
 
+// --- how long an item lasts is DERIVED, not read from the source ---------------------
+/* A source says what is BiS in each phase. Whether something lasts LONGER than one phase
+   is a fact about those lists together, so the site works it out: the run of consecutive
+   phases, from the one in hand, that still name the item for that spec. */
+{
+  const PH = ["P1", "P2", "P3", "P4", "P5"];
+  const NAME = { 1: "phase", 2: "multiPhase", 3: "expansion" };
+  const runFor = (phases, phase, id, ids) => {
+    let run = 0;
+    for (let i = PH.indexOf(phase); i < PH.length; i++) {
+      if (!ids[PH[i]] || !ids[PH[i]].has(id)) break;
+      run++;
+    }
+    return Math.min(Math.max(run, 1), 3);
+  };
+
+  /* It reproduces every stored `bis` value, which is what lets the client derive rather
+     than trust the field - and is why the same rule can serve a source that states none. */
+  let checked = 0, differ = 0;
+  for (const [, phases] of Object.entries(bis.specs)) {
+    const ids = {};
+    for (const p of PH) ids[p] = new Set((phases[p] || []).map((e) => e.id));
+    for (const p of PH) {
+      for (const e of phases[p] || []) {
+        checked++;
+        if (NAME[runFor(phases, p, e.id, ids)] !== (e.bis || "phase")) differ++;
+      }
+    }
+  }
+  ok(checked > 1000 && differ === 0,
+     `the run-length rule reproduces all ${checked} stored tiers (${differ} disagree)`);
+
+  /* wowsims states no tier at all - a preset is a bare list of item ids - so before this
+     every wowsims ring was flat. Deriving gives it real ones. */
+  const sims = bis.wowsimsPresets || {};
+  let simsMulti = 0;
+  for (const [, phases] of Object.entries(sims)) {
+    const ids = {};
+    for (const p of PH) ids[p] = new Set(phases[p] || []);
+    for (const p of PH) {
+      for (const id of phases[p] || []) if (runFor(phases, p, id, ids) > 1) simsMulti++;
+    }
+  }
+  ok(simsMulti > 0,
+     `wowsims gets real multi-phase tiers from the same rule (${simsMulti} entries)`);
+  ok(/function longevityRun/.test(appSource) && !/entry\.bis/.test(appSource),
+     "and the client derives it rather than reading the stored field");
+}
+
 // --- the BiS data source is a choice, and it drives the rings ------------------------
 /* Two sources with very different coverage: Wowhead has all five phases and all 28 specs,
    wowsims has P4/P5 for 20 of them. The control is honest about that by showing what the

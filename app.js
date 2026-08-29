@@ -2727,36 +2727,71 @@
      nothing downstream knows there is a choice. */
   var BIS_INDEX = { wowhead: {}, wowsims: {}, custom: {} };
 
-  /* What each source can say. Wowhead's guides rank an item and qualify it, so its
-     entries carry a longevity tier and a variant. A wowsims preset is a LIST OF ITEM IDS
-     - the gear that build sims with - so it can say "in the preset for this phase" and
-     nothing else. Every wowsims ring is therefore phase-tier and unqualified, which is
-     not a gap in the import: the source does not hold that information. */
+  /* HOW LONG AN ITEM LASTS IS DERIVED HERE, not read from the source.
+
+     A source says what is BiS in each phase. Whether something is BiS for MORE than one
+     phase is a fact about those lists together, and the honest way to know it is to look:
+     count the run of consecutive phases, from the one in hand, that still name the item
+     for that spec. One phase is `phase`, two is `multiPhase`, three or more `expansion`.
+
+     Doing it here rather than trusting a stored field has two consequences worth having.
+     Every source gets real tiers from the same rule - a wowsims preset is a bare list of
+     item ids and could never have stated one - so a new source needs no scraper change to
+     ring correctly. And the rule lives in one place instead of being duplicated between
+     the client and fetch_bis.py, which computes the same thing when it writes the file.
+
+     Checked rather than assumed: this reproduces all 1,889 stored `bis` values exactly.
+     That field stays in bis.json as fetch_bis.py's own record - check_bis.py validates it
+     and the tool reports disagreements - but nothing on screen reads it any more.
+
+     A VARIANT is different and is NOT derivable: "best threat" versus "best mitigation" is
+     a judgement the guide made, so it is read where a source states one. wowsims states
+     none, so its rings carry no qualifier. */
+  function longevityRun(listedByPhase, phase, itemId) {
+    var run = 0;
+    for (var i = PHASE_IDS.indexOf(phase); i < PHASE_IDS.length; i++) {
+      if (!listedByPhase[PHASE_IDS[i]] || !listedByPhase[PHASE_IDS[i]][itemId]) break;
+      run++;
+    }
+    return Math.min(Math.max(run, 1), 3);
+  }
+
+  /* the phases in release order, which is the order "subsequent" means */
+  var PHASE_IDS = PHASES.map(function (p) { return p.id; });
+
   function indexBis(doc) {
     BIS_INDEX = { wowhead: {}, wowsims: {}, custom: {} };
-    var specs = (doc && doc.specs) || {};
-    var sims = (doc && doc.wowsimsPresets) || {};
+    indexOneSource(BIS_INDEX.wowhead, (doc && doc.specs) || {}, function (e) {
+      return e && e.id != null ? { id: e.id, variant: e.variant || "" } : null;
+    });
+    indexOneSource(BIS_INDEX.wowsims, (doc && doc.wowsimsPresets) || {}, function (id) {
+      /* a preset is a bare list of item ids - no qualifier to carry */
+      return id != null ? { id: id, variant: "" } : null;
+    });
+  }
 
-    Object.keys(specs).forEach(function (specName) {
-      var phases = specs[specName] || {};
+  /* Two passes per spec, and the first is what makes the derivation possible: you cannot
+     know how long an item lasts until you have read every phase it might last into. */
+  function indexOneSource(into, bySpec, read) {
+    Object.keys(bySpec).forEach(function (specName) {
+      var phases = bySpec[specName] || {};
+
+      var listed = {};
       Object.keys(phases).forEach(function (phase) {
-        (phases[phase] || []).forEach(function (entry) {
-          if (!entry || entry.id == null) return;
-          BIS_INDEX.wowhead[phase + "|" + specName + "|" + entry.id] = {
-            longevity: BIS_LONGEVITY_BY_NAME[entry.bis || "phase"] || 1,
-            variant: entry.variant || ""
-          };
+        listed[phase] = {};
+        (phases[phase] || []).forEach(function (raw) {
+          var e = read(raw);
+          if (e) listed[phase][e.id] = true;
         });
       });
-    });
 
-    Object.keys(sims).forEach(function (specName) {
-      var phases = sims[specName] || {};
       Object.keys(phases).forEach(function (phase) {
-        (phases[phase] || []).forEach(function (id) {
-          if (id == null) return;
-          BIS_INDEX.wowsims[phase + "|" + specName + "|" + id] = {
-            longevity: 1, variant: ""
+        (phases[phase] || []).forEach(function (raw) {
+          var e = read(raw);
+          if (!e) return;
+          into[phase + "|" + specName + "|" + e.id] = {
+            longevity: longevityRun(listed, phase, e.id),
+            variant: e.variant
           };
         });
       });
