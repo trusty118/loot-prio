@@ -75,19 +75,6 @@
                at the moment someone went looking for it. -->
           <button type="button" id="edit-toggle" class="btn-edit" aria-pressed="false">Edit priorities</button>
 
-          <!-- Last child, and flex-basis: 100% in the stylesheet, so it takes a line of its
-               own UNDER the picker rather than stretching the row sideways. It cannot be
-               absolutely positioned there: the filter row directly below carries Reset at
-               about the same x, and the two would sit on top of each other.
-
-               It only exists in the one state where the table cannot answer anything, so
-               the bar being a line taller then is honest rather than a reflow defect. -->
-          <span class="list-warn" id="list-warn" role="status" hidden>
-            <span class="list-warn-box">
-              <span class="list-warn-icon" aria-hidden="true">&#9888;</span>
-              No list open &mdash; showing what is BiS. Open a list, or make a new one
-            </span>
-          </span>
         </div>
 
       <div class="account-zone">
@@ -108,6 +95,29 @@
           <span class="account-caret" aria-hidden="true">&#9662;</span>
         </button>
       </div>
+
+      <!-- A SIBLING of the list zone, not a child of it, and that is the whole fix. Both
+           earlier arrangements failed, in opposite directions:
+
+           as a CHILD with flex-basis: 100% it contributed a warn line to the zone's own
+           intrinsic width, wrapping the zone off its row in exactly the empty-list state
+           it exists for; as a CHILD positioned absolutely it took no space at all, so a
+           rule on a DIFFERENT element had to hold the line for it - and when the zone
+           moved into this header, that rule stayed pointing at the row it left, matched
+           nothing, and the pill spilled out over the phase tiles and the Settings button.
+
+           Out here it is a child of .site-header-row, which is full width already, so it
+           cannot widen the zone - and it is in flow, so nothing else has to reserve its
+           space. Last child, so it takes a line of its own under the picker.
+
+           It only exists in the one state where the table cannot answer anything, so the
+           header being a line taller then is honest rather than a reflow defect. -->
+      <span class="list-warn" id="list-warn" role="status" hidden>
+        <span class="list-warn-box">
+          <span class="list-warn-icon" aria-hidden="true">&#9888;</span>
+          No list open &mdash; showing what is BiS. Open a list, or make a new one
+        </span>
+      </span>
   </div>
 </header>
 

@@ -1289,19 +1289,41 @@ current if any of those change.
   without moving a single control relative to its neighbours. **Don't split them apart again
   to give the picker room** — the room was never the problem.
 
-  **The no-list warning hangs off the zone, out of flow, and that is load-bearing.** With
-  nothing open the priority column is empty for every row, and `#list-warn` says so under
-  the picker. It lived in the list menu first, which meant it only appeared once you opened
-  the thing it was warning you about. It is two elements: the outer one positions
-  (`position: absolute; top: 100%; left: 0` — the picker's left edge, since the picker is
-  the zone's first child), the inner `.list-warn-box` is the pill and shrinks to its text.
-  It was `flex-basis: 100%` for one commit, and that **contributed a whole warn line to the
+  **The no-list warning is a SIBLING of the zone, not a child of it, and that distinction
+  is the whole of it.** With nothing open the priority column is empty for every row, and
+  `#list-warn` says so under the picker. It lived in the list menu first, which meant it
+  only appeared once you opened the thing it was warning you about. It is two elements: the
+  outer one takes a line of `.site-header-row` (`flex-basis: 100%`, `justify-content:
+  flex-end`), the inner `.list-warn-box` is the pill and shrinks to its text. The glyph is
+  white on purpose: fel and the three item-quality colours all mean something, and a
+  coloured warning would read as a BiS tier.
+
+  **Two earlier arrangements failed in opposite directions, and both were children of the
+  zone.** As a child with `flex-basis: 100%` it **contributed a whole warn line to the
   zone's intrinsic width** — the zone measured ~839px instead of the ~507px its controls
   need, wrapped off the filter row, and opened a 332px gap inside itself, in exactly the
-  empty-list state it exists for. `.control-row--inputs:has(.list-warn:not([hidden]))`
-  reserves the line instead, so the bar is not permanently taller for a message that is
-  usually absent. The glyph is white on purpose: fel and the three item-quality colours all
-  mean something, and a coloured warning would read as a BiS tier.
+  empty-list state it exists for. So it was made `position: absolute` instead, which fixed
+  that and created the opposite problem: out of flow it takes **no** space, so a rule on a
+  different element had to hold the line for it —
+  `.control-row--inputs:has(.list-warn:not([hidden]))`. **Two rules in two places that have
+  to agree, with nothing checking they still refer to the same element.** When the bar
+  rework moved the zone into the banner the reservation stayed pointing at the row it had
+  left, matched nothing, and the pill spilled across the header's bottom border onto the
+  phase tiles and the `Settings` button, at every width.
+
+  As a **sibling** neither is possible: it is a child of `.site-header-row`, which is full
+  width already, so it cannot widen the zone — and it is in flow, so nothing else has to
+  reserve its space. The header is a line taller only while the warning shows, which is the
+  one state where the table cannot answer anything anyway. **Don't put it back inside
+  `.list-zone` in either form.**
+
+  **The test that missed it is the more useful lesson.** `test/smoke.mjs` pinned the
+  reservation rule by grepping the **stylesheet text**, so it proved the rule *existed* and
+  never that it still *matched anything* — it stayed green across two commits with the bug
+  live on screen. jsdom lays nothing out, so there was no `getComputedStyle` fallback
+  either. What is asserted now is that **no** `:has(.list-warn` rule exists anywhere, which
+  is a claim a text search can actually settle, plus that the element is not inside
+  `.list-zone`. A layout bug this class of test cannot see has to be checked by eye.
 
   **The strips gave up stickiness for that, and it was chosen rather than overlooked.**
   `.controls--where` does not stick, so they scroll away on a 699-row table, and they *are*

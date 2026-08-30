@@ -1643,13 +1643,17 @@ ok(doc.querySelector(".control-row--inputs #count"),
 ok(doc.querySelector(".control-row--inputs").contains(doc.getElementById("reset")),
    "Reset stays with the filters it clears");
 
-/* The bug that nearly shipped with the merge: the warning is what decides whether the
-   zone fits beside the filters. In flow it added its own width to the zone and pushed it
-   onto a second line - reinstating the two rows this change removed, in precisely the
-   state it exists for. Out of flow it cannot. jsdom cannot measure, so pin the mechanism
-   and the reservation that replaces the space it no longer takes. */
-ok((cssText.split(".control-row--inputs:has(.list-warn")[1] || "").includes("padding-bottom"),
-   "the row reserves the warning's line itself, only while the warning is shown");
+/* This assertion used to pin a reservation rule holding the line for an absolutely
+   positioned warning. It kept passing after that warning moved into the header, because
+   it greps the STYLESHEET TEXT: it proved the rule existed, never that it still matched
+   anything. It matched nothing, and the pill spilled over the phase tiles for two
+   commits with the suite green.
+
+   The warning is in flow now, so there is no second rule to keep in sync - and the
+   assertion is that there is no such rule, which is a thing a text search can actually
+   establish. See test/edit-mode.mjs for the rest of it. */
+ok(!cssText.includes(":has(.list-warn"),
+   "nothing reserves space for the warning, because the warning takes its own");
 
 /* Prominence without spending the accent. --gold means "selected" everywhere on this
    page, and the design brief lists it as a colour that carries meaning - so the picker

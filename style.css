@@ -593,11 +593,6 @@ a:hover { color: var(--gold-bright); }
   gap: 12px;
 }
 
-/* The warning is out of flow, so nothing reserves the line it sits on. Reserve it here,
-   and only while it is shown - the bar must not be permanently taller for a message
-   that is usually absent. */
-.control-row--inputs:has(.list-warn:not([hidden])) { padding-bottom: 36px; }
-
 .field {
   display: flex;
   flex-direction: column;
@@ -1197,7 +1192,6 @@ mark {
    margin-left:auto, per CLAUDE.md section 5 - three loose children each finding their own
    way right is what put Edit on the left at half-screen. */
 .list-zone {
-  position: relative;      /* the warning hangs off this, see .list-warn */
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1709,22 +1703,22 @@ mark {
 
    flex-basis: 100% is what puts it BELOW the picker instead of stretching the row: it is
    the zone's last child, so it takes the whole of a second line to itself. */
-/* TWO elements, and the split is the whole point. The outer one positions; the inner
-   one is the pill and shrinks to its text.
+/* TWO elements, and the split is the whole point. The outer one takes the line; the
+   inner one is the pill and shrinks to its text.
 
-   It is ABSOLUTE, and that is not cosmetic. As an in-flow child with flex-basis: 100%
-   it contributed a whole warn line to the zone's intrinsic width, so the zone measured
-   ~839px instead of the ~507px its controls need - which on this merged row wrapped the
-   zone onto a second line and opened a 332px gap inside it, in exactly the empty-list
-   state the merge exists to fix. Out of flow it cannot widen the row at all.
+   IN FLOW, and a sibling of .list-zone rather than a child of it - see the comment in
+   index.html for why both of the earlier arrangements failed. The short version: as a
+   child it either widened the zone (flex-basis) or took no space and needed a second
+   rule elsewhere to hold the line for it (absolute), and that second rule was left
+   behind when the zone moved. Out here neither is possible.
 
-   left: 0 is the picker's left edge, because the picker is the zone's first child. */
+   flex-basis: 100% takes a line of its own inside .site-header-row, which is full width
+   already, so this cannot widen anything. The row's own 12px row-gap is the space above
+   it. flex-end puts the pill under the picker/account cluster it is about. */
 .list-warn {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: 8px;
+  flex-basis: 100%;
   display: flex;
+  justify-content: flex-end;
   white-space: nowrap;
 }
 

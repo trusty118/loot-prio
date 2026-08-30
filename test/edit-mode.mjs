@@ -106,18 +106,24 @@ ok(!d.querySelector(".prio-edit"), "the guide's rows are not editable");
   const warn = el(d, "list-warn");
   ok(warn, "there is a warning element on the bar");
   ok(warn.hidden, "hidden while a list is open, because there is nothing to warn about");
-  ok(d.querySelector(".template-bar").parentNode.contains(warn),
-     "and it sits in the list zone, under the picker it is about");
+  /* A SIBLING of the list zone, not a child of it. Both earlier arrangements were
+     children and both failed, in opposite directions: flex-basis on a child widened the
+     zone until it wrapped off its row, and absolute on a child took no space at all, so a
+     rule on ANOTHER element had to hold the line - which was left pointing at the old
+     parent when the zone moved into the header, and the pill spilled over the phase tiles
+     and the Settings button. Being a sibling is what makes neither possible. */
+  const zone = d.querySelector(".list-zone");
+  ok(!zone.contains(warn), "it is not inside the list zone, so it cannot widen it");
+  ok(d.querySelector(".site-header-row").contains(warn),
+     "it is a sibling in the header row, which is full width already");
   ok(warn.parentNode.lastElementChild === warn,
-     "as the zone's last child, which is what lets it take a line of its own");
-  /* It used to be flex-basis: 100%, which took the line but ALSO contributed a whole
-     warn line to the zone's intrinsic width - enough to wrap the zone off the merged
-     filter row in exactly the empty-list state it exists for. Absolute is the stronger
-     property: it still takes its own line under the picker, and it cannot widen the row
-     at all. jsdom lays nothing out, so the rule is the assertion. */
+     "and the row's last child, which is what lets it take a line of its own");
+  /* jsdom lays nothing out, so the rule is the assertion. */
   const warnRule = (cssText.split(".list-warn {")[1] || "").split("}")[0];
-  ok(warnRule.includes("position: absolute") && !warnRule.includes("flex-basis"),
-     "the warning is out of flow, so it cannot stretch the row it hangs under");
+  ok(warnRule.includes("flex-basis") && !warnRule.includes("position: absolute"),
+     "in flow, so nothing else has to reserve the space it takes");
+  ok(!cssText.includes(":has(.list-warn"),
+     "and no rule anywhere holds space for it - a second place to keep in sync is the bug");
   ok(warn.querySelector(".list-warn-icon"), "it carries a warning glyph");
   ok(!/No list is open/.test(source),
      "and the menu no longer carries the wording it moved out of");
