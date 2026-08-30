@@ -46,6 +46,13 @@ def main():
     errors, warnings = [], []
     entries = with_priority = 0
 
+    # The meta-specs toggle reads spec["meta"] is False, so a STRING "false" would be
+    # truthy-by-identity, count as meta, and silently hide nothing - a typo that costs
+    # the feature without costing a test. Absent means meta; only the exception is marked.
+    for sid, spec in specs.items():
+        if "meta" in spec and not isinstance(spec["meta"], bool):
+            errors.append(f"specs.json {sid}: meta is {spec['meta']!r}, expected true or false")
+
     by_id = {}
     for rec in loot:
         where = rec["item"]

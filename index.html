@@ -164,6 +164,20 @@
         <input type="search" id="search" placeholder="Item, boss, class, note&hellip;" autocomplete="off">
       </label>
 
+      <!-- Drops the specs nobody brings - the seven marked "meta": false in specs.json.
+           On by default, which is the only control here that hides data before being
+           asked; the label says which way it is set rather than what pressing it does,
+           so the bar always reads as a statement about what you are looking at.
+
+           Not on the spec strip, even though it governs specs: that row is hidden until
+           a class is picked, and a control you cannot reach cannot be turned off.
+
+           min-width, because "Meta specs" and "All specs" are different widths and this
+           bar sits directly above the rows - a button that resizes when you press it
+           shifts everything beside it, which is the reflow defect the bar rewrite spent
+           itself removing. -->
+      <button type="button" id="meta-toggle" class="btn-meta" aria-pressed="true"></button>
+
       <button type="button" id="reset" class="btn-reset">Reset</button>
 
       <!-- The count takes the row's only margin-left:auto and sits alone on the right

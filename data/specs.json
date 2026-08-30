@@ -148,7 +148,7 @@
    "icon": "ability_marksmanship",
    "roles": [
     "Physical"
-   ]
+   ], "meta": false
   },
   "Surv": {
    "class": "Hunter",
@@ -164,7 +164,7 @@
    "icon": "ability_rogue_eviscerate",
    "roles": [
     "Physical"
-   ]
+   ], "meta": false
   },
   "Combat": {
    "class": "Rogue",
@@ -180,7 +180,7 @@
    "icon": "ability_stealth",
    "roles": [
     "Physical"
-   ]
+   ], "meta": false
   },
   "Disc": {
    "class": "Priest",
@@ -188,7 +188,7 @@
    "icon": "spell_holy_wordfortitude",
    "roles": [
     "Healer"
-   ]
+   ], "meta": false
   },
   "HolyPriest": {
    "class": "Priest",
@@ -244,7 +244,7 @@
    "icon": "spell_fire_flamebolt",
    "roles": [
     "Caster"
-   ]
+   ], "meta": false
   },
   "Frost": {
    "class": "Mage",
@@ -252,7 +252,7 @@
    "icon": "spell_frost_frostbolt02",
    "roles": [
     "Caster"
-   ]
+   ], "meta": false
   },
   "AffliLock": {
    "class": "Warlock",
@@ -268,7 +268,7 @@
    "icon": "spell_shadow_metamorphosis",
    "roles": [
     "Caster"
-   ]
+   ], "meta": false
   },
   "DestroLock": {
    "class": "Warlock",
