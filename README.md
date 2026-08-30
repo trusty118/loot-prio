@@ -31,11 +31,13 @@ how long an item stays BiS derived from wowsims/tbc's P4 and P5 gear presets.
 ```
 index.html            markup + Wowhead tooltip script
 style.css             styling (dark theme, role colour coding)
-app.js                fetch + filter + render (vanilla, no build step)
-data/loot_data.json   195 item records — the source of truth
+app.js                fetch + filter + render (vanilla, no framework)
+data/loot_data.json   699 item records — the source of truth
+build.mjs             minifies the above into dist/, which is what gets published
 ```
 
-No build step, no dependencies. Deployed straight from `main` via GitHub Pages.
+**No framework and no runtime dependencies** — the page is plain files reading JSON.
+A push to `main` runs the tests, builds `dist/` and deploys it to GitHub Pages.
 
 ## Running locally
 

@@ -3,8 +3,13 @@
 A browsable, filterable mirror of a WoW TBC Classic (Tier 6) loot-priority guide,
 hosted on GitHub Pages at **https://trusty118.github.io/loot-prio/**.
 
-Vanilla `index.html` + `style.css` + `app.js` reading JSON. **No build step** — that is
-deliberate, so Pages can serve the repo root directly. Don't introduce one.
+Vanilla `index.html` + `style.css` + `app.js` reading JSON — **no framework and no runtime
+dependencies**, and that part is not negotiable.
+
+**There is a build step as of Aug 2026, and it only exists to decide what is published.**
+`build.mjs` minifies the three front-end files into `dist/` and copies `data/` beside them;
+`.github/workflows/pages.yml` runs the tests, builds, and deploys that. The source is still
+plain files you can open and edit — nothing is transpiled, bundled or imported.
 
 ---
 
@@ -13,12 +18,19 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 ```bash
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
-npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 778 checks in ~30s, should be all green
-python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
+npm install          # jsdom for the tests, esbuild for the build - the SITE has none
+npm test             # 860 checks in ~30s, should be all green
+npm run serve        # the source, on 8642 - what you develop against
+npm run build        # dist/, what Pages publishes
+npm run serve:dist   # the built artifact, on 8643
 ```
 
 Needs `node` and `python3`. `gh` is optional (only used to poll the Pages build).
+
+**`serve` and `serve:dist` are different ports on purpose** — run both and compare. Before
+the build existed, what was live was byte-for-byte what was in the repo, so looking at
+`localhost` *was* looking at production. That property is gone, and `serve:dist` is what
+replaces it: when a bug might be the minifier's, look at 8643.
 
 **On Windows** `python3` is not on PATH — use `py` for both the server and the validators
 (`py verify/check_priority.py`). `npm run serve` still assumes `python3`.
@@ -1188,7 +1200,8 @@ current if any of those change.
   which costs a ~200-byte `304` when nothing changed. This is also **why item data stays in
   files rather than moving to a database**: code and data ship in one commit and deploy
   together, so a cached `app.js` can never disagree with the data it is reading. A database
-  reintroduces exactly that skew.
+  reintroduces exactly that skew. **The build did not**: `build.mjs` copies `data/` into the
+  same artifact as the minified `app.js`, so the two still land in one deploy.
 - **Icon URLs are verified before use.** Everything comes from `wow.zamimg.com`; check a
   new one returns 200 before wiring it up. Boss portraits are Encounter Journal art
   (`ui-ej-boss-*.png`) with irregular slugs — `najentus`, `kazrogal`, no leading "the" on
@@ -1662,3 +1675,61 @@ standing rather than reconciled.
 
 Boss attribution for 52 Black Temple items was verified by hand against Wowhead in
 Aug 2026 — 27 confirmed, 24 corrected. `verify/boss-attribution.csv` is the record.
+
+---
+
+## 9. The build, and what gets published
+
+**This site had no build step until Aug 2026, and the reason it acquired one was not
+size.** Pages was set to `legacy`, serving `main:/` — so the live site was serving the
+**whole repository**. `CLAUDE.md` (this file, 102 KB of internal notes and bug
+post-mortems), `test/smoke.mjs`, the `verify/` scrapers, `docs/` and `package.json` were all
+returning `200` at the site's own URL. `.gitignore` already reasoned about exactly that
+hazard for zip files — *"Pages serves this directory, so a committed zip would be publicly
+downloadable too"* — and the logic had simply never been extended to the docs.
+
+`build.mjs` produces `dist/`, and **`dist/` is the whole of what is published**:
+
+| | |
+|---|---|
+| `app.js` | esbuild, full minify **including identifier renaming** |
+| `style.css` | esbuild, minified |
+| `index.html` | comments stripped, blank lines collapsed — deliberately conservative |
+| `data/` | **copied verbatim** |
+
+88.8 KB → **29.7 KB** gzipped for the three front-end files.
+
+**Renaming is safe here and that was checked, not assumed**: `app.js` has no `eval`, no
+`new Function`, nothing reading a function's `.name`, and it is one self-contained IIFE
+exporting no globals. It is `format: "iife"` and never bundled, because the file is loaded
+by a plain `<script>` and executes *during* parsing — which is load-bearing for the Supabase
+race in §4.
+
+**The data is not minified, on purpose.** JSON carries no comments so there is nothing to
+hide, the gzipped saving is small, and it is the one part of this site worth leaving legible
+to anyone curious enough to look.
+
+**`test/build.mjs` is what makes the build safe to have.** A build step adds a failure mode
+the other five files cannot see — they all read the **source**, which is right, since the
+source is the truth and `test/auth.mjs`'s service-role-key grep has to scan the unminified
+file. That leaves nothing checking what actually reaches users. It boots `dist/index.html`
+and `dist/app.js` in jsdom and asserts the page renders, opens a list and filters; and it
+asserts `dist/` holds **only** the four entries, naming `CLAUDE.md`, `test/` and `verify/`
+individually. One stray copy line would put the notes back on the internet and nothing else
+would complain.
+
+**The workflow's ordering is the point**: `npm ci` → `npm test` → `npm run build` → deploy,
+so a red suite cannot reach the live site. **Before it there was no CI at all** — the tests
+only ever ran on one machine, and a broken commit was published the moment it merged.
+
+**Pages must be set to "GitHub Actions", not "deploy from a branch."** If it is ever
+switched back, the site silently starts serving the repo root again — every file above
+becomes public once more, and nothing on the page changes to say so.
+
+**What was lost, and what replaced it.** With no build, what was live was byte-for-byte what
+was in the repo: `localhost` *was* production, and a deploy could be verified by curling the
+live file and diffing it against the local one. Both are gone. `npm run serve:dist` (port
+8643) is the replacement for the first — when a bug might be the minifier's, look there
+rather than at 8642. For the second, diff live against a local `npm run build`, and check
+that **`/CLAUDE.md` returns 404**, which is the one-line proof the whole arrangement is still
+in force.
