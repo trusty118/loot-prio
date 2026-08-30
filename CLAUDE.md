@@ -187,8 +187,9 @@ unqualified. That is the source's limit, not the import's.
 
 **The choice is a preference, not a filter**: it lives in `localStorage`
 (`lootprio.bisSource`) and deliberately **not** in the url, because a link you send should
-not change somebody else's source out from under them. `seedFromBis()` reads it too, so
-seeding a list from WoWSims and from Wowhead gives different lines.
+not change somebody else's source out from under them. `seedPriorities()` reads it too, so
+a list started while WoWSims is selected arrives with different lines from one started on
+Wowhead — and on Phase 3, where WoWSims has nothing, it arrives empty.
 
 ```json
 "ProtWarr": {
@@ -221,17 +222,32 @@ guides rank by purpose (`Best Threat`, `Best Mitigation`) and healers by build
 `Alternative`, `Pre-Raid`, `PvP`, `Best Until Tier 6`). `Near Best` and `Second Best` fail
 the leading-word test deliberately.
 
-**`Load BiS data` is a control on the bar, Aug 2026**, beside `Edit`. It fills the **empty**
-priorities of the phase on screen from the selected source, joined with `=`, as a starting
-point to drag into an order — `seedFromBis()`. It was an item in the list menu, which is to
-say nobody found it; sharing left the menu for the same reason, and it lives in one place
-rather than two.
+**A new list arrives seeded from BiS, Aug 2026 — there is no control for it.**
+`newBlankTemplate()` runs `seedPriorities()` once on the way out of `New`, filling every
+item that is BiS for somebody with those specs joined by `=`, as a starting point to drag
+into an order. **This is explicitly an interim answer** and is expected to be revisited.
 
-**Disabled rather than hidden** when the open list is not yours, with a title saying so —
-the rule `Edit` beside it already follows. Two limits make it safe to press: it touches only
-the phase on screen, because seeding 699 rows from one click is not something anyone means,
-and it skips any row that already has a priority, so **it can only ever add**. Pressing it
-twice changes nothing and says so rather than appearing to do nothing.
+It replaced a `Load BiS data` button on the bar, which replaced an item in the list menu.
+The button was found where the menu item was not, and then the question became why it had
+to be pressed at all: the list it filled was useless until you pressed it, so the press was
+a step with no decision in it. Automatic, the list you make is usable immediately.
+
+Three properties, and **two of them are invisible from the screen**:
+
+- **It seeds every phase**, not the phase on screen. `bisAt()` defaults to `state.phase`, so
+  seeding without passing one silently fills only what you happen to be looking at — and the
+  list then reads as empty the moment you change phase. A list is a full copy of all 699
+  rows, so seeding has to match. `seedPriorities()` maps zone → phase and asks about each
+  item under its own.
+- **It fills only what is empty**, so it can never overwrite a call. That is why it is safe
+  to be automatic, and it is what would let it be re-run later without an "are you sure".
+- **Notes are not seeded**, unchanged. BiS is a computed fact about an item; a note is a
+  person's sentence about it.
+
+**`Make a copy` does not seed**, deliberately. A copy carries somebody's calls, and their
+deliberate blanks are part of what they said — zatar's 23 "whoever needs it" rows are an
+answer, and filling them from BiS would overwrite that answer with a different claim.
+Only a list started from nothing gets seeded, because there is nothing there to misrepresent.
 
 **With no list open the priority column shows the BiS view**, Aug 2026: every spec an item
 is best-in-slot for, in the phase on screen, from the selected source. Without it the whole
@@ -1456,10 +1472,15 @@ structured priority), `verify/fetch_unique.py` (re-runnable if the item set chan
 - **Zul'Aman trash drops are still missing**, which is why that chip reads 0.
 - **Still not included:** gems, and Mother Shahraz's shadow-resistance set — intentional
   omissions by the creator — and tier set pieces, per the above.
-- **Seeding is an action, not stored data, Aug 2026.** The 268 flat `=` lines that used to
+- **Seeding is computed, not stored data, Aug 2026.** The 268 flat `=` lines that used to
   ship in `loot_data.json` were each exactly the specs `bis.json` lists for that item in
-  that phase — a duplicate of data the page already draws as rings. `seedFromBis()` fills
-  the empty rows of the phase on screen on demand instead, and only on a list of your own.
+  that phase — a duplicate of data the page already draws as rings. `seedPriorities()`
+  computes them into a list of your own at the moment it is created, instead.
+  **Interim, and known to be:** it is automatic and unrepeatable, so a list made before a
+  `bis.json` correction keeps the old lines, and one made while WoWSims was the selected
+  source on Phase 3 arrives empty with nothing offering to fix it. Re-seeding on demand is
+  the obvious next move — the primitive already only fills what is empty, so the safety it
+  would need is built.
 - **`roles` on the imported rows are stats-derived, not BiS-derived.** `fetch_items.py` reads
   them off the item's own stats, which is blunt on hybrids; `verify/seed_roles.py` is the
   better source and has not been re-run since the import.

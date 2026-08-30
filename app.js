@@ -761,7 +761,6 @@
     account: document.getElementById("account"),
     accountName: document.getElementById("account-name"),
     shareTrigger: document.getElementById("share-trigger"),
-    seedBis: document.getElementById("seed-bis"),
     editPill: document.getElementById("edit-pill"),
     editMsg: document.getElementById("edit-msg"),
     editHint: document.getElementById("edit-hint"),
@@ -890,14 +889,53 @@
 
   /* Nobody's list yet: all 195 rows, every priority empty. Still a full copy, so it
      validates, encodes and shares exactly like any other. */
+  /* The seeding primitive. Fills only the EMPTY entries, so it can never overwrite a call
+     that is already there, and returns how many it filled.
+
+     It walks EVERY phase, and asks about each item under the phase that item belongs to.
+     Both halves are load-bearing and neither is visible from the screen: seeded on the
+     phase you happened to be looking at, a list would read as empty the moment you changed
+     phase - and asking bisTier() without a phase would silently do exactly that, since it
+     defaults to state.phase. A list is a full copy of all 699 rows; seeding has to match. */
+  function seedPriorities(priorities) {
+    var order = Object.keys(REG.specs);
+    var phaseOf = {};
+    PHASES.forEach(function (p) {
+      p.zones.forEach(function (z) { phaseOf[z] = p.id; });
+    });
+
+    var filled = 0;
+    ALL.forEach(function (rec) {
+      if ((priorities[rec.id] || []).length) return;
+      var phase = phaseOf[rec.zone];
+      if (!phase) return;
+      var specs = order.filter(function (id) { return bisTier(id, rec.id, phase); });
+      if (!specs.length) return;
+      priorities[rec.id] = specs.map(function (id, i) {
+        return i ? { spec: id, op: "=" } : { spec: id };
+      });
+      filled++;
+    });
+    return filled;
+  }
+
+  /* Seeded from BiS, not blank - a list you start now arrives with every item that is BiS
+     for somebody already ranked flat-equal, as a starting point to drag into order.
+
+     `base` stays "blank" because it records where the list CAME FROM - nobody's list - and
+     that is still true; the BiS ordering is a starting point laid on top, not a source. It
+     is also stored in every saved list and in every `#t=` link, so it is not free to redefine.
+
+     Notes are still not seeded, and that has not changed: you asked for nobody's list, and
+     the guide's wording is somebody's. BiS is a computed fact about an item; a note is a
+     person's sentence about it. */
   function newBlankTemplate(name) {
     var priorities = {}, notes = {};
     ALL.forEach(function (rec) {
       priorities[rec.id] = [];
-      /* Blank means blank. The guide's notes are not seeded here the way they are into
-         a copy - you asked for nobody's list, and his wording is somebody's. */
       notes[rec.id] = "";
     });
+    seedPriorities(priorities);
     return makeTemplate(name || "My list", "blank", priorities, notes);
   }
 
@@ -1387,34 +1425,6 @@
      Two limits, both so it can only ever add. It touches the phase on screen, not the
      whole dataset, because seeding 699 rows from one click is not something anyone means.
      And it skips any row that already has a priority, so it cannot overwrite work. */
-  function seedFromBis() {
-    if (!activeTemplate || !activeIsMine) return;
-    var zones = phaseZones(state.phase);
-    var order = Object.keys(REG.specs);
-    var filled = 0;
-
-    ALL.forEach(function (rec) {
-      if (zones.indexOf(rec.zone) === -1) return;
-      if ((activeTemplate.priorities[rec.id] || []).length) return;
-      var specs = order.filter(function (id) { return bisTier(id, rec.id); });
-      if (!specs.length) return;
-      activeTemplate.priorities[rec.id] = specs.map(function (id, i) {
-        return i ? { spec: id, op: "=" } : { spec: id };
-      });
-      filled++;
-    });
-
-    if (!filled) {
-      announce("Nothing to seed here - every item on this phase either has a priority "
-               + "already or is BiS for nobody");
-      return;
-    }
-    unsaved = true;
-    saveNow().then(refreshLists);
-    announce("Seeded " + filled + " items from BiS, all equal - drag to put them in order");
-    update();
-  }
-
   /* ---------- sharing ----------
      gzip via CompressionStream where the browser has it (11.6 KB -> ~2.1 KB), plain
      base64 where it doesn't. The marker byte says which, so a link made in one
@@ -2832,9 +2842,12 @@
      the phase on screen: a Sunwell item is not BiS for someone reading Phase 3, and a
      ring that ignored the phase would answer "BiS at some point" rather than "BiS for me
      now" - which is the question a loot council is actually asking. */
-  function bisAt(specId, itemId) {
+  /* `phase` is optional and almost always omitted - what is BiS is asked about the phase
+     on screen. Seeding is the exception: it fills a whole list at once, so it has to ask
+     about each item's OWN phase rather than the one you happen to be looking at. */
+  function bisAt(specId, itemId, phase) {
     var idx = BIS_INDEX[state.bisSource] || BIS_INDEX.wowhead;
-    return idx[state.phase + "|" + specId + "|" + itemId] || null;
+    return idx[(phase || state.phase) + "|" + specId + "|" + itemId] || null;
   }
 
   function bisVariant(specId, itemId) {
@@ -2842,8 +2855,8 @@
     return hit ? hit.variant : "";
   }
 
-  function bisTier(specId, itemId) {
-    var hit = bisAt(specId, itemId);
+  function bisTier(specId, itemId, phase) {
+    var hit = bisAt(specId, itemId, phase);
     return hit ? hit.longevity : 0;
   }
 
@@ -3047,8 +3060,8 @@
     /* The SEEDED tag stood here. It marked lines seed_priority.py wrote from the BiS
        data, and those are gone: every one was exactly the specs bis.json already lists,
        so they duplicated data the page draws as rings anyway. Seeding is an action on a
-       list of your own now - see seedFromBis() - and a line you seeded and then ordered
-       is yours, so there is nothing left to disclaim. */
+       list of your own now - see seedPriorities(), which every new list runs once - and a
+       line you seeded and then ordered is yours, so there is nothing left to disclaim. */
 
     /* With a class or spec selected, everyone else in the line dims, so where you
        stand reads at a glance. Same idea as class-icon--muted on tier tokens; the
@@ -3723,14 +3736,6 @@
     el.editToggle.disabled = !activeIsMine;
     el.editToggle.title = activeIsMine ? "" : "Make a copy to edit";
 
-    /* Same rule, same reason. The title carries what the label cannot say in two words:
-       it fills the EMPTY rows of the phase on screen, so it can only ever add. */
-    if (el.seedBis) {
-      el.seedBis.disabled = !activeIsMine;
-      el.seedBis.title = activeIsMine
-        ? "Fill this phase's empty priorities from the BiS data, all equal, to drag into order"
-        : "Make a copy to load BiS data into it";
-    }
     el.editToggle.setAttribute("aria-pressed", state.editing ? "true" : "false");
     el.editToggle.textContent = state.editing ? "Done editing" : "Edit priorities";
     /* the fourth signal, and the only one reachable from the bottom of the table */
@@ -4052,7 +4057,8 @@
     listMenu.appendChild(document.createElement("hr"));
     listMenu.appendChild(menuItem("+  New list", "lm-item--new", function () {
       closeListMenu();
-      startList(newBlankTemplate(), "A blank list - every priority is empty until you fill it in");
+      startList(newBlankTemplate(),
+                "Seeded from BiS, all equal - drag each line to put it in order");
     }));
 
     listMenu.appendChild(document.createElement("hr"));
@@ -4278,10 +4284,6 @@
        trigger's own mousedown closes the menu and its click reopens it - which looks
        like the menu ignoring every second press. */
     el.listTrigger.addEventListener("mousedown", function (ev) { ev.stopPropagation(); });
-
-    if (el.seedBis) {
-      el.seedBis.addEventListener("click", function () { seedFromBis(); });
-    }
 
     if (el.editPill) {
       el.editPill.addEventListener("click", function () {

@@ -1789,28 +1789,6 @@ mark {
    bar rewrite exists to remove. */
 .btn-edit { min-width: 62px; }
 
-/* Quiet, like Reset: the accent means "selected" and is not available, and this must not
-   compete with the picker, which was deliberately made the loud thing on this bar. */
-.btn-seed {
-  font: inherit;
-  font-size: .85rem;
-  background: transparent;
-  color: var(--text-dim);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 7px 12px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.btn-seed:hover:not(:disabled) { color: var(--text); border-color: var(--gold); }
-
-.btn-seed:disabled {
-  color: var(--text-faint);
-  border-color: var(--line-soft);
-  cursor: not-allowed;
-}
-
 .btn-edit:disabled {
   color: var(--text-faint);
   border-color: var(--line-soft);
