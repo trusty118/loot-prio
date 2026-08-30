@@ -741,9 +741,7 @@ select:focus-visible, input:focus-visible, .chip:focus-visible, button:focus-vis
    Separated from the icons by a gap and a hairline, because it is not one of them: they
    pick a class, this one decides which specs exist at all.
 
-   min-width holds "Meta specs" and "All specs" to one width. "Meta specs" measures ~102px
-   here, so anything less lets the shorter label shrink and shifts the strip on every
-   press. */
+   The min-width that holds both labels to one width lives on .chip--meta below. */
 .meta-zone {
   /* flex: none, like the icons themselves - without it flex shrinks this below its
      label rather than letting the class strip beside it scroll, which is the same trap
@@ -757,7 +755,9 @@ select:focus-visible, input:focus-visible, .chip:focus-visible, button:focus-vis
 }
 
 .chip--meta {
-  min-width: 104px;
+  /* Measured, not guessed: "Meta Specs Only" renders 133px at this size, and the shorter
+     "All Specs" would otherwise shrink the chip and shift the strip on every press. */
+  min-width: 134px;
   justify-content: center;
   white-space: nowrap;
 }

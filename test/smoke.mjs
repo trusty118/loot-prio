@@ -2281,7 +2281,7 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
     .map((i) => i.dataset.id);
 
   ok(NON.length > 0, `specs.json marks the non-meta specs (${NON.length})`);
-  ok(btn() && btn().textContent === "Meta specs" && btn().getAttribute("aria-pressed") === "true",
+  ok(btn() && btn().textContent === "Meta Specs Only" && btn().getAttribute("aria-pressed") === "true",
      "the toggle is on by default and says which way it is set");
   ok(/only meta/i.test(btn().dataset.tip || ""), `with a tooltip saying so: "${btn().dataset.tip}"`);
   ok(doc.querySelector(".control-row--who").contains(btn()),
@@ -2299,7 +2299,7 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
   const countBefore = doc.getElementById("count").textContent;
 
   click(btn());
-  ok(btn().textContent === "All specs" && btn().getAttribute("aria-pressed") === "false",
+  ok(btn().textContent === "All Specs" && btn().getAttribute("aria-pressed") === "false",
      "clicking it flips the label");
   ok(/showing all/i.test(btn().dataset.tip || ""), `and the tooltip: "${btn().dataset.tip}"`);
   ok(icons().some((id) => NON.includes(id)),

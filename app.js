@@ -2173,7 +2173,7 @@
   function renderMetaChip() {
     if (!el.metaZone) return;
     var on = metaOnly();
-    var c = chip(on ? "Meta specs" : "All specs", on, null);
+    var c = chip(on ? "Meta Specs Only" : "All Specs", on, null);
     c.id = "meta-toggle";
     c.classList.add("chip--meta");
     c.dataset.tip = on ? "Showing only meta specs" : "Showing all specs";

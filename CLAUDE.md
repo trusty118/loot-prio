@@ -106,7 +106,7 @@ is ever tagged `Physical`**, which is what keeps rogues and hunters off robes in
                          "icon": "ability_warrior_defensivestance", "roles": ["Tank"] } }
 ```
 
-A spec may also carry **`"meta": false`** — seven do, and the `Meta specs` toggle drops
+A spec may also carry **`"meta": false`** — seven do, and the `Meta Specs Only` toggle drops
 them from the chip row and both priority columns. Absent means meta. See §3.
 
 Five sections: `classes` (9), `specs` (28 pickable, plus the `FeralDruid` umbrella),
@@ -602,7 +602,7 @@ With several specs picked it keeps anything BiS for any of them.
 
 ### The meta-specs toggle
 
-**`Meta specs` / `All specs`, at the end of the CLASS strip, Aug 2026.** Seven specs are marked
+**`Meta Specs Only` / `All Specs`, at the end of the CLASS strip, Aug 2026.** Seven specs are marked
 `"meta": false` in `specs.json` — Frost and Fire Mage, Subtlety and Assassination Rogue,
 Marksmanship Hunter, Demonology Warlock, Discipline Priest — and the toggle drops them from
 the chip row and from both priority columns. A raid leader gearing a real roster is never
