@@ -2272,15 +2272,22 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
    asked, so most of what is pinned below is the safeguards rather than the hiding. */
 {
   click(doc.getElementById("reset"));
-  const btn = doc.getElementById("meta-toggle");
+  /* Re-queried, never held: it is a chip on the class strip now, so renderClassChips()
+     replaces the node on every update and a captured reference goes stale the moment you
+     press it. */
+  const btn = () => doc.getElementById("meta-toggle");
   const NON = Object.keys(specs.specs).filter((id) => specs.specs[id].meta === false);
   const icons = () => [...doc.querySelectorAll("td.col-prio img.spec-icon")]
     .map((i) => i.dataset.id);
 
   ok(NON.length > 0, `specs.json marks the non-meta specs (${NON.length})`);
-  ok(btn && btn.textContent === "Meta specs" && btn.getAttribute("aria-pressed") === "true",
+  ok(btn() && btn().textContent === "Meta specs" && btn().getAttribute("aria-pressed") === "true",
      "the toggle is on by default and says which way it is set");
-  ok(/only meta/i.test(btn.dataset.tip || ""), `with a tooltip saying so: "${btn.dataset.tip}"`);
+  ok(/only meta/i.test(btn().dataset.tip || ""), `with a tooltip saying so: "${btn().dataset.tip}"`);
+  ok(doc.querySelector(".control-row--who").contains(btn()),
+     "it sits on the class row, where the specs it governs are chosen");
+  ok(!doc.getElementById("class-chips").contains(btn()),
+     "but outside #class-chips, which is a labelled group of classes and this is not one");
 
   /* zatar's list is open on this window, so this is the authored-priority path. */
   ok(icons().length > 0 && !icons().some((id) => NON.includes(id)),
@@ -2291,10 +2298,10 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
   const before = rows().length;
   const countBefore = doc.getElementById("count").textContent;
 
-  click(btn);
-  ok(btn.textContent === "All specs" && btn.getAttribute("aria-pressed") === "false",
+  click(btn());
+  ok(btn().textContent === "All specs" && btn().getAttribute("aria-pressed") === "false",
      "clicking it flips the label");
-  ok(/showing all/i.test(btn.dataset.tip || ""), `and the tooltip: "${btn.dataset.tip}"`);
+  ok(/showing all/i.test(btn().dataset.tip || ""), `and the tooltip: "${btn().dataset.tip}"`);
   ok(icons().some((id) => NON.includes(id)),
      "turning it off brings the hidden specs back");
   ok(rows().length === before && doc.getElementById("count").textContent === countBefore,
@@ -2302,7 +2309,7 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
 
   /* Operators have to survive the filtering, or a line would claim a relationship its
      author never wrote - and a first entry carrying an op is invalid data besides. */
-  click(btn);
+  click(btn());
   const cells = [...doc.querySelectorAll("td.col-prio")].filter((c) => c.querySelector("img"));
   ok(cells.every((c) => {
     const kids = [...c.children].filter((n) => n.tagName === "IMG" || n.classList.contains("prio-op"));

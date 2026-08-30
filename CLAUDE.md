@@ -602,7 +602,7 @@ With several specs picked it keeps anything BiS for any of them.
 
 ### The meta-specs toggle
 
-**`Meta specs` / `All specs` on the filter row, Aug 2026.** Seven specs are marked
+**`Meta specs` / `All specs`, at the end of the CLASS strip, Aug 2026.** Seven specs are marked
 `"meta": false` in `specs.json` — Frost and Fire Mage, Subtlety and Assassination Rogue,
 Marksmanship Hunter, Demonology Warlock, Discipline Priest — and the toggle drops them from
 the chip row and from both priority columns. A raid leader gearing a real roster is never
@@ -617,6 +617,24 @@ nothing else. `check_priority.py` rejects a non-boolean `meta`, because `"false"
 **`lootprio.metaOnly`, on by default, and deliberately not in the url** — same reasoning as
 `bisSource`: it is a preference about how *you* read the page, and a link you send must not
 hide specs from somebody else.
+
+**It is a chip, and it takes the plain accent when pressed.** It began as a quiet outlined
+button on the filter row, and that was wrong twice over: `--gold` means *selected* on every
+other chip in that strip, so a filter that is on and **not** wearing it read as a button
+nobody had pressed — which is the worst possible reading for a control that is on by
+default. A filter that is on **is** selected, so no `.chip--toggle`-style override: it uses
+the same vocabulary as the class icons beside it. (`BiS only` overrides to epic purple only
+because it filters on the BiS tiers, whose colours mean something specific.)
+
+**On the class row, but OUTSIDE `#class-chips`** — that div is `role="group"` with
+`aria-label="Class"`, and a control deciding which specs exist is not one of the classes; a
+screen reader inside that group would announce it as one. It lives in `#meta-zone`, its own
+`flex: none` box on the same row, which also keeps it clear of the strip's `overflow-x`
+scrolling. It is not on the spec strip either, even though it governs specs: that row is
+`hidden` until a class is picked, and a control you cannot reach cannot be turned off.
+
+**It is rebuilt on every render**, like every other chip, so nothing may hold a reference to
+it across an `update()` — a captured node goes stale the moment it is pressed.
 
 **It is the only control here that hides something before being asked**, which is why the
 safeguards matter more than the hiding:

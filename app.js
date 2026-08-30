@@ -749,7 +749,7 @@
     slot: document.getElementById("slot-select"),
     search: document.getElementById("search"),
     reset: document.getElementById("reset"),
-    metaToggle: document.getElementById("meta-toggle"),
+    metaZone: document.getElementById("meta-zone"),
     count: document.getElementById("count"),
     results: document.getElementById("results"),
     templateBar: document.getElementById("template-bar"),
@@ -2155,6 +2155,35 @@
       });
       el.classChips.appendChild(c);
     });
+
+    renderMetaChip();
+  }
+
+  /* Sits at the end of the CLASS row rather than on the filter bar, because that is the
+     row it speaks about - it decides which specs exist as far as the page is concerned,
+     and the class strip is where you are already looking when you ask that.
+
+     A chip rather than a button, so it wears the accent when it is on. --gold means
+     "selected" everywhere on this page, and a filter that is ON is selected - so this is
+     the same vocabulary the class icons beside it already use, which is what makes the
+     default-on state read as on rather than as a button someone forgot to press.
+
+     The label states which way it is SET, not what pressing it would do, so the row reads
+     as a description of what you are looking at - the way every chip on it does. */
+  function renderMetaChip() {
+    if (!el.metaZone) return;
+    var on = metaOnly();
+    var c = chip(on ? "Meta specs" : "All specs", on, null);
+    c.id = "meta-toggle";
+    c.classList.add("chip--meta");
+    c.dataset.tip = on ? "Showing only meta specs" : "Showing all specs";
+    c.setAttribute("aria-label", c.dataset.tip);
+    c.addEventListener("click", function () {
+      setMetaOnly(!metaOnly());
+      update();
+    });
+    el.metaZone.innerHTML = "";
+    el.metaZone.appendChild(c);
   }
 
   /* The spec row is hidden until a class is picked: 27 icons with no class chosen
@@ -3518,7 +3547,6 @@
 
   function update() {
     indexSelection();
-    renderMetaToggle();
     renderTemplateBar();
     renderPhaseChips();
     renderZoneChips();
@@ -3528,17 +3556,6 @@
     renderSelects();
     renderResults();
     writeUrl();
-  }
-
-  /* The label states which way the toggle is SET, not what pressing it would do - so
-     the bar reads as a description of what you are looking at, the way every chip row on
-     this page does. Its tooltip says the same thing in a sentence. */
-  function renderMetaToggle() {
-    if (!el.metaToggle) return;
-    var on = metaOnly();
-    el.metaToggle.textContent = on ? "Meta specs" : "All specs";
-    el.metaToggle.dataset.tip = on ? "Showing only meta specs" : "Showing all specs";
-    el.metaToggle.setAttribute("aria-pressed", on ? "true" : "false");
   }
 
   /* ---------- the list bar ----------
@@ -4853,13 +4870,6 @@
       clearTimeout(t);
       t = setTimeout(function () { state.q = el.search.value.trim(); update(); }, 120);
     });
-
-    if (el.metaToggle) {
-      el.metaToggle.addEventListener("click", function () {
-        setMetaOnly(!metaOnly());
-        update();
-      });
-    }
 
     el.reset.addEventListener("click", function () {
       state.phase = defaultPhase(); state.zone = ""; state.boss = ""; state.bossZone = "";

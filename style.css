@@ -732,40 +732,34 @@ select:focus-visible, input:focus-visible, .chip:focus-visible, button:focus-vis
 
 .btn-reset:hover { color: var(--text); border-color: var(--gold); }
 
-/* The meta-specs toggle, styled as Reset's sibling - both are quiet controls that act on
-   the whole table rather than naming one thing to filter by.
+/* The meta-specs chip, at the end of the class strip. It takes the plain .chip accent
+   when pressed - no override - because a filter that is ON is selected, and that is what
+   the accent means on every other chip in the row. That is the whole reason it became a
+   chip: as a quiet outlined button on the filter bar, its default-ON state read as a
+   button nobody had pressed yet.
 
-   NOT accented when on. --gold means "selected" among things you can select, and this is
-   not one of a set - it is a mode. The armed state reads through a filled ground and full
-   contrast instead, the same vocabulary #edit-toggle uses for the same reason.
+   Separated from the icons by a gap and a hairline, because it is not one of them: they
+   pick a class, this one decides which specs exist at all.
 
-   min-width holds "Meta specs" and "All specs" to one width. This bar sits directly above
-   699 rows, and a control that changes size when pressed shifts Reset and the count line
-   with it. */
-.btn-meta {
-  font: inherit;
-  font-size: .85rem;
-  background: transparent;
-  color: var(--text-dim);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 7px 12px;
-  /* Measured, not guessed: "Meta specs" renders 102px at this size and padding, so a
-     min-width below that lets the shorter "All specs" shrink and drag Reset and the count
-     line sideways on every press. */
-  min-width: 104px;
-  cursor: pointer;
-  white-space: nowrap;
+   min-width holds "Meta specs" and "All specs" to one width. "Meta specs" measures ~102px
+   here, so anything less lets the shorter label shrink and shifts the strip on every
+   press. */
+.meta-zone {
+  /* flex: none, like the icons themselves - without it flex shrinks this below its
+     label rather than letting the class strip beside it scroll, which is the same trap
+     #class-chips .chip already has a rule for. */
+  flex: none;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
 }
 
-.btn-meta:hover { color: var(--text); border-color: var(--gold); }
-
-.btn-meta[aria-pressed="true"] {
-  background: var(--bg-panel-2);
-  color: var(--text);
-  /* one step brighter than the hairline, mixed off the token rather than hard-coded, so
-     it follows --line if the palette moves again */
-  border-color: color-mix(in srgb, var(--line) 70%, var(--text-faint));
+.chip--meta {
+  min-width: 104px;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 /* The count belongs to the refine panel: it is the running answer to what those
