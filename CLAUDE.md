@@ -1803,3 +1803,65 @@ live file and diffing it against the local one. Both are gone. `npm run serve:di
 rather than at 8642. For the second, diff live against a local `npm run build`, and check
 that **`/CLAUDE.md` returns 404**, which is the one-line proof the whole arrangement is still
 in force.
+
+---
+
+## 10. Working agreements
+
+**These are rules about how to WORK on this repo, not about the code, and they live here for
+one reason: this file is the only thing that travels between machines.** They were kept in
+Claude Code's per-machine memory (`~/.claude/`) until Aug 2026, which meant they applied on
+the laptop they were written on and nowhere else — while `CLAUDE.md`, 1800 lines of the
+reasoning behind every decision here, went everywhere. That is backwards, and the rule most
+worth carrying is the one below that exists *because* it was once broken.
+
+`.gitignore` excludes `.claude/` deliberately, as per-machine settings, so this file is the
+right home rather than a committed settings directory. Since §9 it is not published either —
+`/CLAUDE.md` returns 404 — so notes about how the work is done stay inside the repo.
+
+### Never push, merge or deploy without being asked
+
+**Work stops at a local commit.** Do not `git push`, do not merge to `main`, do not open or
+merge a PR, and do not let Pages deploy, without being asked for **that specific change**.
+
+**Why:** `main` is the deploy branch — a merge publishes to
+https://trusty118.github.io/loot-prio/ within a minute. CI gates the deploy on the tests, but
+it does not ask anybody's permission. The point is to look at a change on `localhost` and
+decide when it goes out.
+
+**Permission to ship one change never carries to the next.** That is the whole rule, and it
+is written down because approval for one PR was once treated as standing approval, and a
+follow-up went straight to `main` unasked.
+
+**How to apply:** branch, commit, stop there, and say what is ready. Committing to a branch
+unasked is fine; publishing is not. If already on `main`, branch before committing.
+
+### The ship route, when it is asked for
+
+1. **Check the data first** — `git diff --stat main...HEAD -- data/` should be empty unless
+   the change is deliberately a data change. The priorities are the one thing that must
+   never move by accident.
+2. `git push -u origin <branch>` → `gh pr create` → `gh pr merge --merge --delete-branch`
+3. Watch the **`Deploy site`** run. Prefer `gh run view <id> --json status,conclusion,jobs`
+   over `gh run watch`: in a pipeline the latter can drop its connection and still exit 0,
+   reporting success it never observed.
+4. **Verify live by fetching, not by trusting the green run.**
+
+### Verifying a deploy, since the build step
+
+Two habits stopped working when §9 landed, and both have replacements:
+
+- **Live `app.js` is minified**, so it can no longer be diffed against the repo file. Diff it
+  against a local `npm run build` instead:
+  `diff <(curl -s $SITE/app.js) dist/app.js`
+- **`curl $SITE/CLAUDE.md` must return 404.** That single check proves Pages is still serving
+  `dist/` and not the repo root. If it ever returns 200, this file, `test/` and `verify/` are
+  public again and nothing on the page would say so.
+
+### Two traps that have each cost real time
+
+- **Use `npm test`. Never grep its output for `FAIL`.** A test file that *crashes* produces
+  no `FAIL` line and no missing `PASS` count, so a truncated run looks identical to a clean
+  one — which hid a broken suite across two commits. `npm test` chains on exit codes.
+- **`npm install` before anything on a fresh clone**, or on a machine that predates the build
+  step. esbuild is a dependency now, and both `npm test` and `npm run build` fail without it.
