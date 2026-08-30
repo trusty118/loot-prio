@@ -822,6 +822,68 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
      "notes are still not seeded - blank means blank for anybody's wording");
 }
 
+// --- the meta-specs toggle never reaches the editor -----------------------------------
+/* The one place it must not apply. Remove, the operator menu and every drop target index
+   into the REAL array - setOp(list, at, op) takes a position - so a filtered view would
+   act on the wrong entry, or delete something that is not on screen. */
+{
+  const wM = boot();
+  await settle(() => wM.document.querySelector("tbody tr"));
+  const dM = wM.document;
+  const NON = Object.keys(specs.specs).filter((id) => specs.specs[id].meta === false);
+
+  ok(dM.getElementById("meta-toggle").getAttribute("aria-pressed") === "true",
+     "the toggle is on, which is the default");
+
+  doMenu(wM, "Make a copy");
+  await settle(() => only(wM));
+  const t = only(wM);
+
+  /* A row the copied list ranks for a hidden spec: reading it shows fewer icons than the
+     data holds, and editing it must show every one. */
+  const id = Object.keys(t.priorities).find((k) =>
+    t.priorities[k].some((e) => NON.includes(e.spec)));
+  ok(id, "the copied list ranks something for a spec the toggle hides");
+
+  const cellFor = () => [...dM.querySelectorAll("tbody tr[data-id]")]
+    .find((tr) => tr.dataset.id === id).querySelector("td.col-prio");
+  const drawn = () => cellFor().querySelectorAll("img.spec-icon").length;
+  const held = t.priorities[id].length;
+
+  /* startList() arms edit mode - "you made it in order to change it" - so a fresh copy
+     opens already editing, and every entry has to be there. */
+  ok(dM.querySelector(".prio-edit"), "a copy opens in edit mode");
+  ok(drawn() === held, `editing it, every entry is present and draggable (${held})`);
+
+  click(wM, el(dM, "edit-toggle"));
+  await settle(() => !dM.querySelector(".prio-edit"));
+  ok(drawn() < held, `and reading it, the hidden ones drop out (${drawn()} of ${held})`);
+
+  click(wM, el(dM, "edit-toggle"));
+  await settle(() => dM.querySelector(".prio-edit"));
+  ok(drawn() === held, "arming it again brings every entry back");
+
+  /* And the data itself was never touched by any of the above. */
+  ok(only(wM).priorities[id].length === held,
+     "the stored list still holds all of them - this was only ever a display filter");
+}
+
+// --- a list seeded while the toggle is on has no non-meta lines in it -----------------
+/* Absent from the DATA, not hidden by a setting - which is what stops them reappearing
+   the day somebody turns the toggle off. */
+{
+  const wS = boot("#phase=P4");
+  await settle(() => wS.document.querySelector("tbody tr"));
+  const NON = Object.keys(specs.specs).filter((id) => specs.specs[id].meta === false);
+
+  doMenu(wS, "+  New list");
+  await settle(() => only(wS));
+  const seeded = Object.values(only(wS).priorities).flat();
+  ok(seeded.length > 0, `it seeded (${seeded.length} entries)`);
+  ok(!seeded.some((e) => NON.includes(e.spec)),
+     "and not one of them names a spec the toggle hides");
+}
+
 // --- no browser dialogs anywhere ------------------------------------------------------------
 ok(!/window\.(prompt|confirm)\s*\(/.test(source),
    "app.js asks nothing through a browser dialog");

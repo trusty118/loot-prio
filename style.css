@@ -732,6 +732,36 @@ select:focus-visible, input:focus-visible, .chip:focus-visible, button:focus-vis
 
 .btn-reset:hover { color: var(--text); border-color: var(--gold); }
 
+/* The meta-specs chip, at the end of the class strip. It takes the plain .chip accent
+   when pressed - no override - because a filter that is ON is selected, and that is what
+   the accent means on every other chip in the row. That is the whole reason it became a
+   chip: as a quiet outlined button on the filter bar, its default-ON state read as a
+   button nobody had pressed yet.
+
+   Separated from the icons by a gap and a hairline, because it is not one of them: they
+   pick a class, this one decides which specs exist at all.
+
+   The min-width that holds both labels to one width lives on .chip--meta below. */
+.meta-zone {
+  /* flex: none, like the icons themselves - without it flex shrinks this below its
+     label rather than letting the class strip beside it scroll, which is the same trap
+     #class-chips .chip already has a rule for. */
+  flex: none;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
+}
+
+.chip--meta {
+  /* Measured, not guessed: "Meta Specs Only" renders 133px at this size, and the shorter
+     "All Specs" would otherwise shrink the chip and shift the strip on every press. */
+  min-width: 134px;
+  justify-content: center;
+  white-space: nowrap;
+}
+
 /* The count belongs to the refine panel: it is the running answer to what those
    three controls just did, so it sits with them rather than over the results. */
 .control-row--meta {

@@ -749,6 +749,7 @@
     slot: document.getElementById("slot-select"),
     search: document.getElementById("search"),
     reset: document.getElementById("reset"),
+    metaZone: document.getElementById("meta-zone"),
     count: document.getElementById("count"),
     results: document.getElementById("results"),
     templateBar: document.getElementById("template-bar"),
@@ -805,6 +806,62 @@
   /* one shared empty array rather than a fresh [] per row per render - this is called
      for every record on every update, and nothing mutates the result */
   var EMPTY = [];
+
+  /* What the priority column DRAWS, once the meta-specs toggle has had its say. Display
+     only: effectivePriority() stays the truth, and matches(), selectionHas(),
+     bisOnlyMatch() and the search haystack all go on reading that - so no row can vanish
+     and no search can stop finding something because of this.
+
+     Two entries are never dropped. A CLASS entry stands for all of its specs, so hiding
+     it would say something different rather than something shorter. And a spec you have
+     explicitly SELECTED stays, or picking Frost Mage from the chip row would narrow the
+     table and then show you nothing.
+
+     Returns the original array when it changes nothing, so the common case allocates
+     nothing - this runs for every row on every render. */
+  function visiblePriority(list) {
+    if (!metaOnly() || !list || list.length < 1) return list || EMPTY;
+
+    var keeps = list.map(function (entry) {
+      return !!entry["class"] || showsSpec(entry.spec);
+    });
+    if (keeps.every(function (k) { return k; })) return list;
+
+    var out = [], pending = null;
+    list.forEach(function (entry, i) {
+      var op = i ? (entry.op || ">") : null;
+      if (!keeps[i]) {
+        /* the dropped entry's own incoming operator still has to reach the next
+           survivor, or the line would claim a relationship nobody wrote */
+        if (op) pending = pending === null ? op : foldOps(pending, op);
+        return;
+      }
+      var copy = {}, k;
+      for (k in entry) if (Object.prototype.hasOwnProperty.call(entry, k)) copy[k] = entry[k];
+      if (!out.length) {
+        /* the first entry carries no operator - the render loop skips it, and
+           validateTemplate() and check_priority.py both refuse one that has it */
+        delete copy.op;
+      } else {
+        copy.op = pending === null ? op : foldOps(pending, op);
+      }
+      out.push(copy);
+      pending = null;
+    });
+    return out;
+  }
+
+  /* Two operators spanning a dropped entry, collapsed into the one relationship that
+     survives. "Rogue > Enh > Arms" with Enh hidden is still "Rogue > Arms", because
+     higher-than carries through; two holds collapse to "?" rather than to "=", since
+     nobody said those two were equal - only that neither was ranked against the thing
+     in between. Identical operators keep their exact wording, so ">>" is not quietly
+     downgraded when it did not have to be. */
+  function foldOps(a, b) {
+    if (a === b) return a;
+    if (OPERATORS[a].advances || OPERATORS[b].advances) return ">";
+    return "?";
+  }
 
   /* The same overlay, for the notes column. A note you have written wins; absent means
      the guide's, which is why a template saved before notes existed still reads correctly
@@ -909,7 +966,13 @@
       if ((priorities[rec.id] || []).length) return;
       var phase = phaseOf[rec.zone];
       if (!phase) return;
-      var specs = order.filter(function (id) { return bisTier(id, rec.id, phase); });
+      /* Seeded meta-only while the toggle is on, so a new list never CONTAINS the lines
+         rather than merely hiding them - which is what stops them reappearing the day
+         somebody turns the toggle off. Seeding already reads state.bisSource; this is the
+         second preference it honours, for the same reason. */
+      var specs = order.filter(function (id) {
+        return bisTier(id, rec.id, phase) && showsSpec(id);
+      });
       if (!specs.length) return;
       priorities[rec.id] = specs.map(function (id, i) {
         return i ? { spec: id, op: "=" } : { spec: id };
@@ -947,6 +1010,7 @@
   var STORE_KEY = "lootprio.templates";
   var SMART_KEY = "lootprio.smartFilter";
   var BIS_SOURCE_KEY = "lootprio.bisSource";
+  var META_KEY = "lootprio.metaOnly";
 
   /* Where the BiS rings come from. A preference about how you read the page rather than
      a filter on it, so it lives in this browser and NOT in the url: a link you send
@@ -986,6 +1050,48 @@
   function setSmartFilter(on) {
     try { window.localStorage.setItem(SMART_KEY, on ? "on" : "off"); }
     catch (e) { /* private browsing: the session still works, it just won't persist */ }
+  }
+
+  /* Hides the specs nobody brings - "meta": false in specs.json, seven of the 28. A raid
+     leader gearing a real roster is never going to rank Frost Mage, and with no list open
+     the BiS view was drawing up to eleven icons on a row.
+
+     Same kind of preference as bisSource, and stored the same way for the same reason: it
+     is about how YOU read the page, so it lives in this browser and NOT in the url. A link
+     you send must not quietly hide specs from somebody else.
+
+     On by default, which is the one thing here that hides data without being asked. That is
+     deliberate and the safeguards are in visiblePriority(): a class entry is never dropped,
+     a spec you have explicitly selected is never dropped, and the editor never sees any of
+     it. */
+  function metaOnly() {
+    try { return window.localStorage.getItem(META_KEY) !== "off"; }
+    catch (e) { return true; }
+  }
+
+  function setMetaOnly(on) {
+    try { window.localStorage.setItem(META_KEY, on ? "on" : "off"); }
+    catch (e) { /* private browsing: the session still works, it just won't persist */ }
+  }
+
+  /* Absent means meta, so the 21 that are stay untouched in specs.json - the exception is
+     marked, not the rule, the way `unique` is in loot_data.json. An unknown id is meta:
+     specs.json fails soft everywhere else here, and a renamed spec must cost this filter
+     rather than the page. */
+  function isMeta(specId) {
+    var spec = REG.specs[specId];
+    return !spec || spec.meta !== false;
+  }
+
+  /* Everything that decides whether a spec is currently showable goes through here, so the
+     chip row, both priority columns and the rings cannot drift apart.
+
+     A spec you have SELECTED is always showable: otherwise picking Frost Mage from the chip
+     row would narrow the table and then show you nothing, which reads as broken. */
+  function showsSpec(specId) {
+    if (!metaOnly()) return true;
+    if (state.specs.indexOf(specId) !== -1) return true;
+    return isMeta(specId);
   }
 
   /* How much of a list actually says something. Every list holds all 195 records - a
@@ -2049,6 +2155,35 @@
       });
       el.classChips.appendChild(c);
     });
+
+    renderMetaChip();
+  }
+
+  /* Sits at the end of the CLASS row rather than on the filter bar, because that is the
+     row it speaks about - it decides which specs exist as far as the page is concerned,
+     and the class strip is where you are already looking when you ask that.
+
+     A chip rather than a button, so it wears the accent when it is on. --gold means
+     "selected" everywhere on this page, and a filter that is ON is selected - so this is
+     the same vocabulary the class icons beside it already use, which is what makes the
+     default-on state read as on rather than as a button someone forgot to press.
+
+     The label states which way it is SET, not what pressing it would do, so the row reads
+     as a description of what you are looking at - the way every chip on it does. */
+  function renderMetaChip() {
+    if (!el.metaZone) return;
+    var on = metaOnly();
+    var c = chip(on ? "Meta Specs Only" : "All Specs", on, null);
+    c.id = "meta-toggle";
+    c.classList.add("chip--meta");
+    c.dataset.tip = on ? "Showing only meta specs" : "Showing all specs";
+    c.setAttribute("aria-label", c.dataset.tip);
+    c.addEventListener("click", function () {
+      setMetaOnly(!metaOnly());
+      update();
+    });
+    el.metaZone.innerHTML = "";
+    el.metaZone.appendChild(c);
   }
 
   /* The spec row is hidden until a class is picked: 27 icons with no class chosen
@@ -2082,6 +2217,10 @@
         var spec = REG.specs[id];
         if (spec["class"] !== cls) return;
         if (covers(id).length) return;   /* an umbrella is not a spec you can pick */
+        /* The meta-specs toggle. showsSpec() keeps a SELECTED spec on the row whatever
+           the toggle says, so turning it on can never strand a filter you already set
+           with no chip to turn it off again. */
+        if (!showsSpec(id)) return;
         var n = pool.filter(function (r) { return priorityHas(r, cls, id); }).length;
         var active = state.specs.indexOf(id) !== -1;
         var c = chip(spec.name, active, n, null, ICON_BASE + spec.icon + ".jpg", true);
@@ -2884,6 +3023,12 @@
       : pickedSpecs(resolved.id);
     if (picked.length) ids = picked;
 
+    /* Same rule as the filter above it, for the same reason: with the meta toggle on, a
+       class icon must not ring because of a spec the toggle is hiding - the ring would
+       be answering for somebody who is not on the page. Never empties the list, since a
+       class with no meta specs left has nothing to ring anyway. */
+    ids = ids.filter(showsSpec);
+
     /* A class icon can stand for two specs wanting the item for opposite reasons - a
        Prot Warrior's threat piece is a Fury Warrior's plain BiS. Only carry a qualifier
        up when every ringed spec behind the icon agrees on it; otherwise the icon would
@@ -3008,7 +3153,7 @@
     if (activeTemplate) return td;
 
     var specs = Object.keys(REG.specs).filter(function (id) {
-      return bisTier(id, rec.id);
+      return bisTier(id, rec.id) && showsSpec(id);
     });
     if (!specs.length) return td;
 
@@ -3051,6 +3196,15 @@
       return td;
     }
     if (!list || !list.length) return bisViewCell(td, rec);
+
+    /* The meta-specs toggle, and the one place it must NOT reach: the editor. Remove,
+       the operator menu and every drop target index into the REAL array - setOp(list, at,
+       op) takes a position - so acting on a filtered copy would edit the wrong entry, or
+       silently delete something that is not on screen. Same reason spec-icon click-to-
+       filter is added here rather than in specIcon(): the editor's press starts a drag,
+       and a mode should not quietly change what a gesture acts on. */
+    if (!canEdit()) list = visiblePriority(list);
+    if (!list.length) return td;
 
     /* The SEEDED tag stood here. It marked lines seed_priority.py wrote from the BiS
        data, and those are gone: every one was exactly the specs bis.json already lists,

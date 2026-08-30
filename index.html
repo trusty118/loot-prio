@@ -201,6 +201,11 @@
          specs - it pays a row exactly when you are using it. -->
     <div class="control-row control-row--who">
       <div class="chips chips--who" id="class-chips" role="group" aria-label="Class"></div>
+      <!-- The meta-specs chip sits on this row but OUTSIDE #class-chips, which carries
+           role="group" aria-label="Class" - a control that decides which specs exist is
+           not one of the classes, and inside that group a screen reader would announce it
+           as one. Its own box also keeps it clear of the strip's overflow-x scrolling. -->
+      <div class="meta-zone" id="meta-zone"></div>
     </div>
 
     <!-- hidden until a class is picked; app.js toggles the attribute -->

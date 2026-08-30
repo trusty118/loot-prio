@@ -794,6 +794,11 @@ for (const [specId, phases] of Object.entries(bis.specs)) {
          fetch_bis.py marks everything past what the slot holds. A near-BiS alternative
          is not BiS, so it draws no ring and must not be looked for. */
       if (e.near) continue;
+      /* The meta-specs toggle is ON by default, and hides seven specs' icons - so their
+         rings are legitimately absent. Skipped rather than allowed for, so this still
+         fails if a ring goes missing for any spec the page is actually drawing. The
+         dedicated meta block below is what tests the hiding itself. */
+      if (specs.specs[specId] && specs.specs[specId].meta === false) continue;
       const rec = data.find((r) => r.id === e.id);
       if (!rec) continue;
       const row = rowFor(rec.item);
@@ -1826,9 +1831,15 @@ ok(emptyPrioRows.every((tr) => {
   return rec && Object.keys(bis.specs).some((id) => specs.specs[id].class === "Mage" &&
     Object.values(bis.specs[id]).flat().some((e) => e.id === rec.id));
 }), "and each is there because it is BiS for a spec of the selected class");
+/* Computed from specs.json rather than listed, so adding a spec - or changing which are
+   meta - extends this test instead of dating it. The meta-specs toggle is ON by default
+   and hides seven, so a hard-coded count would be asserting last week's registry. */
+const showable = (...classes) => Object.entries(specs.specs)
+  .filter(([, v]) => classes.includes(v.class) && !v.covers && v.meta !== false);
+
 ok(!doc.getElementById("spec-row").hidden, "picking a class reveals the spec row");
-ok([...doc.querySelectorAll("#spec-chips .chip")].length === 4,
-   "the spec row holds only that class's three specs, plus All");
+ok([...doc.querySelectorAll("#spec-chips .chip")].length === showable("Mage").length + 1,
+   `the spec row holds only that class's showable specs, plus All (${showable("Mage").length} + 1)`);
 ok(!chipByTip("#spec-chips", "Combat Rogue"), "no other class's specs are offered");
 ok(chipByTip("#spec-chips", "Arcane Mage"), "spec chips are found by their full name");
 ok(!doc.querySelector("#spec-chips .chip--toggle"), "no BiS toggle until a spec is picked");
@@ -1836,19 +1847,28 @@ ok(!doc.querySelector("#spec-chips .chip--toggle"), "no BiS toggle until a spec 
 // classes are multi-select, and the spec row grows to cover all of them
 click(chipByTip("#class-chips", "Warlock"));
 ok(rows().length === 28, `class=Mage+Warlock -> 28 rows, the union (got ${rows().length})`);
-ok([...doc.querySelectorAll("#spec-chips .chip")].length === 7,
+ok([...doc.querySelectorAll("#spec-chips .chip")].length === showable("Mage", "Warlock").length + 1,
    "the spec row now offers both classes' specs");
-ok(chipByTip("#spec-chips", "Fire Mage") && chipByTip("#spec-chips", "Destruction Warlock"),
+ok(chipByTip("#spec-chips", "Arcane Mage") && chipByTip("#spec-chips", "Destruction Warlock"),
    "specs from each selected class are present");
 
 // refining one class must not narrow the other
-click(chipByTip("#spec-chips", "Fire Mage"));
-/* 26, not 27: Waistwrap of Infinity used to be reachable here because it was recorded as
-   BiS for Demonology - and the guide actually lists it SECOND for that slot, a near-BiS
-   alternative. It is marked as one now, so nothing surfaces it as BiS. */
-ok(rows().length === 26, `Fire + the whole Warlock class -> 26 rows (got ${rows().length})`);
-ok(rows().map((tr) => tr.children[0].textContent.trim()).includes("Cowl of the Illidari High Lord"),
-   "a Fire-only row survives the refinement");
+/* Fire Mage stood here until the meta-specs toggle hid it. What is being tested is the
+   SCOPE of a refinement - a spec narrows its own class and leaves the others whole - not
+   anything about Fire, so it uses a meta spec and asserts the property directly rather
+   than through a row count that only ever held for one spec. */
+const namesNow = () => rows().map((tr) => tr.children[0].textContent.trim());
+click(doc.getElementById("reset"));
+click(chipByTip("#class-chips", "Warlock"));
+const warlockAlone = namesNow();
+click(doc.getElementById("reset"));
+click(chipByTip("#class-chips", "Mage"));
+click(chipByTip("#class-chips", "Warlock"));
+click(chipByTip("#spec-chips", "Arcane Mage"));
+ok(/spec=Arcane/.test(window.location.hash),
+   `the refinement is in effect (${window.location.hash})`);
+ok(warlockAlone.length > 0 && warlockAlone.every((n) => namesNow().includes(n)),
+   `and every Warlock row survives it - a spec refines its own class only (${warlockAlone.length} rows)`);
 
 // dropping a class drops the specs that were refining it
 click(chipByTip("#class-chips", "Mage"));
@@ -2126,8 +2146,13 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
   ok(groups.length === 2, `one group per picked class (${groups.length})`);
   ok(groups.map((g) => g.dataset.tip).join() === "Warrior,Mage",
      `in the order the classes were picked (${groups.map((g) => g.dataset.tip).join()})`);
-  ok(groups.every((g) => g.children.length === 3),
-     "each holding that class's three specs");
+  /* Counted from the registry, not written down: the meta-specs toggle is on by default
+     and hides two of Mage's three, so a literal 3 would be asserting the old registry. */
+  const showableIn = (cls) => Object.values(specs.specs)
+    .filter((v) => v.class === cls && !v.covers && v.meta !== false).length;
+  ok(groups[0].children.length === showableIn("Warrior")
+     && groups[1].children.length === showableIn("Mage"),
+     `each holding that class's showable specs (${groups.map((g) => g.children.length).join(", ")})`);
 
   /* The divider goes on `+ .spec-group`, so the FIRST group never gets one: a rule before
      the first group divides nothing, and it would push the strip out of line with the
@@ -2239,6 +2264,73 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
     .find((tr) => !zatarList.priorities[tr.dataset.id]);
   ok(unranked && unranked.children[3].querySelectorAll("img").length === 0,
      "and a row that list does not rank goes blank rather than falling back to BiS");
+}
+
+// --- the meta-specs toggle -----------------------------------------------------------
+/* Drops the seven specs marked "meta": false - the ones a real roster never gears. It is
+   ON by default, which makes it the only control here that hides something before being
+   asked, so most of what is pinned below is the safeguards rather than the hiding. */
+{
+  click(doc.getElementById("reset"));
+  /* Re-queried, never held: it is a chip on the class strip now, so renderClassChips()
+     replaces the node on every update and a captured reference goes stale the moment you
+     press it. */
+  const btn = () => doc.getElementById("meta-toggle");
+  const NON = Object.keys(specs.specs).filter((id) => specs.specs[id].meta === false);
+  const icons = () => [...doc.querySelectorAll("td.col-prio img.spec-icon")]
+    .map((i) => i.dataset.id);
+
+  ok(NON.length > 0, `specs.json marks the non-meta specs (${NON.length})`);
+  ok(btn() && btn().textContent === "Meta Specs Only" && btn().getAttribute("aria-pressed") === "true",
+     "the toggle is on by default and says which way it is set");
+  ok(/only meta/i.test(btn().dataset.tip || ""), `with a tooltip saying so: "${btn().dataset.tip}"`);
+  ok(doc.querySelector(".control-row--who").contains(btn()),
+     "it sits on the class row, where the specs it governs are chosen");
+  ok(!doc.getElementById("class-chips").contains(btn()),
+     "but outside #class-chips, which is a labelled group of classes and this is not one");
+
+  /* zatar's list is open on this window, so this is the authored-priority path. */
+  ok(icons().length > 0 && !icons().some((id) => NON.includes(id)),
+     "no non-meta spec is drawn in an open list's priority column");
+
+  /* The count is the load-bearing one: this hides ICONS, never rows. If it ever started
+     filtering rows, items would silently vanish from a loot table. */
+  const before = rows().length;
+  const countBefore = doc.getElementById("count").textContent;
+
+  click(btn());
+  ok(btn().textContent === "All Specs" && btn().getAttribute("aria-pressed") === "false",
+     "clicking it flips the label");
+  ok(/showing all/i.test(btn().dataset.tip || ""), `and the tooltip: "${btn().dataset.tip}"`);
+  ok(icons().some((id) => NON.includes(id)),
+     "turning it off brings the hidden specs back");
+  ok(rows().length === before && doc.getElementById("count").textContent === countBefore,
+     `and no row was ever filtered by it - the count never moved (${countBefore})`);
+
+  /* Operators have to survive the filtering, or a line would claim a relationship its
+     author never wrote - and a first entry carrying an op is invalid data besides. */
+  click(btn());
+  const cells = [...doc.querySelectorAll("td.col-prio")].filter((c) => c.querySelector("img"));
+  ok(cells.every((c) => {
+    const kids = [...c.children].filter((n) => n.tagName === "IMG" || n.classList.contains("prio-op"));
+    return kids.length === 0 || kids[0].tagName === "IMG";
+  }), "a filtered line never begins with an operator");
+
+  /* The escape hatch. Without it, picking a hidden spec would narrow the table and then
+     show nothing, which reads as broken rather than as filtered. */
+  const hidden = NON.find((id) => specs.specs[id].class === "Mage");
+  click(chipByTip("#class-chips", "Mage"));
+  ok(!chipByTip("#spec-chips", specs.specs[hidden].name),
+     `${specs.specs[hidden].name} is not offered on the spec row while the toggle is on`);
+  window.location.hash = "#class=Mage&spec=" + hidden;
+  window.dispatchEvent(new window.HashChangeEvent("hashchange"));
+  await sleep(20);
+  ok(chipByTip("#spec-chips", specs.specs[hidden].name),
+     "but selecting it explicitly puts its chip back, so it can be turned off again");
+  ok(icons().includes(hidden) || rows().length === 0,
+     "and its icons draw, rather than narrowing to rows that then show nothing");
+
+  click(doc.getElementById("reset"));
 }
 
 // --- the BiS data source is a choice, and it drives the rings ------------------------
