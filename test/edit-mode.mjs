@@ -134,7 +134,7 @@ ok(!d.querySelector(".prio-edit"), "the guide's rows are not editable");
   /* The column is not blank in this state - it shows what the BiS data knows, so the
      BIS FROM control has something to do and the rings are reachable. The warning has to
      say THAT rather than "priorities are empty", which stopped being true. */
-  ok([...dn.querySelectorAll("td.col-prio .prio-from")].length > 0,
+  ok([...dn.querySelectorAll("td.col-prio img.spec-icon")].length > 0,
      "and the column shows the BiS view rather than nothing at all");
   ok([...dn.querySelectorAll("td.col-prio .prio-op")].every((o) => o.textContent === "?"),
      "separated by ? - not ranked against - so it cannot read as somebody's ordering");

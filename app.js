@@ -3012,11 +3012,6 @@
     });
     if (!specs.length) return td;
 
-    var tag = document.createElement("span");
-    tag.className = "prio-from";
-    tag.textContent = "BIS";
-    td.appendChild(tag);
-
     var picking = state.classes.length > 0;
     specs.forEach(function (id, i) {
       /* "?" between them - not ranked against each other. The column used to leave them

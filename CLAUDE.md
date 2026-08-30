@@ -256,11 +256,18 @@ list there were no icons, so 1,889 entries and the `BIS FROM` control had nothin
 while `bisOnlyMatch()` went on filtering by them. The data could narrow the table and could
 not be looked at.
 
-**It must not read as a ranking, and three things keep it honest**: no operators, which is
-what makes a priority line an ordering rather than a set; registry order rather than any
-order implying preference; and a quiet `BIS` label, without which icons under a column
-headed PRIORITY simply read as a priority. `.prio-from` styles it — the class was written
-for the old `SEEDED` tag and had been left orphaned.
+**It must not read as a ranking, and two things keep it honest**: the `?` operator between
+every pair, which says "not ranked against" in the same words its tooltip uses; and registry
+order rather than any order implying preference.
+
+**There were three, and the third was removed once it expired.** A quiet `BIS` label sat in
+front of the icons, on the reasoning that icons under a column headed PRIORITY read as a
+priority unless something says otherwise. That was written when this view carried **no
+operators at all** — it said "not an ordering" by absence, and the label was what stopped the
+absence going unnoticed. `?` then replaced the absence with a louder signal making the same
+claim, and the label was left over from a version of the view that no longer existed. The
+priority column now contains no prose at all, in any state, and `test/smoke.mjs` asserts
+exactly that rather than discounting a label to get there.
 
 **Only when NO list is open.** With one open, an item it does not rank stays blank: that is
 the list saying nothing, and filling it in would make the list look like it ranks things it

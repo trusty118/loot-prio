@@ -1112,16 +1112,10 @@ ok(bands.every((r) => /Scale of the Sands/.test(r.notes)),
    "and their notes say they are a reputation reward, not a drop");
 ok(bands.every((r) => r.unique), "each is unique-equipped, so no doubling up");
 
-// The priority itself is icons and operators only - no prose anywhere. The .prio-from
-// label is not priority content: it says where the ordering came from, and it is
-// discounted here rather than allowed for, so a genuine string leaking back into a
-// priority still fails this.
-const priorityText = (tr) => {
-  const cell = tr.children[3].cloneNode(true);
-  const from = cell.querySelector(".prio-from");
-  if (from) from.remove();
-  return cell.textContent;
-};
+// The priority itself is icons and operators only - no prose anywhere, and nothing is
+// discounted to make that true. It used to allow for a .prio-from "BIS" label on the
+// no-list view; that label is gone, so the column is now literally free of letters.
+const priorityText = (tr) => tr.children[3].textContent;
 const proseRows = [...doc.querySelectorAll("tbody tr")].filter((tr) => /[a-z]/i.test(priorityText(tr)));
 ok(proseRows.length === 0,
    `no free text left in any priority (found: ${proseRows.map((tr) => priorityText(tr).trim()).join(" | ")})`);
@@ -2189,9 +2183,13 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
      `every separator is "?", not ranked against (${viewOps.length})`);
   ok(viewOps.every((o) => /not ranked/i.test(o.dataset.tip || "")),
      "and says so on hover rather than leaving a bare glyph");
-  ok([...bd.querySelectorAll(".prio-from")].length > 0 &&
-     [...bd.querySelectorAll(".prio-from")].every((n) => n.textContent === "BIS"),
-     "and a quiet BIS label says what you are looking at, the same way on every row");
+  /* A quiet "BIS" label used to sit in front of these icons. It was one of three things
+     keeping the view from reading as a ranking, and the other two have not moved - but
+     the first of the three was "no operators at all", and "?" replaced that with a
+     louder signal saying the same thing in the same words its tooltip uses. The label
+     was left over from a version of this view that no longer exists. */
+  ok([...bd.querySelectorAll("td.col-prio")].every((c) => !/[a-z]/i.test(c.textContent)),
+     "and no prose labels it - the ? operators carry that claim on their own");
 
   /* An item BiS for nobody has nothing to show, so it stays genuinely empty. */
   const bisIds = new Set(Object.values(bis.specs)
@@ -2202,15 +2200,23 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
      "an item that is BiS for nobody shows nothing at all");
 
   /* A source with no data for this phase empties it, which is what makes the control
-     visibly honest rather than apparently broken. */
-  const sel = bd.getElementById("bis-source");
-  sel.value = "wowsims";
-  sel.dispatchEvent(new bare.window.Event("change"));
-  await until(() => icons() === 0);
+     visibly honest rather than apparently broken.
+
+     Driven through the account menu, which is where the source lives since the bar
+     rework - the <select id="bis-source"> it used to set is gone. That deletion left
+     this line setting .value on null, and smoke.mjs exited HERE, 31 assertions early,
+     while a grep for "FAIL" still reported a clean run. Use `npm test`: it chains on
+     exit codes and would have said so. */
+  const pickSource = async (id, want) => {
+    bd.getElementById("account").dispatchEvent(new bare.window.MouseEvent("click", { bubbles: true }));
+    await until(() => bd.querySelector(`.acct-item--src[data-src="${id}"]`));
+    bd.querySelector(`.acct-item--src[data-src="${id}"]`)
+      .dispatchEvent(new bare.window.MouseEvent("click", { bubbles: true }));
+    await until(want);
+  };
+  await pickSource("wowsims", () => icons() === 0);
   ok(icons() === 0, "switching to a source with no data for this phase empties the column");
-  sel.value = "wowhead";
-  sel.dispatchEvent(new bare.window.Event("change"));
-  await until(() => icons() > 100);
+  await pickSource("wowhead", () => icons() > 100);
 
   /* Opening a list replaces the view with what the list says - including saying nothing. */
   bd.getElementById("list-trigger").dispatchEvent(new bare.window.MouseEvent("click", { bubbles: true }));
@@ -2218,8 +2224,13 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
     .dispatchEvent(new bare.window.MouseEvent("click", { bubbles: true }));
   await until(() => bd.getElementById("list-trigger-name").textContent === "Zatar's Phase 3");
 
-  ok(bd.querySelectorAll(".prio-from").length === 0,
-     "opening a list replaces the BiS view with the list's own ordering");
+  /* The view is detected by what it draws, now that it carries no label of its own:
+     with a list open, an item the list does not rank has an empty cell, where the BiS
+     view would have filled it. */
+  const listOps = [...bd.querySelectorAll("td.col-prio .prio-op")].map((o) => o.textContent);
+  ok(listOps.length > 0 && listOps.some((o) => o !== "?"),
+     "opening a list replaces the BiS view with the list's own ordering - real operators, "
+     + `not the view's uniform ? (${[...new Set(listOps)].join(" ")})`);
   const unranked = [...bd.querySelectorAll("tbody tr[data-id]")]
     .find((tr) => !zatarList.priorities[tr.dataset.id]);
   ok(unranked && unranked.children[3].querySelectorAll("img").length === 0,
@@ -2232,17 +2243,36 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
    chosen source actually holds rather than falling back to the other one. */
 {
   click(doc.getElementById("reset"));
-  const sel = doc.getElementById("bis-source");
-  ok(sel, "there is a BiS data source control");
-  ok([...sel.options].map((o) => o.value).join() === "wowhead,wowsims,custom",
-     `it offers the three sources (${[...sel.options].map((o) => o.value).join()})`);
-  ok(sel.value === "wowhead", "and defaults to Wowhead, the only complete one");
+
+  /* It lives in the account menu now, not in a <select> on the bar. The menu is always
+     present - signed out it is labelled Settings - because this is the page's one true
+     setting and a preference living behind a login would be homeless for exactly the
+     people the site is for. */
+  const openAcct = () => click(doc.getElementById("account"));
+  const srcItems = () => [...doc.querySelectorAll(".acct-item--src")];
+  openAcct();
+  ok(srcItems().length === 3, `there is a BiS data source control (${srcItems().length} options)`);
+  ok(srcItems().map((b) => b.dataset.src).join() === "wowhead,wowsims,custom",
+     `it offers the three sources (${srcItems().map((b) => b.dataset.src).join()})`);
+  ok(srcItems().find((b) => b.dataset.src === "wowhead").getAttribute("aria-checked") === "true",
+     "and defaults to Wowhead, the only complete one");
+
+  /* The sublines are the point: the sources are wildly asymmetric, and the bare <select>
+     never said so - which is why choosing WoWSims on a Phase 3 page read as broken
+     rather than empty. */
+  ok(srcItems().every((b) => (b.querySelector(".acct-src-note") || {}).textContent),
+     "each says what it costs, so an empty column reads as coverage rather than a fault");
+  click(doc.getElementById("account"));
 
   const rings = () => doc.querySelectorAll(".spec-icon--bis, .spec-icon--bis2, .spec-icon--bis3").length;
   const withWowhead = rings();
   ok(withWowhead > 50, `Wowhead rings the Phase 3 rows (${withWowhead})`);
 
-  const pick = (v) => { sel.value = v; sel.dispatchEvent(new window.Event("change")); };
+  const pick = (v) => {
+    openAcct();
+    srcItems().find((b) => b.dataset.src === v).dispatchEvent(
+      new window.MouseEvent("click", { bubbles: true }));
+  };
 
   /* wowsims holds P4 and P5 only, so on Phase 3 it has nothing to say. Showing no rings
      is the honest answer - quietly falling back to Wowhead would make the control a lie. */
