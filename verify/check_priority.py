@@ -22,7 +22,9 @@ LOOT = ROOT / "data" / "loot_data.json"
 LISTS = ROOT / "data" / "lists"
 SPECS = ROOT / "data" / "specs.json"
 
-OPERATORS = {">", ">>", "~>", "=", "~="}
+# "?" is "not ranked against": these names are listed and nobody has said which comes
+# first. It does not advance a position, the way a tie does not.
+OPERATORS = {">", ">>", "~>", "=", "~=", "?"}
 
 # Slots you can fill twice at once. Two-Hand is excluded on purpose: you get one
 # weapon, not two. Ranged and Relic are single slots, and armour is one each.

@@ -671,11 +671,19 @@
      ">>" and "~>" are ">" for logic, and differ only in what they say. The labels
      are here for the operator tooltips. */
   var OPERATORS = {
-    ">":  { advances: true,  label: "better than" },
-    ">>": { advances: true,  label: "much better than" },
-    "~>": { advances: true,  label: "roughly better than" },
+    ">":  { advances: true,  label: "higher than" },
+    ">>": { advances: true,  label: "much higher than" },
+    "~>": { advances: true,  label: "roughly higher than" },
     "=":  { advances: false, label: "equal to" },
-    "~=": { advances: false, label: "roughly equal to" }
+    "~=": { advances: false, label: "roughly equal to" },
+    /* Not an ordering at all: these names are listed, and nobody has said which comes
+       first. It does not advance, because a rank nobody has decided is not a rank - all
+       of them share one position, the way a tie does.
+
+       It is what the BiS view uses between the specs an item is best-in-slot for, and it
+       is a real operator rather than a display trick so that a line you seed and have
+       not got to yet says the same thing as one the site drew for you. */
+    "?":  { advances: false, label: "not ranked against" }
   };
 
   /* Fold a priority list into 1-based positions: ties share a position. */
@@ -1221,7 +1229,7 @@
      The same rules verify/check_priority.py enforces, applied while editing so the
      editor cannot produce data the validator would reject. */
 
-  var OP_LIST = [">", ">>", "~>", "=", "~="];
+  var OP_LIST = [">", ">>", "~>", "=", "~=", "?"];
   var DOUBLE_SLOTS = { "Finger": 1, "Trinket": 1, "One-Hand": 1, "Main-Hand": 1, "Off-Hand": 1 };
 
   /* You can only be told to take two of something you could equip twice. */
@@ -2987,7 +2995,18 @@
     td.appendChild(tag);
 
     var picking = state.classes.length > 0;
-    specs.forEach(function (id) {
+    specs.forEach(function (id, i) {
+      /* "?" between them - not ranked against each other. The column used to leave them
+         bare, which said the same thing by ABSENCE and left the reader to notice it. An
+         operator that names the state is the same claim made out loud, and it reads the
+         way every other line on the page reads. */
+      if (i > 0) {
+        var sep = document.createElement("span");
+        sep.className = "prio-op";
+        sep.textContent = "?";
+        sep.dataset.tip = OPERATORS["?"].label;
+        td.appendChild(sep);
+      }
       var spec = REG.specs[id];
       var icon = specIcon({ id: id, name: spec.name, icon: spec.icon },
                           bisTier(id, rec.id), [], bisVariant(id, rec.id));

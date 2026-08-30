@@ -313,15 +313,31 @@ before the spec's. A `form` (`bear`/`cat` on `FeralDruid`) swaps the icon and na
 
 | Op | Means | Position |
 |---|---|---|
-| `>` | better than | next |
-| `>>` | much better than | next |
-| `~>` | roughly better than | next |
+| `>` | higher than | next |
+| `>>` | much higher than | next |
+| `~>` | roughly higher than | next |
 | `=` | equal | same |
 | `~=` | roughly equal | same |
+| `?` | not ranked against | same |
 
-`positions()` folds a list into 1-based ranks: `=` and `~=` hold, the rest advance. `>>`
+**`?` means nobody has decided.** These names are listed and no order has been put on
+them, which is a different claim from `=` ("they are equal") — it is the absence of a
+judgement rather than a judgement of sameness. It does not advance a position, because a
+rank nobody has decided is not a rank.
+
+It is what the **BiS view** puts between the specs an item is best-in-slot for. That view
+used to carry no operators at all, which said "not an ordering" by *absence* and left the
+reader to notice; `?` says it out loud and reads the way every other line on the page does.
+It is a real operator rather than a display trick, so a line you seeded and have not got to
+yet can say the same thing as one the site drew for you — `OP_LIST`, `validateTemplate()`
+and `check_priority.py` all accept it, and the operator menu offers it.
+
+`positions()` folds a list into 1-based ranks: `=`, `~=` and `?` hold, the rest advance. `>>`
 and `~>` behave exactly like `>` for ranking — they differ only in what they say, which is
-what `OPERATORS[op].label` is for (it already feeds the operator tooltips).
+what `OPERATORS[op].label` is for (it already feeds the operator tooltips). The comparison
+operators read **"higher than"** rather than "better than", Aug 2026: a priority is a
+position in a queue, and "better" invites an argument about the item where "higher" states
+where it sits.
 
 ### Repeats
 

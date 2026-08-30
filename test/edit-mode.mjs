@@ -136,8 +136,8 @@ ok(!d.querySelector(".prio-edit"), "the guide's rows are not editable");
      say THAT rather than "priorities are empty", which stopped being true. */
   ok([...dn.querySelectorAll("td.col-prio .prio-from")].length > 0,
      "and the column shows the BiS view rather than nothing at all");
-  ok([...dn.querySelectorAll("td.col-prio .prio-op")].length === 0,
-     "with no operators, so it cannot be mistaken for somebody's ordering");
+  ok([...dn.querySelectorAll("td.col-prio .prio-op")].every((o) => o.textContent === "?"),
+     "separated by ? - not ranked against - so it cannot read as somebody's ordering");
 }
 // Disabled rather than hidden: a control that vanishes teaches nothing, and the title
 // names the way out at the moment you went looking for it.
@@ -202,11 +202,11 @@ ok(opsIn(d, ITEM).join("") === "~=", "the operator set above is what the line sh
 click(w, rowFor(d, ITEM).querySelector(".prio-op"));
 const menu = d.querySelector(".prio-menu");
 ok(menu && menu.style.display === "block", "clicking the operator opens the menu");
-ok(menu.querySelectorAll(".prio-menu-item").length === 5, "it offers all five operators");
-ok([...menu.querySelectorAll(".prio-menu-item")].map((b) => b.dataset.op).join(",") === ">,>>,~>,=,~=",
-   "in the documented order");
+ok(menu.querySelectorAll(".prio-menu-item").length === 6, "it offers all six operators");
+ok([...menu.querySelectorAll(".prio-menu-item")].map((b) => b.dataset.op).join(",") === ">,>>,~>,=,~=,?",
+   "in the documented order, with the unranked one last");
 ok([...menu.querySelectorAll(".prio-menu-label")].map((n) => n.textContent).join("|") ===
-   "better than|much better than|roughly better than|equal to|roughly equal to",
+   "higher than|much higher than|roughly higher than|equal to|roughly equal to|not ranked against",
    "worded, not just symbols");
 ok(menu.querySelector('.prio-menu-item[data-op="~="]').getAttribute("aria-checked") === "true",
    "the operator currently in the line is marked");
