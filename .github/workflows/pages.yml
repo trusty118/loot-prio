@@ -1,0 +1,62 @@
+# Builds dist/ and publishes it to GitHub Pages.
+#
+# Pages used to serve the repo root directly, which meant serving CLAUDE.md, the test suite
+# and the verify/ scrapers alongside the site. It now serves only what build.mjs produces.
+#
+# THE ORDER IS THE POINT: tests run before the build, and the build before the deploy, so a
+# red suite cannot reach the live site. Until this workflow existed there was no CI at all -
+# the tests only ever ran on one machine, and a broken commit was published the moment it
+# merged.
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  # so a deploy can be re-run without an empty commit
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# A queued deploy should wait for the running one rather than race it, but in-progress runs
+# are worth finishing: cancelling mid-deploy is how a half-published site happens.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # npm ci, not npm install: the lockfile is the point of running this here at all.
+      - run: npm ci
+
+      # The gate. npm test chains on exit codes, so any red file stops the deploy - which
+      # is the guarantee that grepping output for "FAIL" failed to give when a crashing
+      # test file still reported a clean run.
+      - run: npm test
+
+      - run: npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

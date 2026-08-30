@@ -3,8 +3,13 @@
 A browsable, filterable mirror of a WoW TBC Classic (Tier 6) loot-priority guide,
 hosted on GitHub Pages at **https://trusty118.github.io/loot-prio/**.
 
-Vanilla `index.html` + `style.css` + `app.js` reading JSON. **No build step** — that is
-deliberate, so Pages can serve the repo root directly. Don't introduce one.
+Vanilla `index.html` + `style.css` + `app.js` reading JSON — **no framework and no runtime
+dependencies**, and that part is not negotiable.
+
+**There is a build step as of Aug 2026, and it only exists to decide what is published.**
+`build.mjs` minifies the three front-end files into `dist/` and copies `data/` beside them;
+`.github/workflows/pages.yml` runs the tests, builds, and deploys that. The source is still
+plain files you can open and edit — nothing is transpiled, bundled or imported.
 
 ---
 
@@ -13,12 +18,19 @@ deliberate, so Pages can serve the repo root directly. Don't introduce one.
 ```bash
 git clone https://github.com/trusty118/loot-prio.git
 cd loot-prio
-npm install          # jsdom, for the tests only - the site itself has no dependencies
-npm test             # 778 checks in ~30s, should be all green
-python3 -m http.server 8642 --bind 127.0.0.1   # then open http://localhost:8642
+npm install          # jsdom for the tests, esbuild for the build - the SITE has none
+npm test             # 860 checks in ~30s, should be all green
+npm run serve        # the source, on 8642 - what you develop against
+npm run build        # dist/, what Pages publishes
+npm run serve:dist   # the built artifact, on 8643
 ```
 
 Needs `node` and `python3`. `gh` is optional (only used to poll the Pages build).
+
+**`serve` and `serve:dist` are different ports on purpose** — run both and compare. Before
+the build existed, what was live was byte-for-byte what was in the repo, so looking at
+`localhost` *was* looking at production. That property is gone, and `serve:dist` is what
+replaces it: when a bug might be the minifier's, look at 8643.
 
 **On Windows** `python3` is not on PATH — use `py` for both the server and the validators
 (`py verify/check_priority.py`). `npm run serve` still assumes `python3`.
@@ -187,8 +199,9 @@ unqualified. That is the source's limit, not the import's.
 
 **The choice is a preference, not a filter**: it lives in `localStorage`
 (`lootprio.bisSource`) and deliberately **not** in the url, because a link you send should
-not change somebody else's source out from under them. `seedFromBis()` reads it too, so
-seeding a list from WoWSims and from Wowhead gives different lines.
+not change somebody else's source out from under them. `seedPriorities()` reads it too, so
+a list started while WoWSims is selected arrives with different lines from one started on
+Wowhead — and on Phase 3, where WoWSims has nothing, it arrives empty.
 
 ```json
 "ProtWarr": {
@@ -221,17 +234,32 @@ guides rank by purpose (`Best Threat`, `Best Mitigation`) and healers by build
 `Alternative`, `Pre-Raid`, `PvP`, `Best Until Tier 6`). `Near Best` and `Second Best` fail
 the leading-word test deliberately.
 
-**`Load BiS data` is a control on the bar, Aug 2026**, beside `Edit`. It fills the **empty**
-priorities of the phase on screen from the selected source, joined with `=`, as a starting
-point to drag into an order — `seedFromBis()`. It was an item in the list menu, which is to
-say nobody found it; sharing left the menu for the same reason, and it lives in one place
-rather than two.
+**A new list arrives seeded from BiS, Aug 2026 — there is no control for it.**
+`newBlankTemplate()` runs `seedPriorities()` once on the way out of `New`, filling every
+item that is BiS for somebody with those specs joined by `=`, as a starting point to drag
+into an order. **This is explicitly an interim answer** and is expected to be revisited.
 
-**Disabled rather than hidden** when the open list is not yours, with a title saying so —
-the rule `Edit` beside it already follows. Two limits make it safe to press: it touches only
-the phase on screen, because seeding 699 rows from one click is not something anyone means,
-and it skips any row that already has a priority, so **it can only ever add**. Pressing it
-twice changes nothing and says so rather than appearing to do nothing.
+It replaced a `Load BiS data` button on the bar, which replaced an item in the list menu.
+The button was found where the menu item was not, and then the question became why it had
+to be pressed at all: the list it filled was useless until you pressed it, so the press was
+a step with no decision in it. Automatic, the list you make is usable immediately.
+
+Three properties, and **two of them are invisible from the screen**:
+
+- **It seeds every phase**, not the phase on screen. `bisAt()` defaults to `state.phase`, so
+  seeding without passing one silently fills only what you happen to be looking at — and the
+  list then reads as empty the moment you change phase. A list is a full copy of all 699
+  rows, so seeding has to match. `seedPriorities()` maps zone → phase and asks about each
+  item under its own.
+- **It fills only what is empty**, so it can never overwrite a call. That is why it is safe
+  to be automatic, and it is what would let it be re-run later without an "are you sure".
+- **Notes are not seeded**, unchanged. BiS is a computed fact about an item; a note is a
+  person's sentence about it.
+
+**`Make a copy` does not seed**, deliberately. A copy carries somebody's calls, and their
+deliberate blanks are part of what they said — zatar's 23 "whoever needs it" rows are an
+answer, and filling them from BiS would overwrite that answer with a different claim.
+Only a list started from nothing gets seeded, because there is nothing there to misrepresent.
 
 **With no list open the priority column shows the BiS view**, Aug 2026: every spec an item
 is best-in-slot for, in the phase on screen, from the selected source. Without it the whole
@@ -240,11 +268,18 @@ list there were no icons, so 1,889 entries and the `BIS FROM` control had nothin
 while `bisOnlyMatch()` went on filtering by them. The data could narrow the table and could
 not be looked at.
 
-**It must not read as a ranking, and three things keep it honest**: no operators, which is
-what makes a priority line an ordering rather than a set; registry order rather than any
-order implying preference; and a quiet `BIS` label, without which icons under a column
-headed PRIORITY simply read as a priority. `.prio-from` styles it — the class was written
-for the old `SEEDED` tag and had been left orphaned.
+**It must not read as a ranking, and two things keep it honest**: the `?` operator between
+every pair, which says "not ranked against" in the same words its tooltip uses; and registry
+order rather than any order implying preference.
+
+**There were three, and the third was removed once it expired.** A quiet `BIS` label sat in
+front of the icons, on the reasoning that icons under a column headed PRIORITY read as a
+priority unless something says otherwise. That was written when this view carried **no
+operators at all** — it said "not an ordering" by absence, and the label was what stopped the
+absence going unnoticed. `?` then replaced the absence with a louder signal making the same
+claim, and the label was left over from a version of the view that no longer existed. The
+priority column now contains no prose at all, in any state, and `test/smoke.mjs` asserts
+exactly that rather than discounting a label to get there.
 
 **Only when NO list is open.** With one open, an item it does not rank stays blank: that is
 the list saying nothing, and filling it in would make the list look like it ranks things it
@@ -1165,7 +1200,8 @@ current if any of those change.
   which costs a ~200-byte `304` when nothing changed. This is also **why item data stays in
   files rather than moving to a database**: code and data ship in one commit and deploy
   together, so a cached `app.js` can never disagree with the data it is reading. A database
-  reintroduces exactly that skew.
+  reintroduces exactly that skew. **The build did not**: `build.mjs` copies `data/` into the
+  same artifact as the minified `app.js`, so the two still land in one deploy.
 - **Icon URLs are verified before use.** Everything comes from `wow.zamimg.com`; check a
   new one returns 200 before wiring it up. Boss portraits are Encounter Journal art
   (`ui-ej-boss-*.png`) with irregular slugs — `najentus`, `kazrogal`, no leading "the" on
@@ -1179,6 +1215,52 @@ current if any of those change.
   fails to construct leaves a working select rather than nothing. Arrow keys, Home/End, Enter
   and Escape all had to be written by hand — that is what a native select gives away for free
   and what replacing one costs.
+- **The list controls live in the banner; the refine bar is filters only, Aug 2026.** The
+  pinned bar had eleven things on it, and the test for a place there is not *"is this a
+  filter"* but **"do I reach for this while scrolling 699 rows"**. The picker fails it:
+  which list is open is something you need to **know** constantly and **change** rarely.
+
+  **This reverses the earlier move, and what makes it viable is the count line.** It now
+  reads `195 of 195 items · My list` — so the bar that *does* stay on screen still says
+  which list you are reading. That was the thing missing when the picker was moved out.
+  The separator is a text node, not a CSS `::before`: the line is `aria-live`, and a
+  generated separator has it read "195 of 195 itemsMy list".
+
+  **`#edit-toggle` went with it, and `#edit-pill` is what pays for that** — fixed,
+  bottom-right, present only while armed. The banner scrolls away, so without it there is
+  no way out of edit mode from four hundred rows down. A control that appears *for* a mode
+  is expected; it is not the reflow defect this section warns about.
+
+  **The class and spec strips moved the other way, into the sticky panel.** They were at
+  the foot of the where-hierarchy, which read well and cost the thing that matters more:
+  they are filters you adjust *while reading rows*. Two rows at rest, three while narrowing
+  to specs — it pays a row exactly when you are using it, and never a fourth.
+
+  **The spec strip scrolls; it must not squash.** Three rules agree and the failure is
+  invisible: without `flex: none` on the icons, flex shrinks them below 26px and the strip
+  *looks* like it fits. `overflow-x: auto` gives it somewhere to go, and `flex-wrap: nowrap`
+  is required because flex prefers a new line to a shrunk item — a wrapping row takes a
+  fourth line instead of ever scrolling. All three pinned against the stylesheet source,
+  since jsdom lays nothing out.
+
+  **Spec chips group by class**, one `.spec-group` each, with the divider on
+  `+ .spec-group` so the **first has none** — a rule before the first group divides nothing
+  and pushes the strip out of line with the class strip above.
+
+- **`BiS from` lives in the account menu, which is always present.** It is the page's one
+  true setting: per-browser, out of the url, set about once. Each option carries what it
+  costs — *Wowhead, all 28 specs, every phase* against *WoWSims presets, 20 specs, Phase 4–5
+  only* — because the sources are wildly asymmetric and the bare `<select>` never said so,
+  which is why choosing WoWSims on a Phase 3 page read as broken rather than empty.
+
+  **The menu is not tied to auth**, and that is the part worth keeping. Signed in it is the
+  account button; otherwise it says `Settings` and holds the source alone. The account zone
+  is empty when Supabase is unreachable — `show(el.signIn, supabaseReady() && !signedIn())`
+  — so a preference living only behind a login would have nowhere to go for exactly the
+  people §4 says the site is for. `Sign in with Discord` stays a button on the bar as well:
+  that is the call to action, and burying it would make the upgrade harder to find than the
+  setting.
+
 - **Two control panels**: `.controls--where` (phase → zone → boss) and `.controls--refine` —
   everything that narrows the table, which is type, slot, search **and who you are**. Class
   and spec used to have a panel of their own at the top; they are filters, so they belong
@@ -1220,19 +1302,41 @@ current if any of those change.
   without moving a single control relative to its neighbours. **Don't split them apart again
   to give the picker room** — the room was never the problem.
 
-  **The no-list warning hangs off the zone, out of flow, and that is load-bearing.** With
-  nothing open the priority column is empty for every row, and `#list-warn` says so under
-  the picker. It lived in the list menu first, which meant it only appeared once you opened
-  the thing it was warning you about. It is two elements: the outer one positions
-  (`position: absolute; top: 100%; left: 0` — the picker's left edge, since the picker is
-  the zone's first child), the inner `.list-warn-box` is the pill and shrinks to its text.
-  It was `flex-basis: 100%` for one commit, and that **contributed a whole warn line to the
+  **The no-list warning is a SIBLING of the zone, not a child of it, and that distinction
+  is the whole of it.** With nothing open the priority column is empty for every row, and
+  `#list-warn` says so under the picker. It lived in the list menu first, which meant it
+  only appeared once you opened the thing it was warning you about. It is two elements: the
+  outer one takes a line of `.site-header-row` (`flex-basis: 100%`, `justify-content:
+  flex-end`), the inner `.list-warn-box` is the pill and shrinks to its text. The glyph is
+  white on purpose: fel and the three item-quality colours all mean something, and a
+  coloured warning would read as a BiS tier.
+
+  **Two earlier arrangements failed in opposite directions, and both were children of the
+  zone.** As a child with `flex-basis: 100%` it **contributed a whole warn line to the
   zone's intrinsic width** — the zone measured ~839px instead of the ~507px its controls
   need, wrapped off the filter row, and opened a 332px gap inside itself, in exactly the
-  empty-list state it exists for. `.control-row--inputs:has(.list-warn:not([hidden]))`
-  reserves the line instead, so the bar is not permanently taller for a message that is
-  usually absent. The glyph is white on purpose: fel and the three item-quality colours all
-  mean something, and a coloured warning would read as a BiS tier.
+  empty-list state it exists for. So it was made `position: absolute` instead, which fixed
+  that and created the opposite problem: out of flow it takes **no** space, so a rule on a
+  different element had to hold the line for it —
+  `.control-row--inputs:has(.list-warn:not([hidden]))`. **Two rules in two places that have
+  to agree, with nothing checking they still refer to the same element.** When the bar
+  rework moved the zone into the banner the reservation stayed pointing at the row it had
+  left, matched nothing, and the pill spilled across the header's bottom border onto the
+  phase tiles and the `Settings` button, at every width.
+
+  As a **sibling** neither is possible: it is a child of `.site-header-row`, which is full
+  width already, so it cannot widen the zone — and it is in flow, so nothing else has to
+  reserve its space. The header is a line taller only while the warning shows, which is the
+  one state where the table cannot answer anything anyway. **Don't put it back inside
+  `.list-zone` in either form.**
+
+  **The test that missed it is the more useful lesson.** `test/smoke.mjs` pinned the
+  reservation rule by grepping the **stylesheet text**, so it proved the rule *existed* and
+  never that it still *matched anything* — it stayed green across two commits with the bug
+  live on screen. jsdom lays nothing out, so there was no `getComputedStyle` fallback
+  either. What is asserted now is that **no** `:has(.list-warn` rule exists anywhere, which
+  is a claim a text search can actually settle, plus that the element is not inside
+  `.list-zone`. A layout bug this class of test cannot see has to be checked by eye.
 
   **The strips gave up stickiness for that, and it was chosen rather than overlooked.**
   `.controls--where` does not stick, so they scroll away on a 699-row table, and they *are*
@@ -1410,10 +1514,15 @@ structured priority), `verify/fetch_unique.py` (re-runnable if the item set chan
 - **Zul'Aman trash drops are still missing**, which is why that chip reads 0.
 - **Still not included:** gems, and Mother Shahraz's shadow-resistance set — intentional
   omissions by the creator — and tier set pieces, per the above.
-- **Seeding is an action, not stored data, Aug 2026.** The 268 flat `=` lines that used to
+- **Seeding is computed, not stored data, Aug 2026.** The 268 flat `=` lines that used to
   ship in `loot_data.json` were each exactly the specs `bis.json` lists for that item in
-  that phase — a duplicate of data the page already draws as rings. `seedFromBis()` fills
-  the empty rows of the phase on screen on demand instead, and only on a list of your own.
+  that phase — a duplicate of data the page already draws as rings. `seedPriorities()`
+  computes them into a list of your own at the moment it is created, instead.
+  **Interim, and known to be:** it is automatic and unrepeatable, so a list made before a
+  `bis.json` correction keeps the old lines, and one made while WoWSims was the selected
+  source on Phase 3 arrives empty with nothing offering to fix it. Re-seeding on demand is
+  the obvious next move — the primitive already only fills what is empty, so the safety it
+  would need is built.
 - **`roles` on the imported rows are stats-derived, not BiS-derived.** `fetch_items.py` reads
   them off the item's own stats, which is blunt on hybrids; `verify/seed_roles.py` is the
   better source and has not been re-run since the import.
@@ -1566,3 +1675,61 @@ standing rather than reconciled.
 
 Boss attribution for 52 Black Temple items was verified by hand against Wowhead in
 Aug 2026 — 27 confirmed, 24 corrected. `verify/boss-attribution.csv` is the record.
+
+---
+
+## 9. The build, and what gets published
+
+**This site had no build step until Aug 2026, and the reason it acquired one was not
+size.** Pages was set to `legacy`, serving `main:/` — so the live site was serving the
+**whole repository**. `CLAUDE.md` (this file, 102 KB of internal notes and bug
+post-mortems), `test/smoke.mjs`, the `verify/` scrapers, `docs/` and `package.json` were all
+returning `200` at the site's own URL. `.gitignore` already reasoned about exactly that
+hazard for zip files — *"Pages serves this directory, so a committed zip would be publicly
+downloadable too"* — and the logic had simply never been extended to the docs.
+
+`build.mjs` produces `dist/`, and **`dist/` is the whole of what is published**:
+
+| | |
+|---|---|
+| `app.js` | esbuild, full minify **including identifier renaming** |
+| `style.css` | esbuild, minified |
+| `index.html` | comments stripped, blank lines collapsed — deliberately conservative |
+| `data/` | **copied verbatim** |
+
+88.8 KB → **29.7 KB** gzipped for the three front-end files.
+
+**Renaming is safe here and that was checked, not assumed**: `app.js` has no `eval`, no
+`new Function`, nothing reading a function's `.name`, and it is one self-contained IIFE
+exporting no globals. It is `format: "iife"` and never bundled, because the file is loaded
+by a plain `<script>` and executes *during* parsing — which is load-bearing for the Supabase
+race in §4.
+
+**The data is not minified, on purpose.** JSON carries no comments so there is nothing to
+hide, the gzipped saving is small, and it is the one part of this site worth leaving legible
+to anyone curious enough to look.
+
+**`test/build.mjs` is what makes the build safe to have.** A build step adds a failure mode
+the other five files cannot see — they all read the **source**, which is right, since the
+source is the truth and `test/auth.mjs`'s service-role-key grep has to scan the unminified
+file. That leaves nothing checking what actually reaches users. It boots `dist/index.html`
+and `dist/app.js` in jsdom and asserts the page renders, opens a list and filters; and it
+asserts `dist/` holds **only** the four entries, naming `CLAUDE.md`, `test/` and `verify/`
+individually. One stray copy line would put the notes back on the internet and nothing else
+would complain.
+
+**The workflow's ordering is the point**: `npm ci` → `npm test` → `npm run build` → deploy,
+so a red suite cannot reach the live site. **Before it there was no CI at all** — the tests
+only ever ran on one machine, and a broken commit was published the moment it merged.
+
+**Pages must be set to "GitHub Actions", not "deploy from a branch."** If it is ever
+switched back, the site silently starts serving the repo root again — every file above
+becomes public once more, and nothing on the page changes to say so.
+
+**What was lost, and what replaced it.** With no build, what was live was byte-for-byte what
+was in the repo: `localhost` *was* production, and a deploy could be verified by curling the
+live file and diffing it against the local one. Both are gone. `npm run serve:dist` (port
+8643) is the replacement for the first — when a bug might be the minifier's, look there
+rather than at 8642. For the second, diff live against a local `npm run build`, and check
+that **`/CLAUDE.md` returns 404**, which is the one-line proof the whole arrangement is still
+in force.

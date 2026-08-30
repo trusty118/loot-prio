@@ -593,11 +593,6 @@ a:hover { color: var(--gold-bright); }
   gap: 12px;
 }
 
-/* The warning is out of flow, so nothing reserves the line it sits on. Reserve it here,
-   and only while it is shown - the bar must not be permanently taller for a message
-   that is usually absent. */
-.control-row--inputs:has(.list-warn:not([hidden])) { padding-bottom: 36px; }
-
 .field {
   display: flex;
   flex-direction: column;
@@ -648,45 +643,42 @@ a:hover { color: var(--gold-bright); }
    one long row of icons, and which set narrows which is not obvious - the gold frame was
    meant to carry that and cannot carry it sideways. Right-aligned because the whole block
    is already right-anchored, so both strips end on the same edge. */
-/* Class over spec, both anchored LEFT. The two together were right-aligned while they
-   shared the search box's row, which meant the spec strip grew leftward - fine at six
-   icons, and at twenty-eight it ran ~935px under Slots and Search and then wrapped the
-   row it was in. Anchored left on a row of its own it grows the only direction there is
-   room in, and the class strip above it never moves whatever is picked below. */
-.who-inline {
+/* THE SPEC STRIP SCROLLS, IT DOES NOT SQUASH. Nine classes is 28 pickable specs and
+   ~935px of icons, and the obvious layout quietly does the wrong thing: flex shrinks the
+   icons below 26px and it LOOKS like it fits. flex: none on the icons is what forces the
+   overflow to be real, and it is the easiest line here to delete by accident.
+
+   No flex-wrap on this row either. Flex prefers wrapping a line to shrinking an item, so
+   a wrapping row takes a fourth line rather than ever scrolling - which is the wrap this
+   rework exists to remove. */
+.control-row--who,
+.control-row--specs {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-  flex: 0 1 auto;
+  align-items: center;
   min-width: 0;
 }
 
-/* No display of its own: .control-row supplies it, and .control-row[hidden] is what
-   keeps the attribute winning if this row is ever hidden (CLAUDE.md section 5). */
-.control-row--who { flex-wrap: wrap; }
+.control-row--specs[hidden] { display: none; }
 
 /* Ten pills become one control. The strip carries the border, the background and the
-   padding that each chip used to carry for itself: ~470px of chrome becomes ~256px,
-   and the row reads as one thing you pick from rather than as ten things. */
-.who-inline .chips--who {
+   padding each chip used to carry for itself: ~470px of chrome becomes ~256px, and the
+   row reads as one thing you pick from rather than as ten things. */
+.chips--who {
   flex: 0 1 auto;
+  min-width: 0;
   gap: 2px;
   padding: 2px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--header-bg);
+  overflow-x: auto;
+  flex-wrap: nowrap;
 }
 
-/* `display` on something the code hides with [hidden] has to be guarded, or the
-   attribute loses - see the note in CLAUDE.md section 4. */
-.who-specs { display: flex; align-items: center; }
-.who-specs[hidden] { display: none; }
-
-/* The divider is gone. A hairline said "these are two rows"; what actually needed saying
-   is that the lower strip narrows the one above it, and a gold frame around the specs says
-   that - it is the same gold that marks the class you picked. */
-.who-specs { padding-left: 0; border-left: 0; }
+#spec-chips .chip,
+#spec-chips .chip-icon,
+#class-chips .chip,
+#class-chips .chip-icon { flex: none; }
 
 #spec-chips {
   border-color: var(--gold);
@@ -695,9 +687,20 @@ a:hover { color: var(--gold-bright); }
   background: color-mix(in srgb, var(--gold) 10%, transparent);
 }
 
-/* The source names are short and the widest is "Custom (not set up)", so this one field
-   opts out of the 150px floor the filters share - it would leave a gap on the right. */
-.field--bis select { min-width: 0; }
+/* A BREAK BETWEEN CLASSES. With several picked the spec row was one undifferentiated
+   run - three Warrior specs butting straight against three Mage specs. The DOM order was
+   already grouped; only the visual break was missing.
+
+   The rule goes on border-left of every group EXCEPT the first: a divider before the
+   first group divides nothing, and it would push the strip out of alignment with the
+   class strip above it. */
+.spec-group { display: flex; gap: 2px; }
+
+.spec-group + .spec-group {
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: 1px solid rgba(255, 255, 255, .09);
+}
 
 select, input[type="search"] {
   font: inherit;
@@ -739,11 +742,20 @@ select:focus-visible, input:focus-visible, .chip:focus-visible, button:focus-vis
   padding-bottom: 0;
 }
 
+/* The only output on a row of inputs, so it takes the row's single auto margin and sits
+   alone on the right edge. */
 .count {
-  margin: 0;
+  margin: 0 0 0 auto;
   font-size: .82rem;
   color: var(--text-faint);
+  white-space: nowrap;
 }
+
+/* The open list's name, dimmer than nothing else on the page but brighter than the count
+   it hangs off: it is the answer to "which list am I reading", which the banner used to
+   answer before the picker moved up there and started scrolling away. Read as a caption,
+   never as a control - there is nothing to click here. */
+.count-list { color: var(--text-dim); }
 
 /* ---------- results ---------- */
 
@@ -914,20 +926,6 @@ tbody td { overflow-wrap: break-word; }
 }
 
 tbody tr:hover .class-icon--muted { opacity: .4; }
-
-/* Where an ordering came from, when it did not come from the guide. Deliberately the
-   quietest thing in the cell: the same micro-label treatment the LIST and SLOT fields
-   used, sitting inline before the icons rather than tagging the row. It is a statement
-   about the line, not a warning about it. */
-.prio-from {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .1em;
-  color: var(--text-faint);
-  margin-right: 7px;
-  vertical-align: middle;
-}
 
 /* Operators between the icons. A span rather than bare text so each one can
    carry a data-tip - the instant-tooltip mechanism picks up any [data-tip]. */
@@ -1156,8 +1154,7 @@ mark {
      and the class strip is the reason anyone is looking at this bar. The BiS source goes
      with it - it is set once and then left alone, so it is the last thing needed at
      half-screen. Neither is hidden with [hidden], so a plain display rule is safe here. */
-  .field--type,
-  .field--bis { display: none; }
+  .field--type { display: none; }
 }
 
 @media (max-width: 760px) {
@@ -1191,14 +1188,22 @@ mark {
    bar. Three loose children each finding their own way right is what .account-zone's
    comment warns about upstream, and at half-screen it did exactly that: the row wrapped,
    Edit came off the end alone and landed on the LEFT, away from the list it acts on. */
+/* In the banner now, immediately left of the account zone. Still ONE box with one
+   margin-left:auto, per CLAUDE.md section 5 - three loose children each finding their own
+   way right is what put Edit on the left at half-screen. */
 .list-zone {
-  position: relative;      /* the warning hangs off this, see .list-warn */
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
   margin-left: auto;
+  padding-right: 14px;
+  border-right: 1px solid var(--line);
 }
+
+/* Which list you are reading and who you are signed in as are the same kind of fact, so
+   they sit together - the hairline says "related, not the same thing". */
+.account-zone { padding-left: 4px; }
 
 /* the label sits directly on the select, matching the Type/Slot/Search fields */
 .template-bar .field--tpl { gap: 3px; }
@@ -1698,22 +1703,22 @@ mark {
 
    flex-basis: 100% is what puts it BELOW the picker instead of stretching the row: it is
    the zone's last child, so it takes the whole of a second line to itself. */
-/* TWO elements, and the split is the whole point. The outer one positions; the inner
-   one is the pill and shrinks to its text.
+/* TWO elements, and the split is the whole point. The outer one takes the line; the
+   inner one is the pill and shrinks to its text.
 
-   It is ABSOLUTE, and that is not cosmetic. As an in-flow child with flex-basis: 100%
-   it contributed a whole warn line to the zone's intrinsic width, so the zone measured
-   ~839px instead of the ~507px its controls need - which on this merged row wrapped the
-   zone onto a second line and opened a 332px gap inside it, in exactly the empty-list
-   state the merge exists to fix. Out of flow it cannot widen the row at all.
+   IN FLOW, and a sibling of .list-zone rather than a child of it - see the comment in
+   index.html for why both of the earlier arrangements failed. The short version: as a
+   child it either widened the zone (flex-basis) or took no space and needed a second
+   rule elsewhere to hold the line for it (absolute), and that second rule was left
+   behind when the zone moved. Out here neither is possible.
 
-   left: 0 is the picker's left edge, because the picker is the zone's first child. */
+   flex-basis: 100% takes a line of its own inside .site-header-row, which is full width
+   already, so this cannot widen anything. The row's own 12px row-gap is the space above
+   it. flex-end puts the pill under the picker/account cluster it is about. */
 .list-warn {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: 8px;
+  flex-basis: 100%;
   display: flex;
+  justify-content: flex-end;
   white-space: nowrap;
 }
 
@@ -1763,28 +1768,6 @@ mark {
    font-weight flip alone shifts the row about a pixel, which is the defect this whole
    bar rewrite exists to remove. */
 .btn-edit { min-width: 62px; }
-
-/* Quiet, like Reset: the accent means "selected" and is not available, and this must not
-   compete with the picker, which was deliberately made the loud thing on this bar. */
-.btn-seed {
-  font: inherit;
-  font-size: .85rem;
-  background: transparent;
-  color: var(--text-dim);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 7px 12px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.btn-seed:hover:not(:disabled) { color: var(--text); border-color: var(--gold); }
-
-.btn-seed:disabled {
-  color: var(--text-faint);
-  border-color: var(--line-soft);
-  cursor: not-allowed;
-}
 
 .btn-edit:disabled {
   color: var(--text-faint);
@@ -1953,6 +1936,65 @@ mark {
 }
 
 .acct-item:hover, .acct-item:focus-visible { background: var(--bg-panel-2); color: var(--text); }
+
+/* The BiS source section. Each option carries what it COSTS, because the two sources are
+   wildly asymmetric and a bare list of names never said so - which is why picking wowsims
+   on a Phase 3 page read as broken rather than as empty. */
+.acct-section {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text-faint);
+  padding: 8px 9px 4px;
+}
+
+.acct-item--src {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 0 6px;
+  align-items: baseline;
+}
+
+.acct-tick { color: var(--gold); }
+.acct-src-name { color: var(--text); }
+
+.acct-src-note {
+  grid-column: 2;
+  font-size: .74rem;
+  color: var(--text-faint);
+}
+
+.acct-item--src[aria-checked="true"] .acct-src-name { font-weight: 600; }
+
+/* EDIT MODE HAS A WAY OUT FROM ANYWHERE. Edit moved to the banner with the rest of the
+   list controls, and the banner scrolls away - so from four hundred rows down there was
+   no way to leave the mode without scrolling back. Fixed, bottom right, and present only
+   while armed: a control that appears FOR a mode is expected, which is why this is not
+   the reflow defect CLAUDE.md section 5 warns about. */
+.edit-pill {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 45;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: inherit;
+  font-size: .85rem;
+  font-weight: 600;
+  padding: 9px 14px;
+  color: #14181f;
+  background: var(--gold);
+  border: 1px solid var(--gold-bright);
+  border-radius: 999px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .55);
+  cursor: pointer;
+}
+
+.edit-pill[hidden] { display: none; }
+.edit-pill:hover { background: var(--gold-bright); }
 
 /* the add popover: every class and spec, opened from the + on a row.
    Parented to <body>, so it is positioned rather than laid out. */

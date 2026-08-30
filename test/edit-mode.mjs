@@ -106,18 +106,24 @@ ok(!d.querySelector(".prio-edit"), "the guide's rows are not editable");
   const warn = el(d, "list-warn");
   ok(warn, "there is a warning element on the bar");
   ok(warn.hidden, "hidden while a list is open, because there is nothing to warn about");
-  ok(d.querySelector(".template-bar").parentNode.contains(warn),
-     "and it sits in the list zone, under the picker it is about");
+  /* A SIBLING of the list zone, not a child of it. Both earlier arrangements were
+     children and both failed, in opposite directions: flex-basis on a child widened the
+     zone until it wrapped off its row, and absolute on a child took no space at all, so a
+     rule on ANOTHER element had to hold the line - which was left pointing at the old
+     parent when the zone moved into the header, and the pill spilled over the phase tiles
+     and the Settings button. Being a sibling is what makes neither possible. */
+  const zone = d.querySelector(".list-zone");
+  ok(!zone.contains(warn), "it is not inside the list zone, so it cannot widen it");
+  ok(d.querySelector(".site-header-row").contains(warn),
+     "it is a sibling in the header row, which is full width already");
   ok(warn.parentNode.lastElementChild === warn,
-     "as the zone's last child, which is what lets it take a line of its own");
-  /* It used to be flex-basis: 100%, which took the line but ALSO contributed a whole
-     warn line to the zone's intrinsic width - enough to wrap the zone off the merged
-     filter row in exactly the empty-list state it exists for. Absolute is the stronger
-     property: it still takes its own line under the picker, and it cannot widen the row
-     at all. jsdom lays nothing out, so the rule is the assertion. */
+     "and the row's last child, which is what lets it take a line of its own");
+  /* jsdom lays nothing out, so the rule is the assertion. */
   const warnRule = (cssText.split(".list-warn {")[1] || "").split("}")[0];
-  ok(warnRule.includes("position: absolute") && !warnRule.includes("flex-basis"),
-     "the warning is out of flow, so it cannot stretch the row it hangs under");
+  ok(warnRule.includes("flex-basis") && !warnRule.includes("position: absolute"),
+     "in flow, so nothing else has to reserve the space it takes");
+  ok(!cssText.includes(":has(.list-warn"),
+     "and no rule anywhere holds space for it - a second place to keep in sync is the bug");
   ok(warn.querySelector(".list-warn-icon"), "it carries a warning glyph");
   ok(!/No list is open/.test(source),
      "and the menu no longer carries the wording it moved out of");
@@ -134,7 +140,7 @@ ok(!d.querySelector(".prio-edit"), "the guide's rows are not editable");
   /* The column is not blank in this state - it shows what the BiS data knows, so the
      BIS FROM control has something to do and the rings are reachable. The warning has to
      say THAT rather than "priorities are empty", which stopped being true. */
-  ok([...dn.querySelectorAll("td.col-prio .prio-from")].length > 0,
+  ok([...dn.querySelectorAll("td.col-prio img.spec-icon")].length > 0,
      "and the column shows the BiS view rather than nothing at all");
   ok([...dn.querySelectorAll("td.col-prio .prio-op")].every((o) => o.textContent === "?"),
      "separated by ? - not ranked against - so it cannot read as somebody's ordering");
@@ -457,7 +463,16 @@ await settle(() => only(w2));
 const blank = only(w2);
 ok(Object.keys(blank.priorities).length === data.length,
    `New still holds all ${data.length} rows (${Object.keys(blank.priorities).length})`);
-ok(Object.values(blank.priorities).every((p) => p.length === 0), "with every priority empty");
+/* It is no longer empty - a new list arrives seeded from BiS. What still has to hold is
+   that it holds a KEY for every row, seeded or not, because that is what makes a list a
+   full copy rather than a diff. */
+ok(Object.values(blank.priorities).every((p) => Array.isArray(p)),
+   "every row has an entry, seeded or empty - a list is a full copy, not a diff");
+ok(Object.values(blank.priorities).some((p) => p.length === 0),
+   "and items that are BiS for nobody stay empty, since seeding only fills what BiS knows");
+/* `base` records where the list CAME FROM - nobody's list - which the BiS seeding laid on
+   top does not change. It is also in every saved list and every #t= link, so it is not
+   free to redefine. */
 ok(blank.base === "blank", `and says it started from nothing (base: ${blank.base})`);
 // every item OF THE OPEN PHASE. These were the same number while Phase 3 was the whole
 // dataset; Zul'Aman and Sunwell separated them.
@@ -468,12 +483,21 @@ ok(d2.querySelectorAll("tbody tr").length === inPhase,
 ok(rowFor(d2, ITEM).querySelector(".prio-add"), "each row offers a + to start filling it in");
 
 // --- and it says why the filters find nobody ------------------------------------------------
-const warriorChip = [...d2.querySelectorAll("#class-chips .chip")]
+/* Still reachable, and still worth explaining: New seeds from BiS now, but a genuinely
+   empty list arrives on a #t= link, and one arrives from New too if bis.json failed to
+   load. An empty list matches no class or spec filter, so every chip reads zero - which
+   looks broken unless the page says which of the two it is. */
+const emptyList = { v: 1, name: "Nothing yet", created: "2026-08-30", base: "blank",
+  priorities: Object.fromEntries(data.map((r) => [r.id, []])) };
+const wE = boot("#t=r" + Buffer.from(JSON.stringify(emptyList)).toString("base64url"));
+await settle(() => wE.document.querySelector("tbody tr"));
+const dE = wE.document;
+const warriorChip = [...dE.querySelectorAll("#class-chips .chip")]
   .find((c) => (c.getAttribute("aria-label") || "").includes("Warrior"));
-click(w2, warriorChip);
-await settle(() => d2.querySelector(".empty"));
-ok(d2.querySelector(".empty") && /empty so far/.test(d2.querySelector(".empty").textContent),
-   `a blank list explains its zero results: "${(d2.querySelector(".empty") || {}).textContent || ""}"`);
+click(wE, warriorChip);
+await settle(() => dE.querySelector(".empty"));
+ok(dE.querySelector(".empty") && /empty so far/.test(dE.querySelector(".empty").textContent),
+   `an empty list explains its zero results: "${(dE.querySelector(".empty") || {}).textContent || ""}"`);
 
 // --- a shared list is someone else's ----------------------------------------------------------
 const shared = { v: 1, name: "Someone's list", created: "2026-08-21", base: "zatar",
@@ -514,16 +538,22 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
   doMenu(w5, "+  New list");
   openMenu(w5);
   await settle(() => row(w5, "My list"));
-  ok(rowCount(w5, "My list") === "0 ranked",
-     `a blank list reads 0, which is the honest answer and the useful one (got "${rowCount(w5, "My list")}")`);
+  /* A new list is seeded from BiS now, so this is no longer 0 - but it is still not the
+     dataset size, which is the property the column exists for. */
+  const mine = rowCount(w5, "My list");
+  const mineRanked = Number((mine || "").split(" ")[0]);
+  ok(/^\d+ ranked$/.test(mine) && mineRanked > 0 && mineRanked < data.length,
+     `a new list counts what it seeded, not all ${data.length} rows it holds (got "${mine}")`);
+  ok(mineRanked !== zatarRanked,
+     `and it is a different number from zatar's, which is what makes the column worth reading (${mineRanked} vs ${zatarRanked})`);
   closeMenu(w5);
 
   // a copy carries what it copied, not the dataset size
   doMenu(w5, "Make a copy");
   openMenu(w5);
   await settle(() => row(w5, "Copy of My list"));
-  ok(rowCount(w5, "Copy of My list") === "0 ranked",
-     `copying a blank list copies its emptiness (got "${rowCount(w5, "Copy of My list")}")`);
+  ok(rowCount(w5, "Copy of My list") === mine,
+     `copying carries the count across exactly (got "${rowCount(w5, "Copy of My list")}", expected "${mine}")`);
   closeMenu(w5);
 }
 
@@ -588,7 +618,14 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
   const bar = d6.querySelector(".controls--refine");
   const tog = el(d6, "edit-toggle");
 
-  ok(bar.contains(tog), "Edit sits in the sticky refine bar, above the rows it acts on");
+  /* Edit moved to the banner with the rest of the list controls: the pinned bar had
+     eleven things on it, and the test for a place there is "do I reach for this while
+     scrolling 699 rows". What pays for it is #edit-pill - fixed, bottom right, present
+     only while armed - because the banner scrolls away and there has to be a way out of
+     the mode from four hundred rows down. */
+  ok(d6.querySelector(".site-header-row").contains(tog),
+     "Edit sits with the list it acts on, in the banner");
+  ok(el(d6, "edit-pill"), "and a fixed pill is what gets you out of the mode from anywhere");
   ok(!d6.querySelector(".template-bar").contains(tog),
      "and not in the banner, which answers which list rather than change these calls");
 
@@ -739,48 +776,50 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
      "specIcon() does not add it - priorityCell() does");
 }
 
-// --- Load BiS data, the starting point for a list built from scratch -------------------
-/* It was an item in the list menu, which is to say nobody found it - the same reason
-   sharing got a control of its own. It fills the EMPTY rows of the phase on screen, so it
-   can only ever add. */
+// --- a new list arrives seeded from BiS -----------------------------------------------
+/* There was a `Load BiS data` button on the bar for this. Seeding is automatic now, so
+   there is nothing to press and nothing to find - the list you make is usable immediately
+   instead of being an empty grid you have to know one more control to fill.
+
+   Two properties matter and neither is visible from the phase on screen: it seeds EVERY
+   phase, and it seeds flat. */
 {
   const wS = boot("#phase=P4");
   await settle(() => wS.document.querySelector("tbody tr"));
   const dS = wS.document;
-  const btn = el(dS, "seed-bis");
-  const icons = () => dS.querySelectorAll("td.col-prio img.spec-icon").length;
 
-  ok(btn && !btn.hidden, "the control is on the bar, always");
-  ok(btn.disabled && /make a copy/i.test(btn.title),
-     `disabled with a reason when no list of yours is open: "${btn.title}"`);
-  ok(!/Seed empty rows/.test(menuText(wS)),
-     "and it has left the list menu, so there is one place it lives");
+  ok(!dS.getElementById("seed-bis"), "the Load BiS data button is gone from the bar");
+  ok(!/seed|load bis/i.test(menuText(wS)),
+     "and it did not move back into the list menu - there is no control for this at all");
 
   doMenu(wS, "+  New list");
   await settle(() => only(wS));
-  ok(!btn.disabled, "a list of your own makes it usable");
-  ok(icons() === 0, "which starts with nothing in the priority column");
+  await settle(() => dS.querySelectorAll("td.col-prio img.spec-icon").length > 0);
+  ok(dS.querySelectorAll("td.col-prio img.spec-icon").length > 0,
+     "a new list has icons in the priority column with nothing pressed to put them there");
 
-  click(wS, btn);
-  await settle(() => icons() > 0);
-  ok(icons() > 0, `one press seeds it from the BiS data (${icons()} icons)`);
+  const t = only(wS);
+  const seeded = Object.values(t.priorities).filter((p) => p.length);
 
   /* Flat on purpose: every entry equal, because nothing here ranks them. That is what
      makes it a starting point rather than an answer. */
-  const t = only(wS);
-  const seeded = Object.values(t.priorities).filter((p) => p.length);
   ok(seeded.length > 0 && seeded.every((p) => p.every((e, i) => i === 0 || e.op === "=")),
      `every seeded line is flat - nothing ranks anyone above anyone (${seeded.length} rows)`);
 
-  /* It fills EMPTY rows, so a second press has nothing left to do - which is the same
-     guarantee that stops it overwriting an ordering you made by hand. */
-  const before = JSON.stringify(only(wS).priorities);
-  click(wS, btn);
-  await settle();   /* a real wait: the assertion is that nothing changed */
-  ok(JSON.stringify(only(wS).priorities) === before,
-     "pressing it again changes nothing - it only ever fills what is empty");
-  ok(/nothing to seed/i.test(el(dS, "edit-msg").textContent),
-     `and says so rather than appearing to do nothing: "${el(dS, "edit-msg").textContent}"`);
+  /* The one that would go unnoticed: seeded on the phase you happened to be looking at,
+     a list would read as empty the moment you changed phase. P4 is on screen; Black
+     Temple is Phase 3, so a BT item carrying a priority proves it seeded past the view. */
+  const p3Bis = new Set();
+  Object.values(bis.specs).forEach((byPhase) =>
+    (byPhase.P3 || []).forEach((r) => { if (!r.near) p3Bis.add(r.id); }));
+  const offPhase = data.find((r) => r.zone === "Black Temple" && p3Bis.has(r.id));
+  ok(offPhase && (t.priorities[String(offPhase.id)] || []).length > 0,
+     `it seeds every phase, not the one on screen (${offPhase && offPhase.item} is Phase 3)`);
+
+  /* Unchanged, and the reason is worth keeping: BiS is a computed fact about an item,
+     a note is a person's sentence about it. You asked for nobody's list. */
+  ok(Object.values(t.notes || {}).every((n) => !n),
+     "notes are still not seeded - blank means blank for anybody's wording");
 }
 
 // --- no browser dialogs anywhere ------------------------------------------------------------

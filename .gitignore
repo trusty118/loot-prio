@@ -9,6 +9,11 @@ Desktop.ini
 node_modules/
 *.log
 
+# Built by build.mjs and published by .github/workflows/pages.yml. Never committed: the
+# repo carries the source, the workflow builds the artifact, and a committed dist/ would
+# be a second copy free to disagree with the first.
+dist/
+
 # per-machine Claude Code settings
 .claude/
 

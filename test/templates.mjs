@@ -75,14 +75,22 @@ t.priorities["32375"] = api.addEntry(t.priorities["32375"], { spec: "Arms" });
 ok(JSON.stringify(zatarList.priorities["32375"]).indexOf("Arms") === -1,
    "editing the copy does not reach the list it came from");
 
-// --- a blank list is a template like any other ----------------------------------
+// --- a new list is a template like any other -------------------------------------
+/* It used to be blank, and the `Load BiS data` button filled it. Seeding is automatic
+   now, so what this block pins is that the seeded lines are VALID as data - they go
+   through validateTemplate() and out over a #t= link exactly like hand-made ones. */
 const blank = api.newBlankTemplate("Blank list");
 ok(Object.keys(blank.priorities).length === data.length,
-   `New copies all ${data.length} rows, it just leaves them empty`);
-ok(Object.values(blank.priorities).every((p) => Array.isArray(p) && p.length === 0),
-   "with nothing in any of them");
+   `New copies all ${data.length} rows`);
+ok(Object.values(blank.priorities).every((p) => Array.isArray(p)),
+   "every row has an entry, seeded or empty - a list is a full copy, not a diff");
+const seededRows = Object.values(blank.priorities).filter((p) => p.length);
+ok(seededRows.length > 0, `seeded from BiS on the way out of New (${seededRows.length} rows)`);
+ok(Object.values(blank.priorities).some((p) => p.length === 0),
+   "and an item that is BiS for nobody stays empty, which is still valid data");
 ok(blank.base === "blank", "and it says it started from nothing rather than from him");
-ok(api.validateTemplate(blank) === null, "an empty priority is valid, not a broken one");
+ok(api.validateTemplate(blank) === null,
+   "the seeded lines validate, and so does an empty one - neither is a broken list");
 const blankCode = await api.encodeTemplate(blank);
 ok(api.validateTemplate(await api.decodeTemplate(blankCode)) === null,
    `and it shares like any other list: ${blankCode.length} characters`);

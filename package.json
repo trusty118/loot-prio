@@ -2,13 +2,16 @@
   "name": "loot-prio",
   "version": "1.0.0",
   "private": true,
-  "description": "Tests for the TBC Tier 6 loot priority site. The site itself has no build step and no runtime dependencies - jsdom is only here so the tests can render the page headlessly.",
+  "description": "TBC Tier 6 loot priority site. No runtime dependencies - the page is vanilla JS reading JSON. esbuild builds dist/, the only thing Pages serves; jsdom is for the tests.",
   "type": "module",
   "scripts": {
-    "test": "node test/smoke.mjs && node test/bis-fallback.mjs && node test/edit-mode.mjs && node test/templates.mjs && node test/auth.mjs",
-    "serve": "python3 -m http.server 8642 --bind 127.0.0.1"
+    "test": "node test/smoke.mjs && node test/bis-fallback.mjs && node test/edit-mode.mjs && node test/templates.mjs && node test/auth.mjs && node test/build.mjs",
+    "build": "node build.mjs",
+    "serve": "python3 -m http.server 8642 --bind 127.0.0.1",
+    "serve:dist": "python3 -m http.server 8643 --bind 127.0.0.1 --directory dist"
   },
   "devDependencies": {
+    "esbuild": "^0.28.2",
     "jsdom": "^24.0.0"
   }
 }

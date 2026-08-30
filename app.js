@@ -747,7 +747,6 @@
     specRow: document.getElementById("spec-row"),
     type: document.getElementById("type-select"),
     slot: document.getElementById("slot-select"),
-    bisSource: document.getElementById("bis-source"),
     search: document.getElementById("search"),
     reset: document.getElementById("reset"),
     count: document.getElementById("count"),
@@ -762,7 +761,7 @@
     account: document.getElementById("account"),
     accountName: document.getElementById("account-name"),
     shareTrigger: document.getElementById("share-trigger"),
-    seedBis: document.getElementById("seed-bis"),
+    editPill: document.getElementById("edit-pill"),
     editMsg: document.getElementById("edit-msg"),
     editHint: document.getElementById("edit-hint"),
     refine: document.querySelector(".controls--refine")
@@ -890,14 +889,53 @@
 
   /* Nobody's list yet: all 195 rows, every priority empty. Still a full copy, so it
      validates, encodes and shares exactly like any other. */
+  /* The seeding primitive. Fills only the EMPTY entries, so it can never overwrite a call
+     that is already there, and returns how many it filled.
+
+     It walks EVERY phase, and asks about each item under the phase that item belongs to.
+     Both halves are load-bearing and neither is visible from the screen: seeded on the
+     phase you happened to be looking at, a list would read as empty the moment you changed
+     phase - and asking bisTier() without a phase would silently do exactly that, since it
+     defaults to state.phase. A list is a full copy of all 699 rows; seeding has to match. */
+  function seedPriorities(priorities) {
+    var order = Object.keys(REG.specs);
+    var phaseOf = {};
+    PHASES.forEach(function (p) {
+      p.zones.forEach(function (z) { phaseOf[z] = p.id; });
+    });
+
+    var filled = 0;
+    ALL.forEach(function (rec) {
+      if ((priorities[rec.id] || []).length) return;
+      var phase = phaseOf[rec.zone];
+      if (!phase) return;
+      var specs = order.filter(function (id) { return bisTier(id, rec.id, phase); });
+      if (!specs.length) return;
+      priorities[rec.id] = specs.map(function (id, i) {
+        return i ? { spec: id, op: "=" } : { spec: id };
+      });
+      filled++;
+    });
+    return filled;
+  }
+
+  /* Seeded from BiS, not blank - a list you start now arrives with every item that is BiS
+     for somebody already ranked flat-equal, as a starting point to drag into order.
+
+     `base` stays "blank" because it records where the list CAME FROM - nobody's list - and
+     that is still true; the BiS ordering is a starting point laid on top, not a source. It
+     is also stored in every saved list and in every `#t=` link, so it is not free to redefine.
+
+     Notes are still not seeded, and that has not changed: you asked for nobody's list, and
+     the guide's wording is somebody's. BiS is a computed fact about an item; a note is a
+     person's sentence about it. */
   function newBlankTemplate(name) {
     var priorities = {}, notes = {};
     ALL.forEach(function (rec) {
       priorities[rec.id] = [];
-      /* Blank means blank. The guide's notes are not seeded here the way they are into
-         a copy - you asked for nobody's list, and his wording is somebody's. */
       notes[rec.id] = "";
     });
+    seedPriorities(priorities);
     return makeTemplate(name || "My list", "blank", priorities, notes);
   }
 
@@ -917,12 +955,12 @@
      Wowhead is the default because it is the only source that is complete - all five
      phases, all 28 specs. See BIS_SOURCES for what the others hold. */
   var BIS_SOURCES = [
-    { id: "wowhead", label: "Wowhead" },
-    { id: "wowsims", label: "WoWSims" },
+    { id: "wowhead", label: "Wowhead", covers: "all 28 specs, every phase" },
+    { id: "wowsims", label: "WoWSims presets", covers: "20 specs, Phase 4-5 only" },
     /* Reserved. Choosing it shows no rings at all, which is the honest rendering of
        "you have not supplied any BiS data yet" - the alternative is a menu entry that
        silently does nothing, which reads as broken rather than as unbuilt. */
-    { id: "custom", label: "Custom (not set up)" }
+    { id: "custom", label: "Custom", covers: "not set up yet - no rings" }
   ];
 
   function bisSource() {
@@ -1387,34 +1425,6 @@
      Two limits, both so it can only ever add. It touches the phase on screen, not the
      whole dataset, because seeding 699 rows from one click is not something anyone means.
      And it skips any row that already has a priority, so it cannot overwrite work. */
-  function seedFromBis() {
-    if (!activeTemplate || !activeIsMine) return;
-    var zones = phaseZones(state.phase);
-    var order = Object.keys(REG.specs);
-    var filled = 0;
-
-    ALL.forEach(function (rec) {
-      if (zones.indexOf(rec.zone) === -1) return;
-      if ((activeTemplate.priorities[rec.id] || []).length) return;
-      var specs = order.filter(function (id) { return bisTier(id, rec.id); });
-      if (!specs.length) return;
-      activeTemplate.priorities[rec.id] = specs.map(function (id, i) {
-        return i ? { spec: id, op: "=" } : { spec: id };
-      });
-      filled++;
-    });
-
-    if (!filled) {
-      announce("Nothing to seed here - every item on this phase either has a priority "
-               + "already or is BiS for nobody");
-      return;
-    }
-    unsaved = true;
-    saveNow().then(refreshLists);
-    announce("Seeded " + filled + " items from BiS, all equal - drag to put them in order");
-    update();
-  }
-
   /* ---------- sharing ----------
      gzip via CompressionStream where the browser has it (11.6 KB -> ~2.1 KB), plain
      base64 where it doesn't. The marker byte says which, so a link made in one
@@ -2058,8 +2068,16 @@
     });
     el.specChips.appendChild(all);
 
-    /* grouped by the class order of the row above, not by the registry's spec order */
+    /* Grouped by the class order of the row above, not by the registry's spec order -
+       and now grouped in the DOM as well, one .spec-group per class. With several picked
+       the row was one undifferentiated run: three Warrior specs butting straight against
+       three Mage specs, with the grouping only in the order. The break is what makes it
+       readable, and the group carries the class name so a hovered gap says whose it is. */
     state.classes.forEach(function (cls) {
+      var group = document.createElement("div");
+      group.className = "spec-group";
+      group.dataset.tip = (REG.classes[cls] || {}).name || cls;
+
       Object.keys(REG.specs).forEach(function (id) {
         var spec = REG.specs[id];
         if (spec["class"] !== cls) return;
@@ -2076,8 +2094,10 @@
           }
           update();
         });
-        el.specChips.appendChild(c);
+        group.appendChild(c);
       });
+
+      if (group.children.length) el.specChips.appendChild(group);
     });
 
     /* Only offered once a spec is picked: bis.json is keyed by spec, and a
@@ -2822,9 +2842,12 @@
      the phase on screen: a Sunwell item is not BiS for someone reading Phase 3, and a
      ring that ignored the phase would answer "BiS at some point" rather than "BiS for me
      now" - which is the question a loot council is actually asking. */
-  function bisAt(specId, itemId) {
+  /* `phase` is optional and almost always omitted - what is BiS is asked about the phase
+     on screen. Seeding is the exception: it fills a whole list at once, so it has to ask
+     about each item's OWN phase rather than the one you happen to be looking at. */
+  function bisAt(specId, itemId, phase) {
     var idx = BIS_INDEX[state.bisSource] || BIS_INDEX.wowhead;
-    return idx[state.phase + "|" + specId + "|" + itemId] || null;
+    return idx[(phase || state.phase) + "|" + specId + "|" + itemId] || null;
   }
 
   function bisVariant(specId, itemId) {
@@ -2832,8 +2855,8 @@
     return hit ? hit.variant : "";
   }
 
-  function bisTier(specId, itemId) {
-    var hit = bisAt(specId, itemId);
+  function bisTier(specId, itemId, phase) {
+    var hit = bisAt(specId, itemId, phase);
     return hit ? hit.longevity : 0;
   }
 
@@ -2989,11 +3012,6 @@
     });
     if (!specs.length) return td;
 
-    var tag = document.createElement("span");
-    tag.className = "prio-from";
-    tag.textContent = "BIS";
-    td.appendChild(tag);
-
     var picking = state.classes.length > 0;
     specs.forEach(function (id, i) {
       /* "?" between them - not ranked against each other. The column used to leave them
@@ -3037,8 +3055,8 @@
     /* The SEEDED tag stood here. It marked lines seed_priority.py wrote from the BiS
        data, and those are gone: every one was exactly the specs bis.json already lists,
        so they duplicated data the page draws as rings anyway. Seeding is an action on a
-       list of your own now - see seedFromBis() - and a line you seeded and then ordered
-       is yours, so there is nothing left to disclaim. */
+       list of your own now - see seedPriorities(), which every new list runs once - and a
+       line you seeded and then ordered is yours, so there is nothing left to disclaim. */
 
     /* With a class or spec selected, everyone else in the line dims, so where you
        stand reads at a glance. Same idea as class-icon--muted on tier tokens; the
@@ -3314,7 +3332,18 @@
 
   function renderResults() {
     var rows = filtered();
+    /* "195 of 195 items - My list". The list's name rides on the count because the
+       picker sits in the banner now and the banner scrolls away: this line does not, so
+       it is what keeps you from losing track of which list you are reading. A span
+       rather than more text, so the name can be dimmer and read as a caption. */
     el.count.textContent = rows.length + " of " + phaseTotal() + " items";
+    var openName = activeTemplate ? activeTemplate.name : "No list";
+    var who = document.createElement("span");
+    who.className = "count-list";
+    /* the separator is a text node, not a CSS ::before - this line is aria-live, and a
+       generated separator would have it read "195 of 195 itemsMy list" */
+    who.textContent = " \u00b7 " + openName;
+    el.count.appendChild(who);
     el.results.innerHTML = "";
 
     if (!rows.length) {
@@ -3445,36 +3474,98 @@
     acctMenu = document.createElement("div");
     acctMenu.className = "acct-menu";
     acctMenu.setAttribute("role", "menu");
-    acctMenu.setAttribute("aria-label", "Account");
+    acctMenu.setAttribute("aria-label", "Account and settings");
     acctMenu.style.display = "none";
-
-    /* Who you are, stated rather than actionable - the button that opened this shows a
-       name, and a menu whose first line repeats it without saying what it is reads as a
-       thing you should click. */
-    var who = document.createElement("div");
-    who.className = "acct-who";
-    var w1 = document.createElement("span");
-    w1.className = "acct-who-label";
-    w1.textContent = "Signed in as";
-    var w2 = document.createElement("span");
-    w2.className = "acct-who-name";
-    who.appendChild(w1);
-    who.appendChild(w2);
-    acctMenu.appendChild(who);
-
-    var out = document.createElement("button");
-    out.type = "button";
-    out.className = "acct-item";
-    out.setAttribute("role", "menuitem");
-    out.textContent = "Sign out";
-    out.addEventListener("click", function () { closeAcctMenu(); signOut(); });
-    acctMenu.appendChild(out);
-
     acctMenu.addEventListener("keydown", function (e) {
       if (e.key === "Escape") { e.preventDefault(); closeAcctMenu(); el.account.focus(); }
     });
-
     document.body.appendChild(acctMenu);
+  }
+
+  /* Rebuilt on each open rather than toggled in place: what belongs here depends on
+     whether you are signed in, and on whether signing in is even possible. */
+  function renderAcctMenu() {
+    acctMenu.innerHTML = "";
+
+    if (signedIn()) {
+      /* Who you are, stated rather than actionable - the button that opened this shows a
+         name, and a menu whose first line repeats it without saying what it is reads as
+         a thing you should click. */
+      var who = document.createElement("div");
+      who.className = "acct-who";
+      var w1 = document.createElement("span");
+      w1.className = "acct-who-label";
+      w1.textContent = "Signed in as";
+      var w2 = document.createElement("span");
+      w2.className = "acct-who-name";
+      w2.textContent = accountName();
+      who.appendChild(w1);
+      who.appendChild(w2);
+      acctMenu.appendChild(who);
+
+      var out = document.createElement("button");
+      out.type = "button";
+      out.className = "acct-item";
+      out.setAttribute("role", "menuitem");
+      out.textContent = "Sign out";
+      out.addEventListener("click", function () { closeAcctMenu(); signOut(); });
+      acctMenu.appendChild(out);
+      acctMenu.appendChild(document.createElement("hr"));
+    }
+
+    /* BIS DATA SOURCE, and the sublines are the point. The two sources are wildly
+       asymmetric - Wowhead has every phase and all 28 specs, wowsims has Phase 4-5 for
+       20 - and the bare <select> this replaces never said so, which is why choosing
+       wowsims on a Phase 3 page read as broken rather than as empty. The numbers come
+       from the table in CLAUDE.md section 2. */
+    var head = document.createElement("div");
+    head.className = "acct-section";
+    head.textContent = "BiS data source";
+    acctMenu.appendChild(head);
+
+    BIS_SOURCES.forEach(function (src) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "acct-item acct-item--src";
+      b.setAttribute("role", "menuitemradio");
+      b.setAttribute("aria-checked", state.bisSource === src.id ? "true" : "false");
+      b.dataset.src = src.id;
+
+      var tick = document.createElement("span");
+      tick.className = "acct-tick";
+      tick.textContent = state.bisSource === src.id ? "\u2713" : "";
+      var name = document.createElement("span");
+      name.className = "acct-src-name";
+      name.textContent = src.label;
+      var note = document.createElement("span");
+      note.className = "acct-src-note";
+      note.textContent = src.covers;
+
+      b.appendChild(tick);
+      b.appendChild(name);
+      b.appendChild(note);
+      b.addEventListener("click", function () {
+        state.bisSource = src.id;
+        setBisSource(src.id);
+        closeAcctMenu();
+        update();
+      });
+      acctMenu.appendChild(b);
+    });
+
+    /* Signing in lives here too when it is possible, so the menu is one place rather
+       than two. It is still ALSO a button on the bar - that is the call to action, and
+       burying it would make the upgrade harder to find than the setting. */
+    if (supabaseReady() && !signedIn()) {
+      acctMenu.appendChild(document.createElement("hr"));
+      var inBtn = document.createElement("button");
+      inBtn.type = "button";
+      inBtn.className = "acct-item";
+      inBtn.setAttribute("role", "menuitem");
+      inBtn.textContent = "Sign in with Discord";
+      inBtn.addEventListener("click", function () { closeAcctMenu(); signIn(); });
+      acctMenu.appendChild(inBtn);
+    }
   }
 
   function toggleAcctMenu() {
@@ -3482,7 +3573,7 @@
     if (acctMenu.style.display === "block") { closeAcctMenu(); return; }
     closePop();                       /* only one overlay at a time */
     closeOpMenu();
-    acctMenu.querySelector(".acct-who-name").textContent = accountName();
+    renderAcctMenu();
     acctMenu.style.display = "block";
     el.account.setAttribute("aria-expanded", "true");
     placeUnder(acctMenu, el.account);
@@ -3640,16 +3731,10 @@
     el.editToggle.disabled = !activeIsMine;
     el.editToggle.title = activeIsMine ? "" : "Make a copy to edit";
 
-    /* Same rule, same reason. The title carries what the label cannot say in two words:
-       it fills the EMPTY rows of the phase on screen, so it can only ever add. */
-    if (el.seedBis) {
-      el.seedBis.disabled = !activeIsMine;
-      el.seedBis.title = activeIsMine
-        ? "Fill this phase's empty priorities from the BiS data, all equal, to drag into order"
-        : "Make a copy to load BiS data into it";
-    }
     el.editToggle.setAttribute("aria-pressed", state.editing ? "true" : "false");
     el.editToggle.textContent = state.editing ? "Done editing" : "Edit priorities";
+    /* the fourth signal, and the only one reachable from the bottom of the table */
+    show(el.editPill, state.editing);
 
     /* Three signals for the armed state, because a mode that changes what a click does
        should be impossible to be in without noticing: the button fills, the bar it sits
@@ -3665,13 +3750,25 @@
     /* No sign-in button at all when it could not work - an unconfigured project or a
        blocked CDN should read as "this site has no accounts", not as a broken button. */
     show(el.signIn, supabaseReady() && !signedIn());
-    show(el.account, supabaseReady() && signedIn());
+
+    /* The menu is ALWAYS here, whatever Supabase is doing, because it holds a setting
+       that has nothing to do with accounts: which BiS data the rings come from. It is
+       per-browser, deliberately out of the url, and set about once - and CLAUDE.md is
+       explicit that signed out is the whole product rather than a trial, so a preference
+       that lives only behind a login has nowhere to live for exactly the people the site
+       is for. Signed in it is the account button and says your name; otherwise it says
+       Settings and holds the source alone. One mechanism either way. */
+    show(el.account, true);
 
     if (signedIn()) {
       if (el.accountName) el.accountName.textContent = accountName();
       renderAvatar();
-    } else {
-      closeAcctMenu();
+    } else if (el.accountName) {
+      /* Signed out it is a settings button and nothing more. The avatar has to be taken
+         off by hand: renderAvatar() adds an <img> that no re-render removes. */
+      el.accountName.textContent = "Settings";
+      var stale = el.account.querySelector(".account-avatar");
+      if (stale) stale.remove();
     }
 
     if (listMenu && listMenu.style.display === "block") renderListMenu();
@@ -3955,7 +4052,8 @@
     listMenu.appendChild(document.createElement("hr"));
     listMenu.appendChild(menuItem("+  New list", "lm-item--new", function () {
       closeListMenu();
-      startList(newBlankTemplate(), "A blank list - every priority is empty until you fill it in");
+      startList(newBlankTemplate(),
+                "Seeded from BiS, all equal - drag each line to put it in order");
     }));
 
     listMenu.appendChild(document.createElement("hr"));
@@ -4182,8 +4280,11 @@
        like the menu ignoring every second press. */
     el.listTrigger.addEventListener("mousedown", function (ev) { ev.stopPropagation(); });
 
-    if (el.seedBis) {
-      el.seedBis.addEventListener("click", function () { seedFromBis(); });
+    if (el.editPill) {
+      el.editPill.addEventListener("click", function () {
+        state.editing = false;
+        update();
+      });
     }
 
     if (el.shareTrigger) {

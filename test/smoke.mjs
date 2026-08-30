@@ -62,6 +62,14 @@ const doc = window.document;
 const fail = [];
 const ok = (cond, msg) => { console.log((cond ? "PASS  " : "FAIL  ") + msg); if (!cond) fail.push(msg); };
 
+/* The count line names the open list now - "195 of 195 items - My list" - which is what
+   lets the picker live in the banner and scroll away. These assertions are about the
+   count, so they read the count and not the caption hanging off it. */
+const countOnly = () => {
+  const n = doc.getElementById("count");
+  return [...n.childNodes].filter((x) => x.nodeType === 3).map((x) => x.textContent).join("").trim();
+};
+
 const chipByText = (sel, text) =>
   [...doc.querySelectorAll(sel + " .chip")].find((c) => c.textContent.trim().startsWith(text));
 const click = (node) => node.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
@@ -154,8 +162,9 @@ ok(groups().length === P3_GROUPS, `in ${P3_GROUPS} boss groups (got ${groups().l
    rendered, so measuring against all 699 counted rows that could not have appeared
    whatever the filters said - the fraction was against the wrong whole. Unfiltered,
    the two halves match. */
-ok(doc.getElementById("count").textContent === `${P3_ITEMS} of ${P3_ITEMS} items`,
-   `count text: "${doc.getElementById("count").textContent}"`);
+ok(countOnly() === `${P3_ITEMS} of ${P3_ITEMS} items`, `count text: "${countOnly()}"`);
+ok(/ · /.test(doc.getElementById("count").textContent),
+   "and it names the open list beside the count - the banner scrolls away, this does not");
 ok(P3_ITEMS < data.length,
    `and that is a real distinction - the phase holds ${P3_ITEMS} of ${data.length}`);
 
@@ -184,8 +193,8 @@ ok(headEls.every((h) => {
   return kids.findIndex((k) => k.classList.contains("boss-name")) < tag;
 }), "boss name precedes the zone tag in every header");
 ok(!headEls.some((h) => /\d+\s+items?/.test(h.textContent)), "per-group item counts removed");
-ok(/^\d+ of \d+ items$/.test(doc.getElementById("count").textContent.trim()),
-   `the overall count in the toolbar stays: "${doc.getElementById("count").textContent}"`);
+ok(/^\d+ of \d+ items$/.test(countOnly()),
+   `the overall count in the toolbar stays: "${countOnly()}"`);
 ok(headEls[0].querySelector(".boss-name").textContent.trim() === "Trash",
    `first header's boss-name is the boss, not the zone (got "${headEls[0].querySelector(".boss-name").textContent.trim()}")`);
 
@@ -1086,12 +1095,12 @@ ok(Object.keys(zatarList.notes).length === 177,
    people's lists now and zatar's is one of them, so "not in the guide" named a
    distinction that stopped being the site's organising idea. */
 {
-  const before = doc.getElementById("count").textContent;
+  const before = countOnly();
   click(chipByText("#phase-chips", "Phase 5"));
   const swpRows = [...doc.querySelectorAll("#results tr[data-id]")];
   ok(swpRows.length > 0, `Phase 5 still renders its rows (${swpRows.length})`);
   click(doc.getElementById("reset"));
-  ok(doc.getElementById("count").textContent === before, "and reset returns to the landing phase");
+  ok(countOnly() === before, "and reset returns to the landing phase");
 }
 
 // the four Bands of the Eternal land in Hyjal trash, and say what they really are
@@ -1103,16 +1112,10 @@ ok(bands.every((r) => /Scale of the Sands/.test(r.notes)),
    "and their notes say they are a reputation reward, not a drop");
 ok(bands.every((r) => r.unique), "each is unique-equipped, so no doubling up");
 
-// The priority itself is icons and operators only - no prose anywhere. The .prio-from
-// label is not priority content: it says where the ordering came from, and it is
-// discounted here rather than allowed for, so a genuine string leaking back into a
-// priority still fails this.
-const priorityText = (tr) => {
-  const cell = tr.children[3].cloneNode(true);
-  const from = cell.querySelector(".prio-from");
-  if (from) from.remove();
-  return cell.textContent;
-};
+// The priority itself is icons and operators only - no prose anywhere, and nothing is
+// discounted to make that true. It used to allow for a .prio-from "BIS" label on the
+// no-list view; that label is gone, so the column is now literally free of letters.
+const priorityText = (tr) => tr.children[3].textContent;
 const proseRows = [...doc.querySelectorAll("tbody tr")].filter((tr) => /[a-z]/i.test(priorityText(tr)));
 ok(proseRows.length === 0,
    `no free text left in any priority (found: ${proseRows.map((tr) => priorityText(tr).trim()).join(" | ")})`);
@@ -1482,7 +1485,7 @@ const seenTotals = [];
      `Phase ${n} lists loot rather than an empty-phase message (${rows().length} rows)`);
   /* and the count's denominator follows the phase rather than standing at the dataset
      total - unfiltered, every phase reads "N of N" */
-  const txt = doc.getElementById("count").textContent.trim();
+  const txt = countOnly();
   seenTotals.push(Number(txt.split(" of ")[1].replace(" items", "")));
   ok(txt === `${rows().length} of ${rows().length} items`,
      `Phase ${n} measures itself against itself: "${txt}"`);
@@ -1613,38 +1616,44 @@ const chipByTip = (sel, name) =>
 click(doc.getElementById("reset"));
 ok(doc.getElementById("class-chips") && doc.getElementById("spec-chips"),
    "class and spec chip rows exist");
-/* Who you are sits at the foot of the where-hierarchy: which phase, which zone, which
-   boss, who for. They are filters, and they spent a while in the refine panel on those
-   grounds; they read better as the last answer in that sequence. The cost is that this
-   panel is NOT sticky, so they scroll away - see the note beside the sticky assertion. */
-const wherePanel = doc.querySelector(".controls--where");
-ok(wherePanel.contains(doc.getElementById("class-chips")) &&
-   wherePanel.contains(doc.getElementById("spec-chips")),
-   "class and spec sit at the foot of the where-hierarchy");
-ok([...doc.querySelectorAll(".controls--where .control-row")].pop()
-     .contains(doc.querySelector(".who-inline")),
-   "as its last row, under the boss rail");
+/* Who you are is back in the STICKY panel. It sat under the where-hierarchy for a while,
+   which read well as the last answer in "which phase, which zone, which boss, who for" -
+   and cost the thing that matters more: these are filters you adjust while READING rows,
+   on a panel that scrolls away under 699 of them. This is that cost being paid back, and
+   it is the one thing this rework adds to the pinned bar rather than removing. */
+const refinePanel = doc.querySelector(".controls--refine");
+ok(refinePanel.contains(doc.getElementById("class-chips")) &&
+   refinePanel.contains(doc.getElementById("spec-chips")),
+   "class and spec sit in the sticky panel, with the filters they belong to");
+ok(!doc.querySelector(".controls--where #class-chips"),
+   "and no longer under the boss rail, where they scrolled away");
 ok(!doc.querySelector(".site-header #class-chips"),
    "and never in the banner, which answers a different question entirely");
 
 const rowClasses = [...doc.querySelectorAll(".controls--refine .control-row")]
   .map((r) => r.className.replace("control-row ", ""));
-/* TWO rows, not three. The picker had a row to itself, and its margin-left: auto left
-   ~700px of empty bar beside it while the filters packed against the left below - the bar
-   ran diagonally and the eye crossed it twice. It sits on the end of the filter row now.
-   Reset stays with the filters it clears rather than travelling with the picker. */
-ok(rowClasses.join(" > ") === "control-row--inputs > control-row--meta",
-   `the panel is the filter row then the count (${rowClasses.join(" > ")})`);
+/* Filters only, and the count folded onto the filter row as the one thing there that is
+   output rather than input. Two rows at rest, three while narrowing to specs - it pays a
+   row exactly when you are using it, and never a fourth. */
+ok(rowClasses.join(" > ") === "control-row--inputs > control-row--who > control-row--specs",
+   `the panel is filters, classes, specs (${rowClasses.join(" > ")})`);
+ok(rowClasses.length <= 3, `and never more than three rows (${rowClasses.length})`);
+ok(doc.querySelector(".control-row--inputs #count"),
+   "the count rides on the filter row rather than owning one");
 ok(doc.querySelector(".control-row--inputs").contains(doc.getElementById("reset")),
    "Reset stays with the filters it clears");
 
-/* The bug that nearly shipped with the merge: the warning is what decides whether the
-   zone fits beside the filters. In flow it added its own width to the zone and pushed it
-   onto a second line - reinstating the two rows this change removed, in precisely the
-   state it exists for. Out of flow it cannot. jsdom cannot measure, so pin the mechanism
-   and the reservation that replaces the space it no longer takes. */
-ok((cssText.split(".control-row--inputs:has(.list-warn")[1] || "").includes("padding-bottom"),
-   "the row reserves the warning's line itself, only while the warning is shown");
+/* This assertion used to pin a reservation rule holding the line for an absolutely
+   positioned warning. It kept passing after that warning moved into the header, because
+   it greps the STYLESHEET TEXT: it proved the rule existed, never that it still matched
+   anything. It matched nothing, and the pill spilled over the phase tiles for two
+   commits with the suite green.
+
+   The warning is in flow now, so there is no second rule to keep in sync - and the
+   assertion is that there is no such rule, which is a thing a text search can actually
+   establish. See test/edit-mode.mjs for the rest of it. */
+ok(!cssText.includes(":has(.list-warn"),
+   "nothing reserves space for the warning, because the warning takes its own");
 
 /* Prominence without spending the accent. --gold means "selected" everywhere on this
    page, and the design brief lists it as a colour that carries meaning - so the picker
@@ -1659,17 +1668,18 @@ ok(!/var\(--gold/.test(triggerRule) && !/var\(--fel/.test(triggerRule),
 ok(/font-weight:\s*600/.test(cssText.match(/\.list-trigger-name\s*\{[^}]*\}/)[0]),
    "the open list's name is set heavier than the fields around it");
 
-/* Three rules carry the geometry and jsdom lays nothing out, so they are pinned against
-   the stylesheet source - the same way the [hidden] guard is. The block stacks; it
-   anchors LEFT so class and spec share an edge and the spec strip grows right; and it no
-   longer pushes itself across the row, which is what made it grow the wrong way. */
-ok(/\.who-inline\s*\{[^}]*flex-direction:\s*column/.test(cssText),
-   "the who block stacks class over spec");
-const whoRule = cssText.match(/\.who-inline\s*\{[^}]*\}/)[0];
-ok(/align-items:\s*flex-start/.test(whoRule),
-   "anchored left, so the two strips share an edge and the spec strip grows right");
-ok(!/margin-left:\s*auto/.test(whoRule),
-   "and it no longer shoves itself to the right, which is what made it grow leftward");
+/* THE SPEC STRIP SCROLLS, IT DOES NOT SQUASH, and that takes three rules agreeing.
+   jsdom lays nothing out, so they are pinned against the stylesheet source the way the
+   [hidden] guard is - and the failure mode is the reason: without `flex: none` on the
+   icons, flex shrinks them below 26px and the strip LOOKS like it fits. Nothing about
+   the DOM would show that. */
+const bare = cssText.replace(/\/\*[\s\S]*?\*\//g, "");
+ok(/#spec-chips\s*\.chip,[\s\S]{0,120}flex:\s*none/.test(bare),
+   "the icons refuse to shrink, so the overflow is real rather than a squash");
+ok(/\.chips--who\s*\{[^}]*overflow-x:\s*auto/.test(bare),
+   "and the strip scrolls instead");
+ok(/\.chips--who\s*\{[^}]*flex-wrap:\s*nowrap/.test(bare),
+   "never wraps - flex prefers a new line to a shrunk item, so wrapping would take a fourth row");
 ok(/\.list-zone\s*\{[^}]*margin-left:\s*auto/.test(cssText),
    "the list zone is what pushes the pair over");
 ok(/\.field--grow\s*\{[^}]*flex:\s*0/.test(cssText),
@@ -1682,30 +1692,36 @@ ok(panels.map((p) => p.className.replace("controls ", "")).join(" > ") ===
    "controls--where > controls--refine",
    `panel order: ${panels.map((p) => p.className.replace("controls ", "")).join(" > ")}`);
 
-/* The picker and the Edit it arms lead the sticky bar, together. They were split for one
-   commit - picker under the boss rail, Edit down here - and that left a dead end: Edit is
-   disabled on someone else's list with title="Make a copy to edit", and Make a copy is
-   inside the picker's menu, which was then a panel away. */
-ok(doc.querySelector(".controls--refine").contains(doc.getElementById("template-bar")),
-   "the list picker sits in the sticky bar");
-ok(!doc.querySelector(".site-header #template-bar") &&
-   !doc.querySelector(".controls--where #template-bar"),
-   "and neither in the banner nor up with the where-hierarchy");
-const listRow = doc.querySelector(".control-row--inputs");
-ok(listRow.contains(doc.getElementById("template-bar")) &&
-   listRow.contains(doc.getElementById("edit-toggle")),
-   "the picker and Edit share a row - separating them is the defect this repairs");
-ok(listRow.lastElementChild === doc.querySelector(".list-zone"),
-   "and the zone is the end of that row, which is what its auto margin pushes it to");
+/* THE LIST CONTROLS ARE IN THE BANNER. The pinned bar had eleven things on it, and the
+   test for a place there is not "is this a filter" but "do I reach for this while
+   scrolling 699 rows" - which the picker fails: you need to KNOW which list is open
+   constantly and CHANGE it rarely. Which list you are reading and who you are signed in
+   as are the same kind of fact, so they sit together. */
+ok(doc.querySelector(".site-header-row").contains(doc.getElementById("template-bar")),
+   "the list picker sits in the banner, beside the account zone");
+ok(!doc.querySelector(".controls--refine #template-bar"),
+   "and no longer on the bar it was crowding");
+const zone = doc.querySelector(".list-zone");
+ok(zone.contains(doc.getElementById("template-bar")) &&
+   zone.contains(doc.getElementById("edit-toggle")),
+   "the picker and the Edit it arms stay together - separating them left a dead end once");
 
-/* Both are in the sticky panel, which is the point: Edit is pressed while reading rows,
-   and the picker's menu is where Make a copy lives. The strips gave that up in exchange -
-   they are up in the where panel now and will scroll away. */
+/* What makes the move viable: the count names the open list, so the bar that DOES stay on
+   screen still tells you which one you are reading. That was the thing missing when the
+   picker was moved out of the banner in the first place. */
+ok(doc.querySelector(".control-row--inputs .count-list"),
+   "the sticky bar still names the open list, which is what pays for the banner scrolling away");
+
+/* And what pays for Edit going with it: the banner scrolls away, so there has to be a way
+   out of edit mode from four hundred rows down. */
+ok(doc.getElementById("edit-pill"), "a fixed pill leaves edit mode from anywhere");
+ok(/\.edit-pill\s*\{[^}]*position:\s*fixed/.test(cssText),
+   "and it is fixed, not parked in a panel that scrolls");
+
 ok(/\.controls--refine\s*\{[^}]*position:\s*sticky/.test(cssText),
-   "and that bar is the sticky one, so both stay on screen");
-/* Signing in is about you, not about which list is open, so it did NOT come along. */
+   "the filter bar is still the sticky one");
 ok(doc.querySelector(".site-header .account-zone"),
-   "the account zone stays in the banner - it is not a list control");
+   "the account zone is still in the banner, beside the list zone now");
 
 /* One auto margin in that row. A second further along would split the free space and
    prise Edit away from the list it acts on, which is the defect .account-zone's own
@@ -1773,10 +1789,10 @@ const refine = doc.querySelector(".controls--refine");
 ok(["type-select", "slot-select", "search", "reset", "count"]
    .every((id) => refine.contains(doc.getElementById(id))),
    "type, slot, search, reset and the count all sit in the refine panel");
-ok(refine.querySelectorAll(".chips").length === 0,
-   "no chip rows left in it - class and spec moved up to the where panel");
-ok(doc.querySelectorAll(".controls--where .chips").length === 5,
-   "phase, zone, boss, class and spec are all chip rows up there");
+ok(refine.querySelectorAll(".chips").length === 2,
+   "the class and spec strips are in it - the filters you adjust while reading rows");
+ok(doc.querySelectorAll(".controls--where .chips").length === 3,
+   "and the where panel keeps the three that answer where it drops: phase, zone, boss");
 ok(refine.nextElementSibling === doc.getElementById("results"),
    "the refine panel sits directly above the results it narrows");
 ok(/\.controls--refine\s*\{[^}]*position:\s*sticky/.test(cssText) &&
@@ -2100,6 +2116,41 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
      `and no slot claims more BiS than it can hold (${over} groups over capacity)`);
 }
 
+// --- spec chips break by class, and the first group has no divider --------------------
+{
+  click(doc.getElementById("reset"));
+  click(chipByTip("#class-chips", "Warrior"));
+  click(chipByTip("#class-chips", "Mage"));
+
+  const groups = [...doc.querySelectorAll("#spec-chips .spec-group")];
+  ok(groups.length === 2, `one group per picked class (${groups.length})`);
+  ok(groups.map((g) => g.dataset.tip).join() === "Warrior,Mage",
+     `in the order the classes were picked (${groups.map((g) => g.dataset.tip).join()})`);
+  ok(groups.every((g) => g.children.length === 3),
+     "each holding that class's three specs");
+
+  /* The divider goes on `+ .spec-group`, so the FIRST group never gets one: a rule before
+     the first group divides nothing, and it would push the strip out of line with the
+     class strip above it. */
+  const bare2 = cssText.replace(/\/\*[\s\S]*?\*\//g, "");
+  /* anchored to the line start: unanchored, this matched the SECOND .spec-group in
+     ".spec-group + .spec-group {" and reported the divider as unconditional */
+  ok(!/^\.spec-group\s*\{[^}]*border-left/m.test(bare2),
+     "the divider is not on every group");
+  ok(/\.spec-group\s*\+\s*\.spec-group\s*\{[^}]*border-left/.test(bare2),
+     "it is on the gap BETWEEN groups, so the first has none and the strip stays aligned");
+
+  /* Two clicks in one tick both land. This cannot regress into the stale-closure bug a
+     framework would have here: update() re-renders synchronously and state.classes is
+     mutated in place rather than replaced from a captured copy. */
+  click(doc.getElementById("reset"));
+  const a = chipByTip("#class-chips", "Warrior"), b = chipByTip("#class-chips", "Mage");
+  click(a); click(b);
+  ok(/class=Warrior%2CMage|class=Warrior,Mage/.test(window.location.hash),
+     `picking two classes in the same tick leaves both selected (${window.location.hash})`);
+  click(doc.getElementById("reset"));
+}
+
 // --- with no list open, the column shows what the BiS data knows ----------------------
 /* Rings hang off spec icons in the priority column, so with no list there were no icons -
    1,889 BiS entries and the BIS FROM control had nothing to show, while bisOnlyMatch()
@@ -2136,9 +2187,13 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
      `every separator is "?", not ranked against (${viewOps.length})`);
   ok(viewOps.every((o) => /not ranked/i.test(o.dataset.tip || "")),
      "and says so on hover rather than leaving a bare glyph");
-  ok([...bd.querySelectorAll(".prio-from")].length > 0 &&
-     [...bd.querySelectorAll(".prio-from")].every((n) => n.textContent === "BIS"),
-     "and a quiet BIS label says what you are looking at, the same way on every row");
+  /* A quiet "BIS" label used to sit in front of these icons. It was one of three things
+     keeping the view from reading as a ranking, and the other two have not moved - but
+     the first of the three was "no operators at all", and "?" replaced that with a
+     louder signal saying the same thing in the same words its tooltip uses. The label
+     was left over from a version of this view that no longer exists. */
+  ok([...bd.querySelectorAll("td.col-prio")].every((c) => !/[a-z]/i.test(c.textContent)),
+     "and no prose labels it - the ? operators carry that claim on their own");
 
   /* An item BiS for nobody has nothing to show, so it stays genuinely empty. */
   const bisIds = new Set(Object.values(bis.specs)
@@ -2149,15 +2204,23 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
      "an item that is BiS for nobody shows nothing at all");
 
   /* A source with no data for this phase empties it, which is what makes the control
-     visibly honest rather than apparently broken. */
-  const sel = bd.getElementById("bis-source");
-  sel.value = "wowsims";
-  sel.dispatchEvent(new bare.window.Event("change"));
-  await until(() => icons() === 0);
+     visibly honest rather than apparently broken.
+
+     Driven through the account menu, which is where the source lives since the bar
+     rework - the <select id="bis-source"> it used to set is gone. That deletion left
+     this line setting .value on null, and smoke.mjs exited HERE, 31 assertions early,
+     while a grep for "FAIL" still reported a clean run. Use `npm test`: it chains on
+     exit codes and would have said so. */
+  const pickSource = async (id, want) => {
+    bd.getElementById("account").dispatchEvent(new bare.window.MouseEvent("click", { bubbles: true }));
+    await until(() => bd.querySelector(`.acct-item--src[data-src="${id}"]`));
+    bd.querySelector(`.acct-item--src[data-src="${id}"]`)
+      .dispatchEvent(new bare.window.MouseEvent("click", { bubbles: true }));
+    await until(want);
+  };
+  await pickSource("wowsims", () => icons() === 0);
   ok(icons() === 0, "switching to a source with no data for this phase empties the column");
-  sel.value = "wowhead";
-  sel.dispatchEvent(new bare.window.Event("change"));
-  await until(() => icons() > 100);
+  await pickSource("wowhead", () => icons() > 100);
 
   /* Opening a list replaces the view with what the list says - including saying nothing. */
   bd.getElementById("list-trigger").dispatchEvent(new bare.window.MouseEvent("click", { bubbles: true }));
@@ -2165,8 +2228,13 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
     .dispatchEvent(new bare.window.MouseEvent("click", { bubbles: true }));
   await until(() => bd.getElementById("list-trigger-name").textContent === "Zatar's Phase 3");
 
-  ok(bd.querySelectorAll(".prio-from").length === 0,
-     "opening a list replaces the BiS view with the list's own ordering");
+  /* The view is detected by what it draws, now that it carries no label of its own:
+     with a list open, an item the list does not rank has an empty cell, where the BiS
+     view would have filled it. */
+  const listOps = [...bd.querySelectorAll("td.col-prio .prio-op")].map((o) => o.textContent);
+  ok(listOps.length > 0 && listOps.some((o) => o !== "?"),
+     "opening a list replaces the BiS view with the list's own ordering - real operators, "
+     + `not the view's uniform ? (${[...new Set(listOps)].join(" ")})`);
   const unranked = [...bd.querySelectorAll("tbody tr[data-id]")]
     .find((tr) => !zatarList.priorities[tr.dataset.id]);
   ok(unranked && unranked.children[3].querySelectorAll("img").length === 0,
@@ -2179,17 +2247,36 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
    chosen source actually holds rather than falling back to the other one. */
 {
   click(doc.getElementById("reset"));
-  const sel = doc.getElementById("bis-source");
-  ok(sel, "there is a BiS data source control");
-  ok([...sel.options].map((o) => o.value).join() === "wowhead,wowsims,custom",
-     `it offers the three sources (${[...sel.options].map((o) => o.value).join()})`);
-  ok(sel.value === "wowhead", "and defaults to Wowhead, the only complete one");
+
+  /* It lives in the account menu now, not in a <select> on the bar. The menu is always
+     present - signed out it is labelled Settings - because this is the page's one true
+     setting and a preference living behind a login would be homeless for exactly the
+     people the site is for. */
+  const openAcct = () => click(doc.getElementById("account"));
+  const srcItems = () => [...doc.querySelectorAll(".acct-item--src")];
+  openAcct();
+  ok(srcItems().length === 3, `there is a BiS data source control (${srcItems().length} options)`);
+  ok(srcItems().map((b) => b.dataset.src).join() === "wowhead,wowsims,custom",
+     `it offers the three sources (${srcItems().map((b) => b.dataset.src).join()})`);
+  ok(srcItems().find((b) => b.dataset.src === "wowhead").getAttribute("aria-checked") === "true",
+     "and defaults to Wowhead, the only complete one");
+
+  /* The sublines are the point: the sources are wildly asymmetric, and the bare <select>
+     never said so - which is why choosing WoWSims on a Phase 3 page read as broken
+     rather than empty. */
+  ok(srcItems().every((b) => (b.querySelector(".acct-src-note") || {}).textContent),
+     "each says what it costs, so an empty column reads as coverage rather than a fault");
+  click(doc.getElementById("account"));
 
   const rings = () => doc.querySelectorAll(".spec-icon--bis, .spec-icon--bis2, .spec-icon--bis3").length;
   const withWowhead = rings();
   ok(withWowhead > 50, `Wowhead rings the Phase 3 rows (${withWowhead})`);
 
-  const pick = (v) => { sel.value = v; sel.dispatchEvent(new window.Event("change")); };
+  const pick = (v) => {
+    openAcct();
+    srcItems().find((b) => b.dataset.src === v).dispatchEvent(
+      new window.MouseEvent("click", { bubbles: true }));
+  };
 
   /* wowsims holds P4 and P5 only, so on Phase 3 it has nothing to say. Showing no rings
      is the honest answer - quietly falling back to Wowhead would make the control a lie. */
