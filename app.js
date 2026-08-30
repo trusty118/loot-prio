@@ -747,7 +747,6 @@
     specRow: document.getElementById("spec-row"),
     type: document.getElementById("type-select"),
     slot: document.getElementById("slot-select"),
-    bisSource: document.getElementById("bis-source"),
     search: document.getElementById("search"),
     reset: document.getElementById("reset"),
     count: document.getElementById("count"),
@@ -763,6 +762,7 @@
     accountName: document.getElementById("account-name"),
     shareTrigger: document.getElementById("share-trigger"),
     seedBis: document.getElementById("seed-bis"),
+    editPill: document.getElementById("edit-pill"),
     editMsg: document.getElementById("edit-msg"),
     editHint: document.getElementById("edit-hint"),
     refine: document.querySelector(".controls--refine")
@@ -917,12 +917,12 @@
      Wowhead is the default because it is the only source that is complete - all five
      phases, all 28 specs. See BIS_SOURCES for what the others hold. */
   var BIS_SOURCES = [
-    { id: "wowhead", label: "Wowhead" },
-    { id: "wowsims", label: "WoWSims" },
+    { id: "wowhead", label: "Wowhead", covers: "all 28 specs, every phase" },
+    { id: "wowsims", label: "WoWSims presets", covers: "20 specs, Phase 4-5 only" },
     /* Reserved. Choosing it shows no rings at all, which is the honest rendering of
        "you have not supplied any BiS data yet" - the alternative is a menu entry that
        silently does nothing, which reads as broken rather than as unbuilt. */
-    { id: "custom", label: "Custom (not set up)" }
+    { id: "custom", label: "Custom", covers: "not set up yet - no rings" }
   ];
 
   function bisSource() {
@@ -2058,8 +2058,16 @@
     });
     el.specChips.appendChild(all);
 
-    /* grouped by the class order of the row above, not by the registry's spec order */
+    /* Grouped by the class order of the row above, not by the registry's spec order -
+       and now grouped in the DOM as well, one .spec-group per class. With several picked
+       the row was one undifferentiated run: three Warrior specs butting straight against
+       three Mage specs, with the grouping only in the order. The break is what makes it
+       readable, and the group carries the class name so a hovered gap says whose it is. */
     state.classes.forEach(function (cls) {
+      var group = document.createElement("div");
+      group.className = "spec-group";
+      group.dataset.tip = (REG.classes[cls] || {}).name || cls;
+
       Object.keys(REG.specs).forEach(function (id) {
         var spec = REG.specs[id];
         if (spec["class"] !== cls) return;
@@ -2076,8 +2084,10 @@
           }
           update();
         });
-        el.specChips.appendChild(c);
+        group.appendChild(c);
       });
+
+      if (group.children.length) el.specChips.appendChild(group);
     });
 
     /* Only offered once a spec is picked: bis.json is keyed by spec, and a
@@ -3314,7 +3324,18 @@
 
   function renderResults() {
     var rows = filtered();
+    /* "195 of 195 items - My list". The list's name rides on the count because the
+       picker sits in the banner now and the banner scrolls away: this line does not, so
+       it is what keeps you from losing track of which list you are reading. A span
+       rather than more text, so the name can be dimmer and read as a caption. */
     el.count.textContent = rows.length + " of " + phaseTotal() + " items";
+    var openName = activeTemplate ? activeTemplate.name : "No list";
+    var who = document.createElement("span");
+    who.className = "count-list";
+    /* the separator is a text node, not a CSS ::before - this line is aria-live, and a
+       generated separator would have it read "195 of 195 itemsMy list" */
+    who.textContent = " \u00b7 " + openName;
+    el.count.appendChild(who);
     el.results.innerHTML = "";
 
     if (!rows.length) {
@@ -3445,36 +3466,98 @@
     acctMenu = document.createElement("div");
     acctMenu.className = "acct-menu";
     acctMenu.setAttribute("role", "menu");
-    acctMenu.setAttribute("aria-label", "Account");
+    acctMenu.setAttribute("aria-label", "Account and settings");
     acctMenu.style.display = "none";
-
-    /* Who you are, stated rather than actionable - the button that opened this shows a
-       name, and a menu whose first line repeats it without saying what it is reads as a
-       thing you should click. */
-    var who = document.createElement("div");
-    who.className = "acct-who";
-    var w1 = document.createElement("span");
-    w1.className = "acct-who-label";
-    w1.textContent = "Signed in as";
-    var w2 = document.createElement("span");
-    w2.className = "acct-who-name";
-    who.appendChild(w1);
-    who.appendChild(w2);
-    acctMenu.appendChild(who);
-
-    var out = document.createElement("button");
-    out.type = "button";
-    out.className = "acct-item";
-    out.setAttribute("role", "menuitem");
-    out.textContent = "Sign out";
-    out.addEventListener("click", function () { closeAcctMenu(); signOut(); });
-    acctMenu.appendChild(out);
-
     acctMenu.addEventListener("keydown", function (e) {
       if (e.key === "Escape") { e.preventDefault(); closeAcctMenu(); el.account.focus(); }
     });
-
     document.body.appendChild(acctMenu);
+  }
+
+  /* Rebuilt on each open rather than toggled in place: what belongs here depends on
+     whether you are signed in, and on whether signing in is even possible. */
+  function renderAcctMenu() {
+    acctMenu.innerHTML = "";
+
+    if (signedIn()) {
+      /* Who you are, stated rather than actionable - the button that opened this shows a
+         name, and a menu whose first line repeats it without saying what it is reads as
+         a thing you should click. */
+      var who = document.createElement("div");
+      who.className = "acct-who";
+      var w1 = document.createElement("span");
+      w1.className = "acct-who-label";
+      w1.textContent = "Signed in as";
+      var w2 = document.createElement("span");
+      w2.className = "acct-who-name";
+      w2.textContent = accountName();
+      who.appendChild(w1);
+      who.appendChild(w2);
+      acctMenu.appendChild(who);
+
+      var out = document.createElement("button");
+      out.type = "button";
+      out.className = "acct-item";
+      out.setAttribute("role", "menuitem");
+      out.textContent = "Sign out";
+      out.addEventListener("click", function () { closeAcctMenu(); signOut(); });
+      acctMenu.appendChild(out);
+      acctMenu.appendChild(document.createElement("hr"));
+    }
+
+    /* BIS DATA SOURCE, and the sublines are the point. The two sources are wildly
+       asymmetric - Wowhead has every phase and all 28 specs, wowsims has Phase 4-5 for
+       20 - and the bare <select> this replaces never said so, which is why choosing
+       wowsims on a Phase 3 page read as broken rather than as empty. The numbers come
+       from the table in CLAUDE.md section 2. */
+    var head = document.createElement("div");
+    head.className = "acct-section";
+    head.textContent = "BiS data source";
+    acctMenu.appendChild(head);
+
+    BIS_SOURCES.forEach(function (src) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "acct-item acct-item--src";
+      b.setAttribute("role", "menuitemradio");
+      b.setAttribute("aria-checked", state.bisSource === src.id ? "true" : "false");
+      b.dataset.src = src.id;
+
+      var tick = document.createElement("span");
+      tick.className = "acct-tick";
+      tick.textContent = state.bisSource === src.id ? "\u2713" : "";
+      var name = document.createElement("span");
+      name.className = "acct-src-name";
+      name.textContent = src.label;
+      var note = document.createElement("span");
+      note.className = "acct-src-note";
+      note.textContent = src.covers;
+
+      b.appendChild(tick);
+      b.appendChild(name);
+      b.appendChild(note);
+      b.addEventListener("click", function () {
+        state.bisSource = src.id;
+        setBisSource(src.id);
+        closeAcctMenu();
+        update();
+      });
+      acctMenu.appendChild(b);
+    });
+
+    /* Signing in lives here too when it is possible, so the menu is one place rather
+       than two. It is still ALSO a button on the bar - that is the call to action, and
+       burying it would make the upgrade harder to find than the setting. */
+    if (supabaseReady() && !signedIn()) {
+      acctMenu.appendChild(document.createElement("hr"));
+      var inBtn = document.createElement("button");
+      inBtn.type = "button";
+      inBtn.className = "acct-item";
+      inBtn.setAttribute("role", "menuitem");
+      inBtn.textContent = "Sign in with Discord";
+      inBtn.addEventListener("click", function () { closeAcctMenu(); signIn(); });
+      acctMenu.appendChild(inBtn);
+    }
   }
 
   function toggleAcctMenu() {
@@ -3482,7 +3565,7 @@
     if (acctMenu.style.display === "block") { closeAcctMenu(); return; }
     closePop();                       /* only one overlay at a time */
     closeOpMenu();
-    acctMenu.querySelector(".acct-who-name").textContent = accountName();
+    renderAcctMenu();
     acctMenu.style.display = "block";
     el.account.setAttribute("aria-expanded", "true");
     placeUnder(acctMenu, el.account);
@@ -3650,6 +3733,8 @@
     }
     el.editToggle.setAttribute("aria-pressed", state.editing ? "true" : "false");
     el.editToggle.textContent = state.editing ? "Done editing" : "Edit priorities";
+    /* the fourth signal, and the only one reachable from the bottom of the table */
+    show(el.editPill, state.editing);
 
     /* Three signals for the armed state, because a mode that changes what a click does
        should be impossible to be in without noticing: the button fills, the bar it sits
@@ -3665,13 +3750,25 @@
     /* No sign-in button at all when it could not work - an unconfigured project or a
        blocked CDN should read as "this site has no accounts", not as a broken button. */
     show(el.signIn, supabaseReady() && !signedIn());
-    show(el.account, supabaseReady() && signedIn());
+
+    /* The menu is ALWAYS here, whatever Supabase is doing, because it holds a setting
+       that has nothing to do with accounts: which BiS data the rings come from. It is
+       per-browser, deliberately out of the url, and set about once - and CLAUDE.md is
+       explicit that signed out is the whole product rather than a trial, so a preference
+       that lives only behind a login has nowhere to live for exactly the people the site
+       is for. Signed in it is the account button and says your name; otherwise it says
+       Settings and holds the source alone. One mechanism either way. */
+    show(el.account, true);
 
     if (signedIn()) {
       if (el.accountName) el.accountName.textContent = accountName();
       renderAvatar();
-    } else {
-      closeAcctMenu();
+    } else if (el.accountName) {
+      /* Signed out it is a settings button and nothing more. The avatar has to be taken
+         off by hand: renderAvatar() adds an <img> that no re-render removes. */
+      el.accountName.textContent = "Settings";
+      var stale = el.account.querySelector(".account-avatar");
+      if (stale) stale.remove();
     }
 
     if (listMenu && listMenu.style.display === "block") renderListMenu();
@@ -4184,6 +4281,13 @@
 
     if (el.seedBis) {
       el.seedBis.addEventListener("click", function () { seedFromBis(); });
+    }
+
+    if (el.editPill) {
+      el.editPill.addEventListener("click", function () {
+        state.editing = false;
+        update();
+      });
     }
 
     if (el.shareTrigger) {

@@ -194,7 +194,12 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   const w = boot();
   await settle(() => w.document.querySelector("tbody tr"));
   ok(!shown(w, "sign-in"), "no project configured -> no sign-in button, rather than a broken one");
-  ok(!shown(w, "sign-out") && !shown(w, "account"), "and nothing claiming you are signed in");
+  /* The menu button is always there - it holds the BiS source, which has nothing to do
+     with accounts and must stay reachable when Supabase cannot be reached at all. What
+     it must not do is claim you are signed in. */
+  ok(!shown(w, "sign-out"), "and nothing claiming you are signed in");
+  ok(shown(w, "account") && $(w, "account-name").textContent === "Settings",
+     "the menu is still there, as settings - the BiS source lives in it");
   ok(w.document.querySelectorAll("#results tr[data-id]").length > 0,
      "and the page still renders every row, which is the whole fail-soft promise");
 }
@@ -323,8 +328,10 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   // 7. signing out returns you to this browser's lists, losing nothing either side
   const m2 = openAcct(w);
   [...m2.querySelectorAll(".acct-item")].find((b) => b.textContent === "Sign out").click();
-  await settle(() => shown(w, "sign-in") && !shown(w, "account"));
-  ok(shown(w, "sign-in") && !shown(w, "account"), "signing out returns the sign-in button");
+  await settle(() => shown(w, "sign-in") && $(w, "account-name").textContent === "Settings");
+  ok(shown(w, "sign-in"), "signing out returns the sign-in button");
+  ok($(w, "account-name").textContent === "Settings",
+     "and the menu drops back to plain settings rather than still naming you");
   ok(sdk._rows.size === 1, "the account keeps its lists");
   ok(w.localStorage.getItem("lootprio.templates") === localBefore, "and this browser keeps its own");
 }

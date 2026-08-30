@@ -1179,6 +1179,52 @@ current if any of those change.
   fails to construct leaves a working select rather than nothing. Arrow keys, Home/End, Enter
   and Escape all had to be written by hand — that is what a native select gives away for free
   and what replacing one costs.
+- **The list controls live in the banner; the refine bar is filters only, Aug 2026.** The
+  pinned bar had eleven things on it, and the test for a place there is not *"is this a
+  filter"* but **"do I reach for this while scrolling 699 rows"**. The picker fails it:
+  which list is open is something you need to **know** constantly and **change** rarely.
+
+  **This reverses the earlier move, and what makes it viable is the count line.** It now
+  reads `195 of 195 items · My list` — so the bar that *does* stay on screen still says
+  which list you are reading. That was the thing missing when the picker was moved out.
+  The separator is a text node, not a CSS `::before`: the line is `aria-live`, and a
+  generated separator has it read "195 of 195 itemsMy list".
+
+  **`#edit-toggle` went with it, and `#edit-pill` is what pays for that** — fixed,
+  bottom-right, present only while armed. The banner scrolls away, so without it there is
+  no way out of edit mode from four hundred rows down. A control that appears *for* a mode
+  is expected; it is not the reflow defect this section warns about.
+
+  **The class and spec strips moved the other way, into the sticky panel.** They were at
+  the foot of the where-hierarchy, which read well and cost the thing that matters more:
+  they are filters you adjust *while reading rows*. Two rows at rest, three while narrowing
+  to specs — it pays a row exactly when you are using it, and never a fourth.
+
+  **The spec strip scrolls; it must not squash.** Three rules agree and the failure is
+  invisible: without `flex: none` on the icons, flex shrinks them below 26px and the strip
+  *looks* like it fits. `overflow-x: auto` gives it somewhere to go, and `flex-wrap: nowrap`
+  is required because flex prefers a new line to a shrunk item — a wrapping row takes a
+  fourth line instead of ever scrolling. All three pinned against the stylesheet source,
+  since jsdom lays nothing out.
+
+  **Spec chips group by class**, one `.spec-group` each, with the divider on
+  `+ .spec-group` so the **first has none** — a rule before the first group divides nothing
+  and pushes the strip out of line with the class strip above.
+
+- **`BiS from` lives in the account menu, which is always present.** It is the page's one
+  true setting: per-browser, out of the url, set about once. Each option carries what it
+  costs — *Wowhead, all 28 specs, every phase* against *WoWSims presets, 20 specs, Phase 4–5
+  only* — because the sources are wildly asymmetric and the bare `<select>` never said so,
+  which is why choosing WoWSims on a Phase 3 page read as broken rather than empty.
+
+  **The menu is not tied to auth**, and that is the part worth keeping. Signed in it is the
+  account button; otherwise it says `Settings` and holds the source alone. The account zone
+  is empty when Supabase is unreachable — `show(el.signIn, supabaseReady() && !signedIn())`
+  — so a preference living only behind a login would have nowhere to go for exactly the
+  people §4 says the site is for. `Sign in with Discord` stays a button on the bar as well:
+  that is the call to action, and burying it would make the upgrade harder to find than the
+  setting.
+
 - **Two control panels**: `.controls--where` (phase → zone → boss) and `.controls--refine` —
   everything that narrows the table, which is type, slot, search **and who you are**. Class
   and spec used to have a panel of their own at the top; they are filters, so they belong

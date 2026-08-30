@@ -588,7 +588,14 @@ ok(!el(d3, "edit-toggle").disabled, "now it is yours and editable");
   const bar = d6.querySelector(".controls--refine");
   const tog = el(d6, "edit-toggle");
 
-  ok(bar.contains(tog), "Edit sits in the sticky refine bar, above the rows it acts on");
+  /* Edit moved to the banner with the rest of the list controls: the pinned bar had
+     eleven things on it, and the test for a place there is "do I reach for this while
+     scrolling 699 rows". What pays for it is #edit-pill - fixed, bottom right, present
+     only while armed - because the banner scrolls away and there has to be a way out of
+     the mode from four hundred rows down. */
+  ok(d6.querySelector(".site-header-row").contains(tog),
+     "Edit sits with the list it acts on, in the banner");
+  ok(el(d6, "edit-pill"), "and a fixed pill is what gets you out of the mode from anywhere");
   ok(!d6.querySelector(".template-bar").contains(tog),
      "and not in the banner, which answers which list rather than change these calls");
 
