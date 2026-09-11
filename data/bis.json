@@ -30,7 +30,8 @@
    "P2": [
     {
      "id": 28766,
-     "item": "Ruby Drape of the Mysticant"
+     "item": "Ruby Drape of the Mysticant",
+     "bis": "multiPhase"
     },
     {
      "id": 30107,
@@ -52,7 +53,8 @@
     },
     {
      "id": 28753,
-     "item": "Ring of Recurrence"
+     "item": "Ring of Recurrence",
+     "bis": "multiPhase"
     },
     {
      "id": 30095,
@@ -76,18 +78,21 @@
     {
      "id": 32590,
      "item": "Nethervoid Cloak",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "multiPhase",
-     "variant": "haste"
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 32331,
      "item": "Cloak of the Illidari Council",
-     "variant": "crit"
+     "variant": "crit",
+     "conditional": true
     },
     {
      "id": 30107,
@@ -103,12 +108,14 @@
      "id": 30888,
      "item": "Anetheron's Noose",
      "bis": "multiPhase",
-     "variant": "spellpower"
+     "variant": "spellpower",
+     "conditional": true
     },
     {
      "id": 32256,
      "item": "Waistwrap of Infinity",
-     "variant": "haste"
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 30916,
@@ -119,7 +126,8 @@
     {
      "id": 32367,
      "item": "Leggings of Devastation",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32239,
@@ -161,41 +169,52 @@
    "P4": [
     {
      "id": 32524,
-     "item": "Shroud of the Highborne"
+     "item": "Shroud of the Highborne",
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 30107,
-     "item": "Vestments of the Sea-Witch"
+     "item": "Vestments of the Sea-Witch",
+     "bis": "multiPhase"
     },
     {
      "id": 32586,
-     "item": "Bracers of Nimble Thought"
+     "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
     },
     {
      "id": 30888,
-     "item": "Anetheron's Noose"
+     "item": "Anetheron's Noose",
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 32256,
      "item": "Waistwrap of Infinity",
-     "near": true
+     "near": true,
+     "conditional": true
     },
     {
      "id": 30916,
-     "item": "Leggings of Channeled Elements"
+     "item": "Leggings of Channeled Elements",
+     "bis": "multiPhase"
     },
     {
      "id": 32367,
      "item": "Leggings of Devastation",
-     "near": true
+     "near": true,
+     "conditional": true
     },
     {
      "id": 32239,
-     "item": "Slippers of the Seacaller"
+     "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
     },
     {
      "id": 32349,
-     "item": "Translucent Spellthread Necklace"
+     "item": "Translucent Spellthread Necklace",
+     "bis": "multiPhase"
     },
     {
      "id": 33281,
@@ -208,7 +227,8 @@
     },
     {
      "id": 32527,
-     "item": "Ring of Ancient Knowledge"
+     "item": "Ring of Ancient Knowledge",
+     "bis": "multiPhase"
     },
     {
      "id": 32247,
@@ -226,19 +246,23 @@
     },
     {
      "id": 30910,
-     "item": "Tempest of Chaos"
+     "item": "Tempest of Chaos",
+     "bis": "multiPhase"
     },
     {
      "id": 32374,
-     "item": "Zhar'doom, Greatstaff of the Devourer"
+     "item": "Zhar'doom, Greatstaff of the Devourer",
+     "bis": "multiPhase"
     },
     {
      "id": 30872,
-     "item": "Chronicle of Dark Secrets"
+     "item": "Chronicle of Dark Secrets",
+     "bis": "multiPhase"
     },
     {
      "id": 29982,
-     "item": "Wand of the Forgotten Star"
+     "item": "Wand of the Forgotten Star",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -280,7 +304,8 @@
     },
     {
      "id": 32483,
-     "item": "The Skull of Gul'dan"
+     "item": "The Skull of Gul'dan",
+     "bis": "expansion"
     },
     {
      "id": 33829,
@@ -327,7 +352,8 @@
     {
      "id": 28585,
      "item": "Ruby Slippers",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28762,
@@ -336,7 +362,8 @@
     {
      "id": 28530,
      "item": "Brooch of Unquenchable Fury",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28785,
@@ -450,7 +477,8 @@
     },
     {
      "id": 30720,
-     "item": "Serpent-Coil Braid"
+     "item": "Serpent-Coil Braid",
+     "bis": "multiPhase"
     },
     {
      "id": 32483,
@@ -474,7 +502,8 @@
     },
     {
      "id": 28783,
-     "item": "Eredar Wand of Obliteration"
+     "item": "Eredar Wand of Obliteration",
+     "bis": "multiPhase"
     }
    ],
    "P4": [
@@ -484,7 +513,8 @@
     },
     {
      "id": 30870,
-     "item": "Cuffs of Devastation"
+     "item": "Cuffs of Devastation",
+     "bis": "multiPhase"
     },
     {
      "id": 32586,
@@ -493,15 +523,18 @@
     },
     {
      "id": 30888,
-     "item": "Anetheron's Noose"
+     "item": "Anetheron's Noose",
+     "bis": "multiPhase"
     },
     {
      "id": 30916,
-     "item": "Leggings of Channeled Elements"
+     "item": "Leggings of Channeled Elements",
+     "bis": "multiPhase"
     },
     {
      "id": 32239,
-     "item": "Slippers of the Seacaller"
+     "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
     },
     {
      "id": 33281,
@@ -509,7 +542,8 @@
     },
     {
      "id": 32527,
-     "item": "Ring of Ancient Knowledge"
+     "item": "Ring of Ancient Knowledge",
+     "bis": "multiPhase"
     },
     {
      "id": 33497,
@@ -526,15 +560,18 @@
     },
     {
      "id": 32374,
-     "item": "Zhar'doom, Greatstaff of the Devourer"
+     "item": "Zhar'doom, Greatstaff of the Devourer",
+     "bis": "multiPhase"
     },
     {
      "id": 30910,
-     "item": "Tempest of Chaos"
+     "item": "Tempest of Chaos",
+     "bis": "multiPhase"
     },
     {
      "id": 30872,
-     "item": "Chronicle of Dark Secrets"
+     "item": "Chronicle of Dark Secrets",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -557,7 +594,8 @@
     },
     {
      "id": 29305,
-     "item": "Band of the Eternal Sage"
+     "item": "Band of the Eternal Sage",
+     "bis": "expansion"
     },
     {
      "id": 34429,
@@ -565,7 +603,8 @@
     },
     {
      "id": 32483,
-     "item": "The Skull of Gul'dan"
+     "item": "The Skull of Gul'dan",
+     "bis": "expansion"
     },
     {
      "id": 33829,
@@ -667,11 +706,13 @@
     },
     {
      "id": 28753,
-     "item": "Ring of Recurrence"
+     "item": "Ring of Recurrence",
+     "bis": "multiPhase"
     },
     {
      "id": 28770,
-     "item": "Nathrezim Mindblade"
+     "item": "Nathrezim Mindblade",
+     "bis": "multiPhase"
     },
     {
      "id": 29988,
@@ -751,7 +792,8 @@
    "P4": [
     {
      "id": 32524,
-     "item": "Shroud of the Highborne"
+     "item": "Shroud of the Highborne",
+     "bis": "multiPhase"
     },
     {
      "id": 32331,
@@ -760,7 +802,8 @@
     },
     {
      "id": 32586,
-     "item": "Bracers of Nimble Thought"
+     "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
     },
     {
      "id": 30888,
@@ -768,11 +811,13 @@
     },
     {
      "id": 30916,
-     "item": "Leggings of Channeled Elements"
+     "item": "Leggings of Channeled Elements",
+     "bis": "multiPhase"
     },
     {
      "id": 32239,
-     "item": "Slippers of the Seacaller"
+     "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
     },
     {
      "id": 33281,
@@ -780,11 +825,13 @@
     },
     {
      "id": 32527,
-     "item": "Ring of Ancient Knowledge"
+     "item": "Ring of Ancient Knowledge",
+     "bis": "multiPhase"
     },
     {
      "id": 29305,
-     "item": "Band of the Eternal Sage"
+     "item": "Band of the Eternal Sage",
+     "bis": "multiPhase"
     },
     {
      "id": 33497,
@@ -802,7 +849,8 @@
     },
     {
      "id": 32237,
-     "item": "The Maelstrom's Fury"
+     "item": "The Maelstrom's Fury",
+     "bis": "multiPhase"
     },
     {
      "id": 34009,
@@ -816,11 +864,13 @@
     },
     {
      "id": 32374,
-     "item": "Zhar'doom, Greatstaff of the Devourer"
+     "item": "Zhar'doom, Greatstaff of the Devourer",
+     "bis": "multiPhase"
     },
     {
      "id": 30872,
-     "item": "Chronicle of Dark Secrets"
+     "item": "Chronicle of Dark Secrets",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -862,7 +912,8 @@
     },
     {
      "id": 32483,
-     "item": "The Skull of Gul'dan"
+     "item": "The Skull of Gul'dan",
+     "bis": "expansion"
     },
     {
      "id": 34336,
@@ -916,7 +967,8 @@
    "P2": [
     {
      "id": 28766,
-     "item": "Ruby Drape of the Mysticant"
+     "item": "Ruby Drape of the Mysticant",
+     "bis": "multiPhase"
     },
     {
      "id": 30107,
@@ -938,7 +990,8 @@
     },
     {
      "id": 28753,
-     "item": "Ring of Recurrence"
+     "item": "Ring of Recurrence",
+     "bis": "multiPhase"
     },
     {
      "id": 30095,
@@ -962,18 +1015,21 @@
     {
      "id": 32590,
      "item": "Nethervoid Cloak",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "multiPhase",
-     "variant": "haste"
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 32331,
      "item": "Cloak of the Illidari Council",
-     "variant": "crit"
+     "variant": "crit",
+     "conditional": true
     },
     {
      "id": 30107,
@@ -989,12 +1045,14 @@
      "id": 30888,
      "item": "Anetheron's Noose",
      "bis": "multiPhase",
-     "variant": "spellpower"
+     "variant": "spellpower",
+     "conditional": true
     },
     {
      "id": 32256,
      "item": "Waistwrap of Infinity",
-     "variant": "haste"
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 30916,
@@ -1005,7 +1063,8 @@
     {
      "id": 32367,
      "item": "Leggings of Devastation",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32239,
@@ -1052,41 +1111,52 @@
    "P4": [
     {
      "id": 32524,
-     "item": "Shroud of the Highborne"
+     "item": "Shroud of the Highborne",
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 30107,
-     "item": "Vestments of the Sea-Witch"
+     "item": "Vestments of the Sea-Witch",
+     "bis": "multiPhase"
     },
     {
      "id": 32586,
-     "item": "Bracers of Nimble Thought"
+     "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
     },
     {
      "id": 30888,
-     "item": "Anetheron's Noose"
+     "item": "Anetheron's Noose",
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 32256,
      "item": "Waistwrap of Infinity",
-     "near": true
+     "near": true,
+     "conditional": true
     },
     {
      "id": 30916,
-     "item": "Leggings of Channeled Elements"
+     "item": "Leggings of Channeled Elements",
+     "bis": "multiPhase"
     },
     {
      "id": 32367,
      "item": "Leggings of Devastation",
-     "near": true
+     "near": true,
+     "conditional": true
     },
     {
      "id": 32239,
-     "item": "Slippers of the Seacaller"
+     "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
     },
     {
      "id": 32349,
-     "item": "Translucent Spellthread Necklace"
+     "item": "Translucent Spellthread Necklace",
+     "bis": "multiPhase"
     },
     {
      "id": 33281,
@@ -1099,7 +1169,8 @@
     },
     {
      "id": 32527,
-     "item": "Ring of Ancient Knowledge"
+     "item": "Ring of Ancient Knowledge",
+     "bis": "multiPhase"
     },
     {
      "id": 32247,
@@ -1117,19 +1188,23 @@
     },
     {
      "id": 30910,
-     "item": "Tempest of Chaos"
+     "item": "Tempest of Chaos",
+     "bis": "multiPhase"
     },
     {
      "id": 32374,
-     "item": "Zhar'doom, Greatstaff of the Devourer"
+     "item": "Zhar'doom, Greatstaff of the Devourer",
+     "bis": "multiPhase"
     },
     {
      "id": 30872,
-     "item": "Chronicle of Dark Secrets"
+     "item": "Chronicle of Dark Secrets",
+     "bis": "multiPhase"
     },
     {
      "id": 29982,
-     "item": "Wand of the Forgotten Star"
+     "item": "Wand of the Forgotten Star",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -1171,7 +1246,8 @@
     },
     {
      "id": 32483,
-     "item": "The Skull of Gul'dan"
+     "item": "The Skull of Gul'dan",
+     "bis": "expansion"
     },
     {
      "id": 33829,
@@ -1238,7 +1314,8 @@
    "P2": [
     {
      "id": 28797,
-     "item": "Brute Cloak of the Ogre-Magi"
+     "item": "Brute Cloak of the Ogre-Magi",
+     "bis": "multiPhase"
     },
     {
      "id": 30107,
@@ -1250,7 +1327,8 @@
     },
     {
      "id": 28780,
-     "item": "Soul-Eater's Handwraps"
+     "item": "Soul-Eater's Handwraps",
+     "bis": "multiPhase"
     },
     {
      "id": 30067,
@@ -1258,7 +1336,8 @@
     },
     {
      "id": 30667,
-     "item": "Ring of Unrelenting Storms"
+     "item": "Ring of Unrelenting Storms",
+     "bis": "multiPhase"
     },
     {
      "id": 30109,
@@ -1365,19 +1444,23 @@
     },
     {
      "id": 32586,
-     "item": "Bracers of Nimble Thought"
+     "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
     },
     {
      "id": 32276,
-     "item": "Flashfire Girdle"
+     "item": "Flashfire Girdle",
+     "bis": "multiPhase"
     },
     {
      "id": 30916,
-     "item": "Leggings of Channeled Elements"
+     "item": "Leggings of Channeled Elements",
+     "bis": "multiPhase"
     },
     {
      "id": 32239,
-     "item": "Slippers of the Seacaller"
+     "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
     },
     {
      "id": 32352,
@@ -1405,7 +1488,8 @@
     },
     {
      "id": 29305,
-     "item": "Band of the Eternal Sage"
+     "item": "Band of the Eternal Sage",
+     "bis": "multiPhase"
     },
     {
      "id": 32483,
@@ -1414,7 +1498,8 @@
     },
     {
      "id": 28785,
-     "item": "The Lightning Capacitor"
+     "item": "The Lightning Capacitor",
+     "bis": "multiPhase"
     },
     {
      "id": 33829,
@@ -1423,11 +1508,13 @@
     },
     {
      "id": 32374,
-     "item": "Zhar'doom, Greatstaff of the Devourer"
+     "item": "Zhar'doom, Greatstaff of the Devourer",
+     "bis": "multiPhase"
     },
     {
      "id": 30909,
-     "item": "Antonidas's Aegis of Rapt Concentration"
+     "item": "Antonidas's Aegis of Rapt Concentration",
+     "bis": "multiPhase"
     },
     {
      "id": 32330,
@@ -1477,7 +1564,8 @@
     },
     {
      "id": 32527,
-     "item": "Ring of Ancient Knowledge"
+     "item": "Ring of Ancient Knowledge",
+     "bis": "expansion"
     },
     {
      "id": 34429,
@@ -1485,12 +1573,14 @@
     },
     {
      "id": 32483,
-     "item": "The Skull of Gul'dan"
+     "item": "The Skull of Gul'dan",
+     "bis": "expansion"
     },
     {
      "id": 28785,
      "item": "The Lightning Capacitor",
-     "near": true
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 33829,
@@ -1507,7 +1597,8 @@
     },
     {
      "id": 32330,
-     "item": "Totem of Ancestral Guidance"
+     "item": "Totem of Ancestral Guidance",
+     "bis": "expansion"
     }
    ]
   },
@@ -1517,7 +1608,8 @@
      "id": 28766,
      "item": "Ruby Drape of the Mysticant",
      "bis": "multiPhase",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28797,
@@ -1575,7 +1667,9 @@
     },
     {
      "id": 28766,
-     "item": "Ruby Drape of the Mysticant"
+     "item": "Ruby Drape of the Mysticant",
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 30107,
@@ -1680,27 +1774,33 @@
    "P4": [
     {
      "id": 32525,
-     "item": "Cowl of the Illidari High Lord"
+     "item": "Cowl of the Illidari High Lord",
+     "bis": "multiPhase"
     },
     {
      "id": 32524,
-     "item": "Shroud of the Highborne"
+     "item": "Shroud of the Highborne",
+     "bis": "multiPhase"
     },
     {
      "id": 32586,
-     "item": "Bracers of Nimble Thought"
+     "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
     },
     {
      "id": 32239,
-     "item": "Slippers of the Seacaller"
+     "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
     },
     {
      "id": 32589,
-     "item": "Hellfire-Encased Pendant"
+     "item": "Hellfire-Encased Pendant",
+     "bis": "multiPhase"
     },
     {
      "id": 32527,
-     "item": "Ring of Ancient Knowledge"
+     "item": "Ring of Ancient Knowledge",
+     "bis": "multiPhase"
     },
     {
      "id": 32483,
@@ -1713,19 +1813,23 @@
     },
     {
      "id": 32374,
-     "item": "Zhar'doom, Greatstaff of the Devourer"
+     "item": "Zhar'doom, Greatstaff of the Devourer",
+     "bis": "multiPhase"
     },
     {
      "id": 30910,
-     "item": "Tempest of Chaos"
+     "item": "Tempest of Chaos",
+     "bis": "multiPhase"
     },
     {
      "id": 30872,
-     "item": "Chronicle of Dark Secrets"
+     "item": "Chronicle of Dark Secrets",
+     "bis": "multiPhase"
     },
     {
      "id": 29982,
-     "item": "Wand of the Forgotten Star"
+     "item": "Wand of the Forgotten Star",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -1767,7 +1871,8 @@
     },
     {
      "id": 32483,
-     "item": "The Skull of Gul'dan"
+     "item": "The Skull of Gul'dan",
+     "bis": "expansion"
     },
     {
      "id": 33829,
@@ -1785,7 +1890,8 @@
     {
      "id": 30872,
      "item": "Chronicle of Dark Secrets",
-     "near": true
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 34347,
@@ -1876,6 +1982,7 @@
     {
      "id": 28502,
      "item": "Vambraces of Courage",
+     "bis": "multiPhase",
      "variant": "mitigation"
     },
     {
@@ -1912,6 +2019,7 @@
     {
      "id": 28579,
      "item": "Romulo's Poison Vial",
+     "bis": "multiPhase",
      "variant": "threat"
     },
     {
@@ -1920,7 +2028,8 @@
     },
     {
      "id": 28825,
-     "item": "Aldori Legacy Defender"
+     "item": "Aldori Legacy Defender",
+     "bis": "multiPhase"
     }
    ],
    "P3": [
@@ -1934,11 +2043,13 @@
      "id": 34010,
      "item": "Pepe's Shroud of Pacification",
      "bis": "multiPhase",
-     "variant": "overall"
+     "variant": "overall",
+     "conditional": true
     },
     {
      "id": 29925,
      "item": "Phoenix-Wing Cloak",
+     "bis": "multiPhase",
      "variant": "mitigation"
     },
     {
@@ -2026,51 +2137,62 @@
     {
      "id": 32521,
      "item": "Faceplate of the Impenetrable",
+     "bis": "multiPhase",
      "variant": "mitigation"
     },
     {
      "id": 34010,
      "item": "Pepe's Shroud of Pacification",
-     "variant": "hit"
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32232,
      "item": "Eternium Shell Bracers",
+     "bis": "multiPhase",
      "variant": "mitigation"
     },
     {
      "id": 32280,
      "item": "Gauntlets of Enforcement",
+     "bis": "multiPhase",
      "variant": "overall"
     },
     {
      "id": 29998,
      "item": "Royal Gauntlets of Silvermoon",
+     "bis": "multiPhase",
      "variant": "mitigation"
     },
     {
      "id": 32333,
      "item": "Girdle of Stability",
+     "bis": "multiPhase",
      "variant": "mitigation"
     },
     {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase",
      "variant": "threat"
     },
     {
      "id": 32263,
      "item": "Praetorian's Legguards",
+     "bis": "multiPhase",
      "variant": "mitigation"
     },
     {
      "id": 32345,
      "item": "Dreadboots of the Legion",
+     "bis": "multiPhase",
      "variant": "threat"
     },
     {
      "id": 32268,
      "item": "Myrmidon's Treads",
+     "bis": "multiPhase",
      "variant": "mitigation"
     },
     {
@@ -2080,7 +2202,8 @@
     },
     {
      "id": 32254,
-     "item": "The Brutalizer"
+     "item": "The Brutalizer",
+     "bis": "multiPhase"
     },
     {
      "id": 30874,
@@ -2090,7 +2213,8 @@
     },
     {
      "id": 32375,
-     "item": "Bulwark of Azzinoth"
+     "item": "Bulwark of Azzinoth",
+     "bis": "multiPhase"
     },
     {
      "id": 32253,
@@ -2136,6 +2260,7 @@
     {
      "id": 30874,
      "item": "The Unbreakable Will",
+     "bis": "expansion",
      "variant": "mitigation"
     },
     {
@@ -2145,6 +2270,7 @@
     {
      "id": 32253,
      "item": "Legionkiller",
+     "bis": "expansion",
      "variant": "overall"
     },
     {
@@ -2236,7 +2362,8 @@
     },
     {
      "id": 28763,
-     "item": "Jade Ring of the Everliving"
+     "item": "Jade Ring of the Everliving",
+     "bis": "multiPhase"
     },
     {
      "id": 29920,
@@ -2248,7 +2375,8 @@
     },
     {
      "id": 29458,
-     "item": "Aegis of the Vindicator"
+     "item": "Aegis of the Vindicator",
+     "bis": "multiPhase"
     },
     {
      "id": 28523,
@@ -2344,7 +2472,8 @@
     },
     {
      "id": 32577,
-     "item": "Living Earth Bindings"
+     "item": "Living Earth Bindings",
+     "bis": "multiPhase"
     },
     {
      "id": 32584,
@@ -2363,7 +2492,8 @@
     },
     {
      "id": 32258,
-     "item": "Naturalist's Preserving Cinch"
+     "item": "Naturalist's Preserving Cinch",
+     "bis": "multiPhase"
     },
     {
      "id": 32339,
@@ -2401,11 +2531,13 @@
     },
     {
      "id": 32500,
-     "item": "Crystal Spire of Karabor"
+     "item": "Crystal Spire of Karabor",
+     "bis": "multiPhase"
     },
     {
      "id": 30882,
-     "item": "Bastion of Light"
+     "item": "Bastion of Light",
+     "bis": "multiPhase"
     },
     {
      "id": 32255,
@@ -2421,7 +2553,8 @@
    "P5": [
     {
      "id": 32524,
-     "item": "Shroud of the Highborne"
+     "item": "Shroud of the Highborne",
+     "bis": "expansion"
     },
     {
      "id": 34242,
@@ -2430,15 +2563,18 @@
     },
     {
      "id": 32328,
-     "item": "Botanist's Gloves of Growth"
+     "item": "Botanist's Gloves of Growth",
+     "bis": "expansion"
     },
     {
      "id": 33281,
-     "item": "Brooch of Nature's Mercy"
+     "item": "Brooch of Nature's Mercy",
+     "bis": "expansion"
     },
     {
      "id": 32528,
-     "item": "Blessed Band of Karabor"
+     "item": "Blessed Band of Karabor",
+     "bis": "expansion"
     },
     {
      "id": 28823,
@@ -2446,7 +2582,8 @@
     },
     {
      "id": 32496,
-     "item": "Memento of Tyrande"
+     "item": "Memento of Tyrande",
+     "bis": "expansion"
     },
     {
      "id": 34430,
@@ -2469,7 +2606,8 @@
     {
      "id": 30882,
      "item": "Bastion of Light",
-     "near": true
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 32255,
@@ -2483,7 +2621,8 @@
     },
     {
      "id": 28523,
-     "item": "Totem of Healing Rains"
+     "item": "Totem of Healing Rains",
+     "bis": "expansion"
     }
    ]
   },
@@ -2497,7 +2636,8 @@
     {
      "id": 28507,
      "item": "Handwraps of Flowing Thought",
-     "bis": "multiPhase"
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 30675,
@@ -2545,16 +2685,20 @@
     },
     {
      "id": 30684,
-     "item": "Ravager's Cuffs"
+     "item": "Ravager's Cuffs",
+     "bis": "multiPhase"
     },
     {
      "id": 28507,
      "item": "Handwraps of Flowing Thought",
-     "variant": "hit"
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30675,
-     "item": "Lurker's Cord"
+     "item": "Lurker's Cord",
+     "bis": "multiPhase"
     },
     {
      "id": 29972,
@@ -2562,7 +2706,8 @@
     },
     {
      "id": 30680,
-     "item": "Glider's Foot-Wraps"
+     "item": "Glider's Foot-Wraps",
+     "bis": "multiPhase"
     },
     {
      "id": 30050,
@@ -2571,7 +2716,8 @@
     },
     {
      "id": 30666,
-     "item": "Ritssyn's Lost Pendant"
+     "item": "Ritssyn's Lost Pendant",
+     "bis": "multiPhase"
     },
     {
      "id": 30109,
@@ -2583,11 +2729,13 @@
     },
     {
      "id": 28789,
-     "item": "Eye of Magtheridon"
+     "item": "Eye of Magtheridon",
+     "bis": "multiPhase"
     },
     {
      "id": 28770,
-     "item": "Nathrezim Mindblade"
+     "item": "Nathrezim Mindblade",
+     "bis": "multiPhase"
     },
     {
      "id": 29982,
@@ -2642,29 +2790,35 @@
     },
     {
      "id": 29982,
-     "item": "Wand of the Forgotten Star"
+     "item": "Wand of the Forgotten Star",
+     "bis": "multiPhase"
     }
    ],
    "P4": [
     {
      "id": 32590,
-     "item": "Nethervoid Cloak"
+     "item": "Nethervoid Cloak",
+     "bis": "multiPhase"
     },
     {
      "id": 32586,
-     "item": "Bracers of Nimble Thought"
+     "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
     },
     {
      "id": 32256,
-     "item": "Waistwrap of Infinity"
+     "item": "Waistwrap of Infinity",
+     "bis": "multiPhase"
     },
     {
      "id": 30916,
-     "item": "Leggings of Channeled Elements"
+     "item": "Leggings of Channeled Elements",
+     "bis": "multiPhase"
     },
     {
      "id": 32239,
-     "item": "Slippers of the Seacaller"
+     "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
     },
     {
      "id": 33466,
@@ -2682,11 +2836,13 @@
     },
     {
      "id": 32483,
-     "item": "The Skull of Gul'dan"
+     "item": "The Skull of Gul'dan",
+     "bis": "multiPhase"
     },
     {
      "id": 32374,
-     "item": "Zhar'doom, Greatstaff of the Devourer"
+     "item": "Zhar'doom, Greatstaff of the Devourer",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -2724,7 +2880,8 @@
     },
     {
      "id": 32527,
-     "item": "Ring of Ancient Knowledge"
+     "item": "Ring of Ancient Knowledge",
+     "bis": "expansion"
     },
     {
      "id": 34429,
@@ -2732,7 +2889,8 @@
     },
     {
      "id": 33829,
-     "item": "Hex Shrunken Head"
+     "item": "Hex Shrunken Head",
+     "bis": "expansion"
     },
     {
      "id": 34336,
@@ -2789,7 +2947,8 @@
     {
      "id": 28572,
      "item": "Blade of the Unrequited",
-     "variant": "offhand"
+     "variant": "offhand",
+     "conditional": true
     },
     {
      "id": 28587,
@@ -2821,7 +2980,8 @@
     },
     {
      "id": 30677,
-     "item": "Lurker's Belt"
+     "item": "Lurker's Belt",
+     "bis": "multiPhase"
     },
     {
      "id": 30104,
@@ -2845,12 +3005,14 @@
     {
      "id": 29924,
      "item": "Netherbane",
-     "variant": "mainhand"
+     "variant": "mainhand",
+     "conditional": true
     },
     {
      "id": 29948,
      "item": "Claw of the Phoenix",
-     "variant": "offhand"
+     "variant": "offhand",
+     "conditional": true
     },
     {
      "id": 29993,
@@ -2893,7 +3055,8 @@
      "id": 29301,
      "item": "Band of the Eternal Champion",
      "bis": "multiPhase",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28830,
@@ -2912,13 +3075,15 @@
     },
     {
      "id": 29993,
-     "item": "Twinblade of the Phoenix"
+     "item": "Twinblade of the Phoenix",
+     "bis": "multiPhase"
     },
     {
      "id": 32248,
      "item": "Halberd of Desolation",
      "bis": "expansion",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30906,
@@ -2933,11 +3098,13 @@
     },
     {
      "id": 29994,
-     "item": "Thalassian Wildercloak"
+     "item": "Thalassian Wildercloak",
+     "bis": "multiPhase"
     },
     {
      "id": 32324,
-     "item": "Insidious Bands"
+     "item": "Insidious Bands",
+     "bis": "multiPhase"
     },
     {
      "id": 30686,
@@ -2946,25 +3113,31 @@
     },
     {
      "id": 30879,
-     "item": "Don Alejandro's Money Belt"
+     "item": "Don Alejandro's Money Belt",
+     "bis": "multiPhase"
     },
     {
      "id": 30900,
-     "item": "Bow-stitched Leggings"
+     "item": "Bow-stitched Leggings",
+     "bis": "multiPhase"
     },
     {
      "id": 32366,
-     "item": "Shadowmaster's Boots"
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
     },
     {
      "id": 33496,
      "item": "Signet of Primal Wrath",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 29301,
      "item": "Band of the Eternal Champion",
-     "variant": "hit"
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28830,
@@ -2973,7 +3146,8 @@
     },
     {
      "id": 32505,
-     "item": "Madness of the Betrayer"
+     "item": "Madness of the Betrayer",
+     "bis": "multiPhase"
     },
     {
      "id": 33389,
@@ -2983,18 +3157,21 @@
     {
      "id": 32248,
      "item": "Halberd of Desolation",
-     "bis": "expansion"
+     "bis": "expansion",
+     "conditional": true
     },
     {
      "id": 30906,
-     "item": "Bristleblitz Striker"
+     "item": "Bristleblitz Striker",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
     {
      "id": 34333,
      "item": "Coif of Alleria",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 34244,
@@ -3025,7 +3202,8 @@
     },
     {
      "id": 28830,
-     "item": "Dragonspine Trophy"
+     "item": "Dragonspine Trophy",
+     "bis": "expansion"
     },
     {
      "id": 34331,
@@ -3038,12 +3216,15 @@
     {
      "id": 34247,
      "item": "Apolyon, the Soul-Render",
-     "variant": "mitigation"
+     "variant": "mitigation",
+     "conditional": true
     },
     {
      "id": 32248,
      "item": "Halberd of Desolation",
-     "variant": "hit"
+     "bis": "expansion",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 34334,
@@ -3162,7 +3343,8 @@
     },
     {
      "id": 28772,
-     "item": "Sunfury Bow of the Phoenix"
+     "item": "Sunfury Bow of the Phoenix",
+     "bis": "multiPhase"
     }
    ],
    "P3": [
@@ -3268,7 +3450,8 @@
     },
     {
      "id": 30863,
-     "item": "Deadly Cuffs"
+     "item": "Deadly Cuffs",
+     "bis": "multiPhase"
     },
     {
      "id": 32278,
@@ -3281,11 +3464,13 @@
     },
     {
      "id": 32341,
-     "item": "Leggings of Divine Retribution"
+     "item": "Leggings of Divine Retribution",
+     "bis": "multiPhase"
     },
     {
      "id": 32345,
-     "item": "Dreadboots of the Legion"
+     "item": "Dreadboots of the Legion",
+     "bis": "multiPhase"
     },
     {
      "id": 32260,
@@ -3331,7 +3516,8 @@
     },
     {
      "id": 30902,
-     "item": "Cataclysm's Edge"
+     "item": "Cataclysm's Edge",
+     "bis": "multiPhase"
     },
     {
      "id": 32348,
@@ -3383,7 +3569,8 @@
     },
     {
      "id": 30106,
-     "item": "Belt of One-Hundred Deaths"
+     "item": "Belt of One-Hundred Deaths",
+     "bis": "expansion"
     },
     {
      "id": 34180,
@@ -3404,7 +3591,8 @@
     },
     {
      "id": 32497,
-     "item": "Stormrage Signet Ring"
+     "item": "Stormrage Signet Ring",
+     "bis": "expansion"
     },
     {
      "id": 34427,
@@ -3412,7 +3600,8 @@
     },
     {
      "id": 28830,
-     "item": "Dragonspine Trophy"
+     "item": "Dragonspine Trophy",
+     "bis": "expansion"
     },
     {
      "id": 34247,
@@ -3421,7 +3610,8 @@
     {
      "id": 30902,
      "item": "Cataclysm's Edge",
-     "near": true
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 32348,
@@ -3436,6 +3626,7 @@
     {
      "id": 32837,
      "item": "Warglaive of Azzinoth",
+     "bis": "expansion",
      "variant": "pair"
     },
     {
@@ -3530,7 +3721,8 @@
     },
     {
      "id": 28757,
-     "item": "Ring of a Thousand Marks"
+     "item": "Ring of a Thousand Marks",
+     "bis": "multiPhase"
     },
     {
      "id": 28830,
@@ -3547,7 +3739,8 @@
     },
     {
      "id": 28772,
-     "item": "Sunfury Bow of the Phoenix"
+     "item": "Sunfury Bow of the Phoenix",
+     "bis": "multiPhase"
     }
    ],
    "P3": [
@@ -3646,7 +3839,8 @@
    "P4": [
     {
      "id": 32235,
-     "item": "Cursed Vision of Sargeras"
+     "item": "Cursed Vision of Sargeras",
+     "bis": "multiPhase"
     },
     {
      "id": 32373,
@@ -3655,15 +3849,18 @@
     },
     {
      "id": 32323,
-     "item": "Shadowmoon Destroyer's Drape"
+     "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
     },
     {
      "id": 30863,
-     "item": "Deadly Cuffs"
+     "item": "Deadly Cuffs",
+     "bis": "multiPhase"
     },
     {
      "id": 32278,
-     "item": "Grips of Silent Justice"
+     "item": "Grips of Silent Justice",
+     "bis": "multiPhase"
     },
     {
      "id": 30106,
@@ -3672,15 +3869,18 @@
     },
     {
      "id": 32341,
-     "item": "Leggings of Divine Retribution"
+     "item": "Leggings of Divine Retribution",
+     "bis": "multiPhase"
     },
     {
      "id": 32345,
-     "item": "Dreadboots of the Legion"
+     "item": "Dreadboots of the Legion",
+     "bis": "multiPhase"
     },
     {
      "id": 32260,
-     "item": "Choker of Endless Nightmares"
+     "item": "Choker of Endless Nightmares",
+     "bis": "multiPhase"
     },
     {
      "id": 32591,
@@ -3760,7 +3960,8 @@
     },
     {
      "id": 30106,
-     "item": "Belt of One-Hundred Deaths"
+     "item": "Belt of One-Hundred Deaths",
+     "bis": "expansion"
     },
     {
      "id": 34180,
@@ -3781,7 +3982,8 @@
     },
     {
      "id": 32497,
-     "item": "Stormrage Signet Ring"
+     "item": "Stormrage Signet Ring",
+     "bis": "expansion"
     },
     {
      "id": 34427,
@@ -3789,11 +3991,13 @@
     },
     {
      "id": 28830,
-     "item": "Dragonspine Trophy"
+     "item": "Dragonspine Trophy",
+     "bis": "expansion"
     },
     {
      "id": 32837,
      "item": "Warglaive of Azzinoth",
+     "bis": "expansion",
      "variant": "pair"
     },
     {
@@ -3842,7 +4046,8 @@
      "id": 29458,
      "item": "Aegis of the Vindicator",
      "bis": "multiPhase",
-     "variant": "shield"
+     "variant": "shield",
+     "conditional": true
     },
     {
      "id": 28592,
@@ -3882,7 +4087,8 @@
     },
     {
      "id": 28727,
-     "item": "Pendant of the Violet Eye"
+     "item": "Pendant of the Violet Eye",
+     "bis": "multiPhase"
     },
     {
      "id": 30108,
@@ -3891,12 +4097,15 @@
     {
      "id": 29923,
      "item": "Talisman of the Sun King",
-     "variant": "offhand"
+     "variant": "offhand",
+     "conditional": true
     },
     {
      "id": 29458,
      "item": "Aegis of the Vindicator",
-     "variant": "shield"
+     "bis": "multiPhase",
+     "variant": "shield",
+     "conditional": true
     },
     {
      "id": 28592,
@@ -3909,7 +4118,8 @@
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "multiPhase",
-     "variant": "haste"
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 34012,
@@ -3946,13 +4156,15 @@
      "id": 32528,
      "item": "Blessed Band of Karabor",
      "bis": "expansion",
-     "variant": "haste"
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 32238,
      "item": "Ring of Calming Waves",
      "bis": "multiPhase",
-     "variant": "haste"
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 29309,
@@ -3973,7 +4185,8 @@
      "id": 32255,
      "item": "Felstone Bulwark",
      "bis": "multiPhase",
-     "variant": "shield"
+     "variant": "shield",
+     "conditional": true
     },
     {
      "id": 30882,
@@ -3985,7 +4198,8 @@
      "id": 30911,
      "item": "Scepter of Purification",
      "bis": "multiPhase",
-     "variant": "offhand"
+     "variant": "offhand",
+     "conditional": true
     },
     {
      "id": 28592,
@@ -3997,7 +4211,9 @@
     {
      "id": 32524,
      "item": "Shroud of the Highborne",
-     "variant": "haste"
+     "bis": "multiPhase",
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 34012,
@@ -4007,15 +4223,18 @@
     },
     {
      "id": 30862,
-     "item": "Blessed Adamantite Bracers"
+     "item": "Blessed Adamantite Bracers",
+     "bis": "multiPhase"
     },
     {
      "id": 30112,
-     "item": "Glorious Gauntlets of Crestfall"
+     "item": "Glorious Gauntlets of Crestfall",
+     "bis": "multiPhase"
     },
     {
      "id": 30897,
-     "item": "Girdle of Hope"
+     "item": "Girdle of Hope",
+     "bis": "multiPhase"
     },
     {
      "id": 33446,
@@ -4024,7 +4243,8 @@
     },
     {
      "id": 32243,
-     "item": "Pearl Inlaid Boots"
+     "item": "Pearl Inlaid Boots",
+     "bis": "multiPhase"
     },
     {
      "id": 32370,
@@ -4035,16 +4255,20 @@
      "id": 32528,
      "item": "Blessed Band of Karabor",
      "bis": "expansion",
-     "variant": "haste"
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 32238,
      "item": "Ring of Calming Waves",
-     "variant": "haste"
+     "bis": "multiPhase",
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 29309,
-     "item": "Band of the Eternal Restorer"
+     "item": "Band of the Eternal Restorer",
+     "bis": "multiPhase"
     },
     {
      "id": 32496,
@@ -4053,12 +4277,15 @@
     },
     {
      "id": 32500,
-     "item": "Crystal Spire of Karabor"
+     "item": "Crystal Spire of Karabor",
+     "bis": "multiPhase"
     },
     {
      "id": 32255,
      "item": "Felstone Bulwark",
-     "variant": "shield"
+     "bis": "multiPhase",
+     "variant": "shield",
+     "conditional": true
     },
     {
      "id": 30882,
@@ -4069,7 +4296,9 @@
     {
      "id": 30911,
      "item": "Scepter of Purification",
-     "variant": "offhand"
+     "bis": "multiPhase",
+     "variant": "offhand",
+     "conditional": true
     },
     {
      "id": 28592,
@@ -4097,7 +4326,8 @@
     {
      "id": 34240,
      "item": "Gauntlets of the Soothed Soul",
-     "variant": "haste"
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 34167,
@@ -4105,12 +4335,15 @@
     },
     {
      "id": 32370,
-     "item": "Nadina's Pendant of Purity"
+     "item": "Nadina's Pendant of Purity",
+     "bis": "expansion"
     },
     {
      "id": 32528,
      "item": "Blessed Band of Karabor",
-     "variant": "haste"
+     "bis": "expansion",
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 34430,
@@ -4118,7 +4351,8 @@
     },
     {
      "id": 32496,
-     "item": "Memento of Tyrande"
+     "item": "Memento of Tyrande",
+     "bis": "expansion"
     },
     {
      "id": 34335,
@@ -4127,16 +4361,19 @@
     {
      "id": 34231,
      "item": "Aegis of Angelic Fortune",
-     "variant": "shield"
+     "variant": "shield",
+     "conditional": true
     },
     {
      "id": 34206,
      "item": "Book of Highborne Hymns",
-     "variant": "haste"
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 28592,
-     "item": "Libram of Souls Redeemed"
+     "item": "Libram of Souls Redeemed",
+     "bis": "expansion"
     }
    ]
   },
@@ -4211,6 +4448,7 @@
     {
      "id": 28766,
      "item": "Ruby Drape of the Mysticant",
+     "bis": "multiPhase",
      "variant": "threat"
     },
     {
@@ -4230,7 +4468,8 @@
     },
     {
      "id": 28621,
-     "item": "Wrynn Dynasty Greaves"
+     "item": "Wrynn Dynasty Greaves",
+     "bis": "multiPhase"
     },
     {
      "id": 32267,
@@ -4258,7 +4497,8 @@
     },
     {
      "id": 28528,
-     "item": "Moroes' Lucky Pocket Watch"
+     "item": "Moroes' Lucky Pocket Watch",
+     "bis": "multiPhase"
     },
     {
      "id": 28789,
@@ -4333,7 +4573,8 @@
     },
     {
      "id": 28789,
-     "item": "Eye of Magtheridon"
+     "item": "Eye of Magtheridon",
+     "bis": "multiPhase"
     },
     {
      "id": 30447,
@@ -4368,41 +4609,49 @@
     {
      "id": 32521,
      "item": "Faceplate of the Impenetrable",
+     "bis": "multiPhase",
      "variant": "mitigation"
     },
     {
      "id": 32279,
      "item": "The Seeker's Wristguards",
+     "bis": "multiPhase",
      "variant": "overall"
     },
     {
      "id": 32232,
      "item": "Eternium Shell Bracers",
+     "bis": "multiPhase",
      "variant": "mitigation"
     },
     {
      "id": 32342,
      "item": "Girdle of Mighty Resolve",
+     "bis": "multiPhase",
      "variant": "overall"
     },
     {
      "id": 32263,
      "item": "Praetorian's Legguards",
+     "bis": "multiPhase",
      "variant": "mitigation"
     },
     {
      "id": 32245,
      "item": "Tide-stomper's Greaves",
+     "bis": "multiPhase",
      "variant": "overall"
     },
     {
      "id": 32362,
      "item": "Pendant of Titans",
+     "bis": "multiPhase",
      "variant": "overall"
     },
     {
      "id": 30083,
      "item": "Ring of Sundered Souls",
+     "bis": "multiPhase",
      "variant": "mitigation"
     },
     {
@@ -4420,11 +4669,13 @@
     {
      "id": 32375,
      "item": "Bulwark of Azzinoth",
+     "bis": "multiPhase",
      "variant": "overall"
     },
     {
      "id": 30909,
      "item": "Antonidas's Aegis of Rapt Concentration",
+     "bis": "multiPhase",
      "variant": "threat"
     },
     {
@@ -4443,7 +4694,8 @@
     {
      "id": 34216,
      "item": "Heroic Judicator's Chestguard",
-     "variant": "balanced"
+     "variant": "balanced",
+     "conditional": true
     },
     {
      "id": 34352,
@@ -4468,11 +4720,13 @@
     {
      "id": 32501,
      "item": "Shadowmoon Insignia",
+     "bis": "expansion",
      "variant": "overall"
     },
     {
      "id": 30910,
-     "item": "Tempest of Chaos"
+     "item": "Tempest of Chaos",
+     "bis": "expansion"
     },
     {
      "id": 34185,
@@ -4482,6 +4736,7 @@
     {
      "id": 32368,
      "item": "Tome of the Lightbringer",
+     "bis": "expansion",
      "variant": "mitigation"
     }
    ]
@@ -4508,7 +4763,8 @@
     {
      "id": 28509,
      "item": "Worgen Claw Necklace",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28745,
@@ -4546,12 +4802,14 @@
     },
     {
      "id": 28795,
-     "item": "Bladespire Warbands"
+     "item": "Bladespire Warbands",
+     "bis": "multiPhase"
     },
     {
      "id": 30057,
      "item": "Bracers of Eradication",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 29947,
@@ -4566,7 +4824,8 @@
     {
      "id": 29995,
      "item": "Leggings of Murderous Intent",
-     "variant": "human"
+     "variant": "human",
+     "conditional": true
     },
     {
      "id": 30104,
@@ -4594,7 +4853,9 @@
     {
      "id": 29997,
      "item": "Band of the Ranger-General",
-     "variant": "hit"
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28830,
@@ -4620,11 +4881,13 @@
     {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30098,
-     "item": "Razor-Scale Battlecloak"
+     "item": "Razor-Scale Battlecloak",
+     "bis": "multiPhase"
     },
     {
      "id": 30905,
@@ -4659,13 +4922,15 @@
     {
      "id": 32345,
      "item": "Dreadboots of the Legion",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32260,
      "item": "Choker of Endless Nightmares",
      "bis": "multiPhase",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30022,
@@ -4684,7 +4949,8 @@
     {
      "id": 32497,
      "item": "Stormrage Signet Ring",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28830,
@@ -4700,16 +4966,19 @@
    "P4": [
     {
      "id": 32235,
-     "item": "Cursed Vision of Sargeras"
+     "item": "Cursed Vision of Sargeras",
+     "bis": "multiPhase"
     },
     {
      "id": 30055,
-     "item": "Shoulderpads of the Stranger"
+     "item": "Shoulderpads of the Stranger",
+     "bis": "multiPhase"
     },
     {
      "id": 32581,
      "item": "Swiftstrike Shoulders",
-     "variant": "expertise"
+     "variant": "expertise",
+     "conditional": true
     },
     {
      "id": 33590,
@@ -4717,15 +4986,18 @@
     },
     {
      "id": 30905,
-     "item": "Midnight Chestguard"
+     "item": "Midnight Chestguard",
+     "bis": "multiPhase"
     },
     {
      "id": 32574,
-     "item": "Bindings of Lightning Reflexes"
+     "item": "Bindings of Lightning Reflexes",
+     "bis": "multiPhase"
     },
     {
      "id": 29947,
-     "item": "Gloves of the Searing Grip"
+     "item": "Gloves of the Searing Grip",
+     "bis": "multiPhase"
     },
     {
      "id": 32347,
@@ -4734,37 +5006,47 @@
     },
     {
      "id": 30106,
-     "item": "Belt of One-Hundred Deaths"
+     "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
     },
     {
      "id": 30900,
-     "item": "Bow-stitched Leggings"
+     "item": "Bow-stitched Leggings",
+     "bis": "multiPhase"
     },
     {
      "id": 32366,
-     "item": "Shadowmaster's Boots"
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
     },
     {
      "id": 30022,
-     "item": "Pendant of the Perilous"
+     "item": "Pendant of the Perilous",
+     "bis": "multiPhase"
     },
     {
      "id": 32260,
      "item": "Choker of Endless Nightmares",
-     "variant": "hit"
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32526,
-     "item": "Band of Devastation"
+     "item": "Band of Devastation",
+     "bis": "multiPhase"
     },
     {
      "id": 29997,
      "item": "Band of the Ranger-General",
-     "variant": "hit"
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28830,
-     "item": "Dragonspine Trophy"
+     "item": "Dragonspine Trophy",
+     "bis": "multiPhase"
     },
     {
      "id": 33831,
@@ -4772,7 +5054,8 @@
     },
     {
      "id": 32332,
-     "item": "Torch of the Damned"
+     "item": "Torch of the Damned",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -4788,7 +5071,8 @@
     {
      "id": 34195,
      "item": "Shoulderpads of Vehemence",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 34241,
@@ -4821,7 +5105,8 @@
     {
      "id": 34183,
      "item": "Shivering Felspine",
-     "variant": "non-human"
+     "variant": "non-human",
+     "conditional": true
     }
    ]
   },
@@ -4883,12 +5168,14 @@
     {
      "id": 29997,
      "item": "Band of the Ranger-General",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30052,
      "item": "Ring of Lethality",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28830,
@@ -4898,12 +5185,14 @@
     {
      "id": 32944,
      "item": "Talon of the Phoenix",
-     "variant": "mainhand"
+     "variant": "mainhand",
+     "conditional": true
     },
     {
      "id": 29948,
      "item": "Claw of the Phoenix",
-     "variant": "offhand"
+     "variant": "offhand",
+     "conditional": true
     },
     {
      "id": 29993,
@@ -4919,7 +5208,8 @@
     },
     {
      "id": 29994,
-     "item": "Thalassian Wildercloak"
+     "item": "Thalassian Wildercloak",
+     "bis": "multiPhase"
     },
     {
      "id": 32323,
@@ -4947,12 +5237,14 @@
     {
      "id": 32497,
      "item": "Stormrage Signet Ring",
-     "bis": "multiPhase"
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 29301,
      "item": "Band of the Eternal Champion",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28830,
@@ -4966,12 +5258,14 @@
     {
      "id": 30901,
      "item": "Boundless Agony",
-     "variant": "mainhand"
+     "variant": "mainhand",
+     "conditional": true
     },
     {
      "id": 30881,
      "item": "Blade of Infamy",
-     "variant": "offhand"
+     "variant": "offhand",
+     "conditional": true
     },
     {
      "id": 29993,
@@ -4982,7 +5276,8 @@
      "id": 32248,
      "item": "Halberd of Desolation",
      "bis": "expansion",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30906,
@@ -4993,7 +5288,8 @@
    "P4": [
     {
      "id": 32235,
-     "item": "Cursed Vision of Sargeras"
+     "item": "Cursed Vision of Sargeras",
+     "bis": "multiPhase"
     },
     {
      "id": 32323,
@@ -5001,7 +5297,8 @@
     },
     {
      "id": 32324,
-     "item": "Insidious Bands"
+     "item": "Insidious Bands",
+     "bis": "multiPhase"
     },
     {
      "id": 32346,
@@ -5014,7 +5311,8 @@
     },
     {
      "id": 32366,
-     "item": "Shadowmaster's Boots"
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
     },
     {
      "id": 32260,
@@ -5028,18 +5326,22 @@
     {
      "id": 33496,
      "item": "Signet of Primal Wrath",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32497,
      "item": "Stormrage Signet Ring",
-     "variant": "hit"
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 29301,
      "item": "Band of the Eternal Champion",
      "near": true,
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28830,
@@ -5057,7 +5359,8 @@
     },
     {
      "id": 29993,
-     "item": "Twinblade of the Phoenix"
+     "item": "Twinblade of the Phoenix",
+     "bis": "multiPhase"
     },
     {
      "id": 33492,
@@ -5068,18 +5371,21 @@
      "id": 32248,
      "item": "Halberd of Desolation",
      "bis": "expansion",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30906,
-     "item": "Bristleblitz Striker"
+     "item": "Bristleblitz Striker",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
     {
      "id": 34333,
      "item": "Coif of Alleria",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 34244,
@@ -5118,7 +5424,8 @@
     },
     {
      "id": 28830,
-     "item": "Dragonspine Trophy"
+     "item": "Dragonspine Trophy",
+     "bis": "expansion"
     },
     {
      "id": 33831,
@@ -5136,12 +5443,15 @@
     {
      "id": 34247,
      "item": "Apolyon, the Soul-Render",
-     "variant": "mitigation"
+     "variant": "mitigation",
+     "conditional": true
     },
     {
      "id": 32248,
      "item": "Halberd of Desolation",
-     "variant": "hit"
+     "bis": "expansion",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 34334,
@@ -5154,7 +5464,8 @@
     {
      "id": 28672,
      "item": "Drape of the Dark Reavers",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28828,
@@ -5188,7 +5499,8 @@
     {
      "id": 28572,
      "item": "Blade of the Unrequited",
-     "variant": "mainhand"
+     "variant": "mainhand",
+     "conditional": true
     },
     {
      "id": 28772,
@@ -5221,12 +5533,14 @@
     {
      "id": 29997,
      "item": "Band of the Ranger-General",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30052,
      "item": "Ring of Lethality",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28830,
@@ -5236,12 +5550,14 @@
     {
      "id": 32944,
      "item": "Talon of the Phoenix",
-     "variant": "mainhand"
+     "variant": "mainhand",
+     "conditional": true
     },
     {
      "id": 29948,
      "item": "Claw of the Phoenix",
-     "variant": "offhand"
+     "variant": "offhand",
+     "conditional": true
     },
     {
      "id": 29993,
@@ -5257,7 +5573,8 @@
     },
     {
      "id": 29994,
-     "item": "Thalassian Wildercloak"
+     "item": "Thalassian Wildercloak",
+     "bis": "multiPhase"
     },
     {
      "id": 32323,
@@ -5285,12 +5602,14 @@
     {
      "id": 32497,
      "item": "Stormrage Signet Ring",
-     "bis": "multiPhase"
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 29301,
      "item": "Band of the Eternal Champion",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28830,
@@ -5304,12 +5623,14 @@
     {
      "id": 30901,
      "item": "Boundless Agony",
-     "variant": "mainhand"
+     "variant": "mainhand",
+     "conditional": true
     },
     {
      "id": 30881,
      "item": "Blade of Infamy",
-     "variant": "offhand"
+     "variant": "offhand",
+     "conditional": true
     },
     {
      "id": 29993,
@@ -5320,7 +5641,8 @@
      "id": 32248,
      "item": "Halberd of Desolation",
      "bis": "expansion",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30906,
@@ -5331,7 +5653,8 @@
    "P4": [
     {
      "id": 32235,
-     "item": "Cursed Vision of Sargeras"
+     "item": "Cursed Vision of Sargeras",
+     "bis": "multiPhase"
     },
     {
      "id": 32323,
@@ -5339,7 +5662,8 @@
     },
     {
      "id": 32324,
-     "item": "Insidious Bands"
+     "item": "Insidious Bands",
+     "bis": "multiPhase"
     },
     {
      "id": 32346,
@@ -5352,7 +5676,8 @@
     },
     {
      "id": 32366,
-     "item": "Shadowmaster's Boots"
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
     },
     {
      "id": 32260,
@@ -5366,18 +5691,22 @@
     {
      "id": 33496,
      "item": "Signet of Primal Wrath",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32497,
      "item": "Stormrage Signet Ring",
-     "variant": "hit"
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 29301,
      "item": "Band of the Eternal Champion",
      "near": true,
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28830,
@@ -5395,7 +5724,8 @@
     },
     {
      "id": 29993,
-     "item": "Twinblade of the Phoenix"
+     "item": "Twinblade of the Phoenix",
+     "bis": "multiPhase"
     },
     {
      "id": 33492,
@@ -5406,18 +5736,21 @@
      "id": 32248,
      "item": "Halberd of Desolation",
      "bis": "expansion",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30906,
-     "item": "Bristleblitz Striker"
+     "item": "Bristleblitz Striker",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
     {
      "id": 34333,
      "item": "Coif of Alleria",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 34244,
@@ -5456,7 +5789,8 @@
     },
     {
      "id": 28830,
-     "item": "Dragonspine Trophy"
+     "item": "Dragonspine Trophy",
+     "bis": "expansion"
     },
     {
      "id": 33831,
@@ -5474,12 +5808,15 @@
     {
      "id": 34247,
      "item": "Apolyon, the Soul-Render",
-     "variant": "mitigation"
+     "variant": "mitigation",
+     "conditional": true
     },
     {
      "id": 32248,
      "item": "Halberd of Desolation",
-     "variant": "hit"
+     "bis": "expansion",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 34334,
@@ -5532,7 +5869,8 @@
     },
     {
      "id": 28672,
-     "item": "Drape of the Dark Reavers"
+     "item": "Drape of the Dark Reavers",
+     "bis": "multiPhase"
     },
     {
      "id": 30101,
@@ -5549,7 +5887,8 @@
     },
     {
      "id": 28545,
-     "item": "Edgewalker Longboots"
+     "item": "Edgewalker Longboots",
+     "bis": "multiPhase"
     },
     {
      "id": 30052,
@@ -5638,7 +5977,8 @@
      "id": 32471,
      "item": "Shard of Azzinoth",
      "bis": "multiPhase",
-     "variant": "dagger"
+     "variant": "dagger",
+     "conditional": true
     },
     {
      "id": 32838,
@@ -5659,27 +5999,33 @@
    "P4": [
     {
      "id": 32235,
-     "item": "Cursed Vision of Sargeras"
+     "item": "Cursed Vision of Sargeras",
+     "bis": "multiPhase"
     },
     {
      "id": 32323,
-     "item": "Shadowmoon Destroyer's Drape"
+     "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
     },
     {
      "id": 32324,
-     "item": "Insidious Bands"
+     "item": "Insidious Bands",
+     "bis": "multiPhase"
     },
     {
      "id": 30106,
-     "item": "Belt of One-Hundred Deaths"
+     "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
     },
     {
      "id": 32366,
-     "item": "Shadowmaster's Boots"
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
     },
     {
      "id": 32260,
-     "item": "Choker of Endless Nightmares"
+     "item": "Choker of Endless Nightmares",
+     "bis": "multiPhase"
     },
     {
      "id": 32497,
@@ -5697,7 +6043,8 @@
     },
     {
      "id": 30450,
-     "item": "Warp-Spring Coil"
+     "item": "Warp-Spring Coil",
+     "bis": "multiPhase"
     },
     {
      "id": 33831,
@@ -5712,7 +6059,9 @@
     {
      "id": 32471,
      "item": "Shard of Azzinoth",
-     "variant": "dagger"
+     "bis": "multiPhase",
+     "variant": "dagger",
+     "conditional": true
     },
     {
      "id": 32838,
@@ -5721,11 +6070,13 @@
     },
     {
      "id": 32369,
-     "item": "Blade of Savagery"
+     "item": "Blade of Savagery",
+     "bis": "multiPhase"
     },
     {
      "id": 29949,
-     "item": "Arcanite Steam-Pistol"
+     "item": "Arcanite Steam-Pistol",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -5747,7 +6098,8 @@
     },
     {
      "id": 32497,
-     "item": "Stormrage Signet Ring"
+     "item": "Stormrage Signet Ring",
+     "bis": "expansion"
     },
     {
      "id": 34189,
@@ -5759,25 +6111,30 @@
     },
     {
      "id": 28830,
-     "item": "Dragonspine Trophy"
+     "item": "Dragonspine Trophy",
+     "bis": "expansion"
     },
     {
      "id": 32837,
-     "item": "Warglaive of Azzinoth"
+     "item": "Warglaive of Azzinoth",
+     "bis": "expansion"
     },
     {
      "id": 34329,
      "item": "Crux of the Apocalypse",
-     "variant": "dagger"
+     "variant": "dagger",
+     "conditional": true
     },
     {
      "id": 32838,
-     "item": "Warglaive of Azzinoth"
+     "item": "Warglaive of Azzinoth",
+     "bis": "expansion"
     },
     {
      "id": 34165,
      "item": "Fang of Kalecgos",
-     "variant": "dagger"
+     "variant": "dagger",
+     "conditional": true
     },
     {
      "id": 34196,
@@ -5835,7 +6192,8 @@
     },
     {
      "id": 28672,
-     "item": "Drape of the Dark Reavers"
+     "item": "Drape of the Dark Reavers",
+     "bis": "multiPhase"
     },
     {
      "id": 30101,
@@ -5852,7 +6210,8 @@
     },
     {
      "id": 28545,
-     "item": "Edgewalker Longboots"
+     "item": "Edgewalker Longboots",
+     "bis": "multiPhase"
     },
     {
      "id": 30052,
@@ -5941,7 +6300,8 @@
      "id": 32471,
      "item": "Shard of Azzinoth",
      "bis": "multiPhase",
-     "variant": "dagger"
+     "variant": "dagger",
+     "conditional": true
     },
     {
      "id": 32838,
@@ -5962,27 +6322,33 @@
    "P4": [
     {
      "id": 32235,
-     "item": "Cursed Vision of Sargeras"
+     "item": "Cursed Vision of Sargeras",
+     "bis": "multiPhase"
     },
     {
      "id": 32323,
-     "item": "Shadowmoon Destroyer's Drape"
+     "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
     },
     {
      "id": 32324,
-     "item": "Insidious Bands"
+     "item": "Insidious Bands",
+     "bis": "multiPhase"
     },
     {
      "id": 30106,
-     "item": "Belt of One-Hundred Deaths"
+     "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
     },
     {
      "id": 32366,
-     "item": "Shadowmaster's Boots"
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
     },
     {
      "id": 32260,
-     "item": "Choker of Endless Nightmares"
+     "item": "Choker of Endless Nightmares",
+     "bis": "multiPhase"
     },
     {
      "id": 32497,
@@ -6000,7 +6366,8 @@
     },
     {
      "id": 30450,
-     "item": "Warp-Spring Coil"
+     "item": "Warp-Spring Coil",
+     "bis": "multiPhase"
     },
     {
      "id": 33831,
@@ -6015,7 +6382,9 @@
     {
      "id": 32471,
      "item": "Shard of Azzinoth",
-     "variant": "dagger"
+     "bis": "multiPhase",
+     "variant": "dagger",
+     "conditional": true
     },
     {
      "id": 32838,
@@ -6024,11 +6393,13 @@
     },
     {
      "id": 32369,
-     "item": "Blade of Savagery"
+     "item": "Blade of Savagery",
+     "bis": "multiPhase"
     },
     {
      "id": 29949,
-     "item": "Arcanite Steam-Pistol"
+     "item": "Arcanite Steam-Pistol",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -6050,7 +6421,8 @@
     },
     {
      "id": 32497,
-     "item": "Stormrage Signet Ring"
+     "item": "Stormrage Signet Ring",
+     "bis": "expansion"
     },
     {
      "id": 34189,
@@ -6062,25 +6434,30 @@
     },
     {
      "id": 28830,
-     "item": "Dragonspine Trophy"
+     "item": "Dragonspine Trophy",
+     "bis": "expansion"
     },
     {
      "id": 32837,
-     "item": "Warglaive of Azzinoth"
+     "item": "Warglaive of Azzinoth",
+     "bis": "expansion"
     },
     {
      "id": 34329,
      "item": "Crux of the Apocalypse",
-     "variant": "dagger"
+     "variant": "dagger",
+     "conditional": true
     },
     {
      "id": 32838,
-     "item": "Warglaive of Azzinoth"
+     "item": "Warglaive of Azzinoth",
+     "bis": "expansion"
     },
     {
      "id": 34165,
      "item": "Fang of Kalecgos",
-     "variant": "dagger"
+     "variant": "dagger",
+     "conditional": true
     },
     {
      "id": 34196,
@@ -6138,7 +6515,8 @@
     },
     {
      "id": 28672,
-     "item": "Drape of the Dark Reavers"
+     "item": "Drape of the Dark Reavers",
+     "bis": "multiPhase"
     },
     {
      "id": 30101,
@@ -6155,7 +6533,8 @@
     },
     {
      "id": 28545,
-     "item": "Edgewalker Longboots"
+     "item": "Edgewalker Longboots",
+     "bis": "multiPhase"
     },
     {
      "id": 30052,
@@ -6244,7 +6623,8 @@
      "id": 32471,
      "item": "Shard of Azzinoth",
      "bis": "multiPhase",
-     "variant": "dagger"
+     "variant": "dagger",
+     "conditional": true
     },
     {
      "id": 32838,
@@ -6265,27 +6645,33 @@
    "P4": [
     {
      "id": 32235,
-     "item": "Cursed Vision of Sargeras"
+     "item": "Cursed Vision of Sargeras",
+     "bis": "multiPhase"
     },
     {
      "id": 32323,
-     "item": "Shadowmoon Destroyer's Drape"
+     "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
     },
     {
      "id": 32324,
-     "item": "Insidious Bands"
+     "item": "Insidious Bands",
+     "bis": "multiPhase"
     },
     {
      "id": 30106,
-     "item": "Belt of One-Hundred Deaths"
+     "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
     },
     {
      "id": 32366,
-     "item": "Shadowmaster's Boots"
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
     },
     {
      "id": 32260,
-     "item": "Choker of Endless Nightmares"
+     "item": "Choker of Endless Nightmares",
+     "bis": "multiPhase"
     },
     {
      "id": 32497,
@@ -6303,7 +6689,8 @@
     },
     {
      "id": 30450,
-     "item": "Warp-Spring Coil"
+     "item": "Warp-Spring Coil",
+     "bis": "multiPhase"
     },
     {
      "id": 33831,
@@ -6318,7 +6705,9 @@
     {
      "id": 32471,
      "item": "Shard of Azzinoth",
-     "variant": "dagger"
+     "bis": "multiPhase",
+     "variant": "dagger",
+     "conditional": true
     },
     {
      "id": 32838,
@@ -6327,11 +6716,13 @@
     },
     {
      "id": 32369,
-     "item": "Blade of Savagery"
+     "item": "Blade of Savagery",
+     "bis": "multiPhase"
     },
     {
      "id": 29949,
-     "item": "Arcanite Steam-Pistol"
+     "item": "Arcanite Steam-Pistol",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -6353,7 +6744,8 @@
     },
     {
      "id": 32497,
-     "item": "Stormrage Signet Ring"
+     "item": "Stormrage Signet Ring",
+     "bis": "expansion"
     },
     {
      "id": 34189,
@@ -6365,25 +6757,30 @@
     },
     {
      "id": 28830,
-     "item": "Dragonspine Trophy"
+     "item": "Dragonspine Trophy",
+     "bis": "expansion"
     },
     {
      "id": 32837,
-     "item": "Warglaive of Azzinoth"
+     "item": "Warglaive of Azzinoth",
+     "bis": "expansion"
     },
     {
      "id": 34329,
      "item": "Crux of the Apocalypse",
-     "variant": "dagger"
+     "variant": "dagger",
+     "conditional": true
     },
     {
      "id": 32838,
-     "item": "Warglaive of Azzinoth"
+     "item": "Warglaive of Azzinoth",
+     "bis": "expansion"
     },
     {
      "id": 34165,
      "item": "Fang of Kalecgos",
-     "variant": "dagger"
+     "variant": "dagger",
+     "conditional": true
     },
     {
      "id": 34196,
@@ -6405,7 +6802,8 @@
     {
      "id": 30684,
      "item": "Ravager's Cuffs",
-     "bis": "multiPhase"
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 28508,
@@ -6435,7 +6833,8 @@
     {
      "id": 28609,
      "item": "Emberspur Talisman",
-     "variant": "throughput"
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 28731,
@@ -6449,7 +6848,8 @@
     {
      "id": 28823,
      "item": "Eye of Gruul",
-     "bis": "expansion"
+     "bis": "expansion",
+     "conditional": true
     },
     {
      "id": 28771,
@@ -6472,7 +6872,8 @@
     {
      "id": 32516,
      "item": "Wraps of Purification",
-     "variant": "regen"
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 28511,
@@ -6483,7 +6884,9 @@
     {
      "id": 30684,
      "item": "Ravager's Cuffs",
-     "variant": "throughput"
+     "bis": "multiPhase",
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 30100,
@@ -6497,7 +6900,8 @@
      "id": 28823,
      "item": "Eye of Gruul",
      "bis": "expansion",
-     "variant": "regen"
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 30108,
@@ -6532,30 +6936,35 @@
      "id": 32584,
      "item": "Swiftheal Wraps",
      "bis": "multiPhase",
-     "variant": "throughput"
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 30871,
      "item": "Bracers of Martyrdom",
      "bis": "multiPhase",
-     "variant": "regen"
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 30895,
      "item": "Angelista's Sash",
      "bis": "multiPhase",
-     "variant": "throughput"
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 32519,
      "item": "Belt of Divine Guidance",
      "bis": "multiPhase",
-     "variant": "regen"
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 30912,
      "item": "Leggings of Eternity",
-     "bis": "multiPhase"
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 32609,
@@ -6575,13 +6984,15 @@
      "id": 32496,
      "item": "Memento of Tyrande",
      "bis": "expansion",
-     "variant": "throughput"
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 28823,
      "item": "Eye of Gruul",
      "bis": "expansion",
-     "variant": "regen"
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 32500,
@@ -6602,7 +7013,8 @@
    "P4": [
     {
      "id": 32585,
-     "item": "Swiftheal Mantle"
+     "item": "Swiftheal Mantle",
+     "bis": "multiPhase"
     },
     {
      "id": 32524,
@@ -6612,31 +7024,42 @@
     {
      "id": 32584,
      "item": "Swiftheal Wraps",
-     "variant": "throughput"
+     "bis": "multiPhase",
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 30871,
      "item": "Bracers of Martyrdom",
-     "variant": "regen"
+     "bis": "multiPhase",
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 30895,
      "item": "Angelista's Sash",
-     "variant": "throughput"
+     "bis": "multiPhase",
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 32519,
      "item": "Belt of Divine Guidance",
-     "variant": "regen"
+     "bis": "multiPhase",
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 30912,
      "item": "Leggings of Eternity",
-     "variant": "balanced"
+     "bis": "multiPhase",
+     "variant": "balanced",
+     "conditional": true
     },
     {
      "id": 32609,
-     "item": "Boots of the Divine Light"
+     "item": "Boots of the Divine Light",
+     "bis": "multiPhase"
     },
     {
      "id": 33281,
@@ -6652,25 +7075,30 @@
      "id": 32496,
      "item": "Memento of Tyrande",
      "bis": "expansion",
-     "variant": "throughput"
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 28823,
      "item": "Eye of Gruul",
      "bis": "expansion",
-     "variant": "regen"
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 32500,
-     "item": "Crystal Spire of Karabor"
+     "item": "Crystal Spire of Karabor",
+     "bis": "multiPhase"
     },
     {
      "id": 30911,
-     "item": "Scepter of Purification"
+     "item": "Scepter of Purification",
+     "bis": "multiPhase"
     },
     {
      "id": 32363,
-     "item": "Naaru-Blessed Life Rod"
+     "item": "Naaru-Blessed Life Rod",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -6684,7 +7112,8 @@
     },
     {
      "id": 32524,
-     "item": "Shroud of the Highborne"
+     "item": "Shroud of the Highborne",
+     "bis": "expansion"
     },
     {
      "id": 34233,
@@ -6700,21 +7129,27 @@
     },
     {
      "id": 33281,
-     "item": "Brooch of Nature's Mercy"
+     "item": "Brooch of Nature's Mercy",
+     "bis": "expansion"
     },
     {
      "id": 32528,
-     "item": "Blessed Band of Karabor"
+     "item": "Blessed Band of Karabor",
+     "bis": "expansion"
     },
     {
      "id": 32496,
      "item": "Memento of Tyrande",
-     "variant": "throughput"
+     "bis": "expansion",
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 28823,
      "item": "Eye of Gruul",
-     "variant": "regen"
+     "bis": "expansion",
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 34335,
@@ -6743,7 +7178,8 @@
     {
      "id": 30684,
      "item": "Ravager's Cuffs",
-     "bis": "multiPhase"
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 28508,
@@ -6773,7 +7209,8 @@
     {
      "id": 28609,
      "item": "Emberspur Talisman",
-     "variant": "throughput"
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 28731,
@@ -6787,7 +7224,8 @@
     {
      "id": 28823,
      "item": "Eye of Gruul",
-     "bis": "expansion"
+     "bis": "expansion",
+     "conditional": true
     },
     {
      "id": 28771,
@@ -6810,7 +7248,8 @@
     {
      "id": 32516,
      "item": "Wraps of Purification",
-     "variant": "regen"
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 28511,
@@ -6821,7 +7260,9 @@
     {
      "id": 30684,
      "item": "Ravager's Cuffs",
-     "variant": "throughput"
+     "bis": "multiPhase",
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 30100,
@@ -6835,7 +7276,8 @@
      "id": 28823,
      "item": "Eye of Gruul",
      "bis": "expansion",
-     "variant": "regen"
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 30108,
@@ -6870,30 +7312,35 @@
      "id": 32584,
      "item": "Swiftheal Wraps",
      "bis": "multiPhase",
-     "variant": "throughput"
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 30871,
      "item": "Bracers of Martyrdom",
      "bis": "multiPhase",
-     "variant": "regen"
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 30895,
      "item": "Angelista's Sash",
      "bis": "multiPhase",
-     "variant": "throughput"
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 32519,
      "item": "Belt of Divine Guidance",
      "bis": "multiPhase",
-     "variant": "regen"
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 30912,
      "item": "Leggings of Eternity",
-     "bis": "multiPhase"
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 32609,
@@ -6913,13 +7360,15 @@
      "id": 32496,
      "item": "Memento of Tyrande",
      "bis": "expansion",
-     "variant": "throughput"
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 28823,
      "item": "Eye of Gruul",
      "bis": "expansion",
-     "variant": "regen"
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 32500,
@@ -6940,7 +7389,8 @@
    "P4": [
     {
      "id": 32585,
-     "item": "Swiftheal Mantle"
+     "item": "Swiftheal Mantle",
+     "bis": "multiPhase"
     },
     {
      "id": 32524,
@@ -6950,31 +7400,42 @@
     {
      "id": 32584,
      "item": "Swiftheal Wraps",
-     "variant": "throughput"
+     "bis": "multiPhase",
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 30871,
      "item": "Bracers of Martyrdom",
-     "variant": "regen"
+     "bis": "multiPhase",
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 30895,
      "item": "Angelista's Sash",
-     "variant": "throughput"
+     "bis": "multiPhase",
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 32519,
      "item": "Belt of Divine Guidance",
-     "variant": "regen"
+     "bis": "multiPhase",
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 30912,
      "item": "Leggings of Eternity",
-     "variant": "balanced"
+     "bis": "multiPhase",
+     "variant": "balanced",
+     "conditional": true
     },
     {
      "id": 32609,
-     "item": "Boots of the Divine Light"
+     "item": "Boots of the Divine Light",
+     "bis": "multiPhase"
     },
     {
      "id": 33281,
@@ -6990,25 +7451,30 @@
      "id": 32496,
      "item": "Memento of Tyrande",
      "bis": "expansion",
-     "variant": "throughput"
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 28823,
      "item": "Eye of Gruul",
      "bis": "expansion",
-     "variant": "regen"
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 32500,
-     "item": "Crystal Spire of Karabor"
+     "item": "Crystal Spire of Karabor",
+     "bis": "multiPhase"
     },
     {
      "id": 30911,
-     "item": "Scepter of Purification"
+     "item": "Scepter of Purification",
+     "bis": "multiPhase"
     },
     {
      "id": 32363,
-     "item": "Naaru-Blessed Life Rod"
+     "item": "Naaru-Blessed Life Rod",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -7022,7 +7488,8 @@
     },
     {
      "id": 32524,
-     "item": "Shroud of the Highborne"
+     "item": "Shroud of the Highborne",
+     "bis": "expansion"
     },
     {
      "id": 34233,
@@ -7038,21 +7505,27 @@
     },
     {
      "id": 33281,
-     "item": "Brooch of Nature's Mercy"
+     "item": "Brooch of Nature's Mercy",
+     "bis": "expansion"
     },
     {
      "id": 32528,
-     "item": "Blessed Band of Karabor"
+     "item": "Blessed Band of Karabor",
+     "bis": "expansion"
     },
     {
      "id": 32496,
      "item": "Memento of Tyrande",
-     "variant": "throughput"
+     "bis": "expansion",
+     "variant": "throughput",
+     "conditional": true
     },
     {
      "id": 28823,
      "item": "Eye of Gruul",
-     "variant": "regen"
+     "bis": "expansion",
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 34335,
@@ -7128,7 +7601,8 @@
     {
      "id": 28767,
      "item": "The Decapitator",
-     "variant": "mainhand"
+     "variant": "mainhand",
+     "conditional": true
     }
    ],
    "P2": [
@@ -7275,19 +7749,23 @@
    "P4": [
     {
      "id": 32235,
-     "item": "Cursed Vision of Sargeras"
+     "item": "Cursed Vision of Sargeras",
+     "bis": "multiPhase"
     },
     {
      "id": 32581,
-     "item": "Swiftstrike Shoulders"
+     "item": "Swiftstrike Shoulders",
+     "bis": "multiPhase"
     },
     {
      "id": 32323,
-     "item": "Shadowmoon Destroyer's Drape"
+     "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
     },
     {
      "id": 30905,
-     "item": "Midnight Chestguard"
+     "item": "Midnight Chestguard",
+     "bis": "multiPhase"
     },
     {
      "id": 30863,
@@ -7305,7 +7783,8 @@
     },
     {
      "id": 32234,
-     "item": "Fists of Mukoa"
+     "item": "Fists of Mukoa",
+     "bis": "multiPhase"
     },
     {
      "id": 32347,
@@ -7319,11 +7798,13 @@
     },
     {
      "id": 30900,
-     "item": "Bow-stitched Leggings"
+     "item": "Bow-stitched Leggings",
+     "bis": "multiPhase"
     },
     {
      "id": 32510,
-     "item": "Softstep Boots of Tracking"
+     "item": "Softstep Boots of Tracking",
+     "bis": "multiPhase"
     },
     {
      "id": 32366,
@@ -7332,7 +7813,8 @@
     },
     {
      "id": 32260,
-     "item": "Choker of Endless Nightmares"
+     "item": "Choker of Endless Nightmares",
+     "bis": "multiPhase"
     },
     {
      "id": 32591,
@@ -7360,11 +7842,13 @@
     },
     {
      "id": 28830,
-     "item": "Dragonspine Trophy"
+     "item": "Dragonspine Trophy",
+     "bis": "multiPhase"
     },
     {
      "id": 32505,
-     "item": "Madness of the Betrayer"
+     "item": "Madness of the Betrayer",
+     "bis": "multiPhase"
     },
     {
      "id": 33831,
@@ -7373,7 +7857,8 @@
     },
     {
      "id": 32262,
-     "item": "Syphon of the Nathrezim"
+     "item": "Syphon of the Nathrezim",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -7389,7 +7874,8 @@
     {
      "id": 32235,
      "item": "Cursed Vision of Sargeras",
-     "near": true
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 34194,
@@ -7398,7 +7884,8 @@
     {
      "id": 32581,
      "item": "Swiftstrike Shoulders",
-     "near": true
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 34241,
@@ -7407,7 +7894,8 @@
     {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
-     "near": true
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 34343,
@@ -7415,7 +7903,8 @@
     },
     {
      "id": 30106,
-     "item": "Belt of One-Hundred Deaths"
+     "item": "Belt of One-Hundred Deaths",
+     "bis": "expansion"
     },
     {
      "id": 34188,
@@ -7431,7 +7920,8 @@
     },
     {
      "id": 32497,
-     "item": "Stormrage Signet Ring"
+     "item": "Stormrage Signet Ring",
+     "bis": "expansion"
     },
     {
      "id": 34427,
@@ -7440,12 +7930,14 @@
     {
      "id": 34331,
      "item": "Hand of the Deceiver",
-     "variant": "mainhand"
+     "variant": "mainhand",
+     "conditional": true
     },
     {
      "id": 34346,
      "item": "Mounting Vengeance",
-     "variant": "offhand"
+     "variant": "offhand",
+     "conditional": true
     }
    ]
   },
@@ -7504,7 +7996,8 @@
    "P2": [
     {
      "id": 28766,
-     "item": "Ruby Drape of the Mysticant"
+     "item": "Ruby Drape of the Mysticant",
+     "bis": "multiPhase"
     },
     {
      "id": 30107,
@@ -7588,7 +8081,8 @@
     },
     {
      "id": 30720,
-     "item": "Serpent-Coil Braid"
+     "item": "Serpent-Coil Braid",
+     "bis": "multiPhase"
     },
     {
      "id": 32374,
@@ -7601,29 +8095,35 @@
     },
     {
      "id": 29982,
-     "item": "Wand of the Forgotten Star"
+     "item": "Wand of the Forgotten Star",
+     "bis": "multiPhase"
     }
    ],
    "P4": [
     {
      "id": 32525,
-     "item": "Cowl of the Illidari High Lord"
+     "item": "Cowl of the Illidari High Lord",
+     "bis": "multiPhase"
     },
     {
      "id": 32524,
-     "item": "Shroud of the Highborne"
+     "item": "Shroud of the Highborne",
+     "bis": "multiPhase"
     },
     {
      "id": 32586,
-     "item": "Bracers of Nimble Thought"
+     "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
     },
     {
      "id": 32256,
-     "item": "Waistwrap of Infinity"
+     "item": "Waistwrap of Infinity",
+     "bis": "multiPhase"
     },
     {
      "id": 32239,
-     "item": "Slippers of the Seacaller"
+     "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
     },
     {
      "id": 33281,
@@ -7641,7 +8141,8 @@
     },
     {
      "id": 32527,
-     "item": "Ring of Ancient Knowledge"
+     "item": "Ring of Ancient Knowledge",
+     "bis": "multiPhase"
     },
     {
      "id": 32483,
@@ -7654,7 +8155,8 @@
     },
     {
      "id": 32374,
-     "item": "Zhar'doom, Greatstaff of the Devourer"
+     "item": "Zhar'doom, Greatstaff of the Devourer",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -7688,7 +8190,8 @@
     },
     {
      "id": 33497,
-     "item": "Mana Attuned Band"
+     "item": "Mana Attuned Band",
+     "bis": "expansion"
     },
     {
      "id": 34429,
@@ -7696,7 +8199,8 @@
     },
     {
      "id": 32483,
-     "item": "The Skull of Gul'dan"
+     "item": "The Skull of Gul'dan",
+     "bis": "expansion"
     },
     {
      "id": 34336,
@@ -7717,12 +8221,14 @@
     {
      "id": 28766,
      "item": "Ruby Drape of the Mysticant",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28530,
      "item": "Brooch of Unquenchable Fury",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30666,
@@ -7733,12 +8239,14 @@
     {
      "id": 28753,
      "item": "Ring of Recurrence",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28770,
      "item": "Nathrezim Mindblade",
-     "variant": "mainhand"
+     "variant": "mainhand",
+     "conditional": true
     },
     {
      "id": 28802,
@@ -7749,7 +8257,8 @@
     {
      "id": 28673,
      "item": "Tirisfal Wand of Ascendancy",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28783,
@@ -7766,7 +8275,8 @@
     {
      "id": 28766,
      "item": "Ruby Drape of the Mysticant",
-     "near": true
+     "near": true,
+     "conditional": true
     },
     {
      "id": 30107,
@@ -7822,17 +8332,20 @@
     {
      "id": 32590,
      "item": "Nethervoid Cloak",
-     "bis": "multiPhase"
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 32524,
      "item": "Shroud of the Highborne",
-     "near": true
+     "near": true,
+     "conditional": true
     },
     {
      "id": 32331,
      "item": "Cloak of the Illidari Council",
-     "near": true
+     "near": true,
+     "conditional": true
     },
     {
      "id": 30107,
@@ -7847,12 +8360,14 @@
     {
      "id": 30888,
      "item": "Anetheron's Noose",
-     "bis": "multiPhase"
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 32256,
      "item": "Waistwrap of Infinity",
-     "near": true
+     "near": true,
+     "conditional": true
     },
     {
      "id": 30916,
@@ -7862,7 +8377,8 @@
     {
      "id": 32367,
      "item": "Leggings of Devastation",
-     "near": true
+     "near": true,
+     "conditional": true
     },
     {
      "id": 32239,
@@ -7917,79 +8433,98 @@
    "P4": [
     {
      "id": 32525,
-     "item": "Cowl of the Illidari High Lord"
+     "item": "Cowl of the Illidari High Lord",
+     "bis": "multiPhase"
     },
     {
      "id": 32590,
      "item": "Nethervoid Cloak",
-     "variant": "hit"
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32524,
      "item": "Shroud of the Highborne",
-     "variant": "haste"
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 32331,
      "item": "Cloak of the Illidari Council",
-     "variant": "crit"
+     "variant": "crit",
+     "conditional": true
     },
     {
      "id": 30107,
-     "item": "Vestments of the Sea-Witch"
+     "item": "Vestments of the Sea-Witch",
+     "bis": "multiPhase"
     },
     {
      "id": 32586,
-     "item": "Bracers of Nimble Thought"
+     "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
     },
     {
      "id": 30888,
      "item": "Anetheron's Noose",
-     "variant": "spellpower"
+     "bis": "multiPhase",
+     "variant": "spellpower",
+     "conditional": true
     },
     {
      "id": 32256,
      "item": "Waistwrap of Infinity",
-     "variant": "haste"
+     "variant": "haste",
+     "conditional": true
     },
     {
      "id": 30916,
      "item": "Leggings of Channeled Elements",
+     "bis": "multiPhase",
      "variant": "overall"
     },
     {
      "id": 32367,
      "item": "Leggings of Devastation",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32239,
-     "item": "Slippers of the Seacaller"
+     "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
     },
     {
      "id": 32349,
-     "item": "Translucent Spellthread Necklace"
+     "item": "Translucent Spellthread Necklace",
+     "bis": "multiPhase"
     },
     {
      "id": 32527,
      "item": "Ring of Ancient Knowledge",
+     "bis": "multiPhase",
      "variant": "pair"
     },
     {
      "id": 30910,
-     "item": "Tempest of Chaos"
+     "item": "Tempest of Chaos",
+     "bis": "multiPhase"
     },
     {
      "id": 30872,
-     "item": "Chronicle of Dark Secrets"
+     "item": "Chronicle of Dark Secrets",
+     "bis": "multiPhase"
     },
     {
      "id": 32374,
-     "item": "Zhar'doom, Greatstaff of the Devourer"
+     "item": "Zhar'doom, Greatstaff of the Devourer",
+     "bis": "multiPhase"
     },
     {
      "id": 29982,
-     "item": "Wand of the Forgotten Star"
+     "item": "Wand of the Forgotten Star",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -8031,7 +8566,8 @@
     },
     {
      "id": 32483,
-     "item": "The Skull of Gul'dan"
+     "item": "The Skull of Gul'dan",
+     "bis": "expansion"
     },
     {
      "id": 33829,
@@ -8114,7 +8650,8 @@
     },
     {
      "id": 28521,
-     "item": "Mitts of the Treemender"
+     "item": "Mitts of the Treemender",
+     "bis": "multiPhase"
     },
     {
      "id": 29984,
@@ -8122,7 +8659,8 @@
     },
     {
      "id": 28591,
-     "item": "Earthsoul Leggings"
+     "item": "Earthsoul Leggings",
+     "bis": "multiPhase"
     },
     {
      "id": 30092,
@@ -8130,11 +8668,13 @@
     },
     {
      "id": 30110,
-     "item": "Coral Band of the Revived"
+     "item": "Coral Band of the Revived",
+     "bis": "multiPhase"
     },
     {
      "id": 28763,
-     "item": "Jade Ring of the Everliving"
+     "item": "Jade Ring of the Everliving",
+     "bis": "multiPhase"
     },
     {
      "id": 30108,
@@ -8219,17 +8759,18 @@
    "P4": [
     {
      "id": 32329,
-     "item": "Cowl of Benevolence"
+     "item": "Cowl of Benevolence",
+     "bis": "multiPhase"
     },
     {
      "id": 32524,
-     "item": "Shroud of the Highborne"
+     "item": "Shroud of the Highborne",
+     "bis": "multiPhase"
     },
     {
      "id": 32337,
      "item": "Shroud of Forgiveness",
-     "near": true,
-     "bis": "expansion"
+     "near": true
     },
     {
      "id": 30868,
@@ -8247,11 +8788,13 @@
     },
     {
      "id": 32328,
-     "item": "Botanist's Gloves of Growth"
+     "item": "Botanist's Gloves of Growth",
+     "bis": "multiPhase"
     },
     {
      "id": 30895,
-     "item": "Angelista's Sash"
+     "item": "Angelista's Sash",
+     "bis": "multiPhase"
     },
     {
      "id": 32339,
@@ -8265,11 +8808,13 @@
     },
     {
      "id": 30912,
-     "item": "Leggings of Eternity"
+     "item": "Leggings of Eternity",
+     "bis": "multiPhase"
     },
     {
      "id": 32609,
-     "item": "Boots of the Divine Light"
+     "item": "Boots of the Divine Light",
+     "bis": "multiPhase"
     },
     {
      "id": 33281,
@@ -8283,7 +8828,8 @@
     },
     {
      "id": 30110,
-     "item": "Coral Band of the Revived"
+     "item": "Coral Band of the Revived",
+     "bis": "multiPhase"
     },
     {
      "id": 29309,
@@ -8297,15 +8843,18 @@
     },
     {
      "id": 32500,
-     "item": "Crystal Spire of Karabor"
+     "item": "Crystal Spire of Karabor",
+     "bis": "multiPhase"
     },
     {
      "id": 30908,
-     "item": "Apostle of Argus"
+     "item": "Apostle of Argus",
+     "bis": "multiPhase"
     },
     {
      "id": 30911,
-     "item": "Scepter of Purification"
+     "item": "Scepter of Purification",
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -8334,7 +8883,8 @@
     {
      "id": 32524,
      "item": "Shroud of the Highborne",
-     "near": true
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 34212,
@@ -8360,11 +8910,13 @@
     },
     {
      "id": 33281,
-     "item": "Brooch of Nature's Mercy"
+     "item": "Brooch of Nature's Mercy",
+     "bis": "expansion"
     },
     {
      "id": 32528,
-     "item": "Blessed Band of Karabor"
+     "item": "Blessed Band of Karabor",
+     "bis": "expansion"
     },
     {
      "id": 34166,
@@ -8381,7 +8933,8 @@
     },
     {
      "id": 32496,
-     "item": "Memento of Tyrande"
+     "item": "Memento of Tyrande",
+     "bis": "expansion"
     },
     {
      "id": 34335,
@@ -8390,7 +8943,8 @@
     {
      "id": 34337,
      "item": "Golden Staff of the Sin'dorei",
-     "variant": "regen"
+     "variant": "regen",
+     "conditional": true
     },
     {
      "id": 34206,
@@ -8399,7 +8953,8 @@
     {
      "id": 30911,
      "item": "Scepter of Purification",
-     "near": true
+     "near": true,
+     "bis": "multiPhase"
     }
    ]
   },
@@ -8421,7 +8976,8 @@
     {
      "id": 30676,
      "item": "Lurker's Grasp",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28741,
@@ -8436,7 +8992,8 @@
     {
      "id": 28649,
      "item": "Garona's Signet Ring",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28830,
@@ -8456,13 +9013,15 @@
     {
      "id": 28672,
      "item": "Drape of the Dark Reavers",
+     "bis": "multiPhase",
      "variant": "individually"
     },
     {
      "id": 29994,
      "item": "Thalassian Wildercloak",
      "bis": "multiPhase",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30101,
@@ -8487,16 +9046,19 @@
     {
      "id": 28741,
      "item": "Skulker's Greaves",
+     "bis": "multiPhase",
      "variant": "individually"
     },
     {
      "id": 29995,
      "item": "Leggings of Murderous Intent",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28545,
-     "item": "Edgewalker Longboots"
+     "item": "Edgewalker Longboots",
+     "bis": "multiPhase"
     },
     {
      "id": 30052,
@@ -8523,7 +9085,8 @@
      "id": 29994,
      "item": "Thalassian Wildercloak",
      "bis": "multiPhase",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32252,
@@ -8563,19 +9126,22 @@
      "id": 32591,
      "item": "Choker of Serrated Blades",
      "bis": "multiPhase",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32497,
      "item": "Stormrage Signet Ring",
      "bis": "expansion",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 29301,
      "item": "Band of the Eternal Champion",
      "bis": "multiPhase",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30627,
@@ -8587,52 +9153,64 @@
      "id": 32505,
      "item": "Madness of the Betrayer",
      "bis": "multiPhase",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     }
    ],
    "P4": [
     {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase",
      "variant": "individually"
     },
     {
      "id": 29994,
      "item": "Thalassian Wildercloak",
-     "variant": "hit"
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32252,
      "item": "Nether Shadow Tunic",
+     "bis": "multiPhase",
      "variant": "individually"
     },
     {
      "id": 32324,
      "item": "Insidious Bands",
+     "bis": "multiPhase",
      "variant": "individually"
     },
     {
      "id": 29947,
      "item": "Gloves of the Searing Grip",
+     "bis": "multiPhase",
      "variant": "individually"
     },
     {
      "id": 30106,
-     "item": "Belt of One-Hundred Deaths"
+     "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
     },
     {
      "id": 32366,
-     "item": "Shadowmaster's Boots"
+     "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
     },
     {
      "id": 32260,
      "item": "Choker of Endless Nightmares",
+     "bis": "multiPhase",
      "variant": "individually"
     },
     {
      "id": 32591,
      "item": "Choker of Serrated Blades",
-     "variant": "hit"
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 33496,
@@ -8643,20 +9221,26 @@
      "id": 32497,
      "item": "Stormrage Signet Ring",
      "bis": "expansion",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 29301,
      "item": "Band of the Eternal Champion",
-     "variant": "hit"
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30627,
-     "item": "Tsunami Talisman"
+     "item": "Tsunami Talisman",
+     "bis": "multiPhase"
     },
     {
      "id": 32505,
-     "item": "Madness of the Betrayer"
+     "item": "Madness of the Betrayer",
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 33831,
@@ -8666,14 +9250,16 @@
     {
      "id": 33465,
      "item": "Staff of Primal Fury",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     }
    ],
    "P5": [
     {
      "id": 34244,
      "item": "Duplicitous Guise",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 34241,
@@ -8686,12 +9272,15 @@
     {
      "id": 32497,
      "item": "Stormrage Signet Ring",
-     "variant": "individually"
+     "bis": "expansion",
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 34189,
      "item": "Band of Ruinous Delight",
-     "variant": "hit"
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 34427,
@@ -8814,11 +9403,13 @@
     {
      "id": 28660,
      "item": "Gilded Thorium Cloak",
+     "bis": "multiPhase",
      "variant": "mitigation"
     },
     {
      "id": 29994,
      "item": "Thalassian Wildercloak",
+     "bis": "multiPhase",
      "variant": "threat"
     },
     {
@@ -8869,6 +9460,7 @@
     {
      "id": 28830,
      "item": "Dragonspine Trophy",
+     "bis": "multiPhase",
      "variant": "threat"
     },
     {
@@ -8898,20 +9490,24 @@
     {
      "id": 32324,
      "item": "Insidious Bands",
+     "bis": "multiPhase",
      "variant": "individually"
     },
     {
      "id": 30106,
-     "item": "Belt of One-Hundred Deaths"
+     "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
     },
     {
      "id": 32593,
      "item": "Treads of the Den Mother",
+     "bis": "multiPhase",
      "variant": "individually"
     },
     {
      "id": 32266,
      "item": "Ring of Deceitful Intent",
+     "bis": "multiPhase",
      "variant": "overall"
     },
     {
@@ -8928,17 +9524,20 @@
     {
      "id": 32505,
      "item": "Madness of the Betrayer",
+     "bis": "multiPhase",
      "variant": "threat"
     },
     {
      "id": 28830,
      "item": "Dragonspine Trophy",
      "near": true,
+     "bis": "multiPhase",
      "variant": "threat"
     },
     {
      "id": 30627,
-     "item": "Tsunami Talisman"
+     "item": "Tsunami Talisman",
+     "bis": "multiPhase"
     },
     {
      "id": 30883,
@@ -8973,11 +9572,13 @@
     },
     {
      "id": 32501,
-     "item": "Shadowmoon Insignia"
+     "item": "Shadowmoon Insignia",
+     "bis": "expansion"
     },
     {
      "id": 30883,
      "item": "Pillar of Ferocity",
+     "bis": "expansion",
      "variant": "mitigation"
     },
     {
@@ -8988,6 +9589,7 @@
     {
      "id": 32257,
      "item": "Idol of the White Stag",
+     "bis": "expansion",
      "variant": "threat"
     }
    ]

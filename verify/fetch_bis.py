@@ -341,30 +341,66 @@ def main():
         listed = {ph: {r[0] for r in rows if r[0] not in near_ids[ph]}
                   for ph, rows in per_phase.items()}
 
-        # --- how long it lasts, counted forward from the phase in hand ---
-        # Wowhead covers every spec; wowsims has no preset for the eight that are not
-        # meta, so it cannot decide this for anyone - its silence would read as "one
-        # phase" rather than as "unknown". It cross-checks instead, below.
-        # `expansion` means you got it before Sunwell and nothing in Sunwell replaced
-        # it - so the test is whether the LAST phase still names it, not how long a run
-        # it had. An item BiS in P1, P2 and P3 and then dropped is not BiS for the
-        # expansion; one picked up in P4 and still best in Sunwell is.
+        # --- how long it lasts: ONE answer per item, shown in every phase it appears ---
+        #
+        # This was computed per phase until Sep 2026 - "if you pick it up in P3, how long
+        # does it serve?" - which read as an item decaying down the ladder: gold in P3,
+        # gold in P4, purple in P5. It could not do anything else, because from the last
+        # phase an item has nothing left to outlive. But the colour is read as a property
+        # of the ITEM ("gold means this lasts the expansion"), so a ring that changed
+        # colour by the phase you happened to be looking at was answering a question
+        # nobody was asking.
+        #
+        # `expansion` still means the source's LAST phase names it - you get it before
+        # Sunwell and nothing in Sunwell replaces it - rather than any particular run
+        # length. An item BiS in P1-P3 and then dropped is not an expansion item; one
+        # picked up in P4 and still best in Sunwell is. A single-phase item is `phase`
+        # however late that phase falls.
         #
         # This must stay in step with longevityOf() in app.js, which derives the same
         # thing at render time. The client is what draws the rings; this field is the
         # record, and check_bis.py reports when the two disagree.
         last = PHASES[-1]
 
-        def tier_from(phase, item_id):
-            if item_id in listed[last] and phase != last:
-                return 3
-            run = 0
-            for ph in PHASES[PHASES.index(phase):]:
-                if item_id in listed[ph]:
-                    run += 1
-                else:
-                    break
-            return 2 if run > 1 else 1
+        def tier_from(item_id):
+            where = [ph for ph in PHASES if item_id in listed[ph]]
+            if len(where) < 2:
+                return 1
+            return 3 if item_id in listed[last] else 2
+
+        # --- and whether the claim rests on a CONDITION, which is the other axis ---
+        #
+        # Wowhead ranks plenty of rows "best" only under a condition - "Best - Hit",
+        # "Regen BiS", "BiS - Dagger". Those are real BiS calls, not alternatives, so they
+        # keep their tier; but a reader has to be able to tell them from an outright pick,
+        # or an item that is only ever the hit-rating choice looks like the flat answer.
+        # Halberd of Desolation is the worked example: "Best - Hit" in every hunter phase,
+        # shown as solid gold, which read as "this is THE hunter polearm for the expansion".
+        #
+        # Per ITEM, not per phase, and deliberately: a claim that leans on a condition
+        # anywhere leans on it, so one plain listing among four qualified ones does not
+        # earn a solid ring. Survival's Halberd is exactly that - plain "Best" in P4 only -
+        # and this is what keeps all three hunter specs reading the same.
+        #
+        # NOT conditional: wordings that emphasise rather than qualify, and a tank's
+        # threat/mitigation sets, which are two genuine kits rather than a caveat.
+        EMPHASIS = {"overall", "pair", "individually"}
+        SET_VARIANTS = {"threat", "mitigation"}
+        is_tank = "Tank" in reg.get(spec, {}).get("roles", [])
+
+        def conditional(variant):
+            if not variant or variant in EMPHASIS:
+                return False
+            return not (is_tank and variant in SET_VARIANTS)
+
+        cond_items = set()
+        for ph in PHASES:
+            for item_id, _, rank in per_phase[ph]:
+                if item_id in near_ids[ph]:
+                    continue
+                variant, _ = variant_for(rank)
+                if conditional(variant):
+                    cond_items.add(item_id)
 
         phases_out = {}
         for phase in PHASES:
@@ -384,12 +420,16 @@ def main():
                 entry = {"id": item_id, "item": rec["item"]}
                 if item_id in near_ids[phase]:
                     entry["near"] = True
-                tier = tier_from(phase, item_id)
+                tier = tier_from(item_id)
                 if tier > 1:
                     entry["bis"] = TIERS[tier]
                 variant, miss = variant_for(rank)
                 if variant:
                     entry["variant"] = variant
+                # Per item, so every phase of a conditional pick agrees. Absent means
+                # unconditional, the way `near` and `unique` mark only the exception.
+                if item_id in cond_items:
+                    entry["conditional"] = True
                 if miss:
                     unmapped.setdefault(miss, []).append(f"{spec} {phase}")
                 entries.append(entry)

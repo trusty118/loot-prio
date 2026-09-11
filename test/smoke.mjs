@@ -1198,15 +1198,18 @@ const blank = [...doc.querySelectorAll("tbody tr")]
    Derived from the open list rather than pinned - a literal would fail for a reason that
    says nothing about rendering. A row is counted only if it is BiS for nobody, since
    otherwise the BiS view has something to draw. */
-const p3Bis = new Set();
+const p3Bis = new Set();      /* real BiS only */
+const p3Any = new Set();      /* including near-BiS alternates, which now draw a ring */
 Object.values(bis.specs).forEach((byPhase) =>
-  (byPhase.P3 || []).forEach((r) => { if (!r.near) p3Bis.add(r.id); }));
+  (byPhase.P3 || []).forEach((r) => { p3Any.add(r.id); if (!r.near) p3Bis.add(r.id); }));
 const expectBlank = data.filter((r) => {
   if (!["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone)) return false;
   const held = zatarList.priorities[String(r.id)];
   if (held && held.length) return false;          /* he ranked it */
   if (held) return true;                          /* explicit [] - stays blank */
-  return !p3Bis.has(r.id);                        /* no key: blank only if BiS for nobody */
+  /* no key: the BiS view fills it, and since Sep 2026 that includes near-BiS
+     alternates - so a row is blank only when no spec has it at any tier */
+  return !p3Any.has(r.id);
 }).length;
 ok(blank.length === expectBlank,
    `rows with nothing to say render an empty cell, not "undefined" (${expectBlank})`);
@@ -2130,19 +2133,24 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
 /* `expansion` means you got the item before Sunwell and nothing in Sunwell replaced it,
    so the test is whether that source's LAST phase still names it - not how long a run it
    had. An item BiS in P1, P2 and P3 and then dropped is not BiS for the expansion.
-   Always within one source and one spec, never across sources. */
+   Always within one source and one spec, never across sources.
+
+   ONE tier per item, shown in every phase it appears, since Sep 2026. It used to be
+   computed per phase - "how long does it serve from here" - which could only decay down
+   the ladder, so an expansion item read gold, gold, purple as you moved through phases.
+   The colour is read as a property of the item, so it now is one.
+
+   Derived here a third time on purpose: fetch_bis.py computes it when it writes the file,
+   app.js when it draws the ring, and this reproduces it from the data alone. If any two
+   drift apart, this is what notices. */
 {
   const PH = ["P1", "P2", "P3", "P4", "P5"];
   const NAME = { 1: "phase", 2: "multiPhase", 3: "expansion" };
   const tierOfEntry = (phases, phase, id, ids, order) => {
     const last = order[order.length - 1];
-    if (ids[last] && ids[last].has(id) && phase !== last) return 3;
-    let run = 0;
-    for (let i = order.indexOf(phase); i < order.length; i++) {
-      if (!ids[order[i]] || !ids[order[i]].has(id)) break;
-      run++;
-    }
-    return run > 1 ? 2 : 1;
+    const seen = order.filter((p) => ids[p] && ids[p].has(id)).length;
+    if (seen < 2) return 1;
+    return ids[last] && ids[last].has(id) ? 3 : 2;
   };
 
   /* It reproduces every stored tier, which is what keeps the file and the screen saying
@@ -2269,12 +2277,16 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
   await until(() => bare.window.document.querySelector("tbody tr"));
   const bd = bare.window.document;
   const icons = () => bd.querySelectorAll("td.col-prio img.spec-icon").length;
-  const rings = () => bd.querySelectorAll(".spec-icon--bis, .spec-icon--bis2, .spec-icon--bis3").length;
+  /* --alt joined the ladder in Sep 2026: near-BiS alternates, which drew nothing before. */
+  const rings = () => bd.querySelectorAll(
+    ".spec-icon--bis, .spec-icon--bis2, .spec-icon--bis3, .spec-icon--alt").length;
 
   ok(bd.getElementById("list-trigger-name").textContent === "No list", "no list is open");
   ok(icons() > 100, `the priority column shows the BiS specs anyway (${icons()} icons)`);
   ok(rings() === icons(),
      `and every one carries a ring, because every one IS a BiS entry (${rings()}/${icons()})`);
+  ok(bd.querySelectorAll(".spec-icon--alt").length > 0,
+     `alternates show a blue ring here too (${bd.querySelectorAll(".spec-icon--alt").length})`);
 
   /* It must not read as a ranking, and three things keep it honest. */
   /* It used to carry no operators at all, which said "not an ordering" by ABSENCE and
