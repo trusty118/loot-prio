@@ -406,8 +406,12 @@ ok(rows().every((tr) => tr.children[1].textContent === "Weapon"),
 
 const ranged = byType("Ranged");
 ok(ranged === 6, `type=Ranged -> 6 rows (got ${ranged})`);
-ok(rows().every((tr) => tr.children[1].textContent === "Ranged/Relic"),
-   "every Ranged result shows Ranged/Relic");
+/* Ranged and Relic are separate slots again, Sep 2026. They share a paper-doll slot but
+   are not one question - a hunter after a bow and a druid after an idol were each handed
+   the other's items. The type bucket "Ranged" is bows/guns/crossbows/thrown/wands, all of
+   which sit in the Ranged slot. */
+ok(rows().every((tr) => tr.children[1].textContent === "Ranged"),
+   "every Ranged result shows the Ranged slot, no longer merged with Relic");
 
 ok(oneH + twoH + ranged === 31, `1H + 2H + Ranged = 31 (got ${oneH + twoH + ranged})`);
 
@@ -471,14 +475,35 @@ typeSel.value = ""; typeSel.dispatchEvent(new window.Event("change"));
 const slotSel = doc.getElementById("slot-select");
 const slotOpts = [...slotSel.querySelectorAll("option")].map((o) => o.value);
 ok(slotOpts.includes("Weapon"), "slot dropdown has a single Weapon option");
-ok(slotOpts.includes("Ranged/Relic"), "slot dropdown merges Ranged and Relic");
-ok(!["One-Hand", "Main-Hand", "Off-Hand", "Two-Hand", "Ranged", "Relic"].some((s) => slotOpts.includes(s)),
-   "no split weapon/ranged/relic slots remain in the dropdown");
+ok(slotOpts.includes("Ranged") && slotOpts.includes("Relic"),
+   "Ranged and Relic are separate options, not one merged Ranged/Relic");
+ok(!slotOpts.includes("Ranged/Relic"), "and the merged option is gone");
+ok(!["One-Hand", "Main-Hand", "Off-Hand", "Two-Hand"].some((s) => slotOpts.includes(s)),
+   "the weapon slots are still collapsed into one Weapon option");
 
 const bySlot = (v) => { slotSel.value = v; slotSel.dispatchEvent(new window.Event("change")); return rows().length; };
 // 35 = 31 weapons + shields/off-hand frills, which share the slot but not the type bucket
 ok(bySlot("Weapon") === 35, `slot=Weapon -> 10 One-Hand + 6 Main-Hand + 12 Off-Hand + 7 Two-Hand = 35 (got ${rows().length})`);
-ok(bySlot("Ranged/Relic") === 9, `slot=Ranged/Relic -> 7 ranged + 2 relics = 9 (got ${rows().length})`);
+/* Counted from the data rather than pinned, so refiling an item extends the assertion
+   instead of dating it - which is what a literal 9 did when Tome of the Lightbringer moved
+   from Ranged to Relic. */
+const inPhase3 = (r) => ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone);
+const nRanged = data.filter((r) => inPhase3(r) && r.slot === "Ranged").length;
+const nRelic = data.filter((r) => inPhase3(r) && r.slot === "Relic").length;
+ok(bySlot("Ranged") === nRanged, `slot=Ranged -> ${nRanged} (got ${rows().length})`);
+ok(bySlot("Relic") === nRelic, `slot=Relic -> ${nRelic} (got ${rows().length})`);
+ok(nRanged > 0 && nRelic > 0 && nRanged !== nRelic,
+   `and they are genuinely different sets (${nRanged} ranged, ${nRelic} relics)`);
+
+/* A libram, idol or totem is a relic and nothing else; a bow, gun, crossbow, thrown or
+   wand is ranged. The two were merged for display, so a slot/type disagreement in the
+   data could never show on screen - Tome of the Lightbringer sat as slot=Ranged
+   type=Libram until the split made it visible. */
+const misfiled = data.filter((r) =>
+  (r.slot === "Ranged" && ["Libram", "Idol", "Totem"].includes(r.type)) ||
+  (r.slot === "Relic" && ["Bow", "Gun", "Crossbow", "Thrown", "Wand"].includes(r.type)));
+ok(misfiled.length === 0,
+   `every relic type sits in the Relic slot and every ranged type in Ranged (${misfiled.map((r) => r.item).join(", ")})`);
 ok(bySlot("Head") === 12, `unrelated slots unaffected: Head -> 12 (got ${rows().length})`);
 slotSel.value = ""; slotSel.dispatchEvent(new window.Event("change"));
 

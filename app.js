@@ -269,16 +269,19 @@
     "Sunwell Plateau": JOURNAL + "kiljaeden.png"
   };
 
-  /* Slots as the character sheet presents them: every weapon slot is one "Weapon"
-     entry, and relics share the ranged slot - no class has both, so splitting them
-     only ever produced two half-empty options. */
+  /* Slots as the character sheet presents them: every weapon slot is one "Weapon" entry.
+
+     Ranged and Relic were collapsed into one "Ranged/Relic" option until Sep 2026, on the
+     grounds that they share a paper-doll slot and no class has both. They are still one
+     slot on the character, but they are not one QUESTION: a hunter scanning for a bow and
+     a druid scanning for an idol were both handed the other's items, and the label was the
+     only thing on the row that named two things at once. Ranged is guns, bows, crossbows,
+     thrown and wands; Relic is idols, totems and librams. */
   var SLOT_GROUP = {
     "One-Hand": "Weapon",
     "Main-Hand": "Weapon",
     "Off-Hand": "Weapon",
-    "Two-Hand": "Weapon",
-    "Ranged": "Ranged/Relic",
-    "Relic": "Ranged/Relic"
+    "Two-Hand": "Weapon"
   };
 
   function slotGroup(slot) {
@@ -287,7 +290,7 @@
 
   var SLOT_ORDER = [
     "Head", "Neck", "Shoulder", "Back", "Chest", "Wrist", "Hands", "Waist",
-    "Legs", "Feet", "Finger", "Trinket", "Weapon", "Ranged/Relic"
+    "Legs", "Feet", "Finger", "Trinket", "Weapon", "Ranged", "Relic"
   ];
 
   /* The raw `type` field has 30+ values; collapse them into usable buckets. */

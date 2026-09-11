@@ -68,8 +68,24 @@ together for hand-editing.
 | `zone` | `Black Temple`, `Mount Hyjal`, `Crafted (Heart of Darkness)` |
 | `boss` | Boss name, `Trash`, or `—` for crafted (rendered as its zone, not as a boss) |
 | `item` / `id` / `wowhead` | Name, real TBC item ID, Wowhead link |
-| `slot` | `Head` … `Two-Hand`, `Ranged`, `Relic`. Collapsed for display: all weapon slots → `Weapon`, `Ranged`+`Relic` → `Ranged/Relic` |
+| `slot` | `Head` … `Two-Hand`, `Ranged`, `Relic`. Only the weapon slots collapse for display, all four → `Weapon`. **`Ranged` and `Relic` are separate, Sep 2026** — see below |
 | `type` | Armour class or weapon type. Displayed with tidy-ups: `2H Staff` → `Staff`, bare `Mace` → `1H Mace` (hand count derived from slot) |
+
+**`Ranged` and `Relic` were one `Ranged/Relic` option until Sep 2026.** The argument for
+merging them was that they share a paper-doll slot and no class has both, so splitting
+produced two half-empty options. That was right about the character sheet and wrong about the
+reader: they are one slot but not one *question*, and a hunter scanning for a bow and a druid
+scanning for an idol were each handed the other's items. `Ranged` is guns, bows, crossbows,
+thrown and wands; `Relic` is idols, totems and librams.
+
+**The merge was also hiding a data error, which is the better reason it had to go.** With the
+two collapsed, a slot that disagreed with its own type could never show on screen — and
+*Tome of the Lightbringer* sat as `slot: "Ranged"`, `type: "Libram"`. A libram is a relic. It
+is refiled, and `test/smoke.mjs` now fails on any relic type outside the `Relic` slot, or any
+ranged type outside `Ranged`, so the next one cannot hide the same way.
+
+Phases 4 and 5 hold no relics at all, so the option simply does not appear there —
+`fillSelect()` lists what the phase has.
 | `roles` | What the item is *for*: any of Physical / Caster / Healer / Tank / Tier, **as a list**. Drives the editor's smart filtering, feeds search, and its first value tags the row as `data-role`. Not rendered — see §6 |
 | `notes` | **Facts about the item only** — where else it drops, how it is obtained. Opinions live in a list |
 | `unique` | `true` only on the 23 unique items. **Absent means not unique** — see Repeats in §3 |
