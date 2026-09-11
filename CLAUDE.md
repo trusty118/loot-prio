@@ -69,7 +69,25 @@ together for hand-editing.
 | `boss` | Boss name, `Trash`, or `—` for crafted (rendered as its zone, not as a boss) |
 | `item` / `id` / `wowhead` | Name, real TBC item ID, Wowhead link |
 | `slot` | `Head` … `Two-Hand`, `Ranged`, `Relic`. Only the weapon slots collapse for display, all four → `Weapon`. **`Ranged` and `Relic` are separate, Sep 2026** — see below |
-| `type` | Armour class or weapon type. Displayed with tidy-ups: `2H Staff` → `Staff`, bare `Mace` → `1H Mace` (hand count derived from slot) |
+| `type` | Armour class or weapon type. Displayed with tidy-ups: `2H Staff` → `Staff`, bare `Mace` → `1H Mace` (hand count derived from slot). Caster off-hands carry `Off-hand` — see below |
+
+**A caster off-hand carries `type: "Off-hand"`, and getting there needed a rule keyed on
+the RAW tooltip slot.** `fetch_items.py`'s `slot_type()` reads the two tooltip lines after
+the bind line — slot, then type. An off-hand frill has **no type line at all**: the tooltip
+goes straight from `Held In Off-hand` to the first stat. So nine records shipped with a
+**stat as their item type** — `"+19 Stamina"`, `"+22 Intellect"` — which showed twice over:
+the Type column read `+19 Stamina`, and since `typeGroup()` ends with *"everything left is a
+weapon"*, they filed under **Weapons - 1H**, handing anyone filtering for one-handers nine
+caster books.
+
+`BY_RAW_SLOT` is the fix and it **cannot be folded into `BY_SLOT`**, which is the
+obvious-looking home. `SLOT` flattens three raw strings onto one `Off-Hand`, and that slot
+also holds 15 shields, 5 fists and a sword — all of which *do* carry a type line and would be
+mislabelled by a blanket rule. Only `Held In Off-hand` means "frill with no type of its own".
+
+`test/smoke.mjs` now fails on any `type` beginning with `+`, and on any armour-slot record
+whose type is not a known one — the second being the assertion that would have caught these,
+since the first only shows on rows somebody happened to look at.
 
 **`Ranged` and `Relic` were one `Ranged/Relic` option until Sep 2026.** The argument for
 merging them was that they share a paper-doll slot and no class has both, so splitting
@@ -444,6 +462,49 @@ reads as "lasts longer":
 | Phase BiS | epic purple `#a335ee` |
 | Multi-phase BiS | legendary orange `#ff8000` |
 | Expansion BiS | artifact gold `#e6cc80` |
+| **Alternate BiS** | **rare blue `#0070dd`** |
+
+**Two independent axes, Sep 2026: the COLOUR says how long, the RING STYLE says whether
+there is a condition on it.** A dashed ring means the guide only ever called the item best
+*under a condition* — `Best - Hit`, `Regen BiS`, `BiS - Dagger`. Those are real BiS calls
+and keep their colour; the broken edge is what stops an item that is merely the hit-rating
+choice reading as the flat answer. 168 of 1,889 entries are dashed.
+
+`outline`, not a pseudo element — `.spec-icon` is an `<img>`, and **a replaced element
+generates no `::before`/`::after` at all**, so that version renders nothing and fails
+silently. `box-shadow` cannot be dashed. `outline` is the only property that draws a broken
+ring on an image, and it follows `border-radius`.
+
+**Longevity is one answer per item, shown in every phase it appears.** It was computed per
+phase until Sep 2026 — *"if you pick it up in P3, how long does it serve?"* — which could
+only ever decay down the ladder: gold in P3, gold in P4, **purple in P5**, because from the
+last phase an item has nothing left to outlive. The colour is read as a property of the
+item, so a ring that changed colour with the phase you happened to be looking at was
+answering a question nobody asked. That change moved **393 of 1,674 entries**, almost all
+upward, and is why the table is markedly more orange and gold than it was.
+
+**`conditional` is per ITEM, not per phase**, deliberately: a claim that leans on a
+condition anywhere leans on it, so one plain listing among four qualified ones does not earn
+a solid ring. Survival's Halberd of Desolation is exactly that — plain `Best` in P4 only —
+and this is what keeps all three hunter specs reading the same.
+
+**Not conditional:** wordings that emphasise rather than qualify (`Best Overall`,
+`Best Pair`, `Best Individually`), and a **tank's `threat`/`mitigation` sets**, which are two
+genuine kits rather than a caveat. That exception is keyed on the spec carrying `Tank` in
+its `roles`, so the three `mitigation` entries hunters carry (Wowhead writes
+`Best Survivability` on a hunter two-hander) stay dashed.
+
+**Blue is drawn for `near`, which drew nothing at all before.** 215 entries a guide listed
+as `Best` past what the slot can hold — by its own row order, the second or third choice.
+They were stored, validated by `check_bis.py`, and rendered by nothing, so an item could
+look unwanted when a guide had named it. Blue sits *below* epic on the quality ladder, which
+is why `bisRank()` exists: a class icon takes the best tier among its specs, and the numeric
+maximum would have let one spec's alternative outrank another's expansion pick.
+
+**`bisPick()` is the guard against the blue rung leaking.** `bisTier()` answers 4 for an
+alternate because it draws a ring; but an alternate is not the pick, so it must not seed a
+list, satisfy `BiS only`, or bridge a row through `bisOnlyMatch()`. Those ask "is this BiS";
+only the rendering asks "does this draw a ring".
 
 **A class icon carries the rings of the specs behind it.** `bis.json` is keyed by spec, but
 104 of the 398 priority entries name a *class*, so an item that is BiS for Arcane usually

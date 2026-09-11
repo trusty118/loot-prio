@@ -541,7 +541,7 @@
        row into a filter that asks "where do I stand in this line" when the author's point
        was that there is no line. An absent key is the different thing: not an answer. */
     if (activeTemplate && activeTemplate.priorities[rec.id]) return false;
-    return SELECTED_SPECS.some(function (id) { return bisTier(id, rec.id); });
+    return SELECTED_SPECS.some(function (id) { return bisPick(id, rec.id); });
   }
 
   function typeLabel(rec) {
@@ -974,7 +974,7 @@
          somebody turns the toggle off. Seeding already reads state.bisSource; this is the
          second preference it honours, for the same reason. */
       var specs = order.filter(function (id) {
-        return bisTier(id, rec.id, phase) && showsSpec(id);
+        return bisPick(id, rec.id, phase) && showsSpec(id);
       });
       if (!specs.length) return;
       priorities[rec.id] = specs.map(function (id, i) {
@@ -1757,7 +1757,7 @@
       if (state.classes.length && !selectionHas(rec) && !bisOnlyMatch(rec)) return false;
       /* "bis" skips only the BiS narrowing, so the toggle can count what it would leave */
       if (skip !== "bis" && state.bisOnly && state.specs.length &&
-          !state.specs.some(function (id) { return bisTier(id, rec.id); })) return false;
+          !state.specs.some(function (id) { return bisPick(id, rec.id); })) return false;
     }
 
     /* A token is not cloth or a caster item itself, but it turns into one. Match
@@ -2246,7 +2246,7 @@
        class-wide union of nine specs' BiS lists wouldn't mean anything. */
     if (state.specs.length) {
       var bisRows = filtered("bis").filter(function (r) {
-        return state.specs.some(function (id) { return bisTier(id, r.id); });
+        return state.specs.some(function (id) { return bisPick(id, r.id); });
       });
       /* Reads "8 items" rather than "BiS only 8". The label carries the count and
          there is no separate badge, so it says how many rather than naming the rule.
@@ -2461,7 +2461,7 @@
       resolved.name + ", position " + (index + 1) + " of " + list.length);
 
     var mark = bisMark(resolved, rec.id);
-    wrap.appendChild(specIcon(resolved, mark.tier, mark.specs, mark.variant));
+    wrap.appendChild(specIcon(resolved, mark.tier, mark.specs, mark.variant, mark.conditional));
 
     var x = document.createElement("button");
     x.type = "button";
@@ -2875,10 +2875,34 @@
   var BIS_LONGEVITY = {
     1: { cls: "spec-icon--bis", label: "Phase BiS" },
     2: { cls: "spec-icon--bis2", label: "Multi-phase BiS" },
-    3: { cls: "spec-icon--bis3", label: "Expansion BiS" }
+    3: { cls: "spec-icon--bis3", label: "Expansion BiS" },
+    /* Rare blue, Sep 2026. 215 entries a guide listed as "Best" past what the slot can
+       hold - by its own row order the second or third choice. They were stored, validated
+       and drawn by NOTHING, which is why an item could look unwanted when a guide had
+       named it. Blue sits below epic on the same quality ladder the other three borrow,
+       so "an alternative" reads as "a rung down" without a new vocabulary. */
+    4: { cls: "spec-icon--alt", label: "Alternate BiS" }
   };
 
   var BIS_LONGEVITY_BY_NAME = { "phase": 1, "multiPhase": 2, "expansion": 3 };
+
+  /* The OTHER axis, and it is independent of the three above: a ring is dotted when the
+     guide only ever called the item best under a condition - "Best - Hit", "Regen BiS",
+     "BiS - Dagger". Those are real BiS calls and keep their colour; the broken edge is
+     what stops an item that is merely the hit-rating choice reading as the flat answer.
+     Halberd of Desolation is the case that prompted it: "Best - Hit" in every hunter
+     phase, shown as solid gold. */
+  var BIS_CONDITIONAL_CLASS = "spec-icon--cond";
+
+  /* Qualifiers that say nothing once they reach a tooltip. "Best Overall" is how Wowhead
+     marks the piece that is simply best REGARDLESS of the two specialised sets beside it -
+     37 of its 41 entries are tanks, sitting alongside that spec's Best Threat and Best
+     Mitigation rows. So it is the absence of a condition, and "Multi-phase BiS - Overall"
+     spends a suffix announcing that no suffix applies.
+
+     Suppressed at render, not stripped from the data: bis.json records what the guide
+     actually wrote, which is what verify/dump_bis_raw.py audits against. */
+  var SILENT_VARIANTS = { "overall": true };
 
   /* Flattened from data/bis.json: "P3|ProtWarr|32375" -> { longevity, variant }.
 
@@ -2917,29 +2941,36 @@
 
      A VARIANT is not derivable and is read where a source states one: "best threat" versus
      "best mitigation" is a judgement the guide made. wowsims states none. */
-  function longevityOf(listedByPhase, phases, phase, itemId) {
+  /* ONE answer per item, shown in every phase it appears - not "how long does it serve
+     from here", which is what this computed until Sep 2026. That version could only ever
+     decay down the ladder: gold in P3, gold in P4, purple in P5, because from the last
+     phase an item has nothing left to outlive. The colour is read as a property of the
+     ITEM, so a ring that changed colour with the phase you were looking at was answering
+     a question nobody asked.
+
+     Must stay in step with tier_from() in verify/fetch_bis.py - that writes the stored
+     `bis` field, this draws the ring, and a test asserts the rule reproduces every
+     stored value. */
+  function longevityOf(listedByPhase, phases, itemId) {
     var last = phases[phases.length - 1];
-    var here = phases.indexOf(phase);
-
-    var survives = !!(listedByPhase[last] && listedByPhase[last][itemId]);
-    if (survives && phase !== last) return 3;
-
-    var run = 0;
-    for (var i = here; i < phases.length; i++) {
-      if (!listedByPhase[phases[i]] || !listedByPhase[phases[i]][itemId]) break;
-      run++;
+    var seen = 0;
+    for (var i = 0; i < phases.length; i++) {
+      if (listedByPhase[phases[i]] && listedByPhase[phases[i]][itemId]) seen++;
     }
-    return run > 1 ? 2 : 1;
+    if (seen < 2) return 1;
+    return (listedByPhase[last] && listedByPhase[last][itemId]) ? 3 : 2;
   }
 
   function indexBis(doc) {
     BIS_INDEX = { wowhead: {}, wowsims: {}, custom: {} };
     indexOneSource(BIS_INDEX.wowhead, (doc && doc.specs) || {}, function (e) {
       /* A guide lists several rows as "Best" in one slot and says which is actually BiS
-         through row order. fetch_bis.py marks everything past what the slot holds, and a
-         near-BiS alternative is not BiS: no ring, and no claim on how long it lasted. */
-      if (!e || e.id == null || e.near) return null;
-      return { id: e.id, variant: e.variant || "" };
+         through row order. fetch_bis.py marks everything past what the slot holds. A
+         near-BiS row is not BiS and still makes no claim about how long anything lasted -
+         it just draws a blue ring now instead of nothing at all. */
+      if (!e || e.id == null) return null;
+      return { id: e.id, variant: e.variant || "",
+               conditional: !!e.conditional, near: !!e.near };
     });
     indexOneSource(BIS_INDEX.wowsims, (doc && doc.wowsimsPresets) || {}, function (id) {
       /* a preset is a bare list of item ids - no qualifier, and no ranking to lose */
@@ -2955,12 +2986,16 @@
       var raw = bySpec[specName] || {};
       var phases = PHASE_IDS.filter(function (p) { return raw[p]; });
 
+      /* Near-BiS rows are deliberately absent from `listed`: an alternative must not
+         prove an item survived a phase, or a third-choice sword would look like the item
+         lasting. They ARE indexed below, at longevity 4, because they now draw a blue
+         ring - being shown and counting as evidence are different things. */
       var listed = {};
       phases.forEach(function (phase) {
         listed[phase] = {};
         (raw[phase] || []).forEach(function (row) {
           var e = read(row);
-          if (e) listed[phase][e.id] = true;
+          if (e && !e.near) listed[phase][e.id] = true;
         });
       });
 
@@ -2969,8 +3004,9 @@
           var e = read(row);
           if (!e) return;
           into[phase + "|" + specName + "|" + e.id] = {
-            longevity: longevityOf(listed, phases, phase, e.id),
-            variant: e.variant
+            longevity: e.near ? 4 : longevityOf(listed, phases, e.id),
+            variant: e.variant,
+            conditional: !e.near && !!e.conditional
           };
         });
       });
@@ -3002,6 +3038,21 @@
     return hit ? hit.longevity : 0;
   }
 
+  function bisConditional(specId, itemId, phase) {
+    var hit = bisAt(specId, itemId, phase);
+    return !!(hit && hit.conditional);
+  }
+
+  /* "Is this item actually BiS for that spec", as opposed to "does it draw a ring".
+     Since Sep 2026 bisTier() also answers 4 for a near-BiS alternative, which draws a
+     blue ring but is NOT the pick - so it must not seed a list, satisfy the BiS only
+     filter, or bridge a row through bisOnlyMatch(). Those all ask the first question;
+     only the rendering asks the second. */
+  function bisPick(specId, itemId, phase) {
+    var t = bisTier(specId, itemId, phase);
+    return t >= 1 && t <= 3 ? t : 0;
+  }
+
   /* What ring an icon should carry, and who it is for. A spec icon answers for
      itself. A class icon answers for the specs behind it: bis.json is keyed by
      spec, but 104 of the 398 priority entries name a class, so an item that is
@@ -3016,7 +3067,8 @@
 
     if (REG.specs[resolved.id] && !stands_for.length) {
       return { tier: bisTier(resolved.id, itemId), specs: [],
-               variant: bisVariant(resolved.id, itemId) };
+               variant: bisVariant(resolved.id, itemId),
+               conditional: bisConditional(resolved.id, itemId) };
     }
 
     /* an umbrella spec aggregates like a class does, over the specs it covers */
@@ -3036,16 +3088,31 @@
        Prot Warrior's threat piece is a Fury Warrior's plain BiS. Only carry a qualifier
        up when every ringed spec behind the icon agrees on it; otherwise the icon would
        claim one spec's reason on behalf of all of them. */
-    var tier = 0, names = [], variants = {};
+    var tier = 0, names = [], variants = {}, allCond = true;
     ids.forEach(function (id) {
       var t = bisTier(id, itemId);
       if (!t) return;
-      if (t > tier) tier = t;
+      /* "Highest" is not the numeric maximum: 4 is the near-BiS blue, which sits BELOW
+         the three real tiers rather than above them. Ranking it 0 keeps a class icon
+         showing the best thing any of its specs actually has, so an alternative for one
+         spec never outranks a genuine expansion pick for another. */
+      if (bisRank(t) > bisRank(tier)) tier = t;
+      if (!bisConditional(id, itemId)) allCond = false;
       names.push(shortSpecName(id, resolved.name));
       variants[bisVariant(id, itemId)] = 1;
     });
     var agreed = Object.keys(variants);
-    return { tier: tier, specs: names, variant: agreed.length === 1 ? agreed[0] : "" };
+    /* Dotted only when EVERY spec behind the icon is conditional. If one of them has the
+       item outright, the class does have an unconditional pick, and a broken ring would
+       understate it - the same reasoning the variant line above already follows. */
+    return { tier: tier, specs: names, variant: agreed.length === 1 ? agreed[0] : "",
+             conditional: names.length > 0 && allCond };
+  }
+
+  /* Where a longevity sits on the quality ladder. 4 (near-BiS blue) is rare quality,
+     below epic, so it ranks under the three BiS tiers rather than over them. */
+  function bisRank(t) {
+    return t === 4 ? 0.5 : (t || 0);
   }
 
   /* These names only ever appear on the icon they belong to, listing what it
@@ -3067,10 +3134,11 @@
     return spec.name;
   }
 
-  function specIcon(spec, bis, forSpecs, variant) {
+  function specIcon(spec, bis, forSpecs, variant, conditional) {
     var lasts = BIS_LONGEVITY[bis];
     var img = document.createElement("img");
-    img.className = "spec-icon" + (lasts ? " " + lasts.cls : "");
+    img.className = "spec-icon" + (lasts ? " " + lasts.cls : "") +
+      (lasts && conditional ? " " + BIS_CONDITIONAL_CLASS : "");
     /* which registry entry this icon is, so nothing downstream has to work it out
        from the display name - forms make that lossy ("Feral Druid (cat)") */
     if (spec.id) img.dataset.id = spec.id;
@@ -3085,7 +3153,18 @@
        slot - a tank's threat helm and mitigation helm are both BiS. It rides on the
        longevity line, not the name line: it is a fact about the ring rather than about
        the icon, and the ring's colour keeps meaning longevity alone. */
-    var bisLine = lasts ? lasts.label + (variant ? " (" + variant + ")" : "") : "";
+    /* "Phase BiS - Hit". The qualifier used to arrive in brackets behind the word
+       "Conditional", which named the condition twice; a dash reads as one phrase and puts
+       the tier - the thing actually being looked up - at the front.
+
+       The DASHED RING is what says "conditional" now. 18 conditional entries have no
+       qualifier to name, because `conditional` is a property of the item and those
+       particular listings are the plain one: they show a broken ring and an unadorned
+       label, which is the ring carrying it alone. */
+    var shown = SILENT_VARIANTS[variant] ? "" : variant;
+    var bisLine = lasts
+      ? lasts.label + (shown ? " - " + shown.charAt(0).toUpperCase() + shown.slice(1) : "")
+      : "";
 
     img.alt = who + (bisLine ? " (" + bisLine + ")" : "");
     /* data-tip rather than title: the native tooltip has a ~1s delay the browser
@@ -3173,6 +3252,9 @@
     if (activeTemplate && inTemplate(rec)) return td;
 
     var specs = Object.keys(REG.specs).filter(function (id) {
+      /* Alternates included, since Sep 2026: this view answers "what is BiS here", and
+         a guide's second choice is part of that answer. It draws a blue ring, which is
+         a rung down rather than a claim. +30 icons on Phase 3, worst row 9. */
       return bisTier(id, rec.id) && showsSpec(id);
     });
     if (!specs.length) return td;
@@ -3192,7 +3274,8 @@
       }
       var spec = REG.specs[id];
       var icon = specIcon({ id: id, name: spec.name, icon: spec.icon },
-                          bisTier(id, rec.id), [], bisVariant(id, rec.id));
+                          bisTier(id, rec.id), [], bisVariant(id, rec.id),
+                          bisConditional(id, rec.id));
       /* the same "not you" dimming a priority line uses, so a selection reads the same
          way whichever the column is showing */
       if (picking && SELECTED_SPECS.indexOf(id) === -1) {
@@ -3265,7 +3348,7 @@
         td.appendChild(raceIcon);
       }
       var mark = bisMark(resolved, rec.id);
-      var icon = specIcon(resolved, mark.tier, mark.specs, mark.variant);
+      var icon = specIcon(resolved, mark.tier, mark.specs, mark.variant, mark.conditional);
       if (muted) icon.classList.add("spec-icon--muted");
       makeFocusable(icon, resolved.id);
       td.appendChild(icon);

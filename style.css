@@ -44,6 +44,9 @@
 
   /* WoW item-quality colours, reused for the BiS longevity ladder:
      epic -> legendary -> artifact, matching how long an item stays BiS */
+  /* Rare blue, the rung below epic on WoW's own quality ladder - so an alternate BiS
+     reads as "one step down" without inventing a vocabulary. Sep 2026. */
+  --rare: #0070dd;
   --epic: #a335ee;
   --legendary: #ff8000;
   --artifact: #e6cc80;
@@ -1016,7 +1019,8 @@ tbody tr:hover .spec-icon--muted { opacity: .5; }
    apart by hue alone and nothing shifts position between them. */
 .spec-icon--bis,
 .spec-icon--bis2,
-.spec-icon--bis3 {
+.spec-icon--bis3,
+.spec-icon--alt {
   margin: 4px 5px;   /* clearance for the 4px ring */
 }
 
@@ -1037,6 +1041,37 @@ tbody tr:hover .spec-icon--muted { opacity: .5; }
     0 0 0 4px var(--artifact),
     0 0 9px rgba(230, 204, 128, .6);
 }
+
+/* Alternate BiS: a guide listed it best, but past what the slot can hold, so by its own
+   row order it is the second or third choice. 215 of these were stored and drawn by
+   nothing at all until Sep 2026. */
+.spec-icon--alt {
+  box-shadow:
+    0 0 0 4px var(--rare),
+    0 0 8px rgba(0, 112, 221, .55);
+}
+
+/* The second, independent axis: BROKEN means the guide only ever called it best under a
+   condition - "Best - Hit", "Regen BiS", "BiS - Dagger". The colour still means how long
+   it lasted; the gap in the ring says the claim has a condition on it.
+
+   OUTLINE, not a pseudo element. These icons are <img>, and a replaced element generates
+   no ::before/::after at all - that version renders nothing and fails silently, which is
+   exactly the sort of CSS bug this file keeps a list of. box-shadow cannot be dashed, so
+   outline is the only property that draws a broken ring on an image; it follows
+   border-radius in every browser this site supports. */
+.spec-icon--cond {
+  box-shadow: none;
+  outline: 3px dashed currentColor;
+  outline-offset: 1px;
+}
+
+/* currentColor keeps one outline rule for four tiers - the colour still means longevity
+   and is set per tier, the dashes mean "conditional". */
+.spec-icon--bis.spec-icon--cond { color: var(--epic); }
+.spec-icon--bis2.spec-icon--cond { color: var(--legendary); }
+.spec-icon--bis3.spec-icon--cond { color: var(--artifact); }
+.spec-icon--alt.spec-icon--cond { color: var(--rare); }
 
 /* icons this size need the line to breathe, or wrapped priorities collide */
 .col-prio { line-height: 1.9; }
