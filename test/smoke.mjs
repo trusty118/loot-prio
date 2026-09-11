@@ -404,6 +404,15 @@ ok(twoH === 7, `type=Weapons - 2H -> 7 rows (got ${twoH})`);
 ok(rows().every((tr) => tr.children[1].textContent === "Weapon"),
    "every 2H result shows the collapsed Weapon slot");
 
+/* The user-visible half of the off-hand fix. Nine caster off-hands carried a stat as
+   their type; typeGroup() ends with "everything left is a weapon", so they grouped under
+   Weapons - 1H and a warrior filtering for one-handers was handed nine caster books.
+   Counted from the data, so correcting another record extends this rather than dating it. */
+const inP3 = (r) => ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone);
+const offhandish = data.filter((r) => inP3(r) && (r.type === "Shield" || r.type === "Off-hand")).length;
+ok(byType("Shield / Off-hand") === offhandish,
+   `off-hand frills group with shields, not one-handers (${offhandish} expected, got ${rows().length})`);
+
 const ranged = byType("Ranged");
 ok(ranged === 6, `type=Ranged -> 6 rows (got ${ranged})`);
 /* Ranged and Relic are separate slots again, Sep 2026. They share a paper-doll slot but
@@ -504,6 +513,29 @@ const misfiled = data.filter((r) =>
   (r.slot === "Relic" && ["Bow", "Gun", "Crossbow", "Thrown", "Wand"].includes(r.type)));
 ok(misfiled.length === 0,
    `every relic type sits in the Relic slot and every ranged type in Ranged (${misfiled.map((r) => r.item).join(", ")})`);
+/* `type` must be an ITEM TYPE, never a stat. Nine caster off-hands shipped carrying
+   "+19 Stamina" and the like: a tooltip gives an off-hand frill no type line at all, so
+   fetch_items.py read the line after the slot and got the first stat instead.
+
+   It was visible twice over - the Type column literally read "+19 Stamina", and because
+   typeGroup() ends with "everything left is a weapon" those nine filed under Weapons - 1H,
+   handing a warrior nine caster books. The second is the one worth pinning, because the
+   first only shows on rows nobody happened to look at. */
+const statTyped = data.filter((r) => /^\+/.test(r.type));
+ok(statTyped.length === 0,
+   `no record's type is a stat string (${statTyped.map((r) => `${r.item}: ${r.type}`).join(", ")})`);
+
+/* Nothing may reach the weapon fall-through unless it is genuinely in a weapon slot.
+   Derived from the data rather than listed, so a new legitimate type extends this instead
+   of dating it. */
+const WEAPON_SLOTS = ["One-Hand", "Main-Hand", "Off-Hand", "Two-Hand"];
+const strayWeapons = data.filter((r) =>
+  typeSel && !WEAPON_SLOTS.includes(r.slot) && r.slot !== "Ranged" && r.slot !== "Relic" &&
+  !["Cloth", "Leather", "Mail", "Plate", "Cloak", "Ring", "Neck", "Trinket",
+    "Shield", "Off-hand"].includes(r.type) && !/^Tier Token/i.test(r.type));
+ok(strayWeapons.length === 0,
+   `every armour-slot record carries a known type (${strayWeapons.map((r) => `${r.item}: ${r.type}`).join(", ")})`);
+
 ok(bySlot("Head") === 12, `unrelated slots unaffected: Head -> 12 (got ${rows().length})`);
 slotSel.value = ""; slotSel.dispatchEvent(new window.Event("change"));
 

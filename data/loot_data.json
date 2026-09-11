@@ -441,7 +441,7 @@
   "id": 28525,
   "wowhead": "https://www.wowhead.com/tbc/item=28525",
   "slot": "Off-Hand",
-  "type": "+19 Stamina",
+  "type": "Off-hand",
   "roles": [
    "Healer",
    "Caster"
@@ -1346,7 +1346,7 @@
   "id": 28728,
   "wowhead": "https://www.wowhead.com/tbc/item=28728",
   "slot": "Off-Hand",
-  "type": "+22 Intellect",
+  "type": "Off-hand",
   "roles": [
    "Healer",
    "Caster"
@@ -1512,7 +1512,7 @@
   "id": 28734,
   "wowhead": "https://www.wowhead.com/tbc/item=28734",
   "slot": "Off-Hand",
-  "type": "+19 Stamina",
+  "type": "Off-hand",
   "roles": [
    "Caster"
   ]
@@ -1980,7 +1980,7 @@
   "id": 28603,
   "wowhead": "https://www.wowhead.com/tbc/item=28603",
   "slot": "Off-Hand",
-  "type": "+19 Stamina",
+  "type": "Off-hand",
   "roles": [
    "Caster",
    "Physical"
@@ -2489,7 +2489,7 @@
   "id": 28781,
   "wowhead": "https://www.wowhead.com/tbc/item=28781",
   "slot": "Off-Hand",
-  "type": "+23 Stamina",
+  "type": "Off-hand",
   "roles": [
    "Caster"
   ]
@@ -2732,7 +2732,7 @@
   "id": 30049,
   "wowhead": "https://www.wowhead.com/tbc/item=30049",
   "slot": "Off-Hand",
-  "type": "+16 Stamina",
+  "type": "Off-hand",
   "roles": [
    "Caster",
    "Physical"
@@ -3674,7 +3674,7 @@
   "id": 29923,
   "wowhead": "https://www.wowhead.com/tbc/item=29923",
   "slot": "Off-Hand",
-  "type": "+27 Stamina",
+  "type": "Off-hand",
   "roles": [
    "Healer",
    "Caster"
@@ -7793,7 +7793,7 @@
   "id": 34179,
   "wowhead": "https://www.wowhead.com/tbc/item=34179",
   "slot": "Off-Hand",
-  "type": "+33 Stamina",
+  "type": "Off-hand",
   "roles": [
    "Caster"
   ]
@@ -8157,7 +8157,7 @@
   "id": 34206,
   "wowhead": "https://www.wowhead.com/tbc/item=34206",
   "slot": "Off-Hand",
-  "type": "+33 Stamina",
+  "type": "Off-hand",
   "roles": [
    "Healer",
    "Caster"

@@ -52,6 +52,20 @@ UNIQUE = re.compile(r"<br\s*/?>\s*Unique(-Equipped)?\b", re.I)
 SLOT = {"Main Hand": "Main-Hand", "Off Hand": "Off-Hand", "Held In Off-hand": "Off-Hand",
         "Held in Off-hand": "Off-Hand", "Thrown": "Ranged"}
 BY_SLOT = {"Finger": "Ring", "Neck": "Neck", "Trinket": "Trinket", "Back": "Cloak"}
+
+# Keyed on the RAW tooltip slot, deliberately, and not on the mapped one above.
+#
+# A caster off-hand has NO type line: the tooltip goes straight from "Held In Off-hand" to
+# the first stat, so the generic rule below read `rest[1]` and stored "+19 Stamina" as the
+# item's type. Nine records shipped that way - the Type column said "+19 Stamina", and
+# app.js's typeGroup() ends with "everything left is a weapon", so they filed under
+# Weapons - 1H.
+#
+# It cannot go in BY_SLOT, which is the obvious-looking home: SLOT flattens three raw
+# strings onto one "Off-Hand", and that slot also holds 15 shields, 5 fists and a sword -
+# all of which DO carry a type line and would be mislabelled by a blanket rule. Only
+# "Held In Off-hand" means "frill with no type of its own".
+BY_RAW_SLOT = {"Held In Off-hand": "Off-hand", "Held in Off-hand": "Off-hand"}
 # stored bare: app.js's BARE_WEAPON adds "1H "/"2H " from the slot at render time, so
 # the data does not have to carry a hand count the slot already settles.
 TYPE = {"Fist Weapon": "Fist"}
@@ -138,6 +152,8 @@ def slot_type(name, tooltip):
     raw_slot = rest[0] if rest else ""
     raw_type = rest[1] if len(rest) > 1 else ""
     slot = SLOT.get(raw_slot, raw_slot)
+    if raw_slot in BY_RAW_SLOT:
+        return slot, BY_RAW_SLOT[raw_slot]
     if slot in BY_SLOT:
         return slot, BY_SLOT[slot]
     return slot, TYPE.get(raw_type, raw_type)

@@ -69,7 +69,25 @@ together for hand-editing.
 | `boss` | Boss name, `Trash`, or `—` for crafted (rendered as its zone, not as a boss) |
 | `item` / `id` / `wowhead` | Name, real TBC item ID, Wowhead link |
 | `slot` | `Head` … `Two-Hand`, `Ranged`, `Relic`. Only the weapon slots collapse for display, all four → `Weapon`. **`Ranged` and `Relic` are separate, Sep 2026** — see below |
-| `type` | Armour class or weapon type. Displayed with tidy-ups: `2H Staff` → `Staff`, bare `Mace` → `1H Mace` (hand count derived from slot) |
+| `type` | Armour class or weapon type. Displayed with tidy-ups: `2H Staff` → `Staff`, bare `Mace` → `1H Mace` (hand count derived from slot). Caster off-hands carry `Off-hand` — see below |
+
+**A caster off-hand carries `type: "Off-hand"`, and getting there needed a rule keyed on
+the RAW tooltip slot.** `fetch_items.py`'s `slot_type()` reads the two tooltip lines after
+the bind line — slot, then type. An off-hand frill has **no type line at all**: the tooltip
+goes straight from `Held In Off-hand` to the first stat. So nine records shipped with a
+**stat as their item type** — `"+19 Stamina"`, `"+22 Intellect"` — which showed twice over:
+the Type column read `+19 Stamina`, and since `typeGroup()` ends with *"everything left is a
+weapon"*, they filed under **Weapons - 1H**, handing anyone filtering for one-handers nine
+caster books.
+
+`BY_RAW_SLOT` is the fix and it **cannot be folded into `BY_SLOT`**, which is the
+obvious-looking home. `SLOT` flattens three raw strings onto one `Off-Hand`, and that slot
+also holds 15 shields, 5 fists and a sword — all of which *do* carry a type line and would be
+mislabelled by a blanket rule. Only `Held In Off-hand` means "frill with no type of its own".
+
+`test/smoke.mjs` now fails on any `type` beginning with `+`, and on any armour-slot record
+whose type is not a known one — the second being the assertion that would have caught these,
+since the first only shows on rows somebody happened to look at.
 
 **`Ranged` and `Relic` were one `Ranged/Relic` option until Sep 2026.** The argument for
 merging them was that they share a paper-doll slot and no class has both, so splitting
