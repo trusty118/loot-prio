@@ -80,6 +80,14 @@ VARIANT_MAP = [
     # out Wowhead does say it: "2nd bis for humans", "2nd bis for non-humans"
     (re.compile(r"\bnon-?humans?\b", re.I), "non-human"),
     (re.compile(r"\bhumans?\b", re.I), "human"),
+    # "Best without Madness/Stormrage", "Best until Unforgivable Sin" - best, but only
+    # while you lack some other item. A condition, and it has to carry a NAME or the row
+    # cannot get a slot group of its own: without one it joined the plain "Best" group,
+    # overflowed the slot, and the capacity rule marked it near - so four rows rendered as
+    # alternatives when the author had called them best. The word itself is suppressed on
+    # screen (SILENT_VARIANTS in app.js), because "Phase BiS - Unless" tells a reader
+    # nothing; the condition names another item, which is freeform prose we do not parse.
+    (re.compile(r"\bwith(out)?\b|\buntil\b(?!\s+tier)", re.I), "unless"),
     # two of the same item, or one judged on its own rather than as part of a set
     (re.compile(r"\bpair\b|\bx2\b", re.I), "pair"),
     (re.compile(r"\bindividually\b", re.I), "individually"),
@@ -133,6 +141,23 @@ RANKED_BIS = re.compile(r"^best\b|\bbis\b", re.I)
 
 # Rejections that hold whatever phase is being read.
 NOT_BIS_ALWAYS = r"alternative|option|pre-?raid|pvp|seasonal|until tier|second"
+
+# Authors differ, and the line between them is whether the rank CLAIMS the item is best or
+# merely OFFERS it. "Best without Madness/Stormrage" is a claim with a condition on it;
+# "Hit Alternative" is an offer. 77% of the 627 distinct rank strings are used by exactly
+# one spec, so no single wording rule can be right everywhere - but this distinction turns
+# out to hold across guides that agree on nothing else.
+#
+# An offer that names a REASON becomes an alternate: blue, no claim on longevity or on what
+# the slot can hold. An offer that names none - bare "Option", "Great", "Good", "Viable" -
+# stays invisible, because a ring on it would say only "somebody listed it". Measured: with
+# a reason, 292 entries and +28 icons on the Phase 3 meta view; without, 2,961 and +167,
+# which roughly doubles it.
+OFFERED = re.compile(r"\balternat|\boption", re.I)
+NAMES_A_REASON = re.compile(
+    r"\bhit\b|\bhaste\b|\bcrit\b|\bthreat\b|\bmit(igation)?\b|\bregen\b|"
+    r"\bthroughput\b|\bdagger\b|\bshield\b|\bMH\b|\bOH\b|\b[369]%|"
+    r"spell ?power|expertise|skewed|without|until", re.I)
 
 
 @functools.lru_cache(maxsize=None)
@@ -220,6 +245,10 @@ def scan_rows(html, where, phase):
             why = "rank does not lead with Best or name BiS"
         elif not_bis.search(rank):
             why = "rank is qualified into something other than BiS"
+        # Not a BiS claim, but the author did offer it AND said what for. That is an
+        # alternate - shown, in blue, making no claim on longevity or slot capacity.
+        alternate = why is not None and bool(
+            OFFERED.search(rank) and NAMES_A_REASON.search(rank))
         out.append({
             "row": len(out),
             "id": int(link.group(1)),
@@ -227,6 +256,7 @@ def scan_rows(html, where, phase):
             "rank": rank,
             "kept": why is None,
             "why": why,
+            "alternate": alternate,
         })
 
     if not any(r["kept"] for r in out):
@@ -240,8 +270,8 @@ def bis_rows(html, where, phase):
     The shape fetch_bis.py has always consumed. scan_rows() is the parser now; this is the
     filter over it, kept separate so the dump can see what this throws away.
     """
-    return [(r["id"], r["item"], r["rank"])
-            for r in scan_rows(html, where, phase) if r["kept"]]
+    return [(r["id"], r["item"], r["rank"], r["alternate"])
+            for r in scan_rows(html, where, phase) if r["kept"] or r["alternate"]]
 
 
 def preset_ids(source, phase):
@@ -325,9 +355,15 @@ def main():
         near_ids = {}
         for ph, rows in per_phase.items():
             filled, near_ids[ph] = {}, set()
-            for item_id, name, rank in rows:
+            for item_id, name, rank, alternate in rows:
                 rec = by_id.get(item_id)
                 if not rec:
+                    continue
+                # An offered alternate is blue already and never claimed the slot, so it
+                # must not consume capacity - otherwise a row the author merely suggested
+                # would push a row the author called best into being an alternative.
+                if alternate:
+                    near_ids[ph].add(item_id)
                     continue
                 variant, _ = variant_for(rank)
                 key = (rec["slot"], variant or "")
@@ -338,7 +374,19 @@ def main():
                         f"{spec} {ph} {rec['slot']}: {rec['item']} "
                         f"(#{filled[key]} listed best)")
 
-        listed = {ph: {r[0] for r in rows if r[0] not in near_ids[ph]}
+        # "Best until Unforgivable Sin" names the item that REPLACES this one, so that
+        # phase is the author telling you the run ends - the opposite of what `expansion`
+        # claims. It is still BiS in that phase and still draws its ring; it just cannot
+        # be the evidence that anything lasted. "Best WITHOUT X" is untouched: that is a
+        # condition on your gear, not an expiry date.
+        #
+        # "until tier" is excluded because NOT_BIS_ALWAYS already rejects those outright.
+        capped = {ph: {r[0] for r in rows
+                       if re.search(r"\buntil\b(?!\s+tier)", r[2], re.I)}
+                  for ph, rows in per_phase.items()}
+
+        listed = {ph: {r[0] for r in rows
+                       if r[0] not in near_ids[ph] and r[0] not in capped[ph]}
                   for ph, rows in per_phase.items()}
 
         # --- how long it lasts: ONE answer per item, shown in every phase it appears ---
@@ -404,7 +452,7 @@ def main():
 
         cond_items = set()
         for ph in PHASES:
-            for item_id, _, rank in per_phase[ph]:
+            for item_id, _, rank, _alt in per_phase[ph]:
                 if item_id in near_ids[ph]:
                     continue
                 variant, _ = variant_for(rank)
@@ -414,7 +462,7 @@ def main():
         phases_out = {}
         for phase in PHASES:
             entries, seen = [], set()
-            for item_id, name, rank in per_phase[phase]:
+            for item_id, name, rank, _alt in per_phase[phase]:
                 if item_id in seen:
                     continue
                 seen.add(item_id)
@@ -429,6 +477,13 @@ def main():
                 entry = {"id": item_id, "item": rec["item"]}
                 if item_id in near_ids[phase]:
                     entry["near"] = True
+                # The author named this item's replacement in this phase, so the listing
+                # is still BiS and still rings - it just cannot be evidence that anything
+                # LASTED. Stored rather than left implicit, because the rule has to stay
+                # reproducible from the file alone: test/smoke.mjs derives it a third time
+                # and has no access to the rank text.
+                if item_id in capped[phase]:
+                    entry["superseded"] = True
                 tier = tier_from(item_id)
                 if tier > 1:
                     entry["bis"] = TIERS[tier]
@@ -437,7 +492,13 @@ def main():
                     entry["variant"] = variant
                 # Per item, so every phase of a conditional pick agrees. Absent means
                 # unconditional, the way `near` and `unique` mark only the exception.
-                if item_id in cond_items:
+                #
+                # Never on a near row. Blue already says "an alternative", the two axes do
+                # not compose for it, and app.js strips the flag when it indexes - so
+                # writing it here would leave 41 entries asserting something the renderer
+                # overrides, which is exactly the kind of disagreement bis.json should not
+                # contain for anyone reading it or auditing it.
+                if item_id in cond_items and not entry.get("near"):
                     entry["conditional"] = True
                 if miss:
                     unmapped.setdefault(miss, []).append(f"{spec} {phase}")
