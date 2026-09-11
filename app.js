@@ -2894,6 +2894,16 @@
      phase, shown as solid gold. */
   var BIS_CONDITIONAL_CLASS = "spec-icon--cond";
 
+  /* Qualifiers that say nothing once they reach a tooltip. "Best Overall" is how Wowhead
+     marks the piece that is simply best REGARDLESS of the two specialised sets beside it -
+     37 of its 41 entries are tanks, sitting alongside that spec's Best Threat and Best
+     Mitigation rows. So it is the absence of a condition, and "Multi-phase BiS - Overall"
+     spends a suffix announcing that no suffix applies.
+
+     Suppressed at render, not stripped from the data: bis.json records what the guide
+     actually wrote, which is what verify/dump_bis_raw.py audits against. */
+  var SILENT_VARIANTS = { "overall": true };
+
   /* Flattened from data/bis.json: "P3|ProtWarr|32375" -> { longevity, variant }.
 
      The phase is part of the key because bis.json holds all five, and a spec can list
@@ -3143,9 +3153,17 @@
        slot - a tank's threat helm and mitigation helm are both BiS. It rides on the
        longevity line, not the name line: it is a fact about the ring rather than about
        the icon, and the ring's colour keeps meaning longevity alone. */
+    /* "Phase BiS - Hit". The qualifier used to arrive in brackets behind the word
+       "Conditional", which named the condition twice; a dash reads as one phrase and puts
+       the tier - the thing actually being looked up - at the front.
+
+       The DASHED RING is what says "conditional" now. 18 conditional entries have no
+       qualifier to name, because `conditional` is a property of the item and those
+       particular listings are the plain one: they show a broken ring and an unadorned
+       label, which is the ring carrying it alone. */
+    var shown = SILENT_VARIANTS[variant] ? "" : variant;
     var bisLine = lasts
-      ? (conditional ? "Conditional " + lasts.label.charAt(0).toLowerCase() + lasts.label.slice(1)
-                     : lasts.label) + (variant ? " (" + variant + ")" : "")
+      ? lasts.label + (shown ? " - " + shown.charAt(0).toUpperCase() + shown.slice(1) : "")
       : "";
 
     img.alt = who + (bisLine ? " (" + bisLine + ")" : "");

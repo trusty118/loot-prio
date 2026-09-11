@@ -1095,7 +1095,11 @@ ok(iconsOf(cleanRec.item).every((i) => !i.className.includes("bis")),
   const q = withVariant.find((w) => namesSpec(w.rec, w.specId));
   ok(!!q, "some qualified entry sits on a row that names the spec itself");
   const icon = iconById(rowFor(q.rec.item), q.specId);
-  ok(icon && icon.dataset.tipBis.endsWith(`(${q.entry.variant})`),
+  /* "Phase BiS - Hit". It arrived in brackets behind the word "Conditional" until Sep
+     2026, which named the condition twice; a dash reads as one phrase and leaves the
+     tier - the thing being looked up - at the front. */
+  const cap = q.entry.variant.charAt(0).toUpperCase() + q.entry.variant.slice(1);
+  ok(icon && icon.dataset.tipBis.endsWith(` - ${cap}`),
      `the BiS line says why: "${icon && icon.dataset.tipBis}" (${q.rec.item} / ${q.specId})`);
   ok(icon && !icon.dataset.tip.includes(q.entry.variant),
      "and the name line does not - the qualifier is a fact about the ring, not the icon");
