@@ -284,11 +284,33 @@ claim, and the label was left over from a version of the view that no longer exi
 priority column now contains no prose at all, in any state, and `test/smoke.mjs` asserts
 exactly that rather than discounting a label to get there.
 
-**Only when NO list is open.** With one open, an item it does not rank stays blank: that is
-the list saying nothing, and filling it in would make the list look like it ranks things it
-does not. Deliberately narrower than `bisOnlyMatch()`, which bridges the *filter* whenever a
-list is silent — a filter that reaches too far shows you an extra row, a display that
-reaches too far tells you something untrue.
+**Shown with no list open, and — Sep 2026 — also on a row the open list has NO KEY for.**
+The gate is `inTemplate()`, which had been sitting in `app.js` with no callers since the
+template work and turns out to be exactly the distinction this needs.
+
+**A missing key is not an empty priority, and the whole change rests on the difference.**
+`[]` is somebody answering *"whoever needs it"* — 23 of zatar's rows are that, deliberately.
+A missing key is the list never having mentioned the item at all: his videos covered Black
+Temple and Mount Hyjal but skipped **13 of their drops**, 9 of which are BiS for somebody.
+Filling the first would overwrite an answer; filling the second says something about an item
+the list had no opinion on. `!![]` being `true` is what makes `inTemplate()` draw that line.
+
+**It closes a gap the page had on both sides of.** `bisOnlyMatch()` already reached this far
+for the *filter*, letting those rows through on their BiS — so with a spec picked you could
+land on a row that matched **because** it was BiS for you, and then showed nothing saying
+why. Shadowmoon Destroyer's Drape is the worked example: BiS for seven specs in P3, absent
+from zatar's list, and it appeared under a Fury filter with an empty priority column.
+
+This **overturns the earlier rule** that an item a list does not rank stays blank, which was
+right when the only alternative was filling in every silence. Narrowing it to no-key rows
+keeps what that rule was protecting — a list is never made to look like it ranks something it
+does not — while dropping what it was costing.
+
+**Never while editing.** `canEdit()` short-circuits it: these icons are not in the list, so
+they must not look like entries you can drag, reorder or delete. An editable empty cell
+offers its `+` instead. In practice the case barely arises there, because
+`copyOfCurrent()` and `newBlankTemplate()` both write a key for **every** record — so a
+list of your own has no missing keys until the dataset grows past it.
 
 **A guide lists several rows as `Best` in one slot and ranks them by ROW ORDER.** Wowhead's
 Arms Phase 4 two-handers are Cataclysm's Edge, then Soul Cleaver, then Twinblade of the
@@ -1725,14 +1747,18 @@ would be your own name on every row, which says nothing.
 that is the whole of his guide. The other 517 are loot from the raids he never covered —
 Phases 1, 2, 4 and 5, imported so the tables are complete — plus 13 T6 items the videos
 skipped. `verify/missing-items.md` records the 13. His list simply does not hold a key for
-them, which is what the empty priority column says.
+them — and since Sep 2026 those rows show the **BiS view** rather than an empty column, which
+is the honest rendering of "he never covered this, but here is who it is best for". See §2;
+the 23 rows where he *did* answer and the answer was "whoever needs it" stay blank.
 
 **Nothing on screen frames a row as missing from a guide any more, and that was a decision.**
 A `NOT IN THE GUIDE` tag was right while the site was a mirror of one guide with holes in
 it; it stopped being right once lists became the product and zatar's became one of them.
-**The empty priority column says it now, and says it of every list equally.** A list that
-does not rank an item shows nothing for it, whoever wrote the list — so there is no claim
-to disclaim and no flag to carry. `unsourced`, `prioritySource` and the `SEEDED` tag all
+**The priority column says it now, and says it of every list equally.** A list that does not
+rank an item shows no ordering of its own for it, whoever wrote the list — so there is no
+claim to disclaim and no flag to carry. Where the list holds no key at all the column falls
+back to the BiS view, whose uniform `?` operators say "not ranked against" rather than
+claiming an ordering the list never had. `unsourced`, `prioritySource` and the `SEEDED` tag all
 went with the framing.
 
 **The BiS rings are not zatar's either** and must never be presented as if they were — the
@@ -1803,3 +1829,65 @@ live file and diffing it against the local one. Both are gone. `npm run serve:di
 rather than at 8642. For the second, diff live against a local `npm run build`, and check
 that **`/CLAUDE.md` returns 404**, which is the one-line proof the whole arrangement is still
 in force.
+
+---
+
+## 10. Working agreements
+
+**These are rules about how to WORK on this repo, not about the code, and they live here for
+one reason: this file is the only thing that travels between machines.** They were kept in
+Claude Code's per-machine memory (`~/.claude/`) until Aug 2026, which meant they applied on
+the laptop they were written on and nowhere else — while `CLAUDE.md`, 1800 lines of the
+reasoning behind every decision here, went everywhere. That is backwards, and the rule most
+worth carrying is the one below that exists *because* it was once broken.
+
+`.gitignore` excludes `.claude/` deliberately, as per-machine settings, so this file is the
+right home rather than a committed settings directory. Since §9 it is not published either —
+`/CLAUDE.md` returns 404 — so notes about how the work is done stay inside the repo.
+
+### Never push, merge or deploy without being asked
+
+**Work stops at a local commit.** Do not `git push`, do not merge to `main`, do not open or
+merge a PR, and do not let Pages deploy, without being asked for **that specific change**.
+
+**Why:** `main` is the deploy branch — a merge publishes to
+https://trusty118.github.io/loot-prio/ within a minute. CI gates the deploy on the tests, but
+it does not ask anybody's permission. The point is to look at a change on `localhost` and
+decide when it goes out.
+
+**Permission to ship one change never carries to the next.** That is the whole rule, and it
+is written down because approval for one PR was once treated as standing approval, and a
+follow-up went straight to `main` unasked.
+
+**How to apply:** branch, commit, stop there, and say what is ready. Committing to a branch
+unasked is fine; publishing is not. If already on `main`, branch before committing.
+
+### The ship route, when it is asked for
+
+1. **Check the data first** — `git diff --stat main...HEAD -- data/` should be empty unless
+   the change is deliberately a data change. The priorities are the one thing that must
+   never move by accident.
+2. `git push -u origin <branch>` → `gh pr create` → `gh pr merge --merge --delete-branch`
+3. Watch the **`Deploy site`** run. Prefer `gh run view <id> --json status,conclusion,jobs`
+   over `gh run watch`: in a pipeline the latter can drop its connection and still exit 0,
+   reporting success it never observed.
+4. **Verify live by fetching, not by trusting the green run.**
+
+### Verifying a deploy, since the build step
+
+Two habits stopped working when §9 landed, and both have replacements:
+
+- **Live `app.js` is minified**, so it can no longer be diffed against the repo file. Diff it
+  against a local `npm run build` instead:
+  `diff <(curl -s $SITE/app.js) dist/app.js`
+- **`curl $SITE/CLAUDE.md` must return 404.** That single check proves Pages is still serving
+  `dist/` and not the repo root. If it ever returns 200, this file, `test/` and `verify/` are
+  public again and nothing on the page would say so.
+
+### Two traps that have each cost real time
+
+- **Use `npm test`. Never grep its output for `FAIL`.** A test file that *crashes* produces
+  no `FAIL` line and no missing `PASS` count, so a truncated run looks identical to a clean
+  one — which hid a broken suite across two commits. `npm test` chains on exit codes.
+- **`npm install` before anything on a fresh clone**, or on a machine that predates the build
+  step. esbuild is a dependency now, and both `npm test` and `npm run build` fail without it.
