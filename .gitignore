@@ -21,3 +21,8 @@ dist/
 # carries the applied result - docs/design-brief.md and the CSS - not the archive, and
 # Pages serves this directory, so a committed zip would be publicly downloadable too.
 *.zip
+
+# Regenerable in one command (python3 verify/dump_bis_raw.py) and 6 MB of scraped rows.
+# The repo carries the tools and the decisions, not a snapshot of somebody else the size
+# of the rest of the data put together.
+verify/bis-raw.json

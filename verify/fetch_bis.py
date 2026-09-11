@@ -89,10 +89,16 @@ VARIANT_MAP = [
 # "BiS" said in more words. These are not qualifiers, and swallowing them is what keeps
 # 50-odd entries from carrying a meaningless one. Checked AFTER the variants, so
 # "Best in slot (2.6 MH)" still resolves as mainhand rather than being flattened here.
+# Where the item COMES FROM is not a gear-set qualifier. "Best (Contested)" and "Best
+# (World Boss)" say how you get the thing, not which build wants it, so they are plain BiS
+# and must not split a slot group - two cloaks in one slot are two cloaks however they drop.
+SOURCE_NOTE = r"contested|world ?boss|crafted|bop|boe|quest|reputation|rep|pvp vendor"
+
 PLAIN_RANK = re.compile(
     r"^(bis|best|best in slot|best pve|best personal|best all game|"
     r"p[12345](\s+\w+)?\s*bis|bis\s*\(small upgrade\)|"
-    r"best(\s+in\s+slot)?\s*\(all\))$", re.I)
+    r"best(\s+in\s+slot)?\s*\(all\)|"
+    r"(best|bis)(\s+in\s+slot)?\s*[-\u2013(]*\s*(" + SOURCE_NOTE + r")\s*\)?)$", re.I)
 
 
 def variant_for(rank):
@@ -178,8 +184,22 @@ def text(html):
     return re.sub(r"\s+", " ", TAGS.sub(" ", html)).replace("&#39;", "'").replace("&amp;", "&").strip()
 
 
-def bis_rows(html, where, phase):
-    """(item id, item name, rank) for every row a guide ranks BiS, in page order."""
+def scan_rows(html, where, phase):
+    """Every item row the guide's BiS table holds, in page order, with a verdict.
+
+    Returns dicts: row (index in the table), id, item, rank (the cell VERBATIM), kept,
+    and when kept is False, why.
+
+    This used to be bis_rows(), which filtered as it read and returned only the survivors -
+    so what the tool DISCARDED was unobservable, and the raw rank text vanished the moment
+    variant_for() had mapped it. That is how a "mitigation" qualifier on a Beast Mastery
+    hunter went unnoticed: nothing kept the string it came from. Keeping every row here,
+    and filtering at the call site, is what lets verify/dump_bis_raw.py audit the real
+    parser rather than a second copy of it that could be wrong in different ways.
+
+    Page order is preserved and reported, because Wowhead ranks by row position - that is
+    the whole basis of the near-BiS marking downstream.
+    """
     not_bis = not_bis_for(phase)
     start = BIS_HEADING.search(html)
     if not start:
@@ -195,12 +215,33 @@ def bis_rows(html, where, phase):
             continue
         rank = text(cells[0])
         ranks.add(rank)
-        if RANKED_BIS.search(rank) and not not_bis.search(rank):
-            out.append((int(link.group(1)), text(link.group(2)), rank))
+        why = None
+        if not RANKED_BIS.search(rank):
+            why = "rank does not lead with Best or name BiS"
+        elif not_bis.search(rank):
+            why = "rank is qualified into something other than BiS"
+        out.append({
+            "row": len(out),
+            "id": int(link.group(1)),
+            "item": text(link.group(2)),
+            "rank": rank,
+            "kept": why is None,
+            "why": why,
+        })
 
-    if not out:
+    if not any(r["kept"] for r in out):
         raise ValueError(f"{where}: no rows ranked BiS - ranks seen: {sorted(ranks)[:8]}")
     return out
+
+
+def bis_rows(html, where, phase):
+    """(item id, item name, rank) for the rows that ARE BiS, in page order.
+
+    The shape fetch_bis.py has always consumed. scan_rows() is the parser now; this is the
+    filter over it, kept separate so the dump can see what this throws away.
+    """
+    return [(r["id"], r["item"], r["rank"])
+            for r in scan_rows(html, where, phase) if r["kept"]]
 
 
 def preset_ids(source, phase):
