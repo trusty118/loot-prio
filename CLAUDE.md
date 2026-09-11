@@ -489,10 +489,21 @@ a solid ring. Survival's Halberd of Desolation is exactly that — plain `Best` 
 and this is what keeps all three hunter specs reading the same.
 
 **Not conditional:** wordings that emphasise rather than qualify (`Best Overall`,
-`Best Pair`, `Best Individually`), and a **tank's `threat`/`mitigation` sets**, which are two
+`Best Pair`), and a **tank's `threat`/`mitigation` sets**, which are two
 genuine kits rather than a caveat. That exception is keyed on the spec carrying `Tank` in
 its `roles`, so the three `mitigation` entries hunters carry (Wowhead writes
 `Best Survivability` on a hunter two-hander) stay dashed.
+
+**`Best Individually` IS a condition, and reads like emphasis — which is why it sat in the
+wrong group for a while.** It means best when the item is judged *on its own*, without the
+set bonus it would otherwise be part of: the same shape as `Best - Hit`, not the same shape
+as `Best Overall`. Moving it cost 22 entries their solid ring and changed no tier, since
+longevity is span-based and `conditional` only decides solid or dashed. Every one of the 22
+is a Feral druid, which fits — it is how the druid guides separate a piece from its set.
+
+`Best Pair` stays emphasis, and only because of what it happens to cover here: the
+Warglaives of Azzinoth and nothing else, where it describes what you equip rather than when
+the call applies.
 
 **Blue is drawn for `near`, which drew nothing at all before.** 215 entries a guide listed
 as `Best` past what the slot can hold — by its own row order, the second or third choice.

@@ -8963,7 +8963,8 @@
     {
      "id": 28672,
      "item": "Drape of the Dark Reavers",
-     "bis": "multiPhase"
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 30685,
@@ -8982,7 +8983,8 @@
     {
      "id": 28741,
      "item": "Skulker's Greaves",
-     "bis": "multiPhase"
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 28545,
@@ -9008,13 +9010,15 @@
     {
      "id": 30055,
      "item": "Shoulderpads of the Stranger",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 28672,
      "item": "Drape of the Dark Reavers",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 29994,
@@ -9026,7 +9030,8 @@
     {
      "id": 30101,
      "item": "Bloodsea Brigand's Vest",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 29966,
@@ -9036,7 +9041,8 @@
      "id": 29947,
      "item": "Gloves of the Searing Grip",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 30106,
@@ -9047,7 +9053,8 @@
      "id": 28741,
      "item": "Skulker's Greaves",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 29995,
@@ -9079,7 +9086,8 @@
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 29994,
@@ -9092,19 +9100,22 @@
      "id": 32252,
      "item": "Nether Shadow Tunic",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 32324,
      "item": "Insidious Bands",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 29947,
      "item": "Gloves of the Searing Grip",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 30106,
@@ -9120,7 +9131,8 @@
      "id": 32260,
      "item": "Choker of Endless Nightmares",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 32591,
@@ -9162,7 +9174,8 @@
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 29994,
@@ -9175,19 +9188,22 @@
      "id": 32252,
      "item": "Nether Shadow Tunic",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 32324,
      "item": "Insidious Bands",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 29947,
      "item": "Gloves of the Searing Grip",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 30106,
@@ -9203,7 +9219,8 @@
      "id": 32260,
      "item": "Choker of Endless Nightmares",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 32591,
@@ -9416,7 +9433,8 @@
      "id": 32324,
      "item": "Insidious Bands",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 30106,
@@ -9427,7 +9445,8 @@
      "id": 32593,
      "item": "Treads of the Den Mother",
      "bis": "multiPhase",
-     "variant": "mitigation"
+     "variant": "mitigation",
+     "conditional": true
     },
     {
      "id": 32366,
@@ -9485,13 +9504,15 @@
     {
      "id": 32235,
      "item": "Cursed Vision of Sargeras",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 32324,
      "item": "Insidious Bands",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 30106,
@@ -9502,7 +9523,8 @@
      "id": 32593,
      "item": "Treads of the Den Mother",
      "bis": "multiPhase",
-     "variant": "individually"
+     "variant": "individually",
+     "conditional": true
     },
     {
      "id": 32266,
