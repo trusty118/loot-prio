@@ -38,6 +38,7 @@ VALID_VARIANTS = {
     "dagger", "shield", "mainhand", "offhand",                       # the weapon setup
     "human", "non-human",                                           # racials that change it
     "pair", "individually", "overall",                              # as a set, or alone
+    "unless",                        # best only while you lack (or hold) some other item
 }
 RACES = {"Orc", "Human"}
 

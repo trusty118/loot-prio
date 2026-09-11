@@ -192,8 +192,7 @@
     {
      "id": 32256,
      "item": "Waistwrap of Infinity",
-     "near": true,
-     "conditional": true
+     "near": true
     },
     {
      "id": 30916,
@@ -203,8 +202,7 @@
     {
      "id": 32367,
      "item": "Leggings of Devastation",
-     "near": true,
-     "conditional": true
+     "near": true
     },
     {
      "id": 32239,
@@ -1134,8 +1132,7 @@
     {
      "id": 32256,
      "item": "Waistwrap of Infinity",
-     "near": true,
-     "conditional": true
+     "near": true
     },
     {
      "id": 30916,
@@ -1145,8 +1142,7 @@
     {
      "id": 32367,
      "item": "Leggings of Devastation",
-     "near": true,
-     "conditional": true
+     "near": true
     },
     {
      "id": 32239,
@@ -1902,6 +1898,18 @@
   "ProtWarr": {
    "P1": [
     {
+     "id": 28593,
+     "item": "Eternium Greathelm",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 28743,
+     "item": "Mantle of Abrahmis",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 28672,
      "item": "Drape of the Dark Reavers",
      "variant": "threat"
@@ -1912,10 +1920,28 @@
      "variant": "mitigation"
     },
     {
+     "id": 28529,
+     "item": "Royal Cloak of Arathi Kings",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28597,
+     "item": "Panzar'Thar Breastplate",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 28502,
      "item": "Vambraces of Courage",
      "bis": "multiPhase",
      "variant": "overall"
+    },
+    {
+     "id": 28795,
+     "item": "Bladespire Warbands",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 28518,
@@ -1931,6 +1957,12 @@
      "id": 28566,
      "item": "Crimson Girdle of the Indomitable",
      "variant": "mitigation"
+    },
+    {
+     "id": 28779,
+     "item": "Girdle of the Endless Pit",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 28621,
@@ -1950,6 +1982,30 @@
     {
      "id": 28509,
      "item": "Worgen Claw Necklace",
+     "variant": "threat"
+    },
+    {
+     "id": 28516,
+     "item": "Barbed Choker of Discipline",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 28674,
+     "item": "Saberclaw Talisman",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 28675,
+     "item": "Shermanar Great-Ring",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 28649,
+     "item": "Garona's Signet Ring",
+     "near": true,
      "variant": "threat"
     },
     {
@@ -1980,10 +2036,34 @@
      "variant": "mitigation"
     },
     {
+     "id": 28672,
+     "item": "Drape of the Dark Reavers",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 30102,
+     "item": "Krakken-Heart Breastplate",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 28502,
      "item": "Vambraces of Courage",
      "bis": "multiPhase",
      "variant": "mitigation"
+    },
+    {
+     "id": 32515,
+     "item": "Wristguards of Determination",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 28795,
+     "item": "Bladespire Warbands",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 29998,
@@ -1994,6 +2074,12 @@
     {
      "id": 29947,
      "item": "Gloves of the Searing Grip",
+     "variant": "threat"
+    },
+    {
+     "id": 30644,
+     "item": "Grips of Deftness",
+     "near": true,
      "variant": "threat"
     },
     {
@@ -2008,6 +2094,12 @@
      "variant": "mitigation"
     },
     {
+     "id": 28621,
+     "item": "Wrynn Dynasty Greaves",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 32267,
      "item": "Boots of the Resilient",
      "variant": "mitigation"
@@ -2015,6 +2107,24 @@
     {
      "id": 30099,
      "item": "Frayed Tether of the Drowned"
+    },
+    {
+     "id": 30061,
+     "item": "Ancestral Ring of Conquest",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 30083,
+     "item": "Ring of Sundered Souls",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 30620,
+     "item": "Spyglass of the Hidden Fleet",
+     "near": true,
+     "variant": "mitigation"
     },
     {
      "id": 28579,
@@ -2040,11 +2150,29 @@
      "variant": "mitigation"
     },
     {
+     "id": 32250,
+     "item": "Pauldrons of Abyssal Fury",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 34010,
      "item": "Pepe's Shroud of Pacification",
      "bis": "multiPhase",
      "variant": "overall",
      "conditional": true
+    },
+    {
+     "id": 28672,
+     "item": "Drape of the Dark Reavers",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28529,
+     "item": "Royal Cloak of Arathi Kings",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 29925,
@@ -2058,6 +2186,18 @@
      "variant": "mitigation"
     },
     {
+     "id": 30057,
+     "item": "Bracers of Eradication",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 30861,
+     "item": "Furious Shackles",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 32232,
      "item": "Eternium Shell Bracers",
      "bis": "multiPhase",
@@ -2068,6 +2208,18 @@
      "item": "Gauntlets of Enforcement",
      "bis": "multiPhase",
      "variant": "overall"
+    },
+    {
+     "id": 29947,
+     "item": "Gloves of the Searing Grip",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 32608,
+     "item": "Pillager's Gauntlets",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 29998,
@@ -2086,6 +2238,18 @@
      "item": "Girdle of Stability",
      "bis": "multiPhase",
      "variant": "mitigation"
+    },
+    {
+     "id": 32342,
+     "item": "Girdle of Mighty Resolve",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 30903,
+     "item": "Legguards of Endless Rage",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 32263,
@@ -2111,94 +2275,16 @@
      "variant": "overall"
     },
     {
-     "id": 32254,
-     "item": "The Brutalizer",
-     "bis": "multiPhase"
+     "id": 30099,
+     "item": "Frayed Tether of the Drowned",
+     "near": true,
+     "variant": "hit"
     },
     {
-     "id": 30874,
-     "item": "The Unbreakable Will",
-     "bis": "expansion",
+     "id": 30083,
+     "item": "Ring of Sundered Souls",
+     "near": true,
      "variant": "mitigation"
-    },
-    {
-     "id": 32375,
-     "item": "Bulwark of Azzinoth",
-     "bis": "multiPhase"
-    },
-    {
-     "id": 32253,
-     "item": "Legionkiller",
-     "bis": "expansion",
-     "variant": "overall"
-    }
-   ],
-   "P4": [
-    {
-     "id": 32521,
-     "item": "Faceplate of the Impenetrable",
-     "bis": "multiPhase",
-     "variant": "mitigation"
-    },
-    {
-     "id": 34010,
-     "item": "Pepe's Shroud of Pacification",
-     "bis": "multiPhase",
-     "variant": "hit",
-     "conditional": true
-    },
-    {
-     "id": 32232,
-     "item": "Eternium Shell Bracers",
-     "bis": "multiPhase",
-     "variant": "mitigation"
-    },
-    {
-     "id": 32280,
-     "item": "Gauntlets of Enforcement",
-     "bis": "multiPhase",
-     "variant": "overall"
-    },
-    {
-     "id": 29998,
-     "item": "Royal Gauntlets of Silvermoon",
-     "bis": "multiPhase",
-     "variant": "mitigation"
-    },
-    {
-     "id": 32333,
-     "item": "Girdle of Stability",
-     "bis": "multiPhase",
-     "variant": "mitigation"
-    },
-    {
-     "id": 30106,
-     "item": "Belt of One-Hundred Deaths",
-     "bis": "multiPhase",
-     "variant": "threat"
-    },
-    {
-     "id": 32263,
-     "item": "Praetorian's Legguards",
-     "bis": "multiPhase",
-     "variant": "mitigation"
-    },
-    {
-     "id": 32345,
-     "item": "Dreadboots of the Legion",
-     "bis": "multiPhase",
-     "variant": "threat"
-    },
-    {
-     "id": 32268,
-     "item": "Myrmidon's Treads",
-     "bis": "multiPhase",
-     "variant": "mitigation"
-    },
-    {
-     "id": 33496,
-     "item": "Signet of Primal Wrath",
-     "variant": "threat"
     },
     {
      "id": 32254,
@@ -2225,10 +2311,196 @@
     {
      "id": 29949,
      "item": "Arcanite Steam-Pistol",
+     "near": true,
+     "variant": "hit"
+    }
+   ],
+   "P4": [
+    {
+     "id": 32521,
+     "item": "Faceplate of the Impenetrable",
+     "bis": "multiPhase",
+     "variant": "mitigation"
+    },
+    {
+     "id": 33421,
+     "item": "Battleworn Tuskguard",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 32250,
+     "item": "Pauldrons of Abyssal Fury",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 34010,
+     "item": "Pepe's Shroud of Pacification",
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
+    },
+    {
+     "id": 28529,
+     "item": "Royal Cloak of Arathi Kings",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28672,
+     "item": "Drape of the Dark Reavers",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 33473,
+     "item": "Chestguard of the Warlord",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 30057,
+     "item": "Bracers of Eradication",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32232,
+     "item": "Eternium Shell Bracers",
+     "bis": "multiPhase",
+     "variant": "mitigation"
+    },
+    {
+     "id": 32280,
+     "item": "Gauntlets of Enforcement",
+     "bis": "multiPhase",
+     "variant": "overall"
+    },
+    {
+     "id": 29947,
+     "item": "Gloves of the Searing Grip",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 32608,
+     "item": "Pillager's Gauntlets",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 29998,
+     "item": "Royal Gauntlets of Silvermoon",
+     "bis": "multiPhase",
+     "variant": "mitigation"
+    },
+    {
+     "id": 32333,
+     "item": "Girdle of Stability",
+     "bis": "multiPhase",
+     "variant": "mitigation"
+    },
+    {
+     "id": 30106,
+     "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase",
+     "variant": "threat"
+    },
+    {
+     "id": 32342,
+     "item": "Girdle of Mighty Resolve",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 30903,
+     "item": "Legguards of Endless Rage",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 32263,
+     "item": "Praetorian's Legguards",
+     "bis": "multiPhase",
+     "variant": "mitigation"
+    },
+    {
+     "id": 32345,
+     "item": "Dreadboots of the Legion",
+     "bis": "multiPhase",
+     "variant": "threat"
+    },
+    {
+     "id": 32268,
+     "item": "Myrmidon's Treads",
+     "bis": "multiPhase",
+     "variant": "mitigation"
+    },
+    {
+     "id": 33303,
+     "item": "Skullshatter Warboots",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 32362,
+     "item": "Pendant of Titans",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 33496,
+     "item": "Signet of Primal Wrath",
+     "variant": "threat"
+    },
+    {
+     "id": 30083,
+     "item": "Ring of Sundered Souls",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 32254,
+     "item": "The Brutalizer",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30874,
+     "item": "The Unbreakable Will",
+     "bis": "expansion",
+     "variant": "mitigation"
+    },
+    {
+     "id": 33214,
+     "item": "Akil'zon's Talonblade",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 32375,
+     "item": "Bulwark of Azzinoth",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 32253,
+     "item": "Legionkiller",
+     "bis": "expansion",
+     "variant": "overall"
+    },
+    {
+     "id": 29949,
+     "item": "Arcanite Steam-Pistol",
      "variant": "threat"
     }
    ],
    "P5": [
+    {
+     "id": 34345,
+     "item": "Crown of Anasterian",
+     "near": true,
+     "variant": "threat"
+    },
     {
      "id": 34192,
      "item": "Pauldrons of Perseverance",
@@ -2240,6 +2512,39 @@
      "variant": "overall"
     },
     {
+     "id": 34010,
+     "item": "Pepe's Shroud of Pacification",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "hit"
+    },
+    {
+     "id": 34215,
+     "item": "Warharness of Reckless Fury",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 32232,
+     "item": "Eternium Shell Bracers",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "mitigation"
+    },
+    {
+     "id": 32280,
+     "item": "Gauntlets of Enforcement",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "expertise"
+    },
+    {
+     "id": 34341,
+     "item": "Borderland Paingrips",
+     "near": true,
+     "variant": "crit"
+    },
+    {
      "id": 34352,
      "item": "Borderland Fortress Grips",
      "variant": "mitigation"
@@ -2248,6 +2553,18 @@
      "id": 34178,
      "item": "Collar of the Pit Lord",
      "variant": "overall"
+    },
+    {
+     "id": 32362,
+     "item": "Pendant of Titans",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 30083,
+     "item": "Ring of Sundered Souls",
+     "near": true,
+     "variant": "mitigation"
     },
     {
      "id": 33830,
@@ -2277,6 +2594,12 @@
      "id": 34349,
      "item": "Blade of Life's Inevitability",
      "variant": "threat"
+    },
+    {
+     "id": 29949,
+     "item": "Arcanite Steam-Pistol",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 32325,
@@ -2741,6 +3064,12 @@
      "id": 29982,
      "item": "Wand of the Forgotten Star",
      "bis": "multiPhase"
+    },
+    {
+     "id": 28673,
+     "item": "Tirisfal Wand of Ascendancy",
+     "near": true,
+     "variant": "hit"
     }
    ],
    "P3": [
@@ -2792,6 +3121,12 @@
      "id": 29982,
      "item": "Wand of the Forgotten Star",
      "bis": "multiPhase"
+    },
+    {
+     "id": 28673,
+     "item": "Tirisfal Wand of Ascendancy",
+     "near": true,
+     "variant": "hit"
     }
    ],
    "P4": [
@@ -2843,6 +3178,12 @@
      "id": 32374,
      "item": "Zhar'doom, Greatstaff of the Devourer",
      "bis": "multiPhase"
+    },
+    {
+     "id": 28673,
+     "item": "Tirisfal Wand of Ascendancy",
+     "near": true,
+     "variant": "hit"
     }
    ],
    "P5": [
@@ -3015,6 +3356,24 @@
      "conditional": true
     },
     {
+     "id": 28524,
+     "item": "Emerald Ripper",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28584,
+     "item": "Big Bad Wolf's Paw",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28572,
+     "item": "Blade of the Unrequited",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
      "id": 29993,
      "item": "Twinblade of the Phoenix",
      "bis": "multiPhase"
@@ -3072,6 +3431,30 @@
      "id": 30881,
      "item": "Blade of Infamy",
      "variant": "pair"
+    },
+    {
+     "id": 29948,
+     "item": "Claw of the Phoenix",
+     "near": true,
+     "variant": "offhand"
+    },
+    {
+     "id": 28524,
+     "item": "Emerald Ripper",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28584,
+     "item": "Big Bad Wolf's Paw",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28572,
+     "item": "Blade of the Unrequited",
+     "near": true,
+     "variant": "mainhand"
     },
     {
      "id": 29993,
@@ -3155,6 +3538,30 @@
      "variant": "pair"
     },
     {
+     "id": 29948,
+     "item": "Claw of the Phoenix",
+     "near": true,
+     "variant": "offhand"
+    },
+    {
+     "id": 28524,
+     "item": "Emerald Ripper",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28584,
+     "item": "Big Bad Wolf's Paw",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28572,
+     "item": "Blade of the Unrequited",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
      "id": 32248,
      "item": "Halberd of Desolation",
      "bis": "expansion",
@@ -3192,9 +3599,33 @@
      "item": "Leggings of the Immortal Night"
     },
     {
+     "id": 28545,
+     "item": "Edgewalker Longboots",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32510,
+     "item": "Softstep Boots of Tracking",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 34177,
      "item": "Clutch of Demise",
      "variant": "overall"
+    },
+    {
+     "id": 29997,
+     "item": "Band of the Ranger-General",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32266,
+     "item": "Ring of Deceitful Intent",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 34427,
@@ -3204,6 +3635,13 @@
      "id": 28830,
      "item": "Dragonspine Trophy",
      "bis": "expansion"
+    },
+    {
+     "id": 32505,
+     "item": "Madness of the Betrayer",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "hit"
     },
     {
      "id": 34331,
@@ -3235,6 +3673,18 @@
   "Arms": {
    "P1": [
     {
+     "id": 28755,
+     "item": "Bladed Shoulderpads of the Merciless",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28672,
+     "item": "Drape of the Dark Reavers",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 28795,
      "item": "Bladespire Warbands"
     },
@@ -3258,6 +3708,12 @@
     {
      "id": 28608,
      "item": "Ironstriders of Urgency"
+    },
+    {
+     "id": 28545,
+     "item": "Edgewalker Longboots",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 28745,
@@ -3325,6 +3781,18 @@
      "item": "Band of the Ranger-General"
     },
     {
+     "id": 28757,
+     "item": "Ring of a Thousand Marks",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 30052,
+     "item": "Ring of Lethality",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 28830,
      "item": "Dragonspine Trophy",
      "bis": "expansion"
@@ -3349,6 +3817,24 @@
    ],
    "P3": [
     {
+     "id": 32235,
+     "item": "Cursed Vision of Sargeras",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32373,
+     "item": "Helm of the Illidari Shatterer",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32323,
+     "item": "Shadowmoon Destroyer's Drape",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 30863,
      "item": "Deadly Cuffs",
      "bis": "multiPhase"
@@ -3367,6 +3853,24 @@
      "id": 30861,
      "item": "Furious Shackles",
      "near": true
+    },
+    {
+     "id": 30057,
+     "item": "Bracers of Eradication",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32278,
+     "item": "Grips of Silent Justice",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32608,
+     "item": "Pillager's Gauntlets",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 30106,
@@ -3393,6 +3897,12 @@
      "item": "Choker of Serrated Blades"
     },
     {
+     "id": 32260,
+     "item": "Choker of Endless Nightmares",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 32497,
      "item": "Stormrage Signet Ring",
      "bis": "expansion"
@@ -3400,6 +3910,12 @@
     {
      "id": 32335,
      "item": "Unstoppable Aggressor's Ring"
+    },
+    {
+     "id": 29997,
+     "item": "Band of the Ranger-General",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 28830,
@@ -3630,6 +4146,12 @@
      "variant": "pair"
     },
     {
+     "id": 34164,
+     "item": "Dragonscale-Encrusted Longblade",
+     "near": true,
+     "variant": "offhand"
+    },
+    {
      "id": 34196,
      "item": "Golden Bow of Quel'Thalas"
     }
@@ -3637,6 +4159,12 @@
   },
   "Fury": {
    "P1": [
+    {
+     "id": 28672,
+     "item": "Drape of the Dark Reavers",
+     "near": true,
+     "variant": "hit"
+    },
     {
      "id": 28795,
      "item": "Bladespire Warbands"
@@ -3663,6 +4191,12 @@
      "item": "Ironstriders of Urgency"
     },
     {
+     "id": 28545,
+     "item": "Edgewalker Longboots",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 28745,
      "item": "Mithril Chain of Heroism"
     },
@@ -3674,6 +4208,12 @@
     {
      "id": 28730,
      "item": "Mithril Band of the Unscarred"
+    },
+    {
+     "id": 28649,
+     "item": "Garona's Signet Ring",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 28729,
@@ -4001,6 +4541,24 @@
      "variant": "pair"
     },
     {
+     "id": 34331,
+     "item": "Hand of the Deceiver",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 34346,
+     "item": "Mounting Vengeance",
+     "near": true,
+     "variant": "offhand"
+    },
+    {
+     "id": 34164,
+     "item": "Dragonscale-Encrusted Longblade",
+     "near": true,
+     "variant": "offhand"
+    },
+    {
      "id": 34196,
      "item": "Golden Bow of Quel'Thalas"
     }
@@ -4222,6 +4780,12 @@
      "variant": "haste"
     },
     {
+     "id": 33592,
+     "item": "Cloak of Ancient Rituals",
+     "near": true,
+     "variant": "haste"
+    },
+    {
      "id": 30862,
      "item": "Blessed Adamantite Bracers",
      "bis": "multiPhase"
@@ -4271,6 +4835,12 @@
      "bis": "multiPhase"
     },
     {
+     "id": 33498,
+     "item": "Signet of the Quiet Forest",
+     "near": true,
+     "variant": "haste"
+    },
+    {
      "id": 32496,
      "item": "Memento of Tyrande",
      "bis": "expansion"
@@ -4301,6 +4871,12 @@
      "conditional": true
     },
     {
+     "id": 33332,
+     "item": "Enamelled Disc of Mojo",
+     "near": true,
+     "variant": "shield"
+    },
+    {
      "id": 28592,
      "item": "Libram of Souls Redeemed",
      "bis": "expansion"
@@ -4316,8 +4892,33 @@
      "item": "Spaulders of the Thalassian Savior"
     },
     {
+     "id": 34208,
+     "item": "Equilibrium Epaulets",
+     "near": true,
+     "variant": "haste"
+    },
+    {
      "id": 34205,
      "item": "Shroud of Redeemed Souls"
+    },
+    {
+     "id": 32524,
+     "item": "Shroud of the Highborne",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "haste"
+    },
+    {
+     "id": 34012,
+     "item": "Shroud of the Final Stand",
+     "near": true,
+     "variant": "haste"
+    },
+    {
+     "id": 33592,
+     "item": "Cloak of Ancient Rituals",
+     "near": true,
+     "variant": "haste"
     },
     {
      "id": 34229,
@@ -4339,11 +4940,36 @@
      "bis": "expansion"
     },
     {
+     "id": 34184,
+     "item": "Brooch of the Highborne",
+     "near": true,
+     "variant": "haste"
+    },
+    {
      "id": 32528,
      "item": "Blessed Band of Karabor",
      "bis": "expansion",
      "variant": "haste",
      "conditional": true
+    },
+    {
+     "id": 34166,
+     "item": "Band of Lucent Beams",
+     "near": true,
+     "variant": "haste"
+    },
+    {
+     "id": 32238,
+     "item": "Ring of Calming Waves",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "haste"
+    },
+    {
+     "id": 33498,
+     "item": "Signet of the Quiet Forest",
+     "near": true,
+     "variant": "haste"
     },
     {
      "id": 34430,
@@ -4369,6 +4995,25 @@
      "item": "Book of Highborne Hymns",
      "variant": "haste",
      "conditional": true
+    },
+    {
+     "id": 32255,
+     "item": "Felstone Bulwark",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "shield"
+    },
+    {
+     "id": 30882,
+     "item": "Bastion of Light",
+     "near": true,
+     "variant": "shield"
+    },
+    {
+     "id": 33332,
+     "item": "Enamelled Disc of Mojo",
+     "near": true,
+     "variant": "shield"
     },
     {
      "id": 28592,
@@ -4524,6 +5169,24 @@
      "variant": "overall"
     },
     {
+     "id": 29925,
+     "item": "Phoenix-Wing Cloak",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 32331,
+     "item": "Cloak of the Illidari Council",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 30896,
+     "item": "Glory of the Defender",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 32279,
      "item": "The Seeker's Wristguards",
      "bis": "multiPhase",
@@ -4536,10 +5199,28 @@
      "variant": "mitigation"
     },
     {
+     "id": 32515,
+     "item": "Wristguards of Determination",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 32342,
      "item": "Girdle of Mighty Resolve",
      "bis": "multiPhase",
      "variant": "overall"
+    },
+    {
+     "id": 32333,
+     "item": "Girdle of Stability",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 30064,
+     "item": "Cord of Screaming Terrors",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 32263,
@@ -4548,10 +5229,28 @@
      "variant": "mitigation"
     },
     {
+     "id": 32367,
+     "item": "Leggings of Devastation",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 32245,
      "item": "Tide-stomper's Greaves",
      "bis": "multiPhase",
      "variant": "overall"
+    },
+    {
+     "id": 32267,
+     "item": "Boots of the Resilient",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 30894,
+     "item": "Blue Suede Shoes",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 32362,
@@ -4564,6 +5263,36 @@
      "item": "Ring of Sundered Souls",
      "bis": "multiPhase",
      "variant": "mitigation"
+    },
+    {
+     "id": 32261,
+     "item": "Band of the Abyssal Lord",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 30028,
+     "item": "Seventh Ring of the Tirisfalen",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 29297,
+     "item": "Band of the Eternal Defender",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 29305,
+     "item": "Band of the Eternal Sage",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 33054,
+     "item": "The Seal of Danzalar",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 32501,
@@ -4599,6 +5328,18 @@
      "variant": "threat"
     },
     {
+     "id": 30889,
+     "item": "Kaz'rogal's Hardened Heart",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 34011,
+     "item": "Illidari Runeshield",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 32368,
      "item": "Tome of the Lightbringer",
      "bis": "expansion",
@@ -4610,6 +5351,36 @@
      "id": 32521,
      "item": "Faceplate of the Impenetrable",
      "bis": "multiPhase",
+     "variant": "mitigation"
+    },
+    {
+     "id": 33421,
+     "item": "Battleworn Tuskguard",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 29925,
+     "item": "Phoenix-Wing Cloak",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 32331,
+     "item": "Cloak of the Illidari Council",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 30896,
+     "item": "Glory of the Defender",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 33473,
+     "item": "Chestguard of the Warlord",
+     "near": true,
      "variant": "mitigation"
     },
     {
@@ -4625,10 +5396,28 @@
      "variant": "mitigation"
     },
     {
+     "id": 32515,
+     "item": "Wristguards of Determination",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 32342,
      "item": "Girdle of Mighty Resolve",
      "bis": "multiPhase",
      "variant": "overall"
+    },
+    {
+     "id": 32333,
+     "item": "Girdle of Stability",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 30064,
+     "item": "Cord of Screaming Terrors",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 32263,
@@ -4637,10 +5426,34 @@
      "variant": "mitigation"
     },
     {
+     "id": 32367,
+     "item": "Leggings of Devastation",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 32245,
      "item": "Tide-stomper's Greaves",
      "bis": "multiPhase",
      "variant": "overall"
+    },
+    {
+     "id": 32267,
+     "item": "Boots of the Resilient",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 33191,
+     "item": "Jungle Stompers",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 30894,
+     "item": "Blue Suede Shoes",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 32362,
@@ -4653,6 +5466,42 @@
      "item": "Ring of Sundered Souls",
      "bis": "multiPhase",
      "variant": "mitigation"
+    },
+    {
+     "id": 32261,
+     "item": "Band of the Abyssal Lord",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 30028,
+     "item": "Seventh Ring of the Tirisfalen",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 29297,
+     "item": "Band of the Eternal Defender",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 33499,
+     "item": "Signet of the Last Defender",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 29305,
+     "item": "Band of the Eternal Sage",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 33054,
+     "item": "The Seal of Danzalar",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 32501,
@@ -4679,6 +5528,24 @@
      "variant": "threat"
     },
     {
+     "id": 30889,
+     "item": "Kaz'rogal's Hardened Heart",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 34011,
+     "item": "Illidari Runeshield",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 33326,
+     "item": "Bulwark of the Amani Empire",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 32368,
      "item": "Tome of the Lightbringer",
      "bis": "expansion",
@@ -4690,6 +5557,12 @@
      "id": 34190,
      "item": "Crimson Paragon's Cover",
      "variant": "mitigation"
+    },
+    {
+     "id": 34242,
+     "item": "Tattered Cape of Antonidas",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 34216,
@@ -4713,8 +5586,32 @@
      "variant": "mitigation"
     },
     {
+     "id": 30028,
+     "item": "Seventh Ring of the Tirisfalen",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 29297,
+     "item": "Band of the Eternal Defender",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 33499,
+     "item": "Signet of the Last Defender",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 29305,
      "item": "Band of the Eternal Sage",
+     "variant": "threat"
+    },
+    {
+     "id": 33054,
+     "item": "The Seal of Danzalar",
+     "near": true,
      "variant": "threat"
     },
     {
@@ -4985,6 +5882,12 @@
      "item": "Cloak of Fiends"
     },
     {
+     "id": 28529,
+     "item": "Royal Cloak of Arathi Kings",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 30905,
      "item": "Midnight Chestguard",
      "bis": "multiPhase"
@@ -4993,6 +5896,19 @@
      "id": 32574,
      "item": "Bindings of Lightning Reflexes",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30057,
+     "item": "Bracers of Eradication",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28795,
+     "item": "Bladespire Warbands",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "hit"
     },
     {
      "id": 29947,
@@ -5020,6 +5936,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 32345,
+     "item": "Dreadboots of the Legion",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28545,
+     "item": "Edgewalker Longboots",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 30022,
      "item": "Pendant of the Perilous",
      "bis": "multiPhase"
@@ -5042,6 +5970,12 @@
      "bis": "multiPhase",
      "variant": "hit",
      "conditional": true
+    },
+    {
+     "id": 28757,
+     "item": "Ring of a Thousand Marks",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 28830,
@@ -5075,8 +6009,33 @@
      "conditional": true
     },
     {
+     "id": 32581,
+     "item": "Swiftstrike Shoulders",
+     "near": true,
+     "variant": "expertise"
+    },
+    {
      "id": 34241,
      "item": "Cloak of Unforgivable Sin"
+    },
+    {
+     "id": 28529,
+     "item": "Royal Cloak of Arathi Kings",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 30057,
+     "item": "Bracers of Eradication",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28795,
+     "item": "Bladespire Warbands",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "hit"
     },
     {
      "id": 34343,
@@ -5087,12 +6046,36 @@
      "item": "Felfury Legplates"
     },
     {
+     "id": 34188,
+     "item": "Leggings of the Immortal Night",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32345,
+     "item": "Dreadboots of the Legion",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28545,
+     "item": "Edgewalker Longboots",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 34177,
      "item": "Clutch of Demise"
     },
     {
      "id": 34189,
      "item": "Band of Ruinous Delight"
+    },
+    {
+     "id": 28757,
+     "item": "Ring of a Thousand Marks",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 34427,
@@ -5131,7 +6114,8 @@
     {
      "id": 28830,
      "item": "Dragonspine Trophy",
-     "bis": "expansion"
+     "bis": "expansion",
+     "conditional": true
     },
     {
      "id": 28572,
@@ -5180,7 +6164,8 @@
     {
      "id": 28830,
      "item": "Dragonspine Trophy",
-     "bis": "expansion"
+     "bis": "expansion",
+     "conditional": true
     },
     {
      "id": 32944,
@@ -5193,6 +6178,30 @@
      "item": "Claw of the Phoenix",
      "variant": "offhand",
      "conditional": true
+    },
+    {
+     "id": 29924,
+     "item": "Netherbane",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28524,
+     "item": "Emerald Ripper",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28572,
+     "item": "Blade of the Unrequited",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28584,
+     "item": "Big Bad Wolf's Paw",
+     "near": true,
+     "variant": "mainhand"
     },
     {
      "id": 29993,
@@ -5214,7 +6223,15 @@
     {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
-     "near": true
+     "bis": "multiPhase",
+     "variant": "unless",
+     "conditional": true
+    },
+    {
+     "id": 28672,
+     "item": "Drape of the Dark Reavers",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 32324,
@@ -5224,6 +6241,18 @@
     {
      "id": 30879,
      "item": "Don Alejandro's Money Belt"
+    },
+    {
+     "id": 32346,
+     "item": "Boneweave Girdle",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 30898,
+     "item": "Shady Dealer's Pantaloons",
+     "near": true,
+     "variant": "unless"
     },
     {
      "id": 32366,
@@ -5247,9 +6276,34 @@
      "conditional": true
     },
     {
+     "id": 29997,
+     "item": "Band of the Ranger-General",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 30052,
+     "item": "Ring of Lethality",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28757,
+     "item": "Ring of a Thousand Marks",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28649,
+     "item": "Garona's Signet Ring",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 28830,
      "item": "Dragonspine Trophy",
-     "bis": "expansion"
+     "bis": "expansion",
+     "conditional": true
     },
     {
      "id": 32505,
@@ -5266,6 +6320,18 @@
      "item": "Blade of Infamy",
      "variant": "offhand",
      "conditional": true
+    },
+    {
+     "id": 28524,
+     "item": "Emerald Ripper",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28584,
+     "item": "Big Bad Wolf's Paw",
+     "near": true,
+     "variant": "mainhand"
     },
     {
      "id": 29993,
@@ -5293,7 +6359,15 @@
     },
     {
      "id": 32323,
-     "item": "Shadowmoon Destroyer's Drape"
+     "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase",
+     "conditional": true
+    },
+    {
+     "id": 28672,
+     "item": "Drape of the Dark Reavers",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 32324,
@@ -5310,9 +6384,21 @@
      "near": true
     },
     {
+     "id": 30898,
+     "item": "Shady Dealer's Pantaloons",
+     "near": true,
+     "variant": "unless"
+    },
+    {
      "id": 32366,
      "item": "Shadowmaster's Boots",
      "bis": "multiPhase"
+    },
+    {
+     "id": 32510,
+     "item": "Softstep Boots of Tracking",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 32260,
@@ -5340,22 +6426,66 @@
      "id": 29301,
      "item": "Band of the Eternal Champion",
      "near": true,
-     "variant": "hit",
-     "conditional": true
+     "variant": "hit"
+    },
+    {
+     "id": 29997,
+     "item": "Band of the Ranger-General",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32266,
+     "item": "Ring of Deceitful Intent",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28757,
+     "item": "Ring of a Thousand Marks",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28649,
+     "item": "Garona's Signet Ring",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 28830,
      "item": "Dragonspine Trophy",
-     "bis": "expansion"
+     "bis": "expansion",
+     "conditional": true
     },
     {
      "id": 33831,
-     "item": "Berserker's Call"
+     "item": "Berserker's Call",
+     "bis": "expansion",
+     "conditional": true
+    },
+    {
+     "id": 32505,
+     "item": "Madness of the Betrayer",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 33389,
      "item": "Dagger of Bad Mojo",
      "variant": "pair"
+    },
+    {
+     "id": 28524,
+     "item": "Emerald Ripper",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28584,
+     "item": "Big Bad Wolf's Paw",
+     "near": true,
+     "variant": "mainhand"
     },
     {
      "id": 29993,
@@ -5400,7 +6530,10 @@
     {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
-     "near": true
+     "superseded": true,
+     "bis": "multiPhase",
+     "variant": "unless",
+     "conditional": true
     },
     {
      "id": 34343,
@@ -5411,12 +6544,45 @@
      "item": "Leggings of the Immortal Night"
     },
     {
+     "id": 30898,
+     "item": "Shady Dealer's Pantaloons",
+     "near": true,
+     "variant": "unless"
+    },
+    {
+     "id": 32510,
+     "item": "Softstep Boots of Tracking",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 34177,
-     "item": "Clutch of Demise"
+     "item": "Clutch of Demise",
+     "variant": "unless",
+     "conditional": true
     },
     {
      "id": 34189,
      "item": "Band of Ruinous Delight"
+    },
+    {
+     "id": 32497,
+     "item": "Stormrage Signet Ring",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "hit"
+    },
+    {
+     "id": 29997,
+     "item": "Band of the Ranger-General",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32266,
+     "item": "Ring of Deceitful Intent",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 34427,
@@ -5425,12 +6591,22 @@
     {
      "id": 28830,
      "item": "Dragonspine Trophy",
-     "bis": "expansion"
+     "bis": "expansion",
+     "variant": "unless",
+     "conditional": true
     },
     {
      "id": 33831,
      "item": "Berserker's Call",
-     "near": true
+     "bis": "expansion",
+     "variant": "unless",
+     "conditional": true
+    },
+    {
+     "id": 32505,
+     "item": "Madness of the Betrayer",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 34331,
@@ -5494,7 +6670,8 @@
     {
      "id": 28830,
      "item": "Dragonspine Trophy",
-     "bis": "expansion"
+     "bis": "expansion",
+     "conditional": true
     },
     {
      "id": 28572,
@@ -5545,7 +6722,8 @@
     {
      "id": 28830,
      "item": "Dragonspine Trophy",
-     "bis": "expansion"
+     "bis": "expansion",
+     "conditional": true
     },
     {
      "id": 32944,
@@ -5558,6 +6736,30 @@
      "item": "Claw of the Phoenix",
      "variant": "offhand",
      "conditional": true
+    },
+    {
+     "id": 29924,
+     "item": "Netherbane",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28524,
+     "item": "Emerald Ripper",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28572,
+     "item": "Blade of the Unrequited",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28584,
+     "item": "Big Bad Wolf's Paw",
+     "near": true,
+     "variant": "mainhand"
     },
     {
      "id": 29993,
@@ -5579,7 +6781,15 @@
     {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
-     "near": true
+     "bis": "multiPhase",
+     "variant": "unless",
+     "conditional": true
+    },
+    {
+     "id": 28672,
+     "item": "Drape of the Dark Reavers",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 32324,
@@ -5589,6 +6799,18 @@
     {
      "id": 30879,
      "item": "Don Alejandro's Money Belt"
+    },
+    {
+     "id": 32346,
+     "item": "Boneweave Girdle",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 30898,
+     "item": "Shady Dealer's Pantaloons",
+     "near": true,
+     "variant": "unless"
     },
     {
      "id": 32366,
@@ -5612,9 +6834,34 @@
      "conditional": true
     },
     {
+     "id": 29997,
+     "item": "Band of the Ranger-General",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 30052,
+     "item": "Ring of Lethality",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28757,
+     "item": "Ring of a Thousand Marks",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28649,
+     "item": "Garona's Signet Ring",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 28830,
      "item": "Dragonspine Trophy",
-     "bis": "expansion"
+     "bis": "expansion",
+     "conditional": true
     },
     {
      "id": 32505,
@@ -5631,6 +6878,18 @@
      "item": "Blade of Infamy",
      "variant": "offhand",
      "conditional": true
+    },
+    {
+     "id": 28524,
+     "item": "Emerald Ripper",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28584,
+     "item": "Big Bad Wolf's Paw",
+     "near": true,
+     "variant": "mainhand"
     },
     {
      "id": 29993,
@@ -5658,7 +6917,15 @@
     },
     {
      "id": 32323,
-     "item": "Shadowmoon Destroyer's Drape"
+     "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase",
+     "conditional": true
+    },
+    {
+     "id": 28672,
+     "item": "Drape of the Dark Reavers",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 32324,
@@ -5675,9 +6942,21 @@
      "near": true
     },
     {
+     "id": 30898,
+     "item": "Shady Dealer's Pantaloons",
+     "near": true,
+     "variant": "unless"
+    },
+    {
      "id": 32366,
      "item": "Shadowmaster's Boots",
      "bis": "multiPhase"
+    },
+    {
+     "id": 32510,
+     "item": "Softstep Boots of Tracking",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 32260,
@@ -5705,22 +6984,66 @@
      "id": 29301,
      "item": "Band of the Eternal Champion",
      "near": true,
-     "variant": "hit",
-     "conditional": true
+     "variant": "hit"
+    },
+    {
+     "id": 29997,
+     "item": "Band of the Ranger-General",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32266,
+     "item": "Ring of Deceitful Intent",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28757,
+     "item": "Ring of a Thousand Marks",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28649,
+     "item": "Garona's Signet Ring",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 28830,
      "item": "Dragonspine Trophy",
-     "bis": "expansion"
+     "bis": "expansion",
+     "conditional": true
     },
     {
      "id": 33831,
-     "item": "Berserker's Call"
+     "item": "Berserker's Call",
+     "bis": "expansion",
+     "conditional": true
+    },
+    {
+     "id": 32505,
+     "item": "Madness of the Betrayer",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 33389,
      "item": "Dagger of Bad Mojo",
      "variant": "pair"
+    },
+    {
+     "id": 28524,
+     "item": "Emerald Ripper",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28584,
+     "item": "Big Bad Wolf's Paw",
+     "near": true,
+     "variant": "mainhand"
     },
     {
      "id": 29993,
@@ -5765,7 +7088,10 @@
     {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
-     "near": true
+     "superseded": true,
+     "bis": "multiPhase",
+     "variant": "unless",
+     "conditional": true
     },
     {
      "id": 34343,
@@ -5776,12 +7102,45 @@
      "item": "Leggings of the Immortal Night"
     },
     {
+     "id": 30898,
+     "item": "Shady Dealer's Pantaloons",
+     "near": true,
+     "variant": "unless"
+    },
+    {
+     "id": 32510,
+     "item": "Softstep Boots of Tracking",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 34177,
-     "item": "Clutch of Demise"
+     "item": "Clutch of Demise",
+     "variant": "unless",
+     "conditional": true
     },
     {
      "id": 34189,
      "item": "Band of Ruinous Delight"
+    },
+    {
+     "id": 32497,
+     "item": "Stormrage Signet Ring",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "hit"
+    },
+    {
+     "id": 29997,
+     "item": "Band of the Ranger-General",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32266,
+     "item": "Ring of Deceitful Intent",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 34427,
@@ -5790,12 +7149,22 @@
     {
      "id": 28830,
      "item": "Dragonspine Trophy",
-     "bis": "expansion"
+     "bis": "expansion",
+     "variant": "unless",
+     "conditional": true
     },
     {
      "id": 33831,
      "item": "Berserker's Call",
-     "near": true
+     "bis": "expansion",
+     "variant": "unless",
+     "conditional": true
+    },
+    {
+     "id": 32505,
+     "item": "Madness of the Betrayer",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 34331,
@@ -5858,6 +7227,12 @@
      "bis": "expansion"
     },
     {
+     "id": 28768,
+     "item": "Malchazeen",
+     "near": true,
+     "variant": "dagger"
+    },
+    {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix"
     }
@@ -5911,6 +7286,18 @@
     {
      "id": 30082,
      "item": "Talon of Azshara"
+    },
+    {
+     "id": 30103,
+     "item": "Fang of Vashj",
+     "near": true,
+     "variant": "dagger"
+    },
+    {
+     "id": 29962,
+     "item": "Heartrazor",
+     "near": true,
+     "variant": "dagger"
     },
     {
      "id": 29949,
@@ -5989,6 +7376,12 @@
      "id": 32369,
      "item": "Blade of Savagery",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30865,
+     "item": "Tracker's Blade",
+     "near": true,
+     "variant": "dagger"
     },
     {
      "id": 29949,
@@ -6072,6 +7465,12 @@
      "id": 32369,
      "item": "Blade of Savagery",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30865,
+     "item": "Tracker's Blade",
+     "near": true,
+     "variant": "dagger"
     },
     {
      "id": 29949,
@@ -6181,6 +7580,12 @@
      "bis": "expansion"
     },
     {
+     "id": 28768,
+     "item": "Malchazeen",
+     "near": true,
+     "variant": "dagger"
+    },
+    {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix"
     }
@@ -6234,6 +7639,18 @@
     {
      "id": 30082,
      "item": "Talon of Azshara"
+    },
+    {
+     "id": 30103,
+     "item": "Fang of Vashj",
+     "near": true,
+     "variant": "dagger"
+    },
+    {
+     "id": 29962,
+     "item": "Heartrazor",
+     "near": true,
+     "variant": "dagger"
     },
     {
      "id": 29949,
@@ -6312,6 +7729,12 @@
      "id": 32369,
      "item": "Blade of Savagery",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30865,
+     "item": "Tracker's Blade",
+     "near": true,
+     "variant": "dagger"
     },
     {
      "id": 29949,
@@ -6395,6 +7818,12 @@
      "id": 32369,
      "item": "Blade of Savagery",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30865,
+     "item": "Tracker's Blade",
+     "near": true,
+     "variant": "dagger"
     },
     {
      "id": 29949,
@@ -6504,6 +7933,12 @@
      "bis": "expansion"
     },
     {
+     "id": 28768,
+     "item": "Malchazeen",
+     "near": true,
+     "variant": "dagger"
+    },
+    {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix"
     }
@@ -6557,6 +7992,18 @@
     {
      "id": 30082,
      "item": "Talon of Azshara"
+    },
+    {
+     "id": 30103,
+     "item": "Fang of Vashj",
+     "near": true,
+     "variant": "dagger"
+    },
+    {
+     "id": 29962,
+     "item": "Heartrazor",
+     "near": true,
+     "variant": "dagger"
     },
     {
      "id": 29949,
@@ -6635,6 +8082,12 @@
      "id": 32369,
      "item": "Blade of Savagery",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30865,
+     "item": "Tracker's Blade",
+     "near": true,
+     "variant": "dagger"
     },
     {
      "id": 29949,
@@ -6718,6 +8171,12 @@
      "id": 32369,
      "item": "Blade of Savagery",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30865,
+     "item": "Tracker's Blade",
+     "near": true,
+     "variant": "dagger"
     },
     {
      "id": 29949,
@@ -7639,6 +9098,12 @@
      "id": 28830,
      "item": "Dragonspine Trophy",
      "bis": "multiPhase"
+    },
+    {
+     "id": 28657,
+     "item": "Fool's Bane",
+     "near": true,
+     "variant": "mainhand"
     }
    ],
    "P3": [
@@ -7744,6 +9209,24 @@
      "id": 32262,
      "item": "Syphon of the Nathrezim",
      "bis": "multiPhase"
+    },
+    {
+     "id": 32944,
+     "item": "Talon of the Phoenix",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 29996,
+     "item": "Rod of the Sun King",
+     "near": true,
+     "variant": "offhand"
+    },
+    {
+     "id": 28767,
+     "item": "The Decapitator",
+     "near": true,
+     "variant": "mainhand"
     }
    ],
    "P4": [
@@ -7859,6 +9342,42 @@
      "id": 32262,
      "item": "Syphon of the Nathrezim",
      "bis": "multiPhase"
+    },
+    {
+     "id": 32944,
+     "item": "Talon of the Phoenix",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 29996,
+     "item": "Rod of the Sun King",
+     "near": true,
+     "variant": "offhand"
+    },
+    {
+     "id": 33495,
+     "item": "Rage",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 33640,
+     "item": "Fury",
+     "near": true,
+     "variant": "offhand"
+    },
+    {
+     "id": 28767,
+     "item": "The Decapitator",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 28657,
+     "item": "Fool's Bane",
+     "near": true,
+     "variant": "mainhand"
     }
    ],
    "P5": [
@@ -7938,6 +9457,30 @@
      "item": "Mounting Vengeance",
      "variant": "offhand",
      "conditional": true
+    },
+    {
+     "id": 32944,
+     "item": "Talon of the Phoenix",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 29996,
+     "item": "Rod of the Sun King",
+     "near": true,
+     "variant": "offhand"
+    },
+    {
+     "id": 33495,
+     "item": "Rage",
+     "near": true,
+     "variant": "mainhand"
+    },
+    {
+     "id": 33640,
+     "item": "Fury",
+     "near": true,
+     "variant": "offhand"
     }
    ]
   },
@@ -8225,6 +9768,18 @@
      "conditional": true
     },
     {
+     "id": 28780,
+     "item": "Soul-Eater's Handwraps",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 28585,
+     "item": "Ruby Slippers",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 28530,
      "item": "Brooch of Unquenchable Fury",
      "variant": "hit",
@@ -8255,6 +9810,12 @@
      "variant": "mainhand"
     },
     {
+     "id": 28734,
+     "item": "Jewel of Infinite Possibilities",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 28673,
      "item": "Tirisfal Wand of Ascendancy",
      "variant": "hit",
@@ -8275,8 +9836,7 @@
     {
      "id": 28766,
      "item": "Ruby Drape of the Mysticant",
-     "near": true,
-     "conditional": true
+     "near": true
     },
     {
      "id": 30107,
@@ -8338,14 +9898,12 @@
     {
      "id": 32524,
      "item": "Shroud of the Highborne",
-     "near": true,
-     "conditional": true
+     "near": true
     },
     {
      "id": 32331,
      "item": "Cloak of the Illidari Council",
-     "near": true,
-     "conditional": true
+     "near": true
     },
     {
      "id": 30107,
@@ -8366,8 +9924,7 @@
     {
      "id": 32256,
      "item": "Waistwrap of Infinity",
-     "near": true,
-     "conditional": true
+     "near": true
     },
     {
      "id": 30916,
@@ -8377,8 +9934,7 @@
     {
      "id": 32367,
      "item": "Leggings of Devastation",
-     "near": true,
-     "conditional": true
+     "near": true
     },
     {
      "id": 32239,
@@ -8992,6 +10548,12 @@
      "bis": "multiPhase"
     },
     {
+     "id": 28745,
+     "item": "Mithril Chain of Heroism",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 28649,
      "item": "Garona's Signet Ring",
      "variant": "hit",
@@ -9076,6 +10638,12 @@
      "item": "Band of the Ranger-General"
     },
     {
+     "id": 30061,
+     "item": "Ancestral Ring of Conquest",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 30627,
      "item": "Tsunami Talisman",
      "bis": "multiPhase"
@@ -9156,6 +10724,18 @@
      "conditional": true
     },
     {
+     "id": 30052,
+     "item": "Ring of Lethality",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32335,
+     "item": "Unstoppable Aggressor's Ring",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 30627,
      "item": "Tsunami Talisman",
      "bis": "multiPhase",
@@ -9167,6 +10747,12 @@
      "bis": "multiPhase",
      "variant": "hit",
      "conditional": true
+    },
+    {
+     "id": 28830,
+     "item": "Dragonspine Trophy",
+     "near": true,
+     "variant": "hit"
     }
    ],
    "P4": [
@@ -9249,6 +10835,30 @@
      "conditional": true
     },
     {
+     "id": 30052,
+     "item": "Ring of Lethality",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32266,
+     "item": "Ring of Deceitful Intent",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 32335,
+     "item": "Unstoppable Aggressor's Ring",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 30061,
+     "item": "Ancestral Ring of Conquest",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 30627,
      "item": "Tsunami Talisman",
      "bis": "multiPhase"
@@ -9300,6 +10910,19 @@
      "conditional": true
     },
     {
+     "id": 30052,
+     "item": "Ring of Lethality",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 29301,
+     "item": "Band of the Eternal Champion",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "hit"
+    },
+    {
      "id": 34427,
      "item": "Blackened Naaru Sliver"
     },
@@ -9314,6 +10937,18 @@
     {
      "id": 28796,
      "item": "Malefic Mask of the Shadows",
+     "variant": "threat"
+    },
+    {
+     "id": 28732,
+     "item": "Cowl of Defiance",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 28755,
+     "item": "Bladed Shoulderpads of the Merciless",
+     "near": true,
      "variant": "threat"
     },
     {
@@ -9344,6 +10979,12 @@
      "variant": "threat"
     },
     {
+     "id": 28750,
+     "item": "Girdle of Treachery",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 28741,
      "item": "Skulker's Greaves",
      "variant": "threat"
@@ -9361,6 +11002,31 @@
     {
      "id": 28509,
      "item": "Worgen Claw Necklace"
+    },
+    {
+     "id": 28675,
+     "item": "Shermanar Great-Ring",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 28757,
+     "item": "Ring of a Thousand Marks",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 28649,
+     "item": "Garona's Signet Ring",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 28830,
+     "item": "Dragonspine Trophy",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "threat"
     },
     {
      "id": 28658,
@@ -9382,14 +11048,56 @@
      "variant": "threat"
     },
     {
+     "id": 28672,
+     "item": "Drape of the Dark Reavers",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 30101,
+     "item": "Bloodsea Brigand's Vest",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 29947,
      "item": "Gloves of the Searing Grip",
+     "variant": "threat"
+    },
+    {
+     "id": 30644,
+     "item": "Grips of Deftness",
+     "near": true,
      "variant": "threat"
     },
     {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
      "bis": "multiPhase"
+    },
+    {
+     "id": 29995,
+     "item": "Leggings of Murderous Intent",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 30674,
+     "item": "Zierhut's Lost Treads",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 30060,
+     "item": "Boots of Effortless Striking",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 28545,
+     "item": "Edgewalker Longboots",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 29997,
@@ -9402,6 +11110,24 @@
      "variant": "threat"
     },
     {
+     "id": 33054,
+     "item": "The Seal of Danzalar",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 28649,
+     "item": "Garona's Signet Ring",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 30061,
+     "item": "Ancestral Ring of Conquest",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 28579,
      "item": "Romulo's Poison Vial"
     },
@@ -9409,6 +11135,13 @@
      "id": 28830,
      "item": "Dragonspine Trophy",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30627,
+     "item": "Tsunami Talisman",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "threat"
     },
     {
      "id": 30021,
@@ -9430,6 +11163,24 @@
      "variant": "threat"
     },
     {
+     "id": 34010,
+     "item": "Pepe's Shroud of Pacification",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 32323,
+     "item": "Shadowmoon Destroyer's Drape",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 28672,
+     "item": "Drape of the Dark Reavers",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 32324,
      "item": "Insidious Bands",
      "bis": "multiPhase",
@@ -9437,9 +11188,27 @@
      "conditional": true
     },
     {
+     "id": 29947,
+     "item": "Gloves of the Searing Grip",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 30644,
+     "item": "Grips of Deftness",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30879,
+     "item": "Don Alejandro's Money Belt",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 32593,
@@ -9465,6 +11234,12 @@
      "variant": "overall"
     },
     {
+     "id": 32497,
+     "item": "Stormrage Signet Ring",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 32501,
      "item": "Shadowmoon Insignia",
      "bis": "expansion",
@@ -9486,6 +11261,12 @@
      "id": 30627,
      "item": "Tsunami Talisman",
      "bis": "multiPhase"
+    },
+    {
+     "id": 28579,
+     "item": "Romulo's Poison Vial",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 30883,
@@ -9515,6 +11296,18 @@
      "conditional": true
     },
     {
+     "id": 29947,
+     "item": "Gloves of the Searing Grip",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 30644,
+     "item": "Grips of Deftness",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
      "bis": "multiPhase"
@@ -9531,6 +11324,12 @@
      "item": "Ring of Deceitful Intent",
      "bis": "multiPhase",
      "variant": "overall"
+    },
+    {
+     "id": 32497,
+     "item": "Stormrage Signet Ring",
+     "near": true,
+     "variant": "threat"
     },
     {
      "id": 32501,
@@ -9562,6 +11361,12 @@
      "bis": "multiPhase"
     },
     {
+     "id": 28579,
+     "item": "Romulo's Poison Vial",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 30883,
      "item": "Pillar of Ferocity",
      "bis": "expansion",
@@ -9584,8 +11389,26 @@
      "item": "Harness of Carnal Instinct"
     },
     {
+     "id": 34234,
+     "item": "Shadowed Gauntlets of Paroxysm",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 34188,
+     "item": "Leggings of the Immortal Night",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 34178,
      "item": "Collar of the Pit Lord"
+    },
+    {
+     "id": 32362,
+     "item": "Pendant of Titans",
+     "near": true,
+     "variant": "mitigation"
     },
     {
      "id": 34213,
@@ -9607,6 +11430,12 @@
      "id": 34198,
      "item": "Stanchion of Primal Instinct",
      "variant": "threat"
+    },
+    {
+     "id": 30021,
+     "item": "Wildfury Greatstaff",
+     "near": true,
+     "variant": "mitigation"
     },
     {
      "id": 32257,

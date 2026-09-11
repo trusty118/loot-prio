@@ -2163,10 +2163,16 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
   for (const [, phases] of Object.entries(bis.specs)) {
     const order = PH.filter((p) => phases[p]);
     const ids = {};
-    for (const p of order) ids[p] = new Set((phases[p] || []).filter((e) => !e.near).map((e) => e.id));
+    /* `superseded` is excluded alongside `near`: the author named this item's replacement
+       in that phase, so the listing is still BiS and still rings, but it cannot be the
+       evidence that anything LASTED. Stored in the file precisely so this third derivation
+       can see it - the rank text it comes from is not in bis.json. */
+    for (const p of order) ids[p] = new Set((phases[p] || [])
+      .filter((e) => !e.near && !e.superseded).map((e) => e.id));
     for (const p of order) {
       for (const e of phases[p] || []) {
         if (e.near) continue;      /* a near-BiS row makes no claim about lasting */
+        if (e.superseded) continue;  /* nor does one whose replacement the guide names */
         checked++;
         if (NAME[tierOfEntry(phases, p, e.id, ids, order)] !== (e.bis || "phase")) differ++;
       }

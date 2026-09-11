@@ -505,6 +505,39 @@ is a Feral druid, which fits — it is how the druid guides separate a piece fro
 Warglaives of Azzinoth and nothing else, where it describes what you equip rather than when
 the call applies.
 
+**Authors differ, and the line between them is CLAIM versus OFFER, Sep 2026.** Each Wowhead
+spec guide has a different author and they share no vocabulary — **77% of the 627 distinct
+rank strings are used by exactly one spec**. `Hit Alternative` (Arms) and
+`Threat Alternative` (Feral bear) are offers; `Best without Madness/Stormrage` (BM) is a
+claim with a condition on it. One set of regexes cannot be right for all of them, but that
+one distinction holds across guides that agree on nothing else.
+
+**An offer that names a REASON is an alternate — blue.** `OFFERED` and `NAMES_A_REASON` in
+`fetch_bis.py`: 292 entries, +28 icons on the Phase 3 meta view. An offer naming none —
+bare `Option`, `Great`, `Good`, `Viable` — stays invisible, because a ring on it says only
+"somebody listed it". Measured: including those is 2,961 entries and +167 icons, roughly
+doubling the view.
+
+An offered alternate **never consumes slot capacity**. Otherwise a row the author merely
+suggested would push a row the author called best into being an alternative — which is what
+had happened to Berserker's Call, third in a trinket slot of two.
+
+**`with X` / `without X` are conditions, and `until X` also CAPS the run.** They map to the
+variant `unless`, which exists to give them a slot group of their own; the word is suppressed
+on screen via `SILENT_VARIANTS`, because "Phase BiS - Unless" tells a reader nothing and the
+condition names another item, which is freeform prose we do not parse. Four rows rendered as
+alternatives before this, when the author had called them best.
+
+`until` goes further and sets **`superseded`**: `Best until Unforgivable Sin` names the item
+that replaces this one, so that phase is the author saying the run *ends* — the opposite of
+what `expansion` claims. The listing still rings; it just cannot be the evidence that
+anything lasted. **Stored in the file rather than left implicit**, because `test/smoke.mjs`
+derives the longevity rule a third time and has no access to the rank text.
+
+**Freeing rows from `near` changes tiers, necessarily** — 10 did. A near row is excluded from
+longevity by design, so anything that stops being near grows its item's span. Worth expecting
+rather than rediscovering.
+
 **Blue is drawn for `near`, which drew nothing at all before.** 215 entries a guide listed
 as `Best` past what the slot can hold — by its own row order, the second or third choice.
 They were stored, validated by `check_bis.py`, and rendered by nothing, so an item could
