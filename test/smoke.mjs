@@ -701,7 +701,11 @@ ok(unknown.length === 0, `every priority identifier resolves (${unknown.slice(0,
 
 // operators render between the icons, and only the five known ones appear
 const ops = [...doc.querySelectorAll(".col-prio .prio-op")].map((o) => o.textContent);
-const KNOWN_OPS = [">", ">>", "~>", "=", "~="];
+/* "?" belongs here and was missing: it shipped as a real operator, and the assertion
+   message below has always listed it. It went unnoticed because no "?" reached the
+   table while a list was open - the BiS view was the only thing drawing them, and that
+   only ran with no list. It now also fills rows the open list has no key for. */
+const KNOWN_OPS = [">", ">>", "~>", "=", "~=", "?"];
 ok(ops.length > 0 && ops.every((o) => KNOWN_OPS.includes(o)),
    `only known operators render (${[...new Set(ops)].sort().join(" ")})`);
 ok(ops.every((o) => o !== ">="), "the old >= is gone");
@@ -1129,12 +1133,24 @@ ok(proseRows.length === 0,
 const blank = [...doc.querySelectorAll("tbody tr")]
   .filter((tr) => tr.children[3].textContent.trim() === "" &&
                   tr.children[3].querySelectorAll("img").length === 0);
-/* His own "whoever needs it" calls, plus the rows of his phase his list does not hold at
-   all. Derived from the open list rather than pinned - a literal would fail for a reason
-   that says nothing about rendering. */
-const expectBlank = data.filter((r) =>
-  ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone) &&
-  (zatarList.priorities[String(r.id)] || []).length === 0).length;
+/* His own "whoever needs it" calls - an explicit [] - and NOT the rows his list has no
+   key for, which now fall back to the BiS view. That distinction is the whole point:
+   a missing key is the list never mentioning the item, an empty array is somebody
+   answering "whoever needs it", and only the first is safe to fill in.
+
+   Derived from the open list rather than pinned - a literal would fail for a reason that
+   says nothing about rendering. A row is counted only if it is BiS for nobody, since
+   otherwise the BiS view has something to draw. */
+const p3Bis = new Set();
+Object.values(bis.specs).forEach((byPhase) =>
+  (byPhase.P3 || []).forEach((r) => { if (!r.near) p3Bis.add(r.id); }));
+const expectBlank = data.filter((r) => {
+  if (!["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone)) return false;
+  const held = zatarList.priorities[String(r.id)];
+  if (held && held.length) return false;          /* he ranked it */
+  if (held) return true;                          /* explicit [] - stays blank */
+  return !p3Bis.has(r.id);                        /* no key: blank only if BiS for nobody */
+}).length;
 ok(blank.length === expectBlank,
    `rows with nothing to say render an empty cell, not "undefined" (${expectBlank})`);
 ok(Object.values(zatarList.priorities).filter((p) => !p.length).length === 23,
@@ -2260,10 +2276,37 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
   ok(listOps.length > 0 && listOps.some((o) => o !== "?"),
      "opening a list replaces the BiS view with the list's own ordering - real operators, "
      + `not the view's uniform ? (${[...new Set(listOps)].join(" ")})`);
-  const unranked = [...bd.querySelectorAll("tbody tr[data-id]")]
-    .find((tr) => !zatarList.priorities[tr.dataset.id]);
-  ok(unranked && unranked.children[3].querySelectorAll("img").length === 0,
-     "and a row that list does not rank goes blank rather than falling back to BiS");
+  /* Sep 2026, and this reverses the assertion that stood here. A row the open list has
+     NO KEY for now falls back to the BiS view, because the page was already reaching
+     that far to FILTER: bisOnlyMatch() let these rows through on their BiS, so with a
+     spec picked you could land on a row that matched because it was BiS for you and then
+     showed nothing saying why.
+
+     The distinction that makes it safe is no-key versus an explicit []. zatar's videos
+     skipped 13 Phase 3 drops - his list never mentions them - while 23 other rows hold a
+     deliberate [] meaning "whoever needs it". Filling the first is saying something the
+     list had no opinion on; filling the second would overwrite an answer. */
+  const noKeyBis = [...bd.querySelectorAll("tbody tr[data-id]")]
+    .filter((tr) => !zatarList.priorities[tr.dataset.id] && p3Bis.has(Number(tr.dataset.id)));
+  ok(noKeyBis.length > 0 &&
+     noKeyBis.every((tr) => tr.children[3].querySelectorAll("img.spec-icon").length > 0),
+     `a row the list has no key for falls back to the BiS view (${noKeyBis.length} rows)`);
+  ok(noKeyBis.every((tr) => [...tr.children[3].querySelectorAll(".prio-op")]
+       .every((o) => o.textContent === "?")),
+     "joined by ? - not ranked against - so it cannot read as the list's own ordering");
+
+  /* The half that must NOT change, and the reason the gate keys on inTemplate() rather
+     than on the priority being empty: !![] is true, so an explicit empty array counts as
+     the list having spoken. */
+  const deliberateBlank = [...bd.querySelectorAll("tbody tr[data-id]")]
+    .filter((tr) => {
+      const held = zatarList.priorities[tr.dataset.id];
+      return held && held.length === 0 && p3Bis.has(Number(tr.dataset.id));
+    });
+  ok(deliberateBlank.length > 0 &&
+     deliberateBlank.every((tr) => tr.children[3].querySelectorAll("img").length === 0),
+     `but a deliberate "whoever needs it" blank stays blank, even when BiS has something `
+     + `to say about it (${deliberateBlank.length} rows)`);
 }
 
 // --- the meta-specs toggle -----------------------------------------------------------

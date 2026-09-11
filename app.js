@@ -3150,7 +3150,24 @@
      FILTER whenever a list is silent: a filter that reaches too far shows you an extra
      row, a display that reaches too far tells you something untrue. */
   function bisViewCell(td, rec) {
-    if (activeTemplate) return td;
+    /* Shown when NO list is open, and - since Sep 2026 - also when the open list has no
+       key for this item at all.
+
+       That second case is not the same as a list holding an empty priority. `[]` is
+       somebody answering "whoever needs it", and 23 of zatar's rows are exactly that;
+       filling those in would overwrite an answer with a different claim. A MISSING key is
+       the list never having mentioned the item - his videos covered Black Temple and Mount
+       Hyjal but skipped 13 of their drops - so there is no answer to overwrite.
+       inTemplate() is the distinction, and !![] being true is what makes it work.
+
+       It also closes a gap the page had on both sides of: bisOnlyMatch() already let these
+       rows through the FILTER on their BiS, so with a spec picked you could land on a row
+       that matched BECAUSE it was BiS for you and then showed nothing saying why.
+
+       Never while editing: these icons are not in the list, so they must not look like
+       entries you can drag, reorder or delete. An editable empty cell offers its + instead. */
+    if (canEdit()) return td;
+    if (activeTemplate && inTemplate(rec)) return td;
 
     var specs = Object.keys(REG.specs).filter(function (id) {
       return bisTier(id, rec.id) && showsSpec(id);
