@@ -384,7 +384,16 @@ def main():
         #
         # NOT conditional: wordings that emphasise rather than qualify, and a tank's
         # threat/mitigation sets, which are two genuine kits rather than a caveat.
-        EMPHASIS = {"overall", "pair", "individually"}
+        #
+        # "individually" was in here and has been moved OUT, Sep 2026. It reads like
+        # emphasis and is not: "BiS Individually" means best when the item is judged on
+        # its own, WITHOUT the set bonus it would otherwise be part of - which is exactly
+        # a condition, and the same shape as "Best - Hit". 21 entries.
+        #
+        # "pair" stays, and only because of what it happens to cover: in this data it is
+        # the Warglaives of Azzinoth and nothing else, where "Best Pair" describes what
+        # you equip rather than when it applies.
+        EMPHASIS = {"overall", "pair"}
         SET_VARIANTS = {"threat", "mitigation"}
         is_tank = "Tank" in reg.get(spec, {}).get("roles", [])
 
