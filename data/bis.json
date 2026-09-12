@@ -4,9 +4,26 @@
   "AffliLock": {
    "P1": [
     {
+     "id": 29759,
+     "item": "Helm of the Fallen Hero"
+    },
+    {
+     "id": 29762,
+     "item": "Pauldrons of the Fallen Hero",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28766,
      "item": "Ruby Drape of the Mysticant",
      "bis": "multiPhase"
+    },
+    {
+     "id": 29755,
+     "item": "Chestguard of the Fallen Hero"
+    },
+    {
+     "id": 29756,
+     "item": "Gloves of the Fallen Hero"
     },
     {
      "id": 28530,
@@ -16,6 +33,10 @@
      "id": 28753,
      "item": "Ring of Recurrence",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30723,
+     "item": "Talon of the Tempest"
     },
     {
      "id": 28673,
@@ -28,6 +49,15 @@
     }
    ],
    "P2": [
+    {
+     "id": 30244,
+     "item": "Helm of the Vanquished Hero"
+    },
+    {
+     "id": 29762,
+     "item": "Pauldrons of the Fallen Hero",
+     "bis": "multiPhase"
+    },
     {
      "id": 28766,
      "item": "Ruby Drape of the Mysticant",
@@ -48,6 +78,15 @@
      "near": true
     },
     {
+     "id": 30247,
+     "item": "Leggings of the Vanquished Hero"
+    },
+    {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle",
+     "near": true
+    },
+    {
      "id": 30109,
      "item": "Ring of Endless Coils"
     },
@@ -61,6 +100,11 @@
      "item": "Fang of the Leviathan"
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest",
+     "near": true
+    },
+    {
      "id": 30049,
      "item": "Fathomstone"
     },
@@ -72,8 +116,19 @@
    ],
    "P3": [
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32525,
-     "item": "Cowl of the Illidari High Lord"
+     "item": "Cowl of the Illidari High Lord",
+     "near": true
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "multiPhase"
     },
     {
      "id": 32590,
@@ -100,8 +155,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "near": true
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
      "bis": "multiPhase"
     },
     {
@@ -120,13 +185,19 @@
     {
      "id": 30916,
      "item": "Leggings of Channeled Elements",
-     "bis": "multiPhase",
      "variant": "overall"
     },
     {
      "id": 32367,
      "item": "Leggings of Devastation",
      "variant": "hit",
+     "conditional": true
+    },
+    {
+     "id": 31098,
+     "item": "Leggings of the Forgotten Conqueror",
+     "bis": "multiPhase",
+     "variant": "crit",
      "conditional": true
     },
     {
@@ -168,6 +239,16 @@
    ],
    "P4": [
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "multiPhase",
@@ -179,8 +260,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "near": true
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
      "bis": "multiPhase"
     },
     {
@@ -195,9 +286,15 @@
      "near": true
     },
     {
+     "id": 31098,
+     "item": "Leggings of the Forgotten Conqueror",
+     "bis": "multiPhase",
+     "conditional": true
+    },
+    {
      "id": 30916,
      "item": "Leggings of Channeled Elements",
-     "bis": "multiPhase"
+     "near": true
     },
     {
      "id": 32367,
@@ -273,6 +370,12 @@
      "item": "Amice of the Convoker"
     },
     {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "near": true,
+     "bis": "multiPhase"
+    },
+    {
      "id": 34242,
      "item": "Tattered Cape of Antonidas"
     },
@@ -281,12 +384,24 @@
      "item": "Fel Conquerer Raiments"
     },
     {
+     "id": 34848,
+     "item": "Bracers of the Forgotten Conqueror"
+    },
+    {
      "id": 34344,
      "item": "Handguards of Defiled Worlds"
     },
     {
+     "id": 34853,
+     "item": "Belt of the Forgotten Conqueror"
+    },
+    {
      "id": 34181,
      "item": "Leggings of Calamity"
+    },
+    {
+     "id": 34856,
+     "item": "Boots of the Forgotten Conqueror"
     },
     {
      "id": 34204,
@@ -331,6 +446,14 @@
   "Arcane": {
    "P1": [
     {
+     "id": 29759,
+     "item": "Helm of the Fallen Hero"
+    },
+    {
+     "id": 29762,
+     "item": "Pauldrons of the Fallen Hero"
+    },
+    {
      "id": 28797,
      "item": "Brute Cloak of the Ogre-Magi"
     },
@@ -340,8 +463,13 @@
      "near": true
     },
     {
+     "id": 29765,
+     "item": "Leggings of the Fallen Hero"
+    },
+    {
      "id": 28594,
-     "item": "Trial-Fire Trousers"
+     "item": "Trial-Fire Trousers",
+     "near": true
     },
     {
      "id": 28517,
@@ -368,8 +496,13 @@
      "item": "The Lightning Capacitor"
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest"
+    },
+    {
      "id": 28802,
-     "item": "Bloodmaw Magus-Blade"
+     "item": "Bloodmaw Magus-Blade",
+     "near": true
     },
     {
      "id": 28770,
@@ -389,8 +522,23 @@
    ],
    "P2": [
     {
+     "id": 30244,
+     "item": "Helm of the Vanquished Hero",
+     "bis": "expansion"
+    },
+    {
+     "id": 30250,
+     "item": "Pauldrons of the Vanquished Hero",
+     "bis": "expansion"
+    },
+    {
      "id": 29992,
      "item": "Royal Cloak of the Sunstriders"
+    },
+    {
+     "id": 30238,
+     "item": "Chestguard of the Vanquished Hero",
+     "bis": "multiPhase"
     },
     {
      "id": 29918,
@@ -403,6 +551,10 @@
     {
      "id": 30064,
      "item": "Cord of Screaming Terrors"
+    },
+    {
+     "id": 30247,
+     "item": "Leggings of the Vanquished Hero"
     },
     {
      "id": 30067,
@@ -425,12 +577,32 @@
    ],
    "P3": [
     {
+     "id": 30244,
+     "item": "Helm of the Vanquished Hero",
+     "bis": "expansion"
+    },
+    {
+     "id": 30250,
+     "item": "Pauldrons of the Vanquished Hero",
+     "bis": "expansion"
+    },
+    {
      "id": 32331,
      "item": "Cloak of the Illidari Council"
     },
     {
      "id": 32524,
      "item": "Shroud of the Highborne",
+     "near": true
+    },
+    {
+     "id": 30238,
+     "item": "Chestguard of the Vanquished Hero",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
      "near": true
     },
     {
@@ -444,6 +616,11 @@
      "near": true
     },
     {
+     "id": 30241,
+     "item": "Gloves of the Vanquished Hero",
+     "bis": "expansion"
+    },
+    {
      "id": 30888,
      "item": "Anetheron's Noose",
      "bis": "multiPhase"
@@ -454,9 +631,13 @@
      "near": true
     },
     {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher"
+    },
+    {
      "id": 30916,
      "item": "Leggings of Channeled Elements",
-     "bis": "multiPhase"
+     "near": true
     },
     {
      "id": 32239,
@@ -506,8 +687,28 @@
    ],
    "P4": [
     {
+     "id": 30244,
+     "item": "Helm of the Vanquished Hero",
+     "bis": "expansion"
+    },
+    {
+     "id": 30250,
+     "item": "Pauldrons of the Vanquished Hero",
+     "bis": "expansion"
+    },
+    {
      "id": 32524,
      "item": "Shroud of the Highborne"
+    },
+    {
+     "id": 30238,
+     "item": "Chestguard of the Vanquished Hero",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
+     "near": true
     },
     {
      "id": 30870,
@@ -520,14 +721,18 @@
      "near": true
     },
     {
+     "id": 30241,
+     "item": "Gloves of the Vanquished Hero",
+     "bis": "expansion"
+    },
+    {
      "id": 30888,
      "item": "Anetheron's Noose",
      "bis": "multiPhase"
     },
     {
      "id": 30916,
-     "item": "Leggings of Channeled Elements",
-     "bis": "multiPhase"
+     "item": "Leggings of Channeled Elements"
     },
     {
      "id": 32239,
@@ -574,12 +779,39 @@
    ],
    "P5": [
     {
+     "id": 30244,
+     "item": "Helm of the Vanquished Hero",
+     "bis": "expansion"
+    },
+    {
+     "id": 30250,
+     "item": "Pauldrons of the Vanquished Hero",
+     "bis": "expansion"
+    },
+    {
      "id": 34242,
      "item": "Tattered Cape of Antonidas"
     },
     {
+     "id": 34852,
+     "item": "Bracers of the Forgotten Vanquisher"
+    },
+    {
+     "id": 30241,
+     "item": "Gloves of the Vanquished Hero",
+     "bis": "expansion"
+    },
+    {
+     "id": 34855,
+     "item": "Belt of the Forgotten Vanquisher"
+    },
+    {
      "id": 34181,
      "item": "Leggings of Calamity"
+    },
+    {
+     "id": 34858,
+     "item": "Boots of the Forgotten Vanquisher"
     },
     {
      "id": 34204,
@@ -631,12 +863,29 @@
   "BalanceDruid": {
    "P1": [
     {
+     "id": 29761,
+     "item": "Helm of the Fallen Defender"
+    },
+    {
+     "id": 29764,
+     "item": "Pauldrons of the Fallen Defender"
+    },
+    {
      "id": 28766,
      "item": "Ruby Drape of the Mysticant"
     },
     {
+     "id": 29753,
+     "item": "Chestguard of the Fallen Defender"
+    },
+    {
      "id": 28507,
      "item": "Handwraps of Flowing Thought"
+    },
+    {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle",
+     "bis": "multiPhase"
     },
     {
      "id": 28517,
@@ -663,8 +912,12 @@
     },
     {
      "id": 28770,
-     "item": "Nathrezim Mindblade",
-     "bis": "multiPhase"
+     "item": "Nathrezim Mindblade"
+    },
+    {
+     "id": 30723,
+     "item": "Talon of the Tempest",
+     "near": true
     },
     {
      "id": 28633,
@@ -676,6 +929,14 @@
     }
    ],
    "P2": [
+    {
+     "id": 30243,
+     "item": "Helm of the Vanquished Defender"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender"
+    },
     {
      "id": 28797,
      "item": "Brute Cloak of the Ogre-Magi"
@@ -691,8 +952,21 @@
      "near": true
     },
     {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender"
+    },
+    {
      "id": 29918,
      "item": "Mindstorm Wristbands"
+    },
+    {
+     "id": 30240,
+     "item": "Gloves of the Vanquished Defender"
+    },
+    {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle",
+     "bis": "multiPhase"
     },
     {
      "id": 30067,
@@ -708,9 +982,13 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest"
+    },
+    {
      "id": 28770,
      "item": "Nathrezim Mindblade",
-     "bis": "multiPhase"
+     "near": true
     },
     {
      "id": 29988,
@@ -723,6 +1001,16 @@
    ],
    "P3": [
     {
+     "id": 31096,
+     "item": "Helm of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "multiPhase"
@@ -733,8 +1021,18 @@
      "near": true
     },
     {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -789,6 +1087,16 @@
    ],
    "P4": [
     {
+     "id": 31096,
+     "item": "Helm of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "multiPhase"
@@ -799,8 +1107,18 @@
      "near": true
     },
     {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -881,6 +1199,12 @@
      "item": "Amice of the Convoker"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "near": true,
+     "bis": "multiPhase"
+    },
+    {
      "id": 34242,
      "item": "Tattered Cape of Antonidas"
     },
@@ -889,12 +1213,24 @@
      "item": "Fel Conquerer Raiments"
     },
     {
+     "id": 34852,
+     "item": "Bracers of the Forgotten Vanquisher"
+    },
+    {
      "id": 34344,
      "item": "Handguards of Defiled Worlds"
     },
     {
+     "id": 34855,
+     "item": "Belt of the Forgotten Vanquisher"
+    },
+    {
      "id": 34181,
      "item": "Leggings of Calamity"
+    },
+    {
+     "id": 34858,
+     "item": "Boots of the Forgotten Vanquisher"
     },
     {
      "id": 34204,
@@ -930,9 +1266,26 @@
   "DestroLock": {
    "P1": [
     {
+     "id": 29759,
+     "item": "Helm of the Fallen Hero"
+    },
+    {
+     "id": 29762,
+     "item": "Pauldrons of the Fallen Hero",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28766,
      "item": "Ruby Drape of the Mysticant",
      "bis": "multiPhase"
+    },
+    {
+     "id": 29755,
+     "item": "Chestguard of the Fallen Hero"
+    },
+    {
+     "id": 29756,
+     "item": "Gloves of the Fallen Hero"
     },
     {
      "id": 28517,
@@ -953,6 +1306,10 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest"
+    },
+    {
      "id": 28673,
      "item": "Tirisfal Wand of Ascendancy"
     },
@@ -963,6 +1320,15 @@
     }
    ],
    "P2": [
+    {
+     "id": 30244,
+     "item": "Helm of the Vanquished Hero"
+    },
+    {
+     "id": 29762,
+     "item": "Pauldrons of the Fallen Hero",
+     "bis": "multiPhase"
+    },
     {
      "id": 28766,
      "item": "Ruby Drape of the Mysticant",
@@ -980,6 +1346,15 @@
     {
      "id": 30684,
      "item": "Ravager's Cuffs",
+     "near": true
+    },
+    {
+     "id": 30247,
+     "item": "Leggings of the Vanquished Hero"
+    },
+    {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle",
      "near": true
     },
     {
@@ -1007,8 +1382,19 @@
    ],
    "P3": [
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32525,
-     "item": "Cowl of the Illidari High Lord"
+     "item": "Cowl of the Illidari High Lord",
+     "near": true
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "multiPhase"
     },
     {
      "id": 32590,
@@ -1035,8 +1421,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "near": true
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
      "bis": "multiPhase"
     },
     {
@@ -1055,13 +1451,19 @@
     {
      "id": 30916,
      "item": "Leggings of Channeled Elements",
-     "bis": "multiPhase",
      "variant": "overall"
     },
     {
      "id": 32367,
      "item": "Leggings of Devastation",
      "variant": "hit",
+     "conditional": true
+    },
+    {
+     "id": 31098,
+     "item": "Leggings of the Forgotten Conqueror",
+     "bis": "multiPhase",
+     "variant": "crit",
      "conditional": true
     },
     {
@@ -1108,6 +1510,16 @@
    ],
    "P4": [
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "multiPhase",
@@ -1119,8 +1531,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "near": true
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
      "bis": "multiPhase"
     },
     {
@@ -1135,9 +1557,15 @@
      "near": true
     },
     {
+     "id": 31098,
+     "item": "Leggings of the Forgotten Conqueror",
+     "bis": "multiPhase",
+     "conditional": true
+    },
+    {
      "id": 30916,
      "item": "Leggings of Channeled Elements",
-     "bis": "multiPhase"
+     "near": true
     },
     {
      "id": 32367,
@@ -1213,6 +1641,12 @@
      "item": "Amice of the Convoker"
     },
     {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "near": true,
+     "bis": "multiPhase"
+    },
+    {
      "id": 34242,
      "item": "Tattered Cape of Antonidas"
     },
@@ -1221,12 +1655,24 @@
      "item": "Fel Conquerer Raiments"
     },
     {
+     "id": 34848,
+     "item": "Bracers of the Forgotten Conqueror"
+    },
+    {
      "id": 34344,
      "item": "Handguards of Defiled Worlds"
     },
     {
+     "id": 34853,
+     "item": "Belt of the Forgotten Conqueror"
+    },
+    {
      "id": 34181,
      "item": "Leggings of Calamity"
+    },
+    {
+     "id": 34856,
+     "item": "Boots of the Forgotten Conqueror"
     },
     {
      "id": 34204,
@@ -1271,6 +1717,16 @@
   "Ele": {
    "P1": [
     {
+     "id": 29760,
+     "item": "Helm of the Fallen Champion",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 29763,
+     "item": "Pauldrons of the Fallen Champion",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28797,
      "item": "Brute Cloak of the Ogre-Magi",
      "bis": "multiPhase"
@@ -1303,19 +1759,49 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest"
+    },
+    {
      "id": 28770,
-     "item": "Nathrezim Mindblade"
+     "item": "Nathrezim Mindblade",
+     "near": true
     }
    ],
    "P2": [
+    {
+     "id": 29760,
+     "item": "Helm of the Fallen Champion",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30242,
+     "item": "Helm of the Vanquished Champion",
+     "near": true
+    },
+    {
+     "id": 29763,
+     "item": "Pauldrons of the Fallen Champion",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30248,
+     "item": "Pauldrons of the Vanquished Champion",
+     "near": true
+    },
     {
      "id": 28797,
      "item": "Brute Cloak of the Ogre-Magi",
      "bis": "multiPhase"
     },
     {
+     "id": 30236,
+     "item": "Chestguard of the Vanquished Champion"
+    },
+    {
      "id": 30107,
-     "item": "Vestments of the Sea-Witch"
+     "item": "Vestments of the Sea-Witch",
+     "near": true
     },
     {
      "id": 29918,
@@ -1325,6 +1811,10 @@
      "id": 28780,
      "item": "Soul-Eater's Handwraps",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30245,
+     "item": "Leggings of the Vanquished Champion"
     },
     {
      "id": 30067,
@@ -1355,8 +1845,19 @@
    ],
    "P3": [
     {
+     "id": 31095,
+     "item": "Helm of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 32587,
-     "item": "Mantle of Nimble Thought"
+     "item": "Mantle of Nimble Thought",
+     "near": true
     },
     {
      "id": 32524,
@@ -1368,8 +1869,18 @@
      "near": true
     },
     {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31094,
+     "item": "Gloves of the Forgotten Protector",
      "bis": "multiPhase"
     },
     {
@@ -1381,6 +1892,11 @@
      "id": 30916,
      "item": "Leggings of Channeled Elements",
      "bis": "multiPhase"
+    },
+    {
+     "id": 31100,
+     "item": "Leggings of the Forgotten Protector",
+     "near": true
     },
     {
      "id": 32239,
@@ -1435,12 +1951,32 @@
    ],
    "P4": [
     {
+     "id": 31095,
+     "item": "Helm of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 32331,
      "item": "Cloak of the Illidari Council"
     },
     {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31094,
+     "item": "Gloves of the Forgotten Protector",
      "bis": "multiPhase"
     },
     {
@@ -1452,6 +1988,11 @@
      "id": 30916,
      "item": "Leggings of Channeled Elements",
      "bis": "multiPhase"
+    },
+    {
+     "id": 31100,
+     "item": "Leggings of the Forgotten Protector",
+     "near": true
     },
     {
      "id": 32239,
@@ -1529,8 +2070,17 @@
      "near": true
     },
     {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 34242,
      "item": "Tattered Cape of Antonidas"
+    },
+    {
+     "id": 34851,
+     "item": "Bracers of the Forgotten Protector"
     },
     {
      "id": 34350,
@@ -1542,6 +2092,10 @@
      "near": true
     },
     {
+     "id": 34854,
+     "item": "Belt of the Forgotten Protector"
+    },
+    {
      "id": 34186,
      "item": "Chain Links of the Tumultuous Storm"
     },
@@ -1549,6 +2103,10 @@
      "id": 34181,
      "item": "Leggings of Calamity",
      "near": true
+    },
+    {
+     "id": 34857,
+     "item": "Boots of the Forgotten Protector"
     },
     {
      "id": 34204,
@@ -1601,6 +2159,14 @@
   "Fire": {
    "P1": [
     {
+     "id": 29759,
+     "item": "Helm of the Fallen Hero"
+    },
+    {
+     "id": 29762,
+     "item": "Pauldrons of the Fallen Hero"
+    },
+    {
      "id": 28766,
      "item": "Ruby Drape of the Mysticant",
      "bis": "multiPhase",
@@ -1610,6 +2176,10 @@
     {
      "id": 28797,
      "item": "Brute Cloak of the Ogre-Magi"
+    },
+    {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle"
     },
     {
      "id": 28585,
@@ -1630,8 +2200,13 @@
      "near": true
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest"
+    },
+    {
      "id": 28802,
-     "item": "Bloodmaw Magus-Blade"
+     "item": "Bloodmaw Magus-Blade",
+     "near": true
     },
     {
      "id": 28770,
@@ -1680,6 +2255,10 @@
      "item": "Gauntlets of the Sun King"
     },
     {
+     "id": 30247,
+     "item": "Leggings of the Vanquished Hero"
+    },
+    {
      "id": 30067,
      "item": "Velvet Boots of the Guardian"
     },
@@ -1708,13 +2287,33 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "multiPhase"
     },
     {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -1774,13 +2373,33 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "multiPhase"
     },
     {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -1834,20 +2453,44 @@
      "item": "Dark Conjuror's Collar"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 34210,
-     "item": "Amice of the Convoker"
+     "item": "Amice of the Convoker",
+     "near": true
     },
     {
      "id": 34242,
      "item": "Tattered Cape of Antonidas"
     },
     {
+     "id": 34852,
+     "item": "Bracers of the Forgotten Vanquisher"
+    },
+    {
      "id": 34344,
      "item": "Handguards of Defiled Worlds"
     },
     {
+     "id": 34855,
+     "item": "Belt of the Forgotten Vanquisher"
+    },
+    {
      "id": 34181,
      "item": "Leggings of Calamity"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
+     "near": true,
+     "bis": "multiPhase"
+    },
+    {
+     "id": 34858,
+     "item": "Boots of the Forgotten Vanquisher"
     },
     {
      "id": 34204,
@@ -1898,10 +2541,21 @@
   "ProtWarr": {
    "P1": [
     {
+     "id": 29761,
+     "item": "Helm of the Fallen Defender",
+     "near": true,
+     "variant": "overall"
+    },
+    {
      "id": 28593,
      "item": "Eternium Greathelm",
      "near": true,
      "variant": "mitigation"
+    },
+    {
+     "id": 29764,
+     "item": "Pauldrons of the Fallen Defender",
+     "variant": "overall"
     },
     {
      "id": 28743,
@@ -1926,6 +2580,11 @@
      "variant": "hit"
     },
     {
+     "id": 29753,
+     "item": "Chestguard of the Fallen Defender",
+     "variant": "overall"
+    },
+    {
      "id": 28597,
      "item": "Panzar'Thar Breastplate",
      "near": true,
@@ -1944,8 +2603,14 @@
      "variant": "threat"
     },
     {
+     "id": 30741,
+     "item": "Topaz-Studded Battlegrips",
+     "variant": "mitigation"
+    },
+    {
      "id": 28518,
      "item": "Iron Gauntlets of the Maiden",
+     "near": true,
      "variant": "mitigation"
     },
     {
@@ -2022,9 +2687,26 @@
      "id": 28825,
      "item": "Aldori Legacy Defender",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "variant": "overall"
     }
    ],
    "P2": [
+    {
+     "id": 30243,
+     "item": "Helm of the Vanquished Defender",
+     "near": true,
+     "variant": "overall"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender",
+     "near": true,
+     "variant": "overall"
+    },
     {
      "id": 29994,
      "item": "Thalassian Wildercloak"
@@ -2040,6 +2722,12 @@
      "item": "Drape of the Dark Reavers",
      "near": true,
      "variant": "hit"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender",
+     "bis": "multiPhase",
+     "variant": "overall"
     },
     {
      "id": 30102,
@@ -2092,6 +2780,11 @@
      "id": 30096,
      "item": "Girdle of the Invulnerable",
      "variant": "mitigation"
+    },
+    {
+     "id": 30246,
+     "item": "Leggings of the Vanquished Defender",
+     "variant": "overall"
     },
     {
      "id": 28621,
@@ -2150,6 +2843,30 @@
      "variant": "mitigation"
     },
     {
+     "id": 30243,
+     "item": "Helm of the Vanquished Defender",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 31095,
+     "item": "Helm of the Forgotten Protector",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "multiPhase",
+     "variant": "threat"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 32250,
      "item": "Pauldrons of Abyssal Fury",
      "near": true,
@@ -2179,6 +2896,19 @@
      "item": "Phoenix-Wing Cloak",
      "bis": "multiPhase",
      "variant": "mitigation"
+    },
+    {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "multiPhase",
+     "variant": "threat"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "threat"
     },
     {
      "id": 30896,
@@ -2244,6 +2974,12 @@
      "item": "Girdle of Mighty Resolve",
      "near": true,
      "variant": "mitigation"
+    },
+    {
+     "id": 31100,
+     "item": "Leggings of the Forgotten Protector",
+     "bis": "multiPhase",
+     "variant": "threat"
     },
     {
      "id": 30903,
@@ -2329,6 +3065,24 @@
      "variant": "mitigation"
     },
     {
+     "id": 31095,
+     "item": "Helm of the Forgotten Protector",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "multiPhase",
+     "variant": "threat"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 32250,
      "item": "Pauldrons of Abyssal Fury",
      "near": true,
@@ -2352,6 +3106,18 @@
      "item": "Drape of the Dark Reavers",
      "near": true,
      "variant": "hit"
+    },
+    {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "multiPhase",
+     "variant": "threat"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender",
+     "bis": "multiPhase",
+     "variant": "mitigation"
     },
     {
      "id": 33473,
@@ -2412,6 +3178,12 @@
      "item": "Girdle of Mighty Resolve",
      "near": true,
      "variant": "mitigation"
+    },
+    {
+     "id": 31100,
+     "item": "Leggings of the Forgotten Protector",
+     "bis": "multiPhase",
+     "variant": "threat"
     },
     {
      "id": 30903,
@@ -2507,6 +3279,13 @@
      "variant": "mitigation"
     },
     {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "mitigation"
+    },
+    {
      "id": 34190,
      "item": "Crimson Paragon's Cover",
      "variant": "overall"
@@ -2523,6 +3302,11 @@
      "item": "Warharness of Reckless Fury",
      "near": true,
      "variant": "threat"
+    },
+    {
+     "id": 34851,
+     "item": "Bracers of the Forgotten Protector",
+     "variant": "overall"
     },
     {
      "id": 32232,
@@ -2548,6 +3332,16 @@
      "id": 34352,
      "item": "Borderland Fortress Grips",
      "variant": "mitigation"
+    },
+    {
+     "id": 34854,
+     "item": "Belt of the Forgotten Protector",
+     "variant": "overall"
+    },
+    {
+     "id": 34857,
+     "item": "Boots of the Forgotten Protector",
+     "variant": "overall"
     },
     {
      "id": 34178,
@@ -2611,29 +3405,66 @@
   "RestoShaman": {
    "P1": [
     {
+     "id": 30728,
+     "item": "Fathom-Helm of the Deeps"
+    },
+    {
+     "id": 29760,
+     "item": "Helm of the Fallen Champion",
+     "near": true
+    },
+    {
+     "id": 29763,
+     "item": "Pauldrons of the Fallen Champion"
+    },
+    {
      "id": 28765,
      "item": "Stainless Cloak of the Pure Hearted"
+    },
+    {
+     "id": 29754,
+     "item": "Chestguard of the Fallen Champion"
     },
     {
      "id": 28520,
      "item": "Gloves of Centering"
     },
     {
+     "id": 30727,
+     "item": "Gilded Trousers of Benediction"
+    },
+    {
      "id": 28751,
-     "item": "Heart-Flame Leggings"
+     "item": "Heart-Flame Leggings",
+     "near": true
+    },
+    {
+     "id": 30737,
+     "item": "Gold-Leaf Wildboots",
+     "bis": "multiPhase"
     },
     {
      "id": 28752,
-     "item": "Forestlord Striders"
+     "item": "Forestlord Striders",
+     "near": true
+    },
+    {
+     "id": 30726,
+     "item": "Archaic Charm of Presence"
     },
     {
      "id": 28609,
-     "item": "Emberspur Talisman"
+     "item": "Emberspur Talisman",
+     "near": true
     },
     {
      "id": 28763,
      "item": "Jade Ring of the Everliving",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30736,
+     "item": "Ring of Flowing Light"
     },
     {
      "id": 28590,
@@ -2660,8 +3491,20 @@
    ],
    "P2": [
     {
+     "id": 30242,
+     "item": "Helm of the Vanquished Champion"
+    },
+    {
+     "id": 30248,
+     "item": "Pauldrons of the Vanquished Champion"
+    },
+    {
      "id": 29989,
      "item": "Sunshower Light Cloak"
+    },
+    {
+     "id": 30236,
+     "item": "Chestguard of the Vanquished Champion"
     },
     {
      "id": 30047,
@@ -2680,8 +3523,14 @@
      "item": "Sunhawk Leggings"
     },
     {
+     "id": 30737,
+     "item": "Gold-Leaf Wildboots",
+     "bis": "multiPhase"
+    },
+    {
      "id": 30092,
-     "item": "Orca-Hide Boots"
+     "item": "Orca-Hide Boots",
+     "near": true
     },
     {
      "id": 28763,
@@ -2709,9 +3558,24 @@
    ],
    "P3": [
     {
+     "id": 31095,
+     "item": "Helm of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "expansion"
+    },
+    {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "multiPhase"
     },
     {
      "id": 32577,
@@ -2749,8 +3613,19 @@
      "near": true
     },
     {
+     "id": 31100,
+     "item": "Leggings of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32609,
      "item": "Boots of the Divine Light"
+    },
+    {
+     "id": 30737,
+     "item": "Gold-Leaf Wildboots",
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 32370,
@@ -2789,9 +3664,24 @@
    ],
    "P4": [
     {
+     "id": 31095,
+     "item": "Helm of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "expansion"
+    },
+    {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "multiPhase"
     },
     {
      "id": 32577,
@@ -2827,6 +3717,11 @@
      "id": 30895,
      "item": "Angelista's Sash",
      "near": true
+    },
+    {
+     "id": 31100,
+     "item": "Leggings of the Forgotten Protector",
+     "bis": "multiPhase"
     },
     {
      "id": 33471,
@@ -2875,6 +3770,11 @@
    ],
    "P5": [
     {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "expansion"
@@ -2885,9 +3785,21 @@
      "near": true
     },
     {
+     "id": 34851,
+     "item": "Bracers of the Forgotten Protector"
+    },
+    {
      "id": 32328,
      "item": "Botanist's Gloves of Growth",
      "bis": "expansion"
+    },
+    {
+     "id": 34854,
+     "item": "Belt of the Forgotten Protector"
+    },
+    {
+     "id": 34857,
+     "item": "Boots of the Forgotten Protector"
     },
     {
      "id": 33281,
@@ -2973,6 +3885,10 @@
      "near": true
     },
     {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle"
+    },
+    {
      "id": 30680,
      "item": "Glider's Foot-Wraps",
      "bis": "multiPhase"
@@ -2995,9 +3911,22 @@
      "id": 28770,
      "item": "Nathrezim Mindblade",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30723,
+     "item": "Talon of the Tempest",
+     "near": true
     }
    ],
    "P2": [
+    {
+     "id": 30243,
+     "item": "Helm of the Vanquished Defender"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender"
+    },
     {
      "id": 29992,
      "item": "Royal Cloak of the Sunstriders"
@@ -3026,6 +3955,12 @@
     {
      "id": 29972,
      "item": "Trousers of the Astromancer"
+    },
+    {
+     "id": 30246,
+     "item": "Leggings of the Vanquished Defender",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30680,
@@ -3061,6 +3996,11 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest",
+     "near": true
+    },
+    {
      "id": 29982,
      "item": "Wand of the Forgotten Star",
      "bis": "multiPhase"
@@ -3074,13 +4014,33 @@
    ],
    "P3": [
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "expansion"
+    },
+    {
      "id": 32590,
      "item": "Nethervoid Cloak",
      "bis": "multiPhase"
     },
     {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
      "bis": "multiPhase"
     },
     {
@@ -3131,13 +4091,33 @@
    ],
    "P4": [
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "expansion"
+    },
+    {
      "id": 32590,
      "item": "Nethervoid Cloak",
      "bis": "multiPhase"
     },
     {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
      "bis": "multiPhase"
     },
     {
@@ -3192,8 +4172,14 @@
      "item": "Dark Conjuror's Collar"
     },
     {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "expansion"
+    },
+    {
      "id": 34210,
-     "item": "Amice of the Convoker"
+     "item": "Amice of the Convoker",
+     "near": true
     },
     {
      "id": 34242,
@@ -3204,12 +4190,24 @@
      "item": "Fel Conquerer Raiments"
     },
     {
+     "id": 34848,
+     "item": "Bracers of the Forgotten Conqueror"
+    },
+    {
      "id": 34344,
      "item": "Handguards of Defiled Worlds"
     },
     {
+     "id": 34853,
+     "item": "Belt of the Forgotten Conqueror"
+    },
+    {
      "id": 34181,
      "item": "Leggings of Calamity"
+    },
+    {
+     "id": 34856,
+     "item": "Boots of the Forgotten Conqueror"
     },
     {
      "id": 34204,
@@ -3268,8 +4266,13 @@
      "near": true
     },
     {
+     "id": 30739,
+     "item": "Scaled Greaves of the Marksman"
+    },
+    {
      "id": 28741,
-     "item": "Skulker's Greaves"
+     "item": "Skulker's Greaves",
+     "near": true
     },
     {
      "id": 30682,
@@ -3298,13 +4301,31 @@
     {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix"
+    },
+    {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "near": true
     }
    ],
    "P2": [
     {
+     "id": 30244,
+     "item": "Helm of the Vanquished Hero"
+    },
+    {
+     "id": 30250,
+     "item": "Pauldrons of the Vanquished Hero",
+     "conditional": true
+    },
+    {
      "id": 29994,
      "item": "Thalassian Wildercloak",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30238,
+     "item": "Chestguard of the Vanquished Hero"
     },
     {
      "id": 29966,
@@ -3323,6 +4344,11 @@
      "id": 30677,
      "item": "Lurker's Belt",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30247,
+     "item": "Leggings of the Vanquished Hero",
+     "conditional": true
     },
     {
      "id": 30104,
@@ -3381,9 +4407,24 @@
    ],
    "P3": [
     {
+     "id": 31095,
+     "item": "Helm of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 29994,
      "item": "Thalassian Wildercloak",
      "bis": "multiPhase"
+    },
+    {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "expansion"
     },
     {
      "id": 32324,
@@ -3394,6 +4435,11 @@
      "id": 30686,
      "item": "Ravager's Bands",
      "near": true
+    },
+    {
+     "id": 31094,
+     "item": "Gloves of the Forgotten Protector",
+     "bis": "multiPhase"
     },
     {
      "id": 30879,
@@ -3476,13 +4522,36 @@
    ],
    "P4": [
     {
+     "id": 31095,
+     "item": "Helm of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32235,
-     "item": "Cursed Vision of Sargeras"
+     "item": "Cursed Vision of Sargeras",
+     "near": true
+    },
+    {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
+     "id": 30250,
+     "item": "Pauldrons of the Vanquished Hero",
+     "superseded": true,
+     "variant": "unless",
+     "conditional": true
     },
     {
      "id": 29994,
      "item": "Thalassian Wildercloak",
      "bis": "multiPhase"
+    },
+    {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "expansion"
     },
     {
      "id": 32324,
@@ -3493,6 +4562,11 @@
      "id": 30686,
      "item": "Ravager's Bands",
      "near": true
+    },
+    {
+     "id": 31094,
+     "item": "Gloves of the Forgotten Protector",
+     "bis": "multiPhase"
     },
     {
      "id": 30879,
@@ -3587,16 +4661,45 @@
      "variant": "hit"
     },
     {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 34241,
      "item": "Cloak of Unforgivable Sin"
+    },
+    {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
+     "id": 34851,
+     "item": "Bracers of the Forgotten Protector"
     },
     {
      "id": 34343,
      "item": "Thalassian Ranger Gauntlets"
     },
     {
+     "id": 34854,
+     "item": "Belt of the Forgotten Protector"
+    },
+    {
      "id": 34188,
      "item": "Leggings of the Immortal Night"
+    },
+    {
+     "id": 30247,
+     "item": "Leggings of the Vanquished Hero",
+     "superseded": true,
+     "variant": "unless",
+     "conditional": true
+    },
+    {
+     "id": 34857,
+     "item": "Boots of the Forgotten Protector"
     },
     {
      "id": 28545,
@@ -3673,10 +4776,29 @@
   "Arms": {
    "P1": [
     {
+     "id": 29761,
+     "item": "Helm of the Fallen Defender"
+    },
+    {
+     "id": 30740,
+     "item": "Ripfiend Shoulderplates"
+    },
+    {
+     "id": 29764,
+     "item": "Pauldrons of the Fallen Defender",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 28755,
      "item": "Bladed Shoulderpads of the Merciless",
      "near": true,
      "variant": "hit"
+    },
+    {
+     "id": 30729,
+     "item": "Black-Iron Battlecloak",
+     "bis": "multiPhase"
     },
     {
      "id": 28672,
@@ -3685,8 +4807,19 @@
      "variant": "hit"
     },
     {
+     "id": 30730,
+     "item": "Terrorweave Tunic"
+    },
+    {
+     "id": 29753,
+     "item": "Chestguard of the Fallen Defender",
+     "near": true
+    },
+    {
      "id": 28795,
-     "item": "Bladespire Warbands"
+     "item": "Bladespire Warbands",
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 28824,
@@ -3702,8 +4835,13 @@
      "item": "Girdle of the Endless Pit"
     },
     {
+     "id": 30739,
+     "item": "Scaled Greaves of the Marksman"
+    },
+    {
      "id": 28741,
-     "item": "Skulker's Greaves"
+     "item": "Skulker's Greaves",
+     "near": true
     },
     {
      "id": 28608,
@@ -3720,27 +4858,76 @@
      "item": "Mithril Chain of Heroism"
     },
     {
+     "id": 30738,
+     "item": "Ring of Reciprocity",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28757,
      "item": "Ring of a Thousand Marks"
     },
     {
      "id": 28730,
-     "item": "Mithril Band of the Unscarred"
+     "item": "Mithril Band of the Unscarred",
+     "variant": "hit",
+     "conditional": true
+    },
+    {
+     "id": 28830,
+     "item": "Dragonspine Trophy",
+     "bis": "expansion"
+    },
+    {
+     "id": 30733,
+     "item": "Hope Ender"
     },
     {
      "id": 28729,
      "item": "Spiteblade"
     },
     {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix",
-     "bis": "multiPhase"
+     "bis": "multiPhase",
+     "variant": "non-worldboss",
+     "conditional": true
     }
    ],
    "P2": [
     {
+     "id": 30243,
+     "item": "Helm of the Vanquished Defender"
+    },
+    {
      "id": 30055,
      "item": "Shoulderpads of the Stranger"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender",
+     "variant": "4pc",
+     "conditional": true
+    },
+    {
+     "id": 30740,
+     "item": "Ripfiend Shoulderplates",
+     "near": true
+    },
+    {
+     "id": 30729,
+     "item": "Black-Iron Battlecloak",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30101,
@@ -3748,12 +4935,15 @@
     },
     {
      "id": 30057,
-     "item": "Bracers of Eradication"
+     "item": "Bracers of Eradication",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28795,
      "item": "Bladespire Warbands",
-     "near": true
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 29947,
@@ -3762,7 +4952,7 @@
     {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 29995,
@@ -3779,6 +4969,11 @@
     {
      "id": 29997,
      "item": "Band of the Ranger-General"
+    },
+    {
+     "id": 30738,
+     "item": "Ring of Reciprocity",
+     "bis": "multiPhase"
     },
     {
      "id": 28757,
@@ -3812,10 +5007,15 @@
     {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix",
-     "bis": "multiPhase"
+     "bis": "multiPhase",
+     "conditional": true
     }
    ],
    "P3": [
+    {
+     "id": 31095,
+     "item": "Helm of the Forgotten Protector"
+    },
     {
      "id": 32235,
      "item": "Cursed Vision of Sargeras",
@@ -3829,10 +5029,20 @@
      "variant": "hit"
     },
     {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
      "near": true,
      "variant": "hit"
+    },
+    {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "multiPhase"
     },
     {
      "id": 30863,
@@ -3842,23 +5052,31 @@
     {
      "id": 32574,
      "item": "Bindings of Lightning Reflexes",
-     "near": true
+     "variant": "below-bis",
+     "conditional": true
     },
     {
      "id": 28795,
      "item": "Bladespire Warbands",
-     "near": true
+     "bis": "multiPhase",
+     "variant": "below-bis",
+     "conditional": true
     },
     {
      "id": 30861,
      "item": "Furious Shackles",
-     "near": true
+     "variant": "below-bis",
+     "conditional": true
     },
     {
      "id": 30057,
      "item": "Bracers of Eradication",
      "near": true,
      "variant": "hit"
+    },
+    {
+     "id": 31094,
+     "item": "Gloves of the Forgotten Protector"
     },
     {
      "id": 32278,
@@ -3875,7 +5093,7 @@
     {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 32341,
@@ -3890,7 +5108,8 @@
     {
      "id": 32366,
      "item": "Shadowmaster's Boots",
-     "near": true
+     "variant": "contested",
+     "conditional": true
     },
     {
      "id": 32591,
@@ -3899,8 +5118,9 @@
     {
      "id": 32260,
      "item": "Choker of Endless Nightmares",
-     "near": true,
-     "variant": "hit"
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32497,
@@ -3946,8 +5166,15 @@
      "item": "Warglaive of Azzinoth"
     },
     {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32326,
-     "item": "Twisted Blades of Zarak"
+     "item": "Twisted Blades of Zarak",
+     "variant": "non-worldboss",
+     "conditional": true
     }
    ],
    "P4": [
@@ -3961,8 +5188,23 @@
      "near": true
     },
     {
+     "id": 31095,
+     "item": "Helm of the Forgotten Protector",
+     "near": true
+    },
+    {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape"
+    },
+    {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "multiPhase"
     },
     {
      "id": 30863,
@@ -3976,7 +5218,7 @@
     {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 32341,
@@ -3990,7 +5232,9 @@
     },
     {
      "id": 32260,
-     "item": "Choker of Endless Nightmares"
+     "item": "Choker of Endless Nightmares",
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 32591,
@@ -4059,6 +5303,12 @@
      "id": 32326,
      "item": "Twisted Blades of Zarak",
      "near": true
+    },
+    {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "near": true,
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -4076,17 +5326,32 @@
      "item": "Mantle of the Golden Forest"
     },
     {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "near": true,
+     "bis": "multiPhase"
+    },
+    {
      "id": 34241,
      "item": "Cloak of Unforgivable Sin"
+    },
+    {
+     "id": 34851,
+     "item": "Bracers of the Forgotten Protector"
     },
     {
      "id": 34343,
      "item": "Thalassian Ranger Gauntlets"
     },
     {
+     "id": 34854,
+     "item": "Belt of the Forgotten Protector"
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
-     "bis": "expansion"
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 34180,
@@ -4096,6 +5361,10 @@
      "id": 34188,
      "item": "Leggings of the Immortal Night",
      "near": true
+    },
+    {
+     "id": 34857,
+     "item": "Boots of the Forgotten Protector"
     },
     {
      "id": 34177,
@@ -4160,10 +5429,37 @@
   "Fury": {
    "P1": [
     {
+     "id": 29761,
+     "item": "Helm of the Fallen Defender"
+    },
+    {
+     "id": 30740,
+     "item": "Ripfiend Shoulderplates"
+    },
+    {
+     "id": 29764,
+     "item": "Pauldrons of the Fallen Defender",
+     "near": true
+    },
+    {
+     "id": 30729,
+     "item": "Black-Iron Battlecloak",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28672,
      "item": "Drape of the Dark Reavers",
      "near": true,
      "variant": "hit"
+    },
+    {
+     "id": 30730,
+     "item": "Terrorweave Tunic"
+    },
+    {
+     "id": 29753,
+     "item": "Chestguard of the Fallen Defender",
+     "near": true
     },
     {
      "id": 28795,
@@ -4183,8 +5479,13 @@
      "item": "Girdle of the Endless Pit"
     },
     {
+     "id": 30739,
+     "item": "Scaled Greaves of the Marksman"
+    },
+    {
      "id": 28741,
-     "item": "Skulker's Greaves"
+     "item": "Skulker's Greaves",
+     "near": true
     },
     {
      "id": 28608,
@@ -4201,13 +5502,18 @@
      "item": "Mithril Chain of Heroism"
     },
     {
-     "id": 28757,
-     "item": "Ring of a Thousand Marks",
+     "id": 30738,
+     "item": "Ring of Reciprocity",
      "bis": "multiPhase"
     },
     {
+     "id": 28757,
+     "item": "Ring of a Thousand Marks"
+    },
+    {
      "id": 28730,
-     "item": "Mithril Band of the Unscarred"
+     "item": "Mithril Band of the Unscarred",
+     "near": true
     },
     {
      "id": 28649,
@@ -4216,32 +5522,74 @@
      "variant": "hit"
     },
     {
+     "id": 28830,
+     "item": "Dragonspine Trophy",
+     "bis": "expansion"
+    },
+    {
+     "id": 30733,
+     "item": "Hope Ender"
+    },
+    {
      "id": 28729,
      "item": "Spiteblade"
     },
     {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix",
-     "bis": "multiPhase"
+     "near": true
     }
    ],
    "P2": [
     {
+     "id": 30243,
+     "item": "Helm of the Vanquished Defender"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender"
+    },
+    {
+     "id": 30740,
+     "item": "Ripfiend Shoulderplates",
+     "near": true
+    },
+    {
      "id": 30055,
-     "item": "Shoulderpads of the Stranger"
+     "item": "Shoulderpads of the Stranger",
+     "near": true
+    },
+    {
+     "id": 30729,
+     "item": "Black-Iron Battlecloak",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender"
     },
     {
      "id": 30101,
-     "item": "Bloodsea Brigand's Vest"
+     "item": "Bloodsea Brigand's Vest",
+     "near": true
     },
     {
      "id": 30057,
      "item": "Bracers of Eradication"
     },
     {
+     "id": 30240,
+     "item": "Gloves of the Vanquished Defender"
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 29995,
@@ -4260,9 +5608,14 @@
      "item": "Band of the Ranger-General"
     },
     {
+     "id": 30738,
+     "item": "Ring of Reciprocity",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28757,
      "item": "Ring of a Thousand Marks",
-     "bis": "multiPhase"
+     "near": true
     },
     {
      "id": 28830,
@@ -4279,8 +5632,7 @@
     },
     {
      "id": 28772,
-     "item": "Sunfury Bow of the Phoenix",
-     "bis": "multiPhase"
+     "item": "Sunfury Bow of the Phoenix"
     }
    ],
    "P3": [
@@ -4290,8 +5642,23 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31095,
+     "item": "Helm of the Forgotten Protector",
+     "near": true
+    },
+    {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
      "bis": "multiPhase"
     },
     {
@@ -4320,9 +5687,14 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31094,
+     "item": "Gloves of the Forgotten Protector",
+     "near": true
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 32341,
@@ -4372,8 +5744,14 @@
      "item": "Warglaive of Azzinoth"
     },
     {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32326,
-     "item": "Twisted Blades of Zarak"
+     "item": "Twisted Blades of Zarak",
+     "near": true
     }
    ],
    "P4": [
@@ -4388,8 +5766,23 @@
      "near": true
     },
     {
+     "id": 31095,
+     "item": "Helm of the Forgotten Protector",
+     "near": true
+    },
+    {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
      "bis": "multiPhase"
     },
     {
@@ -4405,7 +5798,7 @@
     {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 32341,
@@ -4474,6 +5867,12 @@
      "id": 32326,
      "item": "Twisted Blades of Zarak",
      "near": true
+    },
+    {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "near": true,
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -4491,17 +5890,32 @@
      "item": "Mantle of the Golden Forest"
     },
     {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "near": true,
+     "bis": "multiPhase"
+    },
+    {
      "id": 34241,
      "item": "Cloak of Unforgivable Sin"
+    },
+    {
+     "id": 34851,
+     "item": "Bracers of the Forgotten Protector"
     },
     {
      "id": 34343,
      "item": "Thalassian Ranger Gauntlets"
     },
     {
+     "id": 34854,
+     "item": "Belt of the Forgotten Protector"
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
-     "bis": "expansion"
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 34180,
@@ -4511,6 +5925,10 @@
      "id": 34188,
      "item": "Leggings of the Immortal Night",
      "near": true
+    },
+    {
+     "id": 34857,
+     "item": "Boots of the Forgotten Protector"
     },
     {
      "id": 34177,
@@ -4567,12 +5985,29 @@
   "HolyPal": {
    "P1": [
     {
+     "id": 29760,
+     "item": "Helm of the Fallen Champion"
+    },
+    {
+     "id": 29763,
+     "item": "Pauldrons of the Fallen Champion"
+    },
+    {
      "id": 28765,
      "item": "Stainless Cloak of the Pure Hearted"
     },
     {
+     "id": 29754,
+     "item": "Chestguard of the Fallen Champion"
+    },
+    {
+     "id": 29757,
+     "item": "Gloves of the Fallen Champion"
+    },
+    {
      "id": 28505,
-     "item": "Gauntlets of Renewed Hope"
+     "item": "Gauntlets of Renewed Hope",
+     "near": true
     },
     {
      "id": 28733,
@@ -4590,6 +6025,10 @@
      "id": 28752,
      "item": "Forestlord Striders",
      "near": true
+    },
+    {
+     "id": 30726,
+     "item": "Archaic Charm of Presence"
     },
     {
      "id": 28727,
@@ -4615,8 +6054,20 @@
    ],
    "P2": [
     {
+     "id": 30242,
+     "item": "Helm of the Vanquished Champion"
+    },
+    {
+     "id": 30248,
+     "item": "Pauldrons of the Vanquished Champion"
+    },
+    {
      "id": 29989,
      "item": "Sunshower Light Cloak"
+    },
+    {
+     "id": 30236,
+     "item": "Chestguard of the Vanquished Champion"
     },
     {
      "id": 30047,
@@ -4673,6 +6124,16 @@
    ],
    "P3": [
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "multiPhase",
@@ -4684,6 +6145,11 @@
      "item": "Shroud of the Final Stand",
      "near": true,
      "variant": "haste"
+    },
+    {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "bis": "multiPhase"
     },
     {
      "id": 30862,
@@ -4698,6 +6164,11 @@
     {
      "id": 30897,
      "item": "Girdle of Hope",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31098,
+     "item": "Leggings of the Forgotten Conqueror",
      "bis": "multiPhase"
     },
     {
@@ -4767,6 +6238,16 @@
    ],
    "P4": [
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "multiPhase",
@@ -4784,6 +6265,11 @@
      "item": "Cloak of Ancient Rituals",
      "near": true,
      "variant": "haste"
+    },
+    {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "bis": "multiPhase"
     },
     {
      "id": 30862,
@@ -4804,6 +6290,11 @@
      "id": 33446,
      "item": "Girdle of Stromgarde's Hope",
      "near": true
+    },
+    {
+     "id": 31098,
+     "item": "Leggings of the Forgotten Conqueror",
+     "bis": "multiPhase"
     },
     {
      "id": 32243,
@@ -4925,14 +6416,26 @@
      "item": "Garments of Serene Shores"
     },
     {
+     "id": 34848,
+     "item": "Bracers of the Forgotten Conqueror"
+    },
+    {
      "id": 34240,
      "item": "Gauntlets of the Soothed Soul",
      "variant": "haste",
      "conditional": true
     },
     {
+     "id": 34853,
+     "item": "Belt of the Forgotten Conqueror"
+    },
+    {
      "id": 34167,
      "item": "Legplates of the Holy Juggernaut"
+    },
+    {
+     "id": 34856,
+     "item": "Boots of the Forgotten Conqueror"
     },
     {
      "id": 32370,
@@ -5025,10 +6528,26 @@
   "ProtPal": {
    "P1": [
     {
+     "id": 29760,
+     "item": "Helm of the Fallen Champion",
+     "variant": "overall"
+    },
+    {
+     "id": 29763,
+     "item": "Pauldrons of the Fallen Champion",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28766,
      "item": "Ruby Drape of the Mysticant",
      "bis": "multiPhase",
      "variant": "threat"
+    },
+    {
+     "id": 29754,
+     "item": "Chestguard of the Fallen Champion",
+     "bis": "multiPhase",
+     "variant": "overall"
     },
     {
      "id": 28597,
@@ -5038,6 +6557,11 @@
     {
      "id": 28502,
      "item": "Vambraces of Courage"
+    },
+    {
+     "id": 29757,
+     "item": "Gloves of the Fallen Champion",
+     "variant": "overall"
     },
     {
      "id": 28518,
@@ -5054,6 +6578,12 @@
      "item": "Wrynn Dynasty Greaves",
      "bis": "multiPhase",
      "variant": "mitigation"
+    },
+    {
+     "id": 29766,
+     "item": "Leggings of the Fallen Champion",
+     "variant": "balanced",
+     "conditional": true
     },
     {
      "id": 30641,
@@ -5086,6 +6616,16 @@
    ],
    "P2": [
     {
+     "id": 30242,
+     "item": "Helm of the Vanquished Champion",
+     "variant": "overall"
+    },
+    {
+     "id": 29763,
+     "item": "Pauldrons of the Fallen Champion",
+     "bis": "multiPhase"
+    },
+    {
      "id": 29925,
      "item": "Phoenix-Wing Cloak",
      "variant": "mitigation"
@@ -5095,6 +6635,11 @@
      "item": "Ruby Drape of the Mysticant",
      "bis": "multiPhase",
      "variant": "threat"
+    },
+    {
+     "id": 29754,
+     "item": "Chestguard of the Fallen Champion",
+     "bis": "multiPhase"
     },
     {
      "id": 32515,
@@ -5107,9 +6652,19 @@
      "variant": "mitigation"
     },
     {
+     "id": 30239,
+     "item": "Gloves of the Vanquished Champion",
+     "variant": "threat"
+    },
+    {
      "id": 30096,
      "item": "Girdle of the Invulnerable",
      "variant": "mitigation"
+    },
+    {
+     "id": 30245,
+     "item": "Leggings of the Vanquished Champion",
+     "variant": "threat"
     },
     {
      "id": 28621,
@@ -5164,6 +6719,17 @@
      "variant": "mitigation"
     },
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase",
+     "variant": "threat"
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
      "id": 34010,
      "item": "Pepe's Shroud of Pacification",
      "variant": "overall"
@@ -5179,6 +6745,11 @@
      "item": "Cloak of the Illidari Council",
      "near": true,
      "variant": "threat"
+    },
+    {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "bis": "multiPhase"
     },
     {
      "id": 30896,
@@ -5205,6 +6776,12 @@
      "variant": "mitigation"
     },
     {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
+     "bis": "expansion",
+     "conditional": true
+    },
+    {
      "id": 32342,
      "item": "Girdle of Mighty Resolve",
      "bis": "multiPhase",
@@ -5221,6 +6798,12 @@
      "item": "Cord of Screaming Terrors",
      "near": true,
      "variant": "threat"
+    },
+    {
+     "id": 31098,
+     "item": "Leggings of the Forgotten Conqueror",
+     "bis": "multiPhase",
+     "variant": "overall"
     },
     {
      "id": 32263,
@@ -5354,10 +6937,27 @@
      "variant": "mitigation"
     },
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase",
+     "variant": "threat"
+    },
+    {
      "id": 33421,
      "item": "Battleworn Tuskguard",
      "near": true,
      "variant": "mitigation"
+    },
+    {
+     "id": 30242,
+     "item": "Helm of the Vanquished Champion",
+     "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "multiPhase"
     },
     {
      "id": 29925,
@@ -5370,6 +6970,11 @@
      "item": "Cloak of the Illidari Council",
      "near": true,
      "variant": "threat"
+    },
+    {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "bis": "multiPhase"
     },
     {
      "id": 30896,
@@ -5402,6 +7007,12 @@
      "variant": "mitigation"
     },
     {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
+     "bis": "expansion",
+     "conditional": true
+    },
+    {
      "id": 32342,
      "item": "Girdle of Mighty Resolve",
      "bis": "multiPhase",
@@ -5418,6 +7029,12 @@
      "item": "Cord of Screaming Terrors",
      "near": true,
      "variant": "threat"
+    },
+    {
+     "id": 31098,
+     "item": "Leggings of the Forgotten Conqueror",
+     "bis": "multiPhase",
+     "variant": "overall"
     },
     {
      "id": 32263,
@@ -5571,9 +7188,32 @@
      "conditional": true
     },
     {
+     "id": 34848,
+     "item": "Bracers of the Forgotten Conqueror"
+    },
+    {
      "id": 34352,
      "item": "Borderland Fortress Grips",
      "variant": "mitigation"
+    },
+    {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
+     "bis": "expansion",
+     "variant": "balanced",
+     "conditional": true
+    },
+    {
+     "id": 34853,
+     "item": "Belt of the Forgotten Conqueror",
+     "variant": "balanced",
+     "conditional": true
+    },
+    {
+     "id": 34856,
+     "item": "Boots of the Forgotten Conqueror",
+     "variant": "balanced",
+     "conditional": true
     },
     {
      "id": 34178,
@@ -5641,6 +7281,27 @@
   "Ret": {
    "P1": [
     {
+     "id": 29760,
+     "item": "Helm of the Fallen Champion"
+    },
+    {
+     "id": 30740,
+     "item": "Ripfiend Shoulderplates"
+    },
+    {
+     "id": 29763,
+     "item": "Pauldrons of the Fallen Champion",
+     "near": true
+    },
+    {
+     "id": 30729,
+     "item": "Black-Iron Battlecloak"
+    },
+    {
+     "id": 30730,
+     "item": "Terrorweave Tunic"
+    },
+    {
      "id": 28795,
      "item": "Bladespire Warbands",
      "bis": "multiPhase"
@@ -5679,6 +7340,10 @@
    ],
    "P2": [
     {
+     "id": 30242,
+     "item": "Helm of the Vanquished Champion"
+    },
+    {
      "id": 30055,
      "item": "Shoulderpads of the Stranger",
      "bis": "multiPhase"
@@ -5694,8 +7359,13 @@
      "near": true
     },
     {
+     "id": 30236,
+     "item": "Chestguard of the Vanquished Champion"
+    },
+    {
      "id": 30102,
-     "item": "Krakken-Heart Breastplate"
+     "item": "Krakken-Heart Breastplate",
+     "near": true
     },
     {
      "id": 28795,
@@ -5723,6 +7393,12 @@
      "item": "Leggings of Murderous Intent",
      "variant": "human",
      "conditional": true
+    },
+    {
+     "id": 30245,
+     "item": "Leggings of the Vanquished Champion",
+     "near": true,
+     "variant": "human"
     },
     {
      "id": 30104,
@@ -5787,9 +7463,13 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror"
+    },
+    {
      "id": 30905,
      "item": "Midnight Chestguard",
-     "bis": "multiPhase"
+     "near": true
     },
     {
      "id": 32574,
@@ -5889,8 +7569,7 @@
     },
     {
      "id": 30905,
-     "item": "Midnight Chestguard",
-     "bis": "multiPhase"
+     "item": "Midnight Chestguard"
     },
     {
      "id": 32574,
@@ -6025,6 +7704,10 @@
      "variant": "hit"
     },
     {
+     "id": 34848,
+     "item": "Bracers of the Forgotten Conqueror"
+    },
+    {
      "id": 30057,
      "item": "Bracers of Eradication",
      "near": true,
@@ -6042,6 +7725,10 @@
      "item": "Thalassian Ranger Gauntlets"
     },
     {
+     "id": 34853,
+     "item": "Belt of the Forgotten Conqueror"
+    },
+    {
      "id": 34180,
      "item": "Felfury Legplates"
     },
@@ -6050,6 +7737,10 @@
      "item": "Leggings of the Immortal Night",
      "near": true,
      "variant": "hit"
+    },
+    {
+     "id": 34856,
+     "item": "Boots of the Forgotten Conqueror"
     },
     {
      "id": 32345,
@@ -6100,6 +7791,10 @@
      "item": "Gronn-Stitched Girdle"
     },
     {
+     "id": 30739,
+     "item": "Scaled Greaves of the Marksman"
+    },
+    {
      "id": 28545,
      "item": "Edgewalker Longboots"
     },
@@ -6124,17 +7819,39 @@
     {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix"
+    },
+    {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "near": true
     }
    ],
    "P2": [
+    {
+     "id": 30244,
+     "item": "Helm of the Vanquished Hero"
+    },
+    {
+     "id": 30250,
+     "item": "Pauldrons of the Vanquished Hero",
+     "conditional": true
+    },
     {
      "id": 29994,
      "item": "Thalassian Wildercloak",
      "bis": "multiPhase"
     },
     {
+     "id": 30238,
+     "item": "Chestguard of the Vanquished Hero"
+    },
+    {
      "id": 29966,
      "item": "Vambraces of Ending"
+    },
+    {
+     "id": 30241,
+     "item": "Gloves of the Vanquished Hero"
     },
     {
      "id": 29995,
@@ -6216,6 +7933,11 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 29994,
      "item": "Thalassian Wildercloak",
      "bis": "multiPhase"
@@ -6234,8 +7956,18 @@
      "variant": "hit"
     },
     {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 32324,
      "item": "Insidious Bands",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31094,
+     "item": "Gloves of the Forgotten Protector",
      "bis": "multiPhase"
     },
     {
@@ -6247,6 +7979,11 @@
      "item": "Boneweave Girdle",
      "near": true,
      "variant": "hit"
+    },
+    {
+     "id": 31100,
+     "item": "Leggings of the Forgotten Protector",
+     "bis": "multiPhase"
     },
     {
      "id": 30898,
@@ -6358,6 +8095,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
+     "id": 30250,
+     "item": "Pauldrons of the Vanquished Hero",
+     "superseded": true,
+     "variant": "unless",
+     "conditional": true
+    },
+    {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
      "bis": "multiPhase",
@@ -6370,9 +8119,24 @@
      "variant": "hit"
     },
     {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 32324,
      "item": "Insidious Bands",
      "bis": "multiPhase"
+    },
+    {
+     "id": 31094,
+     "item": "Gloves of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30241,
+     "item": "Gloves of the Vanquished Hero",
+     "near": true
     },
     {
      "id": 32346,
@@ -6382,6 +8146,11 @@
      "id": 30879,
      "item": "Don Alejandro's Money Belt",
      "near": true
+    },
+    {
+     "id": 31100,
+     "item": "Leggings of the Forgotten Protector",
+     "bis": "multiPhase"
     },
     {
      "id": 30898,
@@ -6524,6 +8293,11 @@
      "variant": "hit"
     },
     {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 34241,
      "item": "Cloak of Unforgivable Sin"
     },
@@ -6536,8 +8310,21 @@
      "conditional": true
     },
     {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
+     "id": 34851,
+     "item": "Bracers of the Forgotten Protector"
+    },
+    {
      "id": 34343,
      "item": "Thalassian Ranger Gauntlets"
+    },
+    {
+     "id": 34854,
+     "item": "Belt of the Forgotten Protector"
     },
     {
      "id": 34188,
@@ -6548,6 +8335,10 @@
      "item": "Shady Dealer's Pantaloons",
      "near": true,
      "variant": "unless"
+    },
+    {
+     "id": 34857,
+     "item": "Boots of the Forgotten Protector"
     },
     {
      "id": 32510,
@@ -6648,8 +8439,13 @@
      "item": "Gronn-Stitched Girdle"
     },
     {
+     "id": 30739,
+     "item": "Scaled Greaves of the Marksman"
+    },
+    {
      "id": 28741,
-     "item": "Skulker's Greaves"
+     "item": "Skulker's Greaves",
+     "near": true
     },
     {
      "id": 28545,
@@ -6682,17 +8478,39 @@
     {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix"
+    },
+    {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "near": true
     }
    ],
    "P2": [
+    {
+     "id": 30244,
+     "item": "Helm of the Vanquished Hero"
+    },
+    {
+     "id": 30250,
+     "item": "Pauldrons of the Vanquished Hero",
+     "conditional": true
+    },
     {
      "id": 29994,
      "item": "Thalassian Wildercloak",
      "bis": "multiPhase"
     },
     {
+     "id": 30238,
+     "item": "Chestguard of the Vanquished Hero"
+    },
+    {
      "id": 29966,
      "item": "Vambraces of Ending"
+    },
+    {
+     "id": 30241,
+     "item": "Gloves of the Vanquished Hero"
     },
     {
      "id": 29995,
@@ -6774,6 +8592,11 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 29994,
      "item": "Thalassian Wildercloak",
      "bis": "multiPhase"
@@ -6792,8 +8615,18 @@
      "variant": "hit"
     },
     {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 32324,
      "item": "Insidious Bands",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31094,
+     "item": "Gloves of the Forgotten Protector",
      "bis": "multiPhase"
     },
     {
@@ -6805,6 +8638,11 @@
      "item": "Boneweave Girdle",
      "near": true,
      "variant": "hit"
+    },
+    {
+     "id": 31100,
+     "item": "Leggings of the Forgotten Protector",
+     "bis": "multiPhase"
     },
     {
      "id": 30898,
@@ -6916,6 +8754,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
+     "id": 30250,
+     "item": "Pauldrons of the Vanquished Hero",
+     "superseded": true,
+     "variant": "unless",
+     "conditional": true
+    },
+    {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
      "bis": "multiPhase",
@@ -6928,9 +8778,24 @@
      "variant": "hit"
     },
     {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 32324,
      "item": "Insidious Bands",
      "bis": "multiPhase"
+    },
+    {
+     "id": 31094,
+     "item": "Gloves of the Forgotten Protector",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30241,
+     "item": "Gloves of the Vanquished Hero",
+     "near": true
     },
     {
      "id": 32346,
@@ -6940,6 +8805,11 @@
      "id": 30879,
      "item": "Don Alejandro's Money Belt",
      "near": true
+    },
+    {
+     "id": 31100,
+     "item": "Leggings of the Forgotten Protector",
+     "bis": "multiPhase"
     },
     {
      "id": 30898,
@@ -7082,6 +8952,11 @@
      "variant": "hit"
     },
     {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
      "id": 34241,
      "item": "Cloak of Unforgivable Sin"
     },
@@ -7094,8 +8969,21 @@
      "conditional": true
     },
     {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "bis": "expansion"
+    },
+    {
+     "id": 34851,
+     "item": "Bracers of the Forgotten Protector"
+    },
+    {
      "id": 34343,
      "item": "Thalassian Ranger Gauntlets"
+    },
+    {
+     "id": 34854,
+     "item": "Belt of the Forgotten Protector"
     },
     {
      "id": 34188,
@@ -7106,6 +8994,10 @@
      "item": "Shady Dealer's Pantaloons",
      "near": true,
      "variant": "unless"
+    },
+    {
+     "id": 34857,
+     "item": "Boots of the Forgotten Protector"
     },
     {
      "id": 32510,
@@ -7196,9 +9088,22 @@
   "Assass": {
    "P1": [
     {
+     "id": 29760,
+     "item": "Helm of the Fallen Champion"
+    },
+    {
      "id": 28672,
      "item": "Drape of the Dark Reavers",
      "bis": "multiPhase"
+    },
+    {
+     "id": 29754,
+     "item": "Chestguard of the Fallen Champion"
+    },
+    {
+     "id": 30730,
+     "item": "Terrorweave Tunic",
+     "near": true
     },
     {
      "id": 30644,
@@ -7207,6 +9112,11 @@
     {
      "id": 28741,
      "item": "Skulker's Greaves"
+    },
+    {
+     "id": 29766,
+     "item": "Leggings of the Fallen Champion",
+     "near": true
     },
     {
      "id": 28545,
@@ -7222,6 +9132,11 @@
      "item": "Garona's Signet Ring"
     },
     {
+     "id": 30738,
+     "item": "Ring of Reciprocity",
+     "near": true
+    },
+    {
      "id": 28830,
      "item": "Dragonspine Trophy",
      "bis": "expansion"
@@ -7233,14 +9148,28 @@
      "variant": "dagger"
     },
     {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle"
+    },
+    {
      "id": 28772,
-     "item": "Sunfury Bow of the Phoenix"
+     "item": "Sunfury Bow of the Phoenix",
+     "near": true
     }
    ],
    "P2": [
     {
+     "id": 30242,
+     "item": "Helm of the Vanquished Champion"
+    },
+    {
+     "id": 30248,
+     "item": "Pauldrons of the Vanquished Champion"
+    },
+    {
      "id": 30055,
-     "item": "Shoulderpads of the Stranger"
+     "item": "Shoulderpads of the Stranger",
+     "near": true
     },
     {
      "id": 28672,
@@ -7252,13 +9181,26 @@
      "item": "Bloodsea Brigand's Vest"
     },
     {
+     "id": 30236,
+     "item": "Chestguard of the Vanquished Champion",
+     "near": true
+    },
+    {
      "id": 29966,
      "item": "Vambraces of Ending"
+    },
+    {
+     "id": 30239,
+     "item": "Gloves of the Vanquished Champion"
     },
     {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30245,
+     "item": "Leggings of the Vanquished Champion"
     },
     {
      "id": 28545,
@@ -7312,8 +9254,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -7322,8 +9274,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -7396,8 +9358,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -7406,8 +9378,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -7484,12 +9466,29 @@
      "item": "Duplicitous Guise"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 34241,
      "item": "Cloak of Unforgivable Sin"
     },
     {
+     "id": 34852,
+     "item": "Bracers of the Forgotten Vanquisher"
+    },
+    {
+     "id": 34855,
+     "item": "Belt of the Forgotten Vanquisher"
+    },
+    {
      "id": 34188,
      "item": "Leggings of the Immortal Night"
+    },
+    {
+     "id": 34858,
+     "item": "Boots of the Forgotten Vanquisher"
     },
     {
      "id": 34177,
@@ -7549,9 +9548,22 @@
   "Combat": {
    "P1": [
     {
+     "id": 29760,
+     "item": "Helm of the Fallen Champion"
+    },
+    {
      "id": 28672,
      "item": "Drape of the Dark Reavers",
      "bis": "multiPhase"
+    },
+    {
+     "id": 29754,
+     "item": "Chestguard of the Fallen Champion"
+    },
+    {
+     "id": 30730,
+     "item": "Terrorweave Tunic",
+     "near": true
     },
     {
      "id": 30644,
@@ -7560,6 +9572,11 @@
     {
      "id": 28741,
      "item": "Skulker's Greaves"
+    },
+    {
+     "id": 29766,
+     "item": "Leggings of the Fallen Champion",
+     "near": true
     },
     {
      "id": 28545,
@@ -7575,6 +9592,11 @@
      "item": "Garona's Signet Ring"
     },
     {
+     "id": 30738,
+     "item": "Ring of Reciprocity",
+     "near": true
+    },
+    {
      "id": 28830,
      "item": "Dragonspine Trophy",
      "bis": "expansion"
@@ -7586,14 +9608,28 @@
      "variant": "dagger"
     },
     {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle"
+    },
+    {
      "id": 28772,
-     "item": "Sunfury Bow of the Phoenix"
+     "item": "Sunfury Bow of the Phoenix",
+     "near": true
     }
    ],
    "P2": [
     {
+     "id": 30242,
+     "item": "Helm of the Vanquished Champion"
+    },
+    {
+     "id": 30248,
+     "item": "Pauldrons of the Vanquished Champion"
+    },
+    {
      "id": 30055,
-     "item": "Shoulderpads of the Stranger"
+     "item": "Shoulderpads of the Stranger",
+     "near": true
     },
     {
      "id": 28672,
@@ -7605,13 +9641,26 @@
      "item": "Bloodsea Brigand's Vest"
     },
     {
+     "id": 30236,
+     "item": "Chestguard of the Vanquished Champion",
+     "near": true
+    },
+    {
      "id": 29966,
      "item": "Vambraces of Ending"
+    },
+    {
+     "id": 30239,
+     "item": "Gloves of the Vanquished Champion"
     },
     {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30245,
+     "item": "Leggings of the Vanquished Champion"
     },
     {
      "id": 28545,
@@ -7665,8 +9714,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -7675,8 +9734,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -7749,8 +9818,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -7759,8 +9838,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -7837,12 +9926,29 @@
      "item": "Duplicitous Guise"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 34241,
      "item": "Cloak of Unforgivable Sin"
     },
     {
+     "id": 34852,
+     "item": "Bracers of the Forgotten Vanquisher"
+    },
+    {
+     "id": 34855,
+     "item": "Belt of the Forgotten Vanquisher"
+    },
+    {
      "id": 34188,
      "item": "Leggings of the Immortal Night"
+    },
+    {
+     "id": 34858,
+     "item": "Boots of the Forgotten Vanquisher"
     },
     {
      "id": 34177,
@@ -7902,9 +10008,22 @@
   "Sub": {
    "P1": [
     {
+     "id": 29760,
+     "item": "Helm of the Fallen Champion"
+    },
+    {
      "id": 28672,
      "item": "Drape of the Dark Reavers",
      "bis": "multiPhase"
+    },
+    {
+     "id": 29754,
+     "item": "Chestguard of the Fallen Champion"
+    },
+    {
+     "id": 30730,
+     "item": "Terrorweave Tunic",
+     "near": true
     },
     {
      "id": 30644,
@@ -7913,6 +10032,11 @@
     {
      "id": 28741,
      "item": "Skulker's Greaves"
+    },
+    {
+     "id": 29766,
+     "item": "Leggings of the Fallen Champion",
+     "near": true
     },
     {
      "id": 28545,
@@ -7928,6 +10052,11 @@
      "item": "Garona's Signet Ring"
     },
     {
+     "id": 30738,
+     "item": "Ring of Reciprocity",
+     "near": true
+    },
+    {
      "id": 28830,
      "item": "Dragonspine Trophy",
      "bis": "expansion"
@@ -7939,14 +10068,28 @@
      "variant": "dagger"
     },
     {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle"
+    },
+    {
      "id": 28772,
-     "item": "Sunfury Bow of the Phoenix"
+     "item": "Sunfury Bow of the Phoenix",
+     "near": true
     }
    ],
    "P2": [
     {
+     "id": 30242,
+     "item": "Helm of the Vanquished Champion"
+    },
+    {
+     "id": 30248,
+     "item": "Pauldrons of the Vanquished Champion"
+    },
+    {
      "id": 30055,
-     "item": "Shoulderpads of the Stranger"
+     "item": "Shoulderpads of the Stranger",
+     "near": true
     },
     {
      "id": 28672,
@@ -7958,13 +10101,26 @@
      "item": "Bloodsea Brigand's Vest"
     },
     {
+     "id": 30236,
+     "item": "Chestguard of the Vanquished Champion",
+     "near": true
+    },
+    {
      "id": 29966,
      "item": "Vambraces of Ending"
+    },
+    {
+     "id": 30239,
+     "item": "Gloves of the Vanquished Champion"
     },
     {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30245,
+     "item": "Leggings of the Vanquished Champion"
     },
     {
      "id": 28545,
@@ -8018,8 +10174,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -8028,8 +10194,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -8102,8 +10278,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -8112,8 +10298,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -8190,12 +10386,29 @@
      "item": "Duplicitous Guise"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 34241,
      "item": "Cloak of Unforgivable Sin"
     },
     {
+     "id": 34852,
+     "item": "Bracers of the Forgotten Vanquisher"
+    },
+    {
+     "id": 34855,
+     "item": "Belt of the Forgotten Vanquisher"
+    },
+    {
      "id": 34188,
      "item": "Leggings of the Immortal Night"
+    },
+    {
+     "id": 34858,
+     "item": "Boots of the Forgotten Vanquisher"
     },
     {
      "id": 34177,
@@ -8255,8 +10468,20 @@
   "Disc": {
    "P1": [
     {
+     "id": 29761,
+     "item": "Helm of the Fallen Defender"
+    },
+    {
+     "id": 29764,
+     "item": "Pauldrons of the Fallen Defender"
+    },
+    {
      "id": 28765,
      "item": "Stainless Cloak of the Pure Hearted"
+    },
+    {
+     "id": 29753,
+     "item": "Chestguard of the Fallen Defender"
     },
     {
      "id": 30684,
@@ -8273,8 +10498,13 @@
      "item": "Cincture of Will"
     },
     {
+     "id": 30727,
+     "item": "Gilded Trousers of Benediction"
+    },
+    {
      "id": 28742,
-     "item": "Pantaloons of Repentance"
+     "item": "Pantaloons of Repentance",
+     "near": true
     },
     {
      "id": 28663,
@@ -8286,8 +10516,13 @@
      "near": true
     },
     {
+     "id": 30726,
+     "item": "Archaic Charm of Presence"
+    },
+    {
      "id": 28822,
-     "item": "Teeth of Gruul"
+     "item": "Teeth of Gruul",
+     "near": true
     },
     {
      "id": 28609,
@@ -8299,6 +10534,10 @@
      "id": 28731,
      "item": "Shining Chain of the Afterworld",
      "near": true
+    },
+    {
+     "id": 30736,
+     "item": "Ring of Flowing Light"
     },
     {
      "id": 28763,
@@ -8325,8 +10564,20 @@
    ],
    "P2": [
     {
+     "id": 30243,
+     "item": "Helm of the Vanquished Defender"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender"
+    },
+    {
      "id": 29989,
      "item": "Sunshower Light Cloak"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender"
     },
     {
      "id": 32516,
@@ -8346,6 +10597,19 @@
      "bis": "multiPhase",
      "variant": "throughput",
      "conditional": true
+    },
+    {
+     "id": 30240,
+     "item": "Gloves of the Vanquished Defender"
+    },
+    {
+     "id": 30246,
+     "item": "Leggings of the Vanquished Defender"
+    },
+    {
+     "id": 30727,
+     "item": "Gilded Trousers of Benediction",
+     "near": true
     },
     {
      "id": 30100,
@@ -8382,14 +10646,44 @@
    ],
    "P3": [
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30243,
+     "item": "Helm of the Vanquished Defender",
+     "near": true
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender",
+     "near": true
+    },
+    {
      "id": 32585,
      "item": "Swiftheal Mantle",
-     "bis": "multiPhase"
+     "near": true
     },
     {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "expansion"
+    },
+    {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender",
+     "near": true
     },
     {
      "id": 32584,
@@ -8404,6 +10698,16 @@
      "bis": "multiPhase",
      "variant": "regen",
      "conditional": true
+    },
+    {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30240,
+     "item": "Gloves of the Vanquished Defender",
+     "near": true
     },
     {
      "id": 30895,
@@ -8471,14 +10775,44 @@
    ],
    "P4": [
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30243,
+     "item": "Helm of the Vanquished Defender",
+     "near": true
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender",
+     "near": true
+    },
+    {
      "id": 32585,
      "item": "Swiftheal Mantle",
-     "bis": "multiPhase"
+     "near": true
     },
     {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "expansion"
+    },
+    {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender",
+     "near": true
     },
     {
      "id": 32584,
@@ -8493,6 +10827,16 @@
      "bis": "multiPhase",
      "variant": "regen",
      "conditional": true
+    },
+    {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30240,
+     "item": "Gloves of the Vanquished Defender",
+     "near": true
     },
     {
      "id": 30895,
@@ -8579,12 +10923,24 @@
      "item": "Robes of Faltered Light"
     },
     {
+     "id": 34848,
+     "item": "Bracers of the Forgotten Conqueror"
+    },
+    {
      "id": 34342,
      "item": "Handguards of the Dawn"
     },
     {
+     "id": 34853,
+     "item": "Belt of the Forgotten Conqueror"
+    },
+    {
      "id": 34170,
      "item": "Pantaloons of Calming Strife"
+    },
+    {
+     "id": 34856,
+     "item": "Boots of the Forgotten Conqueror"
     },
     {
      "id": 33281,
@@ -8631,8 +10987,20 @@
   "HolyPriest": {
    "P1": [
     {
+     "id": 29761,
+     "item": "Helm of the Fallen Defender"
+    },
+    {
+     "id": 29764,
+     "item": "Pauldrons of the Fallen Defender"
+    },
+    {
      "id": 28765,
      "item": "Stainless Cloak of the Pure Hearted"
+    },
+    {
+     "id": 29753,
+     "item": "Chestguard of the Fallen Defender"
     },
     {
      "id": 30684,
@@ -8649,8 +11017,13 @@
      "item": "Cincture of Will"
     },
     {
+     "id": 30727,
+     "item": "Gilded Trousers of Benediction"
+    },
+    {
      "id": 28742,
-     "item": "Pantaloons of Repentance"
+     "item": "Pantaloons of Repentance",
+     "near": true
     },
     {
      "id": 28663,
@@ -8662,8 +11035,13 @@
      "near": true
     },
     {
+     "id": 30726,
+     "item": "Archaic Charm of Presence"
+    },
+    {
      "id": 28822,
-     "item": "Teeth of Gruul"
+     "item": "Teeth of Gruul",
+     "near": true
     },
     {
      "id": 28609,
@@ -8675,6 +11053,10 @@
      "id": 28731,
      "item": "Shining Chain of the Afterworld",
      "near": true
+    },
+    {
+     "id": 30736,
+     "item": "Ring of Flowing Light"
     },
     {
      "id": 28763,
@@ -8701,8 +11083,20 @@
    ],
    "P2": [
     {
+     "id": 30243,
+     "item": "Helm of the Vanquished Defender"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender"
+    },
+    {
      "id": 29989,
      "item": "Sunshower Light Cloak"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender"
     },
     {
      "id": 32516,
@@ -8722,6 +11116,19 @@
      "bis": "multiPhase",
      "variant": "throughput",
      "conditional": true
+    },
+    {
+     "id": 30240,
+     "item": "Gloves of the Vanquished Defender"
+    },
+    {
+     "id": 30246,
+     "item": "Leggings of the Vanquished Defender"
+    },
+    {
+     "id": 30727,
+     "item": "Gilded Trousers of Benediction",
+     "near": true
     },
     {
      "id": 30100,
@@ -8758,14 +11165,44 @@
    ],
    "P3": [
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30243,
+     "item": "Helm of the Vanquished Defender",
+     "near": true
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender",
+     "near": true
+    },
+    {
      "id": 32585,
      "item": "Swiftheal Mantle",
-     "bis": "multiPhase"
+     "near": true
     },
     {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "expansion"
+    },
+    {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender",
+     "near": true
     },
     {
      "id": 32584,
@@ -8780,6 +11217,16 @@
      "bis": "multiPhase",
      "variant": "regen",
      "conditional": true
+    },
+    {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30240,
+     "item": "Gloves of the Vanquished Defender",
+     "near": true
     },
     {
      "id": 30895,
@@ -8847,14 +11294,44 @@
    ],
    "P4": [
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30243,
+     "item": "Helm of the Vanquished Defender",
+     "near": true
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender",
+     "near": true
+    },
+    {
      "id": 32585,
      "item": "Swiftheal Mantle",
-     "bis": "multiPhase"
+     "near": true
     },
     {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "expansion"
+    },
+    {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender",
+     "near": true
     },
     {
      "id": 32584,
@@ -8869,6 +11346,16 @@
      "bis": "multiPhase",
      "variant": "regen",
      "conditional": true
+    },
+    {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30240,
+     "item": "Gloves of the Vanquished Defender",
+     "near": true
     },
     {
      "id": 30895,
@@ -8955,12 +11442,24 @@
      "item": "Robes of Faltered Light"
     },
     {
+     "id": 34848,
+     "item": "Bracers of the Forgotten Conqueror"
+    },
+    {
      "id": 34342,
      "item": "Handguards of the Dawn"
     },
     {
+     "id": 34853,
+     "item": "Belt of the Forgotten Conqueror"
+    },
+    {
      "id": 34170,
      "item": "Pantaloons of Calming Strife"
+    },
+    {
+     "id": 34856,
+     "item": "Boots of the Forgotten Conqueror"
     },
     {
      "id": 33281,
@@ -9007,8 +11506,26 @@
   "Enh": {
    "P1": [
     {
+     "id": 29760,
+     "item": "Helm of the Fallen Champion"
+    },
+    {
+     "id": 29763,
+     "item": "Pauldrons of the Fallen Champion"
+    },
+    {
      "id": 28755,
-     "item": "Bladed Shoulderpads of the Merciless"
+     "item": "Bladed Shoulderpads of the Merciless",
+     "near": true
+    },
+    {
+     "id": 30730,
+     "item": "Terrorweave Tunic"
+    },
+    {
+     "id": 29754,
+     "item": "Chestguard of the Fallen Champion",
+     "near": true
     },
     {
      "id": 28514,
@@ -9021,6 +11538,11 @@
     {
      "id": 30644,
      "item": "Grips of Deftness",
+     "near": true
+    },
+    {
+     "id": 29757,
+     "item": "Gloves of the Fallen Champion",
      "near": true
     },
     {
@@ -9066,6 +11588,10 @@
    ],
    "P2": [
     {
+     "id": 30242,
+     "item": "Helm of the Vanquished Champion"
+    },
+    {
      "id": 30055,
      "item": "Shoulderpads of the Stranger"
     },
@@ -9074,13 +11600,25 @@
      "item": "Thalassian Wildercloak"
     },
     {
+     "id": 30236,
+     "item": "Chestguard of the Vanquished Champion"
+    },
+    {
      "id": 30091,
      "item": "True-Aim Stalker Bands"
     },
     {
+     "id": 30239,
+     "item": "Gloves of the Vanquished Champion"
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
-     "bis": "expansion"
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30245,
+     "item": "Leggings of the Vanquished Champion"
     },
     {
      "id": 30022,
@@ -9154,7 +11692,7 @@
     {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 30900,
@@ -9277,7 +11815,7 @@
     {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 30900,
@@ -9401,6 +11939,11 @@
      "item": "Mantle of the Golden Forest"
     },
     {
+     "id": 31103,
+     "item": "Pauldrons of the Forgotten Protector",
+     "near": true
+    },
+    {
      "id": 32581,
      "item": "Swiftstrike Shoulders",
      "near": true,
@@ -9417,17 +11960,30 @@
      "bis": "multiPhase"
     },
     {
+     "id": 34851,
+     "item": "Bracers of the Forgotten Protector"
+    },
+    {
      "id": 34343,
      "item": "Thalassian Ranger Gauntlets"
     },
     {
+     "id": 34854,
+     "item": "Belt of the Forgotten Protector"
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
-     "bis": "expansion"
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 34188,
      "item": "Leggings of the Immortal Night"
+    },
+    {
+     "id": 34857,
+     "item": "Boots of the Forgotten Protector"
     },
     {
      "id": 34177,
@@ -9487,6 +12043,10 @@
   "Frost": {
    "P1": [
     {
+     "id": 29759,
+     "item": "Helm of the Fallen Hero"
+    },
+    {
      "id": 28766,
      "item": "Ruby Drape of the Mysticant",
      "bis": "multiPhase"
@@ -9497,8 +12057,17 @@
      "near": true
     },
     {
+     "id": 29756,
+     "item": "Gloves of the Fallen Hero"
+    },
+    {
      "id": 28507,
-     "item": "Handwraps of Flowing Thought"
+     "item": "Handwraps of Flowing Thought",
+     "near": true
+    },
+    {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle"
     },
     {
      "id": 28530,
@@ -9514,8 +12083,13 @@
      "item": "Ring of Recurrence"
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest"
+    },
+    {
      "id": 28802,
-     "item": "Bloodmaw Magus-Blade"
+     "item": "Bloodmaw Magus-Blade",
+     "near": true
     },
     {
      "id": 28770,
@@ -9538,6 +12112,14 @@
    ],
    "P2": [
     {
+     "id": 30244,
+     "item": "Helm of the Vanquished Hero"
+    },
+    {
+     "id": 30250,
+     "item": "Pauldrons of the Vanquished Hero"
+    },
+    {
      "id": 28766,
      "item": "Ruby Drape of the Mysticant",
      "bis": "multiPhase"
@@ -9549,6 +12131,14 @@
     {
      "id": 29918,
      "item": "Mindstorm Wristbands"
+    },
+    {
+     "id": 30241,
+     "item": "Gloves of the Vanquished Hero"
+    },
+    {
+     "id": 30247,
+     "item": "Leggings of the Vanquished Hero"
     },
     {
      "id": 30067,
@@ -9588,6 +12178,11 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 32524,
      "item": "Shroud of the Highborne",
      "bis": "multiPhase"
@@ -9598,13 +12193,28 @@
      "near": true
     },
     {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
      "bis": "multiPhase"
     },
     {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32256,
      "item": "Waistwrap of Infinity",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -9649,8 +12259,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 32524,
      "item": "Shroud of the Highborne",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -9659,8 +12279,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32256,
      "item": "Waistwrap of Infinity",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -9708,20 +12338,38 @@
      "item": "Dark Conjuror's Collar"
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 34210,
-     "item": "Amice of the Convoker"
+     "item": "Amice of the Convoker",
+     "near": true
     },
     {
      "id": 34242,
      "item": "Tattered Cape of Antonidas"
     },
     {
+     "id": 34852,
+     "item": "Bracers of the Forgotten Vanquisher"
+    },
+    {
      "id": 34344,
      "item": "Handguards of Defiled Worlds"
     },
     {
+     "id": 34855,
+     "item": "Belt of the Forgotten Vanquisher"
+    },
+    {
      "id": 34181,
      "item": "Leggings of Calamity"
+    },
+    {
+     "id": 34858,
+     "item": "Boots of the Forgotten Vanquisher"
     },
     {
      "id": 34204,
@@ -9762,16 +12410,37 @@
   "DemoLock": {
    "P1": [
     {
+     "id": 29759,
+     "item": "Helm of the Fallen Hero"
+    },
+    {
+     "id": 29762,
+     "item": "Pauldrons of the Fallen Hero",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28766,
      "item": "Ruby Drape of the Mysticant",
      "variant": "hit",
      "conditional": true
     },
     {
+     "id": 29755,
+     "item": "Chestguard of the Fallen Hero"
+    },
+    {
+     "id": 29756,
+     "item": "Gloves of the Fallen Hero"
+    },
+    {
      "id": 28780,
      "item": "Soul-Eater's Handwraps",
      "near": true,
      "variant": "hit"
+    },
+    {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle"
     },
     {
      "id": 28585,
@@ -9798,10 +12467,16 @@
      "conditional": true
     },
     {
-     "id": 28770,
-     "item": "Nathrezim Mindblade",
+     "id": 30723,
+     "item": "Talon of the Tempest",
      "variant": "mainhand",
      "conditional": true
+    },
+    {
+     "id": 28770,
+     "item": "Nathrezim Mindblade",
+     "near": true,
+     "variant": "mainhand"
     },
     {
      "id": 28802,
@@ -9830,6 +12505,15 @@
    ],
    "P2": [
     {
+     "id": 30244,
+     "item": "Helm of the Vanquished Hero"
+    },
+    {
+     "id": 29762,
+     "item": "Pauldrons of the Fallen Hero",
+     "bis": "multiPhase"
+    },
+    {
      "id": 29992,
      "item": "Royal Cloak of the Sunstriders"
     },
@@ -9850,6 +12534,15 @@
     {
      "id": 29918,
      "item": "Mindstorm Wristbands",
+     "near": true
+    },
+    {
+     "id": 30247,
+     "item": "Leggings of the Vanquished Hero"
+    },
+    {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle",
      "near": true
     },
     {
@@ -9885,8 +12578,18 @@
    ],
    "P3": [
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32525,
      "item": "Cowl of the Illidari High Lord",
+     "near": true
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
      "bis": "multiPhase"
     },
     {
@@ -9911,8 +12614,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "near": true
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
      "bis": "multiPhase"
     },
     {
@@ -9934,6 +12647,11 @@
     {
      "id": 32367,
      "item": "Leggings of Devastation",
+     "near": true
+    },
+    {
+     "id": 31098,
+     "item": "Leggings of the Forgotten Conqueror",
      "near": true
     },
     {
@@ -9988,8 +12706,18 @@
    ],
    "P4": [
     {
+     "id": 31097,
+     "item": "Helm of the Forgotten Conqueror",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32525,
      "item": "Cowl of the Illidari High Lord",
+     "near": true
+    },
+    {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
      "bis": "multiPhase"
     },
     {
@@ -10017,8 +12745,18 @@
      "bis": "multiPhase"
     },
     {
+     "id": 31089,
+     "item": "Chestguard of the Forgotten Conqueror",
+     "near": true
+    },
+    {
      "id": 32586,
      "item": "Bracers of Nimble Thought",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31092,
+     "item": "Gloves of the Forgotten Conqueror",
      "bis": "multiPhase"
     },
     {
@@ -10044,6 +12782,12 @@
      "id": 32367,
      "item": "Leggings of Devastation",
      "variant": "hit",
+     "conditional": true
+    },
+    {
+     "id": 31098,
+     "item": "Leggings of the Forgotten Conqueror",
+     "variant": "crit",
      "conditional": true
     },
     {
@@ -10093,6 +12837,12 @@
      "item": "Amice of the Convoker"
     },
     {
+     "id": 31101,
+     "item": "Pauldrons of the Forgotten Conqueror",
+     "near": true,
+     "bis": "multiPhase"
+    },
+    {
      "id": 34242,
      "item": "Tattered Cape of Antonidas"
     },
@@ -10101,12 +12851,24 @@
      "item": "Fel Conquerer Raiments"
     },
     {
+     "id": 34848,
+     "item": "Bracers of the Forgotten Conqueror"
+    },
+    {
      "id": 34344,
      "item": "Handguards of Defiled Worlds"
     },
     {
+     "id": 34853,
+     "item": "Belt of the Forgotten Conqueror"
+    },
+    {
      "id": 34181,
      "item": "Leggings of Calamity"
+    },
+    {
+     "id": 34856,
+     "item": "Boots of the Forgotten Conqueror"
     },
     {
      "id": 34204,
@@ -10151,8 +12913,20 @@
   "RestoDruid": {
    "P1": [
     {
+     "id": 29761,
+     "item": "Helm of the Fallen Defender"
+    },
+    {
+     "id": 29764,
+     "item": "Pauldrons of the Fallen Defender"
+    },
+    {
      "id": 28765,
      "item": "Stainless Cloak of the Pure Hearted"
+    },
+    {
+     "id": 29753,
+     "item": "Chestguard of the Fallen Defender"
     },
     {
      "id": 28521,
@@ -10164,17 +12938,33 @@
      "item": "Cord of Nature's Sustenance"
     },
     {
+     "id": 30727,
+     "item": "Gilded Trousers of Benediction",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28591,
      "item": "Earthsoul Leggings",
+     "near": true
+    },
+    {
+     "id": 30737,
+     "item": "Gold-Leaf Wildboots",
      "bis": "multiPhase"
     },
     {
      "id": 28752,
-     "item": "Forestlord Striders"
+     "item": "Forestlord Striders",
+     "near": true
+    },
+    {
+     "id": 30726,
+     "item": "Archaic Charm of Presence"
     },
     {
      "id": 28822,
-     "item": "Teeth of Gruul"
+     "item": "Teeth of Gruul",
+     "near": true
     },
     {
      "id": 28609,
@@ -10187,6 +12977,10 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30736,
+     "item": "Ring of Flowing Light"
+    },
+    {
      "id": 28771,
      "item": "Light's Justice"
     },
@@ -10197,8 +12991,20 @@
    ],
    "P2": [
     {
+     "id": 30243,
+     "item": "Helm of the Vanquished Defender"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender"
+    },
+    {
      "id": 29989,
      "item": "Sunshower Light Cloak"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender"
     },
     {
      "id": 30062,
@@ -10214,13 +13020,24 @@
      "item": "Girdle of Zaetar"
     },
     {
+     "id": 30727,
+     "item": "Gilded Trousers of Benediction",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28591,
      "item": "Earthsoul Leggings",
+     "near": true
+    },
+    {
+     "id": 30737,
+     "item": "Gold-Leaf Wildboots",
      "bis": "multiPhase"
     },
     {
      "id": 30092,
-     "item": "Orca-Hide Boots"
+     "item": "Orca-Hide Boots",
+     "near": true
     },
     {
      "id": 30110,
@@ -10243,13 +13060,28 @@
    ],
    "P3": [
     {
+     "id": 31096,
+     "item": "Helm of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32329,
      "item": "Cowl of Benevolence",
+     "near": true
+    },
+    {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
      "id": 32524,
      "item": "Shroud of the Highborne",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -10282,9 +13114,14 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30737,
+     "item": "Gold-Leaf Wildboots",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32609,
      "item": "Boots of the Divine Light",
-     "bis": "multiPhase"
+     "near": true
     },
     {
      "id": 32528,
@@ -10314,8 +13151,18 @@
    ],
    "P4": [
     {
+     "id": 31096,
+     "item": "Helm of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32329,
      "item": "Cowl of Benevolence",
+     "near": true
+    },
+    {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -10327,6 +13174,11 @@
      "id": 32337,
      "item": "Shroud of Forgiveness",
      "near": true
+    },
+    {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
+     "bis": "multiPhase"
     },
     {
      "id": 30868,
@@ -10369,7 +13221,12 @@
     },
     {
      "id": 32609,
-     "item": "Boots of the Divine Light",
+     "item": "Boots of the Divine Light"
+    },
+    {
+     "id": 30737,
+     "item": "Gold-Leaf Wildboots",
+     "near": true,
      "bis": "multiPhase"
     },
     {
@@ -10452,6 +13309,10 @@
      "near": true
     },
     {
+     "id": 34852,
+     "item": "Bracers of the Forgotten Vanquisher"
+    },
+    {
      "id": 34342,
      "item": "Handguards of the Dawn"
     },
@@ -10461,8 +13322,16 @@
      "near": true
     },
     {
+     "id": 34855,
+     "item": "Belt of the Forgotten Vanquisher"
+    },
+    {
      "id": 34170,
      "item": "Pantaloons of Calming Strife"
+    },
+    {
+     "id": 34858,
+     "item": "Boots of the Forgotten Vanquisher"
     },
     {
      "id": 33281,
@@ -10517,10 +13386,20 @@
   "FeralCat": {
    "P1": [
     {
+     "id": 29764,
+     "item": "Pauldrons of the Fallen Defender",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28672,
      "item": "Drape of the Dark Reavers",
      "bis": "multiPhase",
      "conditional": true
+    },
+    {
+     "id": 29753,
+     "item": "Chestguard of the Fallen Defender",
+     "bis": "multiPhase"
     },
     {
      "id": 30685,
@@ -10576,6 +13455,16 @@
      "conditional": true
     },
     {
+     "id": 29764,
+     "item": "Pauldrons of the Fallen Defender",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender",
+     "near": true
+    },
+    {
      "id": 28672,
      "item": "Drape of the Dark Reavers",
      "bis": "multiPhase",
@@ -10596,6 +13485,16 @@
      "conditional": true
     },
     {
+     "id": 29753,
+     "item": "Chestguard of the Fallen Defender",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender",
+     "near": true
+    },
+    {
      "id": 29966,
      "item": "Vambraces of Ending"
     },
@@ -10605,6 +13504,10 @@
      "bis": "multiPhase",
      "variant": "individually",
      "conditional": true
+    },
+    {
+     "id": 30240,
+     "item": "Gloves of the Vanquished Defender"
     },
     {
      "id": 30106,
@@ -10623,6 +13526,10 @@
      "item": "Leggings of Murderous Intent",
      "variant": "hit",
      "conditional": true
+    },
+    {
+     "id": 30246,
+     "item": "Leggings of the Vanquished Defender"
     },
     {
      "id": 28545,
@@ -10651,6 +13558,13 @@
    ],
    "P3": [
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion",
+     "variant": "unless",
+     "conditional": true
+    },
+    {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
      "bis": "multiPhase",
@@ -10672,6 +13586,13 @@
      "conditional": true
     },
     {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
+     "bis": "multiPhase",
+     "variant": "unless",
+     "conditional": true
+    },
+    {
      "id": 32324,
      "item": "Insidious Bands",
      "bis": "multiPhase",
@@ -10686,8 +13607,20 @@
      "conditional": true
     },
     {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "bis": "multiPhase",
+     "variant": "unless",
+     "conditional": true
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -10757,6 +13690,13 @@
    ],
    "P4": [
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion",
+     "variant": "unless",
+     "conditional": true
+    },
+    {
      "id": 32323,
      "item": "Shadowmoon Destroyer's Drape",
      "bis": "multiPhase",
@@ -10778,6 +13718,13 @@
      "conditional": true
     },
     {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
+     "bis": "multiPhase",
+     "variant": "unless",
+     "conditional": true
+    },
+    {
      "id": 32324,
      "item": "Insidious Bands",
      "bis": "multiPhase",
@@ -10792,8 +13739,20 @@
      "conditional": true
     },
     {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "bis": "multiPhase",
+     "variant": "unless",
+     "conditional": true
+    },
+    {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -10889,12 +13848,39 @@
      "conditional": true
     },
     {
+     "id": 31096,
+     "item": "Helm of the Forgotten Vanquisher",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion",
+     "variant": "unless",
+     "conditional": true
+    },
+    {
      "id": 34241,
      "item": "Cloak of Unforgivable Sin"
     },
     {
+     "id": 34852,
+     "item": "Bracers of the Forgotten Vanquisher"
+    },
+    {
+     "id": 34855,
+     "item": "Belt of the Forgotten Vanquisher"
+    },
+    {
      "id": 34188,
      "item": "Leggings of the Immortal Night"
+    },
+    {
+     "id": 34858,
+     "item": "Boots of the Forgotten Vanquisher",
+     "variant": "unless",
+     "conditional": true
     },
     {
      "id": 32497,
@@ -10935,6 +13921,11 @@
   "FeralBear": {
    "P1": [
     {
+     "id": 29761,
+     "item": "Helm of the Fallen Defender",
+     "variant": "overall"
+    },
+    {
      "id": 28796,
      "item": "Malefic Mask of the Shadows",
      "variant": "threat"
@@ -10944,6 +13935,10 @@
      "item": "Cowl of Defiance",
      "near": true,
      "variant": "threat"
+    },
+    {
+     "id": 29764,
+     "item": "Pauldrons of the Fallen Defender"
     },
     {
      "id": 28755,
@@ -10969,6 +13964,15 @@
      "variant": "threat"
     },
     {
+     "id": 29753,
+     "item": "Chestguard of the Fallen Defender"
+    },
+    {
+     "id": 29758,
+     "item": "Gloves of the Fallen Defender",
+     "variant": "mitigation"
+    },
+    {
      "id": 30644,
      "item": "Grips of Deftness",
      "variant": "threat"
@@ -10983,6 +13987,11 @@
      "item": "Girdle of Treachery",
      "near": true,
      "variant": "threat"
+    },
+    {
+     "id": 29767,
+     "item": "Leggings of the Fallen Defender",
+     "variant": "mitigation"
     },
     {
      "id": 28741,
@@ -11036,6 +14045,14 @@
    ],
    "P2": [
     {
+     "id": 30243,
+     "item": "Helm of the Vanquished Defender"
+    },
+    {
+     "id": 30249,
+     "item": "Pauldrons of the Vanquished Defender"
+    },
+    {
      "id": 28660,
      "item": "Gilded Thorium Cloak",
      "bis": "multiPhase",
@@ -11054,15 +14071,30 @@
      "variant": "threat"
     },
     {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender"
+    },
+    {
      "id": 30101,
      "item": "Bloodsea Brigand's Vest",
      "near": true,
      "variant": "threat"
     },
     {
+     "id": 30240,
+     "item": "Gloves of the Vanquished Defender",
+     "variant": "mitigation"
+    },
+    {
      "id": 29947,
      "item": "Gloves of the Searing Grip",
      "variant": "threat"
+    },
+    {
+     "id": 29758,
+     "item": "Gloves of the Fallen Defender",
+     "near": true,
+     "variant": "mitigation"
     },
     {
      "id": 30644,
@@ -11074,6 +14106,10 @@
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30246,
+     "item": "Leggings of the Vanquished Defender"
     },
     {
      "id": 29995,
@@ -11151,6 +14187,16 @@
    ],
    "P3": [
     {
+     "id": 31096,
+     "item": "Helm of the Forgotten Vanquisher",
+     "variant": "mitigation"
+    },
+    {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
      "id": 28660,
      "item": "Gilded Thorium Cloak",
      "bis": "multiPhase",
@@ -11181,6 +14227,17 @@
      "variant": "threat"
     },
     {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 32324,
      "item": "Insidious Bands",
      "bis": "multiPhase",
@@ -11188,10 +14245,27 @@
      "conditional": true
     },
     {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30240,
+     "item": "Gloves of the Vanquished Defender",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 29947,
      "item": "Gloves of the Searing Grip",
      "near": true,
      "variant": "threat"
+    },
+    {
+     "id": 29758,
+     "item": "Gloves of the Fallen Defender",
+     "near": true,
+     "variant": "mitigation"
     },
     {
      "id": 30644,
@@ -11209,6 +14283,11 @@
      "item": "Don Alejandro's Money Belt",
      "near": true,
      "variant": "threat"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
+     "bis": "multiPhase"
     },
     {
      "id": 32593,
@@ -11289,6 +14368,22 @@
      "conditional": true
     },
     {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion"
+    },
+    {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30237,
+     "item": "Chestguard of the Vanquished Defender",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 32324,
      "item": "Insidious Bands",
      "bis": "multiPhase",
@@ -11296,10 +14391,27 @@
      "conditional": true
     },
     {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30240,
+     "item": "Gloves of the Vanquished Defender",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 29947,
      "item": "Gloves of the Searing Grip",
      "near": true,
      "variant": "threat"
+    },
+    {
+     "id": 29758,
+     "item": "Gloves of the Fallen Defender",
+     "near": true,
+     "variant": "mitigation"
     },
     {
      "id": 30644,
@@ -11310,6 +14422,11 @@
     {
      "id": 30106,
      "item": "Belt of One-Hundred Deaths",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 31099,
+     "item": "Leggings of the Forgotten Vanquisher",
      "bis": "multiPhase"
     },
     {
@@ -11381,6 +14498,18 @@
    ],
    "P5": [
     {
+     "id": 31096,
+     "item": "Helm of the Forgotten Vanquisher",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 31102,
+     "item": "Pauldrons of the Forgotten Vanquisher",
+     "bis": "expansion",
+     "variant": "threat"
+    },
+    {
      "id": 34190,
      "item": "Crimson Paragon's Cover"
     },
@@ -11389,9 +14518,32 @@
      "item": "Harness of Carnal Instinct"
     },
     {
+     "id": 31090,
+     "item": "Chestguard of the Forgotten Vanquisher",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "mitigation"
+    },
+    {
+     "id": 34852,
+     "item": "Bracers of the Forgotten Vanquisher"
+    },
+    {
      "id": 34234,
      "item": "Shadowed Gauntlets of Paroxysm",
      "near": true,
+     "variant": "threat"
+    },
+    {
+     "id": 31093,
+     "item": "Gloves of the Forgotten Vanquisher",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "mitigation"
+    },
+    {
+     "id": 34855,
+     "item": "Belt of the Forgotten Vanquisher",
      "variant": "threat"
     },
     {
@@ -11399,6 +14551,10 @@
      "item": "Leggings of the Immortal Night",
      "near": true,
      "variant": "threat"
+    },
+    {
+     "id": 34858,
+     "item": "Boots of the Forgotten Vanquisher"
     },
     {
      "id": 34178,

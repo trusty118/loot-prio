@@ -35,6 +35,8 @@ LOOT = ROOT / "data" / "loot_data.json"
 SPECS = ROOT / "data" / "specs.json"
 BIS = ROOT / "data" / "bis.json"
 SOURCES = Path(__file__).resolve().parent / "bis-sources.json"
+RANK_MAP = Path(__file__).resolve().parent / "rank-map.json"
+TIER_TOKENS = Path(__file__).resolve().parent / "tier-tokens.json"
 CHANGES = Path(__file__).resolve().parent / "bis-longevity-changes.csv"
 
 WOWSIMS = "https://raw.githubusercontent.com/wowsims/tbc/master/ui/{}/presets.ts"
@@ -209,7 +211,65 @@ def text(html):
     return re.sub(r"\s+", " ", TAGS.sub(" ", html)).replace("&#39;", "'").replace("&amp;", "&").strip()
 
 
-def scan_rows(html, where, phase):
+def load_tier_tokens():
+    """Tier piece id -> the token id that produces it.
+
+    Tier armour is not loot - it is what a token turns into - so loot_data.json lists the
+    54 tokens and not the 200-odd pieces. The guides rank the PIECES, so 492 BiS calls were
+    landing on items this site has no row for, and all 54 tokens showed a blank priority
+    column and no ring at all.
+
+    Substituting the token is the honest join: "Warbringer Breastplate is BiS for Arms"
+    and "the Chestguard of the Fallen Defender is what an Arms warrior wants" are the same
+    statement, and only the second names a row that exists here.
+    """
+    if not TIER_TOKENS.exists():
+        return {}
+    doc = json.loads(TIER_TOKENS.read_text(encoding="utf-8"))
+    return {int(k): v["token"] for k, v in doc.get("pieces", {}).items()}
+
+
+def load_item_map():
+    """Per-row overrides, keyed exactly as the review page prints an id: "Arms/P1/28730".
+
+    The rank map below keys on (spec, rank text), which cannot reach a row whose rank is
+    plain "Best" - and plenty of conditions live only in the author's PROSE. Arms' Phase 1
+    ring slot is the case that forced this: four rings all ranked "Best", with the blurb
+    saying "Mithril Band of the Unscarred ... will be your go-to if you are over the hit
+    cap". Overriding "Best" for Arms would have hit every row in that guide.
+    """
+    if not RANK_MAP.exists():
+        return {}
+    raw = json.loads(RANK_MAP.read_text(encoding="utf-8")).get("items", {})
+    # A tier piece is swapped for its token before this is consulted, so an override keyed
+    # on the PIECE id would never match - and the piece id is what the review page prints
+    # and what gets pasted back. Register both.
+    pieces = {}
+    if TIER_TOKENS.exists():
+        doc = json.loads(TIER_TOKENS.read_text(encoding="utf-8"))
+        pieces = {int(k): v["token"] for k, v in doc.get("pieces", {}).items()}
+    out = dict(raw)
+    for key, val in raw.items():
+        spec, phase, item = key.split("/")
+        if int(item) in pieces:
+            out[f"{spec}/{phase}/{pieces[int(item)]}"] = val
+    return out
+
+
+def load_rank_map():
+    """Per-spec rank overrides, consulted BEFORE the rules below.
+
+    Authors do not share a vocabulary, so a wording can mean opposite things in two guides.
+    The rules get both of this file's motivating cases right on their own; this is for the
+    ones they do not, and it starts empty so it changes nothing until somebody decides an
+    entry with the guide in front of them.
+    """
+    if not RANK_MAP.exists():
+        return {}
+    return json.loads(RANK_MAP.read_text(encoding="utf-8")).get("specs", {})
+
+
+def scan_rows(html, where, phase, overrides=None):
     """Every item row the guide's BiS table holds, in page order, with a verdict.
 
     Returns dicts: row (index in the table), id, item, rank (the cell VERBATIM), kept,
@@ -224,6 +284,13 @@ def scan_rows(html, where, phase):
 
     Page order is preserved and reported, because Wowhead ranks by row position - that is
     the whole basis of the near-BiS marking downstream.
+
+    Each row also carries the SLOT HEADING it sits under and the PROSE between that heading
+    and the table. Neither is used by the pipeline; both exist because a rank cell cannot be
+    judged alone. Wowhead's feral bear guide ranks Shadowmoon Destroyer's Drape "Threat
+    Alternative", and the only way to know that means "not BiS" rather than "BiS for threat"
+    is the sentence above the table naming two OTHER cloaks as best. Reviewing wordings
+    without that is guesswork.
     """
     not_bis = not_bis_for(phase)
     start = BIS_HEADING.search(html)
@@ -231,47 +298,73 @@ def scan_rows(html, where, phase):
         raise ValueError(f"{where}: no 'Best In Slot ... Phase N' heading - page layout changed?")
 
     out, ranks = [], set()
-    for row in ROW.findall(html[start.end():]):
-        cells = CELL.findall(row)
-        if len(cells) < 2:
-            continue
-        link = ITEM_LINK.search(cells[1])
-        if not link:
-            continue
-        rank = text(cells[0])
-        ranks.add(rank)
-        why = None
-        if not RANKED_BIS.search(rank):
-            why = "rank does not lead with Best or name BiS"
-        elif not_bis.search(rank):
-            why = "rank is qualified into something other than BiS"
-        # Not a BiS claim, but the author did offer it AND said what for. That is an
-        # alternate - shown, in blue, making no claim on longevity or slot capacity.
-        alternate = why is not None and bool(
-            OFFERED.search(rank) and NAMES_A_REASON.search(rank))
-        out.append({
-            "row": len(out),
-            "id": int(link.group(1)),
-            "item": text(link.group(2)),
-            "rank": rank,
-            "kept": why is None,
-            "why": why,
-            "alternate": alternate,
-        })
+    body = html[start.end():]
+
+    # Split on the per-slot headings so each row knows which one it belongs to. The leading
+    # chunk before the first h3 keeps an empty heading rather than being dropped: some
+    # guides open with a summary table, and losing it would silently lose its rows.
+    chunks, last, heading = [], 0, ""
+    for m in re.finditer(r"<h3[^>]*>(.*?)</h3>", body, re.S):
+        chunks.append((heading, body[last:m.start()]))
+        heading = text(m.group(1))
+        last = m.end()
+    chunks.append((heading, body[last:]))
+
+    for heading, chunk in chunks:
+        # everything before the first table is the author talking about the slot
+        blurb = text(chunk.split("<table", 1)[0]) if "<table" in chunk else ""
+        for row in ROW.findall(chunk):
+            cells = CELL.findall(row)
+            if len(cells) < 2:
+                continue
+            link = ITEM_LINK.search(cells[1])
+            if not link:
+                continue
+            rank = text(cells[0])
+            ranks.add(rank)
+            over = (overrides or {}).get(rank)
+            why = None
+            if over is not None and "bis" in over:
+                why = None if over["bis"] else "overridden in rank-map.json"
+            elif not RANKED_BIS.search(rank):
+                why = "rank does not lead with Best or name BiS"
+            elif not_bis.search(rank):
+                why = "rank is qualified into something other than BiS"
+            # Not a BiS claim, but the author did offer it AND said what for. That is an
+            # alternate - shown, in blue, making no claim on longevity or slot capacity.
+            if over is not None and "near" in over:
+                alternate = bool(over["near"])
+            else:
+                alternate = why is not None and bool(
+                    OFFERED.search(rank) and NAMES_A_REASON.search(rank))
+            out.append({
+                "row": len(out),
+                "id": int(link.group(1)),
+                "item": text(link.group(2)),
+                "rank": rank,
+                "kept": why is None,
+                "why": why,
+                "alternate": alternate,
+                "heading": heading,
+                "blurb": blurb,
+            })
 
     if not any(r["kept"] for r in out):
         raise ValueError(f"{where}: no rows ranked BiS - ranks seen: {sorted(ranks)[:8]}")
     return out
 
 
-def bis_rows(html, where, phase):
+UNCONTESTED = {"below-bis"}   # see check_bis.py for why these skip slot capacity
+
+
+def bis_rows(html, where, phase, overrides=None):
     """(item id, item name, rank) for the rows that ARE BiS, in page order.
 
     The shape fetch_bis.py has always consumed. scan_rows() is the parser now; this is the
     filter over it, kept separate so the dump can see what this throws away.
     """
     return [(r["id"], r["item"], r["rank"], r["alternate"])
-            for r in scan_rows(html, where, phase) if r["kept"] or r["alternate"]]
+            for r in scan_rows(html, where, phase, overrides) if r["kept"] or r["alternate"]]
 
 
 def preset_ids(source, phase):
@@ -314,6 +407,9 @@ def main():
     by_id = {r["id"]: r for r in loot}
     reg = json.loads(SPECS.read_text(encoding="utf-8"))["specs"]
     sources = json.loads(SOURCES.read_text(encoding="utf-8"))["specs"]
+    rank_map = load_rank_map()
+    item_map = load_item_map()
+    tier_token = load_tier_tokens()
     current = json.loads(BIS.read_text(encoding="utf-8"))
 
     unknown = [s for s in sources if s not in reg]
@@ -333,6 +429,9 @@ def main():
 
         # --- every phase's guide, so longevity can be observed rather than guessed ---
         per_phase = {}
+        # tokens we substituted in: their guide name is the PIECE, so the name check
+        # below would report every one of them as a mismatch by design
+        swapped = set()
         try:
             for phase in PHASES:
                 urls = source.get(phase.lower())
@@ -341,7 +440,14 @@ def main():
                 rows = []
                 for url in urls:
                     rows += bis_rows(GUIDE_CACHE.setdefault(url, get(url)),
-                                     f"{spec} {phase}", phase)
+                                     f"{spec} {phase}", phase, rank_map.get(spec, {}))
+                # Swap tier pieces for their tokens HERE, before anything counts them, so
+                # slot capacity and longevity both see the row that actually exists. A
+                # token occupies the piece's slot, which is what makes that sound.
+                rows = [(tier_token.get(i, i), n, rk, alt) for i, n, rk, alt in rows]
+                swapped |= {tier_token[i] for i, _n, _r, _a in rows if i in tier_token}
+                swapped |= {tier_token[i] for i in tier_token
+                            if tier_token[i] in {r[0] for r in rows}}
                 per_phase[phase] = rows
         except (urllib.error.URLError, TimeoutError, ValueError) as e:
             failures.append(f"{spec}: {e}")
@@ -352,6 +458,24 @@ def main():
         # past what the slot holds is a near-BiS alternative. It has to be settled first:
         # a near-BiS row must not count toward how long an item lasted, or a third-choice
         # sword in P4 would look like the item surviving P4.
+        def qualifier(phase, item_id, rank):
+            """The variant this row carries, override first.
+
+            ONE function, used by all three places that ask - slot capacity, cond_items,
+            and the written entry. They used to call variant_for() separately, which was
+            fine until an override could change the answer: the first version of this left
+            capacity on the raw rank, so a row given a qualifier by hand still counted
+            against the plain group and stayed marked near. The override could set the
+            variant and not the ring, which is worse than not having it.
+            """
+            over = item_map.get(f"{spec}/{phase}/{item_id}")
+            if over is not None and "variant" in over:
+                return over["variant"], None
+            over = rank_map.get(spec, {}).get(rank)
+            if over is not None and "variant" in over:
+                return over["variant"], None
+            return variant_for(rank)
+
         near_ids = {}
         for ph, rows in per_phase.items():
             filled, near_ids[ph] = {}, set()
@@ -359,13 +483,29 @@ def main():
                 rec = by_id.get(item_id)
                 if not rec:
                     continue
+                # A per-item override settles `near` here rather than at write time, and
+                # that ORDER is the whole of it. It used to be applied to the finished
+                # entry, which left three rows solid when they were asked to be dashed:
+                # freeing a row from blue after `cond_items` was built meant it had never
+                # been eligible to be read as conditional, and forcing a row TO blue left
+                # it still consuming the slot it was being told it had not won.
+                forced = item_map.get(f"{spec}/{ph}/{item_id}", {}).get("near")
+                if forced is not None:
+                    if forced:
+                        near_ids[ph].add(item_id)
+                    continue
                 # An offered alternate is blue already and never claimed the slot, so it
                 # must not consume capacity - otherwise a row the author merely suggested
                 # would push a row the author called best into being an alternative.
                 if alternate:
                     near_ids[ph].add(item_id)
                     continue
-                variant, _ = variant_for(rank)
+                variant, _ = qualifier(ph, item_id, rank)
+                # "below-bis" is a statement about the MARGIN, not about who wins the slot,
+                # so it never competes for one - see UNCONTESTED in check_bis.py, which has
+                # to agree with this or a written file fails its own validator.
+                if variant in UNCONTESTED:
+                    continue
                 key = (rec["slot"], variant or "")
                 filled[key] = filled.get(key, 0) + 1
                 if filled[key] > capacity(rec["slot"]):
@@ -455,7 +595,7 @@ def main():
             for item_id, _, rank, _alt in per_phase[ph]:
                 if item_id in near_ids[ph]:
                     continue
-                variant, _ = variant_for(rank)
+                variant, _ = qualifier(ph, item_id, rank)
                 if conditional(variant):
                     cond_items.add(item_id)
 
@@ -470,7 +610,9 @@ def main():
                 if not rec:
                     dropped.append((spec, phase, item_id, name))
                     continue
-                if name and rec["item"] != name:
+                # A substituted token never matches: the guide named the piece it turns
+                # into. That is the whole point of the swap, not a data error.
+                if name and rec["item"] != name and item_id not in swapped:
                     mismatches.append(
                         f"{spec}: id {item_id} is {rec['item']!r} here, {name!r} on Wowhead")
 
@@ -487,7 +629,7 @@ def main():
                 tier = tier_from(item_id)
                 if tier > 1:
                     entry["bis"] = TIERS[tier]
-                variant, miss = variant_for(rank)
+                variant, miss = qualifier(phase, item_id, rank)
                 if variant:
                     entry["variant"] = variant
                 # Per item, so every phase of a conditional pick agrees. Absent means

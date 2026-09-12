@@ -8793,5 +8793,208 @@
    "Caster",
    "Physical"
   ]
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doomwalker",
+  "item": "Talon of the Tempest",
+  "id": 30723,
+  "wowhead": "https://www.wowhead.com/tbc/item=30723",
+  "slot": "Main-Hand",
+  "type": "Dagger",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "notes": "",
+  "unique": true
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doomwalker",
+  "item": "Barrel-Blade Longrifle",
+  "id": 30724,
+  "wowhead": "https://www.wowhead.com/tbc/item=30724",
+  "slot": "Ranged",
+  "type": "Gun",
+  "roles": [
+   "Physical"
+  ],
+  "notes": ""
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doomwalker",
+  "item": "Archaic Charm of Presence",
+  "id": 30726,
+  "wowhead": "https://www.wowhead.com/tbc/item=30726",
+  "slot": "Neck",
+  "type": "Neck",
+  "roles": [
+   "Caster"
+  ],
+  "notes": ""
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doomwalker",
+  "item": "Gilded Trousers of Benediction",
+  "id": 30727,
+  "wowhead": "https://www.wowhead.com/tbc/item=30727",
+  "slot": "Legs",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "notes": ""
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doomwalker",
+  "item": "Fathom-Helm of the Deeps",
+  "id": 30728,
+  "wowhead": "https://www.wowhead.com/tbc/item=30728",
+  "slot": "Head",
+  "type": "Mail",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "notes": ""
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doomwalker",
+  "item": "Black-Iron Battlecloak",
+  "id": 30729,
+  "wowhead": "https://www.wowhead.com/tbc/item=30729",
+  "slot": "Back",
+  "type": "Cloak",
+  "roles": [
+   "Physical"
+  ],
+  "notes": ""
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doomwalker",
+  "item": "Terrorweave Tunic",
+  "id": 30730,
+  "wowhead": "https://www.wowhead.com/tbc/item=30730",
+  "slot": "Chest",
+  "type": "Leather",
+  "roles": [
+   "Physical"
+  ],
+  "notes": ""
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doom Lord Kazzak",
+  "item": "Hope Ender",
+  "id": 30733,
+  "wowhead": "https://www.wowhead.com/tbc/item=30733",
+  "slot": "One-Hand",
+  "type": "Sword",
+  "roles": [
+   "Physical"
+  ],
+  "notes": ""
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doom Lord Kazzak",
+  "item": "Leggings of the Seventh Circle",
+  "id": 30734,
+  "wowhead": "https://www.wowhead.com/tbc/item=30734",
+  "slot": "Legs",
+  "type": "Cloth",
+  "roles": [
+   "Caster"
+  ],
+  "notes": ""
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doom Lord Kazzak",
+  "item": "Ring of Flowing Light",
+  "id": 30736,
+  "wowhead": "https://www.wowhead.com/tbc/item=30736",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "notes": "",
+  "unique": true
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doom Lord Kazzak",
+  "item": "Gold-Leaf Wildboots",
+  "id": 30737,
+  "wowhead": "https://www.wowhead.com/tbc/item=30737",
+  "slot": "Feet",
+  "type": "Leather",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "notes": ""
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doom Lord Kazzak",
+  "item": "Ring of Reciprocity",
+  "id": 30738,
+  "wowhead": "https://www.wowhead.com/tbc/item=30738",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Physical"
+  ],
+  "notes": "",
+  "unique": true
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doom Lord Kazzak",
+  "item": "Scaled Greaves of the Marksman",
+  "id": 30739,
+  "wowhead": "https://www.wowhead.com/tbc/item=30739",
+  "slot": "Legs",
+  "type": "Mail",
+  "roles": [
+   "Physical"
+  ],
+  "notes": ""
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doom Lord Kazzak",
+  "item": "Ripfiend Shoulderplates",
+  "id": 30740,
+  "wowhead": "https://www.wowhead.com/tbc/item=30740",
+  "slot": "Shoulder",
+  "type": "Plate",
+  "roles": [
+   "Physical"
+  ],
+  "notes": ""
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doom Lord Kazzak",
+  "item": "Topaz-Studded Battlegrips",
+  "id": 30741,
+  "wowhead": "https://www.wowhead.com/tbc/item=30741",
+  "slot": "Hands",
+  "type": "Plate",
+  "roles": [
+   "Tank"
+  ],
+  "notes": ""
  }
 ]

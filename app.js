@@ -55,6 +55,12 @@
     "Magtheridon's Lair": [
       "Magtheridon"
     ],
+    /* No kill order to speak of - two bosses standing in two different zones, which is
+       the point of them. Listed largest-first the way the raids are. */
+    "World Bosses": [
+      "Doomwalker",
+      "Doom Lord Kazzak"
+    ],
     "Serpentshrine Cavern": [
       "Trash",
       "Hydross the Unstable",
@@ -125,7 +131,12 @@
      chips at once was a wall, so nothing below a phase is shown until one is
      picked, and nothing below a zone until a zone is. */
   var PHASES = [
-    { id: "P1", label: "Phase 1", zones: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair"] },
+    /* World Bosses sits with Phase 1 because Doomwalker and Doom Lord Kazzak were there
+       from launch. It is a zone in the same sense Crafted is - a source of loot rather
+       than an instance - which is why it has no Encounter Journal art: the two of them
+       stand in Shadowmoon Valley and Hellfire Peninsula, not inside a raid. */
+    { id: "P1", label: "Phase 1",
+      zones: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair", "World Bosses"] },
     { id: "P2", label: "Phase 2",
       zones: ["Serpentshrine Cavern", "Tempest Keep", "Crafted (Nether Vortex)"] },
     { id: "P3", label: "Phase 3",
@@ -266,7 +277,16 @@
     "Crafted (Heart of Darkness)": ICON + "spell_shadow_demonictactics.jpg",
     "Crafted (Sunmote)": ICON + "spell_nature_elementalshields.jpg",
     "Zul'Aman": JOURNAL + "daakara.png",
-    "Sunwell Plateau": JOURNAL + "kiljaeden.png"
+    "Sunwell Plateau": JOURNAL + "kiljaeden.png",
+    /* THE FEL REAVER'S portrait, standing in for Doomwalker. The Encounter Journal has
+       nothing for either world boss - they never stood in an instance, and every
+       ui-ej-boss-doomwalker slug is a 404 - but Doomwalker is the same kind of fel
+       construct and Wowhead does have art for the Fel Reaver.
+
+       It matters that this is journal art rather than an item icon: at 128x64 it frames
+       exactly like every other zone tile, where a square icon has to be letterboxed by
+       .chip--emblem and reads as a different kind of thing. */
+    "World Bosses": JOURNAL + "felreaver.png"
   };
 
   /* Slots as the character sheet presents them: every weapon slot is one "Weapon" entry.
@@ -1915,6 +1935,12 @@
          icon-only branch uses: replace the img with the name, rather than just
          hiding it. In the rail the name is hidden, so hiding the image too would
          leave an empty cell you could still click. */
+      /* No art at all is a different case from art that fails to load, and the boss rail
+         is where it bites: the rail hides .chip-label so a portrait can carry the name, so
+         a chip with neither renders as an empty clickable box. Four encounters have no
+         journal portrait - Basement, Chess Event, and now Doomwalker and Doom Lord Kazzak
+         - and the first two had been invisible in the rail since it was built. */
+      if (!icon) b.classList.add("chip--noart");
       b.innerHTML =
         (icon ? '<img class="chip-icon" src="' + escapeHtml(icon) +
                 '" alt="" onerror="this.replaceWith(document.createTextNode(this.parentNode.dataset.tip || \'\'))">' : "") +
@@ -2008,7 +2034,14 @@
        Having no BOSS_ORDER entry is the test, not the name - the same rule the phase
        tiles use to decide which zones get an art strip - so a future crafted-style
        zone gets this for free. */
-    var cls = "chip--zone" + (BOSS_ORDER[z] ? "" : " chip--emblem");
+    /* Whether the ART is a landscape journal portrait or a square item icon, which is
+       not the same question as whether the zone has bosses. It used to test BOSS_ORDER,
+       on the assumption that anything with bosses has journal art - World Bosses broke
+       that: Doomwalker and Doom Lord Kazzak never stood in an instance, so the Encounter
+       Journal has nothing for them, and the square icon standing in was being cropped to
+       a middle band by object-fit: cover. Same test the boss rail already uses. */
+    var cls = "chip--zone" +
+      ((ZONE_ICON[z] || "").indexOf(JOURNAL) === 0 ? "" : " chip--emblem");
     return artChip({
       cls: cls,
       active: active,
@@ -2904,6 +2937,29 @@
      actually wrote, which is what verify/dump_bis_raw.py audits against. */
   var SILENT_VARIANTS = { "overall": true };
 
+  /* Qualifiers whose stored slug does not read as English once a capital is put on it.
+     Everything else goes through charAt(0).toUpperCase() below and comes out fine -
+     "Hit", "Threat", "Contested" - so this holds only the exceptions, the way
+     SILENT_VARIANTS above holds only the one qualifier worth suppressing.
+
+     The slug is what bis.json stores and check_bis.py's closed vocabulary admits, and it
+     stays short and hyphenated for that; this is the sentence a reader gets. Keeping the
+     two separate is why a rewording is a one-line change here and not a data migration. */
+  var VARIANT_LABEL = {
+    "below-bis": "Slightly below BiS",
+    "non-worldboss": "No world boss drop",
+    "4pc": "4-piece bonus",
+    /* These two are not new, and both read as a dangling word before this map existed -
+       "Expansion BiS - Unless" and "- Individually" are half a sentence each. The meanings
+       are the ones fetch_bis.py records: "unless" comes from "Best without X" / "Best until
+       X", and "individually" from "BiS Individually", which is the guide saying best when
+       the piece is judged on its own rather than as part of the set it belongs to. */
+    "unless": "Depends on your other gear",
+    "individually": "Without the set bonus",
+    "mainhand": "Main hand",
+    "offhand": "Off hand"
+  };
+
   /* Flattened from data/bis.json: "P3|ProtWarr|32375" -> { longevity, variant }.
 
      The phase is part of the key because bis.json holds all five, and a spec can list
@@ -3161,7 +3217,7 @@
        qualifier to name, because `conditional` is a property of the item and those
        particular listings are the plain one: they show a broken ring and an unadorned
        label, which is the ring carrying it alone. */
-    var shown = SILENT_VARIANTS[variant] ? "" : variant;
+    var shown = SILENT_VARIANTS[variant] ? "" : (VARIANT_LABEL[variant] || variant);
     var bisLine = lasts
       ? lasts.label + (shown ? " - " + shown.charAt(0).toUpperCase() + shown.slice(1) : "")
       : "";

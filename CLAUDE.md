@@ -505,6 +505,73 @@ is a Feral druid, which fits — it is how the druid guides separate a piece fro
 Warglaives of Azzinoth and nothing else, where it describes what you equip rather than when
 the call applies.
 
+**Tier pieces are swapped for their TOKEN, Sep 2026 — `verify/tier-tokens.json`.** Tier armour
+is not loot: it is what a token turns into, so this dataset lists the **54 tokens** and not the
+200-odd pieces. The guides rank the **pieces**, so **492 BiS calls** were landing on items the
+site has no row for, and **all 54 tokens showed a blank priority column and no ring at all** —
+recorded in §7 as expected noise, when it was really 558 missing rings.
+
+*"Warbringer Breastplate is BiS for Arms"* and *"the Chestguard of the Fallen Defender is what
+an Arms warrior wants"* are the same statement; only the second names a row that exists here.
+
+**A token is uniquely identified by (tier, slot, class)** — tier from the set name, slot from
+the piece's own item data, class from the guide naming it. 232 of 234 candidates resolved to
+exactly one token; the two that did not are a gun and a libram that merely contain a set name,
+caught by the slot check rather than by eye.
+
+**The set table was verified, not remembered:** all 27 tier sets checked against which classes
+actually name them across 549 guide rows, **zero disagreements**.
+
+**The swap happens before anything counts the row**, so slot capacity and longevity both see
+the token — sound because a token occupies the piece's own slot. It is why Arms' P1 chest reads
+*Terrorweave Tunic* first and the T4 token as near-BiS behind it, which is exactly what that
+guide's blurb says in words.
+
+**A substituted token never matches its guide name**, since the guide named the piece. The
+mismatch report skips them, or all 558 would be reported as data errors by design.
+
+**The same file carries PER-ROW overrides, keyed as the review page prints an id** —
+`"Arms/P1/28730"`. The rank map reaches a wording; this reaches a row, and it exists because
+**plenty of conditions live only in the author's prose**. Arms' Phase 1 ring slot forced it:
+four rings all ranked plain `Best`, with the blurb saying *"your second ring will depend on
+your hit rating … Mithril Band of the Unscarred and Ring of Arathi Warlords will be your go-to
+if you are over the hit cap"*. Overriding `Best` for Arms would have hit every row in that
+guide.
+
+**`qualifier()` is one function because the first version was not.** Three places ask what
+qualifier a row carries — slot capacity, `cond_items`, and the written entry — and they each
+called `variant_for()` separately. That was harmless until an override could change the
+answer: capacity still read the raw rank, so a row given a qualifier by hand still counted
+against the plain group and stayed marked `near`. The override set the variant and not the
+ring, which is worse than not having the override at all.
+
+**`verify/rank-map.json` is where an author's wording gets overruled.** Keyed on **(spec,
+exact rank string)** → `{ bis, near, variant }`, consulted **before** the rules, which stay
+as the default — so an unlisted wording behaves exactly as it does today and an **empty file
+changes nothing**, proved by regenerating `bis.json` byte-identically. Keyed on spec rather
+than guide url because that is what every other data file here keys on and it survives
+Wowhead reorganising urls; where three specs share one author the identical entries are
+honest rather than redundant.
+
+It started empty on purpose, and the first entry earned its way in: **`Game Best`**, which
+the warrior guides write for Dragonspine Trophy in P1 and nowhere else in the scrape.
+`RANKED_BIS` tests for "best" at the START of the rank, so a claim that puts it last was
+dropped - while the same guides write plain `Best` for the same trophy in P2-P5, where it
+reads as expansion BiS. P1 was the odd one out of its own five.
+
+Two rows, two specs, and the fix is two lines of data rather than a regex that would have
+had to distinguish `Game Best` from `Second Best` and `Near Best`, which lead with a
+qualifier for a reason.
+
+**`scan_rows()` also captures the SLOT HEADING and the author's BLURB**, used by nothing in
+the pipeline and existing solely so a wording can be reviewed. A rank cell cannot be judged
+alone: the feral bear guide ranks Shadowmoon Destroyer's Drape `Threat Alternative`, and the
+only thing that settles whether that means "not BiS" or "BiS for threat" is the sentence
+above the table naming two *other* cloaks as best. `verify/dump_bis_raw.py` records both, and
+the review page groups **by slot** with every row of it shown together — including under
+search, where narrowing a slot to the matching row would remove exactly the context the page
+exists to supply.
+
 **Authors differ, and the line between them is CLAIM versus OFFER, Sep 2026.** Each Wowhead
 spec guide has a different author and they share no vocabulary — **77% of the 627 distinct
 rank strings are used by exactly one spec**. `Hit Alternative` (Arms) and
@@ -673,6 +740,42 @@ exactly what keeps them off the phase tile's art strips. **Only Phase 3 has
 items**: everything else is chips reading `0`, so the shape of the expansion is visible and an
 item has a boss to arrive under. `ZONE_ORDER` is derived from `PHASES`, which keeps
 `bossSortKey()` working without a second list to keep in step.
+
+**`World Bosses` is a zone under Phase 1, Sep 2026** — Doomwalker and Doom Lord Kazzak, who
+were there from launch. It is a zone in the sense `Crafted` is: a **source of loot** rather
+than an instance. 15 items, and the point of adding them is that **90 BiS entries** pointed
+at them and had nowhere to land.
+
+**Its tile wears the FEL REAVER's portrait, standing in for Doomwalker.** The Encounter
+Journal has nothing for either world boss, so every `ui-ej-boss-doomwalker` slug 404s — but
+Doomwalker is the same kind of fel construct and Wowhead does have art for the Fel Reaver.
+It matters that it is journal art rather than an item icon: at 128x64 it frames exactly like
+every other zone tile.
+
+**That also fixed a wrong assumption in the zone tile.** `.chip--emblem` letterboxes a square
+item icon so `object-fit: cover` does not crop it to a middle band, and it was applied by
+testing `BOSS_ORDER[z]` — *"a zone with bosses has journal art"*. World Bosses is the
+counter-example, and its square stand-in icon was being cropped. It now tests the **art url**
+for the journal prefix, which is what the boss rail already did.
+
+Boss attribution came from the **Source column of Wowhead's own BiS guides**
+(`Drop: Doomwalker (World Boss)`) — the same evidence every other zone rests on, not an
+id-range guess. **Five more epics in the same id block are deliberately absent**
+(30722, 30725, 30731, 30732, 30735): no guide ranks them, so nothing states which boss drops
+them, and `verify/world-boss-drops.json` does not guess.
+
+Two things it exposed:
+
+- **`fetch_items.py` was still writing `priority: []` and `unsourced: true`** — fields that
+  left `loot_data.json` when zatar became a list. Nobody had run the tool since, so running
+  it quietly reintroduced two dead fields. `test/smoke.mjs` caught it on the first run.
+- **A boss chip with no portrait rendered as an empty clickable box.** The rail hides
+  `.chip-label` so a portrait can carry the name, and four encounters have no journal art at
+  all — Karazhan's **Basement** and **Chess Event**, plus the two world bosses, who never
+  stood in an instance. The first two had been invisible since the rail was built.
+  `chip()` marks them `.chip--noart` and the rail exempts them, the way it already exempted
+  `All`. They need padding too: a portrait fills the cell edge to edge, which is why the rail
+  has no gaps, so without it the two read as `DoomwalkerDoom Lord Kazzak`.
 
 `Trash` is listed only for the raids that actually drop it — Karazhan, Serpentshrine, Tempest
 Keep, Zul'Aman, Sunwell, and the two Phase 3 raids. Gruul's Lair and Magtheridon's Lair have

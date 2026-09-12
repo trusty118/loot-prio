@@ -1,0 +1,1863 @@
+{
+ "note": "Tier armour is not loot: it is what a token turns into, so this dataset lists the 54 TOKENS and not the 200-odd pieces. Wowhead's guides rank the PIECES, which meant 492 BiS calls landed on items this site has no row for and every token showed a blank priority column. This maps each piece to the token that produces it, so the ring lands on the row that exists.",
+ "how": "Generated, then checked. A token is uniquely identified by (tier, slot, class): tier comes from the set name, slot from the piece's own item data, class from the guide that names it. Every one of the 27 tier sets was verified against which classes actually name it in the guides - 549 rows, zero disagreements - so the set table is confirmed rather than remembered. Two candidates resolved to no token and are absent: Gyro-Balanced Khorium Destroyer and Libram of the Lightbringer, both non-armour items that merely contain a set name.",
+ "regenerate": "The slots come from the item database and the pairs from data/loot_data.json; nothing here is guessed at runtime, which is why it is a reviewed file rather than a lookup fetch_bis.py performs.",
+ "pieces": {
+  "34572": {
+   "token": 34858,
+   "piece": "Thunderheart Footwraps",
+   "tokenItem": "Boots of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Druid"
+  },
+  "34573": {
+   "token": 34858,
+   "piece": "Thunderheart Treads",
+   "tokenItem": "Boots of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Druid"
+  },
+  "34571": {
+   "token": 34858,
+   "piece": "Thunderheart Boots",
+   "tokenItem": "Boots of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Druid"
+  },
+  "34555": {
+   "token": 34855,
+   "piece": "Thunderheart Cord",
+   "tokenItem": "Belt of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Druid"
+  },
+  "34556": {
+   "token": 34855,
+   "piece": "Thunderheart Waistguard",
+   "tokenItem": "Belt of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Druid"
+  },
+  "34554": {
+   "token": 34855,
+   "piece": "Thunderheart Belt",
+   "tokenItem": "Belt of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Druid"
+  },
+  "34446": {
+   "token": 34852,
+   "piece": "Thunderheart Bands",
+   "tokenItem": "Bracers of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Druid"
+  },
+  "34444": {
+   "token": 34852,
+   "piece": "Thunderheart Wristguards",
+   "tokenItem": "Bracers of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Druid"
+  },
+  "34445": {
+   "token": 34852,
+   "piece": "Thunderheart Bracers",
+   "tokenItem": "Bracers of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Druid"
+  },
+  "34570": {
+   "token": 34857,
+   "piece": "Gronnstalker's Boots",
+   "tokenItem": "Boots of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Hunter"
+  },
+  "34549": {
+   "token": 34854,
+   "piece": "Gronnstalker's Belt",
+   "tokenItem": "Belt of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Hunter"
+  },
+  "34443": {
+   "token": 34851,
+   "piece": "Gronnstalker's Bracers",
+   "tokenItem": "Bracers of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Hunter"
+  },
+  "34574": {
+   "token": 34858,
+   "piece": "Boots of the Tempest",
+   "tokenItem": "Boots of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Mage"
+  },
+  "34557": {
+   "token": 34855,
+   "piece": "Belt of the Tempest",
+   "tokenItem": "Belt of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Mage"
+  },
+  "34447": {
+   "token": 34852,
+   "piece": "Bracers of the Tempest",
+   "tokenItem": "Bracers of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Mage"
+  },
+  "34559": {
+   "token": 34856,
+   "piece": "Lightbringer Treads",
+   "tokenItem": "Boots of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Paladin"
+  },
+  "34560": {
+   "token": 34856,
+   "piece": "Lightbringer Stompers",
+   "tokenItem": "Boots of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Paladin"
+  },
+  "34561": {
+   "token": 34856,
+   "piece": "Lightbringer Boots",
+   "tokenItem": "Boots of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Paladin"
+  },
+  "34487": {
+   "token": 34853,
+   "piece": "Lightbringer Belt",
+   "tokenItem": "Belt of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Paladin"
+  },
+  "34488": {
+   "token": 34853,
+   "piece": "Lightbringer Waistguard",
+   "tokenItem": "Belt of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Paladin"
+  },
+  "34485": {
+   "token": 34853,
+   "piece": "Lightbringer Girdle",
+   "tokenItem": "Belt of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Paladin"
+  },
+  "34432": {
+   "token": 34848,
+   "piece": "Lightbringer Bracers",
+   "tokenItem": "Bracers of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Paladin"
+  },
+  "34433": {
+   "token": 34848,
+   "piece": "Lightbringer Wristguards",
+   "tokenItem": "Bracers of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Paladin"
+  },
+  "34431": {
+   "token": 34848,
+   "piece": "Lightbringer Bands",
+   "tokenItem": "Bracers of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Paladin"
+  },
+  "34562": {
+   "token": 34856,
+   "piece": "Boots of Absolution",
+   "tokenItem": "Boots of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Priest"
+  },
+  "34563": {
+   "token": 34856,
+   "piece": "Treads of Absolution",
+   "tokenItem": "Boots of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Priest"
+  },
+  "34527": {
+   "token": 34853,
+   "piece": "Belt of Absolution",
+   "tokenItem": "Belt of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Priest"
+  },
+  "34528": {
+   "token": 34853,
+   "piece": "Cord of Absolution",
+   "tokenItem": "Belt of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Priest"
+  },
+  "34435": {
+   "token": 34848,
+   "piece": "Cuffs of Absolution",
+   "tokenItem": "Bracers of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Priest"
+  },
+  "34434": {
+   "token": 34848,
+   "piece": "Bracers of Absolution",
+   "tokenItem": "Bracers of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Priest"
+  },
+  "34575": {
+   "token": 34858,
+   "piece": "Slayer's Boots",
+   "tokenItem": "Boots of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Rogue"
+  },
+  "34558": {
+   "token": 34855,
+   "piece": "Slayer's Belt",
+   "tokenItem": "Belt of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Rogue"
+  },
+  "34448": {
+   "token": 34852,
+   "piece": "Slayer's Bracers",
+   "tokenItem": "Bracers of the Forgotten Vanquisher",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Rogue"
+  },
+  "34566": {
+   "token": 34857,
+   "piece": "Skyshatter Treads",
+   "tokenItem": "Boots of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Shaman"
+  },
+  "34567": {
+   "token": 34857,
+   "piece": "Skyshatter Greaves",
+   "tokenItem": "Boots of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Shaman"
+  },
+  "34565": {
+   "token": 34857,
+   "piece": "Skyshatter Boots",
+   "tokenItem": "Boots of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Shaman"
+  },
+  "34542": {
+   "token": 34854,
+   "piece": "Skyshatter Cord",
+   "tokenItem": "Belt of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Shaman"
+  },
+  "34545": {
+   "token": 34854,
+   "piece": "Skyshatter Girdle",
+   "tokenItem": "Belt of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Shaman"
+  },
+  "34543": {
+   "token": 34854,
+   "piece": "Skyshatter Belt",
+   "tokenItem": "Belt of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Shaman"
+  },
+  "34437": {
+   "token": 34851,
+   "piece": "Skyshatter Bands",
+   "tokenItem": "Bracers of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Shaman"
+  },
+  "34439": {
+   "token": 34851,
+   "piece": "Skyshatter Wristguards",
+   "tokenItem": "Bracers of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Shaman"
+  },
+  "34438": {
+   "token": 34851,
+   "piece": "Skyshatter Bracers",
+   "tokenItem": "Bracers of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Shaman"
+  },
+  "34564": {
+   "token": 34856,
+   "piece": "Boots of the Malefic",
+   "tokenItem": "Boots of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Warlock"
+  },
+  "34541": {
+   "token": 34853,
+   "piece": "Belt of the Malefic",
+   "tokenItem": "Belt of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Warlock"
+  },
+  "34436": {
+   "token": 34848,
+   "piece": "Bracers of the Malefic",
+   "tokenItem": "Bracers of the Forgotten Conqueror",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Warlock"
+  },
+  "34569": {
+   "token": 34857,
+   "piece": "Onslaught Treads",
+   "tokenItem": "Boots of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Warrior"
+  },
+  "34568": {
+   "token": 34857,
+   "piece": "Onslaught Boots",
+   "tokenItem": "Boots of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Feet",
+   "class": "Warrior"
+  },
+  "34546": {
+   "token": 34854,
+   "piece": "Onslaught Belt",
+   "tokenItem": "Belt of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Warrior"
+  },
+  "34547": {
+   "token": 34854,
+   "piece": "Onslaught Waistguard",
+   "tokenItem": "Belt of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Waist",
+   "class": "Warrior"
+  },
+  "34441": {
+   "token": 34851,
+   "piece": "Onslaught Bracers",
+   "tokenItem": "Bracers of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Warrior"
+  },
+  "34442": {
+   "token": 34851,
+   "piece": "Onslaught Wristguards",
+   "tokenItem": "Bracers of the Forgotten Protector",
+   "tier": "SW",
+   "slot": "Wrist",
+   "class": "Warrior"
+  },
+  "29091": {
+   "token": 29753,
+   "piece": "Chestpiece of Malorne",
+   "tokenItem": "Chestguard of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Chest",
+   "class": "Druid"
+  },
+  "29096": {
+   "token": 29753,
+   "piece": "Breastplate of Malorne",
+   "tokenItem": "Chestguard of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Chest",
+   "class": "Druid"
+  },
+  "29087": {
+   "token": 29753,
+   "piece": "Chestguard of Malorne",
+   "tokenItem": "Chestguard of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Chest",
+   "class": "Druid"
+  },
+  "29097": {
+   "token": 29758,
+   "piece": "Gauntlets of Malorne",
+   "tokenItem": "Gloves of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Hands",
+   "class": "Druid"
+  },
+  "29093": {
+   "token": 29761,
+   "piece": "Antlers of Malorne",
+   "tokenItem": "Helm of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Druid"
+  },
+  "29098": {
+   "token": 29761,
+   "piece": "Stag-Helm of Malorne",
+   "tokenItem": "Helm of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Druid"
+  },
+  "29086": {
+   "token": 29761,
+   "piece": "Crown of Malorne",
+   "tokenItem": "Helm of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Druid"
+  },
+  "29099": {
+   "token": 29767,
+   "piece": "Greaves of Malorne",
+   "tokenItem": "Leggings of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Legs",
+   "class": "Druid"
+  },
+  "29095": {
+   "token": 29764,
+   "piece": "Pauldrons of Malorne",
+   "tokenItem": "Pauldrons of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Shoulder",
+   "class": "Druid"
+  },
+  "29100": {
+   "token": 29764,
+   "piece": "Mantle of Malorne",
+   "tokenItem": "Pauldrons of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Shoulder",
+   "class": "Druid"
+  },
+  "29089": {
+   "token": 29764,
+   "piece": "Shoulderguards of Malorne",
+   "tokenItem": "Pauldrons of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Shoulder",
+   "class": "Druid"
+  },
+  "29080": {
+   "token": 29756,
+   "piece": "Gloves of the Aldor",
+   "tokenItem": "Gloves of the Fallen Hero",
+   "tier": "T4",
+   "slot": "Hands",
+   "class": "Mage"
+  },
+  "29076": {
+   "token": 29759,
+   "piece": "Collar of the Aldor",
+   "tokenItem": "Helm of the Fallen Hero",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Mage"
+  },
+  "29078": {
+   "token": 29765,
+   "piece": "Legwraps of the Aldor",
+   "tokenItem": "Leggings of the Fallen Hero",
+   "tier": "T4",
+   "slot": "Legs",
+   "class": "Mage"
+  },
+  "29079": {
+   "token": 29762,
+   "piece": "Pauldrons of the Aldor",
+   "tokenItem": "Pauldrons of the Fallen Hero",
+   "tier": "T4",
+   "slot": "Shoulder",
+   "class": "Mage"
+  },
+  "29062": {
+   "token": 29754,
+   "piece": "Justicar Chestpiece",
+   "tokenItem": "Chestguard of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Chest",
+   "class": "Paladin"
+  },
+  "29066": {
+   "token": 29754,
+   "piece": "Justicar Chestguard",
+   "tokenItem": "Chestguard of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Chest",
+   "class": "Paladin"
+  },
+  "29065": {
+   "token": 29757,
+   "piece": "Justicar Gloves",
+   "tokenItem": "Gloves of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Hands",
+   "class": "Paladin"
+  },
+  "29067": {
+   "token": 29757,
+   "piece": "Justicar Handguards",
+   "tokenItem": "Gloves of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Hands",
+   "class": "Paladin"
+  },
+  "29061": {
+   "token": 29760,
+   "piece": "Justicar Diadem",
+   "tokenItem": "Helm of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Paladin"
+  },
+  "29068": {
+   "token": 29760,
+   "piece": "Justicar Faceguard",
+   "tokenItem": "Helm of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Paladin"
+  },
+  "29073": {
+   "token": 29760,
+   "piece": "Justicar Crown",
+   "tokenItem": "Helm of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Paladin"
+  },
+  "29069": {
+   "token": 29766,
+   "piece": "Justicar Legguards",
+   "tokenItem": "Leggings of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Legs",
+   "class": "Paladin"
+  },
+  "29064": {
+   "token": 29763,
+   "piece": "Justicar Pauldrons",
+   "tokenItem": "Pauldrons of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Shoulder",
+   "class": "Paladin"
+  },
+  "29070": {
+   "token": 29763,
+   "piece": "Justicar Shoulderguards",
+   "tokenItem": "Pauldrons of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Shoulder",
+   "class": "Paladin"
+  },
+  "29075": {
+   "token": 29763,
+   "piece": "Justicar Shoulderplates",
+   "tokenItem": "Pauldrons of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Shoulder",
+   "class": "Paladin"
+  },
+  "29050": {
+   "token": 29753,
+   "piece": "Robes of the Incarnate",
+   "tokenItem": "Chestguard of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Chest",
+   "class": "Priest"
+  },
+  "29049": {
+   "token": 29761,
+   "piece": "Light-Collar of the Incarnate",
+   "tokenItem": "Helm of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Priest"
+  },
+  "29054": {
+   "token": 29764,
+   "piece": "Light-Mantle of the Incarnate",
+   "tokenItem": "Pauldrons of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Shoulder",
+   "class": "Priest"
+  },
+  "29045": {
+   "token": 29754,
+   "piece": "Netherblade Chestpiece",
+   "tokenItem": "Chestguard of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Chest",
+   "class": "Rogue"
+  },
+  "29044": {
+   "token": 29760,
+   "piece": "Netherblade Facemask",
+   "tokenItem": "Helm of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Rogue"
+  },
+  "29046": {
+   "token": 29766,
+   "piece": "Netherblade Breeches",
+   "tokenItem": "Leggings of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Legs",
+   "class": "Rogue"
+  },
+  "29038": {
+   "token": 29754,
+   "piece": "Cyclone Breastplate",
+   "tokenItem": "Chestguard of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Chest",
+   "class": "Shaman"
+  },
+  "29029": {
+   "token": 29754,
+   "piece": "Cyclone Hauberk",
+   "tokenItem": "Chestguard of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Chest",
+   "class": "Shaman"
+  },
+  "29039": {
+   "token": 29757,
+   "piece": "Cyclone Gauntlets",
+   "tokenItem": "Gloves of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Hands",
+   "class": "Shaman"
+  },
+  "29035": {
+   "token": 29760,
+   "piece": "Cyclone Faceguard",
+   "tokenItem": "Helm of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Shaman"
+  },
+  "29040": {
+   "token": 29760,
+   "piece": "Cyclone Helm",
+   "tokenItem": "Helm of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Shaman"
+  },
+  "29028": {
+   "token": 29760,
+   "piece": "Cyclone Headdress",
+   "tokenItem": "Helm of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Shaman"
+  },
+  "29037": {
+   "token": 29763,
+   "piece": "Cyclone Shoulderguards",
+   "tokenItem": "Pauldrons of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Shoulder",
+   "class": "Shaman"
+  },
+  "29043": {
+   "token": 29763,
+   "piece": "Cyclone Shoulderplates",
+   "tokenItem": "Pauldrons of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Shoulder",
+   "class": "Shaman"
+  },
+  "29031": {
+   "token": 29763,
+   "piece": "Cyclone Shoulderpads",
+   "tokenItem": "Pauldrons of the Fallen Champion",
+   "tier": "T4",
+   "slot": "Shoulder",
+   "class": "Shaman"
+  },
+  "28964": {
+   "token": 29755,
+   "piece": "Voidheart Robe",
+   "tokenItem": "Chestguard of the Fallen Hero",
+   "tier": "T4",
+   "slot": "Chest",
+   "class": "Warlock"
+  },
+  "28968": {
+   "token": 29756,
+   "piece": "Voidheart Gloves",
+   "tokenItem": "Gloves of the Fallen Hero",
+   "tier": "T4",
+   "slot": "Hands",
+   "class": "Warlock"
+  },
+  "28963": {
+   "token": 29759,
+   "piece": "Voidheart Crown",
+   "tokenItem": "Helm of the Fallen Hero",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Warlock"
+  },
+  "28967": {
+   "token": 29762,
+   "piece": "Voidheart Mantle",
+   "tokenItem": "Pauldrons of the Fallen Hero",
+   "tier": "T4",
+   "slot": "Shoulder",
+   "class": "Warlock"
+  },
+  "29019": {
+   "token": 29753,
+   "piece": "Warbringer Breastplate",
+   "tokenItem": "Chestguard of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Chest",
+   "class": "Warrior"
+  },
+  "29012": {
+   "token": 29753,
+   "piece": "Warbringer Chestguard",
+   "tokenItem": "Chestguard of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Chest",
+   "class": "Warrior"
+  },
+  "29021": {
+   "token": 29761,
+   "piece": "Warbringer Battle-Helm",
+   "tokenItem": "Helm of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Warrior"
+  },
+  "29011": {
+   "token": 29761,
+   "piece": "Warbringer Greathelm",
+   "tokenItem": "Helm of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Head",
+   "class": "Warrior"
+  },
+  "29023": {
+   "token": 29764,
+   "piece": "Warbringer Shoulderplates",
+   "tokenItem": "Pauldrons of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Shoulder",
+   "class": "Warrior"
+  },
+  "29016": {
+   "token": 29764,
+   "piece": "Warbringer Shoulderguards",
+   "tokenItem": "Pauldrons of the Fallen Defender",
+   "tier": "T4",
+   "slot": "Shoulder",
+   "class": "Warrior"
+  },
+  "30231": {
+   "token": 30237,
+   "piece": "Nordrassil Chestpiece",
+   "tokenItem": "Chestguard of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Chest",
+   "class": "Druid"
+  },
+  "30222": {
+   "token": 30237,
+   "piece": "Nordrassil Chestplate",
+   "tokenItem": "Chestguard of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Chest",
+   "class": "Druid"
+  },
+  "30216": {
+   "token": 30237,
+   "piece": "Nordrassil Chestguard",
+   "tokenItem": "Chestguard of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Chest",
+   "class": "Druid"
+  },
+  "30232": {
+   "token": 30240,
+   "piece": "Nordrassil Gauntlets",
+   "tokenItem": "Gloves of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Hands",
+   "class": "Druid"
+  },
+  "30223": {
+   "token": 30240,
+   "piece": "Nordrassil Handgrips",
+   "tokenItem": "Gloves of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Hands",
+   "class": "Druid"
+  },
+  "30233": {
+   "token": 30243,
+   "piece": "Nordrassil Headpiece",
+   "tokenItem": "Helm of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Druid"
+  },
+  "30228": {
+   "token": 30243,
+   "piece": "Nordrassil Headdress",
+   "tokenItem": "Helm of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Druid"
+  },
+  "30219": {
+   "token": 30243,
+   "piece": "Nordrassil Headguard",
+   "tokenItem": "Helm of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Druid"
+  },
+  "30229": {
+   "token": 30246,
+   "piece": "Nordrassil Feral-Kilt",
+   "tokenItem": "Leggings of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Legs",
+   "class": "Druid"
+  },
+  "30235": {
+   "token": 30249,
+   "piece": "Nordrassil Wrath-Mantle",
+   "tokenItem": "Pauldrons of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Shoulder",
+   "class": "Druid"
+  },
+  "30230": {
+   "token": 30249,
+   "piece": "Nordrassil Feral-Mantle",
+   "tokenItem": "Pauldrons of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Shoulder",
+   "class": "Druid"
+  },
+  "30221": {
+   "token": 30249,
+   "piece": "Nordrassil Life-Mantle",
+   "tokenItem": "Pauldrons of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Shoulder",
+   "class": "Druid"
+  },
+  "30139": {
+   "token": 30238,
+   "piece": "Rift Stalker Hauberk",
+   "tokenItem": "Chestguard of the Vanquished Hero",
+   "tier": "T5",
+   "slot": "Chest",
+   "class": "Hunter"
+  },
+  "30140": {
+   "token": 30241,
+   "piece": "Rift Stalker Gauntlets",
+   "tokenItem": "Gloves of the Vanquished Hero",
+   "tier": "T5",
+   "slot": "Hands",
+   "class": "Hunter"
+  },
+  "30141": {
+   "token": 30244,
+   "piece": "Rift Stalker Helm",
+   "tokenItem": "Helm of the Vanquished Hero",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Hunter"
+  },
+  "30142": {
+   "token": 30247,
+   "piece": "Rift Stalker Leggings",
+   "tokenItem": "Leggings of the Vanquished Hero",
+   "tier": "T5",
+   "slot": "Legs",
+   "class": "Hunter"
+  },
+  "30143": {
+   "token": 30250,
+   "piece": "Rift Stalker Mantle",
+   "tokenItem": "Pauldrons of the Vanquished Hero",
+   "tier": "T5",
+   "slot": "Shoulder",
+   "class": "Hunter"
+  },
+  "30196": {
+   "token": 30238,
+   "piece": "Robes of Tirisfal",
+   "tokenItem": "Chestguard of the Vanquished Hero",
+   "tier": "T5",
+   "slot": "Chest",
+   "class": "Mage"
+  },
+  "30205": {
+   "token": 30241,
+   "piece": "Gloves of Tirisfal",
+   "tokenItem": "Gloves of the Vanquished Hero",
+   "tier": "T5",
+   "slot": "Hands",
+   "class": "Mage"
+  },
+  "30206": {
+   "token": 30244,
+   "piece": "Cowl of Tirisfal",
+   "tokenItem": "Helm of the Vanquished Hero",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Mage"
+  },
+  "30207": {
+   "token": 30247,
+   "piece": "Leggings of Tirisfal",
+   "tokenItem": "Leggings of the Vanquished Hero",
+   "tier": "T5",
+   "slot": "Legs",
+   "class": "Mage"
+  },
+  "30210": {
+   "token": 30250,
+   "piece": "Mantle of Tirisfal",
+   "tokenItem": "Pauldrons of the Vanquished Hero",
+   "tier": "T5",
+   "slot": "Shoulder",
+   "class": "Mage"
+  },
+  "30134": {
+   "token": 30236,
+   "piece": "Crystalforge Chestpiece",
+   "tokenItem": "Chestguard of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Chest",
+   "class": "Paladin"
+  },
+  "30129": {
+   "token": 30236,
+   "piece": "Crystalforge Breastplate",
+   "tokenItem": "Chestguard of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Chest",
+   "class": "Paladin"
+  },
+  "30124": {
+   "token": 30239,
+   "piece": "Crystalforge Handguards",
+   "tokenItem": "Gloves of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Hands",
+   "class": "Paladin"
+  },
+  "30136": {
+   "token": 30242,
+   "piece": "Crystalforge Greathelm",
+   "tokenItem": "Helm of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Paladin"
+  },
+  "30125": {
+   "token": 30242,
+   "piece": "Crystalforge Faceguard",
+   "tokenItem": "Helm of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Paladin"
+  },
+  "30131": {
+   "token": 30242,
+   "piece": "Crystalforge War-Helm",
+   "tokenItem": "Helm of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Paladin"
+  },
+  "30126": {
+   "token": 30245,
+   "piece": "Crystalforge Legguards",
+   "tokenItem": "Leggings of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Legs",
+   "class": "Paladin"
+  },
+  "30132": {
+   "token": 30245,
+   "piece": "Crystalforge Greaves",
+   "tokenItem": "Leggings of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Legs",
+   "class": "Paladin"
+  },
+  "30138": {
+   "token": 30248,
+   "piece": "Crystalforge Pauldrons",
+   "tokenItem": "Pauldrons of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Shoulder",
+   "class": "Paladin"
+  },
+  "30150": {
+   "token": 30237,
+   "piece": "Vestments of the Avatar",
+   "tokenItem": "Chestguard of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Chest",
+   "class": "Priest"
+  },
+  "30151": {
+   "token": 30240,
+   "piece": "Gloves of the Avatar",
+   "tokenItem": "Gloves of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Hands",
+   "class": "Priest"
+  },
+  "30152": {
+   "token": 30243,
+   "piece": "Cowl of the Avatar",
+   "tokenItem": "Helm of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Priest"
+  },
+  "30161": {
+   "token": 30243,
+   "piece": "Hood of the Avatar",
+   "tokenItem": "Helm of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Priest"
+  },
+  "30153": {
+   "token": 30246,
+   "piece": "Breeches of the Avatar",
+   "tokenItem": "Leggings of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Legs",
+   "class": "Priest"
+  },
+  "30162": {
+   "token": 30246,
+   "piece": "Leggings of the Avatar",
+   "tokenItem": "Leggings of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Legs",
+   "class": "Priest"
+  },
+  "30154": {
+   "token": 30249,
+   "piece": "Mantle of the Avatar",
+   "tokenItem": "Pauldrons of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Shoulder",
+   "class": "Priest"
+  },
+  "30163": {
+   "token": 30249,
+   "piece": "Wings of the Avatar",
+   "tokenItem": "Pauldrons of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Shoulder",
+   "class": "Priest"
+  },
+  "30144": {
+   "token": 30236,
+   "piece": "Deathmantle Chestguard",
+   "tokenItem": "Chestguard of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Chest",
+   "class": "Rogue"
+  },
+  "30145": {
+   "token": 30239,
+   "piece": "Deathmantle Handguards",
+   "tokenItem": "Gloves of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Hands",
+   "class": "Rogue"
+  },
+  "30146": {
+   "token": 30242,
+   "piece": "Deathmantle Helm",
+   "tokenItem": "Helm of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Rogue"
+  },
+  "30148": {
+   "token": 30245,
+   "piece": "Deathmantle Legguards",
+   "tokenItem": "Leggings of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Legs",
+   "class": "Rogue"
+  },
+  "30149": {
+   "token": 30248,
+   "piece": "Deathmantle Shoulderpads",
+   "tokenItem": "Pauldrons of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Shoulder",
+   "class": "Rogue"
+  },
+  "30169": {
+   "token": 30236,
+   "piece": "Cataclysm Chestpiece",
+   "tokenItem": "Chestguard of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Chest",
+   "class": "Shaman"
+  },
+  "30185": {
+   "token": 30236,
+   "piece": "Cataclysm Chestplate",
+   "tokenItem": "Chestguard of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Chest",
+   "class": "Shaman"
+  },
+  "30164": {
+   "token": 30236,
+   "piece": "Cataclysm Chestguard",
+   "tokenItem": "Chestguard of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Chest",
+   "class": "Shaman"
+  },
+  "30189": {
+   "token": 30239,
+   "piece": "Cataclysm Gauntlets",
+   "tokenItem": "Gloves of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Hands",
+   "class": "Shaman"
+  },
+  "30171": {
+   "token": 30242,
+   "piece": "Cataclysm Headpiece",
+   "tokenItem": "Helm of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Shaman"
+  },
+  "30190": {
+   "token": 30242,
+   "piece": "Cataclysm Helm",
+   "tokenItem": "Helm of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Shaman"
+  },
+  "30166": {
+   "token": 30242,
+   "piece": "Cataclysm Headguard",
+   "tokenItem": "Helm of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Shaman"
+  },
+  "30172": {
+   "token": 30245,
+   "piece": "Cataclysm Leggings",
+   "tokenItem": "Leggings of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Legs",
+   "class": "Shaman"
+  },
+  "30192": {
+   "token": 30245,
+   "piece": "Cataclysm Legplates",
+   "tokenItem": "Leggings of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Legs",
+   "class": "Shaman"
+  },
+  "30173": {
+   "token": 30248,
+   "piece": "Cataclysm Shoulderpads",
+   "tokenItem": "Pauldrons of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Shoulder",
+   "class": "Shaman"
+  },
+  "30168": {
+   "token": 30248,
+   "piece": "Cataclysm Shoulderguards",
+   "tokenItem": "Pauldrons of the Vanquished Champion",
+   "tier": "T5",
+   "slot": "Shoulder",
+   "class": "Shaman"
+  },
+  "30212": {
+   "token": 30244,
+   "piece": "Hood of the Corruptor",
+   "tokenItem": "Helm of the Vanquished Hero",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Warlock"
+  },
+  "30213": {
+   "token": 30247,
+   "piece": "Leggings of the Corruptor",
+   "tokenItem": "Leggings of the Vanquished Hero",
+   "tier": "T5",
+   "slot": "Legs",
+   "class": "Warlock"
+  },
+  "30118": {
+   "token": 30237,
+   "piece": "Destroyer Breastplate",
+   "tokenItem": "Chestguard of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Chest",
+   "class": "Warrior"
+  },
+  "30113": {
+   "token": 30237,
+   "piece": "Destroyer Chestguard",
+   "tokenItem": "Chestguard of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Chest",
+   "class": "Warrior"
+  },
+  "30119": {
+   "token": 30240,
+   "piece": "Destroyer Gauntlets",
+   "tokenItem": "Gloves of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Hands",
+   "class": "Warrior"
+  },
+  "30120": {
+   "token": 30243,
+   "piece": "Destroyer Battle-Helm",
+   "tokenItem": "Helm of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Warrior"
+  },
+  "30115": {
+   "token": 30243,
+   "piece": "Destroyer Greathelm",
+   "tokenItem": "Helm of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Head",
+   "class": "Warrior"
+  },
+  "30116": {
+   "token": 30246,
+   "piece": "Destroyer Legguards",
+   "tokenItem": "Leggings of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Legs",
+   "class": "Warrior"
+  },
+  "30121": {
+   "token": 30246,
+   "piece": "Destroyer Greaves",
+   "tokenItem": "Leggings of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Legs",
+   "class": "Warrior"
+  },
+  "30122": {
+   "token": 30249,
+   "piece": "Destroyer Shoulderblades",
+   "tokenItem": "Pauldrons of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Shoulder",
+   "class": "Warrior"
+  },
+  "30117": {
+   "token": 30249,
+   "piece": "Destroyer Shoulderguards",
+   "tokenItem": "Pauldrons of the Vanquished Defender",
+   "tier": "T5",
+   "slot": "Shoulder",
+   "class": "Warrior"
+  },
+  "31043": {
+   "token": 31090,
+   "piece": "Thunderheart Vest",
+   "tokenItem": "Chestguard of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Druid"
+  },
+  "31042": {
+   "token": 31090,
+   "piece": "Thunderheart Chestguard",
+   "tokenItem": "Chestguard of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Druid"
+  },
+  "31041": {
+   "token": 31090,
+   "piece": "Thunderheart Tunic",
+   "tokenItem": "Chestguard of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Druid"
+  },
+  "31035": {
+   "token": 31093,
+   "piece": "Thunderheart Handguards",
+   "tokenItem": "Gloves of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Hands",
+   "class": "Druid"
+  },
+  "31034": {
+   "token": 31093,
+   "piece": "Thunderheart Gauntlets",
+   "tokenItem": "Gloves of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Hands",
+   "class": "Druid"
+  },
+  "31040": {
+   "token": 31096,
+   "piece": "Thunderheart Headguard",
+   "tokenItem": "Helm of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Head",
+   "class": "Druid"
+  },
+  "31039": {
+   "token": 31096,
+   "piece": "Thunderheart Cover",
+   "tokenItem": "Helm of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Head",
+   "class": "Druid"
+  },
+  "31037": {
+   "token": 31096,
+   "piece": "Thunderheart Helmet",
+   "tokenItem": "Helm of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Head",
+   "class": "Druid"
+  },
+  "31044": {
+   "token": 31099,
+   "piece": "Thunderheart Leggings",
+   "tokenItem": "Leggings of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Legs",
+   "class": "Druid"
+  },
+  "31049": {
+   "token": 31102,
+   "piece": "Thunderheart Shoulderpads",
+   "tokenItem": "Pauldrons of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Druid"
+  },
+  "31048": {
+   "token": 31102,
+   "piece": "Thunderheart Pauldrons",
+   "tokenItem": "Pauldrons of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Druid"
+  },
+  "31047": {
+   "token": 31102,
+   "piece": "Thunderheart Spaulders",
+   "tokenItem": "Pauldrons of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Druid"
+  },
+  "31004": {
+   "token": 31091,
+   "piece": "Gronnstalker's Chestguard",
+   "tokenItem": "Chestguard of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Hunter"
+  },
+  "31001": {
+   "token": 31094,
+   "piece": "Gronnstalker's Gloves",
+   "tokenItem": "Gloves of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Hands",
+   "class": "Hunter"
+  },
+  "31003": {
+   "token": 31095,
+   "piece": "Gronnstalker's Helmet",
+   "tokenItem": "Helm of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Head",
+   "class": "Hunter"
+  },
+  "31005": {
+   "token": 31100,
+   "piece": "Gronnstalker's Leggings",
+   "tokenItem": "Leggings of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Legs",
+   "class": "Hunter"
+  },
+  "31006": {
+   "token": 31103,
+   "piece": "Gronnstalker's Spaulders",
+   "tokenItem": "Pauldrons of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Hunter"
+  },
+  "31057": {
+   "token": 31090,
+   "piece": "Robes of the Tempest",
+   "tokenItem": "Chestguard of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Mage"
+  },
+  "31055": {
+   "token": 31093,
+   "piece": "Gloves of the Tempest",
+   "tokenItem": "Gloves of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Hands",
+   "class": "Mage"
+  },
+  "31058": {
+   "token": 31099,
+   "piece": "Leggings of the Tempest",
+   "tokenItem": "Leggings of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Legs",
+   "class": "Mage"
+  },
+  "31059": {
+   "token": 31102,
+   "piece": "Mantle of the Tempest",
+   "tokenItem": "Pauldrons of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Mage"
+  },
+  "30992": {
+   "token": 31089,
+   "piece": "Lightbringer Chestpiece",
+   "tokenItem": "Chestguard of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Paladin"
+  },
+  "30991": {
+   "token": 31089,
+   "piece": "Lightbringer Chestguard",
+   "tokenItem": "Chestguard of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Paladin"
+  },
+  "30990": {
+   "token": 31089,
+   "piece": "Lightbringer Breastplate",
+   "tokenItem": "Chestguard of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Paladin"
+  },
+  "30985": {
+   "token": 31092,
+   "piece": "Lightbringer Handguards",
+   "tokenItem": "Gloves of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Hands",
+   "class": "Paladin"
+  },
+  "30988": {
+   "token": 31097,
+   "piece": "Lightbringer Greathelm",
+   "tokenItem": "Helm of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Head",
+   "class": "Paladin"
+  },
+  "30987": {
+   "token": 31097,
+   "piece": "Lightbringer Faceguard",
+   "tokenItem": "Helm of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Head",
+   "class": "Paladin"
+  },
+  "30994": {
+   "token": 31098,
+   "piece": "Lightbringer Leggings",
+   "tokenItem": "Leggings of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Legs",
+   "class": "Paladin"
+  },
+  "30995": {
+   "token": 31098,
+   "piece": "Lightbringer Legguards",
+   "tokenItem": "Leggings of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Legs",
+   "class": "Paladin"
+  },
+  "30996": {
+   "token": 31101,
+   "piece": "Lightbringer Pauldrons",
+   "tokenItem": "Pauldrons of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Paladin"
+  },
+  "30998": {
+   "token": 31101,
+   "piece": "Lightbringer Shoulderguards",
+   "tokenItem": "Pauldrons of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Paladin"
+  },
+  "31066": {
+   "token": 31089,
+   "piece": "Vestments of Absolution",
+   "tokenItem": "Chestguard of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Priest"
+  },
+  "31065": {
+   "token": 31089,
+   "piece": "Shroud of Absolution",
+   "tokenItem": "Chestguard of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Priest"
+  },
+  "31060": {
+   "token": 31092,
+   "piece": "Gloves of Absolution",
+   "tokenItem": "Gloves of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Hands",
+   "class": "Priest"
+  },
+  "31061": {
+   "token": 31092,
+   "piece": "Handguards of Absolution",
+   "tokenItem": "Gloves of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Hands",
+   "class": "Priest"
+  },
+  "31063": {
+   "token": 31097,
+   "piece": "Cowl of Absolution",
+   "tokenItem": "Helm of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Head",
+   "class": "Priest"
+  },
+  "31064": {
+   "token": 31097,
+   "piece": "Hood of Absolution",
+   "tokenItem": "Helm of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Head",
+   "class": "Priest"
+  },
+  "31069": {
+   "token": 31101,
+   "piece": "Mantle of Absolution",
+   "tokenItem": "Pauldrons of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Priest"
+  },
+  "31070": {
+   "token": 31101,
+   "piece": "Shoulderpads of Absolution",
+   "tokenItem": "Pauldrons of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Priest"
+  },
+  "31028": {
+   "token": 31090,
+   "piece": "Slayer's Chestguard",
+   "tokenItem": "Chestguard of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Rogue"
+  },
+  "31026": {
+   "token": 31093,
+   "piece": "Slayer's Handguards",
+   "tokenItem": "Gloves of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Hands",
+   "class": "Rogue"
+  },
+  "31029": {
+   "token": 31099,
+   "piece": "Slayer's Legguards",
+   "tokenItem": "Leggings of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Legs",
+   "class": "Rogue"
+  },
+  "31030": {
+   "token": 31102,
+   "piece": "Slayer's Shoulderpads",
+   "tokenItem": "Pauldrons of the Forgotten Vanquisher",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Rogue"
+  },
+  "31017": {
+   "token": 31091,
+   "piece": "Skyshatter Breastplate",
+   "tokenItem": "Chestguard of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Shaman"
+  },
+  "31016": {
+   "token": 31091,
+   "piece": "Skyshatter Chestguard",
+   "tokenItem": "Chestguard of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Shaman"
+  },
+  "31008": {
+   "token": 31094,
+   "piece": "Skyshatter Gauntlets",
+   "tokenItem": "Gloves of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Hands",
+   "class": "Shaman"
+  },
+  "31014": {
+   "token": 31095,
+   "piece": "Skyshatter Headguard",
+   "tokenItem": "Helm of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Head",
+   "class": "Shaman"
+  },
+  "31012": {
+   "token": 31095,
+   "piece": "Skyshatter Helmet",
+   "tokenItem": "Helm of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Head",
+   "class": "Shaman"
+  },
+  "31020": {
+   "token": 31100,
+   "piece": "Skyshatter Legguards",
+   "tokenItem": "Leggings of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Legs",
+   "class": "Shaman"
+  },
+  "31019": {
+   "token": 31100,
+   "piece": "Skyshatter Leggings",
+   "tokenItem": "Leggings of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Legs",
+   "class": "Shaman"
+  },
+  "31023": {
+   "token": 31103,
+   "piece": "Skyshatter Mantle",
+   "tokenItem": "Pauldrons of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Shaman"
+  },
+  "31024": {
+   "token": 31103,
+   "piece": "Skyshatter Pauldrons",
+   "tokenItem": "Pauldrons of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Shaman"
+  },
+  "31022": {
+   "token": 31103,
+   "piece": "Skyshatter Shoulderpads",
+   "tokenItem": "Pauldrons of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Shaman"
+  },
+  "31052": {
+   "token": 31089,
+   "piece": "Robe of the Malefic",
+   "tokenItem": "Chestguard of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Warlock"
+  },
+  "31050": {
+   "token": 31092,
+   "piece": "Gloves of the Malefic",
+   "tokenItem": "Gloves of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Hands",
+   "class": "Warlock"
+  },
+  "31051": {
+   "token": 31097,
+   "piece": "Hood of the Malefic",
+   "tokenItem": "Helm of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Head",
+   "class": "Warlock"
+  },
+  "31053": {
+   "token": 31098,
+   "piece": "Leggings of the Malefic",
+   "tokenItem": "Leggings of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Legs",
+   "class": "Warlock"
+  },
+  "31054": {
+   "token": 31101,
+   "piece": "Mantle of the Malefic",
+   "tokenItem": "Pauldrons of the Forgotten Conqueror",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Warlock"
+  },
+  "30975": {
+   "token": 31091,
+   "piece": "Onslaught Breastplate",
+   "tokenItem": "Chestguard of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Chest",
+   "class": "Warrior"
+  },
+  "30969": {
+   "token": 31094,
+   "piece": "Onslaught Gauntlets",
+   "tokenItem": "Gloves of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Hands",
+   "class": "Warrior"
+  },
+  "30972": {
+   "token": 31095,
+   "piece": "Onslaught Battle-Helm",
+   "tokenItem": "Helm of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Head",
+   "class": "Warrior"
+  },
+  "30977": {
+   "token": 31100,
+   "piece": "Onslaught Greaves",
+   "tokenItem": "Leggings of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Legs",
+   "class": "Warrior"
+  },
+  "30979": {
+   "token": 31103,
+   "piece": "Onslaught Shoulderblades",
+   "tokenItem": "Pauldrons of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Warrior"
+  },
+  "30980": {
+   "token": 31103,
+   "piece": "Onslaught Shoulderguards",
+   "tokenItem": "Pauldrons of the Forgotten Protector",
+   "tier": "T6",
+   "slot": "Shoulder",
+   "class": "Warrior"
+  }
+ }
+}

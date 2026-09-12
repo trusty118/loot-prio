@@ -23,9 +23,10 @@ it is a judgement, and the guide's BiS lists are the better source. Run this, th
 fetch_bis.py for P4/P5, then re-seed roles from what the specs actually call BiS. The
 stat rule is the fallback for items no spec lists at all.
 
-`priority` is empty and `unsourced` is true on every row: zatar's videos covered Black
-Temple and Mount Hyjal, and never these two raids. That is a fact about the guide, not
-a gap to fill in.
+Rows carry no `priority` and no `unsourced`. They used to, back when zatar's calls were
+the substrate and an unranked row had to say so. Priorities live in data/lists/ now, and
+an item nobody has ranked is simply an item no list holds a key for - which the empty
+priority column already says, of every list equally.
 """
 
 import json
@@ -242,10 +243,13 @@ def main():
                     "wowhead": f"https://www.wowhead.com/tbc/item={item_id}",
                     "slot": slot, "type": typ,
                     "roles": roles_from_stats(doc["tooltip"], typ),
-                    "priority": [],
+                    # No `priority` and no `unsourced`. This wrote both until Sep 2026 and
+                    # was simply never updated when priorities left loot_data.json for
+                    # data/lists/ - a priority is something a LIST says now, and an item
+                    # this file adds is not ranked by anybody. Running the tool was quietly
+                    # reintroducing two dead fields; test/smoke.mjs is what noticed.
                     "notes": ("Also drops from " + " and ".join(also[item_id]) + "."
                               if item_id in also else ""),
-                    "unsourced": True,
                 }
                 if UNIQUE.search(doc["tooltip"]):
                     rec["unique"] = True

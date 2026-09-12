@@ -1,0 +1,88 @@
+{
+ "note": "Per-spec overrides for Wowhead rank wordings. Each guide has a different author and they share no vocabulary - 77% of the 627 distinct rank strings are used by exactly one spec - so a wording that means one thing in one guide can mean the opposite in another. 'Hit Alternative' in the Arms guide is an option; 'Threat Alternative' in the feral bear guide is explicitly not BiS, which only the blurb above that table reveals. The rules in fetch_bis.py handle both correctly today; this file exists for the ones they get wrong. Consulted BEFORE those rules, so an unlisted wording behaves exactly as it does now and an empty file changes nothing. Keyed on spec rather than guide url because that is what every other data file here keys on and it survives Wowhead reorganising urls; where three specs share one author the identical entries are honest rather than redundant. Run verify/dump_bis_raw.py and read the audit page to decide an entry - a rank cell cannot be judged without the rest of its slot.",
+ "fields": "bis: true keeps the row as a BiS claim, false drops it entirely. near: true renders it blue as an alternate. variant: one of check_bis.py's VALID_VARIANTS, or null for none. Omit a field to leave the rules deciding it.",
+ "example": {
+  "Arms": {
+   "Hit Alternative": {
+    "bis": false,
+    "near": true,
+    "variant": "hit"
+   }
+  }
+ },
+ "specs": {
+  "Arms": {
+   "Game Best": {
+    "bis": true
+   }
+  },
+  "Fury": {
+   "Game Best": {
+    "bis": true
+   }
+  }
+ },
+ "decisions": [
+  "Arms/P1/28730 Mithril Band of the Unscarred - 'your second ring will depend on your hit rating ... Mithril Band ... if you are over the hit cap'.",
+  "Arms/P1/28772 Sunfury Bow of the Phoenix - the world boss gun beats it by under 1 DPS, and the blurb says not to compete for it. Best of what a normal raid can get.",
+  "Arms/P2/30122 Destroyer Shoulderblades -> T5 shoulder token. Wanted for the set bonus.",
+  "Arms/P2/30118 Destroyer Breastplate -> T5 chest token. 'preferred for a typical 6% hit set'.",
+  "Arms/P2/30101 Bloodsea Brigand's Vest - the other half of that pair, and the unconditional one.",
+  "Arms/P2/30057 Bracers of Eradication - hit-conditional.",
+  "Arms/P3/32574, 28795, 30861 - wrists. 'all of them perform within 1-5 DPS of each other ... merely a 4 DPS increase over the Phase 2 and Phase 1 BiS'. A hair under the real pick rather than an alternative.",
+  "Arms/P3/32366 Shadowmaster's Boots - 'a close second choice, they are also BiS for most physical damage dealers within your raid, so it would be best not to contest them'.",
+  "Arms/P3/32260 Choker of Endless Nightmares - ranked 'Hit Alternative', which the rules read as an offer; the author means the hit pick.",
+  "Arms/P3/32326 Twisted Blades of Zarak - the P3 raid bow sitting a couple of DPS behind Barrel-Blade Longrifle, which drops from Doomwalker. The same slot, the same competitor and the same condition as Arms/P1/28772 two phases earlier, so it takes the same qualifier."
+ ],
+ "itemsNote": "Per-ROW overrides, keyed exactly as the review page prints an id. The specs map below keys on a rank string, which cannot reach a row whose rank is plain 'Best' - and plenty of conditions live only in the author's prose, not in the rank cell. Same fields.",
+ "items": {
+  "Arms/P1/28730": {
+   "variant": "hit"
+  },
+  "Arms/P1/28772": {
+   "variant": "non-worldboss",
+   "near": false
+  },
+  "Arms/P2/30122": {
+   "variant": "4pc",
+   "near": false
+  },
+  "Arms/P2/30118": {
+   "variant": "hit",
+   "near": false
+  },
+  "Arms/P2/30101": {
+   "variant": null,
+   "near": false
+  },
+  "Arms/P2/30057": {
+   "variant": "hit",
+   "near": false
+  },
+  "Arms/P3/32574": {
+   "variant": "below-bis",
+   "near": false
+  },
+  "Arms/P3/28795": {
+   "variant": "below-bis",
+   "near": false
+  },
+  "Arms/P3/30861": {
+   "variant": "below-bis",
+   "near": false
+  },
+  "Arms/P3/32366": {
+   "variant": "contested",
+   "near": false
+  },
+  "Arms/P3/32260": {
+   "bis": true,
+   "variant": "hit",
+   "near": false
+  },
+  "Arms/P3/32326": {
+   "variant": "non-worldboss",
+   "near": false
+  }
+ }
+}
