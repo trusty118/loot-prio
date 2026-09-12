@@ -36,6 +36,7 @@ SPECS = ROOT / "data" / "specs.json"
 BIS = ROOT / "data" / "bis.json"
 SOURCES = Path(__file__).resolve().parent / "bis-sources.json"
 RANK_MAP = Path(__file__).resolve().parent / "rank-map.json"
+TIER_TOKENS = Path(__file__).resolve().parent / "tier-tokens.json"
 CHANGES = Path(__file__).resolve().parent / "bis-longevity-changes.csv"
 
 WOWSIMS = "https://raw.githubusercontent.com/wowsims/tbc/master/ui/{}/presets.ts"
@@ -210,6 +211,24 @@ def text(html):
     return re.sub(r"\s+", " ", TAGS.sub(" ", html)).replace("&#39;", "'").replace("&amp;", "&").strip()
 
 
+def load_tier_tokens():
+    """Tier piece id -> the token id that produces it.
+
+    Tier armour is not loot - it is what a token turns into - so loot_data.json lists the
+    54 tokens and not the 200-odd pieces. The guides rank the PIECES, so 492 BiS calls were
+    landing on items this site has no row for, and all 54 tokens showed a blank priority
+    column and no ring at all.
+
+    Substituting the token is the honest join: "Warbringer Breastplate is BiS for Arms"
+    and "the Chestguard of the Fallen Defender is what an Arms warrior wants" are the same
+    statement, and only the second names a row that exists here.
+    """
+    if not TIER_TOKENS.exists():
+        return {}
+    doc = json.loads(TIER_TOKENS.read_text(encoding="utf-8"))
+    return {int(k): v["token"] for k, v in doc.get("pieces", {}).items()}
+
+
 def load_rank_map():
     """Per-spec rank overrides, consulted BEFORE the rules below.
 
@@ -359,6 +378,7 @@ def main():
     reg = json.loads(SPECS.read_text(encoding="utf-8"))["specs"]
     sources = json.loads(SOURCES.read_text(encoding="utf-8"))["specs"]
     rank_map = load_rank_map()
+    tier_token = load_tier_tokens()
     current = json.loads(BIS.read_text(encoding="utf-8"))
 
     unknown = [s for s in sources if s not in reg]
@@ -378,6 +398,9 @@ def main():
 
         # --- every phase's guide, so longevity can be observed rather than guessed ---
         per_phase = {}
+        # tokens we substituted in: their guide name is the PIECE, so the name check
+        # below would report every one of them as a mismatch by design
+        swapped = set()
         try:
             for phase in PHASES:
                 urls = source.get(phase.lower())
@@ -387,6 +410,13 @@ def main():
                 for url in urls:
                     rows += bis_rows(GUIDE_CACHE.setdefault(url, get(url)),
                                      f"{spec} {phase}", phase, rank_map.get(spec, {}))
+                # Swap tier pieces for their tokens HERE, before anything counts them, so
+                # slot capacity and longevity both see the row that actually exists. A
+                # token occupies the piece's slot, which is what makes that sound.
+                rows = [(tier_token.get(i, i), n, rk, alt) for i, n, rk, alt in rows]
+                swapped |= {tier_token[i] for i, _n, _r, _a in rows if i in tier_token}
+                swapped |= {tier_token[i] for i in tier_token
+                            if tier_token[i] in {r[0] for r in rows}}
                 per_phase[phase] = rows
         except (urllib.error.URLError, TimeoutError, ValueError) as e:
             failures.append(f"{spec}: {e}")
@@ -515,7 +545,9 @@ def main():
                 if not rec:
                     dropped.append((spec, phase, item_id, name))
                     continue
-                if name and rec["item"] != name:
+                # A substituted token never matches: the guide named the piece it turns
+                # into. That is the whole point of the swap, not a data error.
+                if name and rec["item"] != name and item_id not in swapped:
                     mismatches.append(
                         f"{spec}: id {item_id} is {rec['item']!r} here, {name!r} on Wowhead")
 

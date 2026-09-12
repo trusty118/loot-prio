@@ -505,6 +505,31 @@ is a Feral druid, which fits — it is how the druid guides separate a piece fro
 Warglaives of Azzinoth and nothing else, where it describes what you equip rather than when
 the call applies.
 
+**Tier pieces are swapped for their TOKEN, Sep 2026 — `verify/tier-tokens.json`.** Tier armour
+is not loot: it is what a token turns into, so this dataset lists the **54 tokens** and not the
+200-odd pieces. The guides rank the **pieces**, so **492 BiS calls** were landing on items the
+site has no row for, and **all 54 tokens showed a blank priority column and no ring at all** —
+recorded in §7 as expected noise, when it was really 558 missing rings.
+
+*"Warbringer Breastplate is BiS for Arms"* and *"the Chestguard of the Fallen Defender is what
+an Arms warrior wants"* are the same statement; only the second names a row that exists here.
+
+**A token is uniquely identified by (tier, slot, class)** — tier from the set name, slot from
+the piece's own item data, class from the guide naming it. 232 of 234 candidates resolved to
+exactly one token; the two that did not are a gun and a libram that merely contain a set name,
+caught by the slot check rather than by eye.
+
+**The set table was verified, not remembered:** all 27 tier sets checked against which classes
+actually name them across 549 guide rows, **zero disagreements**.
+
+**The swap happens before anything counts the row**, so slot capacity and longevity both see
+the token — sound because a token occupies the piece's own slot. It is why Arms' P1 chest reads
+*Terrorweave Tunic* first and the T4 token as near-BiS behind it, which is exactly what that
+guide's blurb says in words.
+
+**A substituted token never matches its guide name**, since the guide named the piece. The
+mismatch report skips them, or all 558 would be reported as data errors by design.
+
 **`verify/rank-map.json` is where an author's wording gets overruled.** Keyed on **(spec,
 exact rank string)** → `{ bis, near, variant }`, consulted **before** the rules, which stay
 as the default — so an unlisted wording behaves exactly as it does today and an **empty file
