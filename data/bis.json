@@ -18,6 +18,11 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30735,
+     "item": "Ancient Spellcloak of the Highborne",
+     "near": true
+    },
+    {
      "id": 28797,
      "item": "Brute Cloak of the Ogre-Magi",
      "bis": "multiPhase",
@@ -113,6 +118,11 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30735,
+     "item": "Ancient Spellcloak of the Highborne",
+     "near": true
+    },
+    {
      "id": 28797,
      "item": "Brute Cloak of the Ogre-Magi",
      "bis": "multiPhase",
@@ -141,6 +151,10 @@
      "conditional": true
     },
     {
+     "id": 30725,
+     "item": "Anger-Spark Gloves"
+    },
+    {
      "id": 30247,
      "item": "Leggings of the Vanquished Hero"
     },
@@ -154,6 +168,10 @@
      "item": "Boots of the Shifting Nightmare",
      "variant": "non-tailor",
      "conditional": true
+    },
+    {
+     "id": 30015,
+     "item": "The Sun King's Talisman"
     },
     {
      "id": 30109,
@@ -283,6 +301,11 @@
      "id": 32349,
      "item": "Translucent Spellthread Necklace",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30015,
+     "item": "The Sun King's Talisman",
+     "near": true
     },
     {
      "id": 32527,
@@ -537,6 +560,12 @@
      "near": true
     },
     {
+     "id": 30725,
+     "item": "Anger-Spark Gloves",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 29765,
      "item": "Leggings of the Fallen Hero"
     },
@@ -639,6 +668,11 @@
      "item": "Velvet Boots of the Guardian"
     },
     {
+     "id": 30015,
+     "item": "The Sun King's Talisman",
+     "bis": "multiPhase"
+    },
+    {
      "id": 30720,
      "item": "Serpent-Coil Braid",
      "bis": "multiPhase"
@@ -696,7 +730,7 @@
     {
      "id": 30241,
      "item": "Gloves of the Vanquished Hero",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 30888,
@@ -720,6 +754,11 @@
     {
      "id": 32239,
      "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30015,
+     "item": "The Sun King's Talisman",
      "bis": "multiPhase"
     },
     {
@@ -801,7 +840,7 @@
     {
      "id": 30241,
      "item": "Gloves of the Vanquished Hero",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 30888,
@@ -871,13 +910,22 @@
      "item": "Tattered Cape of Antonidas"
     },
     {
+     "id": 34399,
+     "item": "Robes of Ghostly Hatred"
+    },
+    {
      "id": 34852,
      "item": "Bracers of the Forgotten Vanquisher"
     },
     {
+     "id": 34406,
+     "item": "Gloves of Tyri's Power"
+    },
+    {
      "id": 30241,
      "item": "Gloves of the Vanquished Hero",
-     "bis": "expansion"
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 34855,
@@ -957,8 +1005,13 @@
      "item": "Chestguard of the Fallen Defender"
     },
     {
+     "id": 30725,
+     "item": "Anger-Spark Gloves"
+    },
+    {
      "id": 28507,
-     "item": "Handwraps of Flowing Thought"
+     "item": "Handwraps of Flowing Thought",
+     "near": true
     },
     {
      "id": 30734,
@@ -1020,8 +1073,13 @@
      "item": "Pauldrons of the Vanquished Defender"
     },
     {
+     "id": 30735,
+     "item": "Ancient Spellcloak of the Highborne"
+    },
+    {
      "id": 28797,
-     "item": "Brute Cloak of the Ogre-Magi"
+     "item": "Brute Cloak of the Ogre-Magi",
+     "near": true
     },
     {
      "id": 28766,
@@ -1053,6 +1111,11 @@
     {
      "id": 30067,
      "item": "Velvet Boots of the Guardian"
+    },
+    {
+     "id": 30015,
+     "item": "The Sun King's Talisman",
+     "bis": "multiPhase"
     },
     {
      "id": 30109,
@@ -1134,6 +1197,11 @@
     {
      "id": 32239,
      "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30015,
+     "item": "The Sun King's Talisman",
      "bis": "multiPhase"
     },
     {
@@ -1286,6 +1354,11 @@
      "item": "Amice of the Convoker"
     },
     {
+     "id": 34391,
+     "item": "Spaulders of Devastation",
+     "near": true
+    },
+    {
      "id": 31102,
      "item": "Pauldrons of the Forgotten Vanquisher",
      "near": true,
@@ -1367,6 +1440,11 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30735,
+     "item": "Ancient Spellcloak of the Highborne",
+     "near": true
+    },
+    {
      "id": 29755,
      "item": "Chestguard of the Fallen Hero"
     },
@@ -1428,6 +1506,11 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30735,
+     "item": "Ancient Spellcloak of the Highborne",
+     "near": true
+    },
+    {
      "id": 30107,
      "item": "Vestments of the Sea-Witch",
      "bis": "multiPhase"
@@ -1449,6 +1532,10 @@
      "conditional": true
     },
     {
+     "id": 30725,
+     "item": "Anger-Spark Gloves"
+    },
+    {
      "id": 30247,
      "item": "Leggings of the Vanquished Hero"
     },
@@ -1456,6 +1543,10 @@
      "id": 30734,
      "item": "Leggings of the Seventh Circle",
      "near": true
+    },
+    {
+     "id": 30015,
+     "item": "The Sun King's Talisman"
     },
     {
      "id": 30109,
@@ -1926,6 +2017,11 @@
      "item": "Velvet Boots of the Guardian"
     },
     {
+     "id": 30015,
+     "item": "The Sun King's Talisman",
+     "bis": "multiPhase"
+    },
+    {
      "id": 30667,
      "item": "Ring of Unrelenting Storms",
      "bis": "multiPhase"
@@ -2012,6 +2108,11 @@
      "id": 32352,
      "item": "Naturewarden's Treads",
      "near": true
+    },
+    {
+     "id": 30015,
+     "item": "The Sun King's Talisman",
+     "bis": "multiPhase"
     },
     {
      "id": 32527,
@@ -2184,12 +2285,21 @@
      "item": "Tattered Cape of Antonidas"
     },
     {
+     "id": 34396,
+     "item": "Garments of Crashing Shores"
+    },
+    {
      "id": 34851,
      "item": "Bracers of the Forgotten Protector"
     },
     {
      "id": 34350,
      "item": "Gauntlets of the Ancient Shadowmoon"
+    },
+    {
+     "id": 34406,
+     "item": "Gloves of Tyri's Power",
+     "near": true
     },
     {
      "id": 34344,
@@ -2279,8 +2389,13 @@
      "conditional": true
     },
     {
+     "id": 30735,
+     "item": "Ancient Spellcloak of the Highborne"
+    },
+    {
      "id": 28797,
-     "item": "Brute Cloak of the Ogre-Magi"
+     "item": "Brute Cloak of the Ogre-Magi",
+     "near": true
     },
     {
      "id": 30734,
@@ -2371,6 +2486,10 @@
     {
      "id": 30067,
      "item": "Velvet Boots of the Guardian"
+    },
+    {
+     "id": 30015,
+     "item": "The Sun King's Talisman"
     },
     {
      "id": 28793,
@@ -2662,6 +2781,12 @@
      "variant": "overall"
     },
     {
+     "id": 30731,
+     "item": "Faceguard of the Endless Watch",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 28593,
      "item": "Eternium Greathelm",
      "near": true,
@@ -2734,6 +2859,12 @@
      "variant": "threat"
     },
     {
+     "id": 29758,
+     "item": "Gloves of the Fallen Defender",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
      "id": 28566,
      "item": "Crimson Girdle of the Indomitable",
      "variant": "mitigation"
@@ -2747,6 +2878,12 @@
     {
      "id": 28621,
      "item": "Wrynn Dynasty Greaves",
+     "variant": "mitigation"
+    },
+    {
+     "id": 29767,
+     "item": "Leggings of the Fallen Defender",
+     "near": true,
      "variant": "mitigation"
     },
     {
@@ -2779,6 +2916,12 @@
     {
      "id": 28675,
      "item": "Shermanar Great-Ring",
+     "near": true,
+     "variant": "mitigation"
+    },
+    {
+     "id": 28792,
+     "item": "A'dal's Signet of Defense",
      "near": true,
      "variant": "mitigation"
     },
@@ -2908,6 +3051,12 @@
      "variant": "mitigation"
     },
     {
+     "id": 29767,
+     "item": "Leggings of the Fallen Defender",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 32267,
      "item": "Boots of the Resilient",
      "variant": "mitigation"
@@ -2915,6 +3064,12 @@
     {
      "id": 30099,
      "item": "Frayed Tether of the Drowned"
+    },
+    {
+     "id": 28792,
+     "item": "A'dal's Signet of Defense",
+     "near": true,
+     "variant": "mitigation"
     },
     {
      "id": 30061,
@@ -3174,16 +3329,16 @@
      "variant": "mitigation"
     },
     {
-     "id": 33421,
-     "item": "Battleworn Tuskguard",
+     "id": 31095,
+     "item": "Helm of the Forgotten Protector",
      "near": true,
      "variant": "mitigation"
     },
     {
-     "id": 31095,
-     "item": "Helm of the Forgotten Protector",
+     "id": 33421,
+     "item": "Battleworn Tuskguard",
      "near": true,
-     "variant": "threat"
+     "variant": "mitigation"
     },
     {
      "id": 31103,
@@ -3383,6 +3538,11 @@
    ],
    "P5": [
     {
+     "id": 34400,
+     "item": "Crown of Dath'Remar",
+     "variant": "mitigation"
+    },
+    {
      "id": 34345,
      "item": "Crown of Anasterian",
      "near": true,
@@ -3419,6 +3579,18 @@
      "variant": "threat"
     },
     {
+     "id": 34394,
+     "item": "Breastplate of Agony's Aversion",
+     "variant": "mitigation"
+    },
+    {
+     "id": 31091,
+     "item": "Chestguard of the Forgotten Protector",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "mitigation"
+    },
+    {
      "id": 34851,
      "item": "Bracers of the Forgotten Protector",
      "variant": "overall"
@@ -3452,6 +3624,17 @@
      "id": 34854,
      "item": "Belt of the Forgotten Protector",
      "variant": "overall"
+    },
+    {
+     "id": 34381,
+     "item": "Felstrength Legplates",
+     "variant": "overall"
+    },
+    {
+     "id": 34382,
+     "item": "Judicator's Legguards",
+     "near": true,
+     "variant": "mitigation"
     },
     {
      "id": 34857,
@@ -3578,8 +3761,13 @@
      "bis": "multiPhase"
     },
     {
+     "id": 28790,
+     "item": "Naaru Lightwarden's Band"
+    },
+    {
      "id": 30736,
-     "item": "Ring of Flowing Light"
+     "item": "Ring of Flowing Light",
+     "near": true
     },
     {
      "id": 28590,
@@ -3590,8 +3778,13 @@
      "item": "Light's Justice"
     },
     {
+     "id": 30732,
+     "item": "Exodar Life-Staff"
+    },
+    {
      "id": 28782,
-     "item": "Crystalheart Pulse-Staff"
+     "item": "Crystalheart Pulse-Staff",
+     "near": true
     },
     {
      "id": 29458,
@@ -3646,6 +3839,10 @@
      "id": 30092,
      "item": "Orca-Hide Boots",
      "near": true
+    },
+    {
+     "id": 30018,
+     "item": "Lord Sanguinar's Claim"
     },
     {
      "id": 28763,
@@ -3885,6 +4082,10 @@
    ],
    "P5": [
     {
+     "id": 34402,
+     "item": "Shroud of Chieftain Ner'zhul"
+    },
+    {
      "id": 31103,
      "item": "Pauldrons of the Forgotten Protector",
      "bis": "expansion"
@@ -3911,6 +4112,10 @@
     {
      "id": 34854,
      "item": "Belt of the Forgotten Protector"
+    },
+    {
+     "id": 34383,
+     "item": "Kilt of Spiritual Reconstruction"
     },
     {
      "id": 34857,
@@ -4331,6 +4536,11 @@
      "item": "Leggings of Calamity"
     },
     {
+     "id": 34386,
+     "item": "Pantaloons of Growing Strife",
+     "near": true
+    },
+    {
      "id": 34856,
      "item": "Boots of the Forgotten Conqueror"
     },
@@ -4407,6 +4617,11 @@
      "id": 28545,
      "item": "Edgewalker Longboots",
      "near": true
+    },
+    {
+     "id": 28791,
+     "item": "Ring of the Recalcitrant",
+     "bis": "multiPhase"
     },
     {
      "id": 28830,
@@ -4490,6 +4705,16 @@
      "near": true
     },
     {
+     "id": 30017,
+     "item": "Telonicus's Pendant of Mayhem",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 28791,
+     "item": "Ring of the Recalcitrant",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28830,
      "item": "Dragonspine Trophy",
      "bis": "expansion"
@@ -4528,6 +4753,10 @@
      "id": 29993,
      "item": "Twinblade of the Phoenix",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30105,
+     "item": "Serpent Spine Longbow"
     }
    ],
    "P3": [
@@ -4549,7 +4778,7 @@
     {
      "id": 31091,
      "item": "Chestguard of the Forgotten Protector",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 32324,
@@ -4579,6 +4808,16 @@
     {
      "id": 32366,
      "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30017,
+     "item": "Telonicus's Pendant of Mayhem",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 28791,
+     "item": "Ring of the Recalcitrant",
      "bis": "multiPhase"
     },
     {
@@ -4676,7 +4915,7 @@
     {
      "id": 31091,
      "item": "Chestguard of the Forgotten Protector",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 32324,
@@ -4706,6 +4945,11 @@
     {
      "id": 32366,
      "item": "Shadowmaster's Boots",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30017,
+     "item": "Telonicus's Pendant of Mayhem",
      "bis": "multiPhase"
     },
     {
@@ -4795,9 +5039,14 @@
      "item": "Cloak of Unforgivable Sin"
     },
     {
+     "id": 34397,
+     "item": "Bladed Chaos Tunic"
+    },
+    {
      "id": 31091,
      "item": "Chestguard of the Forgotten Protector",
-     "bis": "expansion"
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 34851,
@@ -4835,6 +5084,12 @@
     {
      "id": 32510,
      "item": "Softstep Boots of Tracking",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 30880,
+     "item": "Quickstrider Moccasins",
      "near": true,
      "variant": "hit"
     },
@@ -5018,7 +5273,6 @@
     {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix",
-     "bis": "multiPhase",
      "variant": "non-worldboss",
      "conditional": true
     }
@@ -5130,10 +5384,13 @@
      "item": "Talon of Azshara"
     },
     {
+     "id": 30105,
+     "item": "Serpent Spine Longbow"
+    },
+    {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix",
-     "bis": "multiPhase",
-     "conditional": true
+     "near": true
     }
    ],
    "P3": [
@@ -5300,6 +5557,11 @@
      "item": "Twisted Blades of Zarak",
      "variant": "non-worldboss",
      "conditional": true
+    },
+    {
+     "id": 30105,
+     "item": "Serpent Spine Longbow",
+     "near": true
     }
    ],
    "P4": [
@@ -5430,6 +5692,11 @@
      "near": true
     },
     {
+     "id": 30105,
+     "item": "Serpent Spine Longbow",
+     "near": true
+    },
+    {
      "id": 30724,
      "item": "Barrel-Blade Longrifle",
      "near": true,
@@ -5459,6 +5726,10 @@
     {
      "id": 34241,
      "item": "Cloak of Unforgivable Sin"
+    },
+    {
+     "id": 34397,
+     "item": "Bladed Chaos Tunic"
     },
     {
      "id": 34851,
@@ -5598,6 +5869,12 @@
      "id": 28776,
      "item": "Liar's Tongue Gloves",
      "near": true
+    },
+    {
+     "id": 29758,
+     "item": "Gloves of the Fallen Defender",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 28779,
@@ -5756,8 +6033,13 @@
      "item": "Talon of Azshara"
     },
     {
+     "id": 30105,
+     "item": "Serpent Spine Longbow"
+    },
+    {
      "id": 28772,
-     "item": "Sunfury Bow of the Phoenix"
+     "item": "Sunfury Bow of the Phoenix",
+     "near": true
     }
    ],
    "P3": [
@@ -5877,6 +6159,11 @@
      "id": 32326,
      "item": "Twisted Blades of Zarak",
      "near": true
+    },
+    {
+     "id": 30105,
+     "item": "Serpent Spine Longbow",
+     "near": true
     }
    ],
    "P4": [
@@ -5994,6 +6281,11 @@
      "near": true
     },
     {
+     "id": 30105,
+     "item": "Serpent Spine Longbow",
+     "near": true
+    },
+    {
      "id": 30724,
      "item": "Barrel-Blade Longrifle",
      "near": true,
@@ -6023,6 +6315,10 @@
     {
      "id": 34241,
      "item": "Cloak of Unforgivable Sin"
+    },
+    {
+     "id": 34397,
+     "item": "Bladed Chaos Tunic"
     },
     {
      "id": 34851,
@@ -6156,6 +6452,11 @@
      "item": "Archaic Charm of Presence"
     },
     {
+     "id": 28790,
+     "item": "Naaru Lightwarden's Band",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28727,
      "item": "Pendant of the Violet Eye",
      "bis": "multiPhase"
@@ -6216,8 +6517,17 @@
      "item": "Boots of Courage Unending"
     },
     {
+     "id": 30018,
+     "item": "Lord Sanguinar's Claim"
+    },
+    {
      "id": 30110,
      "item": "Coral Band of the Revived"
+    },
+    {
+     "id": 28790,
+     "item": "Naaru Lightwarden's Band",
+     "bis": "multiPhase"
     },
     {
      "id": 28727,
@@ -6359,6 +6669,11 @@
      "id": 28592,
      "item": "Libram of Souls Redeemed",
      "bis": "expansion"
+    },
+    {
+     "id": 30063,
+     "item": "Libram of Absolute Truth",
+     "near": true
     }
    ],
    "P4": [
@@ -6496,12 +6811,23 @@
      "id": 28592,
      "item": "Libram of Souls Redeemed",
      "bis": "expansion"
+    },
+    {
+     "id": 30063,
+     "item": "Libram of Absolute Truth",
+     "near": true
     }
    ],
    "P5": [
     {
      "id": 34243,
      "item": "Helm of Burning Righteousness"
+    },
+    {
+     "id": 34402,
+     "item": "Shroud of Chieftain Ner'zhul",
+     "near": true,
+     "variant": "haste"
     },
     {
      "id": 34193,
@@ -6541,6 +6867,12 @@
      "item": "Garments of Serene Shores"
     },
     {
+     "id": 34395,
+     "item": "Noble Judicator's Chestguard",
+     "near": true,
+     "variant": "haste"
+    },
+    {
      "id": 34848,
      "item": "Bracers of the Forgotten Conqueror"
     },
@@ -6557,6 +6889,12 @@
     {
      "id": 34167,
      "item": "Legplates of the Holy Juggernaut"
+    },
+    {
+     "id": 34383,
+     "item": "Kilt of Spiritual Reconstruction",
+     "near": true,
+     "variant": "haste"
     },
     {
      "id": 34856,
@@ -6647,6 +6985,11 @@
      "id": 28592,
      "item": "Libram of Souls Redeemed",
      "bis": "expansion"
+    },
+    {
+     "id": 30063,
+     "item": "Libram of Absolute Truth",
+     "near": true
     }
    ]
   },
@@ -7296,6 +7639,17 @@
    ],
    "P5": [
     {
+     "id": 34401,
+     "item": "Helm of Uther's Resolve",
+     "variant": "balanced",
+     "conditional": true
+    },
+    {
+     "id": 34400,
+     "item": "Crown of Dath'Remar",
+     "variant": "mitigation"
+    },
+    {
      "id": 34190,
      "item": "Crimson Paragon's Cover",
      "variant": "mitigation"
@@ -7333,6 +7687,11 @@
      "item": "Belt of the Forgotten Conqueror",
      "variant": "balanced",
      "conditional": true
+    },
+    {
+     "id": 34382,
+     "item": "Judicator's Legguards",
+     "variant": "overall"
     },
     {
      "id": 34856,
@@ -7461,6 +7820,10 @@
      "id": 28830,
      "item": "Dragonspine Trophy",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30722,
+     "item": "Ethereum Nexus-Reaver"
     }
    ],
    "P2": [
@@ -7543,6 +7906,11 @@
      "id": 30022,
      "item": "Pendant of the Perilous",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30017,
+     "item": "Telonicus's Pendant of Mayhem",
+     "near": true
     },
     {
      "id": 30061,
@@ -7638,6 +8006,11 @@
      "id": 30022,
      "item": "Pendant of the Perilous",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30017,
+     "item": "Telonicus's Pendant of Mayhem",
+     "near": true
     },
     {
      "id": 32526,
@@ -7829,6 +8202,10 @@
      "variant": "hit"
     },
     {
+     "id": 34397,
+     "item": "Bladed Chaos Tunic"
+    },
+    {
      "id": 34848,
      "item": "Bracers of the Forgotten Conqueror"
     },
@@ -7924,12 +8301,19 @@
      "item": "Edgewalker Longboots"
     },
     {
+     "id": 28791,
+     "item": "Ring of the Recalcitrant",
+     "bis": "multiPhase",
+     "conditional": true
+    },
+    {
      "id": 28757,
      "item": "Ring of a Thousand Marks"
     },
     {
      "id": 28649,
-     "item": "Garona's Signet Ring"
+     "item": "Garona's Signet Ring",
+     "near": true
     },
     {
      "id": 28830,
@@ -7992,6 +8376,17 @@
      "near": true
     },
     {
+     "id": 30017,
+     "item": "Telonicus's Pendant of Mayhem"
+    },
+    {
+     "id": 28791,
+     "item": "Ring of the Recalcitrant",
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
+    },
+    {
      "id": 29997,
      "item": "Band of the Ranger-General",
      "variant": "hit",
@@ -8000,8 +8395,8 @@
     {
      "id": 30052,
      "item": "Ring of Lethality",
-     "variant": "hit",
-     "conditional": true
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 28830,
@@ -8049,6 +8444,10 @@
      "id": 29993,
      "item": "Twinblade of the Phoenix",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30105,
+     "item": "Serpent Spine Longbow"
     }
    ],
    "P3": [
@@ -8083,7 +8482,7 @@
     {
      "id": 31091,
      "item": "Chestguard of the Forgotten Protector",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 32324,
@@ -8246,7 +8645,7 @@
     {
      "id": 31091,
      "item": "Chestguard of the Forgotten Protector",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 32324,
@@ -8291,6 +8690,12 @@
     {
      "id": 32510,
      "item": "Softstep Boots of Tracking",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 30880,
+     "item": "Quickstrider Moccasins",
      "near": true,
      "variant": "hit"
     },
@@ -8435,9 +8840,14 @@
      "conditional": true
     },
     {
+     "id": 34397,
+     "item": "Bladed Chaos Tunic"
+    },
+    {
      "id": 31091,
      "item": "Chestguard of the Forgotten Protector",
-     "bis": "expansion"
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 34851,
@@ -8581,12 +8991,19 @@
      "item": "Worgen Claw Necklace"
     },
     {
+     "id": 28791,
+     "item": "Ring of the Recalcitrant",
+     "bis": "multiPhase",
+     "conditional": true
+    },
+    {
      "id": 28757,
      "item": "Ring of a Thousand Marks"
     },
     {
      "id": 28649,
-     "item": "Garona's Signet Ring"
+     "item": "Garona's Signet Ring",
+     "near": true
     },
     {
      "id": 28830,
@@ -8651,6 +9068,17 @@
      "near": true
     },
     {
+     "id": 30017,
+     "item": "Telonicus's Pendant of Mayhem"
+    },
+    {
+     "id": 28791,
+     "item": "Ring of the Recalcitrant",
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
+    },
+    {
      "id": 29997,
      "item": "Band of the Ranger-General",
      "variant": "hit",
@@ -8659,8 +9087,8 @@
     {
      "id": 30052,
      "item": "Ring of Lethality",
-     "variant": "hit",
-     "conditional": true
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 28830,
@@ -8708,6 +9136,10 @@
      "id": 29993,
      "item": "Twinblade of the Phoenix",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30105,
+     "item": "Serpent Spine Longbow"
     }
    ],
    "P3": [
@@ -8742,7 +9174,7 @@
     {
      "id": 31091,
      "item": "Chestguard of the Forgotten Protector",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 32324,
@@ -8905,7 +9337,7 @@
     {
      "id": 31091,
      "item": "Chestguard of the Forgotten Protector",
-     "bis": "expansion"
+     "bis": "multiPhase"
     },
     {
      "id": 32324,
@@ -8950,6 +9382,12 @@
     {
      "id": 32510,
      "item": "Softstep Boots of Tracking",
+     "near": true,
+     "variant": "hit"
+    },
+    {
+     "id": 30880,
+     "item": "Quickstrider Moccasins",
      "near": true,
      "variant": "hit"
     },
@@ -9094,9 +9532,14 @@
      "conditional": true
     },
     {
+     "id": 34397,
+     "item": "Bladed Chaos Tunic"
+    },
+    {
      "id": 31091,
      "item": "Chestguard of the Forgotten Protector",
-     "bis": "expansion"
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 34851,
@@ -9600,6 +10043,10 @@
      "item": "Cloak of Unforgivable Sin"
     },
     {
+     "id": 34397,
+     "item": "Bladed Chaos Tunic"
+    },
+    {
      "id": 34852,
      "item": "Bracers of the Forgotten Vanquisher"
     },
@@ -10058,6 +10505,10 @@
     {
      "id": 34241,
      "item": "Cloak of Unforgivable Sin"
+    },
+    {
+     "id": 34397,
+     "item": "Bladed Chaos Tunic"
     },
     {
      "id": 34852,
@@ -10520,6 +10971,10 @@
      "item": "Cloak of Unforgivable Sin"
     },
     {
+     "id": 34397,
+     "item": "Bladed Chaos Tunic"
+    },
+    {
      "id": 34852,
      "item": "Bracers of the Forgotten Vanquisher"
     },
@@ -10679,8 +11134,13 @@
      "item": "Light's Justice"
     },
     {
+     "id": 30732,
+     "item": "Exodar Life-Staff"
+    },
+    {
      "id": 28782,
-     "item": "Crystalheart Pulse-Staff"
+     "item": "Crystalheart Pulse-Staff",
+     "near": true
     },
     {
      "id": 28588,
@@ -10739,6 +11199,10 @@
     {
      "id": 30100,
      "item": "Soul-Strider Boots"
+    },
+    {
+     "id": 30018,
+     "item": "Lord Sanguinar's Claim"
     },
     {
      "id": 30110,
@@ -10862,6 +11326,11 @@
     {
      "id": 32370,
      "item": "Nadina's Pendant of Purity"
+    },
+    {
+     "id": 30018,
+     "item": "Lord Sanguinar's Claim",
+     "near": true
     },
     {
      "id": 32528,
@@ -11198,8 +11667,13 @@
      "item": "Light's Justice"
     },
     {
+     "id": 30732,
+     "item": "Exodar Life-Staff"
+    },
+    {
      "id": 28782,
-     "item": "Crystalheart Pulse-Staff"
+     "item": "Crystalheart Pulse-Staff",
+     "near": true
     },
     {
      "id": 28588,
@@ -11258,6 +11732,10 @@
     {
      "id": 30100,
      "item": "Soul-Strider Boots"
+    },
+    {
+     "id": 30018,
+     "item": "Lord Sanguinar's Claim"
     },
     {
      "id": 30110,
@@ -11381,6 +11859,11 @@
     {
      "id": 32370,
      "item": "Nadina's Pendant of Purity"
+    },
+    {
+     "id": 30018,
+     "item": "Lord Sanguinar's Claim",
+     "near": true
     },
     {
      "id": 32528,
@@ -11746,8 +12229,13 @@
      "item": "Leggings of the Vanquished Champion"
     },
     {
+     "id": 30017,
+     "item": "Telonicus's Pendant of Mayhem"
+    },
+    {
      "id": 30022,
-     "item": "Pendant of the Perilous"
+     "item": "Pendant of the Perilous",
+     "near": true
     },
     {
      "id": 29997,
@@ -12085,6 +12573,10 @@
      "bis": "multiPhase"
     },
     {
+     "id": 34397,
+     "item": "Bladed Chaos Tunic"
+    },
+    {
      "id": 34851,
      "item": "Bracers of the Forgotten Protector"
     },
@@ -12182,8 +12674,18 @@
      "near": true
     },
     {
+     "id": 30735,
+     "item": "Ancient Spellcloak of the Highborne",
+     "near": true
+    },
+    {
+     "id": 30725,
+     "item": "Anger-Spark Gloves"
+    },
+    {
      "id": 29756,
-     "item": "Gloves of the Fallen Hero"
+     "item": "Gloves of the Fallen Hero",
+     "near": true
     },
     {
      "id": 28507,
@@ -12274,6 +12776,11 @@
      "item": "Velvet Boots of the Guardian"
     },
     {
+     "id": 30015,
+     "item": "The Sun King's Talisman",
+     "bis": "multiPhase"
+    },
+    {
      "id": 30109,
      "item": "Ring of Endless Coils"
     },
@@ -12349,6 +12856,11 @@
     {
      "id": 32239,
      "item": "Slippers of the Seacaller",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30015,
+     "item": "The Sun King's Talisman",
      "bis": "multiPhase"
     },
     {
@@ -12554,14 +13066,24 @@
      "conditional": true
     },
     {
+     "id": 30735,
+     "item": "Ancient Spellcloak of the Highborne",
+     "near": true,
+     "variant": "hit"
+    },
+    {
      "id": 29755,
      "item": "Chestguard of the Fallen Hero"
     },
     {
+     "id": 30725,
+     "item": "Anger-Spark Gloves",
+     "bis": "multiPhase"
+    },
+    {
      "id": 29756,
      "item": "Gloves of the Fallen Hero",
-     "bis": "multiPhase",
-     "conditional": true
+     "near": true
     },
     {
      "id": 28780,
@@ -12661,6 +13183,11 @@
      "near": true
     },
     {
+     "id": 30735,
+     "item": "Ancient Spellcloak of the Highborne",
+     "near": true
+    },
+    {
      "id": 30107,
      "item": "Vestments of the Sea-Witch",
      "bis": "multiPhase"
@@ -12677,9 +13204,13 @@
     {
      "id": 29756,
      "item": "Gloves of the Fallen Hero",
-     "bis": "multiPhase",
      "variant": "2pc",
      "conditional": true
+    },
+    {
+     "id": 30725,
+     "item": "Anger-Spark Gloves",
+     "bis": "multiPhase"
     },
     {
      "id": 30247,
@@ -12698,6 +13229,10 @@
      "id": 30680,
      "item": "Glider's Foot-Wraps",
      "near": true
+    },
+    {
+     "id": 30015,
+     "item": "The Sun King's Talisman"
     },
     {
      "id": 30109,
@@ -12815,6 +13350,11 @@
      "id": 32349,
      "item": "Translucent Spellthread Necklace",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30015,
+     "item": "The Sun King's Talisman",
+     "near": true
     },
     {
      "id": 32527,
@@ -13129,16 +13669,26 @@
      "bis": "multiPhase"
     },
     {
+     "id": 28790,
+     "item": "Naaru Lightwarden's Band"
+    },
+    {
      "id": 30736,
-     "item": "Ring of Flowing Light"
+     "item": "Ring of Flowing Light",
+     "near": true
     },
     {
      "id": 28771,
      "item": "Light's Justice"
     },
     {
+     "id": 30732,
+     "item": "Exodar Life-Staff"
+    },
+    {
      "id": 28782,
-     "item": "Crystalheart Pulse-Staff"
+     "item": "Crystalheart Pulse-Staff",
+     "near": true
     }
    ],
    "P2": [
@@ -13190,6 +13740,11 @@
      "id": 30092,
      "item": "Orca-Hide Boots",
      "near": true
+    },
+    {
+     "id": 30018,
+     "item": "Lord Sanguinar's Claim",
+     "bis": "multiPhase"
     },
     {
      "id": 30110,
@@ -13274,6 +13829,11 @@
      "id": 32609,
      "item": "Boots of the Divine Light",
      "near": true
+    },
+    {
+     "id": 30018,
+     "item": "Lord Sanguinar's Claim",
+     "bis": "multiPhase"
     },
     {
      "id": 32528,
@@ -13478,8 +14038,13 @@
      "item": "Belt of the Forgotten Vanquisher"
     },
     {
+     "id": 34384,
+     "item": "Breeches of Natural Splendor"
+    },
+    {
      "id": 34170,
-     "item": "Pantaloons of Calming Strife"
+     "item": "Pantaloons of Calming Strife",
+     "near": true
     },
     {
      "id": 34858,
@@ -13587,6 +14152,12 @@
     {
      "id": 28649,
      "item": "Garona's Signet Ring",
+     "variant": "hit",
+     "conditional": true
+    },
+    {
+     "id": 28791,
+     "item": "Ring of the Recalcitrant",
      "variant": "hit",
      "conditional": true
     },
@@ -13788,11 +14359,17 @@
      "conditional": true
     },
     {
-     "id": 32591,
-     "item": "Choker of Serrated Blades",
+     "id": 30017,
+     "item": "Telonicus's Pendant of Mayhem",
      "bis": "multiPhase",
      "variant": "hit",
      "conditional": true
+    },
+    {
+     "id": 32591,
+     "item": "Choker of Serrated Blades",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 32497,
@@ -13920,11 +14497,17 @@
      "conditional": true
     },
     {
-     "id": 32591,
-     "item": "Choker of Serrated Blades",
+     "id": 30017,
+     "item": "Telonicus's Pendant of Mayhem",
      "bis": "multiPhase",
      "variant": "hit",
      "conditional": true
+    },
+    {
+     "id": 32591,
+     "item": "Choker of Serrated Blades",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 33496,
@@ -14015,6 +14598,10 @@
     {
      "id": 34241,
      "item": "Cloak of Unforgivable Sin"
+    },
+    {
+     "id": 34397,
+     "item": "Bladed Chaos Tunic"
     },
     {
      "id": 34852,
@@ -14165,6 +14752,12 @@
      "item": "Worgen Claw Necklace"
     },
     {
+     "id": 28792,
+     "item": "A'dal's Signet of Defense",
+     "bis": "multiPhase",
+     "variant": "mitigation"
+    },
+    {
      "id": 28675,
      "item": "Shermanar Great-Ring",
      "near": true,
@@ -14286,6 +14879,19 @@
      "item": "Edgewalker Longboots",
      "near": true,
      "variant": "threat"
+    },
+    {
+     "id": 30017,
+     "item": "Telonicus's Pendant of Mayhem",
+     "bis": "multiPhase",
+     "variant": "individually",
+     "conditional": true
+    },
+    {
+     "id": 28792,
+     "item": "A'dal's Signet of Defense",
+     "bis": "multiPhase",
+     "variant": "mitigation"
     },
     {
      "id": 29997,
@@ -14454,6 +15060,13 @@
      "variant": "threat"
     },
     {
+     "id": 30017,
+     "item": "Telonicus's Pendant of Mayhem",
+     "bis": "multiPhase",
+     "variant": "individually",
+     "conditional": true
+    },
+    {
      "id": 32362,
      "item": "Pendant of Titans",
      "variant": "mitigation"
@@ -14469,6 +15082,13 @@
      "item": "Stormrage Signet Ring",
      "near": true,
      "variant": "threat"
+    },
+    {
+     "id": 28792,
+     "item": "A'dal's Signet of Defense",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "mitigation"
     },
     {
      "id": 32501,
@@ -14601,6 +15221,13 @@
      "variant": "threat"
     },
     {
+     "id": 28792,
+     "item": "A'dal's Signet of Defense",
+     "near": true,
+     "bis": "multiPhase",
+     "variant": "mitigation"
+    },
+    {
      "id": 32501,
      "item": "Shadowmoon Insignia",
      "bis": "expansion",
@@ -14650,6 +15277,10 @@
    ],
    "P5": [
     {
+     "id": 34404,
+     "item": "Mask of the Fury Hunter"
+    },
+    {
      "id": 31096,
      "item": "Helm of the Forgotten Vanquisher",
      "near": true,
@@ -14677,8 +15308,18 @@
      "variant": "mitigation"
     },
     {
+     "id": 34397,
+     "item": "Bladed Chaos Tunic",
+     "near": true,
+     "variant": "threat"
+    },
+    {
      "id": 34852,
      "item": "Bracers of the Forgotten Vanquisher"
+    },
+    {
+     "id": 34408,
+     "item": "Gloves of the Forest Drifter"
     },
     {
      "id": 34234,
@@ -14697,6 +15338,10 @@
      "id": 34855,
      "item": "Belt of the Forgotten Vanquisher",
      "variant": "threat"
+    },
+    {
+     "id": 34385,
+     "item": "Leggings of the Immortal Beast"
     },
     {
      "id": 34188,

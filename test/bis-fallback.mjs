@@ -8,6 +8,12 @@ import { until } from "./helpers.mjs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const data = JSON.parse(fs.readFileSync(path.join(root, "data/loot_data.json"), "utf8"));
+
+/* Counted, not pinned - the same lesson smoke.mjs learned when 51 rows arrived and took a
+   dozen checks red. What every assertion below means is "the table still renders in full",
+   which is a claim about degrading gracefully and not about how much loot exists. */
+const P3_ZONES = ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"];
+const P3_TOTAL = data.filter((r) => P3_ZONES.includes(r.zone)).length;
 const specs = JSON.parse(fs.readFileSync(path.join(root, "data/specs.json"), "utf8"));
 const listIndex = JSON.parse(fs.readFileSync(path.join(root, "data/lists/index.json"), "utf8"));
 const zatarList = JSON.parse(fs.readFileSync(path.join(root, "data/lists/zatar-p3.json"), "utf8"));
@@ -36,22 +42,22 @@ async function boot(bisResponse) {
 
 // 404
 let doc = await boot(() => Promise.resolve({ ok: false, status: 404, json: () => Promise.reject(new Error("nope")) }));
-ok(doc.querySelectorAll("tbody tr").length === 195, `bis.json 404 -> table still renders (${doc.querySelectorAll("tbody tr").length} rows)`);
+ok(doc.querySelectorAll("tbody tr").length === P3_TOTAL, `bis.json 404 -> table still renders (${doc.querySelectorAll("tbody tr").length} rows)`);
 ok(doc.querySelectorAll(".spec-icon--bis, .spec-icon--bis2, .spec-icon--bis3").length === 0, "404 -> no rings, no crash");
 ok(doc.querySelectorAll(".col-prio img").length > 300, "404 -> spec icons still render");
 
 // malformed json
 doc = await boot(() => Promise.resolve({ ok: true, status: 200, json: () => Promise.reject(new SyntaxError("bad json")) }));
-ok(doc.querySelectorAll("tbody tr").length === 195, "malformed bis.json -> table still renders");
+ok(doc.querySelectorAll("tbody tr").length === P3_TOTAL, "malformed bis.json -> table still renders");
 
 // valid but empty
 doc = await boot(() => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({ specs: {} }) }));
-ok(doc.querySelectorAll("tbody tr").length === 195, "empty specs -> table still renders");
+ok(doc.querySelectorAll("tbody tr").length === P3_TOTAL, "empty specs -> table still renders");
 ok(doc.querySelectorAll(".spec-icon--bis3").length === 0, "empty specs -> no rings");
 
 // shape without a specs key at all
 doc = await boot(() => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}) }));
-ok(doc.querySelectorAll("tbody tr").length === 195, "missing specs key -> table still renders");
+ok(doc.querySelectorAll("tbody tr").length === P3_TOTAL, "missing specs key -> table still renders");
 
 // --- a stale alias costs that one word, not the page ------------------------------
 /* specs.json fails soft everywhere else here, and its aliases are no different: one
@@ -78,7 +84,7 @@ ok(doc.querySelectorAll("tbody tr").length === 195, "missing specs key -> table 
   await new Promise((r) => setTimeout(r, 400));
   const d = window.document;
 
-  ok(d.querySelectorAll("tbody tr").length === 195,
+  ok(d.querySelectorAll("tbody tr").length === P3_TOTAL,
      `an alias pointing at nothing -> the table still renders (${d.querySelectorAll("tbody tr").length} rows)`);
 
   const box = d.getElementById("search");

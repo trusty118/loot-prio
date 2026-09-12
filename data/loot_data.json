@@ -2522,6 +2522,46 @@
   "unique": true
  },
  {
+  "zone": "Magtheridon's Lair",
+  "boss": "Magtheridon",
+  "item": "A'dal's Signet of Defense",
+  "id": 28792,
+  "wowhead": "https://www.wowhead.com/tbc/item=28792",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Tank"
+  ],
+  "unique": true
+ },
+ {
+  "zone": "Magtheridon's Lair",
+  "boss": "Magtheridon",
+  "item": "Naaru Lightwarden's Band",
+  "id": 28790,
+  "wowhead": "https://www.wowhead.com/tbc/item=28790",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "unique": true
+ },
+ {
+  "zone": "Magtheridon's Lair",
+  "boss": "Magtheridon",
+  "item": "Ring of the Recalcitrant",
+  "id": 28791,
+  "wowhead": "https://www.wowhead.com/tbc/item=28791",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Physical"
+  ],
+  "unique": true
+ },
+ {
   "zone": "Serpentshrine Cavern",
   "boss": "Trash",
   "item": "Spyglass of the Hidden Fleet",
@@ -2903,6 +2943,19 @@
   "type": "Mace",
   "roles": [
    "Tank",
+   "Physical"
+  ],
+  "unique": true
+ },
+ {
+  "zone": "Serpentshrine Cavern",
+  "boss": "The Lurker Below",
+  "item": "Libram of Absolute Truth",
+  "id": 30063,
+  "wowhead": "https://www.wowhead.com/tbc/item=30063",
+  "slot": "Relic",
+  "type": "Libram",
+  "roles": [
    "Physical"
   ],
   "unique": true
@@ -3478,6 +3531,18 @@
    "Caster"
   ],
   "unique": true
+ },
+ {
+  "zone": "Serpentshrine Cavern",
+  "boss": "Lady Vashj",
+  "item": "Serpent Spine Longbow",
+  "id": 30105,
+  "wowhead": "https://www.wowhead.com/tbc/item=30105",
+  "slot": "Ranged",
+  "type": "Bow",
+  "roles": [
+   "Physical"
+  ]
  },
  {
   "zone": "Tempest Keep",
@@ -4200,6 +4265,104 @@
   ]
  },
  {
+  "zone": "Tempest Keep",
+  "boss": "Kael'thas Sunstrider",
+  "item": "Cudgel of Consecration",
+  "id": 34611,
+  "wowhead": "https://www.wowhead.com/tbc/item=34611",
+  "slot": "Main-Hand",
+  "type": "Mace",
+  "roles": [
+   "Caster"
+  ]
+ },
+ {
+  "zone": "Tempest Keep",
+  "boss": "Kael'thas Sunstrider",
+  "item": "Gloves of Arcane Acuity",
+  "id": 34808,
+  "wowhead": "https://www.wowhead.com/tbc/item=34808",
+  "slot": "Hands",
+  "type": "Cloth",
+  "roles": [
+   "Caster"
+  ]
+ },
+ {
+  "zone": "Tempest Keep",
+  "boss": "Kael'thas Sunstrider",
+  "item": "Kharmaa's Ring of Fate",
+  "id": 34625,
+  "wowhead": "https://www.wowhead.com/tbc/item=34625",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Caster"
+  ]
+ },
+ {
+  "zone": "Tempest Keep",
+  "boss": "Kael'thas Sunstrider",
+  "item": "Lord Sanguinar's Claim",
+  "id": 30018,
+  "wowhead": "https://www.wowhead.com/tbc/item=30018",
+  "slot": "Neck",
+  "type": "Neck",
+  "roles": [
+   "Healer",
+   "Caster"
+  ]
+ },
+ {
+  "zone": "Tempest Keep",
+  "boss": "Kael'thas Sunstrider",
+  "item": "Scarlet Sin'dorei Robes",
+  "id": 34610,
+  "wowhead": "https://www.wowhead.com/tbc/item=34610",
+  "slot": "Chest",
+  "type": "Cloth",
+  "roles": [
+   "Caster"
+  ]
+ },
+ {
+  "zone": "Tempest Keep",
+  "boss": "Kael'thas Sunstrider",
+  "item": "Sunrage Treads",
+  "id": 34809,
+  "wowhead": "https://www.wowhead.com/tbc/item=34809",
+  "slot": "Feet",
+  "type": "Leather",
+  "roles": [
+   "Physical"
+  ]
+ },
+ {
+  "zone": "Tempest Keep",
+  "boss": "Kael'thas Sunstrider",
+  "item": "Telonicus's Pendant of Mayhem",
+  "id": 30017,
+  "wowhead": "https://www.wowhead.com/tbc/item=30017",
+  "slot": "Neck",
+  "type": "Neck",
+  "roles": [
+   "Physical"
+  ]
+ },
+ {
+  "zone": "Tempest Keep",
+  "boss": "Kael'thas Sunstrider",
+  "item": "The Sun King's Talisman",
+  "id": 30015,
+  "wowhead": "https://www.wowhead.com/tbc/item=30015",
+  "slot": "Neck",
+  "type": "Neck",
+  "roles": [
+   "Caster",
+   "Physical"
+  ]
+ },
+ {
   "zone": "Mount Hyjal",
   "boss": "Trash",
   "item": "Nethervoid Cloak",
@@ -4492,6 +4655,19 @@
  },
  {
   "zone": "Mount Hyjal",
+  "boss": "Rage Winterchill",
+  "item": "Howling Wind Bracers",
+  "id": 30869,
+  "wowhead": "https://www.wowhead.com/tbc/item=30869",
+  "slot": "Wrist",
+  "type": "Mail",
+  "roles": [
+   "Healer",
+   "Caster"
+  ]
+ },
+ {
+  "zone": "Mount Hyjal",
   "boss": "Anetheron",
   "item": "Hatefury Mantle",
   "id": 30884,
@@ -4614,6 +4790,32 @@
  },
  {
   "zone": "Mount Hyjal",
+  "boss": "Anetheron",
+  "item": "Golden Links of Restoration",
+  "id": 30887,
+  "wowhead": "https://www.wowhead.com/tbc/item=30887",
+  "slot": "Chest",
+  "type": "Mail",
+  "roles": [
+   "Healer",
+   "Caster"
+  ]
+ },
+ {
+  "zone": "Mount Hyjal",
+  "boss": "Anetheron",
+  "item": "Quickstrider Moccasins",
+  "id": 30880,
+  "wowhead": "https://www.wowhead.com/tbc/item=30880",
+  "slot": "Feet",
+  "type": "Mail",
+  "roles": [
+   "Caster",
+   "Physical"
+  ]
+ },
+ {
+  "zone": "Mount Hyjal",
   "boss": "Kaz'rogal",
   "item": "Angelista's Sash",
   "id": 30895,
@@ -4730,6 +4932,18 @@
   "type": "Shield",
   "roles": [
    "Tank"
+  ]
+ },
+ {
+  "zone": "Mount Hyjal",
+  "boss": "Kaz'rogal",
+  "item": "Belt of Seething Fury",
+  "id": 30915,
+  "wowhead": "https://www.wowhead.com/tbc/item=30915",
+  "slot": "Waist",
+  "type": "Plate",
+  "roles": [
+   "Physical"
   ]
  },
  {
@@ -5011,6 +5225,18 @@
   "type": "Tier Token (Rogue/Mage/Druid)",
   "roles": [
    "Tier"
+  ]
+ },
+ {
+  "zone": "Mount Hyjal",
+  "boss": "Archimonde",
+  "item": "Robes of Rhonin",
+  "id": 30913,
+  "wowhead": "https://www.wowhead.com/tbc/item=30913",
+  "slot": "Chest",
+  "type": "Cloth",
+  "roles": [
+   "Caster"
   ]
  },
  {
@@ -5599,6 +5825,32 @@
  },
  {
   "zone": "Black Temple",
+  "boss": "Shade of Akama",
+  "item": "Amice of Brilliant Light",
+  "id": 32273,
+  "wowhead": "https://www.wowhead.com/tbc/item=32273",
+  "slot": "Shoulder",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ]
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Shade of Akama",
+  "item": "Wristbands of Divine Influence",
+  "id": 32513,
+  "wowhead": "https://www.wowhead.com/tbc/item=32513",
+  "slot": "Wrist",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ]
+ },
+ {
+  "zone": "Black Temple",
   "boss": "Teron Gorefiend",
   "item": "Insidious Bands",
   "id": 32324,
@@ -5730,6 +5982,19 @@
   "type": "Cloth",
   "roles": [
    "Healer"
+  ]
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Teron Gorefiend",
+  "item": "Robe of the Shadow Council",
+  "id": 32327,
+  "wowhead": "https://www.wowhead.com/tbc/item=32327",
+  "slot": "Chest",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
   ]
  },
  {
@@ -5868,6 +6133,43 @@
   "roles": [
    "Caster",
    "Tank"
+  ]
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Gurtogg Bloodboil",
+  "item": "Messenger of Fate",
+  "id": 32269,
+  "wowhead": "https://www.wowhead.com/tbc/item=32269",
+  "slot": "One-Hand",
+  "type": "Dagger",
+  "roles": [
+   "Physical"
+  ]
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Gurtogg Bloodboil",
+  "item": "Staff of Immaculate Recovery",
+  "id": 32344,
+  "wowhead": "https://www.wowhead.com/tbc/item=32344",
+  "slot": "Two-Hand",
+  "type": "Staff",
+  "roles": [
+   "Healer",
+   "Caster"
+  ]
+ },
+ {
+  "zone": "Black Temple",
+  "boss": "Gurtogg Bloodboil",
+  "item": "Wand of Prismatic Focus",
+  "id": 32343,
+  "wowhead": "https://www.wowhead.com/tbc/item=32343",
+  "slot": "Ranged",
+  "type": "Wand",
+  "roles": [
+   "Caster"
   ]
  },
  {
@@ -8905,6 +9207,42 @@
  },
  {
   "zone": "World Bosses",
+  "boss": "Doomwalker",
+  "item": "Anger-Spark Gloves",
+  "id": 30725,
+  "wowhead": "https://www.wowhead.com/tbc/item=30725",
+  "slot": "Hands",
+  "type": "Cloth",
+  "roles": [
+   "Caster"
+  ]
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doomwalker",
+  "item": "Ethereum Nexus-Reaver",
+  "id": 30722,
+  "wowhead": "https://www.wowhead.com/tbc/item=30722",
+  "slot": "Two-Hand",
+  "type": "Axe",
+  "roles": [
+   "Physical"
+  ]
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doomwalker",
+  "item": "Faceguard of the Endless Watch",
+  "id": 30731,
+  "wowhead": "https://www.wowhead.com/tbc/item=30731",
+  "slot": "Head",
+  "type": "Plate",
+  "roles": [
+   "Tank"
+  ]
+ },
+ {
+  "zone": "World Bosses",
   "boss": "Doom Lord Kazzak",
   "item": "Hope Ender",
   "id": 30733,
@@ -9010,5 +9348,336 @@
    "Tank"
   ],
   "notes": ""
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doom Lord Kazzak",
+  "item": "Ancient Spellcloak of the Highborne",
+  "id": 30735,
+  "wowhead": "https://www.wowhead.com/tbc/item=30735",
+  "slot": "Back",
+  "type": "Cloak",
+  "roles": [
+   "Caster",
+   "Physical"
+  ]
+ },
+ {
+  "zone": "World Bosses",
+  "boss": "Doom Lord Kazzak",
+  "item": "Exodar Life-Staff",
+  "id": 30732,
+  "wowhead": "https://www.wowhead.com/tbc/item=30732",
+  "slot": "Two-Hand",
+  "type": "Staff",
+  "roles": [
+   "Healer",
+   "Caster"
+  ]
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Bladed Chaos Tunic",
+  "id": 34397,
+  "wowhead": "https://www.wowhead.com/tbc/item=34397",
+  "slot": "Chest",
+  "type": "Leather",
+  "roles": [
+   "Physical"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Harness of Carnal Instinct, which drops from M'uru."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Breastplate of Agony's Aversion",
+  "id": 34394,
+  "wowhead": "https://www.wowhead.com/tbc/item=34394",
+  "slot": "Chest",
+  "type": "Plate",
+  "roles": [
+   "Tank"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Warharness of Reckless Fury, which drops from M'uru."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Breeches of Natural Splendor",
+  "id": 34384,
+  "wowhead": "https://www.wowhead.com/tbc/item=34384",
+  "slot": "Legs",
+  "type": "Leather",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Breeches of Natural Aggression, which drops from Kalecgos."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Crown of Dath'Remar",
+  "id": 34400,
+  "wowhead": "https://www.wowhead.com/tbc/item=34400",
+  "slot": "Head",
+  "type": "Plate",
+  "roles": [
+   "Tank"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Crown of Anasterian, which drops from Kil'jaeden."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Erupting Epaulets",
+  "id": 34390,
+  "wowhead": "https://www.wowhead.com/tbc/item=34390",
+  "slot": "Shoulder",
+  "type": "Mail",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Equilibrium Epaulets, which drops from Eredar Twins."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Felstrength Legplates",
+  "id": 34381,
+  "wowhead": "https://www.wowhead.com/tbc/item=34381",
+  "slot": "Legs",
+  "type": "Plate",
+  "roles": [
+   "Tank",
+   "Physical"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Felfury Legplates, which drops from Brutallus."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Garments of Crashing Shores",
+  "id": 34396,
+  "wowhead": "https://www.wowhead.com/tbc/item=34396",
+  "slot": "Chest",
+  "type": "Mail",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Garments of Serene Shores, which drops from M'uru."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Gloves of Tyri's Power",
+  "id": 34406,
+  "wowhead": "https://www.wowhead.com/tbc/item=34406",
+  "slot": "Hands",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Handguards of the Dawn, which drops from Kil'jaeden."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Gloves of the Forest Drifter",
+  "id": 34408,
+  "wowhead": "https://www.wowhead.com/tbc/item=34408",
+  "slot": "Hands",
+  "type": "Leather",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Shadowed Gauntlets of Paroxysm, which drops from M'uru."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Helm of Arcane Purity",
+  "id": 34405,
+  "wowhead": "https://www.wowhead.com/tbc/item=34405",
+  "slot": "Head",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Cowl of Light's Purity, which drops from Kil'jaeden."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Helm of Uther's Resolve",
+  "id": 34401,
+  "wowhead": "https://www.wowhead.com/tbc/item=34401",
+  "slot": "Head",
+  "type": "Plate",
+  "roles": [
+   "Tank",
+   "Caster"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Helm of Burning Righteousness, which drops from Kil'jaeden."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Judicator's Legguards",
+  "id": 34382,
+  "wowhead": "https://www.wowhead.com/tbc/item=34382",
+  "slot": "Legs",
+  "type": "Plate",
+  "roles": [
+   "Tank",
+   "Caster"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Legplates of the Holy Juggernaut, which drops from Kalecgos."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Kilt of Spiritual Reconstruction",
+  "id": 34383,
+  "wowhead": "https://www.wowhead.com/tbc/item=34383",
+  "slot": "Legs",
+  "type": "Mail",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Chain Links of the Tumultuous Storm, which drops from Felmyst."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Leggings of the Immortal Beast",
+  "id": 34385,
+  "wowhead": "https://www.wowhead.com/tbc/item=34385",
+  "slot": "Legs",
+  "type": "Leather",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Leggings of the Immortal Night, which drops from Felmyst."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Mask of the Fury Hunter",
+  "id": 34404,
+  "wowhead": "https://www.wowhead.com/tbc/item=34404",
+  "slot": "Head",
+  "type": "Leather",
+  "roles": [
+   "Caster",
+   "Physical"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Duplicitous Guise, which drops from Kil'jaeden."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Noble Judicator's Chestguard",
+  "id": 34395,
+  "wowhead": "https://www.wowhead.com/tbc/item=34395",
+  "slot": "Chest",
+  "type": "Plate",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Heroic Judicator's Chestguard, which drops from M'uru."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Pantaloons of Growing Strife",
+  "id": 34386,
+  "wowhead": "https://www.wowhead.com/tbc/item=34386",
+  "slot": "Legs",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Pantaloons of Calming Strife, which drops from Kalecgos."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Robes of Ghostly Hatred",
+  "id": 34399,
+  "wowhead": "https://www.wowhead.com/tbc/item=34399",
+  "slot": "Chest",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Robes of Faltered Light, which drops from M'uru."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Shoulderpads of Knowledge's Pursuit",
+  "id": 34393,
+  "wowhead": "https://www.wowhead.com/tbc/item=34393",
+  "slot": "Shoulder",
+  "type": "Cloth",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Shawl of Wonderment, which drops from Eredar Twins."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Shroud of Chieftain Ner'zhul",
+  "id": 34402,
+  "wowhead": "https://www.wowhead.com/tbc/item=34402",
+  "slot": "Head",
+  "type": "Mail",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Cowl of Gul'dan, which drops from Kil'jaeden."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Spaulders of Devastation",
+  "id": 34391,
+  "wowhead": "https://www.wowhead.com/tbc/item=34391",
+  "slot": "Shoulder",
+  "type": "Leather",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Spaulders of Reclamation, which drops from Eredar Twins."
+ },
+ {
+  "zone": "Crafted (Sunmote)",
+  "boss": "—",
+  "item": "Utopian Tunic of Elune",
+  "id": 34398,
+  "wowhead": "https://www.wowhead.com/tbc/item=34398",
+  "slot": "Chest",
+  "type": "Leather",
+  "roles": [
+   "Healer",
+   "Caster"
+  ],
+  "notes": "Traded to Yrma with a Sunmote for Sunglow Vest, which drops from M'uru."
  }
 ]
