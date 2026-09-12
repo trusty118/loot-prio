@@ -22,7 +22,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { until, siteFetch } from "./helpers.mjs";
-import { build, SHIPPED } from "../build.mjs";
+import { build, report, SHIPPED } from "../build.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
@@ -55,6 +55,12 @@ await build();
 
   const src = fs.readdirSync(path.join(root, "src")).filter((f) => f.endsWith(".js"))
     .reduce((n, f) => n + fs.statSync(path.join(root, "src", f)).size, 0);
+  /* The report is what `node build.mjs` prints; running it here is what catches a stat on
+     a file that exists on this machine and not on CI, which is exactly how the first
+     module-era build went red on the runner and green everywhere else. */
+  let printed = "";
+  try { printed = report(); } catch (e) { printed = "THREW " + e.message; }
+  ok(/app\.js .*->/.test(printed) && !/THREW/.test(printed), `the size report runs (${printed.split("\n")[2] || printed})`);
   ok(fs.statSync(path.join(dist, "app.js")).size < src / 2,
      `app.js is less than half its source size (${(src / 1024).toFixed(0)} KB source)`);
 
