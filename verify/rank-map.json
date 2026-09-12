@@ -31,7 +31,8 @@
   "Arms/P2/30057 Bracers of Eradication - hit-conditional.",
   "Arms/P3/32574, 28795, 30861 - wrists. 'all of them perform within 1-5 DPS of each other ... merely a 4 DPS increase over the Phase 2 and Phase 1 BiS'. A hair under the real pick rather than an alternative.",
   "Arms/P3/32366 Shadowmaster's Boots - 'a close second choice, they are also BiS for most physical damage dealers within your raid, so it would be best not to contest them'.",
-  "Arms/P3/32260 Choker of Endless Nightmares - ranked 'Hit Alternative', which the rules read as an offer; the author means the hit pick."
+  "Arms/P3/32260 Choker of Endless Nightmares - ranked 'Hit Alternative', which the rules read as an offer; the author means the hit pick.",
+  "Arms/P3/32326 Twisted Blades of Zarak - the P3 raid bow sitting a couple of DPS behind Barrel-Blade Longrifle, which drops from Doomwalker. The same slot, the same competitor and the same condition as Arms/P1/28772 two phases earlier, so it takes the same qualifier."
  ],
  "itemsNote": "Per-ROW overrides, keyed exactly as the review page prints an id. The specs map below keys on a rank string, which cannot reach a row whose rank is plain 'Best' - and plenty of conditions live only in the author's prose, not in the rank cell. Same fields.",
  "items": {
@@ -77,6 +78,10 @@
   "Arms/P3/32260": {
    "bis": true,
    "variant": "hit",
+   "near": false
+  },
+  "Arms/P3/32326": {
+   "variant": "non-worldboss",
    "near": false
   }
  }

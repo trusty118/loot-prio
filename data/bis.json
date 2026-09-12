@@ -5173,7 +5173,8 @@
     {
      "id": 32326,
      "item": "Twisted Blades of Zarak",
-     "near": true
+     "variant": "non-worldboss",
+     "conditional": true
     }
    ],
    "P4": [
