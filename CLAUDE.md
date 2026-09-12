@@ -530,6 +530,21 @@ guide's blurb says in words.
 **A substituted token never matches its guide name**, since the guide named the piece. The
 mismatch report skips them, or all 558 would be reported as data errors by design.
 
+**The same file carries PER-ROW overrides, keyed as the review page prints an id** —
+`"Arms/P1/28730"`. The rank map reaches a wording; this reaches a row, and it exists because
+**plenty of conditions live only in the author's prose**. Arms' Phase 1 ring slot forced it:
+four rings all ranked plain `Best`, with the blurb saying *"your second ring will depend on
+your hit rating … Mithril Band of the Unscarred and Ring of Arathi Warlords will be your go-to
+if you are over the hit cap"*. Overriding `Best` for Arms would have hit every row in that
+guide.
+
+**`qualifier()` is one function because the first version was not.** Three places ask what
+qualifier a row carries — slot capacity, `cond_items`, and the written entry — and they each
+called `variant_for()` separately. That was harmless until an override could change the
+answer: capacity still read the raw rank, so a row given a qualifier by hand still counted
+against the plain group and stayed marked `near`. The override set the variant and not the
+ring, which is worse than not having the override at all.
+
 **`verify/rank-map.json` is where an author's wording gets overruled.** Keyed on **(spec,
 exact rank string)** → `{ bis, near, variant }`, consulted **before** the rules, which stay
 as the default — so an unlisted wording behaves exactly as it does today and an **empty file

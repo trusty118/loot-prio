@@ -4867,7 +4867,8 @@
     {
      "id": 28730,
      "item": "Mithril Band of the Unscarred",
-     "near": true
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28830,

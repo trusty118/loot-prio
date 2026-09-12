@@ -229,6 +229,20 @@ def load_tier_tokens():
     return {int(k): v["token"] for k, v in doc.get("pieces", {}).items()}
 
 
+def load_item_map():
+    """Per-row overrides, keyed exactly as the review page prints an id: "Arms/P1/28730".
+
+    The rank map below keys on (spec, rank text), which cannot reach a row whose rank is
+    plain "Best" - and plenty of conditions live only in the author's PROSE. Arms' Phase 1
+    ring slot is the case that forced this: four rings all ranked "Best", with the blurb
+    saying "Mithril Band of the Unscarred ... will be your go-to if you are over the hit
+    cap". Overriding "Best" for Arms would have hit every row in that guide.
+    """
+    if not RANK_MAP.exists():
+        return {}
+    return json.loads(RANK_MAP.read_text(encoding="utf-8")).get("items", {})
+
+
 def load_rank_map():
     """Per-spec rank overrides, consulted BEFORE the rules below.
 
@@ -378,6 +392,7 @@ def main():
     reg = json.loads(SPECS.read_text(encoding="utf-8"))["specs"]
     sources = json.loads(SOURCES.read_text(encoding="utf-8"))["specs"]
     rank_map = load_rank_map()
+    item_map = load_item_map()
     tier_token = load_tier_tokens()
     current = json.loads(BIS.read_text(encoding="utf-8"))
 
@@ -427,6 +442,24 @@ def main():
         # past what the slot holds is a near-BiS alternative. It has to be settled first:
         # a near-BiS row must not count toward how long an item lasted, or a third-choice
         # sword in P4 would look like the item surviving P4.
+        def qualifier(phase, item_id, rank):
+            """The variant this row carries, override first.
+
+            ONE function, used by all three places that ask - slot capacity, cond_items,
+            and the written entry. They used to call variant_for() separately, which was
+            fine until an override could change the answer: the first version of this left
+            capacity on the raw rank, so a row given a qualifier by hand still counted
+            against the plain group and stayed marked near. The override could set the
+            variant and not the ring, which is worse than not having it.
+            """
+            over = item_map.get(f"{spec}/{phase}/{item_id}")
+            if over is not None and "variant" in over:
+                return over["variant"], None
+            over = rank_map.get(spec, {}).get(rank)
+            if over is not None and "variant" in over:
+                return over["variant"], None
+            return variant_for(rank)
+
         near_ids = {}
         for ph, rows in per_phase.items():
             filled, near_ids[ph] = {}, set()
@@ -440,7 +473,7 @@ def main():
                 if alternate:
                     near_ids[ph].add(item_id)
                     continue
-                variant, _ = variant_for(rank)
+                variant, _ = qualifier(ph, item_id, rank)
                 key = (rec["slot"], variant or "")
                 filled[key] = filled.get(key, 0) + 1
                 if filled[key] > capacity(rec["slot"]):
@@ -530,7 +563,7 @@ def main():
             for item_id, _, rank, _alt in per_phase[ph]:
                 if item_id in near_ids[ph]:
                     continue
-                variant, _ = variant_for(rank)
+                variant, _ = qualifier(ph, item_id, rank)
                 if conditional(variant):
                     cond_items.add(item_id)
 
@@ -552,7 +585,11 @@ def main():
                         f"{spec}: id {item_id} is {rec['item']!r} here, {name!r} on Wowhead")
 
                 entry = {"id": item_id, "item": rec["item"]}
-                if item_id in near_ids[phase]:
+                over_item = item_map.get(f"{spec}/{phase}/{item_id}", {})
+                near = item_id in near_ids[phase]
+                if "near" in over_item:
+                    near = bool(over_item["near"])
+                if near:
                     entry["near"] = True
                 # The author named this item's replacement in this phase, so the listing
                 # is still BiS and still rings - it just cannot be evidence that anything
@@ -564,10 +601,7 @@ def main():
                 tier = tier_from(item_id)
                 if tier > 1:
                     entry["bis"] = TIERS[tier]
-                variant, miss = variant_for(rank)
-                over = rank_map.get(spec, {}).get(rank)
-                if over is not None and "variant" in over:
-                    variant, miss = over["variant"], None
+                variant, miss = qualifier(phase, item_id, rank)
                 if variant:
                     entry["variant"] = variant
                 # Per item, so every phase of a conditional pick agrees. Absent means

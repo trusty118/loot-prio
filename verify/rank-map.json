@@ -23,6 +23,13 @@
   }
  },
  "decisions": [
-  "Game Best (Arms, Fury) - Dragonspine Trophy. The strongest claim the warrior guides make, and RANKED_BIS dropped it because it tests for 'best' at the START of the rank: 'Game Best' puts it last. The same guides write plain 'Best' for the same trophy in P2-P5, where it reads as expansion BiS, so P1 was the odd one out. Two rows in the whole scrape, both this item."
- ]
+  "Game Best (Arms, Fury) - Dragonspine Trophy. The strongest claim the warrior guides make, and RANKED_BIS dropped it because it tests for 'best' at the START of the rank: 'Game Best' puts it last. The same guides write plain 'Best' for the same trophy in P2-P5, where it reads as expansion BiS, so P1 was the odd one out. Two rows in the whole scrape, both this item.",
+  "Arms/P1/28730 - Mithril Band of the Unscarred. Ranked plain 'Best' like the three rings above it, so nothing in the rank cell says it is conditional. The blurb does: 'your second ring will depend on your hit rating ... Mithril Band of the Unscarred and Ring of Arathi Warlords will be your go-to if you are over the hit cap.' Marked hit-conditional."
+ ],
+ "itemsNote": "Per-ROW overrides, keyed exactly as the review page prints an id. The specs map below keys on a rank string, which cannot reach a row whose rank is plain 'Best' - and plenty of conditions live only in the author's prose, not in the rank cell. Same fields.",
+ "items": {
+  "Arms/P1/28730": {
+   "variant": "hit"
+  }
+ }
 }
