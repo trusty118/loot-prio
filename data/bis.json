@@ -150,6 +150,12 @@
      "near": true
     },
     {
+     "id": 30050,
+     "item": "Boots of the Shifting Nightmare",
+     "variant": "non-tailor",
+     "conditional": true
+    },
+    {
      "id": 30109,
      "item": "Ring of Endless Coils"
     },
