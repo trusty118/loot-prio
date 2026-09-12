@@ -1,0 +1,272 @@
+<title>BiS Rank Review</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root{
+  --ground:#f7f8fa; --panel:#fff; --panel-2:#eef1f5; --line:#d8dee7; --line-soft:#e7ecf2;
+  --ink:#161b22; --ink-dim:#4a5666; --ink-faint:#78859a;
+  --accent:#0e7c86; --accent-soft:#d7eef0;
+  --purple:#7b3fb8; --orange:#b4600a; --gold:#8a6d1f; --blue:#0a5fb4; --drop:#8a95a5;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#12151a; --panel:#181d24; --panel-2:#1f252e; --line:#2c343f; --line-soft:#232a33;
+  --ink:#e6eaf0; --ink-dim:#a3aebd; --ink-faint:#778494;
+  --accent:#4fc3cd; --accent-soft:#12333a;
+  --purple:#c08cf0; --orange:#ffa04d; --gold:#e6cc80; --blue:#5fa8ec; --drop:#6a7686;
+}}
+:root[data-theme="dark"]{
+  --ground:#12151a; --panel:#181d24; --panel-2:#1f252e; --line:#2c343f; --line-soft:#232a33;
+  --ink:#e6eaf0; --ink-dim:#a3aebd; --ink-faint:#778494;
+  --accent:#4fc3cd; --accent-soft:#12333a;
+  --purple:#c08cf0; --orange:#ffa04d; --gold:#e6cc80; --blue:#5fa8ec; --drop:#6a7686;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:14px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding:26px 20px 80px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-size:1.65rem;margin:0 0 6px;font-weight:600;text-wrap:balance}
+.lede{color:var(--ink-dim);max-width:70ch;margin:0 0 14px}
+code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--panel-2);padding:1px 5px;border-radius:3px}
+.bar{position:sticky;top:0;z-index:5;background:var(--ground);border-bottom:1px solid var(--line);
+  padding:12px 0;display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-bottom:18px}
+select,input[type=search]{font:inherit;font-size:.85rem;background:var(--panel);color:var(--ink);
+  border:1px solid var(--line);border-radius:6px;padding:6px 9px}
+input[type=search]{min-width:200px}
+select:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.count{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--ink-faint);font-variant-numeric:tabular-nums}
+.slot{background:var(--panel);border:1px solid var(--line);border-radius:9px;margin-bottom:14px;overflow:hidden}
+.slot-head{padding:11px 15px;border-bottom:1px solid var(--line-soft);background:var(--panel-2)}
+.slot-head h3{margin:0;font-size:.95rem;font-family:"IBM Plex Serif",Georgia,serif;font-weight:600}
+.who{font-family:"IBM Plex Mono",monospace;font-size:.75rem;color:var(--ink-faint);margin-top:2px}
+.blurb{padding:10px 15px;color:var(--ink-dim);border-bottom:1px solid var(--line-soft);
+  font-style:italic;max-width:88ch}
+.blurb.none{color:var(--ink-faint);font-style:normal}
+table{border-collapse:collapse;width:100%}
+th{padding:6px 15px 5px;text-align:left;font-size:.68rem;text-transform:uppercase;
+  letter-spacing:.07em;color:var(--ink-faint);font-weight:600;
+  border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:6px 15px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr.drop td{color:var(--drop)}
+/* the row you searched for, without hiding the ones that give it meaning */
+tr.hit td{background:var(--accent-soft)}
+tr.hit td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+.rank{font-family:"IBM Plex Mono",monospace;font-size:.85rem;font-weight:500;white-space:nowrap}
+.num{font-family:"IBM Plex Mono",monospace;color:var(--ink-faint);font-variant-numeric:tabular-nums;width:2.5rem}
+.rid{font-family:"IBM Plex Mono",monospace;font-size:.74rem;background:var(--panel-2);color:var(--ink-dim);
+  border:1px solid var(--line-soft);border-radius:4px;padding:1px 5px;cursor:pointer;white-space:nowrap}
+.rid:hover{border-color:var(--accent);color:var(--accent)}
+.rid.copied{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.o{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.o-phase{color:var(--purple)} .o-multiPhase{color:var(--orange)} .o-expansion{color:var(--gold)}
+.o-alt{color:var(--blue)} .o-dropped{color:var(--drop)} .o-noitem{color:var(--ink-faint)}
+.elsewhere{display:inline-block;margin-left:.5em;padding:.05em .45em;border-radius:3px;border:1px solid var(--line);color:var(--ink-faint);font-size:.68rem;font-weight:600;letter-spacing:.04em;white-space:nowrap;vertical-align:middle}
+tr.elsewhere-row td:not(.o){opacity:.62}
+.why{font-size:.72rem;font-weight:400;text-transform:none;letter-spacing:0;
+  color:var(--ink-faint);margin-top:2px;max-width:34ch;white-space:normal}
+.dash::after{content:" (dashed)";font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink-faint)}
+.more{text-align:center;padding:18px}
+.chk{font-size:.85rem;color:var(--ink-dim);display:flex;align-items:center;gap:6px;cursor:pointer}
+.hidden-note{padding:7px 15px;font-size:.78rem;color:var(--ink-faint);
+  background:var(--panel-2);border-bottom:1px solid var(--line-soft)}
+.legend{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+  padding:12px 16px;margin-bottom:16px}
+.legend summary{cursor:pointer;font-weight:600;color:var(--ink-dim)}
+.legend dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:14px 0 2px;align-items:start}
+.legend dt{white-space:nowrap;font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--ink)}
+.legend dd{margin:0;color:var(--ink-dim);max-width:80ch}
+.legend dd.wide{grid-column:1 / -1;line-height:1.9}
+@media (max-width:640px){.legend dl{grid-template-columns:1fr}}
+button.link{font:inherit;font-size:.83rem;font-weight:600;color:var(--accent);background:var(--accent-soft);
+  border:1px solid transparent;border-radius:5px;padding:5px 11px;cursor:pointer}
+button.link:hover{border-color:var(--accent)}
+footer{margin-top:30px;padding-top:15px;border-top:1px solid var(--line);color:var(--ink-faint);font-size:.8rem;max-width:78ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<h1>BiS Rank Review</h1>
+<p class="lede">Every Wowhead BiS table, grouped the way the guide is written: one block per
+slot, with the author&rsquo;s own sentence above it and <strong>all of its rows together</strong>
+&mdash; kept, alternate and dropped. A rank cell cannot be judged alone. Wowhead&rsquo;s feral
+bear guide ranks Shadowmoon Destroyer&rsquo;s Drape <span class="rank">Threat Alternative</span>,
+and the only way to know that means &ldquo;not BiS&rdquo; rather than &ldquo;BiS for threat&rdquo;
+is the sentence above the table naming two <em>other</em> cloaks as best.</p>
+<p class="lede">Disagree with one? Click its id to copy &mdash; <code>Arms/P3/32323</code> &mdash;
+and paste it back with what it should be. Decisions land in
+<code>verify/rank-map.json</code>, keyed per spec, because authors do not share a vocabulary.</p>
+
+<details class="legend" open>
+  <summary>What the columns and outcomes mean</summary>
+  <dl>
+    <dt>#</dt><dd><strong>The row&rsquo;s position in the guide&rsquo;s own table.</strong>
+      Wowhead ranks by order, so row 0 is the author&rsquo;s first choice. This is what decides
+      which of several &ldquo;Best&rdquo; rows actually holds the slot.</dd>
+    <dt>Id</dt><dd>Spec, phase and item id. <strong>Click to copy</strong>, then paste it back
+      to tell me a row is wrong. Stays valid if Wowhead reorders the guide.</dd>
+    <dt>What the guide says</dt><dd>The rank cell <strong>copied exactly</strong>, never
+      normalised. This is the evidence.</dd>
+    <dt>What we did with it</dt><dd>One of:</dd>
+    <dd class="wide">
+      <span class="o o-phase">phase</span> &middot;
+      <span class="o o-multiPhase">multi-phase</span> &middot;
+      <span class="o o-expansion">expansion</span> &mdash; kept as a real BiS call. The word
+      says how long it lasts, and it draws a purple, orange or gold ring on the site.<br>
+      <span class="o o-phase dash">phase</span> &mdash; the same, but the guide only ever
+      called it best <em>under a condition</em>, so the ring is dashed.<br>
+      <span class="o o-alt">alternate</span> &mdash; the author offered it and said what for,
+      but never called it best. Blue ring.<br>
+      <span class="o o-dropped">rank rejected</span> &mdash; the rank is not a BiS call
+      (<code>Great</code>, <code>P2 Best</code>, <code>Best Pre-raid</code>) or names no
+      reason to offer it (<code>Optional</code>). The exact reason is under the label.<br>
+      <span class="o o-noitem">no such item</span> &mdash; <strong>a different thing, and
+      two-thirds of everything not shown.</strong> Wowhead ranks it but this site has no row
+      for it, so there is nothing to put a ring on. Usually tier armour (what a token turns
+      into), PvP, crafted or 5-man gear, which <code>loot_data.json</code> leaves out on
+      purpose. The rank itself is often perfectly fine &mdash; the label says which.
+    </dd>
+    <dt>A row marked <span class="elsewhere">P2 DROP</span></dt>
+    <dd>The guide for this phase ranks an item that <strong>drops in an earlier one</strong>,
+      so it is not a row you can act on here &mdash; the site only ever shows that item under
+      the phase it drops in. <strong>It is not noise, and deleting these would break the ring
+      colours.</strong> How long an item lasts is derived from which phases go on listing it:
+      Dragonspine Trophy is a Phase 1 trinket, and the only reason it wears a gold
+      <em>expansion</em> ring is that the P2&ndash;P5 guides keep naming it. 1,057 of the
+      2,837 shipped entries are these. Hide them with the checkbox when you are reviewing one
+      phase's decisions.</dd>
+  </dl>
+</details>
+
+<div class="bar">
+  <select id="f-spec"><option value="">All specs</option></select>
+  <select id="f-phase"><option value="">All phases</option></select>
+  <select id="f-out">
+    <option value="">Every outcome</option>
+    <option value="dropped">Rank rejected only</option>
+    <option value="noitem">No such item only</option>
+    <option value="alt">Alternates only</option>
+    <option value="mixed">Slots with a mix</option>
+  </select>
+  <input type="search" id="f-q" placeholder="Item or rank text&hellip;">
+  <label class="chk"><input type="checkbox" id="f-nonraid"> show non-raid rows</label>
+  <label class="chk"><input type="checkbox" id="f-thisphase"> only this phase's drops</label>
+  <span class="count" id="count"></span>
+</div>
+<div id="out"></div>
+<div class="more" id="more"></div>
+
+<footer>Generated by <code>verify/dump_bis_raw.py</code>, which imports the real parser from
+<code>verify/fetch_bis.py</code> &mdash; so this audits the code that ships, not a second copy.
+Rows appear in guide order, which is how Wowhead ranks them.</footer>
+</div>
+
+<script>
+const PAGE = 60;
+let DATA = null, shown = PAGE;
+fetch("review-data.json").then((r) => r.json()).then((d) => { DATA = d; init(); });
+
+const LABEL = { dropped:"rank rejected", noitem:"no such item", alt:"alternate",
+                phase:"phase", multiPhase:"multi-phase", expansion:"expansion",
+                "cond-phase":"phase", "cond-multiPhase":"multi-phase",
+                "cond-expansion":"expansion" };
+
+function init(){
+  for (const s of [...new Set(DATA.rows.map((r) => r.s))].sort()) add("f-spec", s);
+  for (const p of [...new Set(DATA.rows.map((r) => r.p))].sort()) add("f-phase", p);
+  for (const id of ["f-spec","f-phase","f-out","f-nonraid"])
+    document.getElementById(id).addEventListener("change", () => { shown = PAGE; render(); });
+  document.getElementById("f-q").addEventListener("input", () => { shown = PAGE; render(); });
+  document.getElementById("f-thisphase")
+    .addEventListener("change", () => { shown = PAGE; render(); });
+  render();
+}
+function add(sel, v){ const o=document.createElement("option"); o.value=o.textContent=v;
+  document.getElementById(sel).appendChild(o); }
+function esc(s){ return String(s ?? "").replace(/[&<>"]/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function val(id){ return document.getElementById(id).value; }
+
+function render(){
+  const spec = val("f-spec"), phase = val("f-phase"), out = val("f-out"), q = val("f-q").toLowerCase();
+  /* Spec and phase narrow which rows exist at all; the SEARCH does not. It selects
+     which slots to show and every one of them arrives whole, because a rank cell is
+     judged against the rows around it - filtering the slot down to the match is exactly
+     the context the page exists to provide. */
+  const rows = DATA.rows.filter((r) => (!spec || r.s === spec) && (!phase || r.p === phase));
+
+  /* Non-raid rows are hidden by default. This dataset is a RAID loot table, so heroic
+     5-mans, crafted, reputation and badge gear have no row on the site and cannot be
+     reviewed - they were two-thirds of everything here and buried the rows that can.
+     Kept behind a toggle rather than filtered out of the data, because a slot whose real
+     BiS is a tier helm we do not list still needs to explain why only alternates remain. */
+  const showAll = document.getElementById("f-nonraid").checked;
+  const here = document.getElementById("f-thisphase").checked;
+
+  const groups = new Map();
+  for (const r of rows) {
+    const k = `${r.s}|${r.p}|${r.h}`;
+    if (!groups.has(k)) groups.set(k, { all: [], shown: [] });
+    const e = groups.get(k);
+    e.all.push(r);
+    if ((showAll || r.o !== "noitem") && !(here && r.d)) e.shown.push(r);
+  }
+  /* a slot with nothing left to review is not a slot worth showing */
+  let list = [...groups.entries()].filter(([, e]) => e.shown.length);
+  if (q) list = list.filter(([, e]) =>
+    e.shown.some((r) => r.t.toLowerCase().includes(q) || r.r.toLowerCase().includes(q)));
+  if (out === "dropped") list = list.filter(([,e]) => e.shown.some((r) => r.o === "dropped"));
+  if (out === "noitem")  list = list.filter(([,e]) => e.all.some((r) => r.o === "noitem"));
+  if (out === "alt")     list = list.filter(([,e]) => e.shown.some((r) => r.o === "alt"));
+  if (out === "mixed")   list = list.filter(([,e]) => new Set(e.shown.map((r) => r.o)).size > 1);
+
+  document.getElementById("count").textContent =
+    `${list.length.toLocaleString()} slots · ${list.reduce((n,[,e]) => n + e.shown.length, 0).toLocaleString()} rows`;
+
+  document.getElementById("out").innerHTML = list.slice(0, shown).map(([k, e]) => {
+    const g = e.shown;
+    const [s, p, h] = k.split("|");
+    const blurb = DATA.blurbs[e.all[0].b];
+    const hidden = e.all.length - e.shown.length;
+    const body = g.slice().sort((a,b) => a.n - b.n).map((r) => {
+      const cond = r.o.startsWith("cond-");
+      const base = cond ? r.o.slice(5) : r.o;
+      const hit = q && (r.t.toLowerCase().includes(q) || r.r.toLowerCase().includes(q));
+      const gone = r.o === "dropped" || r.o === "noitem";
+      /* An item we do not hold is NOT the same as a rank we rejected, and showing both as
+         "dropped" made "Warbringer Battle-Helm / Best / dropped" unreadable: its rank was
+         fine, we simply do not list T4 tier armour. Two-thirds of all drops are this. */
+      const note = r.o === "noitem"
+        ? (r.k ? "rank was fine \u2014 this site has no row for the item"
+               : "no row for the item, and the rank was rejected too: " + r.w)
+        : (r.o === "dropped" ? r.w : "");
+      return `<tr class="${gone ? "drop" : ""}${hit ? " hit" : ""}${r.d ? " elsewhere-row" : ""}">
+        <td class="num">${r.n}</td>
+        <td><button class="rid" data-id="${esc(r.s)}/${esc(r.p)}/${r.i}">${esc(r.s)}/${esc(r.p)}/${r.i}</button></td>
+        <td>${esc(r.t)}${r.d ? `<span class="elsewhere" title="Drops in ${esc(r.d)}, so the site shows this item under ${esc(r.d)} and never here. The listing still counts: it is the evidence for how long the item stayed BiS.">${esc(r.d)} drop</span>` : ""}</td>
+        <td class="rank">${esc(r.r)}</td>
+        <td class="o o-${base}${cond ? " dash" : ""}"${note ? ` title="${esc(note)}"` : ""}>${LABEL[r.o]}${
+          note ? `<div class="why">${esc(note)}</div>` : ""}</td></tr>`;
+    }).join("");
+    return `<section class="slot">
+      <div class="slot-head"><h3>${esc(h)}</h3><div class="who">${esc(s)} &middot; ${esc(p)}</div></div>
+      <div class="blurb${blurb ? "" : " none"}">${blurb ? esc(blurb) : "no sentence above this table"}</div>
+      ${hidden ? `<div class="hidden-note">${hidden} row${hidden > 1 ? "s" : ""} not shown &mdash; not raid loot, so this site has no row to review. Tick <em>show non-raid rows</em> above to see ${hidden > 1 ? "them" : "it"}.</div>` : ""}
+      <table>
+        <thead><tr>
+          <th class="num">#</th><th>Id</th><th>Item</th>
+          <th>What the guide says</th><th>What we did with it</th>
+        </tr></thead>
+        <tbody>${body}</tbody></table></section>`;
+  }).join("");
+
+  document.getElementById("more").innerHTML = list.length > shown
+    ? `<button class="link" onclick="shown += 120; render()">Show 120 more (${(list.length - shown).toLocaleString()} slots hidden)</button>` : "";
+}
+
+document.addEventListener("click", (e) => {
+  const b = e.target.closest(".rid");
+  if (!b) return;
+  const done = () => { const was = b.textContent; b.textContent = "copied";
+    b.classList.add("copied");
+    setTimeout(() => { b.textContent = was; b.classList.remove("copied"); }, 900); };
+  if (navigator.clipboard?.writeText) navigator.clipboard.writeText(b.dataset.id).then(done, done);
+  else done();
+});
+</script>

@@ -33,19 +33,26 @@ const dist = path.join(root, "dist");
    script and the Supabase SDK are external CDN URLs and need nothing from here. */
 export const SHIPPED = ["index.html", "style.css", "app.js", "data"];
 
-/* Identifier renaming is safe on app.js and was checked, not assumed: no eval, no
-   `new Function`, nothing reads a function's .name, and the whole file is one
-   self-contained IIFE exporting no globals. test/build.mjs is what keeps that true - it
-   boots the built file and asserts the page still renders, which is the only thing that
-   can catch a minifier breaking the app. */
+/* app.js is BUNDLED from src/*.js, Sep 2026 - seventeen ES modules along the section
+   banners the one 5,200-line IIFE already had. What ships is unchanged in kind: one
+   self-contained IIFE, a classic <script>, executing during parsing (which the Supabase
+   race in CLAUDE.md depends on). esbuild's bundle IS that IIFE; the modules exist for the
+   person editing, not for the browser.
+
+   Identifier renaming is safe and was checked, not assumed: no eval, no `new Function`,
+   nothing reads a function's .name, no globals exported. test/build.mjs is what keeps
+   that true - it boots the built file and asserts the page still renders, which is the
+   only thing that can catch a minifier breaking the app. */
 async function buildJs() {
   const out = await esbuild.build({
-    entryPoints: [path.join(root, "app.js")],
+    entryPoints: [path.join(root, "src", "main.js")],
+    bundle: true,
     outfile: path.join(dist, "app.js"),
     minify: true,
     /* A classic script, not a module: app.js is loaded with a plain <script> tag and
        executes during parsing, which is load-bearing for the Supabase race described in
-       CLAUDE.md section 4. Bundling or wrapping it as ESM would change when it runs. */
+       CLAUDE.md section 4. "iife" is what makes the bundle behave exactly as the single
+       file did; emitting ESM would change when it runs. */
     format: "iife",
     target: "es2017",
     legalComments: "none",

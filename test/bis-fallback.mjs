@@ -2,7 +2,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { until } from "./helpers.mjs";
+import { until, siteFetch, site, appBundle } from "./helpers.mjs";
 
 // resolve the repo root from this file, so it works on any machine or cwd
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -12,7 +12,7 @@ const data = JSON.parse(fs.readFileSync(path.join(root, "data/loot_data.json"), 
 /* Counted, not pinned - the same lesson smoke.mjs learned when 51 rows arrived and took a
    dozen checks red. What every assertion below means is "the table still renders in full",
    which is a claim about degrading gracefully and not about how much loot exists. */
-const P3_ZONES = ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"];
+const P3_ZONES = site.rules.phases.find((p) => p.id === "P3").zones;
 const P3_TOTAL = data.filter((r) => P3_ZONES.includes(r.zone)).length;
 const specs = JSON.parse(fs.readFileSync(path.join(root, "data/specs.json"), "utf8"));
 const listIndex = JSON.parse(fs.readFileSync(path.join(root, "data/lists/index.json"), "utf8"));
@@ -28,14 +28,8 @@ async function boot(bisResponse) {
     url: "https://x.test/#list=zatar-p3" });
   const { window } = dom;
   window.console = { warn: () => {}, log: () => {} };
-  window.fetch = (url) => {
-    const u = String(url);
-    if (u.includes("bis.json")) return bisResponse();
-    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
-      u.includes("lists/index.json") ? listIndex : u.includes("zatar-p3.json") ? zatarList
-      : u.includes("specs.json") ? specs : data) });
-  };
-  window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
+  window.fetch = siteFetch({ "bis.json": bisResponse });
+  window.eval(appBundle());
   await until(() => window.document.querySelector("td.col-prio img.spec-icon"));
   return window.document;
 }
@@ -74,13 +68,8 @@ ok(doc.querySelectorAll("tbody tr").length === P3_TOTAL, "missing specs key -> t
   const dom = new JSDOM(html, { runScripts: "outside-only", url: "https://x.test/#list=zatar-p3" });
   const { window } = dom;
   window.console = { warn: () => {}, log: () => {} };
-  window.fetch = (url) => {
-    const u = String(url);
-    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
-      u.includes("lists/index.json") ? listIndex : u.includes("zatar-p3.json") ? zatarList
-      : u.includes("specs.json") ? bent : u.includes("bis.json") ? { specs: {} } : data) });
-  };
-  window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
+  window.fetch = siteFetch({ "specs.json": bent, "bis.json": { specs: {} } });
+  window.eval(appBundle());
   await new Promise((r) => setTimeout(r, 400));
   const d = window.document;
 

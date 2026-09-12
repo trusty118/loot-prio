@@ -21,7 +21,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { until } from "./helpers.mjs";
+import { until, siteFetch } from "./helpers.mjs";
 import { build, SHIPPED } from "../build.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -40,7 +40,7 @@ await build();
 
   /* Named individually rather than inferred from the list above, because these are the
      specific things that were public and the assertion should say so by name. */
-  for (const leaked of ["CLAUDE.md", "README.md", "test", "verify", "docs",
+  for (const leaked of ["CLAUDE.md", "README.md", "test", "verify", "docs", "src",
                         "package.json", "package-lock.json", "node_modules"]) {
     ok(!fs.existsSync(path.join(dist, leaked)), `${leaked} is not published`);
   }
@@ -53,7 +53,8 @@ await build();
   ok(!js.includes("/*") && !css.includes("/*"), "no block comments survive in the JS or CSS");
   ok(!htmlOut.includes("<!--"), "and none in the HTML");
 
-  const src = fs.statSync(path.join(root, "app.js")).size;
+  const src = fs.readdirSync(path.join(root, "src")).filter((f) => f.endsWith(".js"))
+    .reduce((n, f) => n + fs.statSync(path.join(root, "src", f)).size, 0);
   ok(fs.statSync(path.join(dist, "app.js")).size < src / 2,
      `app.js is less than half its source size (${(src / 1024).toFixed(0)} KB source)`);
 
@@ -75,13 +76,7 @@ await build();
 
   const dom = new JSDOM(html, { runScripts: "outside-only", url: "https://x.test/loot-prio/" });
   const { window } = dom;
-  window.fetch = (url) => {
-    const u = String(url);
-    const body = u.includes("lists/index.json") ? listIndex
-               : u.includes("zatar-p3.json") ? zatarList
-               : u.includes("bis.json") ? bis : u.includes("specs.json") ? specs : data;
-    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(body) });
-  };
+  window.fetch = siteFetch();
   window.eval(fs.readFileSync(path.join(dist, "app.js"), "utf8"));
 
   const d = window.document;

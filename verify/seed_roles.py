@@ -32,7 +32,7 @@ LOOT = ROOT / "data" / "loot_data.json"
 SPECS = ROOT / "data" / "specs.json"
 BIS = ROOT / "data" / "bis.json"
 
-VALID = ["Physical", "Caster", "Healer", "Tank", "Tier"]
+VALID = json.loads((ROOT / "data" / "rules.json").read_text(encoding="utf-8"))["roles"]
 ARMOUR = {"Cloth", "Leather", "Mail", "Plate"}
 
 

@@ -30,30 +30,11 @@ VALID_TIERS = {"phase", "multiPhase", "expansion"}
 # inventing a phrase. Absent means "the BiS item for that slot", which is most entries.
 # How many of a slot one person wears at once, matching fetch_bis.py. More non-near
 # entries than this in one (slot, variant) group means the ranking was lost again.
-SLOT_CAPACITY = {"Finger": 2, "Trinket": 2, "One-Hand": 2}
+RULES = json.loads((ROOT / "data" / "rules.json").read_text(encoding="utf-8"))
+SLOT_CAPACITY = RULES["slotCapacity"]
 
-VALID_VARIANTS = {
-    "threat", "mitigation", "regen", "throughput", "balanced",       # what it is for
-    "hit", "haste", "crit", "spellpower", "expertise",               # the stat chased
-    "dagger", "shield", "mainhand", "offhand",                       # the weapon setup
-    "human", "non-human",                                           # racials that change it
-    "pair", "individually", "overall",                              # as a set, or alone
-    "unless",                        # best only while you lack (or hold) some other item
-    # Added Sep 2026 from reviewed rows whose condition lived in the author's prose rather
-    # than the rank cell, so nothing could have mapped them automatically.
-    "2pc",                           # wanted for the two-piece set bonus
-    "4pc",                           # wanted for the four-piece set bonus
-    "contested",                     # best, but another class wants it more
-    "non-worldboss",                 # best among what a normal raid can actually get
-    "below-bis",                     # a hair under the real pick; the guide calls them equal
-    # The warlock guides rank every non-BiS piece a bare "Option" and put the real call in
-    # the prose, so these four came off blurbs rather than rank cells.
-    "non-crafted",                   # best of what you do not have to have crafted
-    "non-tailor",                    # the BiS needs tailoring; this is the pick without it
-    "10man",                         # best from 10-man content
-    "worldboss",                     # best, but it drops off a world boss
-}
-RACES = {"Orc", "Human"}
+VALID_VARIANTS = set(RULES["variants"])
+RACES = set(RULES["races"])
 
 
 def registry():
@@ -155,18 +136,9 @@ def main():
                         f"not {who}, so no ring will show"
                     )
 
-    # Qualifiers that do NOT compete for the slot, and the one reason they are exempt from the
-    # capacity rule below. Every other variant in the vocabulary names a condition under which
-    # that row IS the slot's pick - hit, threat, 4pc, contested - so two of them in one slot is
-    # the row-order bug this file exists to catch. "below-bis" makes no such claim: it says the
-    # row is within a few DPS of the winner, which is a statement about the MARGIN rather than
-    # about who wins, so counting it against capacity asks a question it does not answer.
-    #
-    # It is still a stronger claim than blue. Blue is "the author listed this without calling it
-    # best"; this is "the author called it Best and the prose says they are all about equal"
-    # (Arms P3 Wrist: "all of them perform within 1-5 DPS of each other"). Three dashed rings,
-    # not one solid and two blue, is the honest rendering of that.
-    UNCONTESTED = {"below-bis"}
+    # Qualifiers that do NOT compete for the slot - `uncontested` in data/rules.json, which
+    # also says why. fetch_bis.py and test/smoke.mjs read the same flag.
+    UNCONTESTED = {v for v, m in RULES["variants"].items() if m.get("uncontested")}
 
     # The invariant the row-order fix exists to enforce: within one (spec, phase, slot,
     # variant) group, no more entries claim to be BiS than the slot can hold. Two rings

@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "node test/smoke.mjs && node test/bis-fallback.mjs && node test/edit-mode.mjs && node test/templates.mjs && node test/auth.mjs && node test/build.mjs",
+    "bundle": "esbuild src/main.js --bundle --format=iife --target=es2017 --outfile=app.js",
     "build": "node build.mjs",
-    "serve": "python3 -m http.server 8642 --bind 127.0.0.1",
+    "serve": "npm run bundle -- --watch=forever & python3 -m http.server 8642 --bind 127.0.0.1",
     "serve:dist": "python3 -m http.server 8643 --bind 127.0.0.1 --directory dist"
   },
   "devDependencies": {

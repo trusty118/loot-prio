@@ -52,7 +52,10 @@ BIS_HEADING = re.compile(r"Best In Slot Gear.{0,90}?Phase\s*([12345])", re.I | r
 # Phase 2 is also the one phase written PER SPEC where Phase 3 is per class, so five
 # specs have a better source at P2 than they do at P3.
 PHASE_SLUG = {"P3": "-bt-hyjal-phase-3-", "P4": "-za-phase-4-", "P5": "-swp-phase-5-"}
-PHASES = ["P1", "P2", "P3", "P4", "P5"]
+# Everything three languages have to agree on lives in data/rules.json - see the note at
+# the top of that file. Loaded once here; the tests and app.js read the same file.
+RULES = json.loads((ROOT / "data" / "rules.json").read_text(encoding="utf-8"))
+PHASES = [p["id"] for p in RULES["phases"]]
 
 # The rank column says WHY an item is BiS, and until now that was read and thrown away.
 # Wowhead's wording is not fixed - the same idea arrives as "Best Mitigation", "Best Mit
@@ -179,7 +182,7 @@ TIERS = {1: "phase", 2: "multiPhase", 3: "expansion"}
 # How many of a slot one person wears at once. A guide listing three "Best" two-handers
 # is ranking them - the first is BiS and the rest are near-BiS alternatives - but two
 # "Best" rings really are two rings.
-SLOT_CAPACITY = {"Finger": 2, "Trinket": 2, "One-Hand": 2}
+SLOT_CAPACITY = RULES["slotCapacity"]
 
 
 def capacity(slot):
@@ -275,7 +278,7 @@ def scan_rows(html, where, phase, overrides=None, row_overrides=None):
     Returns dicts: row (index in the table), id, item, rank (the cell VERBATIM), kept,
     and when kept is False, why.
 
-    This used to be bis_rows(), which filtered as it read and returned only the survivors -
+    The old reader filtered as it read and returned only the survivors -
     so what the tool DISCARDED was unobservable, and the raw rank text vanished the moment
     variant_for() had mapped it. That is how a "mitigation" qualifier on a Beast Mastery
     hunter went unnoticed: nothing kept the string it came from. Keeping every row here,
@@ -331,7 +334,7 @@ def scan_rows(html, where, phase, overrides=None, row_overrides=None):
             source = text(cells[2]) if len(cells) > 2 else ""
             over = (overrides or {}).get(rank)
             # A PER-ROW override has to be applied here, not later, and that is the whole
-            # reason this parameter exists. bis_rows() keeps only `kept or alternate`, so a
+            # reason this parameter exists. Downstream keeps only `kept or alternate`, so a
             # row the rules rejected is gone before anything downstream can consult the item
             # map - which made a per-row `bis` silently do nothing for exactly the rows that
             # needed it most. The warlock guides rank every non-BiS piece a bare `Option`
@@ -374,18 +377,224 @@ def scan_rows(html, where, phase, overrides=None, row_overrides=None):
     return out
 
 
-UNCONTESTED = {"below-bis"}   # see check_bis.py for why these skip slot capacity
+UNCONTESTED = {v for v, m in RULES["variants"].items() if m.get("uncontested")}
 
 
-def bis_rows(html, where, phase, overrides=None, row_overrides=None):
-    """(item id, item name, rank) for the rows that ARE BiS, in page order.
 
-    The shape fetch_bis.py has always consumed. scan_rows() is the parser now; this is the
-    filter over it, kept separate so the dump can see what this throws away.
-    """
-    return [(r["id"], r["item"], r["rank"], r["alternate"])
-            for r in scan_rows(html, where, phase, overrides, row_overrides)
-            if r["kept"] or r["alternate"]]
+# ---------------------------------------------------------------------------------------
+# THE PIPELINE, AS STAGES. main() used to do all of this inline, 360 lines with nested
+# defs, and dump_bis_raw.py - which exists to explain the shipped file - had to REPLAY
+# "the two decisions that happen after parsing" by hand. It got them wrong four ways:
+# no overrides, no token swap, no forced `near`, no `uncontested`. A stage both can call
+# is the only version of this that cannot drift.
+#
+# A row is scan_rows()'s dict throughout. `id` is what the guide linked; `item_id` is
+# the row every decision is made on, which differs only when a tier piece was swapped
+# for its token. Keeping both is what lets the review page show the guide's own name.
+# ---------------------------------------------------------------------------------------
+
+def fetch_rows(spec, source, phase, rank_map, item_map):
+    """Every guide row for one spec and phase, overrides applied, in guide order."""
+    urls = source.get(phase.lower())
+    if not urls:
+        urls = [u.replace(PHASE_SLUG["P3"], PHASE_SLUG[phase]) for u in source["p3"]]
+    row_over = {int(k.split("/")[2]): v for k, v in item_map.items()
+                if k.startswith(f"{spec}/{phase}/")}
+    rows = []
+    for url in urls:
+        for r in scan_rows(GUIDE_CACHE.setdefault(url, get(url)),
+                           f"{spec} {phase}", phase, rank_map.get(spec, {}), row_over):
+            rows.append(dict(r, url=url, spec=spec, phase=phase))
+    return rows
+
+
+def swap_tokens(rows, tier_token):
+    """Tier pieces resolve to their TOKEN before anything counts them, so slot capacity
+    and longevity both see the row that actually exists. Sets `item_id` on every row."""
+    for r in rows:
+        r["item_id"] = tier_token.get(r["id"], r["id"])
+        r["swapped"] = r["item_id"] != r["id"]
+    return rows
+
+
+def qualifier(spec, phase, item_id, rank, rank_map, item_map):
+    """The variant a row carries, override first: item beats rank beats the rules.
+
+    ONE function for the three places that ask - capacity, conditional, the written
+    entry. When they each called variant_for() separately, an override could set the
+    variant and not the ring."""
+    over = item_map.get(f"{spec}/{phase}/{item_id}")
+    if over is not None and "variant" in over:
+        return over["variant"], None
+    over = rank_map.get(spec, {}).get(rank)
+    if over is not None and "variant" in over:
+        return over["variant"], None
+    return variant_for(rank)
+
+
+def mark_near(spec, per_phase, by_id, rank_map, item_map):
+    """Which rows are alternatives rather than the pick, per phase.
+
+    Decided ONCE here, before longevity and conditional read it. A forced `near` from
+    the item map is applied at this point and not to the finished entry: freeing a row
+    after cond_items was built left it never eligible to be conditional, and forcing a
+    row to blue after capacity was counted left it still holding the slot.
+
+    Returns (near_ids by phase, the capacity-overflow report lines)."""
+    near_ids, report = {}, []
+    for ph, rows in per_phase.items():
+        filled, near_ids[ph] = {}, set()
+        for r in rows:
+            if not (r["kept"] or r["alternate"]):
+                continue
+            item_id = r["item_id"]
+            rec = by_id.get(item_id)
+            if not rec:
+                continue
+            forced = item_map.get(f"{spec}/{ph}/{item_id}", {}).get("near")
+            if forced is not None:
+                if forced:
+                    near_ids[ph].add(item_id)
+                continue
+            # An offered alternate is blue already and never claimed the slot.
+            if r["alternate"]:
+                near_ids[ph].add(item_id)
+                continue
+            variant, _ = qualifier(spec, ph, item_id, r["rank"], rank_map, item_map)
+            # A margin, not a condition under which the row wins - never competes.
+            if variant in UNCONTESTED:
+                continue
+            key = (rec["slot"], variant or "")
+            filled[key] = filled.get(key, 0) + 1
+            if filled[key] > capacity(rec["slot"]):
+                near_ids[ph].add(item_id)
+                report.append(f"{spec} {ph} {rec['slot']}: {rec['item']} "
+                              f"(#{filled[key]} listed best)")
+    return near_ids, report
+
+
+def capped_ids(per_phase):
+    """'Best until X' names the item that REPLACES this one: still BiS that phase, still
+    rings, but cannot be evidence that anything lasted. 'until tier' is excluded because
+    NOT_BIS_ALWAYS already rejects those outright."""
+    return {ph: {r["item_id"] for r in rows
+                 if (r["kept"] or r["alternate"])
+                 and re.search(r"\buntil\b(?!\s+tier)", r["rank"], re.I)}
+            for ph, rows in per_phase.items()}
+
+
+def listed_ids(per_phase, near_ids, capped):
+    """The rows that count toward how long an item lasts: kept, not near, not capped."""
+    return {ph: {r["item_id"] for r in rows
+                 if (r["kept"] or r["alternate"])
+                 and r["item_id"] not in near_ids[ph] and r["item_id"] not in capped[ph]}
+            for ph, rows in per_phase.items()}
+
+
+def tier_from(listed, item_id):
+    """ONE answer per item: 1 if listed in one phase, 3 if it reaches the source's last
+    phase, else 2. Must stay in step with longevityOf() in app.js, which derives the
+    same thing at render time; check_bis.py reports when the two disagree."""
+    where = [ph for ph in PHASES if item_id in listed[ph]]
+    if len(where) < 2:
+        return 1
+    return 3 if item_id in listed[PHASES[-1]] else 2
+
+
+def conditional_items(spec, per_phase, near_ids, rank_map, item_map, reg):
+    """Items whose BiS claim leans on a condition ANYWHERE - per item, not per phase, so
+    one plain listing among four qualified ones does not earn a solid ring.
+
+    Not conditional: wordings that emphasise rather than qualify, and a tank's
+    threat/mitigation sets, which are two genuine kits rather than a caveat. Both flags
+    come from rules.json."""
+    emphasis = {v for v, m in RULES["variants"].items() if m.get("emphasis")}
+    tank_set = {v for v, m in RULES["variants"].items() if m.get("tankSet")}
+    is_tank = "Tank" in reg.get(spec, {}).get("roles", [])
+    out = set()
+    for ph in PHASES:
+        for r in per_phase.get(ph, []):
+            if not (r["kept"] or r["alternate"]) or r["item_id"] in near_ids[ph]:
+                continue
+            variant, _ = qualifier(spec, ph, r["item_id"], r["rank"], rank_map, item_map)
+            if not variant or variant in emphasis:
+                continue
+            if is_tank and variant in tank_set:
+                continue
+            out.add(r["item_id"])
+    return out
+
+
+def decide(spec, source, *, by_id, reg, rank_map, item_map, tier_token):
+    """Run every stage for one spec. Returns the per-phase rows with every decision
+    written back onto them, plus the sets main() and the dump both need.
+
+    Raises the fetch errors (URLError, TimeoutError, ValueError) - the caller decides
+    whether one spec failing stops the run."""
+    per_phase = {}
+    for phase in PHASES:
+        per_phase[phase] = swap_tokens(
+            fetch_rows(spec, source, phase, rank_map, item_map), tier_token)
+    near_ids, near_report = mark_near(spec, per_phase, by_id, rank_map, item_map)
+    capped = capped_ids(per_phase)
+    listed = listed_ids(per_phase, near_ids, capped)
+    cond = conditional_items(spec, per_phase, near_ids, rank_map, item_map, reg)
+    for ph, rows in per_phase.items():
+        for r in rows:
+            variant, miss = qualifier(spec, ph, r["item_id"], r["rank"], rank_map, item_map)
+            rec = by_id.get(r["item_id"])
+            r["variant"], r["unmapped_rank"] = variant, miss
+            r["in_dataset"] = rec is not None
+            r["slot"] = rec["slot"] if rec else None
+            r["near"] = r["item_id"] in near_ids[ph]
+            r["superseded"] = r["item_id"] in capped[ph]
+            r["tier"] = tier_from(listed, r["item_id"]) if rec else None
+            r["conditional"] = r["item_id"] in cond and not r["near"]
+    return {"per_phase": per_phase, "near_ids": near_ids, "near_report": near_report,
+            "capped": capped, "listed": listed, "cond": cond}
+
+
+def write_entries(spec, decided, by_id):
+    """The bis.json entries for one spec, from decided rows. Also returns what was
+    dropped (not in the dataset), name mismatches, and unmapped rank wordings."""
+    phases_out, dropped, mismatches, unmapped = {}, [], [], {}
+    for phase in PHASES:
+        entries, seen = [], set()
+        for r in decided["per_phase"][phase]:
+            if not (r["kept"] or r["alternate"]):
+                continue
+            item_id = r["item_id"]
+            # A duplicate id is skipped, taking its rank text with it.
+            if item_id in seen:
+                continue
+            seen.add(item_id)
+            rec = by_id.get(item_id)
+            if not rec:
+                dropped.append((spec, phase, item_id, r["item"]))
+                continue
+            # A substituted token never matches: the guide named the piece it turns into.
+            if r["item"] and rec["item"] != r["item"] and not r["swapped"]:
+                mismatches.append(
+                    f"{spec}: id {item_id} is {rec['item']!r} here, {r['item']!r} on Wowhead")
+            entry = {"id": item_id, "item": rec["item"]}
+            if r["near"]:
+                entry["near"] = True
+            if r["superseded"]:
+                entry["superseded"] = True
+            if r["tier"] > 1:
+                entry["bis"] = TIERS[r["tier"]]
+            if r["variant"]:
+                entry["variant"] = r["variant"]
+            # Never on a near row: blue already says "an alternative", and app.js strips
+            # the flag when it indexes.
+            if r["conditional"]:
+                entry["conditional"] = True
+            if r["unmapped_rank"]:
+                unmapped.setdefault(r["unmapped_rank"], []).append(f"{spec} {phase}")
+            entries.append(entry)
+        if entries:
+            phases_out[phase] = entries
+    return phases_out, dropped, mismatches, unmapped
 
 
 def preset_ids(source, phase):
@@ -447,243 +656,20 @@ def main():
         if only and spec not in only:
             continue
         source = sources[spec]
-
-        # --- every phase's guide, so longevity can be observed rather than guessed ---
-        per_phase = {}
-        # tokens we substituted in: their guide name is the PIECE, so the name check
-        # below would report every one of them as a mismatch by design
-        swapped = set()
         try:
-            for phase in PHASES:
-                urls = source.get(phase.lower())
-                if not urls:
-                    urls = [u.replace(PHASE_SLUG["P3"], PHASE_SLUG[phase]) for u in source["p3"]]
-                rows = []
-                for url in urls:
-                    # Per-row overrides for THIS spec and phase, keyed by item id. The
-                    # scan needs them because it is where a rejected rank is discarded.
-                    row_over = {int(k.split("/")[2]): v for k, v in item_map.items()
-                                if k.startswith(f"{spec}/{phase}/")}
-                    rows += bis_rows(GUIDE_CACHE.setdefault(url, get(url)),
-                                     f"{spec} {phase}", phase, rank_map.get(spec, {}),
-                                     row_over)
-                # Swap tier pieces for their tokens HERE, before anything counts them, so
-                # slot capacity and longevity both see the row that actually exists. A
-                # token occupies the piece's slot, which is what makes that sound.
-                rows = [(tier_token.get(i, i), n, rk, alt) for i, n, rk, alt in rows]
-                swapped |= {tier_token[i] for i, _n, _r, _a in rows if i in tier_token}
-                swapped |= {tier_token[i] for i in tier_token
-                            if tier_token[i] in {r[0] for r in rows}}
-                per_phase[phase] = rows
+            decided = decide(spec, source, by_id=by_id, reg=reg, rank_map=rank_map,
+                             item_map=item_map, tier_token=tier_token)
         except (urllib.error.URLError, TimeoutError, ValueError) as e:
             failures.append(f"{spec}: {e}")
             continue
-
-        # WHICH ROWS ARE ACTUALLY BiS, decided before anything is counted. A guide lists
-        # several rows as "Best" in one slot and ranks them by row order, so everything
-        # past what the slot holds is a near-BiS alternative. It has to be settled first:
-        # a near-BiS row must not count toward how long an item lasted, or a third-choice
-        # sword in P4 would look like the item surviving P4.
-        def qualifier(phase, item_id, rank):
-            """The variant this row carries, override first.
-
-            ONE function, used by all three places that ask - slot capacity, cond_items,
-            and the written entry. They used to call variant_for() separately, which was
-            fine until an override could change the answer: the first version of this left
-            capacity on the raw rank, so a row given a qualifier by hand still counted
-            against the plain group and stayed marked near. The override could set the
-            variant and not the ring, which is worse than not having it.
-            """
-            over = item_map.get(f"{spec}/{phase}/{item_id}")
-            if over is not None and "variant" in over:
-                return over["variant"], None
-            over = rank_map.get(spec, {}).get(rank)
-            if over is not None and "variant" in over:
-                return over["variant"], None
-            return variant_for(rank)
-
-        near_ids = {}
-        for ph, rows in per_phase.items():
-            filled, near_ids[ph] = {}, set()
-            for item_id, name, rank, alternate in rows:
-                rec = by_id.get(item_id)
-                if not rec:
-                    continue
-                # A per-item override settles `near` here rather than at write time, and
-                # that ORDER is the whole of it. It used to be applied to the finished
-                # entry, which left three rows solid when they were asked to be dashed:
-                # freeing a row from blue after `cond_items` was built meant it had never
-                # been eligible to be read as conditional, and forcing a row TO blue left
-                # it still consuming the slot it was being told it had not won.
-                forced = item_map.get(f"{spec}/{ph}/{item_id}", {}).get("near")
-                if forced is not None:
-                    if forced:
-                        near_ids[ph].add(item_id)
-                    continue
-                # An offered alternate is blue already and never claimed the slot, so it
-                # must not consume capacity - otherwise a row the author merely suggested
-                # would push a row the author called best into being an alternative.
-                if alternate:
-                    near_ids[ph].add(item_id)
-                    continue
-                variant, _ = qualifier(ph, item_id, rank)
-                # "below-bis" is a statement about the MARGIN, not about who wins the slot,
-                # so it never competes for one - see UNCONTESTED in check_bis.py, which has
-                # to agree with this or a written file fails its own validator.
-                if variant in UNCONTESTED:
-                    continue
-                key = (rec["slot"], variant or "")
-                filled[key] = filled.get(key, 0) + 1
-                if filled[key] > capacity(rec["slot"]):
-                    near_ids[ph].add(item_id)
-                    near_marked.append(
-                        f"{spec} {ph} {rec['slot']}: {rec['item']} "
-                        f"(#{filled[key]} listed best)")
-
-        # "Best until Unforgivable Sin" names the item that REPLACES this one, so that
-        # phase is the author telling you the run ends - the opposite of what `expansion`
-        # claims. It is still BiS in that phase and still draws its ring; it just cannot
-        # be the evidence that anything lasted. "Best WITHOUT X" is untouched: that is a
-        # condition on your gear, not an expiry date.
-        #
-        # "until tier" is excluded because NOT_BIS_ALWAYS already rejects those outright.
-        capped = {ph: {r[0] for r in rows
-                       if re.search(r"\buntil\b(?!\s+tier)", r[2], re.I)}
-                  for ph, rows in per_phase.items()}
-
-        listed = {ph: {r[0] for r in rows
-                       if r[0] not in near_ids[ph] and r[0] not in capped[ph]}
-                  for ph, rows in per_phase.items()}
-
-        # --- how long it lasts: ONE answer per item, shown in every phase it appears ---
-        #
-        # This was computed per phase until Sep 2026 - "if you pick it up in P3, how long
-        # does it serve?" - which read as an item decaying down the ladder: gold in P3,
-        # gold in P4, purple in P5. It could not do anything else, because from the last
-        # phase an item has nothing left to outlive. But the colour is read as a property
-        # of the ITEM ("gold means this lasts the expansion"), so a ring that changed
-        # colour by the phase you happened to be looking at was answering a question
-        # nobody was asking.
-        #
-        # `expansion` still means the source's LAST phase names it - you get it before
-        # Sunwell and nothing in Sunwell replaces it - rather than any particular run
-        # length. An item BiS in P1-P3 and then dropped is not an expansion item; one
-        # picked up in P4 and still best in Sunwell is. A single-phase item is `phase`
-        # however late that phase falls.
-        #
-        # This must stay in step with longevityOf() in app.js, which derives the same
-        # thing at render time. The client is what draws the rings; this field is the
-        # record, and check_bis.py reports when the two disagree.
-        last = PHASES[-1]
-
-        def tier_from(item_id):
-            where = [ph for ph in PHASES if item_id in listed[ph]]
-            if len(where) < 2:
-                return 1
-            return 3 if item_id in listed[last] else 2
-
-        # --- and whether the claim rests on a CONDITION, which is the other axis ---
-        #
-        # Wowhead ranks plenty of rows "best" only under a condition - "Best - Hit",
-        # "Regen BiS", "BiS - Dagger". Those are real BiS calls, not alternatives, so they
-        # keep their tier; but a reader has to be able to tell them from an outright pick,
-        # or an item that is only ever the hit-rating choice looks like the flat answer.
-        # Halberd of Desolation is the worked example: "Best - Hit" in every hunter phase,
-        # shown as solid gold, which read as "this is THE hunter polearm for the expansion".
-        #
-        # Per ITEM, not per phase, and deliberately: a claim that leans on a condition
-        # anywhere leans on it, so one plain listing among four qualified ones does not
-        # earn a solid ring. Survival's Halberd is exactly that - plain "Best" in P4 only -
-        # and this is what keeps all three hunter specs reading the same.
-        #
-        # NOT conditional: wordings that emphasise rather than qualify, and a tank's
-        # threat/mitigation sets, which are two genuine kits rather than a caveat.
-        #
-        # "individually" was in here and has been moved OUT, Sep 2026. It reads like
-        # emphasis and is not: "BiS Individually" means best when the item is judged on
-        # its own, WITHOUT the set bonus it would otherwise be part of - which is exactly
-        # a condition, and the same shape as "Best - Hit". 21 entries.
-        #
-        # "pair" stays, and only because of what it happens to cover: in this data it is
-        # the Warglaives of Azzinoth and nothing else, where "Best Pair" describes what
-        # you equip rather than when it applies.
-        EMPHASIS = {"overall", "pair"}
-        SET_VARIANTS = {"threat", "mitigation"}
-        is_tank = "Tank" in reg.get(spec, {}).get("roles", [])
-
-        def conditional(variant):
-            if not variant or variant in EMPHASIS:
-                return False
-            return not (is_tank and variant in SET_VARIANTS)
-
-        cond_items = set()
-        for ph in PHASES:
-            for item_id, _, rank, _alt in per_phase[ph]:
-                if item_id in near_ids[ph]:
-                    continue
-                variant, _ = qualifier(ph, item_id, rank)
-                if conditional(variant):
-                    cond_items.add(item_id)
-
-        phases_out = {}
-        for phase in PHASES:
-            entries, seen = [], set()
-            for item_id, name, rank, _alt in per_phase[phase]:
-                if item_id in seen:
-                    continue
-                seen.add(item_id)
-                rec = by_id.get(item_id)
-                if not rec:
-                    dropped.append((spec, phase, item_id, name))
-                    continue
-                # A substituted token never matches: the guide named the piece it turns
-                # into. That is the whole point of the swap, not a data error.
-                if name and rec["item"] != name and item_id not in swapped:
-                    mismatches.append(
-                        f"{spec}: id {item_id} is {rec['item']!r} here, {name!r} on Wowhead")
-
-                entry = {"id": item_id, "item": rec["item"]}
-                if item_id in near_ids[phase]:
-                    entry["near"] = True
-                # The author named this item's replacement in this phase, so the listing
-                # is still BiS and still rings - it just cannot be evidence that anything
-                # LASTED. Stored rather than left implicit, because the rule has to stay
-                # reproducible from the file alone: test/smoke.mjs derives it a third time
-                # and has no access to the rank text.
-                if item_id in capped[phase]:
-                    entry["superseded"] = True
-                tier = tier_from(item_id)
-                if tier > 1:
-                    entry["bis"] = TIERS[tier]
-                variant, miss = qualifier(phase, item_id, rank)
-                if variant:
-                    entry["variant"] = variant
-                # Per item, so every phase of a conditional pick agrees. Absent means
-                # unconditional, the way `near` and `unique` mark only the exception.
-                #
-                # Never on a near row. Blue already says "an alternative", the two axes do
-                # not compose for it, and app.js strips the flag when it indexes - so
-                # writing it here would leave 41 entries asserting something the renderer
-                # overrides, which is exactly the kind of disagreement bis.json should not
-                # contain for anyone reading it or auditing it.
-                if item_id in cond_items and not entry.get("near"):
-                    entry["conditional"] = True
-                if miss:
-                    unmapped.setdefault(miss, []).append(f"{spec} {phase}")
-                entries.append(entry)
-            # Entries stay in GUIDE ORDER. Sorting by name here is what used to throw
-            # the ranking away, so three "Best" two-handers all ringed identically.
-            if entries:
-                phases_out[phase] = entries
-
+        near_marked += decided["near_report"]
+        phases_out, spec_dropped, spec_mismatches, spec_unmapped = write_entries(spec, decided, by_id)
+        dropped += spec_dropped
+        mismatches += spec_mismatches
+        for rank, where in spec_unmapped.items():
+            unmapped.setdefault(rank, []).extend(where)
         if phases_out:
             built[spec] = phases_out
-
-        # --- wowsims: kept, and used as a cross-check ---
-        # Wowhead decides what renders, because it is the only source covering all 28
-        # specs. wowsims is stored beside it rather than thrown away: the plan is to let
-        # people choose their BiS data source, and that needs the other source's answer
-        # to still exist. Nothing reads it yet.
         if source.get("wowsims"):
             try:
                 sim = {2: preset_ids(source["wowsims"], "P4"), 3: preset_ids(source["wowsims"], "P5")}

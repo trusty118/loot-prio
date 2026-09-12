@@ -11,7 +11,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { until, sleep } from "./helpers.mjs";
+import { until, sleep, siteFetch, site, appBundle, appSource } from "./helpers.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
@@ -20,7 +20,8 @@ const data = rd("loot_data.json"), bis = rd("bis.json"), specs = rd("specs.json"
    starting points, and the priority column is empty on every row */
 const listIndex = JSON.parse(fs.readFileSync(path.join(root, "data", "lists", "index.json"), "utf8"));
 const zatarList = JSON.parse(fs.readFileSync(path.join(root, "data", "lists", "zatar-p3.json"), "utf8"));
-const source = fs.readFileSync(path.join(root, "app.js"), "utf8");
+const source = appSource();   /* for structure greps */
+const bundle = appBundle();   /* for running */
 const cssText = fs.readFileSync(path.join(root, "style.css"), "utf8");
 const htmlText = fs.readFileSync(path.join(root, "index.html"), "utf8");
 
@@ -41,13 +42,8 @@ function boot(hash) {
   Object.assign(window, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
   // jsdom gives each instance its own localStorage, and it cannot be reassigned -
   // so the store is read back through the same object the page writes to.
-  window.fetch = (u) => {
-    const s = String(u);
-    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
-      s.includes("lists/index.json") ? listIndex : s.includes("zatar-p3.json") ? zatarList
-      : s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
-  };
-  window.eval(source);
+  window.fetch = siteFetch();
+  window.eval(bundle);
   return window;
 }
 
@@ -221,7 +217,7 @@ click(w, menu.querySelector('.prio-menu-item[data-op=">>"]'));
 ok(opsIn(d, ITEM).join("") === ">>", "one click sets it, no cycling through the others");
 ok(menu.style.display === "none", "and the menu closes behind it");
 ok(only(w).priorities[bulwark][1].op === ">>", "the choice reached the store");
-ok(source.includes("function openOpMenu(rec, list, index, anchor) {\n    if (!canEdit()) return;"),
+ok(source.includes("function openOpMenu(rec, list, index, anchor) {\n  if (!canEdit()) return;"),
    "the menu is behind canEdit() like every other editing control");
 
 // --- removing -----------------------------------------------------------------------
@@ -477,7 +473,7 @@ ok(blank.base === "blank", `and says it started from nothing (base: ${blank.base
 // every item OF THE OPEN PHASE. These were the same number while Phase 3 was the whole
 // dataset; Zul'Aman and Sunwell separated them.
 const inPhase = data.filter((r) =>
-  ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone)).length;
+  site.rules.phases.find((p) => p.id === "P3").zones.includes(r.zone)).length;
 ok(d2.querySelectorAll("tbody tr").length === inPhase,
    `the table still renders every item of the phase - only the priority column is empty (${inPhase})`);
 ok(rowFor(d2, ITEM).querySelector(".prio-add"), "each row offers a + to start filling it in");

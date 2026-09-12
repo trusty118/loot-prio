@@ -26,3 +26,11 @@ dist/
 # The repo carries the tools and the decisions, not a snapshot of somebody else the size
 # of the rest of the data put together.
 verify/bis-raw.json
+
+# Regenerable output of verify/review_page.py. The template beside it IS committed.
+verify/review/index.html
+verify/review/review-data.json
+
+# The DEV bundle - src/*.js bundled unminified so index.html on 8642 has an app.js to load.
+# Written by `npm run bundle` (and kept fresh by `npm run serve`); the shipped one is in dist/.
+/app.js

@@ -30,14 +30,9 @@ LOOT = ROOT / "data" / "loot_data.json"
 BIS = ROOT / "data" / "bis.json"
 SPECS = ROOT / "data" / "specs.json"
 
-# which phase's BiS list speaks for a zone
-ZONE_PHASE = {
-    "Karazhan": "P1", "Gruul's Lair": "P1", "Magtheridon's Lair": "P1",
-    "Serpentshrine Cavern": "P2", "Tempest Keep": "P2", "Crafted (Nether Vortex)": "P2",
-    "Black Temple": "P3", "Mount Hyjal": "P3", "Crafted (Heart of Darkness)": "P3",
-    "Zul'Aman": "P4",
-    "Sunwell Plateau": "P5", "Crafted (Sunmote)": "P5",
-}
+# which phase's BiS list speaks for a zone - from data/rules.json, the one copy
+RULES = json.loads((ROOT / "data" / "rules.json").read_text(encoding="utf-8"))
+ZONE_PHASE = {z: p["id"] for p in RULES["phases"] for z in p["zones"]}
 
 
 def main():
