@@ -20,6 +20,7 @@
     {
      "id": 28797,
      "item": "Brute Cloak of the Ogre-Magi",
+     "bis": "multiPhase",
      "variant": "crit",
      "conditional": true
     },
@@ -29,7 +30,9 @@
     },
     {
      "id": 29756,
-     "item": "Gloves of the Fallen Hero"
+     "item": "Gloves of the Fallen Hero",
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 28799,
@@ -110,6 +113,13 @@
      "bis": "multiPhase"
     },
     {
+     "id": 28797,
+     "item": "Brute Cloak of the Ogre-Magi",
+     "bis": "multiPhase",
+     "variant": "crit",
+     "conditional": true
+    },
+    {
      "id": 30107,
      "item": "Vestments of the Sea-Witch",
      "bis": "multiPhase"
@@ -122,6 +132,13 @@
      "id": 30684,
      "item": "Ravager's Cuffs",
      "near": true
+    },
+    {
+     "id": 29756,
+     "item": "Gloves of the Fallen Hero",
+     "bis": "multiPhase",
+     "variant": "2pc",
+     "conditional": true
     },
     {
      "id": 30247,
@@ -1349,7 +1366,9 @@
     },
     {
      "id": 29756,
-     "item": "Gloves of the Fallen Hero"
+     "item": "Gloves of the Fallen Hero",
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 28517,
@@ -1415,6 +1434,13 @@
      "id": 30684,
      "item": "Ravager's Cuffs",
      "near": true
+    },
+    {
+     "id": 29756,
+     "item": "Gloves of the Fallen Hero",
+     "bis": "multiPhase",
+     "variant": "2pc",
+     "conditional": true
     },
     {
      "id": 30247,
@@ -12527,7 +12553,9 @@
     },
     {
      "id": 29756,
-     "item": "Gloves of the Fallen Hero"
+     "item": "Gloves of the Fallen Hero",
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 28780,
@@ -12639,6 +12667,13 @@
      "id": 29918,
      "item": "Mindstorm Wristbands",
      "near": true
+    },
+    {
+     "id": 29756,
+     "item": "Gloves of the Fallen Hero",
+     "bis": "multiPhase",
+     "variant": "2pc",
+     "conditional": true
     },
     {
      "id": 30247,

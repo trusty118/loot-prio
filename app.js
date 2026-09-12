@@ -2948,6 +2948,7 @@
   var VARIANT_LABEL = {
     "below-bis": "Slightly below BiS",
     "non-worldboss": "No world boss drop",
+    "2pc": "2-piece bonus",
     "4pc": "4-piece bonus",
     /* These two are not new, and both read as a dangling word before this map existed -
        "Expansion BiS - Unless" and "- Individually" are half a sentence each. The meanings

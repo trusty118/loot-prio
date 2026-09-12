@@ -41,6 +41,7 @@ VALID_VARIANTS = {
     "unless",                        # best only while you lack (or hold) some other item
     # Added Sep 2026 from reviewed rows whose condition lived in the author's prose rather
     # than the rank cell, so nothing could have mapped them automatically.
+    "2pc",                           # wanted for the two-piece set bonus
     "4pc",                           # wanted for the four-piece set bonus
     "contested",                     # best, but another class wants it more
     "non-worldboss",                 # best among what a normal raid can actually get

@@ -20,6 +20,24 @@
    "Game Best": {
     "bis": true
    }
+  },
+  "AffliLock": {
+   "Two-Piece": {
+    "bis": true,
+    "variant": "2pc"
+   }
+  },
+  "DemoLock": {
+   "Two-Piece": {
+    "bis": true,
+    "variant": "2pc"
+   }
+  },
+  "DestroLock": {
+   "Two-Piece": {
+    "bis": true,
+    "variant": "2pc"
+   }
   }
  },
  "decisions": [
@@ -38,7 +56,9 @@
   "AffliLock/P1/28517 Boots of Foretelling - 'Frozen Shadoweave Boots require tailoring ... Non-tailor choices will depend on their hit'.",
   "AffliLock/P1/28762 and 30666 - 'both non-hit alternatives are very close in value (~1 Spell Damage difference)', which is the crit one and the spell damage one.",
   "AffliLock/P1/30723 Talon of the Tempest - 'from a world boss and may be difficult to acquire, but there are plenty of strong alternatives obtainable inside raids'.",
-  "AffliLock/P1/28770 Nathrezim Mindblade - Karazhan, so the 10-man pick."
+  "AffliLock/P1/28770 Nathrezim Mindblade - Karazhan, so the 10-man pick.",
+  "'Two-Piece' (AffliLock, DemoLock, DestroLock) - the warlock guides rank the T4 glove token this one word, and the blurb says why: 'Voidheart Gloves are another good option in order to reach your two-piece set bonus for Voidheart Raiment'. That is a BiS call with a condition on it, the same shape as '4pc', not an absence of one. Three rows, one item, three specs sharing an author.",
+  "AffliLock/P2/28797 Brute Cloak of the Ogre-Magi - the same call as P1, carried forward."
  ],
  "itemsNote": "Per-ROW overrides, keyed exactly as the review page prints an id. The specs map below keys on a rank string, which cannot reach a row whose rank is plain 'Best' - and plenty of conditions live only in the author's prose, not in the rank cell. Same fields.",
  "items": {
@@ -128,6 +148,11 @@
   "AffliLock/P1/30723": {
    "bis": true,
    "variant": "worldboss",
+   "near": false
+  },
+  "AffliLock/P2/28797": {
+   "bis": true,
+   "variant": "crit",
    "near": false
   }
  }
