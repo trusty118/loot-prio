@@ -505,6 +505,26 @@ is a Feral druid, which fits — it is how the druid guides separate a piece fro
 Warglaives of Azzinoth and nothing else, where it describes what you equip rather than when
 the call applies.
 
+**`verify/rank-map.json` is where an author's wording gets overruled.** Keyed on **(spec,
+exact rank string)** → `{ bis, near, variant }`, consulted **before** the rules, which stay
+as the default — so an unlisted wording behaves exactly as it does today and an **empty file
+changes nothing**, proved by regenerating `bis.json` byte-identically. Keyed on spec rather
+than guide url because that is what every other data file here keys on and it survives
+Wowhead reorganising urls; where three specs share one author the identical entries are
+honest rather than redundant.
+
+It starts empty on purpose. The rules below get both motivating cases right without it, and
+an override should be a decision somebody made with the guide in front of them.
+
+**`scan_rows()` also captures the SLOT HEADING and the author's BLURB**, used by nothing in
+the pipeline and existing solely so a wording can be reviewed. A rank cell cannot be judged
+alone: the feral bear guide ranks Shadowmoon Destroyer's Drape `Threat Alternative`, and the
+only thing that settles whether that means "not BiS" or "BiS for threat" is the sentence
+above the table naming two *other* cloaks as best. `verify/dump_bis_raw.py` records both, and
+the review page groups **by slot** with every row of it shown together — including under
+search, where narrowing a slot to the matching row would remove exactly the context the page
+exists to supply.
+
 **Authors differ, and the line between them is CLAIM versus OFFER, Sep 2026.** Each Wowhead
 spec guide has a different author and they share no vocabulary — **77% of the 627 distinct
 rank strings are used by exactly one spec**. `Hit Alternative` (Arms) and

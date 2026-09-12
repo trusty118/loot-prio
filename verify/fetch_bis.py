@@ -35,6 +35,7 @@ LOOT = ROOT / "data" / "loot_data.json"
 SPECS = ROOT / "data" / "specs.json"
 BIS = ROOT / "data" / "bis.json"
 SOURCES = Path(__file__).resolve().parent / "bis-sources.json"
+RANK_MAP = Path(__file__).resolve().parent / "rank-map.json"
 CHANGES = Path(__file__).resolve().parent / "bis-longevity-changes.csv"
 
 WOWSIMS = "https://raw.githubusercontent.com/wowsims/tbc/master/ui/{}/presets.ts"
@@ -209,7 +210,20 @@ def text(html):
     return re.sub(r"\s+", " ", TAGS.sub(" ", html)).replace("&#39;", "'").replace("&amp;", "&").strip()
 
 
-def scan_rows(html, where, phase):
+def load_rank_map():
+    """Per-spec rank overrides, consulted BEFORE the rules below.
+
+    Authors do not share a vocabulary, so a wording can mean opposite things in two guides.
+    The rules get both of this file's motivating cases right on their own; this is for the
+    ones they do not, and it starts empty so it changes nothing until somebody decides an
+    entry with the guide in front of them.
+    """
+    if not RANK_MAP.exists():
+        return {}
+    return json.loads(RANK_MAP.read_text(encoding="utf-8")).get("specs", {})
+
+
+def scan_rows(html, where, phase, overrides=None):
     """Every item row the guide's BiS table holds, in page order, with a verdict.
 
     Returns dicts: row (index in the table), id, item, rank (the cell VERBATIM), kept,
@@ -224,6 +238,13 @@ def scan_rows(html, where, phase):
 
     Page order is preserved and reported, because Wowhead ranks by row position - that is
     the whole basis of the near-BiS marking downstream.
+
+    Each row also carries the SLOT HEADING it sits under and the PROSE between that heading
+    and the table. Neither is used by the pipeline; both exist because a rank cell cannot be
+    judged alone. Wowhead's feral bear guide ranks Shadowmoon Destroyer's Drape "Threat
+    Alternative", and the only way to know that means "not BiS" rather than "BiS for threat"
+    is the sentence above the table naming two OTHER cloaks as best. Reviewing wordings
+    without that is guesswork.
     """
     not_bis = not_bis_for(phase)
     start = BIS_HEADING.search(html)
@@ -231,47 +252,70 @@ def scan_rows(html, where, phase):
         raise ValueError(f"{where}: no 'Best In Slot ... Phase N' heading - page layout changed?")
 
     out, ranks = [], set()
-    for row in ROW.findall(html[start.end():]):
-        cells = CELL.findall(row)
-        if len(cells) < 2:
-            continue
-        link = ITEM_LINK.search(cells[1])
-        if not link:
-            continue
-        rank = text(cells[0])
-        ranks.add(rank)
-        why = None
-        if not RANKED_BIS.search(rank):
-            why = "rank does not lead with Best or name BiS"
-        elif not_bis.search(rank):
-            why = "rank is qualified into something other than BiS"
-        # Not a BiS claim, but the author did offer it AND said what for. That is an
-        # alternate - shown, in blue, making no claim on longevity or slot capacity.
-        alternate = why is not None and bool(
-            OFFERED.search(rank) and NAMES_A_REASON.search(rank))
-        out.append({
-            "row": len(out),
-            "id": int(link.group(1)),
-            "item": text(link.group(2)),
-            "rank": rank,
-            "kept": why is None,
-            "why": why,
-            "alternate": alternate,
-        })
+    body = html[start.end():]
+
+    # Split on the per-slot headings so each row knows which one it belongs to. The leading
+    # chunk before the first h3 keeps an empty heading rather than being dropped: some
+    # guides open with a summary table, and losing it would silently lose its rows.
+    chunks, last, heading = [], 0, ""
+    for m in re.finditer(r"<h3[^>]*>(.*?)</h3>", body, re.S):
+        chunks.append((heading, body[last:m.start()]))
+        heading = text(m.group(1))
+        last = m.end()
+    chunks.append((heading, body[last:]))
+
+    for heading, chunk in chunks:
+        # everything before the first table is the author talking about the slot
+        blurb = text(chunk.split("<table", 1)[0]) if "<table" in chunk else ""
+        for row in ROW.findall(chunk):
+            cells = CELL.findall(row)
+            if len(cells) < 2:
+                continue
+            link = ITEM_LINK.search(cells[1])
+            if not link:
+                continue
+            rank = text(cells[0])
+            ranks.add(rank)
+            over = (overrides or {}).get(rank)
+            why = None
+            if over is not None and "bis" in over:
+                why = None if over["bis"] else "overridden in rank-map.json"
+            elif not RANKED_BIS.search(rank):
+                why = "rank does not lead with Best or name BiS"
+            elif not_bis.search(rank):
+                why = "rank is qualified into something other than BiS"
+            # Not a BiS claim, but the author did offer it AND said what for. That is an
+            # alternate - shown, in blue, making no claim on longevity or slot capacity.
+            if over is not None and "near" in over:
+                alternate = bool(over["near"])
+            else:
+                alternate = why is not None and bool(
+                    OFFERED.search(rank) and NAMES_A_REASON.search(rank))
+            out.append({
+                "row": len(out),
+                "id": int(link.group(1)),
+                "item": text(link.group(2)),
+                "rank": rank,
+                "kept": why is None,
+                "why": why,
+                "alternate": alternate,
+                "heading": heading,
+                "blurb": blurb,
+            })
 
     if not any(r["kept"] for r in out):
         raise ValueError(f"{where}: no rows ranked BiS - ranks seen: {sorted(ranks)[:8]}")
     return out
 
 
-def bis_rows(html, where, phase):
+def bis_rows(html, where, phase, overrides=None):
     """(item id, item name, rank) for the rows that ARE BiS, in page order.
 
     The shape fetch_bis.py has always consumed. scan_rows() is the parser now; this is the
     filter over it, kept separate so the dump can see what this throws away.
     """
     return [(r["id"], r["item"], r["rank"], r["alternate"])
-            for r in scan_rows(html, where, phase) if r["kept"] or r["alternate"]]
+            for r in scan_rows(html, where, phase, overrides) if r["kept"] or r["alternate"]]
 
 
 def preset_ids(source, phase):
@@ -314,6 +358,7 @@ def main():
     by_id = {r["id"]: r for r in loot}
     reg = json.loads(SPECS.read_text(encoding="utf-8"))["specs"]
     sources = json.loads(SOURCES.read_text(encoding="utf-8"))["specs"]
+    rank_map = load_rank_map()
     current = json.loads(BIS.read_text(encoding="utf-8"))
 
     unknown = [s for s in sources if s not in reg]
@@ -341,7 +386,7 @@ def main():
                 rows = []
                 for url in urls:
                     rows += bis_rows(GUIDE_CACHE.setdefault(url, get(url)),
-                                     f"{spec} {phase}", phase)
+                                     f"{spec} {phase}", phase, rank_map.get(spec, {}))
                 per_phase[phase] = rows
         except (urllib.error.URLError, TimeoutError, ValueError) as e:
             failures.append(f"{spec}: {e}")
@@ -488,6 +533,9 @@ def main():
                 if tier > 1:
                     entry["bis"] = TIERS[tier]
                 variant, miss = variant_for(rank)
+                over = rank_map.get(spec, {}).get(rank)
+                if over is not None and "variant" in over:
+                    variant, miss = over["variant"], None
                 if variant:
                     entry["variant"] = variant
                 # Per item, so every phase of a conditional pick agrees. Absent means
