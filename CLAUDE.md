@@ -349,9 +349,21 @@ python3 verify/regroup.py                           # zone, then kill order
 python3 verify/check_priority.py && python3 verify/check_bis.py
 ```
 
-`fetch_bis.py` **never writes `loot_data.json`** and never edits a priority. It captures
-each guide row's rank, item, **source cell**, slot heading and blurb. `dump_bis_raw.py`
-writes all of that to `verify/bis-raw.json` (gitignored, 15 MB) for review.
+`fetch_bis.py` **never writes `loot_data.json`** and never edits a priority. Its work is
+a pipeline of named stages — `fetch_rows` → `swap_tokens` → `mark_near` → `capped_ids` →
+`listed_ids` → `tier_from` → `conditional_items` — wrapped by `decide(spec)`; `main()` only
+orchestrates and reports. Each guide row keeps its rank, item, **source cell**, slot heading
+and blurb.
+
+**The review page** is built from the same stages, so its verdicts *are* the shipped ones:
+
+```bash
+python3 verify/dump_bis_raw.py     # every row, decided -> verify/bis-raw.json (gitignored)
+python3 verify/review_page.py      # -> verify/review/index.html + review-data.json (gitignored)
+```
+
+`verify/review/template.html` is the page's source. Publish `index.html` and
+`review-data.json` together; the page fetches the data by relative path.
 
 **Finding missing loot**: cross-reference every id the guides name against
 `loot_data.json`, grouped by the Source cell. A tier piece needs a `tier-tokens.json`

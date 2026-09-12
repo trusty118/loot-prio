@@ -26,3 +26,7 @@ dist/
 # The repo carries the tools and the decisions, not a snapshot of somebody else the size
 # of the rest of the data put together.
 verify/bis-raw.json
+
+# Regenerable output of verify/review_page.py. The template beside it IS committed.
+verify/review/index.html
+verify/review/review-data.json
