@@ -2508,6 +2508,20 @@
   ]
  },
  {
+  "zone": "Magtheridon's Lair",
+  "boss": "Magtheridon",
+  "item": "Band of Crimson Fury",
+  "id": 28793,
+  "wowhead": "https://www.wowhead.com/tbc/item=28793",
+  "slot": "Finger",
+  "type": "Ring",
+  "roles": [
+   "Caster"
+  ],
+  "notes": "Quest reward from Magtheridon's Head, not a drop from the encounter itself.",
+  "unique": true
+ },
+ {
   "zone": "Serpentshrine Cavern",
   "boss": "Trash",
   "item": "Spyglass of the Hidden Fleet",

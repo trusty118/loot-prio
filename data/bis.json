@@ -18,6 +18,12 @@
      "bis": "multiPhase"
     },
     {
+     "id": 28797,
+     "item": "Brute Cloak of the Ogre-Magi",
+     "variant": "crit",
+     "conditional": true
+    },
+    {
      "id": 29755,
      "item": "Chestguard of the Fallen Hero"
     },
@@ -26,8 +32,36 @@
      "item": "Gloves of the Fallen Hero"
     },
     {
+     "id": 28799,
+     "item": "Belt of Divine Inspiration",
+     "variant": "non-crafted",
+     "conditional": true
+    },
+    {
+     "id": 28517,
+     "item": "Boots of Foretelling",
+     "variant": "non-tailor",
+     "conditional": true
+    },
+    {
      "id": 28530,
      "item": "Brooch of Unquenchable Fury"
+    },
+    {
+     "id": 28762,
+     "item": "Adornment of Stolen Souls",
+     "variant": "crit",
+     "conditional": true
+    },
+    {
+     "id": 30666,
+     "item": "Ritssyn's Lost Pendant",
+     "variant": "spellpower",
+     "conditional": true
+    },
+    {
+     "id": 28793,
+     "item": "Band of Crimson Fury"
     },
     {
      "id": 28753,
@@ -36,7 +70,19 @@
     },
     {
      "id": 30723,
-     "item": "Talon of the Tempest"
+     "item": "Talon of the Tempest",
+     "variant": "worldboss",
+     "conditional": true
+    },
+    {
+     "id": 28802,
+     "item": "Bloodmaw Magus-Blade"
+    },
+    {
+     "id": 28770,
+     "item": "Nathrezim Mindblade",
+     "variant": "10man",
+     "conditional": true
     },
     {
      "id": 28673,
@@ -94,6 +140,11 @@
      "id": 28753,
      "item": "Ring of Recurrence",
      "bis": "multiPhase"
+    },
+    {
+     "id": 28793,
+     "item": "Band of Crimson Fury",
+     "near": true
     },
     {
      "id": 30095,
@@ -490,6 +541,10 @@
      "item": "Brooch of Unquenchable Fury",
      "variant": "hit",
      "conditional": true
+    },
+    {
+     "id": 28793,
+     "item": "Band of Crimson Fury"
     },
     {
      "id": 28785,
@@ -906,6 +961,10 @@
      "near": true
     },
     {
+     "id": 28793,
+     "item": "Band of Crimson Fury"
+    },
+    {
      "id": 28753,
      "item": "Ring of Recurrence",
      "bis": "multiPhase"
@@ -980,6 +1039,11 @@
      "id": 28753,
      "item": "Ring of Recurrence",
      "bis": "multiPhase"
+    },
+    {
+     "id": 28793,
+     "item": "Band of Crimson Fury",
+     "near": true
     },
     {
      "id": 30723,
@@ -1301,6 +1365,10 @@
      "near": true
     },
     {
+     "id": 28793,
+     "item": "Band of Crimson Fury"
+    },
+    {
      "id": 28753,
      "item": "Ring of Recurrence",
      "bis": "multiPhase"
@@ -1365,6 +1433,11 @@
      "id": 28753,
      "item": "Ring of Recurrence",
      "bis": "multiPhase"
+    },
+    {
+     "id": 28793,
+     "item": "Band of Crimson Fury",
+     "near": true
     },
     {
      "id": 30095,
@@ -2200,6 +2273,11 @@
      "near": true
     },
     {
+     "id": 28793,
+     "item": "Band of Crimson Fury",
+     "bis": "multiPhase"
+    },
+    {
      "id": 30723,
      "item": "Talon of the Tempest"
     },
@@ -2261,6 +2339,11 @@
     {
      "id": 30067,
      "item": "Velvet Boots of the Guardian"
+    },
+    {
+     "id": 28793,
+     "item": "Band of Crimson Fury",
+     "bis": "multiPhase"
     },
     {
      "id": 30626,
@@ -3903,6 +3986,10 @@
      "item": "Ring of Recurrence"
     },
     {
+     "id": 28793,
+     "item": "Band of Crimson Fury"
+    },
+    {
      "id": 28789,
      "item": "Eye of Magtheridon",
      "bis": "multiPhase"
@@ -3984,6 +4071,12 @@
     {
      "id": 29922,
      "item": "Band of Al'ar"
+    },
+    {
+     "id": 28793,
+     "item": "Band of Crimson Fury",
+     "near": true,
+     "variant": "hit"
     },
     {
      "id": 28789,
@@ -12079,6 +12172,10 @@
      "near": true
     },
     {
+     "id": 28793,
+     "item": "Band of Crimson Fury"
+    },
+    {
      "id": 28753,
      "item": "Ring of Recurrence"
     },
@@ -12461,6 +12558,13 @@
      "variant": "hit"
     },
     {
+     "id": 28793,
+     "item": "Band of Crimson Fury",
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
+    },
+    {
      "id": 28753,
      "item": "Ring of Recurrence",
      "variant": "hit",
@@ -12559,8 +12663,15 @@
      "item": "Ring of Endless Coils"
     },
     {
+     "id": 28793,
+     "item": "Band of Crimson Fury",
+     "bis": "multiPhase",
+     "conditional": true
+    },
+    {
      "id": 29922,
-     "item": "Band of Al'ar"
+     "item": "Band of Al'ar",
+     "near": true
     },
     {
      "id": 30095,

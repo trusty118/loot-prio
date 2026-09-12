@@ -32,7 +32,13 @@
   "Arms/P3/32574, 28795, 30861 - wrists. 'all of them perform within 1-5 DPS of each other ... merely a 4 DPS increase over the Phase 2 and Phase 1 BiS'. A hair under the real pick rather than an alternative.",
   "Arms/P3/32366 Shadowmaster's Boots - 'a close second choice, they are also BiS for most physical damage dealers within your raid, so it would be best not to contest them'.",
   "Arms/P3/32260 Choker of Endless Nightmares - ranked 'Hit Alternative', which the rules read as an offer; the author means the hit pick.",
-  "Arms/P3/32326 Twisted Blades of Zarak - the P3 raid bow sitting a couple of DPS behind Barrel-Blade Longrifle, which drops from Doomwalker. The same slot, the same competitor and the same condition as Arms/P1/28772 two phases earlier, so it takes the same qualifier."
+  "Arms/P3/32326 Twisted Blades of Zarak - the P3 raid bow sitting a couple of DPS behind Barrel-Blade Longrifle, which drops from Doomwalker. The same slot, the same competitor and the same condition as Arms/P1/28772 two phases earlier, so it takes the same qualifier.",
+  "AffliLock P1 - this author ranks every non-BiS piece a bare 'Option' and puts the real call in the prose above the table, so the rank cells carry none of it. Eight rows read off those blurbs.",
+  "AffliLock/P1/28799 Belt of Divine Inspiration - 'Girdle of Ruination is crafted and Bind on Equip, so even non-tailors can make use of it'; this is the pick that needs no crafting.",
+  "AffliLock/P1/28517 Boots of Foretelling - 'Frozen Shadoweave Boots require tailoring ... Non-tailor choices will depend on their hit'.",
+  "AffliLock/P1/28762 and 30666 - 'both non-hit alternatives are very close in value (~1 Spell Damage difference)', which is the crit one and the spell damage one.",
+  "AffliLock/P1/30723 Talon of the Tempest - 'from a world boss and may be difficult to acquire, but there are plenty of strong alternatives obtainable inside raids'.",
+  "AffliLock/P1/28770 Nathrezim Mindblade - Karazhan, so the 10-man pick."
  ],
  "itemsNote": "Per-ROW overrides, keyed exactly as the review page prints an id. The specs map below keys on a rank string, which cannot reach a row whose rank is plain 'Best' - and plenty of conditions live only in the author's prose, not in the rank cell. Same fields.",
  "items": {
@@ -82,6 +88,46 @@
   },
   "Arms/P3/32326": {
    "variant": "non-worldboss",
+   "near": false
+  },
+  "AffliLock/P1/28797": {
+   "bis": true,
+   "variant": "crit",
+   "near": false
+  },
+  "AffliLock/P1/28799": {
+   "bis": true,
+   "variant": "non-crafted",
+   "near": false
+  },
+  "AffliLock/P1/28517": {
+   "bis": true,
+   "variant": "non-tailor",
+   "near": false
+  },
+  "AffliLock/P1/28762": {
+   "bis": true,
+   "variant": "crit",
+   "near": false
+  },
+  "AffliLock/P1/30666": {
+   "bis": true,
+   "variant": "spellpower",
+   "near": false
+  },
+  "AffliLock/P1/28802": {
+   "bis": true,
+   "variant": null,
+   "near": false
+  },
+  "AffliLock/P1/28770": {
+   "bis": true,
+   "variant": "10man",
+   "near": false
+  },
+  "AffliLock/P1/30723": {
+   "bis": true,
+   "variant": "worldboss",
    "near": false
   }
  }

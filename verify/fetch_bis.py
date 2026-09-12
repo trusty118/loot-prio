@@ -269,7 +269,7 @@ def load_rank_map():
     return json.loads(RANK_MAP.read_text(encoding="utf-8")).get("specs", {})
 
 
-def scan_rows(html, where, phase, overrides=None):
+def scan_rows(html, where, phase, overrides=None, row_overrides=None):
     """Every item row the guide's BiS table holds, in page order, with a verdict.
 
     Returns dicts: row (index in the table), id, item, rank (the cell VERBATIM), kept,
@@ -323,8 +323,18 @@ def scan_rows(html, where, phase, overrides=None):
             rank = text(cells[0])
             ranks.add(rank)
             over = (overrides or {}).get(rank)
+            # A PER-ROW override has to be applied here, not later, and that is the whole
+            # reason this parameter exists. bis_rows() keeps only `kept or alternate`, so a
+            # row the rules rejected is gone before anything downstream can consult the item
+            # map - which made a per-row `bis` silently do nothing for exactly the rows that
+            # needed it most. The warlock guides rank every non-BiS piece a bare `Option`
+            # and put the real meaning in the prose, so five of one slot's calls were
+            # unreachable. Item beats rank beats the rules: most specific wins.
+            row_over = (row_overrides or {}).get(int(link.group(1)))
             why = None
-            if over is not None and "bis" in over:
+            if row_over is not None and "bis" in row_over:
+                why = None if row_over["bis"] else "overridden in rank-map.json"
+            elif over is not None and "bis" in over:
                 why = None if over["bis"] else "overridden in rank-map.json"
             elif not RANKED_BIS.search(rank):
                 why = "rank does not lead with Best or name BiS"
@@ -332,7 +342,9 @@ def scan_rows(html, where, phase, overrides=None):
                 why = "rank is qualified into something other than BiS"
             # Not a BiS claim, but the author did offer it AND said what for. That is an
             # alternate - shown, in blue, making no claim on longevity or slot capacity.
-            if over is not None and "near" in over:
+            if row_over is not None and "near" in row_over:
+                alternate = bool(row_over["near"])
+            elif over is not None and "near" in over:
                 alternate = bool(over["near"])
             else:
                 alternate = why is not None and bool(
@@ -357,14 +369,15 @@ def scan_rows(html, where, phase, overrides=None):
 UNCONTESTED = {"below-bis"}   # see check_bis.py for why these skip slot capacity
 
 
-def bis_rows(html, where, phase, overrides=None):
+def bis_rows(html, where, phase, overrides=None, row_overrides=None):
     """(item id, item name, rank) for the rows that ARE BiS, in page order.
 
     The shape fetch_bis.py has always consumed. scan_rows() is the parser now; this is the
     filter over it, kept separate so the dump can see what this throws away.
     """
     return [(r["id"], r["item"], r["rank"], r["alternate"])
-            for r in scan_rows(html, where, phase, overrides) if r["kept"] or r["alternate"]]
+            for r in scan_rows(html, where, phase, overrides, row_overrides)
+            if r["kept"] or r["alternate"]]
 
 
 def preset_ids(source, phase):
@@ -439,8 +452,13 @@ def main():
                     urls = [u.replace(PHASE_SLUG["P3"], PHASE_SLUG[phase]) for u in source["p3"]]
                 rows = []
                 for url in urls:
+                    # Per-row overrides for THIS spec and phase, keyed by item id. The
+                    # scan needs them because it is where a rejected rank is discarded.
+                    row_over = {int(k.split("/")[2]): v for k, v in item_map.items()
+                                if k.startswith(f"{spec}/{phase}/")}
                     rows += bis_rows(GUIDE_CACHE.setdefault(url, get(url)),
-                                     f"{spec} {phase}", phase, rank_map.get(spec, {}))
+                                     f"{spec} {phase}", phase, rank_map.get(spec, {}),
+                                     row_over)
                 # Swap tier pieces for their tokens HERE, before anything counts them, so
                 # slot capacity and longevity both see the row that actually exists. A
                 # token occupies the piece's slot, which is what makes that sound.

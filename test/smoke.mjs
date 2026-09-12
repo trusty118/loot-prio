@@ -1171,8 +1171,13 @@ ok(Object.keys(zatarList.notes).length === 177,
      and the rest was already said better elsewhere - `unique: true` carries the one-per-
      player rule and is asserted below, and the "not in the source guide" framing was
      retired from the UI in Aug 2026. The shape being pinned is unchanged: a note left on
-     an item is a fact about the item, never anybody's opinion of it. */
-  ok(facts.length > 0 && facts.every((r) => /^(Also drops from|Drops from|Reputation reward|Scale of the Sands)/.test(r.notes)),
+     an item is a fact about the item, never anybody's opinion of it.
+
+     "Quest reward" joined the list in Sep 2026 with Band of Crimson Fury, which is handed
+     over for Magtheridon's Head rather than dropping off the encounter - the same kind of
+     fact as "Also drops from", and worth saying because a loot council looking at the
+     Magtheridon table would otherwise expect to roll on it. */
+  ok(facts.length > 0 && facts.every((r) => /^(Also drops from|Drops from|Quest reward|Reputation reward|Scale of the Sands)/.test(r.notes)),
      `the notes left on items are facts about the item (${facts.length})`);
 }
 

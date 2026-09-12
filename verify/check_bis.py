@@ -45,6 +45,12 @@ VALID_VARIANTS = {
     "contested",                     # best, but another class wants it more
     "non-worldboss",                 # best among what a normal raid can actually get
     "below-bis",                     # a hair under the real pick; the guide calls them equal
+    # The warlock guides rank every non-BiS piece a bare "Option" and put the real call in
+    # the prose, so these four came off blurbs rather than rank cells.
+    "non-crafted",                   # best of what you do not have to have crafted
+    "non-tailor",                    # the BiS needs tailoring; this is the pick without it
+    "10man",                         # best from 10-man content
+    "worldboss",                     # best, but it drops off a world boss
 }
 RACES = {"Orc", "Human"}
 
