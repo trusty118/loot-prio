@@ -278,9 +278,15 @@
     "Crafted (Sunmote)": ICON + "spell_nature_elementalshields.jpg",
     "Zul'Aman": JOURNAL + "daakara.png",
     "Sunwell Plateau": JOURNAL + "kiljaeden.png",
-    /* An item icon, the way the Crafted zones do it: the journal has no art for a boss
-       that never stood in an instance, and ui-ej-boss-doomwalker is a 404. */
-    "World Bosses": ICON + "spell_shadow_summoninfernal.jpg"
+    /* THE FEL REAVER'S portrait, standing in for Doomwalker. The Encounter Journal has
+       nothing for either world boss - they never stood in an instance, and every
+       ui-ej-boss-doomwalker slug is a 404 - but Doomwalker is the same kind of fel
+       construct and Wowhead does have art for the Fel Reaver.
+
+       It matters that this is journal art rather than an item icon: at 128x64 it frames
+       exactly like every other zone tile, where a square icon has to be letterboxed by
+       .chip--emblem and reads as a different kind of thing. */
+    "World Bosses": JOURNAL + "felreaver.png"
   };
 
   /* Slots as the character sheet presents them: every weapon slot is one "Weapon" entry.
@@ -2028,7 +2034,14 @@
        Having no BOSS_ORDER entry is the test, not the name - the same rule the phase
        tiles use to decide which zones get an art strip - so a future crafted-style
        zone gets this for free. */
-    var cls = "chip--zone" + (BOSS_ORDER[z] ? "" : " chip--emblem");
+    /* Whether the ART is a landscape journal portrait or a square item icon, which is
+       not the same question as whether the zone has bosses. It used to test BOSS_ORDER,
+       on the assumption that anything with bosses has journal art - World Bosses broke
+       that: Doomwalker and Doom Lord Kazzak never stood in an instance, so the Encounter
+       Journal has nothing for them, and the square icon standing in was being cropped to
+       a middle band by object-fit: cover. Same test the boss rail already uses. */
+    var cls = "chip--zone" +
+      ((ZONE_ICON[z] || "").indexOf(JOURNAL) === 0 ? "" : " chip--emblem");
     return artChip({
       cls: cls,
       active: active,

@@ -699,6 +699,18 @@ were there from launch. It is a zone in the sense `Crafted` is: a **source of lo
 than an instance. 15 items, and the point of adding them is that **90 BiS entries** pointed
 at them and had nowhere to land.
 
+**Its tile wears the FEL REAVER's portrait, standing in for Doomwalker.** The Encounter
+Journal has nothing for either world boss, so every `ui-ej-boss-doomwalker` slug 404s — but
+Doomwalker is the same kind of fel construct and Wowhead does have art for the Fel Reaver.
+It matters that it is journal art rather than an item icon: at 128x64 it frames exactly like
+every other zone tile.
+
+**That also fixed a wrong assumption in the zone tile.** `.chip--emblem` letterboxes a square
+item icon so `object-fit: cover` does not crop it to a middle band, and it was applied by
+testing `BOSS_ORDER[z]` — *"a zone with bosses has journal art"*. World Bosses is the
+counter-example, and its square stand-in icon was being cropped. It now tests the **art url**
+for the journal prefix, which is what the boss rail already did.
+
 Boss attribution came from the **Source column of Wowhead's own BiS guides**
 (`Drop: Doomwalker (World Boss)`) — the same evidence every other zone rests on, not an
 id-range guess. **Five more epics in the same id block are deliberately absent**
