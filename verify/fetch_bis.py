@@ -322,6 +322,13 @@ def scan_rows(html, where, phase, overrides=None, row_overrides=None):
                 continue
             rank = text(cells[0])
             ranks.add(rank)
+            # The guides' third cell states where an item comes from - "Drop: Lady Vashj
+            # (Serpentshrine Cavern)", "Quest: The Vials of Eternity". Nothing in the
+            # pipeline reads it; it is captured because it is the only machine-readable
+            # evidence of SOURCE anywhere in this project, and it is what world-boss
+            # attribution already rested on. It is also how a raid quest reward gets found:
+            # those are real raid loot that no loot table lists, so they were invisible.
+            source = text(cells[2]) if len(cells) > 2 else ""
             over = (overrides or {}).get(rank)
             # A PER-ROW override has to be applied here, not later, and that is the whole
             # reason this parameter exists. bis_rows() keeps only `kept or alternate`, so a
@@ -354,6 +361,7 @@ def scan_rows(html, where, phase, overrides=None, row_overrides=None):
                 "id": int(link.group(1)),
                 "item": text(link.group(2)),
                 "rank": rank,
+                "source": source,
                 "kept": why is None,
                 "why": why,
                 "alternate": alternate,
