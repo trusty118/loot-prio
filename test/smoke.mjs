@@ -9,6 +9,16 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const data = JSON.parse(fs.readFileSync(path.join(root, "data/loot_data.json"), "utf8"));
 
+/* Phase 3's totals, COUNTED rather than pinned. They were literals in a dozen assertions
+   and every one of them dated the moment loot was added - 51 rows arrived in Sep 2026 and
+   took 21 checks red at once, none of which was testing anything about item counts. What
+   the assertions actually mean is "the phase shows all of its rows" and "this filter shows
+   this zone's rows", which is what these express. Type-bucket counts stay literal below,
+   because deriving those would mean reimplementing typeGroup() in the test. */
+const P3_ZONES = ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"];
+const P3_TOTAL = data.filter((r) => P3_ZONES.includes(r.zone)).length;
+const countIn = (f) => data.filter((r) => P3_ZONES.includes(r.zone) && f(r)).length;
+
 const dom = new JSDOM(html, { runScripts: "outside-only", url: "https://example.test/loot-prio/" });
 const { window } = dom;
 
@@ -132,7 +142,7 @@ ok(phaseChips().every((c) => c.querySelector(".art-label")), "with the label ove
 // No count on the face of a tile - the art is doing the work, and "N of 195 items"
 // above the table already answers it. It survives where it costs nothing.
 ok(phaseChips().every((c) => !c.querySelector(".art-count")), "and no item count on it");
-ok(/195/.test(chipByText("#phase-chips", "Phase 3").getAttribute("aria-label")),
+ok(new RegExp(String(P3_TOTAL)).test(chipByText("#phase-chips", "Phase 3").getAttribute("aria-label")),
    "though a screen reader is still told how many, since it cannot see the table either");
 ok(/Black Temple/.test(chipByText("#phase-chips", "Phase 3").dataset.tip),
    `and the raids it covers on hover: "${chipByText("#phase-chips", "Phase 3").dataset.tip}"`);
@@ -144,7 +154,7 @@ ok(picked().textContent.trim().startsWith("Phase 3"),
    `and it is the phase that has data (got "${picked().textContent.trim()}")`);
 ok(!doc.getElementById("boss-row").hidden === false, "the boss row still waits for a zone");
 ok(doc.querySelectorAll("#zone-chips .chip").length > 0, "but the zone row is already open");
-ok(rows().length === 195, "and the phase with the data shows all of it");
+ok(rows().length === P3_TOTAL, "and the phase with the data shows all of it");
 
 // clicking the phase you are already on must not leave the page with no phase at all
 click(picked());
@@ -216,7 +226,7 @@ ok(/\.c-item\s*\{[^}]*width/.test(cssText), "column widths are declared in css")
 
 // wowhead links
 const links = [...doc.querySelectorAll("a.item-link")];
-ok(links.length === 195, `195 item links (got ${links.length})`);
+ok(links.length === P3_TOTAL, `${P3_TOTAL} item links (got ${links.length})`);
 ok(links.every((a) => /wowhead\.com\/tbc\/item=\d+/.test(a.href)), "all item links point at wowhead tbc items");
 
 // --- icons ---
@@ -352,12 +362,14 @@ ok(clothPhysical.length === 0,
 // --- filter interactions ---
 openP3();
 click(chipByText("#zone-chips", "Mount Hyjal"));
-ok(rows().length === 66, `zone=Mount Hyjal -> 66 rows (got ${rows().length})`);
+ok(rows().length === countIn((r) => r.zone === "Mount Hyjal"),
+   `zone=Mount Hyjal -> ${countIn((r) => r.zone === "Mount Hyjal")} rows (got ${rows().length})`);
 ok(groups().length === 6, `zone=Mount Hyjal -> 6 groups (got ${groups().length})`);
 ok(window.location.hash.includes("zone=Mount+Hyjal"), `url state: ${window.location.hash}`);
 
 click(chipByText("#boss-chips", "Archimonde"));
-ok(rows().length === 14, `+ boss=Archimonde -> 14 rows (got ${rows().length})`);
+ok(rows().length === countIn((r) => r.boss === "Archimonde"),
+   `+ boss=Archimonde -> ${countIn((r) => r.boss === "Archimonde")} rows (got ${rows().length})`);
 
 // the class filter is what replaced the role filter, so narrow with it instead
 const byTip = (sel, name) =>
@@ -369,7 +381,7 @@ ok(rows().some((tr) => tr.dataset.role === "Tier"),
    "Archimonde's priest view still includes its tier token");
 
 click(doc.getElementById("reset"));
-ok(rows().length === 195, `reset -> 195 rows (got ${rows().length})`);
+ok(rows().length === P3_TOTAL, `reset -> ${P3_TOTAL} rows (got ${rows().length})`);
 
 // type grouping
 const typeSel = doc.getElementById("type-select");
@@ -397,12 +409,12 @@ ok(!typeOpts.includes("Weapon"), "the old combined Weapon option is gone");
 const byType = (v) => { typeSel.value = v; typeSel.dispatchEvent(new window.Event("change")); return rows().length; };
 
 const oneH = byType("Weapons - 1H");
-ok(oneH === 18, `type=Weapons - 1H -> 18 rows (got ${oneH})`);
+ok(oneH === 19, `type=Weapons - 1H -> 19 rows (got ${oneH})`);
 ok(rows().every((tr) => tr.children[1].textContent === "Weapon"),
    "every 1H result shows the collapsed Weapon slot");
 
 const twoH = byType("Weapons - 2H");
-ok(twoH === 7, `type=Weapons - 2H -> 7 rows (got ${twoH})`);
+ok(twoH === 8, `type=Weapons - 2H -> 8 rows (got ${twoH})`);
 ok(rows().every((tr) => tr.children[1].textContent === "Weapon"),
    "every 2H result shows the collapsed Weapon slot");
 
@@ -416,7 +428,7 @@ ok(byType("Shield / Off-hand") === offhandish,
    `off-hand frills group with shields, not one-handers (${offhandish} expected, got ${rows().length})`);
 
 const ranged = byType("Ranged");
-ok(ranged === 6, `type=Ranged -> 6 rows (got ${ranged})`);
+ok(ranged === 7, `type=Ranged -> 7 rows (got ${ranged})`);
 /* Ranged and Relic are separate slots again, Sep 2026. They share a paper-doll slot but
    are not one question - a hunter after a bow and a druid after an idol were each handed
    the other's items. The type bucket "Ranged" is bows/guns/crossbows/thrown/wands, all of
@@ -424,7 +436,7 @@ ok(ranged === 6, `type=Ranged -> 6 rows (got ${ranged})`);
 ok(rows().every((tr) => tr.children[1].textContent === "Ranged"),
    "every Ranged result shows the Ranged slot, no longer merged with Relic");
 
-ok(oneH + twoH + ranged === 31, `1H + 2H + Ranged = 31 (got ${oneH + twoH + ranged})`);
+ok(oneH + twoH + ranged === 34, `1H + 2H + Ranged = 34 (got ${oneH + twoH + ranged})`);
 
 // staves/polearms are 2H by definition, so the prefix is dropped for display only
 byType("Weapons - 2H");
@@ -434,7 +446,7 @@ ok(!twoHTypes.includes("2H Staff"), '"2H Staff" no longer shown');
 ok(!twoHTypes.includes("2H Polearm"), '"2H Polearm" no longer shown');
 ok(twoHTypes.includes("2H Axe") && twoHTypes.includes("2H Sword"),
    "2H Axe/Sword keep their prefix - one-handed versions of those exist");
-ok(twoHTypes.length === 7, `relabelling didn't change the 2H count (${twoHTypes.length})`);
+ok(twoHTypes.length === 8, `relabelling didn't change the 2H count (${twoHTypes.length})`);
 ok(JSON.parse(fs.readFileSync(path.join(root, "data/loot_data.json"), "utf8"))
      .some((r) => r.type === "2H Staff"), "underlying data still records 2H Staff");
 
@@ -493,8 +505,8 @@ ok(!["One-Hand", "Main-Hand", "Off-Hand", "Two-Hand"].some((s) => slotOpts.inclu
    "the weapon slots are still collapsed into one Weapon option");
 
 const bySlot = (v) => { slotSel.value = v; slotSel.dispatchEvent(new window.Event("change")); return rows().length; };
-// 35 = 31 weapons + shields/off-hand frills, which share the slot but not the type bucket
-ok(bySlot("Weapon") === 35, `slot=Weapon -> 10 One-Hand + 6 Main-Hand + 12 Off-Hand + 7 Two-Hand = 35 (got ${rows().length})`);
+// 37 = 34 weapons + shields/off-hand frills, which share the slot but not the type bucket
+ok(bySlot("Weapon") === 37, `slot=Weapon -> 11 One-Hand + 6 Main-Hand + 12 Off-Hand + 8 Two-Hand = 37 (got ${rows().length})`);
 /* Counted from the data rather than pinned, so refiling an item extends the assertion
    instead of dating it - which is what a literal 9 did when Tome of the Lightbringer moved
    from Ranged to Relic. */
@@ -1171,8 +1183,18 @@ ok(Object.keys(zatarList.notes).length === 177,
      and the rest was already said better elsewhere - `unique: true` carries the one-per-
      player rule and is asserted below, and the "not in the source guide" framing was
      retired from the UI in Aug 2026. The shape being pinned is unchanged: a note left on
-     an item is a fact about the item, never anybody's opinion of it. */
-  ok(facts.length > 0 && facts.every((r) => /^(Also drops from|Drops from|Reputation reward|Scale of the Sands)/.test(r.notes)),
+     an item is a fact about the item, never anybody's opinion of it.
+
+     "Traded to Yrma" joined in Sep 2026 with the 22 Sunmote upgrades. Those sit under
+     Crafted (Sunmote) rather than under a boss, because you do not roll on them - you roll
+     on the drop they upgrade - so the note is what names the item and the boss it comes
+     from. Same kind of fact as the rest: how the thing is obtained.
+
+     "Quest reward" joined the list in Sep 2026 with Band of Crimson Fury, which is handed
+     over for Magtheridon's Head rather than dropping off the encounter - the same kind of
+     fact as "Also drops from", and worth saying because a loot council looking at the
+     Magtheridon table would otherwise expect to roll on it. */
+  ok(facts.length > 0 && facts.every((r) => /^(Also drops from|Drops from|Quest reward|Reputation reward|Scale of the Sands|Traded to Yrma)/.test(r.notes)),
      `the notes left on items are facts about the item (${facts.length})`);
 }
 
@@ -1412,7 +1434,7 @@ ok(!doc.querySelector(".class-icon--muted"), "no dimming when the filter is the 
 // no filters at all: nothing is dimmed
 click(doc.getElementById("reset"));
 ok(!doc.querySelector(".class-icon--muted"), "no dimming when no filters are active");
-ok(rows().length === 195, "unfiltered view is unchanged at 195 rows");
+ok(rows().length === P3_TOTAL, `unfiltered view is unchanged at ${P3_TOTAL} rows`);
 
 // --- column sorting ---
 click(doc.getElementById("reset"));
@@ -1469,7 +1491,7 @@ const sortedHeads = [...doc.querySelectorAll(".boss-head .boss-name")].map((h) =
 ok(sortedHeads[0] === "Trash" && sortedHeads[5] === "Archimonde" &&
    sortedHeads[15] === "Illidan Stormrage",
    "boss groups stay in kill order while rows sort inside them");
-ok(rows().length === 195, `all rows still present after sorting (${rows().length})`);
+ok(rows().length === P3_TOTAL, `all rows still present after sorting (${rows().length})`);
 
 click(doc.getElementById("reset"));
 ok(!doc.querySelector('th[aria-sort="ascending"]') && !doc.querySelector('th[aria-sort="descending"]'),
@@ -1518,12 +1540,13 @@ ok(zoneChipNames().join(", ") === "Serpentshrine Cavern, Tempest Keep, Crafted",
 click(phaseChip(3));
 ok(zoneChipNames().join(", ") === "Mount Hyjal, Black Temple, Crafted",
    `phase 3 is the one with data: ${zoneChipNames().join(", ")}`);
-ok(rows().length === 195, "picking a phase with no zone means every zone in it");
+ok(rows().length === P3_TOTAL, "picking a phase with no zone means every zone in it");
 ok(doc.getElementById("boss-row").hidden, "the boss row waits for a zone");
 
 click(chipByText("#zone-chips", "Black Temple"));
 ok(!doc.getElementById("boss-row").hidden, "which a zone reveals");
-ok(rows().length === 117, `a zone with no boss means every boss in it (got ${rows().length})`);
+ok(rows().length === countIn((r) => r.zone === "Black Temple"),
+   `a zone with no boss means every boss in it (got ${rows().length})`);
 ok(window.location.hash.includes("phase=P3"), `the phase is in the url: ${window.location.hash}`);
 
 // leaving a phase takes its zone and boss with it - they belonged to that phase
@@ -1541,7 +1564,7 @@ ok(!window.location.hash.includes("zone="), "a zone outside the chosen phase is 
 click(doc.getElementById("reset"));
 ok(chipByText("#phase-chips", "Phase 3").getAttribute("aria-pressed") === "true",
    "reset returns to the phase with the data, not to an empty page");
-ok(doc.getElementById("boss-row").hidden && rows().length === 195,
+ok(doc.getElementById("boss-row").hidden && rows().length === P3_TOTAL,
    "with the zone and boss below it cleared");
 
 // --- the phase is always set ---
@@ -1570,7 +1593,7 @@ ok(/phase=P\d/.test(window.location.hash), `the phase is always in the url: ${wi
 // an unknown phase in a link falls back rather than emptying the table
 window.location.hash = "phase=P9";
 await new Promise((r) => setTimeout(r, 50));
-ok(rows().length === 195 && window.location.hash.includes("phase=P3"),
+ok(rows().length === P3_TOTAL && window.location.hash.includes("phase=P3"),
    `an unknown phase falls back to the default (${window.location.hash})`);
 
 /* Every phase carries loot now, so nothing triggers phaseIsEmpty() any more. It stays
@@ -2144,10 +2167,10 @@ if (notBisMage.length) {
 click(doc.getElementById("reset"));
 window.location.hash = "spec=NotASpec";
 await new Promise((r) => setTimeout(r, 50));
-ok(rows().length === 195, `an unknown spec id is ignored (got ${rows().length})`);
+ok(rows().length === P3_TOTAL, `an unknown spec id is ignored (got ${rows().length})`);
 
 click(doc.getElementById("reset"));
-ok(rows().length === 195, `reset clears the spec filter (got ${rows().length})`);
+ok(rows().length === P3_TOTAL, `reset clears the spec filter (got ${rows().length})`);
 ok(!doc.querySelector("#spec-chips .chip--toggle"), "reset drops the BiS toggle");
 ok(doc.getElementById("spec-row").hidden, "reset hides the spec row again");
 ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priority icons");

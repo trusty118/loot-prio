@@ -2948,12 +2948,21 @@
   var VARIANT_LABEL = {
     "below-bis": "Slightly below BiS",
     "non-worldboss": "No world boss drop",
+    "2pc": "2-piece bonus",
     "4pc": "4-piece bonus",
     /* These two are not new, and both read as a dangling word before this map existed -
        "Expansion BiS - Unless" and "- Individually" are half a sentence each. The meanings
        are the ones fetch_bis.py records: "unless" comes from "Best without X" / "Best until
        X", and "individually" from "BiS Individually", which is the guide saying best when
        the piece is judged on its own rather than as part of the set it belongs to. */
+    "non-crafted": "Not crafted",
+    "non-tailor": "Without tailoring",
+    "10man": "From 10-man",
+    "worldboss": "World boss drop",
+    /* TBC has no "spell power" - the stat on every one of these tooltips reads "damage and
+       healing done by magical spells". The slug predates the map and is left alone; this is
+       the word the game uses. */
+    "spellpower": "Spell damage",
     "unless": "Depends on your other gear",
     "individually": "Without the set bonus",
     "mainhand": "Main hand",
