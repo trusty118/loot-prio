@@ -19,7 +19,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { until, sleep } from "./helpers.mjs";
+import { until, sleep, siteFetch } from "./helpers.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
@@ -134,12 +134,7 @@ function boot({ configured = false, sdk = null, url = "" } = {}) {
     { runScripts: "outside-only", url: "https://x.test/loot-prio/" + url });
   const { window } = dom;
   Object.assign(window, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
-  window.fetch = (u) => {
-    const s = String(u);
-    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
-      s.includes("lists/index.json") ? listIndex : s.includes("zatar-p3.json") ? zatarList
-      : s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
-  };
+  window.fetch = siteFetch();
   if (sdk) window.supabase = { createClient: () => sdk };
 
   let src = source;
@@ -258,12 +253,7 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
     { runScripts: "outside-only", url: "https://x.test/loot-prio/?code=abc123#phase=P3" });
   const { window: w } = dom;
   Object.assign(w, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
-  w.fetch = (u) => {
-    const s = String(u);
-    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
-      s.includes("lists/index.json") ? listIndex : s.includes("zatar-p3.json") ? zatarList
-      : s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
-  };
+  w.fetch = siteFetch();
   w.eval(source);
   await settle();   /* a real wait: the assertion is that writeUrl did NOT eat the OAuth
                        code, and the code is already there to begin with */

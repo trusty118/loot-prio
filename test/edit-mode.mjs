@@ -11,7 +11,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { until, sleep } from "./helpers.mjs";
+import { until, sleep, siteFetch, site } from "./helpers.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
@@ -41,12 +41,7 @@ function boot(hash) {
   Object.assign(window, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
   // jsdom gives each instance its own localStorage, and it cannot be reassigned -
   // so the store is read back through the same object the page writes to.
-  window.fetch = (u) => {
-    const s = String(u);
-    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
-      s.includes("lists/index.json") ? listIndex : s.includes("zatar-p3.json") ? zatarList
-      : s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
-  };
+  window.fetch = siteFetch();
   window.eval(source);
   return window;
 }
@@ -477,7 +472,7 @@ ok(blank.base === "blank", `and says it started from nothing (base: ${blank.base
 // every item OF THE OPEN PHASE. These were the same number while Phase 3 was the whole
 // dataset; Zul'Aman and Sunwell separated them.
 const inPhase = data.filter((r) =>
-  ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone)).length;
+  site.rules.phases.find((p) => p.id === "P3").zones.includes(r.zone)).length;
 ok(d2.querySelectorAll("tbody tr").length === inPhase,
    `the table still renders every item of the phase - only the priority column is empty (${inPhase})`);
 ok(rowFor(d2, ITEM).querySelector(".prio-add"), "each row offers a + to start filling it in");

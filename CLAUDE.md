@@ -61,6 +61,17 @@ keeps the green accent unambiguous (green is uncommon quality; no green item nam
 
 Why → [loot-data.md](docs/decisions/loot-data.md)
 
+### `data/rules.json` — the rules three languages agree on
+
+Operators and their labels, slot capacity, the double slots, the armour ladder, relic
+classes, tier-token class groupings, the longevity tiers, the **variant vocabulary with its
+labels and flags** (`emphasis`, `tankSet`, `uncontested`), and the **phases with their
+zones**. `app.js` fetches it at boot (`applyRules()`, not fail-soft: nothing in the priority
+column can be drawn without it); `fetch_bis.py`, `check_bis.py`, `check_priority.py`,
+`seed_priority.py` and `seed_roles.py` load it; every test file reads it through
+`test/helpers.mjs`'s `site.rules`. **Nothing derives any of these at runtime, and nothing
+carries a copy.** Adding a variant, a phase or an operator is a line here and nothing else.
+
 ### `data/lists/` — the lists that ship with the site
 
 `index.json` names them; each is a template (`validateTemplate()` shape) plus `phase` and
@@ -92,7 +103,7 @@ superseded? }`.
 | Field | Meaning |
 |---|---|
 | `bis` | `phase` (default) / `multiPhase` / `expansion` — **one answer per item per spec**, shown in every phase it appears. Derived: listed in one phase → `phase`; two or more → `multiPhase`; reaches the source's last phase → `expansion` |
-| `variant` | A qualifier from the closed vocabulary in `check_bis.py` (`hit`, `threat`, `2pc`, `non-worldboss`, `below-bis` …). `app.js`'s `VARIANT_LABEL` says how each reads |
+| `variant` | A qualifier from the closed vocabulary in `rules.json` (`hit`, `threat`, `2pc`, `non-worldboss`, `below-bis` …), which also says how each reads |
 | `conditional` | The guide only ever called it best *under a condition*. **Per item, not per phase.** Draws a dashed ring |
 | `near` | Listed past what the slot holds, or offered with a reason but never called best. Draws a blue ring; counts toward nothing |
 | `superseded` | The guide named this item's replacement (`Best until X`); rings, but is not evidence of lasting |
@@ -110,7 +121,7 @@ only). A source with nothing to say rings nothing and does not fall back.
 | `verify/tier-tokens.json` | piece id → token, identified by (tier, slot, class) |
 | `verify/world-boss-drops.json` | Doomwalker and Doom Lord Kazzak's drops |
 
-**Slot capacity**: 2 for `Finger`, `Trinket`, `One-Hand`; 1 otherwise. Within one (spec,
+**Slot capacity** (`rules.json`): 2 for `Finger`, `Trinket`, `One-Hand`; 1 otherwise. Within one (spec,
 phase, slot, variant) group, no more entries may claim BiS than that. `below-bis` is
 exempt — it states a margin, not a condition under which the row wins.
 
@@ -286,6 +297,8 @@ Each of these has bitten at least once. The reasoning is in
   ladder colours mean their tiers. Nothing else on the page is warm.
 - **No browser dialogs.** No `prompt`, `confirm`, `alert` — the tests grep for them.
 - **Every art surface uses `--art-dim` / `--art-dim-hover`**, never a literal filter.
+- **A rule three languages share lives in `data/rules.json`, never in code.** Operators,
+  capacity, variants, phases. A "must stay in step" comment is not a guard.
 - **Every new template field needs three things**: the upsert column, the SQL the RPC
   selects, and `rowToTemplate()`. An upsert silently drops what it does not name.
 
@@ -307,6 +320,9 @@ Each of these has bitten at least once. The reasoning is in
 
 **Counts are counted, not pinned**: `P3_TOTAL` and `countIn()` derive from the data.
 Type-bucket counts stay literal because deriving them would reimplement `typeGroup()`.
+Every file boots the page through `siteFetch()` from `test/helpers.mjs`, which serves the
+data files by url and **404s anything it does not know** — so a new data file the page
+asks for fails loudly in every test rather than being answered with the loot array.
 
 **Waiting**: `until(pred)` / `settle()`, never a fixed sleep. The predicate must cover what
 the *next line* needs, be about the new state, and a "did not happen" assertion cannot be

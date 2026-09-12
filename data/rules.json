@@ -1,0 +1,77 @@
+{
+  "note": "The rules that app.js, the verify/ pipeline and the tests must all agree on, in ONE place. Before Sep 2026 each of these was hand-copied into Python, the page and the test files, with a 'must stay in step' comment as the only guard - and the near-override ordering bug was the guard failing. app.js fetches this at boot beside loot_data.json; fetch_bis.py, check_bis.py, check_priority.py and seed_priority.py load it; test/*.mjs read it directly. Nothing derives any of these at runtime.",
+
+  "phases": [
+    { "id": "P1", "label": "Phase 1",
+      "zones": ["Karazhan", "Gruul's Lair", "Magtheridon's Lair", "World Bosses"] },
+    { "id": "P2", "label": "Phase 2",
+      "zones": ["Serpentshrine Cavern", "Tempest Keep", "Crafted (Nether Vortex)"] },
+    { "id": "P3", "label": "Phase 3",
+      "zones": ["Mount Hyjal", "Black Temple", "Crafted (Heart of Darkness)"] },
+    { "id": "P4", "label": "Phase 4", "zones": ["Zul'Aman"] },
+    { "id": "P5", "label": "Phase 5", "zones": ["Sunwell Plateau", "Crafted (Sunmote)"] }
+  ],
+
+  "operators": {
+    ">":  { "advances": true,  "label": "higher than" },
+    ">>": { "advances": true,  "label": "much higher than" },
+    "~>": { "advances": true,  "label": "roughly higher than" },
+    "=":  { "advances": false, "label": "equal to" },
+    "~=": { "advances": false, "label": "roughly equal to" },
+    "?":  { "advances": false, "label": "not ranked against" }
+  },
+  "operatorOrder": [">", ">>", "~>", "=", "~=", "?"],
+
+  "roles": ["Physical", "Caster", "Healer", "Tank", "Tier"],
+  "races": ["Orc", "Human"],
+
+  "doubleSlots": ["Finger", "Trinket", "One-Hand", "Main-Hand", "Off-Hand"],
+  "slotCapacity": { "Finger": 2, "Trinket": 2, "One-Hand": 2 },
+
+  "armourRank": { "Cloth": 1, "Leather": 2, "Mail": 3, "Plate": 4 },
+  "relicClass": { "Idol": "Druid", "Totem": "Shaman", "Libram": "Paladin" },
+
+  "tierClasses": {
+    "Tier Token (Pal/Priest/Lock)":   ["Paladin", "Priest", "Warlock"],
+    "Tier Token (War/Hunter/Shaman)": ["Warrior", "Hunter", "Shaman"],
+    "Tier Token (Rogue/Mage/Druid)":  ["Rogue", "Mage", "Druid"],
+    "Tier Token (Pal/Rogue/Shaman)":  ["Paladin", "Rogue", "Shaman"],
+    "Tier Token (War/Priest/Druid)":  ["Warrior", "Priest", "Druid"],
+    "Tier Token (Hunter/Mage/Lock)":  ["Hunter", "Mage", "Warlock"]
+  },
+
+  "longevity": { "phase": 1, "multiPhase": 2, "expansion": 3 },
+
+  "variantsNote": "The closed vocabulary a BiS entry's `variant` may use, and how each reads. `label` null means the word is suppressed on screen. `emphasis` means the wording emphasises rather than qualifies, so it never makes a ring dashed. `tankSet` means a tank's threat/mitigation kit - two genuine sets, not a caveat - so it is not conditional on a spec whose roles include Tank. `uncontested` means the row does not compete for slot capacity: it states a margin, not a condition under which the row wins.",
+  "variants": {
+    "threat":        { "label": "Threat",                     "tankSet": true },
+    "mitigation":    { "label": "Mitigation",                 "tankSet": true },
+    "regen":         { "label": "Regen" },
+    "throughput":    { "label": "Throughput" },
+    "balanced":      { "label": "Balanced" },
+    "hit":           { "label": "Hit" },
+    "haste":         { "label": "Haste" },
+    "crit":          { "label": "Crit" },
+    "spellpower":    { "label": "Spell damage" },
+    "expertise":     { "label": "Expertise" },
+    "dagger":        { "label": "Dagger" },
+    "shield":        { "label": "Shield" },
+    "mainhand":      { "label": "Main hand" },
+    "offhand":       { "label": "Off hand" },
+    "human":         { "label": "Human" },
+    "non-human":     { "label": "Non-human" },
+    "pair":          { "label": "Pair",                       "emphasis": true },
+    "individually":  { "label": "Without the set bonus" },
+    "overall":       { "label": null,                         "emphasis": true },
+    "unless":        { "label": "Depends on your other gear" },
+    "2pc":           { "label": "2-piece bonus" },
+    "4pc":           { "label": "4-piece bonus" },
+    "contested":     { "label": "Contested" },
+    "non-worldboss": { "label": "No world boss drop" },
+    "worldboss":     { "label": "World boss drop" },
+    "below-bis":     { "label": "Slightly below BiS",         "uncontested": true },
+    "non-crafted":   { "label": "Not crafted" },
+    "non-tailor":    { "label": "Without tailoring" },
+    "10man":         { "label": "From 10-man" }
+  }
+}

@@ -52,7 +52,10 @@ BIS_HEADING = re.compile(r"Best In Slot Gear.{0,90}?Phase\s*([12345])", re.I | r
 # Phase 2 is also the one phase written PER SPEC where Phase 3 is per class, so five
 # specs have a better source at P2 than they do at P3.
 PHASE_SLUG = {"P3": "-bt-hyjal-phase-3-", "P4": "-za-phase-4-", "P5": "-swp-phase-5-"}
-PHASES = ["P1", "P2", "P3", "P4", "P5"]
+# Everything three languages have to agree on lives in data/rules.json - see the note at
+# the top of that file. Loaded once here; the tests and app.js read the same file.
+RULES = json.loads((ROOT / "data" / "rules.json").read_text(encoding="utf-8"))
+PHASES = [p["id"] for p in RULES["phases"]]
 
 # The rank column says WHY an item is BiS, and until now that was read and thrown away.
 # Wowhead's wording is not fixed - the same idea arrives as "Best Mitigation", "Best Mit
@@ -179,7 +182,7 @@ TIERS = {1: "phase", 2: "multiPhase", 3: "expansion"}
 # How many of a slot one person wears at once. A guide listing three "Best" two-handers
 # is ranking them - the first is BiS and the rest are near-BiS alternatives - but two
 # "Best" rings really are two rings.
-SLOT_CAPACITY = {"Finger": 2, "Trinket": 2, "One-Hand": 2}
+SLOT_CAPACITY = RULES["slotCapacity"]
 
 
 def capacity(slot):
@@ -374,7 +377,7 @@ def scan_rows(html, where, phase, overrides=None, row_overrides=None):
     return out
 
 
-UNCONTESTED = {"below-bis"}   # see check_bis.py for why these skip slot capacity
+UNCONTESTED = {v for v, m in RULES["variants"].items() if m.get("uncontested")}
 
 
 def bis_rows(html, where, phase, overrides=None, row_overrides=None):
@@ -607,8 +610,8 @@ def main():
         # "pair" stays, and only because of what it happens to cover: in this data it is
         # the Warglaives of Azzinoth and nothing else, where "Best Pair" describes what
         # you equip rather than when it applies.
-        EMPHASIS = {"overall", "pair"}
-        SET_VARIANTS = {"threat", "mitigation"}
+        EMPHASIS = {v for v, m in RULES["variants"].items() if m.get("emphasis")}
+        SET_VARIANTS = {v for v, m in RULES["variants"].items() if m.get("tankSet")}
         is_tank = "Tank" in reg.get(spec, {}).get("roles", [])
 
         def conditional(variant):

@@ -24,18 +24,19 @@ SPECS = ROOT / "data" / "specs.json"
 
 # "?" is "not ranked against": these names are listed and nobody has said which comes
 # first. It does not advance a position, the way a tie does not.
-OPERATORS = {">", ">>", "~>", "=", "~=", "?"}
+RULES = json.loads((ROOT / "data" / "rules.json").read_text(encoding="utf-8"))
+OPERATORS = set(RULES["operators"])
 
 # Slots you can fill twice at once. Two-Hand is excluded on purpose: you get one
 # weapon, not two. Ranged and Relic are single slots, and armour is one each.
-DOUBLE_SLOTS = {"Finger", "Trinket", "One-Hand", "Main-Hand", "Off-Hand"}
+DOUBLE_SLOTS = set(RULES["doubleSlots"])
 
-ROLE_TAGS = {"Physical", "Caster", "Healer", "Tank", "Tier"}
+ROLE_TAGS = set(RULES["roles"])
 
 # Armour proficiency: a class wears its own type and everything below it. This is a
 # hard rule the editor enforces, so the data must never contradict it.
-ARMOUR_RANK = {"Cloth": 1, "Leather": 2, "Mail": 3, "Plate": 4}
-RELIC_CLASS = {"Idol": "Druid", "Totem": "Shaman", "Libram": "Paladin"}
+ARMOUR_RANK = RULES["armourRank"]
+RELIC_CLASS = RULES["relicClass"]
 
 
 def main():

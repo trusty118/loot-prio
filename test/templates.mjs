@@ -7,7 +7,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { until, sleep } from "./helpers.mjs";
+import { until, sleep, siteFetch } from "./helpers.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
@@ -29,12 +29,7 @@ function boot(hash) {
     { runScripts: "outside-only", url: "https://x.test/loot-prio/" + (hash || "") });
   const { window } = dom;
   Object.assign(window, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
-  window.fetch = (u) => {
-    const s = String(u);
-    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(
-      s.includes("lists/index.json") ? listIndex : s.includes("zatar-p3.json") ? zatarList
-      : s.includes("bis.json") ? bis : s.includes("specs.json") ? specs : data) });
-  };
+  window.fetch = siteFetch();
   window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8").replace("})();", EXPOSE));
   return window;
 }

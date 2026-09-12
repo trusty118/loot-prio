@@ -21,7 +21,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { until } from "./helpers.mjs";
+import { until, siteFetch } from "./helpers.mjs";
 import { build, SHIPPED } from "../build.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -75,13 +75,7 @@ await build();
 
   const dom = new JSDOM(html, { runScripts: "outside-only", url: "https://x.test/loot-prio/" });
   const { window } = dom;
-  window.fetch = (url) => {
-    const u = String(url);
-    const body = u.includes("lists/index.json") ? listIndex
-               : u.includes("zatar-p3.json") ? zatarList
-               : u.includes("bis.json") ? bis : u.includes("specs.json") ? specs : data;
-    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(body) });
-  };
+  window.fetch = siteFetch();
   window.eval(fs.readFileSync(path.join(dist, "app.js"), "utf8"));
 
   const d = window.document;

@@ -44,3 +44,53 @@ export function until(predicate, timeout = UNTIL_TIMEOUT) {
 /* For the cases above, where there is genuinely nothing to poll for. Named so that
    every remaining fixed wait in the suite says out loud that it is deliberate. */
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/* The site's data files, read once, and a fetch() that serves them by url.
+ *
+ * Every test file used to carry its own copy of this stub - nine of them, each a chain of
+ * `u.includes("bis.json") ? bis : ...` falling through to loot_data for anything it did
+ * not name. That fall-through is the trap: a NEW data file arriving at the page got
+ * answered with the loot array, silently, in nine places. rules.json was the one that
+ * made it a helper.
+ *
+ * `overrides` maps a filename fragment to either a body or a function returning a
+ * Response-like, for the tests that bend one file on purpose (bis-fallback.mjs). Anything
+ * the page asks for that is neither here nor in overrides is a 404 - which is what a
+ * missing file IS, and lets the fail-soft paths be tested honestly.
+ */
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const readJson = (rel) => JSON.parse(fs.readFileSync(path.join(root, "data", rel), "utf8"));
+
+export const site = {
+  data:      readJson("loot_data.json"),
+  rules:     readJson("rules.json"),
+  bis:       readJson("bis.json"),
+  specs:     readJson("specs.json"),
+  listIndex: readJson("lists/index.json"),
+  zatarList: readJson("lists/zatar-p3.json")
+};
+
+const FILES = [
+  ["lists/index.json", "listIndex"], ["zatar-p3.json", "zatarList"], ["rules.json", "rules"],
+  ["bis.json", "bis"], ["specs.json", "specs"], ["loot_data.json", "data"]
+];
+
+export function siteFetch(overrides = {}) {
+  return (url) => {
+    const u = String(url);
+    for (const key of Object.keys(overrides)) {
+      if (u.includes(key)) {
+        const o = overrides[key];
+        return typeof o === "function" ? o()
+          : Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(o) });
+      }
+    }
+    const hit = FILES.find(([frag]) => u.includes(frag));
+    if (!hit) return Promise.resolve({ ok: false, status: 404, json: () => Promise.reject(new Error("404 " + u)) });
+    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(site[hit[1]]) });
+  };
+}

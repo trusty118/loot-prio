@@ -17,11 +17,13 @@
      the code and the data ship in one commit and deploy together, so a cached app.js
      can never disagree with the data it is reading. */
   var FRESH = { cache: "no-cache" };
+  var RULES = null;
 
   var DATA_URL = "data/loot_data.json";
   var BIS_URL = "data/bis.json";
   var SPECS_URL = "data/specs.json";
   var LISTS_URL = "data/lists/index.json";
+  var RULES_URL = "data/rules.json";
 
   /* Encounter order per zone (the JSON is not in kill order). */
   /* Kill order per zone. The seven zones outside Phase 3 have no items yet, so their
@@ -130,20 +132,11 @@
      This is also what makes the where-panel readable: 17 boss chips and 3 zone
      chips at once was a wall, so nothing below a phase is shown until one is
      picked, and nothing below a zone until a zone is. */
-  var PHASES = [
-    /* World Bosses sits with Phase 1 because Doomwalker and Doom Lord Kazzak were there
-       from launch. It is a zone in the same sense Crafted is - a source of loot rather
-       than an instance - which is why it has no Encounter Journal art: the two of them
-       stand in Shadowmoon Valley and Hellfire Peninsula, not inside a raid. */
-    { id: "P1", label: "Phase 1",
-      zones: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair", "World Bosses"] },
-    { id: "P2", label: "Phase 2",
-      zones: ["Serpentshrine Cavern", "Tempest Keep", "Crafted (Nether Vortex)"] },
-    { id: "P3", label: "Phase 3",
-      zones: ["Mount Hyjal", "Black Temple", "Crafted (Heart of Darkness)"] },
-    { id: "P4", label: "Phase 4", zones: ["Zul'Aman"] },
-    { id: "P5", label: "Phase 5", zones: ["Sunwell Plateau", "Crafted (Sunmote)"] }
-  ];
+  /* Filled by applyRules() from data/rules.json at boot, where the phases live alongside
+     every other table three languages have to agree on. World Bosses sits with Phase 1
+     because Doomwalker and Doom Lord Kazzak were there from launch: a zone in the same
+     sense Crafted is, a source of loot rather than an instance. */
+  var PHASES = [];
 
   /* The order zones are listed in is load-bearing, not cosmetic: ZONE_ORDER derives from
      it, and ZONE_ORDER decides the zone chip row, the order of the art strips on a phase
@@ -183,7 +176,7 @@
 
   /* Every zone, in phase order - which is also kill order across the expansion, so
      bossSortKey() can go on using the index of this list. */
-  var ZONE_ORDER = PHASES.reduce(function (all, p) { return all.concat(p.zones); }, []);
+  var ZONE_ORDER = [];   // derived from PHASES in applyRules()
   /* Each phase has its own crafting tier, named for the material it is gated on, and
      both render as plain "Crafted" - they are never on screen together, because the
      phase above them decides which one is. */
@@ -344,14 +337,7 @@
   /* Tier 4 and Tier 5 share one set of groupings, Tier 6 uses another - Priest is with
      Warlock at T6 and with Warrior at T4/T5 - so these are six entries and not three
      under different names. Taken from the tokens' own "Classes:" lines. */
-  var TIER_CLASSES = {
-    "Tier Token (Pal/Priest/Lock)": ["Paladin", "Priest", "Warlock"],
-    "Tier Token (War/Hunter/Shaman)": ["Warrior", "Hunter", "Shaman"],
-    "Tier Token (Rogue/Mage/Druid)": ["Rogue", "Mage", "Druid"],
-    "Tier Token (Pal/Rogue/Shaman)": ["Paladin", "Rogue", "Shaman"],
-    "Tier Token (War/Priest/Druid)": ["Warrior", "Priest", "Druid"],
-    "Tier Token (Hunter/Mage/Lock)": ["Hunter", "Mage", "Warlock"]
-  };
+  var TIER_CLASSES = {}; // from rules.json - six groupings, since T4/T5 pair classes differently from T6
 
   function tierClasses(rec) {
     return TIER_CLASSES[rec.type] || null;
@@ -373,8 +359,8 @@
         zatar's own calls - a Prot Warrior on a physical weapon, an Enhancement
         Shaman on a healer ring - so the editor hides these, never refuses them. */
 
-  var ARMOUR_RANK = { "Cloth": 1, "Leather": 2, "Mail": 3, "Plate": 4 };
-  var RELIC_CLASS = { "Idol": "Druid", "Totem": "Shaman", "Libram": "Paladin" };
+  var ARMOUR_RANK = {};  // from rules.json
+  var RELIC_CLASS = {};  // from rules.json
 
   /* Layer 1 on its own: can this class physically use the item at all? */
   function canUse(clsId, rec) {
@@ -693,21 +679,13 @@
   /* How each operator behaves. `advances` is the only thing ranking cares about:
      ">>" and "~>" are ">" for logic, and differ only in what they say. The labels
      are here for the operator tooltips. */
-  var OPERATORS = {
-    ">":  { advances: true,  label: "higher than" },
-    ">>": { advances: true,  label: "much higher than" },
-    "~>": { advances: true,  label: "roughly higher than" },
-    "=":  { advances: false, label: "equal to" },
-    "~=": { advances: false, label: "roughly equal to" },
-    /* Not an ordering at all: these names are listed, and nobody has said which comes
-       first. It does not advance, because a rank nobody has decided is not a rank - all
-       of them share one position, the way a tie does.
-
-       It is what the BiS view uses between the specs an item is best-in-slot for, and it
-       is a real operator rather than a display trick so that a line you seed and have
-       not got to yet says the same thing as one the site drew for you. */
-    "?":  { advances: false, label: "not ranked against" }
-  };
+  /* From data/rules.json. "?" is not an ordering at all: these names are listed, and
+     nobody has said which comes first. It does not advance, because a rank nobody has
+     decided is not a rank - all of them share one position, the way a tie does. It is
+     what the BiS view uses between the specs an item is best-in-slot for, and it is a
+     real operator rather than a display trick so that a line you seed and have not got
+     to yet says the same thing as one the site drew for you. */
+  var OPERATORS = {};
 
   /* Fold a priority list into 1-based positions: ties share a position. */
   function positions(list) {
@@ -1396,8 +1374,8 @@
      The same rules verify/check_priority.py enforces, applied while editing so the
      editor cannot produce data the validator would reject. */
 
-  var OP_LIST = [">", ">>", "~>", "=", "~=", "?"];
-  var DOUBLE_SLOTS = { "Finger": 1, "Trinket": 1, "One-Hand": 1, "Main-Hand": 1, "Off-Hand": 1 };
+  var OP_LIST = [];      // from rules.json
+  var DOUBLE_SLOTS = {}; // from rules.json
 
   /* You can only be told to take two of something you could equip twice. */
   function allowsRepeat(rec) {
@@ -2917,7 +2895,7 @@
     4: { cls: "spec-icon--alt", label: "Alternate BiS" }
   };
 
-  var BIS_LONGEVITY_BY_NAME = { "phase": 1, "multiPhase": 2, "expansion": 3 };
+  var BIS_LONGEVITY_BY_NAME = {};  // from rules.json
 
   /* The OTHER axis, and it is independent of the three above: a ring is dotted when the
      guide only ever called the item best under a condition - "Best - Hit", "Regen BiS",
@@ -2935,7 +2913,7 @@
 
      Suppressed at render, not stripped from the data: bis.json records what the guide
      actually wrote, which is what verify/dump_bis_raw.py audits against. */
-  var SILENT_VARIANTS = { "overall": true };
+  var SILENT_VARIANTS = {};  // from rules.json: a variant whose label is null
 
   /* Qualifiers whose stored slug does not read as English once a capital is put on it.
      Everything else goes through charAt(0).toUpperCase() below and comes out fine -
@@ -2945,29 +2923,7 @@
      The slug is what bis.json stores and check_bis.py's closed vocabulary admits, and it
      stays short and hyphenated for that; this is the sentence a reader gets. Keeping the
      two separate is why a rewording is a one-line change here and not a data migration. */
-  var VARIANT_LABEL = {
-    "below-bis": "Slightly below BiS",
-    "non-worldboss": "No world boss drop",
-    "2pc": "2-piece bonus",
-    "4pc": "4-piece bonus",
-    /* These two are not new, and both read as a dangling word before this map existed -
-       "Expansion BiS - Unless" and "- Individually" are half a sentence each. The meanings
-       are the ones fetch_bis.py records: "unless" comes from "Best without X" / "Best until
-       X", and "individually" from "BiS Individually", which is the guide saying best when
-       the piece is judged on its own rather than as part of the set it belongs to. */
-    "non-crafted": "Not crafted",
-    "non-tailor": "Without tailoring",
-    "10man": "From 10-man",
-    "worldboss": "World boss drop",
-    /* TBC has no "spell power" - the stat on every one of these tooltips reads "damage and
-       healing done by magical spells". The slug predates the map and is left alone; this is
-       the word the game uses. */
-    "spellpower": "Spell damage",
-    "unless": "Depends on your other gear",
-    "individually": "Without the set bonus",
-    "mainhand": "Main hand",
-    "offhand": "Off hand"
-  };
+  var VARIANT_LABEL = {};    // from rules.json: every variant's label, so the slug never renders
 
   /* Flattened from data/bis.json: "P3|ProtWarr|32375" -> { longevity, variant }.
 
@@ -3079,7 +3035,7 @@
   }
 
   /* the phases in release order, which is the order "survives to" means */
-  var PHASE_IDS = PHASES.map(function (p) { return p.id; });
+  var PHASE_IDS = [];    // derived from PHASES in applyRules()
 
   /* Keyed by the registry identifier (ProtWarr), matching data/bis.json, and scoped to
      the phase on screen: a Sunwell item is not BiS for someone reading Phase 3, and a
@@ -3227,9 +3183,7 @@
        particular listings are the plain one: they show a broken ring and an unadorned
        label, which is the ring carrying it alone. */
     var shown = SILENT_VARIANTS[variant] ? "" : (VARIANT_LABEL[variant] || variant);
-    var bisLine = lasts
-      ? lasts.label + (shown ? " - " + shown.charAt(0).toUpperCase() + shown.slice(1) : "")
-      : "";
+    var bisLine = lasts ? lasts.label + (shown ? " - " + shown : "") : "";
 
     img.alt = who + (bisLine ? " (" + bisLine + ")" : "");
     /* data-tip rather than title: the native tooltip has a ~1s delay the browser
@@ -5161,17 +5115,45 @@
     return OOTB.filter(function (e) { return !e.phase || e.phase === state.phase; });
   }
 
+  /* The rules three languages agree on - operators, slot capacity, the variant vocabulary,
+     the phases - come from ONE file, and this is where the page takes them. Not fail-soft
+     like bis.json: without operators nothing in the priority column can be validated or
+     drawn, so a missing file is the same kind of failure as a missing loot_data.json. */
+  function applyRules(doc) {
+    RULES = doc;
+    PHASES = doc.phases;
+    ZONE_ORDER = PHASES.reduce(function (all, p) { return all.concat(p.zones); }, []);
+    PHASE_IDS = PHASES.map(function (p) { return p.id; });
+    OPERATORS = doc.operators;
+    OP_LIST = doc.operatorOrder;
+    DOUBLE_SLOTS = {};
+    doc.doubleSlots.forEach(function (s) { DOUBLE_SLOTS[s] = 1; });
+    ARMOUR_RANK = doc.armourRank;
+    RELIC_CLASS = doc.relicClass;
+    TIER_CLASSES = doc.tierClasses;
+    BIS_LONGEVITY_BY_NAME = doc.longevity;
+    SILENT_VARIANTS = {};
+    VARIANT_LABEL = {};
+    Object.keys(doc.variants).forEach(function (v) {
+      if (doc.variants[v].label === null) SILENT_VARIANTS[v] = true;
+      else VARIANT_LABEL[v] = doc.variants[v].label;
+    });
+  }
+
+  function fetchJson(url) {
+    return fetch(url, FRESH).then(function (res) {
+      if (!res.ok) throw new Error(url + ": HTTP " + res.status);
+      return res.json();
+    });
+  }
+
+  /* Fetched raw here and indexed in boot, AFTER applyRules(): indexBis() reads PHASE_IDS,
+     and the fetches run in parallel, so the rules may not have landed when this resolves. */
   function loadBis() {
-    return fetch(BIS_URL, FRESH)
-      .then(function (res) {
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        return res.json();
-      })
-      .then(indexBis)
-      .catch(function (err) {
-        if (window.console) console.warn("BiS data unavailable, rings disabled:", err.message);
-        indexBis(null);
-      });
+    return fetchJson(BIS_URL).catch(function (err) {
+      if (window.console) console.warn("BiS data unavailable, rings disabled:", err.message);
+      return null;
+    });
   }
 
   /* The registry is not optional the way bis.json is - without it nothing in the
@@ -5191,15 +5173,15 @@
   }
 
   Promise.all([
-    fetch(DATA_URL, FRESH).then(function (res) {
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      return res.json();
-    }),
+    fetchJson(DATA_URL),
+    fetchJson(RULES_URL),
     loadRegistry(),
     loadBis(),
     loadOotb()
   ])
     .then(function (results) {
+      applyRules(results[1]);
+      indexBis(results[3]);
       var data = results[0];
       ALL = data;
       state.bisSource = bisSource();
@@ -5226,7 +5208,7 @@
     })
     .catch(function (err) {
       el.results.innerHTML =
-        '<p class="empty error">Could not load <code>' + DATA_URL + "</code> (" + escapeHtml(err.message) +
+        '<p class="empty error">Could not load the site data (' + escapeHtml(err.message) +
         "). If you opened this file directly from disk, run a local server instead: " +
         "<code>python -m http.server</code></p>";
     });

@@ -2,7 +2,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { until, sleep } from "./helpers.mjs";
+import { until, sleep, siteFetch, site } from "./helpers.mjs";
 
 // resolve the repo root from this file, so it works on any machine or cwd
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -15,7 +15,7 @@ const data = JSON.parse(fs.readFileSync(path.join(root, "data/loot_data.json"), 
    the assertions actually mean is "the phase shows all of its rows" and "this filter shows
    this zone's rows", which is what these express. Type-bucket counts stay literal below,
    because deriving those would mean reimplementing typeGroup() in the test. */
-const P3_ZONES = ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"];
+const P3_ZONES = site.rules.phases.find((p) => p.id === "P3").zones;
 const P3_TOTAL = data.filter((r) => P3_ZONES.includes(r.zone)).length;
 const countIn = (f) => data.filter((r) => P3_ZONES.includes(r.zone) && f(r)).length;
 
@@ -29,13 +29,7 @@ const specs = JSON.parse(fs.readFileSync(path.join(root, "data/specs.json"), "ut
    points, and the priority column is empty on every row */
 const listIndex = JSON.parse(fs.readFileSync(path.join(root, "data/lists/index.json"), "utf8"));
 const zatarList = JSON.parse(fs.readFileSync(path.join(root, "data/lists/zatar-p3.json"), "utf8"));
-window.fetch = (url) => {
-  const u = String(url);
-  const body = u.includes("lists/index.json") ? listIndex
-             : u.includes("zatar-p3.json") ? zatarList
-             : u.includes("bis.json") ? bis : u.includes("specs.json") ? specs : data;
-  return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(body) });
-};
+window.fetch = siteFetch();
 
 window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
 
@@ -161,9 +155,9 @@ click(picked());
 // Derived, not pinned: the dataset grows, and a literal here fails on every addition
 // while saying nothing about whether rendering works.
 const P3_ITEMS = data.filter((r) =>
-  ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone)).length;
+  P3_ZONES.includes(r.zone)).length;
 const P3_GROUPS = new Set(data
-  .filter((r) => ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone))
+  .filter((r) => P3_ZONES.includes(r.zone))
   .map((r) => r.zone + "|" + r.boss)).size;
 
 ok(!!picked() && rows().length === P3_ITEMS, "clicking the current phase is a no-op");
@@ -422,7 +416,7 @@ ok(rows().every((tr) => tr.children[1].textContent === "Weapon"),
    their type; typeGroup() ends with "everything left is a weapon", so they grouped under
    Weapons - 1H and a warrior filtering for one-handers was handed nine caster books.
    Counted from the data, so correcting another record extends this rather than dating it. */
-const inP3 = (r) => ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone);
+const inP3 = (r) => P3_ZONES.includes(r.zone);
 const offhandish = data.filter((r) => inP3(r) && (r.type === "Shield" || r.type === "Off-hand")).length;
 ok(byType("Shield / Off-hand") === offhandish,
    `off-hand frills group with shields, not one-handers (${offhandish} expected, got ${rows().length})`);
@@ -510,7 +504,7 @@ ok(bySlot("Weapon") === 37, `slot=Weapon -> 11 One-Hand + 6 Main-Hand + 12 Off-H
 /* Counted from the data rather than pinned, so refiling an item extends the assertion
    instead of dating it - which is what a literal 9 did when Tome of the Lightbringer moved
    from Ranged to Relic. */
-const inPhase3 = (r) => ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone);
+const inPhase3 = (r) => P3_ZONES.includes(r.zone);
 const nRanged = data.filter((r) => inPhase3(r) && r.slot === "Ranged").length;
 const nRelic = data.filter((r) => inPhase3(r) && r.slot === "Relic").length;
 ok(bySlot("Ranged") === nRanged, `slot=Ranged -> ${nRanged} (got ${rows().length})`);
@@ -789,7 +783,7 @@ const ops = [...doc.querySelectorAll(".col-prio .prio-op")].map((o) => o.textCon
    message below has always listed it. It went unnoticed because no "?" reached the
    table while a list was open - the BiS view was the only thing drawing them, and that
    only ran with no list. It now also fills rows the open list has no key for. */
-const KNOWN_OPS = [">", ">>", "~>", "=", "~=", "?"];
+const KNOWN_OPS = site.rules.operatorOrder;
 ok(ops.length > 0 && ops.every((o) => KNOWN_OPS.includes(o)),
    `only known operators render (${[...new Set(ops)].sort().join(" ")})`);
 ok(ops.every((o) => o !== ">="), "the old >= is gone");
@@ -821,22 +815,22 @@ ok([...vanq.querySelectorAll("img")].some((i) => i.dataset.tip === "Feral Druid 
 ok(doc.querySelectorAll(".col-type img.class-icon").length === 45,
    `15 tier tokens x 3 class icons = 45 (${doc.querySelectorAll(".col-type img.class-icon").length})`);
 
-/* Every token type in the data has to be in TIER_CLASSES, or it renders as bare text
-   with no class icons - which reads as "we do not know who this is for" rather than as
-   a bug. Tier 4 and 5 group the classes DIFFERENTLY from Tier 6 (Priest sits with
-   Warlock at T6 and with Warrior below it), so this cannot be checked by pattern. */
+/* Every token type in the data has to be in rules.json's tierClasses, or it renders as
+   bare text with no class icons - which reads as "we do not know who this is for" rather
+   than as a bug. Tier 4 and 5 group the classes DIFFERENTLY from Tier 6 (Priest sits with
+   Warlock at T6 and with Warrior below it), so this cannot be checked by pattern. The
+   table lives in data now, so this reads the table rather than grepping app.js for it. */
 {
   const tokenTypes = [...new Set(data.filter((r) => r.type.startsWith("Tier Token"))
     .map((r) => r.type))];
   ok(tokenTypes.length === 6, `six token groupings across T4, T5 and T6 (${tokenTypes.length})`);
-  const known = appSource.match(/var TIER_CLASSES = \{[^}]*\}/)[0];
-  ok(tokenTypes.every((t) => known.includes(`"${t}"`)),
-     `app.js knows every one of them (missing: ${tokenTypes.filter((t) => !known.includes(`"${t}"`)).join(", ")})`);
+  const known = site.rules.tierClasses;
+  ok(tokenTypes.every((t) => known[t]),
+     `rules.json knows every one of them (missing: ${tokenTypes.filter((t) => !known[t]).join(", ")})`);
   // and the three classes on each are three DIFFERENT real classes
-  const groups = tokenTypes.map((t) => (known.match(new RegExp(`"${t.replace(/[()/]/g, "\\$&")}":\\s*\\[([^\\]]*)\\]`)) || [])[1]);
-  ok(groups.every((g) => g && [...new Set(g.match(/"([^"]+)"/g))].length === 3),
-     "each names three distinct classes");
-  ok(groups.every((g) => g.match(/"([^"]+)"/g).every((c) => specs.classes[c.slice(1, -1)])),
+  const groups = tokenTypes.map((t) => known[t]);
+  ok(groups.every((g) => g && new Set(g).size === 3), "each names three distinct classes");
+  ok(groups.every((g) => g.every((c) => specs.classes[c])),
      "and every class in them is one the registry knows");
 }
 
@@ -1244,7 +1238,7 @@ const p3Any = new Set();      /* including near-BiS alternates, which now draw a
 Object.values(bis.specs).forEach((byPhase) =>
   (byPhase.P3 || []).forEach((r) => { p3Any.add(r.id); if (!r.near) p3Bis.add(r.id); }));
 const expectBlank = data.filter((r) => {
-  if (!["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"].includes(r.zone)) return false;
+  if (!P3_ZONES.includes(r.zone)) return false;
   const held = zatarList.priorities[String(r.id)];
   if (held && held.length) return false;          /* he ranked it */
   if (held) return true;                          /* explicit [] - stays blank */
@@ -1572,13 +1566,8 @@ click(doc.getElementById("reset"));
 
 // the landing phase is derived from the data, not hardcoded: the LAST phase that has
 // items, so it follows the content when a new tier is filled in
-const phasesWithItems = ["P1", "P2", "P3", "P4", "P5"].filter((id) => {
-  const zones = { P1: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair"],
-                  P2: ["Serpentshrine Cavern", "Tempest Keep"],
-                  P3: ["Black Temple", "Mount Hyjal", "Crafted (Heart of Darkness)"],
-                  P4: ["Zul'Aman"], P5: ["Sunwell Plateau"] }[id];
-  return data.some((r) => zones.includes(r.zone));
-});
+const phasesWithItems = site.rules.phases
+  .filter((p) => data.some((r) => p.zones.includes(r.zone))).map((p) => p.id);
 /* The landing phase is CURRENT_PHASE, a hand-set constant meaning "the phase the game is
    on". It used to derive "the last phase carrying zatar's calls", which worked only while
    his calls WERE the item data - and every derivation available now is a proxy that will
@@ -2247,12 +2236,11 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
    two-handers ring identically. */
 {
   const loot = new Map(data.map((r) => [r.id, r]));
-  const CAP = { Finger: 2, Trinket: 2, "One-Hand": 2 };
-  // Must match UNCONTESTED in check_bis.py and fetch_bis.py. A qualifier in here names the
-  // MARGIN rather than a condition under which the row wins the slot, so it never competes
-  // for one - three wrists all "slightly below BiS" is the guide saying they are equal, not
-  // the row order having been lost.
-  const UNCONTESTED = new Set(["below-bis"]);
+  // Both from data/rules.json - the same file fetch_bis.py and check_bis.py read - so the
+  // three derivations of this invariant cannot drift. `uncontested` names a MARGIN rather
+  // than a condition under which the row wins the slot, so it never competes for one.
+  const CAP = site.rules.slotCapacity;
+  const UNCONTESTED = new Set(Object.keys(site.rules.variants).filter((v) => site.rules.variants[v].uncontested));
   let over = 0, near = 0;
   for (const [spec, phases] of Object.entries(bis.specs)) {
     for (const [phase, entries] of Object.entries(phases)) {
@@ -2324,13 +2312,7 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
      you pick anything */
   const bare = new JSDOM(html, { runScripts: "outside-only", url: "https://x.test/loot-prio/" });
   Object.assign(bare.window, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
-  bare.window.fetch = (url) => {
-    const u = String(url);
-    const body = u.includes("lists/index.json") ? listIndex
-               : u.includes("zatar-p3.json") ? zatarList
-               : u.includes("bis.json") ? bis : u.includes("specs.json") ? specs : data;
-    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(body) });
-  };
+  bare.window.fetch = siteFetch();
   bare.window.eval(appSource);
   await until(() => bare.window.document.querySelector("tbody tr"));
   const bd = bare.window.document;
