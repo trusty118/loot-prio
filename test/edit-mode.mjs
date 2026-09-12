@@ -11,7 +11,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { until, sleep, siteFetch, site } from "./helpers.mjs";
+import { until, sleep, siteFetch, site, appBundle, appSource } from "./helpers.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
@@ -20,7 +20,8 @@ const data = rd("loot_data.json"), bis = rd("bis.json"), specs = rd("specs.json"
    starting points, and the priority column is empty on every row */
 const listIndex = JSON.parse(fs.readFileSync(path.join(root, "data", "lists", "index.json"), "utf8"));
 const zatarList = JSON.parse(fs.readFileSync(path.join(root, "data", "lists", "zatar-p3.json"), "utf8"));
-const source = fs.readFileSync(path.join(root, "app.js"), "utf8");
+const source = appSource();   /* for structure greps */
+const bundle = appBundle();   /* for running */
 const cssText = fs.readFileSync(path.join(root, "style.css"), "utf8");
 const htmlText = fs.readFileSync(path.join(root, "index.html"), "utf8");
 
@@ -42,7 +43,7 @@ function boot(hash) {
   // jsdom gives each instance its own localStorage, and it cannot be reassigned -
   // so the store is read back through the same object the page writes to.
   window.fetch = siteFetch();
-  window.eval(source);
+  window.eval(bundle);
   return window;
 }
 
@@ -216,7 +217,7 @@ click(w, menu.querySelector('.prio-menu-item[data-op=">>"]'));
 ok(opsIn(d, ITEM).join("") === ">>", "one click sets it, no cycling through the others");
 ok(menu.style.display === "none", "and the menu closes behind it");
 ok(only(w).priorities[bulwark][1].op === ">>", "the choice reached the store");
-ok(source.includes("function openOpMenu(rec, list, index, anchor) {\n    if (!canEdit()) return;"),
+ok(source.includes("function openOpMenu(rec, list, index, anchor) {\n  if (!canEdit()) return;"),
    "the menu is behind canEdit() like every other editing control");
 
 // --- removing -----------------------------------------------------------------------

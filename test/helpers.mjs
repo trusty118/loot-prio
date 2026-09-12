@@ -94,3 +94,35 @@ export function siteFetch(overrides = {}) {
     return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(site[hit[1]]) });
   };
 }
+
+/* The app, two ways.
+ *
+ * appBundle() is what the page RUNS: src/main.js bundled by esbuild into the same single
+ * IIFE that ships, built once per test run in memory. Every test that evals the app uses
+ * this, so a module that fails to bundle fails every file at once rather than being
+ * discovered by a browser.
+ *
+ * appSource() is what a person WROTE: the src/*.js files concatenated, comments intact.
+ * Assertions about structure - "specIcon() does not add the link class", "no
+ * window.prompt" - grep this, never the bundle, which esbuild has stripped of comments and
+ * so is denser than the source in ways a distance-based regex notices.
+ */
+import esbuild from "esbuild";
+
+const srcDir = path.join(root, "src");
+let bundleCache = null;
+
+export function appBundle() {
+  if (bundleCache === null) {
+    bundleCache = esbuild.buildSync({
+      entryPoints: [path.join(srcDir, "main.js")],
+      bundle: true, format: "iife", target: "es2017", write: false, logLevel: "silent"
+    }).outputFiles[0].text;
+  }
+  return bundleCache;
+}
+
+export function appSource() {
+  return fs.readdirSync(srcDir).filter((f) => f.endsWith(".js")).sort()
+    .map((f) => fs.readFileSync(path.join(srcDir, f), "utf8")).join("\n");
+}

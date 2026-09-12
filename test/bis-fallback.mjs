@@ -2,7 +2,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { until, siteFetch, site } from "./helpers.mjs";
+import { until, siteFetch, site, appBundle } from "./helpers.mjs";
 
 // resolve the repo root from this file, so it works on any machine or cwd
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -29,7 +29,7 @@ async function boot(bisResponse) {
   const { window } = dom;
   window.console = { warn: () => {}, log: () => {} };
   window.fetch = siteFetch({ "bis.json": bisResponse });
-  window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
+  window.eval(appBundle());
   await until(() => window.document.querySelector("td.col-prio img.spec-icon"));
   return window.document;
 }
@@ -69,7 +69,7 @@ ok(doc.querySelectorAll("tbody tr").length === P3_TOTAL, "missing specs key -> t
   const { window } = dom;
   window.console = { warn: () => {}, log: () => {} };
   window.fetch = siteFetch({ "specs.json": bent, "bis.json": { specs: {} } });
-  window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
+  window.eval(appBundle());
   await new Promise((r) => setTimeout(r, 400));
   const d = window.document;
 

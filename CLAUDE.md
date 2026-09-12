@@ -4,10 +4,12 @@ A browsable, filterable loot-priority site for WoW TBC Classic, hosted on GitHub
 **https://trusty118.github.io/loot-prio/**. Every raid in the expansion, every item, which
 specs each item is best-in-slot for, and priority lists people make and share.
 
-Vanilla `index.html` + `style.css` + `app.js` reading JSON — **no framework and no runtime
-dependencies**, and that part is not negotiable. There is a build step (`build.mjs`,
-esbuild) but it exists only to decide what is published: it minifies the three files into
-`dist/` and copies `data/` beside them. Nothing is transpiled or bundled.
+Vanilla `index.html` + `style.css` + one classic-script `app.js` reading JSON — **no
+framework and no runtime dependencies**, and that part is not negotiable. `app.js` is
+**bundled by esbuild from `src/*.js`** (seventeen ES modules) into a single IIFE, which is
+the same shape the file had when it was written by hand; the modules exist for the person
+editing, not for the browser. Nothing is transpiled: the source is ES5-style code with
+`import`/`export` lines, and the bundle has none.
 
 **This file is the map: what is true now, in the present tense.** The reasoning — what was
 tried first, what it cost, why it ended up this way — lives in
@@ -20,12 +22,15 @@ points at its own. Read the decision before changing the thing it covers.
 
 ```bash
 git clone https://github.com/trusty118/loot-prio.git && cd loot-prio
-npm install          # jsdom for tests, esbuild for the build - the SITE has none
-npm test             # six files, ~895 checks, ~30s
-npm run serve        # the source, on 8642 - develop against this
+npm install          # jsdom for tests, esbuild for the bundle and build - the SITE has none
+npm test             # six files, ~895 checks, ~30s; bundles src/ in memory first
+npm run serve        # bundles src/ -> app.js (unminified, watched) and serves on 8642
 npm run build        # dist/, what Pages publishes
 npm run serve:dist   # the built artifact, on 8643 - when a bug might be the minifier's
 ```
+
+**`app.js` at the root is a build output, gitignored.** `npm run serve` writes it and keeps
+it fresh; `index.html` loads it, unchanged. The source is `src/`.
 
 Needs `node` and `python3` (`py` on Windows). `gh` is optional, for polling the deploy.
 **Always view over HTTP** — the page `fetch`es its data and shows a load error from disk.
@@ -270,6 +275,33 @@ Why → [edit-mode.md](docs/decisions/edit-mode.md),
 
 ---
 
+## 4b. The modules
+
+`src/` is one module per section banner the old single file already had:
+
+| Module | Holds |
+|---|---|
+| `main.js` | wiring and boot — the only entry point |
+| `data.js` | constants, urls, `BOSS_ORDER`, `ZONE_ICON`, type groupings, the data loaders |
+| `rules.js` | the JS mirror of `rules.json`, filled once by `applyRules()` |
+| `state.js` | `state`, `ALL`, `el`, the open list, the session — **and the setters** |
+| `registry.js` | the spec registry, what an item suits, how a selection matches a priority |
+| `templates.js` | what a template is: overlay, copy, seed, encode, validate |
+| `store.js` | preferences, `localStore`, `remoteStore`, the account |
+| `editing.js` | the editing rules and actions |
+| `filter.js` | `matches()`, sorting, url state |
+| `controls.js` `results.js` `bar.js` `share.js` `editor.js` `tooltips.js` `lists.js` | one UI area each |
+| `helpers.js` | escaping, labels, boss ordering |
+
+**Cross-module writes go through `state.js`'s setters** (`setAll`, `setActive`,
+`setUnsaved`, `setSession`, `setSb`). An ES module reads another's `export var` as a live
+binding but cannot assign it — esbuild refuses the build if you try, which is the guard.
+Reads need no setter. Every other module-level `var` is written only by its own module.
+
+Tests get the app two ways from `test/helpers.mjs`: **`appBundle()`** to run it (esbuild in
+memory, once per run) and **`appSource()`** to grep its structure (the `src/*.js` text,
+comments intact — the bundle is denser and a distance-based regex notices).
+
 ## 5. Conventions that break
 
 Each of these has bitten at least once. The reasoning is in
@@ -377,8 +409,10 @@ One-shot tools kept as audit trail: `migrate_priority.py`, `fetch_unique.py`, `a
 
 ## 8. Build and publish
 
-`build.mjs` → `dist/` = minified `app.js` (identifier renaming is safe: no `eval`, one
-IIFE, no globals), minified `style.css`, comment-stripped `index.html`, `data/` verbatim.
+`build.mjs` → `dist/` = `app.js` bundled from `src/main.js` and minified (identifier
+renaming is safe: no `eval`, one IIFE, no globals), minified `style.css`, comment-stripped
+`index.html`, `data/` verbatim. `format: "iife"` is what keeps the bundle a classic script
+that executes during parsing, which the Supabase race depends on.
 `.github/workflows/pages.yml` runs `npm ci` → `npm test` → `npm run build` → deploy, so a
 red suite cannot reach the live site.
 

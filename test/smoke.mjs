@@ -2,7 +2,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { until, sleep, siteFetch, site } from "./helpers.mjs";
+import { until, sleep, siteFetch, site, appBundle, appSource as appSourceText } from "./helpers.mjs";
 
 // resolve the repo root from this file, so it works on any machine or cwd
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -31,7 +31,7 @@ const listIndex = JSON.parse(fs.readFileSync(path.join(root, "data/lists/index.j
 const zatarList = JSON.parse(fs.readFileSync(path.join(root, "data/lists/zatar-p3.json"), "utf8"));
 window.fetch = siteFetch();
 
-window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
+window.eval(appBundle());
 
 await until(() => window.document.querySelector("tbody tr"));
 
@@ -116,7 +116,7 @@ ok(strips(2).length === 2, `phase 2 likewise shows two raids (got ${strips(2).le
 // Three phases have a crafted tier, each named for the material it is gated on. They
 // behave identically because nothing special-cases them: no bosses means no art strip
 // and an empty boss row, and the display label is the same for all three.
-const appSource = fs.readFileSync(path.join(root, "app.js"), "utf8");
+const appSource = appSourceText();
 const crafted = [...appSource.matchAll(/"(Crafted \([^"]+\))"/g)].map((m) => m[1]);
 ok([...new Set(crafted)].length === 3,
    `three crafted zones, one per tier that has craftables: ${[...new Set(crafted)].join(", ")}`);
@@ -333,7 +333,6 @@ ok(ejPortraits.length === 14, `14 Encounter Journal boss portraits (got ${ejPort
 
 // The Role column and filter are deleted, not hidden. The class/spec filter
 // answers the same question more precisely, so nothing renders a role now.
-const appSrc = fs.readFileSync(path.join(root, "app.js"), "utf8");
 ok(!doc.querySelector(".role-pill"), "no role pills rendered");
 ok(!doc.querySelector('th[data-sort="role"]'), "no Role header");
 ok(!doc.querySelector("#role-chips"), "no role chip row in the markup");
@@ -1613,8 +1612,7 @@ click(doc.getElementById("reset"));
 // order the data happens to be in rather than in kill order. Timed Chest arrived that
 // way and looked correct purely by luck.
 {
-  const src = fs.readFileSync(path.join(root, "app.js"), "utf8");
-  const block = /var BOSS_ORDER = \{([\s\S]*?)\n  \};/.exec(src)[1];
+  const block = /var BOSS_ORDER = \{([\s\S]*?)\n\};/.exec(appSource)[1];
   const orderFor = {};
   for (const m of block.matchAll(/"([^"]+)":\s*\[([\s\S]*?)\]/g)) {
     orderFor[m[1]] = [...m[2].matchAll(/"([^"]+)"/g)].map((x) => x[1]);
@@ -2313,7 +2311,7 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
   const bare = new JSDOM(html, { runScripts: "outside-only", url: "https://x.test/loot-prio/" });
   Object.assign(bare.window, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
   bare.window.fetch = siteFetch();
-  bare.window.eval(appSource);
+  bare.window.eval(appBundle());
   await until(() => bare.window.document.querySelector("tbody tr"));
   const bd = bare.window.document;
   const icons = () => bd.querySelectorAll("td.col-prio img.spec-icon").length;

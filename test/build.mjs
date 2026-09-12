@@ -53,7 +53,8 @@ await build();
   ok(!js.includes("/*") && !css.includes("/*"), "no block comments survive in the JS or CSS");
   ok(!htmlOut.includes("<!--"), "and none in the HTML");
 
-  const src = fs.statSync(path.join(root, "app.js")).size;
+  const src = fs.readdirSync(path.join(root, "src")).filter((f) => f.endsWith(".js"))
+    .reduce((n, f) => n + fs.statSync(path.join(root, "src", f)).size, 0);
   ok(fs.statSync(path.join(dist, "app.js")).size < src / 2,
      `app.js is less than half its source size (${(src / 1024).toFixed(0)} KB source)`);
 

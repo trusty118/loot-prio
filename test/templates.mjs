@@ -7,7 +7,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { until, sleep, siteFetch } from "./helpers.mjs";
+import { until, sleep, siteFetch, appBundle } from "./helpers.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
@@ -30,7 +30,7 @@ function boot(hash) {
   const { window } = dom;
   Object.assign(window, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
   window.fetch = siteFetch();
-  window.eval(fs.readFileSync(path.join(root, "app.js"), "utf8").replace("})();", EXPOSE));
+  window.eval(appBundle().replace("})();", EXPOSE));
   return window;
 }
 /* Given a condition, waits only until it holds; given nothing, falls back to the old

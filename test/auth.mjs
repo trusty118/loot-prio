@@ -19,7 +19,7 @@ import { JSDOM } from "jsdom";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { until, sleep, siteFetch } from "./helpers.mjs";
+import { until, sleep, siteFetch, appBundle, appSource } from "./helpers.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (f) => JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
@@ -28,7 +28,7 @@ const data = rd("loot_data.json"), bis = rd("bis.json"), specs = rd("specs.json"
    starting points, and the priority column is empty on every row */
 const listIndex = JSON.parse(fs.readFileSync(path.join(root, "data", "lists", "index.json"), "utf8"));
 const zatarList = JSON.parse(fs.readFileSync(path.join(root, "data", "lists", "zatar-p3.json"), "utf8"));
-const source = fs.readFileSync(path.join(root, "app.js"), "utf8");
+const source = appSource();   /* for the key greps */
 
 /* What get_shared_list actually returns. Kept beside the fake and pinned against the
    migration, so the two cannot drift. */
@@ -137,7 +137,7 @@ function boot({ configured = false, sdk = null, url = "" } = {}) {
   window.fetch = siteFetch();
   if (sdk) window.supabase = { createClient: () => sdk };
 
-  let src = source;
+  let src = appBundle();
   if (configured) {
     src = src.replace('var SUPABASE_URL = "";', 'var SUPABASE_URL = "https://p.supabase.co";')
              .replace('var SUPABASE_ANON_KEY = "";', 'var SUPABASE_ANON_KEY = "anon-test-key";');
@@ -254,7 +254,7 @@ ok(!/["'`]eyJ[A-Za-z0-9_-]{20,}/.test(code), "and no legacy JWT literal pasted i
   const { window: w } = dom;
   Object.assign(w, { TextEncoder, TextDecoder, CompressionStream, DecompressionStream, Response });
   w.fetch = siteFetch();
-  w.eval(source);
+  w.eval(appBundle());
   await settle();   /* a real wait: the assertion is that writeUrl did NOT eat the OAuth
                        code, and the code is already there to begin with */
 
