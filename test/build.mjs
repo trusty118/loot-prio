@@ -40,7 +40,7 @@ await build();
 
   /* Named individually rather than inferred from the list above, because these are the
      specific things that were public and the assertion should say so by name. */
-  for (const leaked of ["CLAUDE.md", "README.md", "test", "verify", "docs",
+  for (const leaked of ["CLAUDE.md", "README.md", "test", "verify", "docs", "src",
                         "package.json", "package-lock.json", "node_modules"]) {
     ok(!fs.existsSync(path.join(dist, leaked)), `${leaked} is not published`);
   }
