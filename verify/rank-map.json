@@ -1,10 +1,28 @@
 {
-  "note": "Per-spec overrides for Wowhead rank wordings. Each guide has a different author and they share no vocabulary - 77% of the 627 distinct rank strings are used by exactly one spec - so a wording that means one thing in one guide can mean the opposite in another. 'Hit Alternative' in the Arms guide is an option; 'Threat Alternative' in the feral bear guide is explicitly not BiS, which only the blurb above that table reveals. The rules in fetch_bis.py handle both correctly today; this file exists for the ones they get wrong. Consulted BEFORE those rules, so an unlisted wording behaves exactly as it does now and an empty file changes nothing. Keyed on spec rather than guide url because that is what every other data file here keys on and it survives Wowhead reorganising urls; where three specs share one author the identical entries are honest rather than redundant. Run verify/dump_bis_raw.py and read the audit page to decide an entry - a rank cell cannot be judged without the rest of its slot.",
-  "fields": "bis: true keeps the row as a BiS claim, false drops it entirely. near: true renders it blue as an alternate. variant: one of check_bis.py's VALID_VARIANTS, or null for none. Omit a field to leave the rules deciding it.",
-  "example": {
-    "Arms": {
-      "Hit Alternative": { "bis": false, "near": true, "variant": "hit" }
-    }
+ "note": "Per-spec overrides for Wowhead rank wordings. Each guide has a different author and they share no vocabulary - 77% of the 627 distinct rank strings are used by exactly one spec - so a wording that means one thing in one guide can mean the opposite in another. 'Hit Alternative' in the Arms guide is an option; 'Threat Alternative' in the feral bear guide is explicitly not BiS, which only the blurb above that table reveals. The rules in fetch_bis.py handle both correctly today; this file exists for the ones they get wrong. Consulted BEFORE those rules, so an unlisted wording behaves exactly as it does now and an empty file changes nothing. Keyed on spec rather than guide url because that is what every other data file here keys on and it survives Wowhead reorganising urls; where three specs share one author the identical entries are honest rather than redundant. Run verify/dump_bis_raw.py and read the audit page to decide an entry - a rank cell cannot be judged without the rest of its slot.",
+ "fields": "bis: true keeps the row as a BiS claim, false drops it entirely. near: true renders it blue as an alternate. variant: one of check_bis.py's VALID_VARIANTS, or null for none. Omit a field to leave the rules deciding it.",
+ "example": {
+  "Arms": {
+   "Hit Alternative": {
+    "bis": false,
+    "near": true,
+    "variant": "hit"
+   }
+  }
+ },
+ "specs": {
+  "Arms": {
+   "Game Best": {
+    "bis": true
+   }
   },
-  "specs": {}
+  "Fury": {
+   "Game Best": {
+    "bis": true
+   }
+  }
+ },
+ "decisions": [
+  "Game Best (Arms, Fury) - Dragonspine Trophy. The strongest claim the warrior guides make, and RANKED_BIS dropped it because it tests for 'best' at the START of the rank: 'Game Best' puts it last. The same guides write plain 'Best' for the same trophy in P2-P5, where it reads as expansion BiS, so P1 was the odd one out. Two rows in the whole scrape, both this item."
+ ]
 }

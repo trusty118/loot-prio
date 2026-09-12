@@ -3881,6 +3881,11 @@
      "near": true
     },
     {
+     "id": 28830,
+     "item": "Dragonspine Trophy",
+     "bis": "expansion"
+    },
+    {
      "id": 30733,
      "item": "Hope Ender"
     },
@@ -4426,6 +4431,11 @@
      "item": "Garona's Signet Ring",
      "near": true,
      "variant": "hit"
+    },
+    {
+     "id": 28830,
+     "item": "Dragonspine Trophy",
+     "bis": "expansion"
     },
     {
      "id": 30733,

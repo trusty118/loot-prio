@@ -513,8 +513,15 @@ than guide url because that is what every other data file here keys on and it su
 Wowhead reorganising urls; where three specs share one author the identical entries are
 honest rather than redundant.
 
-It starts empty on purpose. The rules below get both motivating cases right without it, and
-an override should be a decision somebody made with the guide in front of them.
+It started empty on purpose, and the first entry earned its way in: **`Game Best`**, which
+the warrior guides write for Dragonspine Trophy in P1 and nowhere else in the scrape.
+`RANKED_BIS` tests for "best" at the START of the rank, so a claim that puts it last was
+dropped - while the same guides write plain `Best` for the same trophy in P2-P5, where it
+reads as expansion BiS. P1 was the odd one out of its own five.
+
+Two rows, two specs, and the fix is two lines of data rather than a regex that would have
+had to distinguish `Game Best` from `Second Best` and `Near Best`, which lead with a
+qualifier for a reason.
 
 **`scan_rows()` also captures the SLOT HEADING and the author's BLURB**, used by nothing in
 the pipeline and existing solely so a wording can be reviewed. A rank cell cannot be judged
