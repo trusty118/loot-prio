@@ -39,6 +39,12 @@ VALID_VARIANTS = {
     "human", "non-human",                                           # racials that change it
     "pair", "individually", "overall",                              # as a set, or alone
     "unless",                        # best only while you lack (or hold) some other item
+    # Added Sep 2026 from reviewed rows whose condition lived in the author's prose rather
+    # than the rank cell, so nothing could have mapped them automatically.
+    "4pc",                           # wanted for the four-piece set bonus
+    "contested",                     # best, but another class wants it more
+    "non-worldboss",                 # best among what a normal raid can actually get
+    "below-bis",                     # a hair under the real pick; the guide calls them equal
 }
 RACES = {"Orc", "Human"}
 
@@ -142,6 +148,19 @@ def main():
                         f"not {who}, so no ring will show"
                     )
 
+    # Qualifiers that do NOT compete for the slot, and the one reason they are exempt from the
+    # capacity rule below. Every other variant in the vocabulary names a condition under which
+    # that row IS the slot's pick - hit, threat, 4pc, contested - so two of them in one slot is
+    # the row-order bug this file exists to catch. "below-bis" makes no such claim: it says the
+    # row is within a few DPS of the winner, which is a statement about the MARGIN rather than
+    # about who wins, so counting it against capacity asks a question it does not answer.
+    #
+    # It is still a stronger claim than blue. Blue is "the author listed this without calling it
+    # best"; this is "the author called it Best and the prose says they are all about equal"
+    # (Arms P3 Wrist: "all of them perform within 1-5 DPS of each other"). Three dashed rings,
+    # not one solid and two blue, is the honest rendering of that.
+    UNCONTESTED = {"below-bis"}
+
     # The invariant the row-order fix exists to enforce: within one (spec, phase, slot,
     # variant) group, no more entries claim to be BiS than the slot can hold. Two rings
     # are fine; three "Best" two-handers are the ranking having been thrown away again.
@@ -157,8 +176,10 @@ def main():
                 rec = by_id.get(e.get("id"))
                 if not rec:
                     continue
-                key = (rec["slot"], e.get("variant", ""))
-                group[key] += 1
+                variant = e.get("variant", "")
+                if variant in UNCONTESTED:
+                    continue
+                group[(rec["slot"], variant)] += 1
             for (slot, variant), n in group.items():
                 cap = SLOT_CAPACITY.get(slot, 1)
                 if n > cap:

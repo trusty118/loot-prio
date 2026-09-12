@@ -2225,6 +2225,11 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
 {
   const loot = new Map(data.map((r) => [r.id, r]));
   const CAP = { Finger: 2, Trinket: 2, "One-Hand": 2 };
+  // Must match UNCONTESTED in check_bis.py and fetch_bis.py. A qualifier in here names the
+  // MARGIN rather than a condition under which the row wins the slot, so it never competes
+  // for one - three wrists all "slightly below BiS" is the guide saying they are equal, not
+  // the row order having been lost.
+  const UNCONTESTED = new Set(["below-bis"]);
   let over = 0, near = 0;
   for (const [spec, phases] of Object.entries(bis.specs)) {
     for (const [phase, entries] of Object.entries(phases)) {
@@ -2233,6 +2238,7 @@ ok(!doc.querySelector(".col-prio .spec-icon--muted"), "reset un-dims the priorit
         if (e.near) { near++; continue; }
         const rec = loot.get(e.id);
         if (!rec) continue;
+        if (UNCONTESTED.has(e.variant)) continue;
         const key = rec.slot + "|" + (e.variant || "");
         group.set(key, (group.get(key) || 0) + 1);
       }

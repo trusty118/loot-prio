@@ -4817,7 +4817,9 @@
     },
     {
      "id": 28795,
-     "item": "Bladespire Warbands"
+     "item": "Bladespire Warbands",
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 28824,
@@ -4891,7 +4893,9 @@
     {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix",
-     "near": true
+     "bis": "multiPhase",
+     "variant": "non-worldboss",
+     "conditional": true
     }
    ],
    "P2": [
@@ -4906,7 +4910,8 @@
     {
      "id": 30249,
      "item": "Pauldrons of the Vanquished Defender",
-     "near": true
+     "variant": "4pc",
+     "conditional": true
     },
     {
      "id": 30740,
@@ -4920,21 +4925,25 @@
     },
     {
      "id": 30237,
-     "item": "Chestguard of the Vanquished Defender"
+     "item": "Chestguard of the Vanquished Defender",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 30101,
-     "item": "Bloodsea Brigand's Vest",
-     "near": true
+     "item": "Bloodsea Brigand's Vest"
     },
     {
      "id": 30057,
-     "item": "Bracers of Eradication"
+     "item": "Bracers of Eradication",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 28795,
      "item": "Bladespire Warbands",
-     "near": true
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 29947,
@@ -4997,7 +5006,9 @@
     },
     {
      "id": 28772,
-     "item": "Sunfury Bow of the Phoenix"
+     "item": "Sunfury Bow of the Phoenix",
+     "bis": "multiPhase",
+     "conditional": true
     }
    ],
    "P3": [
@@ -5041,17 +5052,21 @@
     {
      "id": 32574,
      "item": "Bindings of Lightning Reflexes",
-     "near": true
+     "variant": "below-bis",
+     "conditional": true
     },
     {
      "id": 28795,
      "item": "Bladespire Warbands",
-     "near": true
+     "bis": "multiPhase",
+     "variant": "below-bis",
+     "conditional": true
     },
     {
      "id": 30861,
      "item": "Furious Shackles",
-     "near": true
+     "variant": "below-bis",
+     "conditional": true
     },
     {
      "id": 30057,
@@ -5093,7 +5108,8 @@
     {
      "id": 32366,
      "item": "Shadowmaster's Boots",
-     "near": true
+     "variant": "contested",
+     "conditional": true
     },
     {
      "id": 32591,
@@ -5102,8 +5118,9 @@
     {
      "id": 32260,
      "item": "Choker of Endless Nightmares",
-     "near": true,
-     "variant": "hit"
+     "bis": "multiPhase",
+     "variant": "hit",
+     "conditional": true
     },
     {
      "id": 32497,
@@ -5214,7 +5231,9 @@
     },
     {
      "id": 32260,
-     "item": "Choker of Endless Nightmares"
+     "item": "Choker of Endless Nightmares",
+     "bis": "multiPhase",
+     "conditional": true
     },
     {
      "id": 32591,

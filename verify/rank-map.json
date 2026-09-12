@@ -23,13 +23,61 @@
   }
  },
  "decisions": [
-  "Game Best (Arms, Fury) - Dragonspine Trophy. The strongest claim the warrior guides make, and RANKED_BIS dropped it because it tests for 'best' at the START of the rank: 'Game Best' puts it last. The same guides write plain 'Best' for the same trophy in P2-P5, where it reads as expansion BiS, so P1 was the odd one out. Two rows in the whole scrape, both this item.",
-  "Arms/P1/28730 - Mithril Band of the Unscarred. Ranked plain 'Best' like the three rings above it, so nothing in the rank cell says it is conditional. The blurb does: 'your second ring will depend on your hit rating ... Mithril Band of the Unscarred and Ring of Arathi Warlords will be your go-to if you are over the hit cap.' Marked hit-conditional."
+  "Arms/P1/28730 Mithril Band of the Unscarred - 'your second ring will depend on your hit rating ... Mithril Band ... if you are over the hit cap'.",
+  "Arms/P1/28772 Sunfury Bow of the Phoenix - the world boss gun beats it by under 1 DPS, and the blurb says not to compete for it. Best of what a normal raid can get.",
+  "Arms/P2/30122 Destroyer Shoulderblades -> T5 shoulder token. Wanted for the set bonus.",
+  "Arms/P2/30118 Destroyer Breastplate -> T5 chest token. 'preferred for a typical 6% hit set'.",
+  "Arms/P2/30101 Bloodsea Brigand's Vest - the other half of that pair, and the unconditional one.",
+  "Arms/P2/30057 Bracers of Eradication - hit-conditional.",
+  "Arms/P3/32574, 28795, 30861 - wrists. 'all of them perform within 1-5 DPS of each other ... merely a 4 DPS increase over the Phase 2 and Phase 1 BiS'. A hair under the real pick rather than an alternative.",
+  "Arms/P3/32366 Shadowmaster's Boots - 'a close second choice, they are also BiS for most physical damage dealers within your raid, so it would be best not to contest them'.",
+  "Arms/P3/32260 Choker of Endless Nightmares - ranked 'Hit Alternative', which the rules read as an offer; the author means the hit pick."
  ],
  "itemsNote": "Per-ROW overrides, keyed exactly as the review page prints an id. The specs map below keys on a rank string, which cannot reach a row whose rank is plain 'Best' - and plenty of conditions live only in the author's prose, not in the rank cell. Same fields.",
  "items": {
   "Arms/P1/28730": {
    "variant": "hit"
+  },
+  "Arms/P1/28772": {
+   "variant": "non-worldboss",
+   "near": false
+  },
+  "Arms/P2/30122": {
+   "variant": "4pc",
+   "near": false
+  },
+  "Arms/P2/30118": {
+   "variant": "hit",
+   "near": false
+  },
+  "Arms/P2/30101": {
+   "variant": null,
+   "near": false
+  },
+  "Arms/P2/30057": {
+   "variant": "hit",
+   "near": false
+  },
+  "Arms/P3/32574": {
+   "variant": "below-bis",
+   "near": false
+  },
+  "Arms/P3/28795": {
+   "variant": "below-bis",
+   "near": false
+  },
+  "Arms/P3/30861": {
+   "variant": "below-bis",
+   "near": false
+  },
+  "Arms/P3/32366": {
+   "variant": "contested",
+   "near": false
+  },
+  "Arms/P3/32260": {
+   "bis": true,
+   "variant": "hit",
+   "near": false
   }
  }
 }

@@ -240,7 +240,20 @@ def load_item_map():
     """
     if not RANK_MAP.exists():
         return {}
-    return json.loads(RANK_MAP.read_text(encoding="utf-8")).get("items", {})
+    raw = json.loads(RANK_MAP.read_text(encoding="utf-8")).get("items", {})
+    # A tier piece is swapped for its token before this is consulted, so an override keyed
+    # on the PIECE id would never match - and the piece id is what the review page prints
+    # and what gets pasted back. Register both.
+    pieces = {}
+    if TIER_TOKENS.exists():
+        doc = json.loads(TIER_TOKENS.read_text(encoding="utf-8"))
+        pieces = {int(k): v["token"] for k, v in doc.get("pieces", {}).items()}
+    out = dict(raw)
+    for key, val in raw.items():
+        spec, phase, item = key.split("/")
+        if int(item) in pieces:
+            out[f"{spec}/{phase}/{pieces[int(item)]}"] = val
+    return out
 
 
 def load_rank_map():
@@ -339,6 +352,9 @@ def scan_rows(html, where, phase, overrides=None):
     if not any(r["kept"] for r in out):
         raise ValueError(f"{where}: no rows ranked BiS - ranks seen: {sorted(ranks)[:8]}")
     return out
+
+
+UNCONTESTED = {"below-bis"}   # see check_bis.py for why these skip slot capacity
 
 
 def bis_rows(html, where, phase, overrides=None):
@@ -467,6 +483,17 @@ def main():
                 rec = by_id.get(item_id)
                 if not rec:
                     continue
+                # A per-item override settles `near` here rather than at write time, and
+                # that ORDER is the whole of it. It used to be applied to the finished
+                # entry, which left three rows solid when they were asked to be dashed:
+                # freeing a row from blue after `cond_items` was built meant it had never
+                # been eligible to be read as conditional, and forcing a row TO blue left
+                # it still consuming the slot it was being told it had not won.
+                forced = item_map.get(f"{spec}/{ph}/{item_id}", {}).get("near")
+                if forced is not None:
+                    if forced:
+                        near_ids[ph].add(item_id)
+                    continue
                 # An offered alternate is blue already and never claimed the slot, so it
                 # must not consume capacity - otherwise a row the author merely suggested
                 # would push a row the author called best into being an alternative.
@@ -474,6 +501,11 @@ def main():
                     near_ids[ph].add(item_id)
                     continue
                 variant, _ = qualifier(ph, item_id, rank)
+                # "below-bis" is a statement about the MARGIN, not about who wins the slot,
+                # so it never competes for one - see UNCONTESTED in check_bis.py, which has
+                # to agree with this or a written file fails its own validator.
+                if variant in UNCONTESTED:
+                    continue
                 key = (rec["slot"], variant or "")
                 filled[key] = filled.get(key, 0) + 1
                 if filled[key] > capacity(rec["slot"]):
@@ -585,11 +617,7 @@ def main():
                         f"{spec}: id {item_id} is {rec['item']!r} here, {name!r} on Wowhead")
 
                 entry = {"id": item_id, "item": rec["item"]}
-                over_item = item_map.get(f"{spec}/{phase}/{item_id}", {})
-                near = item_id in near_ids[phase]
-                if "near" in over_item:
-                    near = bool(over_item["near"])
-                if near:
+                if item_id in near_ids[phase]:
                     entry["near"] = True
                 # The author named this item's replacement in this phase, so the listing
                 # is still BiS and still rings - it just cannot be evidence that anything
