@@ -105,13 +105,26 @@ export async function build() {
   return js;
 }
 
-/* Only report when run directly - test/build.mjs imports build() and wants it quiet. */
+/* The size report. app.js has no single source file any more - it is bundled from src/ -
+   so its "was" column is the sum of the modules. This is exported and exercised by
+   test/build.mjs because the first version was not: it stat'd a root app.js that exists
+   locally only as the gitignored dev bundle, and CI - which has no such file - failed on
+   the one line the suite never ran. */
+export function report() {
+  const kb = (n) => (n / 1024).toFixed(1) + " KB";
+  const size = (p) => fs.statSync(p).size;
+  const srcOf = (f) => f === "app.js"
+    ? fs.readdirSync(path.join(root, "src")).filter((x) => x.endsWith(".js"))
+        .reduce((n, x) => n + size(path.join(root, "src", x)), 0)
+    : size(path.join(root, f));
+  const lines = ["index.html", "style.css", "app.js"].map((f) =>
+    `  ${f.padEnd(12)} ${kb(srcOf(f)).padStart(9)} -> ${kb(size(path.join(dist, f))).padStart(9)}`);
+  lines.push(`\n  dist/ holds ${SHIPPED.join(", ")} and nothing else.`);
+  return lines.join("\n");
+}
+
+/* Only print when run directly - test/build.mjs imports build() and wants it quiet. */
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   await build();
-  const kb = (p) => (fs.statSync(path.join(dist, p)).size / 1024).toFixed(1) + " KB";
-  const was = (p) => (fs.statSync(path.join(root, p)).size / 1024).toFixed(1) + " KB";
-  for (const f of ["index.html", "style.css", "app.js"]) {
-    console.log(`  ${f.padEnd(12)} ${was(f).padStart(9)} -> ${kb(f).padStart(9)}`);
-  }
-  console.log(`\n  dist/ holds ${SHIPPED.join(", ")} and nothing else.`);
+  console.log(report());
 }
