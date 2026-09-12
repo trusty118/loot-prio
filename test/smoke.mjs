@@ -99,9 +99,11 @@ ok(phaseChips().every((c) => c.classList.contains("chip--phase")), "each phase i
 ok(phaseChips().every((c) => c.querySelector(".art-split img")), "each carries raid art");
 
 // one strip per RAID, which is not the same as per zone: the crafted pseudo-zone has
-// no bosses and no art, so phase 3 shows two strips for three zones
+// no bosses and no art, so phase 3 shows two strips for three zones. Phase 1 shows four
+// since World Bosses joined it - Doomwalker and Doom Lord Kazzak have a BOSS_ORDER entry,
+// which is the test phaseRaids() applies, so unlike Crafted they do get a strip.
 const strips = (n) => chipByText("#phase-chips", "Phase " + n).querySelectorAll(".art-split img");
-ok(strips(1).length === 3, `phase 1 shows its three raids (got ${strips(1).length})`);
+ok(strips(1).length === 4, `phase 1 shows its four loot sources (got ${strips(1).length})`);
 ok(strips(3).length === 2, `phase 3 shows two - crafted has no art to show (got ${strips(3).length})`);
 ok(strips(4).length === 1, `phase 4 shows its one (got ${strips(4).length})`);
 ok(strips(5).length === 1, `phase 5 shows Sunwell only, not its crafted tier (got ${strips(5).length})`);
@@ -535,6 +537,19 @@ const strayWeapons = data.filter((r) =>
     "Shield", "Off-hand"].includes(r.type) && !/^Tier Token/i.test(r.type));
 ok(strayWeapons.length === 0,
    `every armour-slot record carries a known type (${strayWeapons.map((r) => `${r.item}: ${r.type}`).join(", ")})`);
+
+/* A boss chip with no portrait must still show its name. The rail hides .chip-label so a
+   portrait can carry the name instead, and four encounters have no journal art at all -
+   Karazhan's Basement and Chess Event, and the two world bosses who never stood in an
+   instance. Without the exemption those render as an empty clickable cell, which Basement
+   and the Chess Event had been doing since the rail was built. */
+{
+  const cssRule = cssText.split("#boss-chips .chip:not(.chip--all)")[1] || "";
+  ok(cssRule.startsWith(":not(.chip--noart)"),
+     "the rail exempts portrait-less chips from hiding their label");
+  ok(/if \(!icon\) b\.classList\.add\("chip--noart"\)/.test(appSource),
+     "and chip() marks them, since no art is not the same as art that failed to load");
+}
 
 ok(bySlot("Head") === 12, `unrelated slots unaffected: Head -> 12 (got ${rows().length})`);
 slotSel.value = ""; slotSel.dispatchEvent(new window.Event("change"));
@@ -1472,7 +1487,7 @@ ok([1, 2, 3, 4, 5].every((n) => phaseItems(n) > 0),
    `every phase carries loot now (${[1,2,3,4,5].map(phaseItems).join("/")})`);
 
 click(phaseChip(1));
-ok(zoneChipNames().join(", ") === "Karazhan, Gruul's Lair, Magtheridon's Lair",
+ok(zoneChipNames().join(", ") === "Karazhan, Gruul's Lair, Magtheridon's Lair, World Bosses",
    `phase 1 opens its own zones: ${zoneChipNames().join(", ")}`);
 ok(rows().length === phaseItems(1), `and lists them: ${rows().length} rows`);
 
@@ -1592,7 +1607,11 @@ click(doc.getElementById("reset"));
   for (const m of block.matchAll(/"([^"]+)":\s*\[([\s\S]*?)\]/g)) {
     orderFor[m[1]] = [...m[2].matchAll(/"([^"]+)"/g)].map((x) => x[1]);
   }
-  ok(Object.keys(orderFor).length === 9, `BOSS_ORDER covers all nine raids (${Object.keys(orderFor).length})`);
+  /* Nine raids plus World Bosses, which is a loot SOURCE rather than an instance - it
+     earns a BOSS_ORDER entry because its two bosses still need an order, and that entry
+     is also what gives it an art strip on the phase tile. */
+  ok(Object.keys(orderFor).length === 10,
+     `BOSS_ORDER covers the nine raids and World Bosses (${Object.keys(orderFor).length})`);
   const stray = [...new Set(data
     .filter((r) => orderFor[r.zone] && !orderFor[r.zone].includes(r.boss))
     .map((r) => `${r.zone}/${r.boss}`))];

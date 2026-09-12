@@ -694,6 +694,30 @@ items**: everything else is chips reading `0`, so the shape of the expansion is 
 item has a boss to arrive under. `ZONE_ORDER` is derived from `PHASES`, which keeps
 `bossSortKey()` working without a second list to keep in step.
 
+**`World Bosses` is a zone under Phase 1, Sep 2026** — Doomwalker and Doom Lord Kazzak, who
+were there from launch. It is a zone in the sense `Crafted` is: a **source of loot** rather
+than an instance. 15 items, and the point of adding them is that **90 BiS entries** pointed
+at them and had nowhere to land.
+
+Boss attribution came from the **Source column of Wowhead's own BiS guides**
+(`Drop: Doomwalker (World Boss)`) — the same evidence every other zone rests on, not an
+id-range guess. **Five more epics in the same id block are deliberately absent**
+(30722, 30725, 30731, 30732, 30735): no guide ranks them, so nothing states which boss drops
+them, and `verify/world-boss-drops.json` does not guess.
+
+Two things it exposed:
+
+- **`fetch_items.py` was still writing `priority: []` and `unsourced: true`** — fields that
+  left `loot_data.json` when zatar became a list. Nobody had run the tool since, so running
+  it quietly reintroduced two dead fields. `test/smoke.mjs` caught it on the first run.
+- **A boss chip with no portrait rendered as an empty clickable box.** The rail hides
+  `.chip-label` so a portrait can carry the name, and four encounters have no journal art at
+  all — Karazhan's **Basement** and **Chess Event**, plus the two world bosses, who never
+  stood in an instance. The first two had been invisible since the rail was built.
+  `chip()` marks them `.chip--noart` and the rail exempts them, the way it already exempted
+  `All`. They need padding too: a portrait fills the cell edge to edge, which is why the rail
+  has no gaps, so without it the two read as `DoomwalkerDoom Lord Kazzak`.
+
 `Trash` is listed only for the raids that actually drop it — Karazhan, Serpentshrine, Tempest
 Keep, Zul'Aman, Sunwell, and the two Phase 3 raids. Gruul's Lair and Magtheridon's Lair have
 none, which is why they have no chip for it.

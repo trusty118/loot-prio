@@ -1,0 +1,7 @@
+{
+  "note": "The two Outland world bosses, added Sep 2026. Boss attribution comes from the Source column of Wowhead's own BiS guides - 'Drop: Doomwalker (World Boss)' - which is the same evidence every other zone's attribution rests on, rather than an id-range guess. Five more epics sit in the same id block (30722 Ethereum Nexus-Reaver, 30725 Anger-Spark Gloves, 30731 Faceguard of the Endless Watch, 30732 Exodar Life-Staff, 30735 Ancient Spellcloak of the Highborn) and are NOT listed here: no BiS guide ranks them, so nothing states which boss drops them, and this file does not guess. Add them once somebody confirms.",
+  "World Bosses": {
+    "Doomwalker": [30723, 30724, 30726, 30727, 30728, 30729, 30730],
+    "Doom Lord Kazzak": [30733, 30734, 30736, 30737, 30738, 30739, 30740, 30741]
+  }
+}

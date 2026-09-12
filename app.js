@@ -55,6 +55,12 @@
     "Magtheridon's Lair": [
       "Magtheridon"
     ],
+    /* No kill order to speak of - two bosses standing in two different zones, which is
+       the point of them. Listed largest-first the way the raids are. */
+    "World Bosses": [
+      "Doomwalker",
+      "Doom Lord Kazzak"
+    ],
     "Serpentshrine Cavern": [
       "Trash",
       "Hydross the Unstable",
@@ -125,7 +131,12 @@
      chips at once was a wall, so nothing below a phase is shown until one is
      picked, and nothing below a zone until a zone is. */
   var PHASES = [
-    { id: "P1", label: "Phase 1", zones: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair"] },
+    /* World Bosses sits with Phase 1 because Doomwalker and Doom Lord Kazzak were there
+       from launch. It is a zone in the same sense Crafted is - a source of loot rather
+       than an instance - which is why it has no Encounter Journal art: the two of them
+       stand in Shadowmoon Valley and Hellfire Peninsula, not inside a raid. */
+    { id: "P1", label: "Phase 1",
+      zones: ["Karazhan", "Gruul's Lair", "Magtheridon's Lair", "World Bosses"] },
     { id: "P2", label: "Phase 2",
       zones: ["Serpentshrine Cavern", "Tempest Keep", "Crafted (Nether Vortex)"] },
     { id: "P3", label: "Phase 3",
@@ -266,7 +277,10 @@
     "Crafted (Heart of Darkness)": ICON + "spell_shadow_demonictactics.jpg",
     "Crafted (Sunmote)": ICON + "spell_nature_elementalshields.jpg",
     "Zul'Aman": JOURNAL + "daakara.png",
-    "Sunwell Plateau": JOURNAL + "kiljaeden.png"
+    "Sunwell Plateau": JOURNAL + "kiljaeden.png",
+    /* An item icon, the way the Crafted zones do it: the journal has no art for a boss
+       that never stood in an instance, and ui-ej-boss-doomwalker is a 404. */
+    "World Bosses": ICON + "spell_shadow_summoninfernal.jpg"
   };
 
   /* Slots as the character sheet presents them: every weapon slot is one "Weapon" entry.
@@ -1915,6 +1929,12 @@
          icon-only branch uses: replace the img with the name, rather than just
          hiding it. In the rail the name is hidden, so hiding the image too would
          leave an empty cell you could still click. */
+      /* No art at all is a different case from art that fails to load, and the boss rail
+         is where it bites: the rail hides .chip-label so a portrait can carry the name, so
+         a chip with neither renders as an empty clickable box. Four encounters have no
+         journal portrait - Basement, Chess Event, and now Doomwalker and Doom Lord Kazzak
+         - and the first two had been invisible in the rail since it was built. */
+      if (!icon) b.classList.add("chip--noart");
       b.innerHTML =
         (icon ? '<img class="chip-icon" src="' + escapeHtml(icon) +
                 '" alt="" onerror="this.replaceWith(document.createTextNode(this.parentNode.dataset.tip || \'\'))">' : "") +

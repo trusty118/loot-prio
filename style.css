@@ -510,8 +510,22 @@ a:hover { color: var(--gold-bright); }
 #boss-chips .chip:last-child { border-right: 0; }
 
 /* The name lives in the tooltip now. Not on the All cell, which is a word and
-   nothing else - hiding its label would leave an empty 9px box. */
-#boss-chips .chip:not(.chip--all) .chip-label { display: none; }
+   nothing else - hiding its label would leave an empty 9px box.
+
+   Nor on a chip with no portrait to replace the name with. Four encounters have none in
+   the journal - Karazhan's Basement and Chess Event, and the two world bosses, who never
+   stood in an instance - and hiding the label on those left an empty clickable cell you
+   could not identify or even see. Basement and the Chess Event had been in that state
+   since the rail was built. */
+#boss-chips .chip:not(.chip--all):not(.chip--noart) .chip-label { display: none; }
+
+/* A portrait fills the cell edge to edge, which is why the rail has no gaps. A word does
+   not, so without this the two world bosses read as "DoomwalkerDoom Lord Kazzak". */
+#boss-chips .chip--noart {
+  padding: 0 12px;
+  font-size: .8rem;
+  min-height: 44px;
+}
 
 #boss-chips .chip .chip-icon {
   width: 76px;

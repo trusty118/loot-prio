@@ -18,6 +18,10 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest"
+    },
+    {
      "id": 28673,
      "item": "Tirisfal Wand of Ascendancy"
     },
@@ -48,6 +52,10 @@
      "near": true
     },
     {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle"
+    },
+    {
      "id": 30109,
      "item": "Ring of Endless Coils"
     },
@@ -59,6 +67,11 @@
     {
      "id": 30095,
      "item": "Fang of the Leviathan"
+    },
+    {
+     "id": 30723,
+     "item": "Talon of the Tempest",
+     "near": true
     },
     {
      "id": 30049,
@@ -368,8 +381,13 @@
      "item": "The Lightning Capacitor"
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest"
+    },
+    {
      "id": 28802,
-     "item": "Bloodmaw Magus-Blade"
+     "item": "Bloodmaw Magus-Blade",
+     "near": true
     },
     {
      "id": 28770,
@@ -639,6 +657,11 @@
      "item": "Handwraps of Flowing Thought"
     },
     {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28517,
      "item": "Boots of Foretelling"
     },
@@ -663,8 +686,12 @@
     },
     {
      "id": 28770,
-     "item": "Nathrezim Mindblade",
-     "bis": "multiPhase"
+     "item": "Nathrezim Mindblade"
+    },
+    {
+     "id": 30723,
+     "item": "Talon of the Tempest",
+     "near": true
     },
     {
      "id": 28633,
@@ -695,6 +722,11 @@
      "item": "Mindstorm Wristbands"
     },
     {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle",
+     "bis": "multiPhase"
+    },
+    {
      "id": 30067,
      "item": "Velvet Boots of the Guardian"
     },
@@ -708,9 +740,13 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest"
+    },
+    {
      "id": 28770,
      "item": "Nathrezim Mindblade",
-     "bis": "multiPhase"
+     "near": true
     },
     {
      "id": 29988,
@@ -953,6 +989,10 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest"
+    },
+    {
      "id": 28673,
      "item": "Tirisfal Wand of Ascendancy"
     },
@@ -981,6 +1021,10 @@
      "id": 30684,
      "item": "Ravager's Cuffs",
      "near": true
+    },
+    {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle"
     },
     {
      "id": 30109,
@@ -1303,8 +1347,13 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest"
+    },
+    {
      "id": 28770,
-     "item": "Nathrezim Mindblade"
+     "item": "Nathrezim Mindblade",
+     "near": true
     }
    ],
    "P2": [
@@ -1612,6 +1661,10 @@
      "item": "Brute Cloak of the Ogre-Magi"
     },
     {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle"
+    },
+    {
      "id": 28585,
      "item": "Ruby Slippers"
     },
@@ -1630,8 +1683,13 @@
      "near": true
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest"
+    },
+    {
      "id": 28802,
-     "item": "Bloodmaw Magus-Blade"
+     "item": "Bloodmaw Magus-Blade",
+     "near": true
     },
     {
      "id": 28770,
@@ -1944,8 +2002,14 @@
      "variant": "threat"
     },
     {
+     "id": 30741,
+     "item": "Topaz-Studded Battlegrips",
+     "variant": "mitigation"
+    },
+    {
      "id": 28518,
      "item": "Iron Gauntlets of the Maiden",
+     "near": true,
      "variant": "mitigation"
     },
     {
@@ -2022,6 +2086,11 @@
      "id": 28825,
      "item": "Aldori Legacy Defender",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "variant": "overall"
     }
    ],
    "P2": [
@@ -2611,6 +2680,10 @@
   "RestoShaman": {
    "P1": [
     {
+     "id": 30728,
+     "item": "Fathom-Helm of the Deeps"
+    },
+    {
      "id": 28765,
      "item": "Stainless Cloak of the Pure Hearted"
     },
@@ -2619,21 +2692,41 @@
      "item": "Gloves of Centering"
     },
     {
+     "id": 30727,
+     "item": "Gilded Trousers of Benediction"
+    },
+    {
      "id": 28751,
-     "item": "Heart-Flame Leggings"
+     "item": "Heart-Flame Leggings",
+     "near": true
+    },
+    {
+     "id": 30737,
+     "item": "Gold-Leaf Wildboots",
+     "bis": "multiPhase"
     },
     {
      "id": 28752,
-     "item": "Forestlord Striders"
+     "item": "Forestlord Striders",
+     "near": true
+    },
+    {
+     "id": 30726,
+     "item": "Archaic Charm of Presence"
     },
     {
      "id": 28609,
-     "item": "Emberspur Talisman"
+     "item": "Emberspur Talisman",
+     "near": true
     },
     {
      "id": 28763,
      "item": "Jade Ring of the Everliving",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30736,
+     "item": "Ring of Flowing Light"
     },
     {
      "id": 28590,
@@ -2680,8 +2773,14 @@
      "item": "Sunhawk Leggings"
     },
     {
+     "id": 30737,
+     "item": "Gold-Leaf Wildboots",
+     "bis": "multiPhase"
+    },
+    {
      "id": 30092,
-     "item": "Orca-Hide Boots"
+     "item": "Orca-Hide Boots",
+     "near": true
     },
     {
      "id": 28763,
@@ -2751,6 +2850,12 @@
     {
      "id": 32609,
      "item": "Boots of the Divine Light"
+    },
+    {
+     "id": 30737,
+     "item": "Gold-Leaf Wildboots",
+     "near": true,
+     "bis": "multiPhase"
     },
     {
      "id": 32370,
@@ -2973,6 +3078,10 @@
      "near": true
     },
     {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle"
+    },
+    {
      "id": 30680,
      "item": "Glider's Foot-Wraps",
      "bis": "multiPhase"
@@ -2995,6 +3104,11 @@
      "id": 28770,
      "item": "Nathrezim Mindblade",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30723,
+     "item": "Talon of the Tempest",
+     "near": true
     }
    ],
    "P2": [
@@ -3059,6 +3173,11 @@
      "id": 28770,
      "item": "Nathrezim Mindblade",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30723,
+     "item": "Talon of the Tempest",
+     "near": true
     },
     {
      "id": 29982,
@@ -3268,8 +3387,13 @@
      "near": true
     },
     {
+     "id": 30739,
+     "item": "Scaled Greaves of the Marksman"
+    },
+    {
      "id": 28741,
-     "item": "Skulker's Greaves"
+     "item": "Skulker's Greaves",
+     "near": true
     },
     {
      "id": 30682,
@@ -3298,6 +3422,11 @@
     {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix"
+    },
+    {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "near": true
     }
    ],
    "P2": [
@@ -3673,16 +3802,29 @@
   "Arms": {
    "P1": [
     {
+     "id": 30740,
+     "item": "Ripfiend Shoulderplates"
+    },
+    {
      "id": 28755,
      "item": "Bladed Shoulderpads of the Merciless",
      "near": true,
      "variant": "hit"
     },
     {
+     "id": 30729,
+     "item": "Black-Iron Battlecloak",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28672,
      "item": "Drape of the Dark Reavers",
      "near": true,
      "variant": "hit"
+    },
+    {
+     "id": 30730,
+     "item": "Terrorweave Tunic"
     },
     {
      "id": 28795,
@@ -3702,8 +3844,13 @@
      "item": "Girdle of the Endless Pit"
     },
     {
+     "id": 30739,
+     "item": "Scaled Greaves of the Marksman"
+    },
+    {
      "id": 28741,
-     "item": "Skulker's Greaves"
+     "item": "Skulker's Greaves",
+     "near": true
     },
     {
      "id": 28608,
@@ -3720,27 +3867,52 @@
      "item": "Mithril Chain of Heroism"
     },
     {
+     "id": 30738,
+     "item": "Ring of Reciprocity",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28757,
      "item": "Ring of a Thousand Marks"
     },
     {
      "id": 28730,
-     "item": "Mithril Band of the Unscarred"
+     "item": "Mithril Band of the Unscarred",
+     "near": true
+    },
+    {
+     "id": 30733,
+     "item": "Hope Ender"
     },
     {
      "id": 28729,
      "item": "Spiteblade"
     },
     {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix",
-     "bis": "multiPhase"
+     "near": true
     }
    ],
    "P2": [
     {
      "id": 30055,
      "item": "Shoulderpads of the Stranger"
+    },
+    {
+     "id": 30740,
+     "item": "Ripfiend Shoulderplates",
+     "near": true
+    },
+    {
+     "id": 30729,
+     "item": "Black-Iron Battlecloak",
+     "bis": "multiPhase"
     },
     {
      "id": 30101,
@@ -3781,6 +3953,11 @@
      "item": "Band of the Ranger-General"
     },
     {
+     "id": 30738,
+     "item": "Ring of Reciprocity",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28757,
      "item": "Ring of a Thousand Marks",
      "near": true,
@@ -3811,8 +3988,7 @@
     },
     {
      "id": 28772,
-     "item": "Sunfury Bow of the Phoenix",
-     "bis": "multiPhase"
+     "item": "Sunfury Bow of the Phoenix"
     }
    ],
    "P3": [
@@ -3946,8 +4122,14 @@
      "item": "Warglaive of Azzinoth"
     },
     {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32326,
-     "item": "Twisted Blades of Zarak"
+     "item": "Twisted Blades of Zarak",
+     "near": true
     }
    ],
    "P4": [
@@ -4059,6 +4241,12 @@
      "id": 32326,
      "item": "Twisted Blades of Zarak",
      "near": true
+    },
+    {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "near": true,
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -4160,10 +4348,24 @@
   "Fury": {
    "P1": [
     {
+     "id": 30740,
+     "item": "Ripfiend Shoulderplates",
+     "bis": "multiPhase"
+    },
+    {
+     "id": 30729,
+     "item": "Black-Iron Battlecloak",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28672,
      "item": "Drape of the Dark Reavers",
      "near": true,
      "variant": "hit"
+    },
+    {
+     "id": 30730,
+     "item": "Terrorweave Tunic"
     },
     {
      "id": 28795,
@@ -4183,8 +4385,13 @@
      "item": "Girdle of the Endless Pit"
     },
     {
+     "id": 30739,
+     "item": "Scaled Greaves of the Marksman"
+    },
+    {
      "id": 28741,
-     "item": "Skulker's Greaves"
+     "item": "Skulker's Greaves",
+     "near": true
     },
     {
      "id": 28608,
@@ -4201,13 +4408,18 @@
      "item": "Mithril Chain of Heroism"
     },
     {
-     "id": 28757,
-     "item": "Ring of a Thousand Marks",
+     "id": 30738,
+     "item": "Ring of Reciprocity",
      "bis": "multiPhase"
     },
     {
+     "id": 28757,
+     "item": "Ring of a Thousand Marks"
+    },
+    {
      "id": 28730,
-     "item": "Mithril Band of the Unscarred"
+     "item": "Mithril Band of the Unscarred",
+     "near": true
     },
     {
      "id": 28649,
@@ -4216,19 +4428,39 @@
      "variant": "hit"
     },
     {
+     "id": 30733,
+     "item": "Hope Ender"
+    },
+    {
      "id": 28729,
      "item": "Spiteblade"
     },
     {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix",
-     "bis": "multiPhase"
+     "near": true
     }
    ],
    "P2": [
     {
+     "id": 30740,
+     "item": "Ripfiend Shoulderplates",
+     "bis": "multiPhase"
+    },
+    {
      "id": 30055,
-     "item": "Shoulderpads of the Stranger"
+     "item": "Shoulderpads of the Stranger",
+     "near": true
+    },
+    {
+     "id": 30729,
+     "item": "Black-Iron Battlecloak",
+     "bis": "multiPhase"
     },
     {
      "id": 30101,
@@ -4260,9 +4492,14 @@
      "item": "Band of the Ranger-General"
     },
     {
+     "id": 30738,
+     "item": "Ring of Reciprocity",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28757,
      "item": "Ring of a Thousand Marks",
-     "bis": "multiPhase"
+     "near": true
     },
     {
      "id": 28830,
@@ -4279,8 +4516,7 @@
     },
     {
      "id": 28772,
-     "item": "Sunfury Bow of the Phoenix",
-     "bis": "multiPhase"
+     "item": "Sunfury Bow of the Phoenix"
     }
    ],
    "P3": [
@@ -4372,8 +4608,14 @@
      "item": "Warglaive of Azzinoth"
     },
     {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32326,
-     "item": "Twisted Blades of Zarak"
+     "item": "Twisted Blades of Zarak",
+     "near": true
     }
    ],
    "P4": [
@@ -4474,6 +4716,12 @@
      "id": 32326,
      "item": "Twisted Blades of Zarak",
      "near": true
+    },
+    {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "near": true,
+     "bis": "multiPhase"
     }
    ],
    "P5": [
@@ -4590,6 +4838,10 @@
      "id": 28752,
      "item": "Forestlord Striders",
      "near": true
+    },
+    {
+     "id": 30726,
+     "item": "Archaic Charm of Presence"
     },
     {
      "id": 28727,
@@ -5641,6 +5893,18 @@
   "Ret": {
    "P1": [
     {
+     "id": 30740,
+     "item": "Ripfiend Shoulderplates"
+    },
+    {
+     "id": 30729,
+     "item": "Black-Iron Battlecloak"
+    },
+    {
+     "id": 30730,
+     "item": "Terrorweave Tunic"
+    },
+    {
      "id": 28795,
      "item": "Bladespire Warbands",
      "bis": "multiPhase"
@@ -6100,6 +6364,10 @@
      "item": "Gronn-Stitched Girdle"
     },
     {
+     "id": 30739,
+     "item": "Scaled Greaves of the Marksman"
+    },
+    {
      "id": 28545,
      "item": "Edgewalker Longboots"
     },
@@ -6124,6 +6392,11 @@
     {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix"
+    },
+    {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "near": true
     }
    ],
    "P2": [
@@ -6648,8 +6921,13 @@
      "item": "Gronn-Stitched Girdle"
     },
     {
+     "id": 30739,
+     "item": "Scaled Greaves of the Marksman"
+    },
+    {
      "id": 28741,
-     "item": "Skulker's Greaves"
+     "item": "Skulker's Greaves",
+     "near": true
     },
     {
      "id": 28545,
@@ -6682,6 +6960,11 @@
     {
      "id": 28772,
      "item": "Sunfury Bow of the Phoenix"
+    },
+    {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle",
+     "near": true
     }
    ],
    "P2": [
@@ -7201,6 +7484,10 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30730,
+     "item": "Terrorweave Tunic"
+    },
+    {
      "id": 30644,
      "item": "Grips of Deftness"
     },
@@ -7222,6 +7509,11 @@
      "item": "Garona's Signet Ring"
     },
     {
+     "id": 30738,
+     "item": "Ring of Reciprocity",
+     "near": true
+    },
+    {
      "id": 28830,
      "item": "Dragonspine Trophy",
      "bis": "expansion"
@@ -7233,8 +7525,13 @@
      "variant": "dagger"
     },
     {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle"
+    },
+    {
      "id": 28772,
-     "item": "Sunfury Bow of the Phoenix"
+     "item": "Sunfury Bow of the Phoenix",
+     "near": true
     }
    ],
    "P2": [
@@ -7554,6 +7851,10 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30730,
+     "item": "Terrorweave Tunic"
+    },
+    {
      "id": 30644,
      "item": "Grips of Deftness"
     },
@@ -7575,6 +7876,11 @@
      "item": "Garona's Signet Ring"
     },
     {
+     "id": 30738,
+     "item": "Ring of Reciprocity",
+     "near": true
+    },
+    {
      "id": 28830,
      "item": "Dragonspine Trophy",
      "bis": "expansion"
@@ -7586,8 +7892,13 @@
      "variant": "dagger"
     },
     {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle"
+    },
+    {
      "id": 28772,
-     "item": "Sunfury Bow of the Phoenix"
+     "item": "Sunfury Bow of the Phoenix",
+     "near": true
     }
    ],
    "P2": [
@@ -7907,6 +8218,10 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30730,
+     "item": "Terrorweave Tunic"
+    },
+    {
      "id": 30644,
      "item": "Grips of Deftness"
     },
@@ -7928,6 +8243,11 @@
      "item": "Garona's Signet Ring"
     },
     {
+     "id": 30738,
+     "item": "Ring of Reciprocity",
+     "near": true
+    },
+    {
      "id": 28830,
      "item": "Dragonspine Trophy",
      "bis": "expansion"
@@ -7939,8 +8259,13 @@
      "variant": "dagger"
     },
     {
+     "id": 30724,
+     "item": "Barrel-Blade Longrifle"
+    },
+    {
      "id": 28772,
-     "item": "Sunfury Bow of the Phoenix"
+     "item": "Sunfury Bow of the Phoenix",
+     "near": true
     }
    ],
    "P2": [
@@ -8273,8 +8598,14 @@
      "item": "Cincture of Will"
     },
     {
+     "id": 30727,
+     "item": "Gilded Trousers of Benediction",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28742,
-     "item": "Pantaloons of Repentance"
+     "item": "Pantaloons of Repentance",
+     "near": true
     },
     {
      "id": 28663,
@@ -8286,8 +8617,13 @@
      "near": true
     },
     {
+     "id": 30726,
+     "item": "Archaic Charm of Presence"
+    },
+    {
      "id": 28822,
-     "item": "Teeth of Gruul"
+     "item": "Teeth of Gruul",
+     "near": true
     },
     {
      "id": 28609,
@@ -8299,6 +8635,10 @@
      "id": 28731,
      "item": "Shining Chain of the Afterworld",
      "near": true
+    },
+    {
+     "id": 30736,
+     "item": "Ring of Flowing Light"
     },
     {
      "id": 28763,
@@ -8346,6 +8686,11 @@
      "bis": "multiPhase",
      "variant": "throughput",
      "conditional": true
+    },
+    {
+     "id": 30727,
+     "item": "Gilded Trousers of Benediction",
+     "bis": "multiPhase"
     },
     {
      "id": 30100,
@@ -8649,8 +8994,14 @@
      "item": "Cincture of Will"
     },
     {
+     "id": 30727,
+     "item": "Gilded Trousers of Benediction",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28742,
-     "item": "Pantaloons of Repentance"
+     "item": "Pantaloons of Repentance",
+     "near": true
     },
     {
      "id": 28663,
@@ -8662,8 +9013,13 @@
      "near": true
     },
     {
+     "id": 30726,
+     "item": "Archaic Charm of Presence"
+    },
+    {
      "id": 28822,
-     "item": "Teeth of Gruul"
+     "item": "Teeth of Gruul",
+     "near": true
     },
     {
      "id": 28609,
@@ -8675,6 +9031,10 @@
      "id": 28731,
      "item": "Shining Chain of the Afterworld",
      "near": true
+    },
+    {
+     "id": 30736,
+     "item": "Ring of Flowing Light"
     },
     {
      "id": 28763,
@@ -8722,6 +9082,11 @@
      "bis": "multiPhase",
      "variant": "throughput",
      "conditional": true
+    },
+    {
+     "id": 30727,
+     "item": "Gilded Trousers of Benediction",
+     "bis": "multiPhase"
     },
     {
      "id": 30100,
@@ -9009,6 +9374,10 @@
     {
      "id": 28755,
      "item": "Bladed Shoulderpads of the Merciless"
+    },
+    {
+     "id": 30730,
+     "item": "Terrorweave Tunic"
     },
     {
      "id": 28514,
@@ -9501,6 +9870,10 @@
      "item": "Handwraps of Flowing Thought"
     },
     {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle"
+    },
+    {
      "id": 28530,
      "item": "Brooch of Unquenchable Fury"
     },
@@ -9514,8 +9887,13 @@
      "item": "Ring of Recurrence"
     },
     {
+     "id": 30723,
+     "item": "Talon of the Tempest"
+    },
+    {
      "id": 28802,
-     "item": "Bloodmaw Magus-Blade"
+     "item": "Bloodmaw Magus-Blade",
+     "near": true
     },
     {
      "id": 28770,
@@ -9774,6 +10152,11 @@
      "variant": "hit"
     },
     {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28585,
      "item": "Ruby Slippers",
      "near": true,
@@ -9798,10 +10181,16 @@
      "conditional": true
     },
     {
-     "id": 28770,
-     "item": "Nathrezim Mindblade",
+     "id": 30723,
+     "item": "Talon of the Tempest",
      "variant": "mainhand",
      "conditional": true
+    },
+    {
+     "id": 28770,
+     "item": "Nathrezim Mindblade",
+     "near": true,
+     "variant": "mainhand"
     },
     {
      "id": 28802,
@@ -9851,6 +10240,11 @@
      "id": 29918,
      "item": "Mindstorm Wristbands",
      "near": true
+    },
+    {
+     "id": 30734,
+     "item": "Leggings of the Seventh Circle",
+     "bis": "multiPhase"
     },
     {
      "id": 30050,
@@ -10164,17 +10558,33 @@
      "item": "Cord of Nature's Sustenance"
     },
     {
+     "id": 30727,
+     "item": "Gilded Trousers of Benediction",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28591,
      "item": "Earthsoul Leggings",
+     "near": true
+    },
+    {
+     "id": 30737,
+     "item": "Gold-Leaf Wildboots",
      "bis": "multiPhase"
     },
     {
      "id": 28752,
-     "item": "Forestlord Striders"
+     "item": "Forestlord Striders",
+     "near": true
+    },
+    {
+     "id": 30726,
+     "item": "Archaic Charm of Presence"
     },
     {
      "id": 28822,
-     "item": "Teeth of Gruul"
+     "item": "Teeth of Gruul",
+     "near": true
     },
     {
      "id": 28609,
@@ -10185,6 +10595,10 @@
      "id": 28763,
      "item": "Jade Ring of the Everliving",
      "bis": "multiPhase"
+    },
+    {
+     "id": 30736,
+     "item": "Ring of Flowing Light"
     },
     {
      "id": 28771,
@@ -10214,13 +10628,24 @@
      "item": "Girdle of Zaetar"
     },
     {
+     "id": 30727,
+     "item": "Gilded Trousers of Benediction",
+     "bis": "multiPhase"
+    },
+    {
      "id": 28591,
      "item": "Earthsoul Leggings",
+     "near": true
+    },
+    {
+     "id": 30737,
+     "item": "Gold-Leaf Wildboots",
      "bis": "multiPhase"
     },
     {
      "id": 30092,
-     "item": "Orca-Hide Boots"
+     "item": "Orca-Hide Boots",
+     "near": true
     },
     {
      "id": 30110,
@@ -10282,9 +10707,14 @@
      "bis": "multiPhase"
     },
     {
+     "id": 30737,
+     "item": "Gold-Leaf Wildboots",
+     "bis": "multiPhase"
+    },
+    {
      "id": 32609,
      "item": "Boots of the Divine Light",
-     "bis": "multiPhase"
+     "near": true
     },
     {
      "id": 32528,
@@ -10369,7 +10799,12 @@
     },
     {
      "id": 32609,
-     "item": "Boots of the Divine Light",
+     "item": "Boots of the Divine Light"
+    },
+    {
+     "id": 30737,
+     "item": "Gold-Leaf Wildboots",
+     "near": true,
      "bis": "multiPhase"
     },
     {
